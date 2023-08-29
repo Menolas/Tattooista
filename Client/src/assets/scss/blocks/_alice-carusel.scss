@@ -1,0 +1,226 @@
+.portfolio-slider {
+  .alice-carousel {
+
+    .alice-carousel__wrapper {
+      margin: 0 auto;
+      width: 270px;
+      max-width: 100%;
+      height: 380px;
+
+      .alice-carousel__stage {
+
+        li.alice-carousel__stage-item {
+          flex-shrink: 0;
+          padding: 5px;
+
+          div.slider-item {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+
+            .portfolio-slider__link {
+              display: flex;
+              justify-content: center;
+              align-items: flex-end;
+              padding-bottom: 20px;
+              width: 100%;
+              height: 100%;
+              background-size: cover;
+              background-repeat: no-repeat;
+              filter: grayscale(100%);
+            }
+
+            &:hover {
+              .portfolio-slider__link {
+                filter: none;
+              }
+            }
+          }
+
+          .slider-item-title {
+            margin: 0;
+            padding: 8px 0;
+            width: 100%;
+            text-align: center;
+            height: auto;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 0.9;
+            text-shadow: 6px 2px 2px rgba(0, 0, 0, 0.95);
+            background-color: rgba(0, 0, 0, 0.6);
+          }
+        }
+      }
+    }
+  }
+}
+
+.portfolio-slider {
+  .alice-carousel {
+    .alice-carousel__prev-btn,
+    .alice-carousel__next-btn {
+      position: absolute;
+      top: 42%;
+      padding: 0;
+      width: 45px;
+      height: 30px;
+      transform: translate(0, -50%);
+
+      .alice-carousel__next-btn-wrapper,
+      .alice-carousel__prev-btn-wrapper {
+        width: 100%;
+        height: 100%;
+      }
+
+      .alice-carousel__next-btn-item,
+      .alice-carousel__prev-btn-item {
+        position: relative;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+
+        span {
+          display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          right: 0;
+
+          &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            width: 45px;
+            height: 2px;
+            background-color: white;
+            transform: translate(0, -50%);
+          }
+
+          &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 18px;
+            height: 22px;
+            background-color: transparent;
+            box-sizing: border-box;
+            border: 1px solid white;
+            border-right: none;
+            border-top: none;
+          }
+        }
+      }
+    }
+
+    .alice-carousel__prev-btn {
+      left: 5%;
+
+      .alice-carousel__prev-btn-item {
+        span {
+          left: 0;
+
+          &::after {
+            left: 0;
+            bottom: 1px;
+            transform: skew(-30deg, -10deg) rotate(-210deg);
+          }
+        }
+      }
+    }
+
+    .alice-carousel__next-btn {
+      right: 5%;
+
+      .alice-carousel__next-btn-item {
+        span {
+          right: 0;
+
+          &::after {
+            right: 0;
+            bottom: 7px;
+            transform: skew(-30deg, -10deg) rotate(-30deg);
+          }
+        }
+      }
+    }
+
+  }
+}
+
+@media (min-width: 600px) {
+
+  .portfolio-slider {
+    .alice-carousel {
+
+      .alice-carousel__wrapper {
+        margin: 0 auto;
+        width: 560px;
+        max-width: 100%;
+        height: 380px;
+
+        .alice-carousel__stage {
+          //display: flex;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 900px) {
+
+  .portfolio-slider {
+    .alice-carousel {
+
+      .alice-carousel__wrapper {
+        width: 850px;
+      }
+
+      .alice-carousel__prev-btn,
+      .alice-carousel__next-btn {
+        width: 70px;
+
+        .alice-carousel__next-btn-item,
+        .alice-carousel__prev-btn-item {
+          span {
+
+            &::before {
+              width: 70px;
+            }
+          }
+        }
+
+      }
+
+      .alice-carousel__prev-btn {
+        left: 3%;
+      }
+      .alice-carousel__next-btn {
+        right: 3%;
+      }
+    }
+  }
+}
+
+@media (min-width: 1400px) {
+
+  .portfolio-slider {
+    .alice-carousel {
+
+      .alice-carousel__wrapper {
+        width: 1200px;
+      }
+
+      .alice-carousel__next-btn {
+        right: 0;
+      }
+      .alice-carousel__prev-btn {
+        left: 0;
+      }
+    }
+  }
+
+}

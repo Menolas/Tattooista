@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Web site created using create-react-app"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <title>AH - The Tattoo Artist</title>
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root">
+  <header class="main-header container">
+    <div class="main-header__top">
+        <nav class="main-nav">
+          <div class="hamburger">
+            <span></span>
+          </div>
+          <ul class="list main-nav__list">
+            <li class="main-nav__item">
+              <a href="#" class="main-nav__link">Portfolio</a>
+            </li>
+            <li class="main-nav__item">
+              <a class="main-nav__link">Tattoo Artist</a>
+            </li>
+            <li class="main-nav__item">
+              <a class="main-nav__link">Studio Services</a>
+            </li>
+            <li class="main-nav__item">
+              <a class="main-nav__link">F.A.Q</a>
+            </li>
+            <li class="main-nav__item">
+              <a class="main-nav__link">Booking</a>
+            </li>
+            <li class="main-nav__item">
+              <a class="main-nav__link">Contacts</a>
+            </li>
+          </ul>
+        </nav>
+      <div class="logo">
+        <a href="./" class="logo__link">
+          <img src="../assets/img/logo.png" alt="" width="88" height="140"/>
+        </a>
+      </div>
+        <nav class="social-nav">
+          <ul class="social-nav__list">
+            <li class="social-nav__item">
+              <a class="social-nav__link" href="">
+                <span><svg><use href="../assets/svg/sprite.svg#instagram"></use></svg></span>
+                Instagram
+              </a>
+            </li>
+            <li class="social-nav__item">
+              <a class="social-nav__link">
+                <span><svg><use href="../assets/svg/sprite.svg#facebook"></use></svg></span>
+                Messenger
+              </a>
+            </li>
+            <li class="social-nav__item">
+              <a class="social-nav__link">
+                <span><svg><use href="../assets/svg/sprite.svg#phone"></use></svg></span>
+                Facebook
+              </a>
+            </li>
+          </ul>
+        </nav>
+    </div>
+  </header>
+  <main class="site-main">
+    <section class="tattoo-style page-block container">
+      <ul class="tattoo-style__list list">
+        <li class="tattoo-style__item">BlackWork</li>
+        <li class="tattoo-style__item">Black&Gray</li>
+        <li class="tattoo-style__item active">FineLine</li>
+      </ul>
+      <div class="tattoo-style__item-content">
+        <h2 class="title title--secondary page-block__title tattoo-style__title">FineLine</h2>
+        <div class="tattoo-style__text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+          laborum.
+        </div>
+      </div>
+    </section>
+    <section class="advertisement">
+      <div class="container">
+      <button class="btn btn--light-bg" type="submit">BOOK A CONSULTATION</button>
+      <div class="social-share">
+        <span>Share this page</span>
+        <ul class="social-share__list list">
+          <li class="social-share__item">
+            <a href="#" class="social-share__link">
+              <svg><use href="../assets/svg/sprite.svg#facebook"></use></svg>
+            </a>
+          </li>
+          <li class="social-share__item">
+            <a href="#" class="social-share__link">
+              <svg><use href="../assets/svg/sprite.svg#facebook"></use></svg>
+            </a>
+          </li>
+          <li class="social-share__item">
+            <a href="#" class="social-share__link">
+              <svg><use href="../assets/svg/sprite.svg#facebook"></use></svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+      </div>
+    </section>
+    <section class="gallery page-block container">
+      <ul class="gallery__list list">
+        <li class="gallery__item">
+          <img src="../assets/img/gallery/blackAndGray.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/gallery/blackWork.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/gallery/fineLine.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/gallery/neoTraditional.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/gallery/realistic.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/mySplash/red.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/mySplash/green.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/mySplash/gray.jpg" alt="some alt">
+        </li>
+        <li class="gallery__item">
+          <img src="../assets/img/mySplash/violet.jpg" alt="some alt">
+        </li>
+      </ul>
+    </section>
+    <section class="page-block contacts container">
+      <h2 class="title title--secondary page-block__title">Contacts</h2>
+      <div class="contacts__map-wrap">
+        <picture>
+          <source media="(min-width: 990px)" srcset="../assets/img/map.PNG">
+          <img src="../assets/img/map-mobile.PNG" alt="" />
+        </picture>
+        <div class="contacts__content">
+          <p>
+            Sniki Art Custom Tattoo<br>
+            Torvet 1, 3120 Nøtterøy
+          </p>
+          <p>
+            Adelaine Hobf Studio<br>
+            Agnes, 3290 Stavern
+          </p>
+          <p>
+            +47 455 19 015<br>
+            ah_tattoo@gmail.com
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="main-footer container">
+    <div class="main-footer__copyrights">@ Tattoo Studio "Adelaine Hobf"</div>
+    <div class="main-footer__middle-section">
+      <div class="logo">
+        <img src="../assets/img/logo.png" alt="" width="88" height="140"/>
+      </div>
+      <nav class="social-nav">
+        <ul class="social-nav__list">
+          <li class="social-nav__item">
+            <a class="social-nav__link" href="">
+              <span><svg><use href="../assets/svg/sprite.svg#instagram"></use></svg></span>
+            </a>
+          </li>
+          <li class="social-nav__item">
+            <a class="social-nav__link">
+              <span><svg><use href="../assets/svg/sprite.svg#facebook"></use></svg></span>
+            </a>
+          </li>
+          <li class="social-nav__item">
+            <a class="social-nav__link">
+              <span><svg><use href="../assets/svg/sprite.svg#phone"></use></svg></span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div>Web Developer Olena Christensen</div>
+  </footer>
+</div>
+<div class="modal booking">
+  <div class="modal__header">
+    <h2 class="title title--secondary modal__title">
+      FILL THE FORM AND WE WILL CONTACT YOU SOON
+    </h2>
+    <button class="close-button"></button>
+  </div>
+  <div class="modal__content booking__content">
+    <form id="bookingModal" class="booking__form" method="POST">
+      <div class="booking__input-wrap">
+        <input type="text" name="name" placeholder="Full Name" required />
+      </div>
+      <div class="booking__input-wrap">
+        <input type="text" name="phone" placeholder="Phone Number" required />
+      </div>
+      <div class="booking__input-wrap">
+        <input id="consentModal" type="checkbox" name="consent" placeholder="Phone Number" required />
+        <label for="consentModal">
+          <span class="checkbox"></span>
+          CONSENT WITH PROCESSING OF MY PERSONAL DATA
+        </label>
+      </div>
+      <button class="btn btn--transparent booking__submit-btn" type="submit">BOOK A CONSULTATION</button>
+    </form>
+  </div>
+</div>
+<script src="../assets/js/script.js"></script>
+</body>
+</html>

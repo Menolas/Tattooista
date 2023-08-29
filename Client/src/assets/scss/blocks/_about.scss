@@ -1,0 +1,58 @@
+.about {
+  position: relative;
+  padding-bottom: 50px;
+  text-align: center;
+}
+
+.about__img-wrap {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  //background-image: url("../img/avatar.jpg");
+  background-size: cover;
+  z-index: 1;
+}
+
+.about__img-wrap-decor {
+  position: relative;
+  margin: 0 auto;
+  width: 260px;
+  height: 260px;
+
+  &::before {
+    @include element-style(123%, 100%, transparent);
+    left: 50%;
+    top: 30px;
+    border: $light-border;
+    transform: translate(-50%, 0);
+  }
+}
+
+.about__content {
+  position: relative;
+  padding: 0.5rem 1rem;
+  line-height: 1.7;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+@media(min-width: 990px) {
+
+  .about {
+    padding-bottom: 70px;
+  }
+
+  .about__img-wrap {
+    width: 400px;
+    height: 400px;
+  }
+
+  .about__img-wrap-decor {
+    width: 400px;
+    height: 400px;
+
+    &::before {
+      top: 50px;
+    }
+  }
+}

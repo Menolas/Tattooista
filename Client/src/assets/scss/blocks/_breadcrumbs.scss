@@ -1,0 +1,19 @@
+.breadcrumbs {
+  .list {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+    font-weight: 500;
+    border: none;
+    &::before {
+      bottom: 50%;
+      transform: translate(0, 50%);
+    }
+  }
+
+  .list li:first-child .btn::before {
+    display: none;
+  }
+}

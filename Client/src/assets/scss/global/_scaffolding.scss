@@ -1,0 +1,52 @@
+body {
+  display: block;
+  margin: 0;
+  font-family: 'Monseratt', sans-serif;
+  color: $light-text;
+  background-color: $dark;
+}
+
+div#root {
+  min-height: 100vh;
+}
+
+div.App {
+  height: 100%;
+}
+
+.list {
+  @include list-style;
+}
+
+input:-internal-autofill-selected {
+  background-color: transparent;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+svg {
+  fill: $light-text;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+.hidden {
+  margin: 0;
+  padding: 0;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}

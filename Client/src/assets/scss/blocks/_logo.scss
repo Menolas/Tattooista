@@ -1,0 +1,33 @@
+.logo {
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 64px;
+
+  .logo__link {
+    @include link-style;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .logo__img {
+    display: block;
+    width: 40px;
+    height: 100%;
+    background-image: url("../img/logo.png");
+    background-size: cover;
+  }
+}
+
+@media (min-width: 990px) {
+
+  .logo {
+    width: auto;
+    height: 80px;
+
+    .logo__img {
+      width: 88px;
+    }
+  }
+}

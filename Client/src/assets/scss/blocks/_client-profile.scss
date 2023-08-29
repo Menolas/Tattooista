@@ -1,0 +1,118 @@
+.client-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+
+  .client-profile__header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-left: 62px;
+  }
+
+  .client-profile__avatar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-right: 20px;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+  }
+
+  .client-profile__details {
+    order: 1;
+  }
+
+  .client-profile__name {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  .client-profile__contacts {
+    font-size: 12px;
+
+    input {
+      background-color: $light;
+    }
+  }
+
+  .admin__card-contacts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .client-profile__contacts-title {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .client-profile__gallery-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  input[type="file"] {
+    color: $light;
+  }
+}
+
+.client-profile__gallery-list li {
+  flex-grow: 1;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-position: center;
+  }
+}
+
+.client-profile__action-btns {
+  position: relative;
+  order: 0;
+  display: flex;
+  column-gap: 2px;
+  margin-left: auto;
+}
+
+@media (min-width: 900px) {
+
+  .client-profile {
+    .client-profile__header {
+      align-items: flex-start;
+      flex-direction: row;
+      padding-left: 0;
+    }
+
+    .client-profile__avatar {
+      position: static;
+      order: 0;
+      width: 80px;
+      height: 80px;
+    }
+
+    .client-profile__details {
+      order: 1;
+    }
+
+    .client-profile__action-btns {
+      order: 2;
+      flex-direction: row;
+      column-gap: 8px;
+    }
+  }
+
+  .client-profile__gallery-list li {
+    width: 24%;
+    max-width: 24%;
+    height: 150px;
+  }
+}

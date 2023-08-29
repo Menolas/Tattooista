@@ -1,0 +1,92 @@
+import * as React from 'react'
+import {useState} from 'react'
+import { FaqType } from '../../types/Types'
+import { FaqItem } from './FaqItem'
+import {ModalPopUp} from '../common/ModalPopUp'
+import {SuccessModal} from "../SuccessModal";
+import {UpdateFaqItemFormFormik} from '../Forms/UpdateFaqItemFormFormik'
+
+type PropsType = {
+  isAuth: boolean
+  faq: Array<FaqType>
+  updateFaqItem: (id: string, values: any) => void
+  addFaqItem: (values: FaqType) => void
+  deleteFaqItem: (id: string) => void
+}
+
+export const FaqItems: React.FC<PropsType> = React.memo(({
+  isAuth,
+  faq,
+  updateFaqItem,
+  addFaqItem,
+  deleteFaqItem
+}) => {
+
+  const [addFaqItemMode, setAddFaqItemMode] = useState(false)
+  const [isSuccess, setSuccess] = useState(false)
+  const showSuccessModal = () => {
+    setSuccess(true)
+  }
+
+  const closeSuccessModal = () => {
+    setSuccess(false)
+  }
+  const closeAddFaqItemModal = () => {
+      setAddFaqItemMode(false)
+  }
+
+    const modalTitle = ''
+    const addFaqItemModalTitle = 'Add New Faq Item'
+
+  const faqItemsArray = faq?.map(item => {
+    return (
+      <FaqItem
+        key={item._id}
+        isAuth={isAuth}
+        faqItem={item}
+        updateFaqItem={updateFaqItem}
+        deleteFaqItem={deleteFaqItem}
+      />
+    )
+  })
+
+  return (
+    <section className="page-block faq" id="faq">
+      {
+        isAuth &&
+        <button
+            className={"btn btn--bg btn--light-bg"}
+            onClick={() => {setAddFaqItemMode(true)}}
+        >
+            Add Faq
+        </button>
+      }
+      {
+        addFaqItemMode &&
+        <ModalPopUp
+            modalTitle={addFaqItemModalTitle}
+            closeModal={closeAddFaqItemModal}
+        >
+            <UpdateFaqItemFormFormik
+                addFaqItem={addFaqItem}
+                closeModal={closeAddFaqItemModal}
+                showSuccessModal={showSuccessModal}
+            />
+        </ModalPopUp>
+      }
+      {
+        isSuccess &&
+        <ModalPopUp
+            modalTitle={modalTitle}
+            closeModal={closeSuccessModal}
+        >
+            <SuccessModal />
+        </ModalPopUp>
+      }
+      <h2 className="page-block__title">F.A.Q</h2>
+      <ul className="faq__list list">
+        {faqItemsArray}
+      </ul>
+    </section>
+  )
+})

@@ -1,0 +1,34 @@
+.advertisement {
+  margin: 0 -16px;
+  padding: 16px;
+  background-color: $light;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  background-image: none;
+  color: $dark-text;
+
+  .social-share {
+    margin-left: auto;
+  }
+
+  .advertisement__btn {
+    position: relative;
+
+    &::before {
+      @include element-style(2px, 50%, $dark-text);
+      left: 0;
+      bottom: 0;
+    }
+  }
+}
+
+@media (min-width: 990px) {
+  .advertisement {
+    flex-direction: row;
+    margin: 0 -70px;
+    padding: 16px 70px;
+  }
+}
+

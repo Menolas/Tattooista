@@ -1,0 +1,29 @@
+.login {
+  padding-top: 152px;
+  color: $dark-text;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+  }
+}
+
+.login__form-wrap {
+  margin: auto;
+  padding: 80px 60px;
+  width: 100%;
+  max-width: 615px;
+  background-image: url("../img/form-background.png");
+  background-repeat: no-repeat;
+  background-color: $light;
+}
+
+@media (min-width: 990px) {
+
+  .login__form-wrap {
+    width: 615px;
+  }
+}

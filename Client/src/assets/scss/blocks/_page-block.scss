@@ -1,0 +1,33 @@
+.page-block {
+  position: relative;
+  padding-top: 40px;
+  padding-bottom: 30px;
+
+  &::after {
+    @include element-style(100%, 16px, $dark);
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.page-block__title {
+  margin-top: 0;
+  margin-bottom: 32px;
+  text-align: center;
+  font-size: 32px;
+}
+
+@media(min-width: 990px) {
+
+  .page-block {
+    position: relative;
+    padding-top: 112px;
+  }
+
+  .page-block__title {
+    margin-top: 0;
+    margin-bottom: 56px;
+    text-align: center;
+    font-size: 48px;
+  }
+}

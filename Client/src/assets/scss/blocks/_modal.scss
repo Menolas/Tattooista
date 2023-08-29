@@ -1,0 +1,61 @@
+.modal {
+  display: none;
+}
+
+.modal.shown {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  padding: 40px 20px;
+  width: 90%;
+  max-width: 600px;
+  transform: translate(-50%, -50%);
+  color: $dark-text;
+  background-image: url("../img/form-background.png");
+  background-repeat: no-repeat;
+  background-color: $light;
+  z-index: 5;
+
+  .modal__header {
+    position: relative;
+    margin-bottom: 20px;
+
+    .close-button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      transform: translate(0, -100%);
+    }
+  }
+
+  .booking__form {
+    padding: 0;
+    height: unset;
+    background-image: none;
+    background-color: transparent;
+  }
+}
+
+@media (min-width: 990px) {
+
+  .modal.shown {
+    padding: 70px 40px;
+    width: 600px;
+
+    .modal__header {
+      margin-bottom: 36px;
+
+      .close-button {
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        transform: translate(0, -100%);
+      }
+    }
+
+    .booking__content {
+      width: 100%;
+    }
+  }
+}

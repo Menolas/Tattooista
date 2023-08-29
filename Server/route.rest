@@ -1,0 +1,162 @@
+GET http://localhost:3030/auth/me
+Authorization: undefinet 
+
+###
+
+GET http://localhost:3030/auth/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYTk2YzcyZWU5NWYxZjIwNmZhZDUxYSIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjcyNjY0MDI5LCJleHAiOjE2NzI3NTA0Mjl9.RC2q2fYO-b-mKnIVBzh54iRrfukJ98_A96yAsBwuiuQ
+
+
+###
+
+GET http://localhost:3030/customers?page=1&limit=2
+
+###
+
+GET http://localhost:3030/clients?page=1&limit=2
+
+###
+
+POST http://localhost:3030/auth/registration
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYTk3ZjE3NjAyMjYzZDI3NDY4M2RiMSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTY3MzAzODAwOSwiZXhwIjoxNjczMTI0NDA5fQ.3t-DdkYNw7OrO8hAuPR7gb84T3dmgrUK6mt-Lbxm6tA
+Content-Type: application/json
+
+{
+  "username": "Shmenolas",
+  "password": "r512lock",
+  "roles": ["ADMIN"]
+}
+
+
+###
+
+POST http://localhost:3030/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+###
+
+POST http://localhost:3030/auth/login
+Content-Type: application/json
+
+{
+  "username": "Zuzanna10",
+  "password": "r512lock"
+}
+
+###
+
+DELETE http://localhost:3030/auth/logout/63b889b869488ca78b626c12
+
+###
+
+POST http://localhost:3030/customers
+Content-Type: application/json
+
+{
+  "fullName": "Menolas MH",
+  "message": "Here is some message i wanted to talk about",
+  "status": false,
+  "email": "olenakunina+1@gmail.com",
+  "insta": "@Menolas",
+  "phone": "+47794070141",
+  "whatsapp": "+47794070141",
+  "messenger": "@Menolas"
+}
+
+###
+
+POST http://localhost:3030/clients
+Content-Type: application/json
+
+{
+  "fullName": "Zuzanna Bruewq666",
+  "email": "olenakunina+1@gmail.com",
+  "insta": "@Menolas",
+  "phone": "+47794070141"
+}
+
+###
+
+GET http://localhost:3030/clients/63a813574dd779e77c4f2db6
+
+###
+
+PATCH http://localhost:3030/customers/contact/63a6ac14174809d4960c695c
+
+###
+
+PATCH http://localhost:3030/customers/unContact/63a24841f748389f0c358c58
+
+###
+
+DELETE http://localhost:3030/customers/63a6ac13174809d4960c695a
+
+###
+
+POST http://localhost:3030/clients/updateContact/63a9635dbb97da8ff0292ef0
+Content-Type: application/json
+
+###
+
+POST http://localhost:3030/category/
+Content-Type: application/json
+
+{
+  "categoryName": "OldSchool",
+  "wallPaper": "oldSchool.jpg"
+}
+
+###
+
+GET http://localhost:3030/category/
+
+###
+
+POST http://localhost:3030/gallery/
+Content-Type: application/json
+
+{
+  "fileName": "Design.jpg",
+  "category": "Designs"
+}
+
+###
+
+GET http://localhost:3030/gallery/
+
+###
+
+POST http://localhost:3030/faq/
+Content-Type: application/json
+
+{
+  "question": "HOW TO CHOOSE A DESIGN FOR TATTOO?",
+  "answer": "I will be happy to help you with that, you can bring me you ideas and we can develop your very personal and individual design, or you can choose yourself."
+}
+
+###
+
+GET http://localhost:3030/faq/
+
+###
+
+POST http://localhost:3030/services/
+Content-Type: application/json
+
+{
+  "title": "CONSULTATION",
+  "imgUrl": "service.png",
+  "conditions": [
+    "1000 kr -minimum cost up to one hour",
+    "1000 kr/hour - no longer then 4 hours",
+    "700 kr/hour cost for each next hour if session longer then 4 hours",
+    "max session 6 hours"]
+}
+
+
+ 

@@ -1,0 +1,36 @@
+.booking-modal {
+
+  .booking__form-modal-wrap {
+    position: relative;
+    padding: 60px 36px;
+    width: 100%;
+    background-image: url("../img/form-background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: $light;
+  }
+
+  .booking-modal__close-btn {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    width: 30px;
+    height: 30px;
+
+    &::before,
+    &::after {
+      bottom: 14px;
+      left: -3px;
+    }
+  }
+}
+
+@media (min-width: 990px) {
+
+  .booking-modal {
+    .booking__form-modal-wrap {
+      padding: 80px 60px;
+      width: 615px;
+    }
+  }
+}

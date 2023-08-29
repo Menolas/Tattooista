@@ -1,0 +1,26 @@
+.social-share {
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.social-share__list {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+}
+.social-share__link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: $light;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: $dark;
+  }
+}

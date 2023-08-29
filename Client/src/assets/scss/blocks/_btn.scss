@@ -1,0 +1,83 @@
+.btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  color: $dark-text;
+  text-transform: uppercase;
+  border: 2px solid $dark;
+  cursor: pointer;
+}
+
+.btn--transparent {
+  background-color: transparent;
+
+  &::before {
+    @include element-style(2px, 50%, black);
+    left: 0;
+    bottom: 0;
+  }
+}
+
+.btn--light-bg {
+  background-color: $light;
+  border: none;
+
+  &::before {
+    display: none;
+  }
+}
+
+.btn--dark-bg {
+  color: $light-text;
+  background-color: $dark;
+  border: $light-border;
+  border-left: none;
+
+  &::before {
+    @include element-style(2px, 50%, $light);
+    left: 0;
+    bottom: 0;
+  }
+}
+
+.btn--sm {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.btn--bg {
+  padding: 0 16px;
+  height: 46px;
+  font-size: 16px;
+  border-left: none;
+}
+
+.btn--icon {
+  padding: 8px;
+  background-color: transparent;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.btn--icon--light {
+  svg {
+    fill: $dark;
+  }
+}
+
+@media (min-width: 990px) {
+
+  .btn--bg {
+    padding: 0 32px;
+    height: 71px;
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+

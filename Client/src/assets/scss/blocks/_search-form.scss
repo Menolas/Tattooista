@@ -1,0 +1,26 @@
+.search-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  select,
+  input {
+    padding: 10px;
+    height: 42px;
+    background-color: $light;
+    border: none;
+  }
+
+  select {
+    //padding-bottom: 0;
+    max-width: 240px;
+    font-size: 16px;
+  }
+
+  .btn {
+    height: 42px;
+    border: none;
+  }
+}
+
+

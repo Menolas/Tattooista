@@ -1,0 +1,229 @@
+input::placeholder,
+textarea::placeholder {
+  color: #6F6D6D;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  font-family: 'Monseratt', sans-serif;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+.form {
+  color: $dark-text;
+}
+
+.search-form {
+  width: 100%;
+}
+
+.form__title {
+  margin-top: 0;
+  margin-bottom: 27px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.form__input-wrap {
+  margin-bottom: 32px;
+  width: 100%;
+
+  &.form__input-wrap--uploadFile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.form--updateTattooStyle .form__input-wrap--uploadFile {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form__input-wrap--uploadFile-img {
+  height: 250px;
+  overflow: hidden;
+}
+
+.form--updateAboutForm {
+  .form__input-wrap--uploadFile-img {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+.form__uploadFileBtns {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.form__file-name {
+  display: flex;
+  overflow: hidden;
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.form__input-wrap--checkbox {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 8px;
+    padding-left: 28px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #373737;
+    text-transform: uppercase;
+  }
+}
+
+.checkbox {
+  position: absolute;
+  display: block;
+  width: 21px;
+  height: 21px;
+  left: 0;
+  top: 50%;
+  background-color: transparent;
+  border: $dark-border;
+  transform: translate(0, -50%);
+}
+
+input[type="checkbox"]:checked+label .checkbox::after {
+  @include element-style(9px, 16px, transparent);
+  bottom: 3px;
+  left: 4px;
+  border: 3px solid $dark;
+  border-left: none;
+  border-top: none;
+  border-radius: 2px;
+  transform: rotate(45deg) skew(9deg, 7deg);
+}
+
+input,
+textarea,
+select {
+  padding-bottom: 8px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  color: $dark-text;
+  border: $dark-border;
+  border-left: none;
+  border-top: none;
+  background-color: transparent;
+
+  &:focus {
+    border-left: none;
+    border-top: none;
+    outline: none;
+  }
+}
+
+input {
+  height: 32px;
+}
+
+.form__file-input-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+
+  input {
+    height: unset;
+    width: unset;
+    border: none;
+  }
+}
+
+.form__submit-btn {
+  width: 100%;
+
+  &::before {
+    @include element-style(2px, 50%, $dark);
+    left: 0;
+    bottom: 0;
+  }
+}
+
+.form__error {
+  display: inline-block;
+  margin-top: 10px;
+  color: rgb(150, 16, 16);
+  font-weight: 600;
+}
+
+.form__avatar {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border: $dark-border;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+  }
+}
+
+.form--galleryUpload {
+
+  .client-gallery {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .client-gallery__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100px;
+    overflow: hidden;
+
+    img {
+      height: 100px;
+    }
+  }
+}
+
+@media (min-width: 990px) {
+
+  input::placeholder,
+  textarea::placeholder {
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  .form__title {
+    margin-bottom: 47px;
+    font-size: 24px;
+  }
+
+  .form__input-wrap {
+    margin-bottom: 46px;
+  }
+
+  .form__input-wrap--checkbox {
+
+    label {
+      padding-left: 36px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
+}
+
