@@ -8,8 +8,8 @@ export const getTokenSelector = (state: AppStateType) => {
   return state.auth.token
 }
 
-export const getUserIdSelector = (state: AppStateType) => {
-  return state.auth.userId
+export const getUserSelector = (state: AppStateType) => {
+  return state.auth.user
 }
 
 //username: null,

@@ -11,7 +11,6 @@ router.post('/registration',
   body('password').isLength({min:4, max:32}),
   authController.registration
 )
-
 router.post('/login', authController.login)
 router.post('/logout', authController.logout)
 router.get('/activate/:link', authController.activate)

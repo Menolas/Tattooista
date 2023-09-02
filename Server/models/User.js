@@ -20,6 +20,10 @@ const UserSchema = new Schema({
   isActivated: {
     type: Boolean,
     default: false
+  },
+
+  activationLink: {
+    type: String
   }
 
 });

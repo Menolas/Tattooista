@@ -2,26 +2,20 @@ import { authAPI } from './authApi'
 import { ResultCodesEnum } from '../../utils/constants'
 import {ThunkAction} from "redux-thunk"
 import {AppStateType} from "../redux-store"
-import {LoginFormValues} from "../../types/Types"
+import {LoginFormValues, RegistrationFormValues} from "../../types/Types"
+import {IUser} from "../../types/IUser";
 
 const SET_ADMIN_DATA = 'SET_ADMIN_DATE'
 const SET_AUTH = 'SET_AUTH'
+const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN'
 
-export type InitialStateType = {
-  userId: string | null
-  username: string | null
-  password: string | null
-  token: string | null
-  isAuth: boolean
+let initialState = {
+  user: {} as IUser | null,
+  token: null as string | null | undefined,
+  isAuth: false as boolean
 }
 
-let initialState: InitialStateType = {
-  userId: null,
-  username: null,
-  password: null,
-  token: null,
-  isAuth: false
-}
+export type InitialStateType = typeof initialState
 
 export const authReducer = (
     state = initialState,
@@ -30,10 +24,16 @@ export const authReducer = (
 
   switch (action.type) {
 
+    case SET_ACCESS_TOKEN:
+      return  {
+        ...state,
+        token: action.token
+      }
+
     case SET_ADMIN_DATA:
       return {
         ...state,
-        ...action.payload,
+        ...action.user,
       }
 
     case SET_AUTH:
@@ -46,42 +46,36 @@ export const authReducer = (
   }
 }
 
-type ActionsTypes = SetAdminDataActionType | SetAuthActionType
+type ActionsTypes = SetTokenActionType | SetAdminDataActionType | SetAuthActionType
 
-type SetAdminDataActionPayloadType = {
-  userId: string | null
-  username: string | null
-  password: string | null
-  token: string | null
+type SetTokenActionType = {
+  type: typeof SET_ACCESS_TOKEN,
+  token: null | string
 }
+
+const setAccessToken = (token: string | null): SetTokenActionType => ({
+  type: SET_ACCESS_TOKEN, token
+})
 
 type SetAdminDataActionType = {
   type: typeof SET_ADMIN_DATA,
-  payload: SetAdminDataActionPayloadType
+  user: IUser | null
 }
 
 const setAdminData = (
-    userId: string | null,
-    username: string | null,
-    password: string | null,
-    token: string | null
-): SetAdminDataActionType => (
-  {
-    type: SET_ADMIN_DATA,
-    payload: { userId, username, password, token }
-  }
-)
+    user: IUser | null
+): SetAdminDataActionType => ({
+    type: SET_ADMIN_DATA, user
+})
 
 type SetAuthActionType = {
   type: typeof SET_AUTH
   isAuth: boolean
 }
 
-const setAuth = (isAuth: boolean): SetAuthActionType => (
-  {
+const setAuth = (isAuth: boolean): SetAuthActionType => ({
     type: SET_AUTH, isAuth
-  }
-)
+})
 
 //thunks
 
@@ -106,38 +100,48 @@ export const getAuthAdminData = (
 export const login = (values: LoginFormValues): ThunkType => async (
     dispatch
 ) => {
-  //debugger
   try {
     let response = await authAPI.login(values)
-    if (response.resultCode === ResultCodesEnum.Success && response.user) {
-      dispatch(setAdminData(
-          response.user._id,
-          response.user.username,
-          response.user.password,
-          response.user.token
-      ))
-      await dispatch(getAuthAdminData(response.user.token))
-    }
-    if (response.resultCode === ResultCodesEnum.Error) {
-      console.log(response.error)
-    }
+    dispatch(setAdminData(response.user))
+    dispatch(setAuth(true))
+    dispatch(setAccessToken(response.accessToken))
+
   } catch (e) {
     console.log(e)
   }
 
 }
 
-export const logout = (
-    userId: string
-): ThunkType => async (
+export const logout = (): ThunkType => async (
     dispatch
 ) => {
   try {
-    let response = await authAPI.logout(userId)
-    if (response === ResultCodesEnum.Success) {
-      dispatch(setAdminData(null, null, null, null))
-      dispatch(setAuth(false))
-    }
+    const response = await authAPI.logout()
+    dispatch(setAccessToken(null))
+    dispatch(setAdminData(null))
+    dispatch(setAuth(false))
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const registration = (values: RegistrationFormValues): ThunkType => async (dispatch) => {
+  try {
+    let response = await authAPI.registration(values.email, values.password)
+    dispatch(setAuth(true))
+    dispatch(setAdminData(response.user))
+    dispatch(setAccessToken(response.accessToken))
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const checkAuth = ():ThunkType => async (dispatch) => {
+  try {
+    let response = await authAPI.checkAuth()
+    dispatch(setAccessToken(response.accessToken))
+    dispatch(setAuth(true))
+    dispatch(setAdminData(response.user))
   } catch (e) {
     console.log(e)
   }

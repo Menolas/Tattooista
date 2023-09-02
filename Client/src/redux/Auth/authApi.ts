@@ -1,6 +1,8 @@
+import $api, {API_URL} from '../../http'
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from 'axios'
-import { LoginFormValues } from '../../types/Types'
+import {LoginFormValues, RegistrationFormValues} from '../../types/Types'
 import { SERVER_URL } from '../../utils/constants'
+import {IUser} from "../../types/IUser";
 //import {CreateAxiosDefaults} from 'axios/index'
 
 const instance = axios.create({
@@ -8,15 +10,20 @@ const instance = axios.create({
 } as CreateAxiosDefaults)
 
 type LoginResponseType = {
-    resultCode: number,
-    user?: {
-        password: string,
-        roles: Array<string>,
-        token: string,
-        username: string,
-        _id: string
-    },
-    error?: string | null
+    user: IUser,
+    accessToken: string,
+    refreshToken: string,
+    error?: string
+}
+
+type RegistrationResponseType = {
+    accessToken: string
+    refreshToken: string
+    user: IUser
+}
+
+type LogoutResponseType = {
+    resultCode: number
 }
 
 export const authAPI = {
@@ -33,15 +40,23 @@ export const authAPI = {
     })
   },
 
+  registration(email: string, password: string) {
+      return $api.post<RegistrationResponseType>('auth/registration', {email, password})
+          .then(res => res.data)
+  },
+
   login(values: LoginFormValues) {
-      return instance.post<LoginResponseType>('auth/login',  values)
+      return $api.post<LoginResponseType>('auth/login',  values)
         .then(res => res.data)
   },
 
-  logout(userId: string) {
-    return instance.delete<number>(`auth/logout/${userId}`)
-        .then(response => {
-          return response.data
-        })
+  logout() {
+    return $api.post<LogoutResponseType>(`auth/logout`)
+        .then(response => response.data)
+  },
+
+  checkAuth() {
+      return axios.get(`${API_URL}/auth/refresh`, {withCredentials: true})
+          .then(response => response.data)
   }
 }

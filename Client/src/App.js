@@ -23,10 +23,13 @@ import { ArchiveContainer } from './components/Admin/Archive/ArchiveContainer'
 import { ArchivedClients } from './components/Admin/Archive/ArchivedClients'
 import { ArchivedCustomers } from './components/Admin/Archive/ArchivedCustomers'
 import {ArchivedGallery} from './components/Admin/Archive/ArchivedGallery'
+import {RegistrationContainer} from "./pages/registration/RegistrationContainer";
+import {checkAuth} from "./redux/Auth/auth-reducer";
 
 class App extends Component {
 
   componentDidMount() {
+    this.props.checkAuth()
     //this.props.getAuthAdminData(this.props.token)
     //this.props.initializeApp(this.props.token)
   }
@@ -42,6 +45,8 @@ class App extends Component {
                 <Routes>
                   <Route exact path='/'
                     element={<MainPageContainer />} />
+                  <Route path={`registration`}
+                         element={<RegistrationContainer />} />
                   <Route path={`login`}
                          element={<LoginContainer />} />
                   <Route path={`portfolio`}
@@ -85,7 +90,7 @@ const mapStateToProps = (state) => ({
 
 const AppContainer = compose(
   withRouter,
-  connect(mapStateToProps, { initializeApp })
+  connect(mapStateToProps, { initializeApp, checkAuth })
 )(App);
 
 const AhTattooistaApp = (props) => {

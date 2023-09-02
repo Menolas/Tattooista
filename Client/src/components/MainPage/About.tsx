@@ -41,7 +41,7 @@ export const About: React.FC<PropsType> = React.memo(({
     const imgUrl = pageAbout?.wallPaper ? `url("${SERVER_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("../avatar.jpg")`
 
     return (
-         (isAuth || pageAbout?.isActive) &&
+         ( pageAbout?.isActive) &&
             <section className="page-block about">
                 { isAuth &&
                     <div className={"actionBar"}>

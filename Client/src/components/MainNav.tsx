@@ -3,11 +3,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link'
 
-type PropsType = {
-  activeStyleValue: string
-}
-
-export const MainNav: React.FC<PropsType> = React.memo(({activeStyleValue}) => {
+export const MainNav: React.FC = React.memo(() => {
   let [mainNavMenuModal, setMainMenu] = useState(false)
   let [mainNavClasses, setMainNavClasses] = useState('main-nav')
 
@@ -73,7 +69,6 @@ export const MainNav: React.FC<PropsType> = React.memo(({activeStyleValue}) => {
       <ul className="list main-nav__list">
         <li className="main-nav__item">
           <NavLink
-              //to={`portfolio?&style=${activeStyleValue}`}
               to={`portfolio`}
               className="main-nav__link"
               onClick={ closeMenu }>
