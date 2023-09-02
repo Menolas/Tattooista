@@ -12,14 +12,14 @@ export const LoginContainer: React.FC = () => {
 
   const dispatch = useDispatch()
 
-  const adminLogin = (values: LoginFormValues) => {
+  const loginCallBack = (values: LoginFormValues) => {
     dispatch(login(values))
   }
 
   return (
     <Login
       isAuth={isAuth}
-      login={adminLogin}
+      login={loginCallBack}
     />
   )
 }

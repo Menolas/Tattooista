@@ -3,7 +3,7 @@ import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues} from 'fo
 import { ErrorMessageWrapper } from '../../utils/validators'
 import * as Yup from 'yup'
 import { Navigate } from 'react-router';
-import { LoginFormValues } from '../../types/Types'
+import {LoginFormValues, RegistrationFormValues} from '../../types/Types'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required('Required field'),
@@ -12,26 +12,23 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
   isAuth: boolean
-  login: (values: LoginFormValues) => void
+  registration: (values: RegistrationFormValues) => void
 }
 
-export const LoginForm: React.FC<PropsType> = React.memo(({
+export const RegistrationForm: React.FC<PropsType> = React.memo(({
   isAuth,
-  login
+  registration
 }) => {
 
-  if (isAuth) {
-    return <Navigate to="/admin/customers" />
-  }
-
-  const submit = (values: LoginFormValues, actions: FormikHelpers<FormikValues>) => {
-    login(values)
+  const submit = (values: RegistrationFormValues, actions: FormikHelpers<FormikValues>) => {
+    registration(values)
     actions.setSubmitting(false)
   }
 
-  const initialValues: LoginFormValues = {
+  const initialValues: RegistrationFormValues = {
       email: '',
-      password: ''
+      password: '',
+      consent: false,
   }
 
   return (
@@ -46,10 +43,10 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
         return (
           <Form id="login" className="form">
             <h3 className="form__title">
-              Login
+              Registration
             </h3>
             <div className="form__input-wrap">
-              <label>Login</label>
+              <label>Your email</label>
               <Field
                 name={'email'}
                 type={'text'}
@@ -70,6 +67,20 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                 {ErrorMessageWrapper}
               </ErrorMessage>
             </div>
+            <div className="form__input-wrap form__input-wrap--checkbox">
+              <Field
+                  type="checkbox"
+                  name="consent"
+                  id="consent"
+              />
+              <label htmlFor="consent">
+                <span className="checkbox">{''}</span>
+                CONSENT WITH PROCESSING OF MY PERSONAL DATA
+              </label>
+              <ErrorMessage name='consent'>
+                {ErrorMessageWrapper}
+              </ErrorMessage>
+            </div>
             <button
               className="btn btn--bg btn--transparent form__submit-btn"
               type="submit"
@@ -77,7 +88,7 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
             >
               {isSubmitting
                   ? 'Please wait...'
-                  : 'Log In'
+                  : 'Sign Up'
               }
             </button>
           </Form>

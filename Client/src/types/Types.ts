@@ -54,8 +54,14 @@ export type GalleryItemType = {
     categories: Array<String>
 }
 
+export interface RegistrationFormValues {
+    email: string
+    password: string
+    consent: boolean
+}
+
 export interface LoginFormValues {
-    username: string
+    email: string
     password: string
 }
 
