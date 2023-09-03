@@ -122,7 +122,7 @@ input[type="checkbox"]:checked+label .checkbox::after {
 input,
 textarea,
 select {
-  padding-bottom: 8px;
+  padding: 8px 0 12px;
   width: 100%;
   font-size: 20px;
   font-weight: 600;

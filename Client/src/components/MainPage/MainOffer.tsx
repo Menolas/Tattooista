@@ -2,20 +2,17 @@ import * as React from 'react'
 import { useState } from 'react'
 import { ModalPopUp } from '../common/ModalPopUp'
 import { BookingForm } from '../Forms/BookingFormFormik'
-import { AddCustomerFormValues } from '../../types/Types'
-import {SuccessModal} from "../SuccessModal";
+import {AddCustomerFormValues, BookConsultationFormValues} from '../../types/Types'
 
 type PropsType = {
-  addCustomer: (values: AddCustomerFormValues) => void
+  bookConsultation: (values: BookConsultationFormValues) => void
 }
 
-export const MainOffer: React.FC<PropsType> = React.memo(({addCustomer}) => {
+export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) => {
 
   const [bookingModal, setBookingModal] = useState(false)
-  const [isSuccess, setSuccess] = useState(false)
 
   const modalTitle = 'FILL THE FORM AND WE WILL CONTACT YOU SOON'
-  const successModalTitle = ''
 
   const showBookConsultationModal = () => {
     setBookingModal(true)
@@ -23,14 +20,6 @@ export const MainOffer: React.FC<PropsType> = React.memo(({addCustomer}) => {
 
   const closeBookingModal = () => {
     setBookingModal(false)
-  }
-
-  const showSuccessModal = () => {
-    setSuccess(true)
-  }
-
-  const closeSuccessModal = () => {
-    setSuccess(false)
   }
 
   return (
@@ -55,20 +44,10 @@ export const MainOffer: React.FC<PropsType> = React.memo(({addCustomer}) => {
         >
           <BookingForm
             consentId="consent"
-            addCustomer={addCustomer}
+            bookConsultation={bookConsultation}
             closeBookingModal={closeBookingModal}
-            showSuccessModal={showSuccessModal}
           />
         </ModalPopUp>
-      }
-      {
-          isSuccess &&
-          <ModalPopUp
-              modalTitle={successModalTitle}
-              closeModal={closeSuccessModal}
-          >
-            <SuccessModal />
-          </ModalPopUp>
       }
     </div>
   )

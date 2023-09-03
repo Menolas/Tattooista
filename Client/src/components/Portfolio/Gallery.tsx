@@ -5,11 +5,13 @@ import {GalleryItemType, TattooStyleType} from '../../types/Types'
 import { ModalPopUp } from '../common/ModalPopUp'
 import { AdminGalleryUploadFormFormik } from '../Forms/AdminGalleryUploadFormFormik'
 import {SERVER_URL} from '../../utils/constants'
+// @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
-import {Paginator} from "../common/Paginator";
-import {SuccessModal} from "../SuccessModal";
+import {Paginator} from '../common/Paginator'
+import {SuccessPopUp} from "../common/SuccessPopUp";
 
 type PropsType = {
+  isSuccess: boolean
   isAuth: boolean
   isFetching: boolean
   totalCount: number
@@ -21,11 +23,13 @@ type PropsType = {
   updateGallery: (values: any) => void
   deleteGalleryItem: (itemId: string) => void
   setCurrentGalleryPage: (page: number) => void
-  setPageLimit: (limit: number) => void
+  setGalleryPageSize: (limit: number) => void
   archiveGalleryItem: (id: string) => void
+  setIsSuccess: (bol: boolean) => void
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
+  isSuccess,
   isAuth,
   isFetching,
   activeStyle,
@@ -35,25 +39,17 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   gallery,
   isGalleryItemDeletingInProcess,
   setCurrentGalleryPage,
-  setPageLimit,
+  setGalleryPageSize,
   updateGallery,
   deleteGalleryItem,
-  archiveGalleryItem
+  archiveGalleryItem,
+  setIsSuccess
 }) => {
   //debugger
 
   let [bigImg, setBigImg] = useState('')
   const [ editGalleryMode, setEditGalleryMode] = useState(false)
-  const [isSuccess, setSuccess] = useState(false)
-  const successModalTitle = ''
-
-  const showSuccessModal = () => {
-    setSuccess(true)
-  }
-
-  const closeSuccessModal = () => {
-    setSuccess(false)
-  }
+  const successPopUpContent = `You successfully added images to ${activeStyle.value} style gallery`
 
   const showBigImg = (fileName) => {
     if (!bigImg) {
@@ -122,7 +118,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChanged={setCurrentGalleryPage}
-              setPageLimit={setPageLimit}
+              setPageLimit={setGalleryPageSize}
             />
             { isAuth &&
                 <button
@@ -140,7 +136,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                         activeStyle={activeStyle.value}
                         updateGallery={updateGallery}
                         closeModal={closeEditGalleryForm}
-                        showSuccessModal={showSuccessModal}
                     />
                 </ModalPopUp>
             }
@@ -161,17 +156,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               </div>
             </div>
           }
-          {
-              isSuccess &&
-              <ModalPopUp
-                  modalTitle={successModalTitle}
-                  closeModal={closeSuccessModal}
-              >
-                <SuccessModal />
-              </ModalPopUp>
-          }
         </section>
       )}
+      {
+          isSuccess &&
+          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+      }
     </>
   )
 })

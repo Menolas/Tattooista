@@ -2,9 +2,9 @@ import * as React from 'react'
 import {useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MainPage } from './MainPage'
-import {AddCustomerFormValues, FaqType, TattooStyleType} from '../../types/Types'
+import {AddCustomerFormValues, BookConsultationFormValues, FaqType, TattooStyleType} from '../../types/Types'
 import { addCustomer } from '../../redux/Customers/customers-reducer'
-import { getFaqItemsSelector, getPagesSelector, getServicesSelector } from '../../redux/MainPage/mainPage-selectors'
+import { getFaqItemsSelector, getPagesSelector, getServicesSelector } from '../../redux/General/general-selectors'
 import {
   getFaqItems,
   getPages,
@@ -12,11 +12,18 @@ import {
   editAboutPage,
   changePageVisibility,
   editService,
-  addService, deleteService, updateFaqItem, addFaqItem, deleteFaqItem
-} from '../../redux/MainPage/mainPage-reducer'
+  addService,
+  deleteService,
+  updateFaqItem,
+  addFaqItem,
+  deleteFaqItem,
+  bookConsultation,
+  setIsSuccessAC
+} from '../../redux/General/general-reducer'
 import { getTattooStyles, setActiveStyleAC } from '../../redux/Portfolio/portfolio-reducer'
 import {getGalleryPageSize, getTattooStylesSelector} from '../../redux/Portfolio/portfolio-selectors'
 import {getAuthSelector} from "../../redux/Auth/auth-selectors";
+import {getIsSuccessSelector} from "../../redux/Customers/customers-selectors";
 
 export const MainPageContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector)
@@ -25,6 +32,7 @@ export const MainPageContainer: React.FC = () =>  {
   const services = useSelector(getServicesSelector)
   const faq = useSelector(getFaqItemsSelector)
   const pages = useSelector(getPagesSelector)
+  const isSuccess = useSelector(getIsSuccessSelector)
 
   const dispatch = useDispatch()
 
@@ -75,6 +83,14 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(deleteFaqItem(id))
   }
 
+  const bookConsultationCallBack = (values: BookConsultationFormValues) => {
+    dispatch(bookConsultation(values))
+  }
+
+  const setIsSuccessCallBack = (bol: boolean) => {
+    dispatch(setIsSuccessAC(bol))
+  }
+
   return (
     <MainPage
       isAuth={isAuth}
@@ -83,6 +99,7 @@ export const MainPageContainer: React.FC = () =>  {
       services={services}
       faq={faq}
       pages={pages}
+      isSuccess={isSuccess}
       addCustomer={addCustomerCallBack}
       setActiveStyle={setActiveStyleCallBack}
       editAboutPage={editAboutPageCallBack}
@@ -93,6 +110,8 @@ export const MainPageContainer: React.FC = () =>  {
       addFaqItem={addFaqItemCallBack}
       updateFaqItem={updateFaqItemCallBack}
       deleteFaqItem={deleteFaqItemCallBack}
+      bookConsultation={bookConsultationCallBack}
+      setIsSuccess={setIsSuccessCallBack}
     />
   )
 }

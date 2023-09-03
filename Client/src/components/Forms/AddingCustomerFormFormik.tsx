@@ -14,7 +14,6 @@ const validationSchema = Yup.object().shape({
 })
 
 type PropsType = {
-  consentId?: string
   addCustomer: (values: AddCustomerFormValues) => void
   closeBookingModal: () => void
 }

@@ -7,7 +7,7 @@ import { CustomersSearchFormFormik } from '../../Forms/CustomersSearchFormFormik
 import { CustomersFilterType } from '../../../redux/Customers/customers-reducer'
 import {ModalPopUp} from '../../common/ModalPopUp'
 import {AddingCustomerForm} from "../../Forms/AddingCustomerFormFormik";
-import {SuccessModal} from "../../SuccessModal";
+import {SuccessPopUp} from "../../common/SuccessPopUp";
 
 type PropsType = {
   isSuccess: boolean
@@ -26,7 +26,7 @@ type PropsType = {
   setPageLimit: (customersPageSize: number) => void
   addCustomer: (values: AddCustomerFormValues) => void
   archiveCustomer: (customerId: string) => void
-  closeSuccessModal: () => void
+  setIsSuccess: (bol: boolean) => void
 }
 
 export const Customers: React.FC<PropsType> = React.memo(({
@@ -46,17 +46,17 @@ export const Customers: React.FC<PropsType> = React.memo(({
   setPageLimit,
   addCustomer,
   archiveCustomer,
-  closeSuccessModal
+  setIsSuccess
  }) => {
 
   let [addCustomerMode, setAddCustomerMode] = useState<boolean>(false)
-  const successModalTitle = ''
 
   const closeModal = () => {
     setAddCustomerMode(false)
   }
 
   const modalTitle = 'ADD CUSTOMER'
+  const successPopUpContent = "You successfully changed your consultations list"
 
   const customersElements = customers?.map(customer => {
       return (
@@ -105,7 +105,6 @@ export const Customers: React.FC<PropsType> = React.memo(({
               closeModal={closeModal}
           >
               <AddingCustomerForm
-                consentId="consent"
                 addCustomer={addCustomer}
                 closeBookingModal={closeModal}
               />
@@ -113,12 +112,10 @@ export const Customers: React.FC<PropsType> = React.memo(({
       }
       {
         isSuccess &&
-        <ModalPopUp
-            modalTitle={successModalTitle}
-            closeModal={closeSuccessModal}
-        >
-            <SuccessModal />
-        </ModalPopUp>
+        <SuccessPopUp
+            closeModal={setIsSuccess}
+            content={successPopUpContent}
+        />
       }
     </>
   )

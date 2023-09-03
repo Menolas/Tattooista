@@ -1,13 +1,17 @@
 import {AppStateType} from '../redux-store'
 
 export const getFaqItemsSelector = (state: AppStateType) => {
-  return state.mainPage.faq
+  return state.general.faq
 }
 
 export const getServicesSelector = (state: AppStateType) => {
-  return state.mainPage.services
+  return state.general.services
 }
 
 export const getPagesSelector = (state: AppStateType) => {
-  return state.mainPage.pages
+  return state.general.pages
+}
+
+export const getIsSuccessSelector = (state: AppStateType) => {
+  return state.general.isSuccess
 }

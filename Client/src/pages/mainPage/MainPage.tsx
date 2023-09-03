@@ -5,7 +5,15 @@ import { About } from '../../components/MainPage/About'
 import { Services } from '../../components/MainPage/Services'
 import { FaqItems } from '../../components/MainPage/FaqItems'
 import { Booking } from '../../components/MainPage/Booking'
-import {AddCustomerFormValues, FaqType, PageType, ServiceType, TattooStyleType} from "../../types/Types";
+import {
+    AddCustomerFormValues,
+    BookConsultationFormValues,
+    FaqType,
+    PageType,
+    ServiceType,
+    TattooStyleType
+} from "../../types/Types";
+import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 
 type PropsType = {
   isAuth: boolean
@@ -14,6 +22,7 @@ type PropsType = {
   services: Array<ServiceType>
   faq: Array<FaqType>
   pages: Array<PageType>
+  isSuccess: boolean
   addCustomer: (values: AddCustomerFormValues) => void
   setActiveStyle: (style: TattooStyleType) => void
   editAboutPage: (id: string, values: FormData) => void
@@ -24,6 +33,8 @@ type PropsType = {
   updateFaqItem: (id: string, values: any) => void
   addFaqItem: (values: FaqType) => void
   deleteFaqItem: (id: string) => void
+  bookConsultation: (values: BookConsultationFormValues) => void
+  setIsSuccess: (bol: boolean) => void
 }
 
 export const MainPage: React.FC<PropsType> = React.memo(({
@@ -33,6 +44,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   services,
   faq,
   pages,
+  isSuccess,
   addCustomer,
   setActiveStyle,
   editAboutPage,
@@ -42,14 +54,17 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   deleteService,
   updateFaqItem,
   addFaqItem,
-  deleteFaqItem
+  deleteFaqItem,
+  bookConsultation,
+  setIsSuccess
 }) => {
 
   const pageAbout = pages?.find(page => page.name === 'about')
+  const successPopUpContent = "You've booked a consultation! We will contact you soon))"
 
   return (
     <>
-      <MainOffer addCustomer={addCustomer} />
+      <MainOffer bookConsultation={bookConsultation} />
       <PortfolioSlider
           galleryPageSize={galleryPageSize}
           setActiveStyle={setActiveStyle}
@@ -75,7 +90,10 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           addFaqItem={addFaqItem}
           deleteFaqItem={deleteFaqItem}
       />
-      <Booking consentId="consent" addCustomer={addCustomer} />
+      <Booking consentId="consent" bookConsultation={bookConsultation} />
+      { isSuccess &&
+        <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+      }
     </>
   )
 })

@@ -9,13 +9,11 @@ type PropsType = {
   activeStyle: string
   updateGallery: (values: any) => void
   closeModal: () => void
-  showSuccessModal: () => void
 }
 
 export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
   updateGallery,
-  closeModal,
-  showSuccessModal
+  closeModal
 }) => {
 
   const [imageURL, setImageURL] = useState()
@@ -31,7 +29,6 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
     formData.append('gallery', values['gallery'])
     updateGallery(formData)
     closeModal()
-    showSuccessModal()
   }
 
   const initialValues: any = {

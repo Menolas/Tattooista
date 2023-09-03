@@ -23,7 +23,8 @@ type RegistrationResponseType = {
 }
 
 type LogoutResponseType = {
-    resultCode: number
+    deletedCount: number
+    acknowledged: boolean
 }
 
 export const authAPI = {

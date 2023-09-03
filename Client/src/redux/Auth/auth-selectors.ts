@@ -12,6 +12,10 @@ export const getUserSelector = (state: AppStateType) => {
   return state.auth.user
 }
 
+export const getIsSuccessSelector = (state: AppStateType) => {
+  return state.auth.isSuccess
+}
+
 //username: null,
 //password: null,
 

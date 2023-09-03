@@ -2,7 +2,8 @@ import * as React from 'react'
 import { Advertisement } from '../../components/Portfolio/Advertisement'
 import { Gallery } from '../../components/Portfolio/Gallery'
 import { TattooStyles } from '../../components/Portfolio/TattooStyles'
-import { AddCustomerFormValues, GalleryItemType, TattooStyleType } from "../../types/Types";
+import {AddCustomerFormValues, BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
+import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 
 type PropsType = {
   isAuth: boolean
@@ -14,8 +15,9 @@ type PropsType = {
   tattooStyles: Array<TattooStyleType>
   activeStyle: TattooStyleType
   gallery: Array<GalleryItemType>
-  setPageLimit: (galleryPageSize: number) => void
-  addCustomer: (values: AddCustomerFormValues) => void
+  isSuccess: boolean
+  setGalleryPageSize: (galleryPageSize: number) => void
+  bookConsultation: (values: BookConsultationFormValues) => void
   updateGallery: (values: any) => void
   deleteGalleryItem: (itemId: string) => void
   setCurrentGalleryPage: (page: number) => void
@@ -24,6 +26,7 @@ type PropsType = {
   editTattooStyle: (vid: string, values: FormData) => void
   deleteTattooStyle: (id: string) => void
   archiveGalleryItem: (id: string) => void
+  setIsSuccess: (bol: boolean) => void
 }
 
 export const Portfolio: React.FC<PropsType> = ({
@@ -36,8 +39,9 @@ export const Portfolio: React.FC<PropsType> = ({
   tattooStyles,
   activeStyle,
   gallery,
-  setPageLimit,
-  addCustomer,
+  isSuccess,
+  setGalleryPageSize,
+  bookConsultation,
   updateGallery,
   deleteGalleryItem,
   setCurrentGalleryPage,
@@ -45,7 +49,8 @@ export const Portfolio: React.FC<PropsType> = ({
   addTattooStyle,
   editTattooStyle,
   deleteTattooStyle,
-  archiveGalleryItem
+  archiveGalleryItem,
+  setIsSuccess
 }) => {
 
   return (
@@ -60,9 +65,16 @@ export const Portfolio: React.FC<PropsType> = ({
         deleteTattooStyle={deleteTattooStyle}
       />
 
-      { !isAuth && <Advertisement addCustomer={addCustomer}/>}
+      { !isAuth &&
+          <Advertisement
+              isSuccess={isSuccess}
+              setIsSuccess={setIsSuccess}
+              bookConsultation={bookConsultation}
+          />
+      }
 
       <Gallery
+        isSuccess={isSuccess}
         isAuth={isAuth}
         isFetching={isFetching}
         activeStyle={activeStyle}
@@ -70,12 +82,13 @@ export const Portfolio: React.FC<PropsType> = ({
         pageSize={galleryPageSize}
         currentPage={currentGalleryPage}
         setCurrentGalleryPage={setCurrentGalleryPage}
-        setPageLimit={setPageLimit}
+        setGalleryPageSize={setGalleryPageSize}
         gallery={gallery}
         updateGallery={updateGallery}
         deleteGalleryItem={deleteGalleryItem}
         archiveGalleryItem={archiveGalleryItem}
         isGalleryItemDeletingInProcess={isGalleryItemDeletingInProcess}
+        setIsSuccess={setIsSuccess}
       />
     </>
   )

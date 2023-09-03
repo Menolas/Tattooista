@@ -43,6 +43,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
       const file = event.target.files[0]
       const fileReader = new FileReader()
       fileReader.onloadend = () => {
+        // @ts-ignore
         setImageURL(fileReader.result)
       }
       fileReader.readAsDataURL(file)
@@ -171,7 +172,6 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 : 'SUBMIT'
               }
             </button>
-            {/*<pre>{JSON.stringify(values, 0, 2)}</pre>*/}
           </Form>
         )
       }}

@@ -162,7 +162,6 @@ export const customersReducer = (
       }
 
     case SET_IS_SUCCESS:
-      console.log(state.isSuccess)
       return {
         ...state,
         isSuccess: action.isSuccess
@@ -486,7 +485,6 @@ export const addCustomer = (
   } catch (e) {
     console.log(e)
   }
-
 }
 
 export const turnCustomerToClient = (
@@ -503,18 +501,18 @@ export const turnCustomerToClient = (
     )
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteCustomerAC(customerId))
-      dispatch(setIsFetching(false))
+      dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
-    dispatch(setIsFetching(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetching(false))
   }
 }
 
 export const archiveCustomer = (
     customerId: string
 ): ThunkType => async (dispatch) => {
-  console.log("it is a hit!!!!!")
   try {
     let response = await customersAPI.archiveCustomer(customerId)
     if (response.resultCode === ResultCodesEnum.Success) {

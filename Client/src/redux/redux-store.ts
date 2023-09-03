@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, createStore, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { portfolioReducer } from './Portfolio/portfolio-reducer'
-import { mainPageReducer } from './MainPage/mainPage-reducer'
+import { generalReducer } from './General/general-reducer'
 import { customersReducer } from './Customers/customers-reducer'
 import { clientsReducer } from './Clients/clients-reducer'
 import { authReducer } from './Auth/auth-reducer'
@@ -10,7 +10,7 @@ import { appReducer } from './app-reducer'
 
 let rootReducer = combineReducers({
   portfolio: portfolioReducer,
-  mainPage: mainPageReducer,
+  general: generalReducer,
   customers: customersReducer,
   clients: clientsReducer,
   auth: authReducer,
