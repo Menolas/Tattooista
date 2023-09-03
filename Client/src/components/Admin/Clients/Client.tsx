@@ -1,17 +1,17 @@
 import * as React from 'react'
 import {useState} from 'react'
+// @ts-ignore
 import avatar from '../../../assets/img/fox.webp'
+// @ts-ignore
+import Sprite from '../../../assets/svg/sprite.svg'
 import { NavLink } from 'react-router-dom'
 import {ClientType, ContactType} from '../../../types/Types'
 import { SERVER_URL } from '../../../utils/constants'
 import { ModalPopUp } from '../../common/ModalPopUp'
 import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
-import Sprite from '../../../assets/svg/sprite.svg'
-import {ClientGalleryUploadFormFormik} from "../../Forms/ClientGalleryUploadFormFormik";
-import {SuccessModal} from "../../SuccessModal";
+import {ClientGalleryUploadFormFormik} from '../../Forms/ClientGalleryUploadFormFormik'
 
 type PropsType = {
-  isSuccess: boolean
   client: ClientType
   pageSize: number
   currentPage: number
@@ -20,11 +20,9 @@ type PropsType = {
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (clientId: string) => void
-  closeSuccessModal: () => void
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
-  isSuccess,
   client,
   deleteClient,
   editClient,
@@ -33,7 +31,6 @@ export const Client: React.FC<PropsType> = React.memo(({
   updateClientGallery,
   deleteClientGalleryPicture,
   archiveClient,
-  closeSuccessModal
 }) => {
 
   let [editClientMode, setEditClientMode] = useState<boolean>(false)
@@ -150,15 +147,6 @@ export const Client: React.FC<PropsType> = React.memo(({
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 closeModal={closeEditModal}
             />
-          </ModalPopUp>
-      }
-      {
-          isSuccess &&
-          <ModalPopUp
-              modalTitle={successModalTitle}
-              closeModal={closeSuccessModal}
-          >
-            <SuccessModal />
           </ModalPopUp>
       }
     </li>

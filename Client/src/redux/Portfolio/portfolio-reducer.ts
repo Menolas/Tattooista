@@ -17,11 +17,12 @@ const SET_GALLERY = 'SET_GALLERY'
 const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY'
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM'
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM'
+const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 
 let initialState = {
   totalGalleryItemsCount: 0 as number | null,
   totalArchivedGalleryItemsCount: 0 as number | null,
-  galleryPageSize: 5 as number | null,
+  galleryPageSize: 4 as number | null,
   archivedGalleryPageSize: 5 as number,
   currentGalleryPage: 1 as number | null,
   currentArchivedGalleryPage: 1 as number,
@@ -30,7 +31,8 @@ let initialState = {
   tattooStyles: [] as Array<TattooStyleType>,
   activeStyle: {} as TattooStyleType | null,
   gallery: [] as Array<GalleryItemType>,
-  archivedGallery: [] as Array<GalleryItemType>
+  archivedGallery: [] as Array<GalleryItemType>,
+  isSuccess: false as boolean
 }
 
 export type InitialStateType = typeof initialState
@@ -122,6 +124,12 @@ export const portfolioReducer = (
         archivedGallery: state.archivedGallery.filter(item => item._id !== action.itemId)
       }
 
+    case SET_IS_SUCCESS:
+      return {
+        ...state,
+        isSuccess: action.isSuccess
+      }
+
     default: return {
       ...state
     }
@@ -130,10 +138,21 @@ export const portfolioReducer = (
 
 //action creators
 
-type ActionsTypes = SetGalleryPageSizeActionType | SetCurrentGalleryPageActionType |
+type ActionsTypes = SetIsSuccessAT | SetGalleryPageSizeActionType | SetCurrentGalleryPageActionType |
     SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountActionType | SetArchivedGalleryTotalCountAT |
     SetIsFetchingActionType | SetTattooStylesActionType | SetActiveStyleActionType | SetGalleryActionType
     | SetArchivedGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT
+
+// actions creators
+
+type SetIsSuccessAT = {
+  type: typeof SET_IS_SUCCESS
+  isSuccess: boolean
+}
+
+export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
+  type: SET_IS_SUCCESS, isSuccess
+})
 
 type SetGalleryPageSizeActionType = {
   type: typeof SET_GALLERY_PAGE_SIZE
@@ -347,14 +366,16 @@ export const getArchivedGallery = (
     archivedGalleryPageSize: number,
 ): ThunkType => async (dispatch) => {
   try {
+    dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.getArchivedGalleryItems(currentArchivedGalleryPage, archivedGalleryPageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedGalleryAC(response.gallery))
       dispatch(setArchivedGalleryTotalCountAC(response.totalCount))
     }
   } catch (e) {
-    //dispatch(setIsFetching(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 
@@ -375,11 +396,12 @@ export const adminUpdateGallery = (
     let response = await portfolioApi.adminUpdateGallery(tattooStyle, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setGalleryAC(response.gallery))
+      dispatch(setIsSuccessAC(true))
     }
-    dispatch(setIsFetchingAC(false))
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 

@@ -1,29 +1,27 @@
 import * as React from 'react'
 import { useState } from 'react'
+// @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
 import { NavLink } from "react-router-dom"
 import { ModalPopUp } from '../common/ModalPopUp'
 import { BookingForm } from '../Forms/BookingFormFormik'
-import { AddCustomerFormValues } from '../../types/Types'
-import {SuccessModal} from "../SuccessModal";
+import {BookConsultationFormValues} from '../../types/Types'
+import {SuccessPopUp} from "../common/SuccessPopUp";
 
 type PropsType = {
-  addCustomer: (values: AddCustomerFormValues) => void
+  isSuccess: boolean
+  bookConsultation: (values: BookConsultationFormValues) => void
+  setIsSuccess: (bol: boolean) => void
 }
 
-export const Advertisement: React.FC<PropsType> = React.memo(({addCustomer}) => {
+export const Advertisement: React.FC<PropsType> = React.memo(({
+  isSuccess,
+  setIsSuccess,
+  bookConsultation
+}) => {
 
   let [bookingModal, setBookingModal] = useState(false)
-  const [isSuccess, setSuccess] = useState(false)
-  const showSuccessModal = () => {
-    setSuccess(true)
-  }
-
-  const closeSuccessModal = () => {
-    setSuccess(false)
-  }
-
-  const modalTitle = ''
+  const successPopUpContent = "You've booked a consultation! We will contact you soon))"
 
   const showBookConsultationModal = () => {
     setBookingModal(true);
@@ -66,21 +64,14 @@ export const Advertisement: React.FC<PropsType> = React.memo(({addCustomer}) => 
           >
             <BookingForm
               consentId="consent"
-              addCustomer={addCustomer}
+              bookConsultation={bookConsultation}
               closeBookingModal={closeBookingModal}
-              showSuccessModal={showSuccessModal}
             />
           </ModalPopUp>
         }
-        {
-          isSuccess &&
-          <ModalPopUp
-              modalTitle={modalTitle}
-              closeModal={closeSuccessModal}
-          >
-            <SuccessModal />
-          </ModalPopUp>
-        }
+      { isSuccess &&
+          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
+      }
     </section>
   )
 })

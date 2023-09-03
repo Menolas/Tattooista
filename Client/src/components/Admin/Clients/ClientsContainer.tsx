@@ -110,8 +110,8 @@ export const ClientsContainer: React.FC = () => {
     dispatch(archiveClient(clientId))
   }
 
-  const closeSuccessModalCallBack = () => {
-    dispatch(setIsSuccessAC(false))
+  const setIsSuccessCallBack = (bol: boolean) => {
+    dispatch(setIsSuccessAC(bol))
   }
 
   return (
@@ -135,7 +135,7 @@ export const ClientsContainer: React.FC = () => {
             updateClientGallery={updateClientGalleryCallBack}
             deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
             archiveClient={archiveClientCallBack}
-            closeSuccessModal={closeSuccessModalCallBack}
+            setIsSuccess={setIsSuccessCallBack}
           />
       }
     </>

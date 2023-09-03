@@ -2,7 +2,6 @@ import * as React from 'react'
 import { ConfettiContainer } from './common/Confetti'
 
 export const SuccessModal: React.FC = React.memo(() => {
-  console.log("!!!!!!!!SUCCESS!!!!!!!!!!!!!!!")
 
   return (
     <>

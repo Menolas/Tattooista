@@ -106,8 +106,8 @@ export const CustomersContainer: React.FC = () => {
     dispatch(archiveCustomer(customerId))
   }
 
-  const closeSuccessModalCallBack = () => {
-    dispatch(setIsSuccessAC(false))
+  const setIsSuccessCallBack = (bol: boolean) => {
+    dispatch(setIsSuccessAC(bol))
   }
 
   return (
@@ -131,7 +131,7 @@ export const CustomersContainer: React.FC = () => {
             setPageLimit={setPageLimit}
             addCustomer={addCustomerCallBack}
             archiveCustomer={archiveCustomerCallBack}
-            closeSuccessModal={closeSuccessModalCallBack}
+            setIsSuccess={setIsSuccessCallBack}
           />
       }
     </>

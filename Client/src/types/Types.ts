@@ -14,7 +14,7 @@ export type ClientType = {
     _id: string
     fullName: string
     createdAt?: any
-    contacts: {},
+    contacts: ContactType,
     avatar?: File | string,
     gallery?: Array<string>
 }
@@ -63,6 +63,14 @@ export interface RegistrationFormValues {
 export interface LoginFormValues {
     email: string
     password: string
+}
+
+export interface BookConsultationFormValues  {
+    name: string,
+    contact: string,
+    contactValue: string,
+    message: string,
+    consent: boolean,
 }
 
 export interface AddCustomerFormValues  {

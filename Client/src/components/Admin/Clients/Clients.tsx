@@ -9,6 +9,7 @@ import { ClientSearchFormFormik } from '../../Forms/ClientSearchFormFormik'
 import { ClientsFilterType} from '../../../redux/Clients/clients-reducer'
 import {SuccessModal} from "../../SuccessModal";
 import {NothingToShow} from "../../common/NothingToShow";
+import {SuccessPopUp} from "../../common/SuccessPopUp";
 
 type PropsType = {
   isSuccess: boolean
@@ -27,7 +28,7 @@ type PropsType = {
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (clientId: string) => void
-  closeSuccessModal: () => void
+  setIsSuccess: (bol: boolean) => void
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
@@ -47,7 +48,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     updateClientGallery,
     deleteClientGalleryPicture,
     archiveClient,
-    closeSuccessModal
+    setIsSuccess
 }) => {
 
   let [addClientMode, setAddClientMode] = useState<boolean>(false)
@@ -58,13 +59,13 @@ export const Clients: React.FC<PropsType> = React.memo(({
   }
 
   const modalTitle = 'ADD CLIENT'
+  const successPopUpContent = "You successfully added changes to your clients list"
 
   const clientsElements = clients
       .map(client => {
         return (
             <Client
                 key={client._id}
-                isSuccess={isSuccess}
                 client={client}
                 deleteClient={deleteClient}
                 editClient={editClient}
@@ -73,7 +74,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 updateClientGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 archiveClient={archiveClient}
-                closeSuccessModal={closeSuccessModal}
             />
         )
       })
@@ -120,12 +120,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
         }
         {
           isSuccess &&
-          <ModalPopUp
-              modalTitle={successModalTitle}
-              closeModal={closeSuccessModal}
-          >
-              <SuccessModal />
-          </ModalPopUp>
+          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
         }
       </>
   )

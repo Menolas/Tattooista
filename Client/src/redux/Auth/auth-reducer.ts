@@ -8,11 +8,13 @@ import {IUser} from "../../types/IUser";
 const SET_ADMIN_DATA = 'SET_ADMIN_DATE'
 const SET_AUTH = 'SET_AUTH'
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN'
+const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 
 let initialState = {
   user: {} as IUser | null,
   token: null as string | null | undefined,
-  isAuth: false as boolean
+  isAuth: false as boolean,
+  isSuccess: false as boolean
 }
 
 export type InitialStateType = typeof initialState
@@ -42,11 +44,28 @@ export const authReducer = (
         isAuth: action.isAuth
       }
 
+    case SET_IS_SUCCESS:
+      return {
+        ...state,
+        isSuccess: action.isSuccess
+      }
+
     default: return state
   }
 }
 
-type ActionsTypes = SetTokenActionType | SetAdminDataActionType | SetAuthActionType
+type ActionsTypes = SetIsSuccessAT | SetTokenActionType | SetAdminDataActionType | SetAuthActionType
+
+// actions creators
+
+type SetIsSuccessAT = {
+  type: typeof SET_IS_SUCCESS
+  isSuccess: boolean
+}
+
+export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
+  type: SET_IS_SUCCESS, isSuccess
+})
 
 type SetTokenActionType = {
   type: typeof SET_ACCESS_TOKEN,
@@ -117,9 +136,11 @@ export const logout = (): ThunkType => async (
 ) => {
   try {
     const response = await authAPI.logout()
-    dispatch(setAccessToken(null))
-    dispatch(setAdminData(null))
-    dispatch(setAuth(false))
+     if(response.deletedCount === 1) {
+       dispatch(setAccessToken(null))
+       dispatch(setAdminData(null))
+       dispatch(setAuth(false))
+     }
   } catch (e) {
     console.log(e)
   }
@@ -131,6 +152,7 @@ export const registration = (values: RegistrationFormValues): ThunkType => async
     dispatch(setAuth(true))
     dispatch(setAdminData(response.user))
     dispatch(setAccessToken(response.accessToken))
+    dispatch(setIsSuccessAC(true))
   } catch (e) {
     console.log(e)
   }

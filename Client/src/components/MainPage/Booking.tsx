@@ -1,26 +1,16 @@
 import * as React from 'react'
 import { useState } from 'react'
 import {BookingForm} from '../Forms/BookingFormFormik'
-import {AddCustomerFormValues} from '../../types/Types'
+import {AddCustomerFormValues, BookConsultationFormValues} from '../../types/Types'
 import {SuccessModal} from '../SuccessModal'
 import {ModalPopUp} from '../common/ModalPopUp'
 
 type PropsType = {
-  addCustomer: (values: AddCustomerFormValues) => void
+  consentId: string
+  bookConsultation: (values: BookConsultationFormValues) => void
 }
 
-export const Booking: React.FC<PropsType> = React.memo(({addCustomer}) => {
-
-  const [isSuccess, setSuccess] = useState(false)
-  const showSuccessModal = () => {
-      setSuccess(true)
-  }
-
-  const closeSuccessModal = () => {
-      setSuccess(false)
-  }
-
-  const modalTitle = ''
+export const Booking: React.FC<PropsType> = React.memo(({consentId, bookConsultation}) => {
 
   return (
     <section className = "page-block booking" id="bookingSection">
@@ -28,22 +18,12 @@ export const Booking: React.FC<PropsType> = React.memo(({addCustomer}) => {
       <div className = "booking__content">
         <div className = "booking__form-page-wrap">
           <BookingForm
-              consentId="consent"
-              addCustomer={addCustomer}
-              showSuccessModal={showSuccessModal}
+              consentId={consentId}
+              bookConsultation={bookConsultation}
           />
         </div>
         <div className = "booking__img-wrap">{''}</div>
       </div>
-      {
-          isSuccess &&
-          <ModalPopUp
-              modalTitle={modalTitle}
-              closeModal={closeSuccessModal}
-          >
-            <SuccessModal />
-          </ModalPopUp>
-      }
     </section>
   )
 })

@@ -1,5 +1,5 @@
 import axios, { CreateAxiosDefaults } from 'axios'
-import {FaqType, ServiceType, PageType} from '../../types/Types'
+import {FaqType, ServiceType, PageType, CustomerType, BookConsultationFormValues} from '../../types/Types'
 import { SERVER_URL } from '../../utils/constants'
 
 const instance = axios.create({
@@ -9,6 +9,12 @@ const instance = axios.create({
 type GetPagesResponseType = {
     resultCode: number
     pages: Array<PageType>
+    message?: string
+}
+
+type BookConsultationResponseType = {
+    resultCode: number
+    customer: CustomerType
     message?: string
 }
 
@@ -102,5 +108,12 @@ export const generalSourcesApi = {
             .then(response => {
                 return response.data
             })
-    }
+    },
+
+    bookConsultation(values: BookConsultationFormValues) {
+        return instance.post<BookConsultationResponseType>('customers', values)
+            .then(response => {
+                return response.data
+            })
+    },
 }

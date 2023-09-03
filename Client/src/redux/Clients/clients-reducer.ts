@@ -4,7 +4,6 @@ import { ClientType } from '../../types/Types'
 import { AppStateType } from '../redux-store'
 import { ThunkAction } from 'redux-thunk'
 import type {} from 'redux-thunk/extend-redux'
-import {boolean} from "yup";
 
 const SET_CLIENTS_PAGE_SIZE = 'SET_CLIENTS_PAGE_SIZE'
 const SET_ARCHIVED_CLIENTS_PAGE_SIZE = 'SET_ARCHIVED_CLIENTS_PAGE_SIZE'
@@ -518,7 +517,6 @@ export const getClientProfile = (
   clientId: string): ThunkType => async (
   dispatch
 ) => {
-  //debugger
   dispatch(setIsFetching(true));
   try {
     let response = await clientsAPI.getClientProfile(clientId)
@@ -542,6 +540,7 @@ export const updateClientGallery = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client))
       dispatch(editClientAC(response.client))
+      dispatch(setIsSuccessAC(true))
     }
     dispatch(setIsFetching(false))
   } catch (e) {

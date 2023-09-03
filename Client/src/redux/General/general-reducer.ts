@@ -1,23 +1,25 @@
 import { generalSourcesApi } from './generalSourcesApi'
-import {FaqType, PageType, ServiceType} from '../../types/Types'
+import {BookConsultationFormValues, FaqType, PageType, ServiceType} from '../../types/Types'
 import {ThunkAction} from 'redux-thunk'
 import {AppStateType} from '../redux-store'
-import {ResultCodesEnum} from "../../utils/constants";
+import {ResultCodesEnum} from '../../utils/constants'
 
 const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS'
 const SET_SERVICES = 'SET_SERVICES'
 const SET_PAGES = 'SET_PAGES'
 const SET_PAGE_VISIBILITY = 'SET_PAGE_VISIBILITY'
+const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 
 let initialState = {
   faq: [] as Array<FaqType>,
   services: [] as Array<ServiceType>,
-  pages: [] as Array<PageType>
+  pages: [] as Array<PageType>,
+  isSuccess: false as boolean
 }
 
 export type InitialStateType = typeof initialState
 
-export const mainPageReducer = (
+export const generalReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
@@ -52,15 +54,30 @@ export const mainPageReducer = (
         })
       }
 
+    case SET_IS_SUCCESS:
+      return {
+        ...state,
+        isSuccess: action.isSuccess
+      }
+
     default: return {
-      ...state,
+      ...state
     }
   }
 }
 
-type ActionsTypes = SetPageVisibilityActionType | SetPagesActionType | SetFaqItemsActionType | SetServicesActionType
+type ActionsTypes = SetIsSuccessAT | SetPageVisibilityActionType | SetPagesActionType | SetFaqItemsActionType | SetServicesActionType
 
 // action creators
+
+type SetIsSuccessAT = {
+  type: typeof SET_IS_SUCCESS
+  isSuccess: boolean
+}
+
+export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
+  type: SET_IS_SUCCESS, isSuccess
+})
 
 type SetPageVisibilityActionType = {
   type: typeof SET_PAGE_VISIBILITY
@@ -164,7 +181,7 @@ export const getServices = (): ThunkType => async (dispatch) => {
 
 export const getPages = (): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.getPages()
+    const response = await generalSourcesApi.getPages()
     dispatch(setPages(response.pages))
   } catch (e) {
     console.log(e);
@@ -173,7 +190,7 @@ export const getPages = (): ThunkType => async (dispatch) => {
 
 export const editAboutPage = (id: string, FormData: FormData): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.editAboutPage(id, FormData)
+    const response = await generalSourcesApi.editAboutPage(id, FormData)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setPages(response.pages))
     }
@@ -187,7 +204,7 @@ export const changePageVisibility = (
     isActive: boolean
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.changePageVisibility(pageId, isActive)
+    const response = await generalSourcesApi.changePageVisibility(pageId, isActive)
     dispatch(setPageVisibility(pageId, !isActive))
   } catch (e) {
     console.log(e)
@@ -199,7 +216,7 @@ export const editService = (
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.editService(id, values)
+    const response = await generalSourcesApi.editService(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServices(response.services))
     }
@@ -212,7 +229,7 @@ export const addService = (
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.addService(values)
+    const response = await generalSourcesApi.addService(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServices(response.services))
     }
@@ -225,10 +242,21 @@ export const deleteService = (
     id: string
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.deleteService(id)
+    const response = await generalSourcesApi.deleteService(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServices(response.services))
     }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const bookConsultation = (values: BookConsultationFormValues
+
+): ThunkType => async (dispatch) => {
+  try {
+    const response = await generalSourcesApi.bookConsultation(values)
+    dispatch(setIsSuccessAC(true))
   } catch (e) {
     console.log(e)
   }
