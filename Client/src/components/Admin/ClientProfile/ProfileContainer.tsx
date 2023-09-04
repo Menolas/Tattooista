@@ -10,21 +10,23 @@ import {
   deleteClientGalleryPicture
 } from '../../../redux/Clients/clients-reducer'
 import { Profile } from './Profile'
-import { getClientProfileSelector } from '../../../redux/Clients/clients-selectors'
+import { getClientProfileSelector, getIsSuccessSelector } from '../../../redux/Clients/clients-selectors'
+import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer";
 
 export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector)
+  const isSuccess = useSelector(getIsSuccessSelector)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
-    //const urlParams = new URLSearchParams(window.location.search)
-    //let actualId = profile._id
-    //if(!!profile) actualId = profile._id
-    //if (!!urlParams.get('clientId')) actualId = urlParams.get('clientId')
-    dispatch(getClientProfile(profile._id))
+    const urlParams = new URLSearchParams(window.location.search)
+    let actualId = profile._id
+    if(!!profile) actualId = profile._id
+    if (!!urlParams.get('clientId')) actualId = urlParams.get('clientId')
+    dispatch(getClientProfile(actualId))
 
   }, [])
 
@@ -48,13 +50,19 @@ export const ProfileContainer: React.FC = () => {
     dispatch(deleteClientGalleryPicture(clientId, picture))
   }
 
+  const setIsSuccessCallBack = (bol: boolean) => {
+    dispatch(setIsSuccessAC(bol))
+  }
+
   return (
     <Profile
+      isSuccess={isSuccess}
       profile={profile}
       deleteClient={deleteClientCallBack}
       editClient={editClientCallBack}
       updateClientGallery={updateClientGalleryCallBack}
       deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
+      setIsSuccess={setIsSuccessCallBack}
     />
   )
 }

@@ -67,8 +67,6 @@ export const Portfolio: React.FC<PropsType> = ({
 
       { !isAuth &&
           <Advertisement
-              isSuccess={isSuccess}
-              setIsSuccess={setIsSuccess}
               bookConsultation={bookConsultation}
           />
       }

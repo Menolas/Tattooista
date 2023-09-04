@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import { Paginator } from '../../common/Paginator'
 import { Customer } from './Customer'
 import {AddCustomerFormValues, CustomerType} from '../../../types/Types'
@@ -8,6 +8,8 @@ import { CustomersFilterType } from '../../../redux/Customers/customers-reducer'
 import {ModalPopUp} from '../../common/ModalPopUp'
 import {AddingCustomerForm} from "../../Forms/AddingCustomerFormFormik";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {setIsSuccessAC} from "../../../redux/Portfolio/portfolio-reducer";
+import {useDispatch} from "react-redux";
 
 type PropsType = {
   isSuccess: boolean
@@ -48,6 +50,15 @@ export const Customers: React.FC<PropsType> = React.memo(({
   archiveCustomer,
   setIsSuccess
  }) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (isSuccess) {
+            setTimeout( () => {
+                dispatch(setIsSuccessAC(false))
+            }, 1500)
+        }
+    }, [isSuccess])
 
   let [addCustomerMode, setAddCustomerMode] = useState<boolean>(false)
 

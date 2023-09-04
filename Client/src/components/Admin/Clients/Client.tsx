@@ -36,8 +36,6 @@ export const Client: React.FC<PropsType> = React.memo(({
   let [editClientMode, setEditClientMode] = useState<boolean>(false)
   let [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
 
-  const successModalTitle = ''
-
   const closeEditModal = () => {
     setEditClientMode(false)
     setEditGalleryMode(false)

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import { Client } from './Client'
 import { Paginator } from '../../common/Paginator'
 import { ModalPopUp } from '../../common/ModalPopUp'
@@ -7,9 +7,10 @@ import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
 import { ClientType } from '../../../types/Types'
 import { ClientSearchFormFormik } from '../../Forms/ClientSearchFormFormik'
 import { ClientsFilterType} from '../../../redux/Clients/clients-reducer'
-import {SuccessModal} from "../../SuccessModal";
-import {NothingToShow} from "../../common/NothingToShow";
-import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {NothingToShow} from "../../common/NothingToShow"
+import {SuccessPopUp} from "../../common/SuccessPopUp"
+import {useDispatch} from "react-redux"
+import {setIsSuccessAC} from "../../../redux/Portfolio/portfolio-reducer"
 
 type PropsType = {
   isSuccess: boolean
@@ -50,9 +51,17 @@ export const Clients: React.FC<PropsType> = React.memo(({
     archiveClient,
     setIsSuccess
 }) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (isSuccess) {
+            setTimeout( () => {
+                setIsSuccess(false)
+            }, 1500)
+        }
+    }, [isSuccess])
 
   let [addClientMode, setAddClientMode] = useState<boolean>(false)
-  const successModalTitle = ''
 
   const closeModal = () => {
     setAddClientMode(false)
