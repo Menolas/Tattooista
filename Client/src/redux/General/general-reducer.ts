@@ -9,12 +9,14 @@ const SET_SERVICES = 'SET_SERVICES'
 const SET_PAGES = 'SET_PAGES'
 const SET_PAGE_VISIBILITY = 'SET_PAGE_VISIBILITY'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
+const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING'
 
 let initialState = {
   faq: [] as Array<FaqType>,
   services: [] as Array<ServiceType>,
   pages: [] as Array<PageType>,
-  isSuccess: false as boolean
+  isSuccess: false as boolean,
+  isSuccessBooking: false as boolean,
 }
 
 export type InitialStateType = typeof initialState
@@ -60,15 +62,30 @@ export const generalReducer = (
         isSuccess: action.isSuccess
       }
 
+    case SET_IS_SUCCESS_BOOKING:
+      return {
+        ...state,
+        isSuccessBooking: action.bol
+      }
+
     default: return {
       ...state
     }
   }
 }
 
-type ActionsTypes = SetIsSuccessAT | SetPageVisibilityActionType | SetPagesActionType | SetFaqItemsActionType | SetServicesActionType
+type ActionsTypes = SetIsSuccessBookingAT | SetIsSuccessAT | SetPageVisibilityActionType | SetPagesActionType | SetFaqItemsActionType | SetServicesActionType
 
 // action creators
+
+type SetIsSuccessBookingAT = {
+  type: typeof SET_IS_SUCCESS_BOOKING
+  bol: boolean
+}
+
+export const setIsSuccessBookingAC = (bol: boolean): SetIsSuccessBookingAT => ({
+  type: SET_IS_SUCCESS_BOOKING, bol
+})
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
@@ -256,7 +273,7 @@ export const bookConsultation = (values: BookConsultationFormValues
 ): ThunkType => async (dispatch) => {
   try {
     const response = await generalSourcesApi.bookConsultation(values)
-    dispatch(setIsSuccessAC(true))
+    dispatch(setIsSuccessBookingAC(true))
   } catch (e) {
     console.log(e)
   }

@@ -14,6 +14,9 @@ import {
     TattooStyleType
 } from "../../types/Types";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+import {useEffect} from "react";
+import {setIsSuccessAC} from "../../redux/Clients/clients-reducer";
+import {useDispatch} from "react-redux";
 
 type PropsType = {
   isAuth: boolean
@@ -61,6 +64,16 @@ export const MainPage: React.FC<PropsType> = React.memo(({
 
   const pageAbout = pages?.find(page => page.name === 'about')
   const successPopUpContent = "You've booked a consultation! We will contact you soon))"
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isSuccess) {
+        setTimeout( () => {
+            dispatch(setIsSuccessAC(false))
+        }, 1500)
+    }
+  }, [isSuccess])
 
   return (
     <>

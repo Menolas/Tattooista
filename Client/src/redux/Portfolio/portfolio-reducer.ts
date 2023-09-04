@@ -397,6 +397,9 @@ export const adminUpdateGallery = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setGalleryAC(response.gallery))
       dispatch(setIsSuccessAC(true))
+      // setTimeout( () => {
+      //   dispatch(setIsSuccessAC(false))
+      // }, 2000);
     }
   } catch (e) {
     console.log(e)

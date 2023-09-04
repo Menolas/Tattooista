@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom'
 // @ts-ignore
 import avatar from '../../../assets/img/fox.webp'
@@ -10,43 +10,49 @@ import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
 // @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
 import { ClientGalleryUploadFormFormik } from '../../Forms/ClientGalleryUploadFormFormik'
-import {SuccessModal} from "../../SuccessModal";
+import {useDispatch} from "react-redux";
+import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer";
 
 type PropsType = {
-  profile: ClientType,
+  isSuccess: boolean
+  profile: ClientType
   deleteClient: (clientId: string) => void,
   editClient: (clientId: string, values: FormData) => void
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
+  setIsSuccess: (bol: boolean) => void
 }
 
 export const Profile: React.FC<PropsType> = React.memo(({
+    isSuccess,
     profile,
     deleteClient,
     editClient,
     updateClientGallery,
     deleteClientGalleryPicture
 }) => {
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout( () => {
+        dispatch(setIsSuccessAC(false))
+      }, 1500)
+    }
+  }, [isSuccess])
+
   //debugger
   let [editClientMode, setEditClientMode] = useState<boolean>(false)
   let [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
-  const [isSuccess, setSuccess] = useState(false)
-  const successModalTitle = ''
-
-  const showSuccessModal = () => {
-    setSuccess(true)
-  }
-
-  const closeSuccessModal = () => {
-    setSuccess(false)
-  }
+  const successPopUpContent = "You successfully added changes to your clients list"
+  const modalTitle = 'EDIT CLIENT'
 
   const closeModal = () => {
     setEditClientMode(false)
     setEditGalleryMode(false)
   }
-
-  const modalTitle = 'EDIT CLIENT'
 
   if (!profile) {
     return <div>Sorry, we can not find such a client in data base</div>
@@ -54,13 +60,14 @@ export const Profile: React.FC<PropsType> = React.memo(({
 
   const profileContacts: ContactType = profile.contacts
 
-  const contactsArray = Object.keys(profileContacts).map(contact => {
-    return profileContacts[contact] ?
-      <li key={contact}>
-        <span>{contact}:&nbsp;</span>
-        <span>{profileContacts[contact]}</span>
-      </li> : null
-  })
+  const contactsArray = profileContacts
+      ? Object.keys(profileContacts).map(contact => {
+          return profileContacts[contact] ?
+            <li key={contact}>
+              <span>{contact}:&nbsp;</span>
+              <span>{profileContacts[contact]}</span>
+            </li> : null
+        }) : <></>
 
 
   const Avatar = profile.avatar
@@ -128,7 +135,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
               closeModal={closeModal}
           >
             <UpdateClientForm
-                showSuccessModal={showSuccessModal}
                 profile={profile}
                 editClient={editClient}
                 closeModal={closeModal}
@@ -151,12 +157,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
       }
       {
           isSuccess &&
-          <ModalPopUp
-              modalTitle={successModalTitle}
-              closeModal={closeSuccessModal}
-          >
-            <SuccessModal />
-          </ModalPopUp>
+          <SuccessPopUp closeModal={setIsSuccessAC} content={successPopUpContent} />
       }
     </div>
   )

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { Preloader } from '../common/Preloader'
 import {GalleryItemType, TattooStyleType} from '../../types/Types'
 import { ModalPopUp } from '../common/ModalPopUp'
@@ -9,6 +9,8 @@ import {SERVER_URL} from '../../utils/constants'
 import Sprite from '../../assets/svg/sprite.svg'
 import {Paginator} from '../common/Paginator'
 import {SuccessPopUp} from "../common/SuccessPopUp";
+import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer";
+import {useDispatch} from "react-redux";
 
 type PropsType = {
   isSuccess: boolean
@@ -51,6 +53,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const [ editGalleryMode, setEditGalleryMode] = useState(false)
   const successPopUpContent = `You successfully added images to ${activeStyle.value} style gallery`
 
+  const dispatch = useDispatch()
+
   const showBigImg = (fileName) => {
     if (!bigImg) {
       setBigImg(fileName)
@@ -68,6 +72,14 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const closeEditGalleryForm = () => {
     setEditGalleryMode(false)
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout( () => {
+        dispatch(setIsSuccessAC(false))
+      }, 2000)
+    }
+  }, [isSuccess])
 
   const GalleryItemsArray = gallery?.map(item => {
     return (

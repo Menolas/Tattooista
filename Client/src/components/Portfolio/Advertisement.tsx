@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 // @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
 import { NavLink } from "react-router-dom"
@@ -7,21 +7,36 @@ import { ModalPopUp } from '../common/ModalPopUp'
 import { BookingForm } from '../Forms/BookingFormFormik'
 import {BookConsultationFormValues} from '../../types/Types'
 import {SuccessPopUp} from "../common/SuccessPopUp";
+import {useDispatch, useSelector} from "react-redux";
+import {getIsSuccessBookingSelector} from "../../redux/General/general-selectors";
+import {setIsSuccessBookingAC} from "../../redux/General/general-reducer";
 
 type PropsType = {
-  isSuccess: boolean
   bookConsultation: (values: BookConsultationFormValues) => void
-  setIsSuccess: (bol: boolean) => void
 }
 
 export const Advertisement: React.FC<PropsType> = React.memo(({
-  isSuccess,
-  setIsSuccess,
   bookConsultation
 }) => {
 
+  const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
+
   let [bookingModal, setBookingModal] = useState(false)
   const successPopUpContent = "You've booked a consultation! We will contact you soon))"
+
+  const dispatch = useDispatch()
+
+  const setIsSuccessBookingCallBack = (bol: boolean) => {
+    dispatch(setIsSuccessBookingAC(bol))
+  }
+
+  useEffect(() => {
+    if (isSuccessBooking) {
+      setTimeout( () => {
+        dispatch(setIsSuccessBookingAC(false))
+      }, 1500)
+    }
+  }, [isSuccessBooking])
 
   const showBookConsultationModal = () => {
     setBookingModal(true);
@@ -60,6 +75,7 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
         </div>
         { bookingModal &&
           <ModalPopUp
+            modalTitle={"Book your consultation"}
             closeModal={closeBookingModal}
           >
             <BookingForm
@@ -69,8 +85,8 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
             />
           </ModalPopUp>
         }
-      { isSuccess &&
-          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
+      { isSuccessBooking &&
+          <SuccessPopUp closeModal={setIsSuccessBookingCallBack} content={successPopUpContent} />
       }
     </section>
   )

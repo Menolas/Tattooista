@@ -15,3 +15,7 @@ export const getPagesSelector = (state: AppStateType) => {
 export const getIsSuccessSelector = (state: AppStateType) => {
   return state.general.isSuccess
 }
+
+export const getIsSuccessBookingSelector = (state: AppStateType) => {
+  return state.general.isSuccessBooking
+}
