@@ -12,7 +12,7 @@ import { MainPageContainer } from './pages/mainPage/MainPageContainer'
 import { Contacts } from './components/Contacts'
 import { Footer } from './components/Footer/Footer'
 import Admin from './pages/admin/Admin'
-import { CustomersContainer} from './components/Admin/Customers/CustomersContainer'
+import { BookedConsultationsContainer} from './components/Admin/bookedConsultations/BookedConsultationsContainer'
 import { ClientsContainer } from './components/Admin/Clients/ClientsContainer'
 import { ProfileContainer } from './components/Admin/ClientProfile/ProfileContainer'
 import { LoginContainer } from './pages/login/LoginContainer'
@@ -21,7 +21,7 @@ import { PortfolioContainer } from'./pages/portfolio/PortfolioContainer'
 import { Preloader } from './components/common/Preloader'
 import { ArchiveContainer } from './components/Admin/Archive/ArchiveContainer'
 import { ArchivedClients } from './components/Admin/Archive/ArchivedClients'
-import { ArchivedCustomers } from './components/Admin/Archive/ArchivedCustomers'
+import { ArchivedConsultations } from './components/Admin/Archive/ArchivedConsultations'
 import {ArchivedGallery} from './components/Admin/Archive/ArchivedGallery'
 import {RegistrationContainer} from "./pages/registration/RegistrationContainer";
 import {checkAuth} from "./redux/Auth/auth-reducer";
@@ -53,8 +53,8 @@ class App extends Component {
                          element={<PortfolioContainer />} />
                   <Route path={`admin`}
                     element={<Admin />}>
-                    <Route path={`customers`}
-                      element={<CustomersContainer />} />
+                    <Route path={`bookedConsultations`}
+                      element={<BookedConsultationsContainer />} />
                     <Route path={`clients`}
                       element={<ClientsContainer />} />
                     <Route path={`profile`}
@@ -65,8 +65,8 @@ class App extends Component {
                       element={<ArchiveContainer />}>
                       <Route path={`archivedClients`}
                         element={<ArchivedClients />}/>
-                      <Route path={`archivedCustomers`}
-                             element={<ArchivedCustomers />}/>
+                      <Route path={`archivedConsultations`}
+                             element={<ArchivedConsultations />}/>
                       <Route path={`archivedGallery`}
                              element={<ArchivedGallery />}/>
                     </Route>

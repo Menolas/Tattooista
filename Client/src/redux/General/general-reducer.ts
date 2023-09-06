@@ -268,8 +268,8 @@ export const deleteService = (
   }
 }
 
-export const bookConsultation = (values: BookConsultationFormValues
-
+export const bookConsultation = (
+    values: BookConsultationFormValues
 ): ThunkType => async (dispatch) => {
   try {
     const response = await generalSourcesApi.bookConsultation(values)

@@ -5,7 +5,7 @@ export type InitialStateType = {
 }
 
 let initialState: InitialStateType = {
-  pageUrl: 'customers'
+  pageUrl: 'bookedConsultations'
 }
 
 export const adminReducer = (state = initialState, action: ActionTypes): InitialStateType => {

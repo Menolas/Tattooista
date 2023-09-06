@@ -10,7 +10,7 @@ const fileUpload = require('express-fileupload')
 const app = express()
 const PORT = process.env.PORT || 3030
 
-const customerRouter = require('./routes/CustomerRoutes')
+const bookingRouter = require('./routes/BookingRoutes')
 const clientRouter = require('./routes/ClientRoutes')
 const authRouter = require('./routes/AuthRoutes')
 const galleryRouter = require('./routes/GalleryRoutes')
@@ -28,7 +28,7 @@ app.use(cors({
 }))
 app.use(fileUpload({createParentPath: true,}))
 app.use('/', express.static(__dirname + '/uploads'))
-app.use('/customers/', customerRouter)
+app.use('/bookings/', bookingRouter)
 app.use('/clients/', clientRouter)
 app.use('/auth/', authRouter)
 app.use('/gallery/', galleryRouter)

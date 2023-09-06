@@ -1,37 +1,38 @@
 import * as React from 'react'
-import {ContactType, CustomerType} from '../../../types/Types'
+import {ContactType, BookedConsultationType} from '../../../types/Types'
+// @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
 
 type PropsType = {
-  customer: CustomerType
+  consultation: BookedConsultationType
   pageSize: number
   currentPage: number
-  isCustomerDeletingInProcess?: Array<string>
+  isConsultationDeletingInProcess?: Array<string>
   isStatusChanging?: Array<string>
-  changeCustomerStatus: (customerId: string, status: boolean) => void
-  turnCustomerToClient: (customerId: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
-  deleteCustomer: (customerId: string, pageSize: number, currentPage: number) => void
-  archiveCustomer: (customerId: string) => void
+  changeStatus: (id: string, status: boolean) => void
+  turnConsultationToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
+  deleteConsultation: (id: string, pageSize: number, currentPage: number) => void
+  archiveConsultation: (id: string) => void
 }
 
-export const Customer: React.FC<PropsType> = React.memo(({
-    customer,
+export const BookedConsultation: React.FC<PropsType> = React.memo(({
+    consultation,
     pageSize,
     currentPage,
-    isCustomerDeletingInProcess,
+    isConsultationDeletingInProcess,
     isStatusChanging,
-    changeCustomerStatus,
-    turnCustomerToClient,
-    deleteCustomer,
-    archiveCustomer
+    changeStatus,
+    turnConsultationToClient,
+    deleteConsultation,
+    archiveConsultation
 }) => {
-    const customerContacts: ContactType = customer.contacts
-    const contacts = Object.keys(customerContacts).map(contact => {
+    const bookingContacts: ContactType = consultation.contacts
+    const contacts = Object.keys(bookingContacts).map(contact => {
 
-        return customerContacts[contact] ?
+        return bookingContacts[contact] ?
             <li key={contact}>
                 <span>{contact}:&nbsp;</span>
-                <span>{customerContacts[contact]}</span>
+                <span>{bookingContacts[contact]}</span>
             </li> : null
 
     })
@@ -41,7 +42,7 @@ export const Customer: React.FC<PropsType> = React.memo(({
       <div className="admin__card-details">
         <div className="admin__card-name">
           <span>Name:&nbsp;</span>
-          <span>{customer.fullName}</span>
+          <span>{consultation.fullName}</span>
         </div>
         <div>
           <ul className="list">
@@ -50,16 +51,16 @@ export const Customer: React.FC<PropsType> = React.memo(({
         </div>
         <div className="admin__card-message">
           <span>Message:&nbsp;</span>
-          <p>{customer.message}</p>
+          <p>{consultation.message}</p>
         </div>
       </div>
       <div className="admin__card-action-btns">
         <button
           className={"btn btn--icon"}
-          disabled={ isStatusChanging?.some(id => id === customer._id) }
-          onClick={() => {changeCustomerStatus(customer._id, customer.status)}}
+          disabled={ isStatusChanging?.some(id => id === consultation._id) }
+          onClick={() => {changeStatus(consultation._id, consultation.status)}}
         >
-          { !customer.status
+          { !consultation.status
               ? <svg><use href={`${Sprite}#phone-arrow-right`}/></svg>
               : <svg><use href={`${Sprite}#phone-missed`}/></svg>
           }
@@ -67,25 +68,24 @@ export const Customer: React.FC<PropsType> = React.memo(({
         <button
           className={"btn btn--icon"}
           onClick={() => {
-              turnCustomerToClient(customer._id, customer.fullName, customer.contacts, pageSize, currentPage)
+              turnConsultationToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage)
           }}
         >
             <svg><use href={`${Sprite}#users-medical`}/></svg>
         </button>
         <button
           className={"btn btn--icon"}
-          //disabled={isCustomerDeletingInProcess.some(id => id === customer._id)}
           onClick={() => {
-              archiveCustomer(customer._id)
+              archiveConsultation(consultation._id)
           }}
         >
             <svg><use href={`${Sprite}#archive`}/></svg>
         </button>
         <button
           className={"btn btn--icon"}
-          disabled={isCustomerDeletingInProcess?.some(id => id === customer._id)}
+          disabled={isConsultationDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
-              deleteCustomer(customer._id, pageSize, currentPage)
+              deleteConsultation(consultation._id, pageSize, currentPage)
           }}
         >
             <svg><use href={`${Sprite}#trash`}/></svg>

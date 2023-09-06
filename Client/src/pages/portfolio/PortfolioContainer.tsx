@@ -26,8 +26,8 @@ import {
   archiveGalleryItem
 } from '../../redux/Portfolio/portfolio-reducer'
 import { Portfolio } from './Portfolio'
-import {getAuthSelector} from "../../redux/Auth/auth-selectors";
-import {getIsSuccessSelector} from "../../redux/Customers/customers-selectors";
+import {getAuthSelector} from '../../redux/Auth/auth-selectors'
+import {getIsSuccessSelector} from '../../redux/bookedConsultations/bookedConsultations-selectors'
 import {bookConsultation, setIsSuccessAC} from "../../redux/General/general-reducer";
 
 export const PortfolioContainer: React.FC = () =>  {

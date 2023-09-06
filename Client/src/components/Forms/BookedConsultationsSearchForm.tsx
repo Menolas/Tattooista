@@ -1,28 +1,28 @@
 import * as React from 'react'
 import {Field, Form, Formik} from 'formik'
-import {CustomersFilterType} from '../../redux/Customers/customers-reducer'
-
-const CustomersSearchFormValidate = (values: FormType) => {
-  const errors = {}
-  return errors
-}
+import {BookedConsultationsFilterType} from '../../redux/bookedConsultations/bookedConsultations-reducer'
 
 type FormType = {
   term: string
   status: string
 }
 
-type PropsType = {
-  customersFilter: CustomersFilterType
-  onFilterChanged: (filter: CustomersFilterType) => void
+const bookedConsultationsSearchFormValidate = (values: FormType) => {
+  const errors = {}
+  return errors
 }
 
-export const CustomersSearchFormFormik: React.FC<PropsType> = React.memo(({
-  customersFilter,
+type PropsType = {
+  filter: BookedConsultationsFilterType
+  onFilterChanged: (filter: BookedConsultationsFilterType) => void
+}
+
+export const BookedConsultationsSearchForm: React.FC<PropsType> = React.memo(({
+  filter,
   onFilterChanged
 }) => {
   const submit = (values: FormType, {setSubmitting}: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    const filter: CustomersFilterType = {
+    const filter: BookedConsultationsFilterType = {
       term: values.term,
       status: values.status
     }
@@ -30,14 +30,14 @@ export const CustomersSearchFormFormik: React.FC<PropsType> = React.memo(({
     setSubmitting(false)
   }
   const initialValues = {
-    term: customersFilter.term,
-    status: customersFilter.status
+    term: filter.term,
+    status: filter.status
   }
   return (
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      validate={CustomersSearchFormValidate}
+      validate={bookedConsultationsSearchFormValidate}
       onSubmit={submit}
     >
       {

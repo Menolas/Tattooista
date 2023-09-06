@@ -1,27 +1,28 @@
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
+// @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
-import {ContactType, CustomerType} from '../../../types/Types'
+import {ContactType, BookedConsultationType} from '../../../types/Types'
 
 type PropsType = {
-    customer: CustomerType
-    deleteArchivedCustomer: (clientId: string) => void
-    reactivateCustomer: (customerId: string) => void
+    consultation: BookedConsultationType
+    deleteArchivedConsultation: (id: string) => void
+    reactivateConsultation: (id: string) => void
 }
 
-export const ArchivedCustomer: React.FC<PropsType> = React.memo(({
-   customer,
-   deleteArchivedCustomer,
-   reactivateCustomer
+export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
+   consultation,
+   deleteArchivedConsultation,
+   reactivateConsultation
 }) => {
 
-    const customerContacts: ContactType = customer.contacts
+    const archivedBookingContacts: ContactType = consultation.contacts
 
-    const contacts = Object.keys(customerContacts).map(contact => {
-        return customerContacts[contact] ?
+    const contacts = Object.keys(archivedBookingContacts).map(contact => {
+        return archivedBookingContacts[contact] ?
             <li key={contact}>
                 <span>{contact}:&nbsp;</span>
-                <span>{customerContacts[contact]}</span>
+                <span>{archivedBookingContacts[contact]}</span>
             </li> : null
     })
 
@@ -29,26 +30,26 @@ export const ArchivedCustomer: React.FC<PropsType> = React.memo(({
         <li className="admin__card admin__card--client">
             <div className="client-profile__header">
                 <NavLink
-                    to={`/admin/profile?clientId=${customer._id}`}
+                    to={`/admin/profile?clientId=${consultation._id}`}
                     className="admin__card-link client-profile">
                     <div className="client-profile__details">
                         <div className="client-profile__name">
                             <span>Name:&nbsp;</span>
-                            <span>{customer.fullName}</span>
+                            <span>{consultation.fullName}</span>
                         </div>
                     </div>
                 </NavLink>
                 <div className="admin__card-action-btns client-profile__action-btns">
                     <button
                         className={"btn btn--icon"}
-                        onClick={() => reactivateCustomer(customer._id)}
+                        onClick={() => reactivateConsultation(consultation._id)}
                     >
                         <svg><use href={`${Sprite}#smile`}/></svg>
                     </button>
                     <button
                         className={"btn btn--icon"}
                         onClick={() => {
-                            deleteArchivedCustomer(customer._id)
+                            deleteArchivedConsultation(consultation._id)
                         }}
                     >
                         <svg><use href={`${Sprite}#trash`}/></svg>

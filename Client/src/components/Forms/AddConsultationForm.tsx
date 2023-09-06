@@ -2,7 +2,7 @@ import * as React from 'react'
 import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues} from 'formik'
 import * as Yup from 'yup'
 import {ErrorMessageWrapper} from '../../utils/validators'
-import {AddCustomerFormValues} from "../../types/Types";
+import {AddConsultationFormValues} from "../../types/Types";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -14,23 +14,23 @@ const validationSchema = Yup.object().shape({
 })
 
 type PropsType = {
-  addCustomer: (values: AddCustomerFormValues) => void
+  addBookedConsultation: (values: AddConsultationFormValues) => void
   closeBookingModal: () => void
 }
 
-export const AddingCustomerForm: React.FC<PropsType> = React.memo(({
-  addCustomer,
+export const AddConsultationForm: React.FC<PropsType> = React.memo(({
+  addBookedConsultation,
   closeBookingModal,
 }) => {
 
-  const submit = (values: AddCustomerFormValues) => {
-    addCustomer(values)
+  const submit = (values: AddConsultationFormValues) => {
+    addBookedConsultation(values)
     //actions.setSubmitting(false)
     //actions.resetForm()
     closeBookingModal()
   }
 
-  const initialValues: AddCustomerFormValues = {
+  const initialValues: AddConsultationFormValues = {
     name: '',
     contact: '',
     contactValue: ''
@@ -93,7 +93,7 @@ export const AddingCustomerForm: React.FC<PropsType> = React.memo(({
             >
                 {isSubmitting
                     ? 'Please wait...'
-                    : 'Add customer'
+                    : 'Add Consultation'
                 }
             </button>
           </Form>

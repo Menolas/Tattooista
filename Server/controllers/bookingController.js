@@ -1,33 +1,33 @@
-const Customer = require('../models/Customer')
+const Booking = require('../models/Booking')
 const Client = require("../models/Client");
-const ArchivedCustomer = require("../models/ArchivedCustomer");
+const ArchivedBooking = require("../models/ArchivedBooking");
 
-class customerController {
+class bookingController {
 
-  async getCustomers (req, res) {
+  async getBookings (req, res) {
     let page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
     const status = req.query.status
     const term = req.query.term
-    let customers = []
+    let bookings = []
     const results = {}
 
     try {
       if (status === 'null' && !term) {
-        customers = await Customer.find().sort({createdAt: -1})
+        bookings = await Booking.find().sort({createdAt: -1})
       } else if (status !== 'null' && !term) {
-        customers = await Customer.find({status: status}).sort({createdAt: -1})
+        bookings = await Booking.find({status: status}).sort({createdAt: -1})
       } else if (status !== 'null' && term) {
-        customers = await Customer.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
+        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
       } else if (status === 'null' && term) {
-        customers = await Customer.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
 
       results.resultCode = 0
-      results.totalCount = customers.length
-      results.customers = customers.slice(startIndex, endIndex)
+      results.totalCount = bookings.length
+      results.bookings = bookings.slice(startIndex, endIndex)
       res.json(results)
     } catch (err) {
       results.resultCode = 1
@@ -37,29 +37,29 @@ class customerController {
     }
   }
 
-  async getArchivedCustomers (req, res) {
+  async getArchivedBookings (req, res) {
     let page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
     const status = req.query.status
     const term = req.query.term
-    let archivedCustomers = []
+    let archivedBookings = []
     const results = {}
 
     try {
       if (status === 'null' && !term) {
-        archivedCustomers = await ArchivedCustomer.find().sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find().sort({createdAt: -1})
       } else if (status !== 'null' && !term) {
-        archivedCustomers = await ArchivedCustomer.find({status: status}).sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find({status: status}).sort({createdAt: -1})
       } else if (status !== 'null' && term) {
-        archivedCustomers = await ArchivedCustomer.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
       } else if (status === 'null' && term) {
-        archivedCustomers = await ArchivedCustomer.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
       results.resultCode = 0
-      results.totalCount = archivedCustomers.length
-      results.customers = archivedCustomers.slice(startIndex, endIndex)
+      results.totalCount = archivedBookings.length
+      results.bookings = archivedBookings.slice(startIndex, endIndex)
       res.json(results)
     } catch (err) {
       results.resultCode = 1
@@ -69,19 +69,19 @@ class customerController {
     }
   }
 
-  async createCustomer(req, res) {
-    const customer = new Customer({
+  async createBooking(req, res) {
+    const booking = new Booking({
       fullName: req.body.name,
       message: req.body.message
     });
 
-    customer.contacts = { ...{ [req.body.contact]: req.body.contactValue }}
+    booking.contacts = { ...{ [req.body.contact]: req.body.contactValue }}
     const results = {}
 
     try {
-      await customer.save()
+      await booking.save()
       results.resultCode = 0
-      results.customer = customer
+      results.booking = booking
       res.status(201).json(results)
     } catch (err) {
       results.resultCode = 1
@@ -91,11 +91,11 @@ class customerController {
     }
   }
 
-  async deleteCustomer(req, res) {
+  async deleteBooking(req, res) {
     const results = {}
 
     try {
-      await res.customer.remove()
+      await res.booking.remove()
       results.resultCode = 0
       res.json(results)
     } catch (err) {
@@ -105,12 +105,12 @@ class customerController {
     }
   }
 
-  async changeCustomerStatus(req, res) {
-    res.customer.status = !req.body.status
+  async changeBookingStatus(req, res) {
+    res.booking.status = !req.body.status
     const results = {}
     try {
-      await res.customer.save()
-      results.status = res.customer.status
+      await res.booking.save()
+      results.status = res.booking.status
       results.resultCode = 0
       res.json(results)
     } catch (err) {
@@ -120,7 +120,7 @@ class customerController {
     }
   }
 
-  async customerToClient(req, res) {
+  async bookingToClient(req, res) {
     const client = new Client({
       fullName: req.body.fullName,
       contacts: req.body.contacts
@@ -128,7 +128,7 @@ class customerController {
     const results = {}
 
     try {
-      await res.customer.remove()
+      await res.booking.remove()
       await client.save()
       results.client = client
       results.resultCode = 0
@@ -140,25 +140,25 @@ class customerController {
     }
   }
 
-  async archiveCustomer(req, res) {
-    const archivedCustomer = new ArchivedCustomer({
-      fullName: res.customer.fullName,
+  async archiveBooking(req, res) {
+    const archivedBooking = new ArchivedBooking({
+      fullName: res.booking.fullName,
       contacts: {
-        email: res.customer.contacts.email,
-        insta: res.customer.contacts.insta,
-        phone: res.customer.contacts.phone,
-        whatsapp: res.customer.contacts.whatsapp,
-        messenger: res.customer.contacts.messenger
+        email: res.booking.contacts.email,
+        insta: res.booking.contacts.insta,
+        phone: res.booking.contacts.phone,
+        whatsapp: res.booking.contacts.whatsapp,
+        messenger: res.booking.contacts.messenger
       }
     })
 
     const results = {}
 
     try {
-      await archivedCustomer.save()
-      await res.customer.remove()
+      await archivedBooking.save()
+      await res.booking.remove()
       results.resultCode = 0
-      results.customer = archivedCustomer
+      results.booking = archivedBooking
       res.status(201).json(results)
 
     } catch (err) {
@@ -168,25 +168,25 @@ class customerController {
     }
   }
 
-  async reactivateCustomer(req, res) {
-    const customer = new Customer({
-      fullName: res.customer.fullName,
+  async reactivateBooking(req, res) {
+    const booking = new Booking({
+      fullName: res.booking.fullName,
       contacts: {
-        email: res.customer.contacts.email,
-        insta: res.customer.contacts.insta,
-        phone: res.customer.contacts.phone,
-        whatsapp: res.customer.contacts.whatsapp,
-        messenger: res.customer.contacts.messenger
+        email: res.booking.contacts.email,
+        insta: res.booking.contacts.insta,
+        phone: res.booking.contacts.phone,
+        whatsapp: res.booking.contacts.whatsapp,
+        messenger: res.booking.contacts.messenger
       }
     })
 
     const results = {}
 
     try {
-      await customer.save()
-      await res.customer.remove()
+      await booking.save()
+      await res.booking.remove()
       results.resultCode = 0
-      results.customer = customer
+      results.booking = booking
       res.status(201).json(results)
     } catch (err) {
       results.resultCode = 1
@@ -196,4 +196,4 @@ class customerController {
   }
 }
 
-module.exports = new customerController()
+module.exports = new bookingController()

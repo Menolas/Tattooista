@@ -2,8 +2,7 @@ import * as React from 'react'
 import { Advertisement } from '../../components/Portfolio/Advertisement'
 import { Gallery } from '../../components/Portfolio/Gallery'
 import { TattooStyles } from '../../components/Portfolio/TattooStyles'
-import {AddCustomerFormValues, BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
-import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
 
 type PropsType = {
   isAuth: boolean

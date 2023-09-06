@@ -6,7 +6,6 @@ import { Services } from '../../components/MainPage/Services'
 import { FaqItems } from '../../components/MainPage/FaqItems'
 import { Booking } from '../../components/MainPage/Booking'
 import {
-    AddCustomerFormValues,
     BookConsultationFormValues,
     FaqType,
     PageType,
@@ -17,6 +16,7 @@ import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useEffect} from "react";
 import {setIsSuccessAC} from "../../redux/Clients/clients-reducer";
 import {useDispatch} from "react-redux";
+import {setIsSuccessBookingAC} from "../../redux/General/general-reducer";
 
 type PropsType = {
   isAuth: boolean
@@ -26,7 +26,7 @@ type PropsType = {
   faq: Array<FaqType>
   pages: Array<PageType>
   isSuccess: boolean
-  addCustomer: (values: AddCustomerFormValues) => void
+  isSuccessBooking: boolean
   setActiveStyle: (style: TattooStyleType) => void
   editAboutPage: (id: string, values: FormData) => void
   changePageVisibility: (pageId: string, isActive: boolean) => void
@@ -38,6 +38,7 @@ type PropsType = {
   deleteFaqItem: (id: string) => void
   bookConsultation: (values: BookConsultationFormValues) => void
   setIsSuccess: (bol: boolean) => void
+  setIsSuccessBooking: (bol: boolean) => void
 }
 
 export const MainPage: React.FC<PropsType> = React.memo(({
@@ -48,7 +49,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   faq,
   pages,
   isSuccess,
-  addCustomer,
+  isSuccessBooking,
   setActiveStyle,
   editAboutPage,
   changePageVisibility,
@@ -59,7 +60,8 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   addFaqItem,
   deleteFaqItem,
   bookConsultation,
-  setIsSuccess
+  setIsSuccess,
+  setIsSuccessBooking
 }) => {
 
   const pageAbout = pages?.find(page => page.name === 'about')
@@ -74,6 +76,14 @@ export const MainPage: React.FC<PropsType> = React.memo(({
         }, 1500)
     }
   }, [isSuccess])
+
+  useEffect(() => {
+        if (isSuccessBooking) {
+            setTimeout( () => {
+                setIsSuccessBooking(false)
+            }, 1500)
+        }
+  }, [isSuccessBooking])
 
   return (
     <>
@@ -104,7 +114,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           deleteFaqItem={deleteFaqItem}
       />
       <Booking consentId="consent" bookConsultation={bookConsultation} />
-      { isSuccess &&
+      { isSuccessBooking &&
         <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
       }
     </>
