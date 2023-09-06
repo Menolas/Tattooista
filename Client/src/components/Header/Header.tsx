@@ -25,7 +25,7 @@ export const Header: React.FC<PropsType> = ({
       <SocialNav />
       { isAuth
         ? <>
-              <NavLink to="/admin/customers" className="main-header__admin-link">
+              <NavLink to="/admin/bookedConsultations" className="main-header__admin-link">
                 <svg><use href={`${Sprite}#admin`}/></svg>
               </NavLink>
               <NavLink to="/" className="main-header__admin-link" onClick={() => { logout() }}>

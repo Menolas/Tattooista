@@ -19,9 +19,9 @@ export const ArchiveContainer: React.FC = () => {
                         <li>
                             <NavLink
                                 className={"btn btn--sm btn--dark-bg"}
-                                to={'archivedCustomers'}
+                                to={'archivedConsultations'}
                             >
-                                ArchivedCustomers
+                                ArchivedConsultations
                             </NavLink>
                         </li>
                         <li>

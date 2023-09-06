@@ -19,7 +19,7 @@ export type ClientType = {
     gallery?: Array<string>
 }
 
-export type CustomerType = {
+export type BookedConsultationType = {
     _id: string
     fullName: string
     message?: string
@@ -73,12 +73,10 @@ export interface BookConsultationFormValues  {
     consent: boolean,
 }
 
-export interface AddCustomerFormValues  {
+export interface AddConsultationFormValues  {
     name: string,
     contact: string,
     contactValue: string,
-    message?: string,
-    consent?: boolean,
 }
 
 export interface AddClientFormValues {

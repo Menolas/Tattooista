@@ -5,7 +5,7 @@ type PropsType = {
   pageSize: number
   currentPage?: number
   onPageChanged: (page: number) => void
-  setPageLimit: (customersPageSize: number) => void
+  setPageLimit: (pageSize: number) => void
 }
 
 export const Paginator: React.FC<PropsType> = React.memo(({

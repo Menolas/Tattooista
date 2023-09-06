@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 import {BookingForm} from '../Forms/BookingFormFormik'
-import {AddCustomerFormValues, BookConsultationFormValues} from '../../types/Types'
-import {SuccessModal} from '../SuccessModal'
-import {ModalPopUp} from '../common/ModalPopUp'
+import {BookConsultationFormValues} from '../../types/Types'
 
 type PropsType = {
   consentId: string

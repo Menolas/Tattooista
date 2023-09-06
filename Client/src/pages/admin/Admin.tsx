@@ -6,11 +6,11 @@ import { compose } from 'redux'
 
 const adminButtonsData = [
     {
-        btnText: "Customers",
-        btnUrl: "customers"
+        btnText: "Booked Consultations",
+        btnUrl: "bookedConsultations"
     },
     {
-        btnText: "My Clients",
+        btnText: "Clients",
         btnUrl: "clients"
     },
     {

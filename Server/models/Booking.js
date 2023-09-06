@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ArchivedCustomerSchema = new mongoose.Schema({
+const BookingSchema = new mongoose.Schema({
   fullName: {
     type: String,
     required: true,
@@ -42,4 +42,4 @@ const ArchivedCustomerSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('ArchivedCustomer', ArchivedCustomerSchema);
+module.exports = mongoose.model('Booking', BookingSchema);
