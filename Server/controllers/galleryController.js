@@ -14,7 +14,7 @@ class galleryController {
     let gallery = []
     const results = {}
     try {
-      gallery = await GalleryItem.find({categories: style})
+      gallery = await GalleryItem.find({categories: style}).sort({createdAt: -1})
       results.resultCode = 0
       results.totalCount = gallery.length
       results.gallery = gallery.slice(startIndex, endIndex)
@@ -36,7 +36,7 @@ class galleryController {
     const results = {}
 
     try {
-      gallery = await ArchivedGalleryItem.find()
+      gallery = await ArchivedGalleryItem.find().sort({createdAt: -1})
       results.resultCode = 0
       results.totalCount = gallery.length
       results.gallery = gallery.slice(startIndex, endIndex)
@@ -83,23 +83,24 @@ class galleryController {
     for (let key in files) {
       const fileNewName = encodeURI(Date.now() + '_' + files[key].name)
       gallery.push(fileNewName)
-      console.log(fileNewName)
+      console.log(req.params.style)
       await files[key].mv(`./uploads/gallery/${fileNewName}`, err => {
       })
     }
 
-    try {
-      gallery.forEach((item) => {
-        const newGalleryItem = new GalleryItem({
-          fileName: item.toString(),
-          categories: [req.params.style]
-        })
-        newGalleryItem.save()
+    await gallery.forEach((item) => {
+      const newGalleryItem = new GalleryItem({
+        fileName: item.toString(),
+        categories: [req.params.style]
       })
-      const newGallery = await GalleryItem.find({categories: req.params.style})
+      newGalleryItem.save()
+    })
 
+    try {
+      //const newGallery = await GalleryItem.find({categories: req.params.style})
       results.resultCode = 0
-      results.gallery = newGallery
+      results.gallery = await GalleryItem.find({categories: req.params.style})
+      console.log(results.gallery)
       res.json(results)
     } catch (err) {
       results.resultCode = 1

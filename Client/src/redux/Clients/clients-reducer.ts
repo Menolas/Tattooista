@@ -532,10 +532,10 @@ export const updateClientGallery = (
       dispatch(editClientAC(response.client))
       dispatch(setIsSuccessAC(true))
     }
-    dispatch(setIsFetching(false))
   } catch (e) {
-    dispatch(setIsFetching(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetching(false))
   }
 }
 

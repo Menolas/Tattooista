@@ -10,7 +10,12 @@ const GalleryItem = new Schema({
   categories: [{
     type: String,
     ref: 'Category'
-  }]
+  }],
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 //Black@Gray
