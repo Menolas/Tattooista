@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {useEffect, useState} from "react";
 
 type PropsType = {
   totalCount: number
@@ -15,6 +16,12 @@ export const Paginator: React.FC<PropsType> = React.memo(({
   onPageChanged,
   setPageLimit
 }) => {
+  const [isPageLimitEditable, setIsPageLimitEditable] = useState(false)
+  const [limit, setLimit] = useState(pageSize)
+
+  useEffect(()=> {
+    setLimit(pageSize)
+  }, [pageSize])
 
   let pagesCount: number = Math.ceil(totalCount / pageSize)
   let pages = []
@@ -37,32 +44,53 @@ export const Paginator: React.FC<PropsType> = React.memo(({
       )
     })
 
-  if (totalCount > pageSize) {
-      return (
-          <div className="pagination">
-              <div className={"page-limit"}>
-                  <label htmlFor={"pageLimit"}>Page limit</label>
-                  <select
-                      id="pageLimit"
-                      name={"pageLimit"}
-                      value={pageSize}
-                      onChange={(event) => {
-                          setPageLimit(Number(event.target.value))
-                          console.log(event.target.value)
-                      }}
-                  >
-                      <option value={5}>5</option>
-                      <option value={10}>10</option>
-                      <option value={20}>20</option>
-                      <option value={50}>50</option>
-                  </select>
-              </div>
+  return (
+      <div className="pagination">
+          <div className={"page-limit"}>
+              <label htmlFor={"pageLimit"}>Page limit</label>
+              {
+                  !isPageLimitEditable &&
+                      <button
+                          className={"pagination__pageLimitButton"}
+                          onClick={() => {
+                              setIsPageLimitEditable(true)
+                          }}
+                      >
+                          {pageSize}
+                      </button>
+              }
+
+              {
+                  isPageLimitEditable &&
+                      <input
+                          className={"pagination__pageLimit"}
+                          id="pageLimit"
+                          name={"pageLimit"}
+                          value={limit || ""}
+                          type={"number"}
+                          autoFocus={true}
+                          onChange={(e) => {
+                              setLimit(Number(e.target.value))
+                          }}
+                          onBlur={() => {
+                              setIsPageLimitEditable(false)
+                              setPageLimit(limit)
+                          }}
+                          onKeyDown={(e) => {
+                              if(e.key === "Enter") {
+                                  setIsPageLimitEditable(false)
+                                  setPageLimit(limit)
+                              }
+                          }}
+                      />
+              }
+
+          </div>
+          { totalCount > pageSize &&
               <ul className="list pagination__list">
                   {pages}
               </ul>
-          </div>
-      )
-  } else {
-      return
-  }
+          }
+      </div>
+  )
 })

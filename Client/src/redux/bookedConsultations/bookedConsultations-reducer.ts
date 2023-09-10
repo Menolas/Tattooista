@@ -12,7 +12,7 @@ const SET_ARCHIVED_CONSULTATIONS_FILTER = 'SET_ARCHIVED_CONSULTATIONS_FILTER'
 const SET_CONSULTATION_STATUS = 'SET_CONSULTATION_STATUS'
 const SET_BOOKED_CONSULTATIONS = 'SET_BOOKED_CONSULTATIONS'
 const SET_ARCHIVED_CONSULTATIONS = 'SET_ARCHIVED_CONSULTATIONS'
-const SET_CURRENT_PAGE_FOT_BOOKED_CONSULTATIONS = 'SET_CURRENT_PAGE_FOT_BOOKED_CONSULTATIONS'
+const SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS = 'SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS'
 const SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS = 'SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS'
 const SET_TOTAL_BOOKED_CONSULTATIONS_COUNT = 'SET_TOTAL_BOOKED_CONSULTATIONS_COUNT'
 const SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT = 'SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT'
@@ -59,13 +59,15 @@ export const bookedConsultationsReducer = (
     case SET_BOOKED_CONSULTATIONS_PAGE_SIZE:
       return {
         ...state,
-        bookedConsultationsPageSize: action.pageSize
+        bookedConsultationsPageSize: action.pageSize,
+        currentBookedConsultationsPage: 1
       }
 
     case SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE:
       return {
         ...state,
-        archivedConsultationsPageSize: action.pageSize
+        archivedConsultationsPageSize: action.pageSize,
+        currentArchivedConsultationsPage: 1
       }
 
     case SET_BOOKED_CONSULTATIONS_FILTER:
@@ -91,10 +93,10 @@ export const bookedConsultationsReducer = (
         ...state,
         archivedConsultations: action.archivedConsultations
       }
-    case SET_CURRENT_PAGE_FOT_BOOKED_CONSULTATIONS:
+    case SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS:
       return {
         ...state,
-        currentBookedConsultationsPage: action.currentPage,
+        currentBookedConsultationsPage: action.page,
       }
 
     case SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS:
@@ -158,7 +160,8 @@ export const bookedConsultationsReducer = (
     case ADD_CONSULTATION:
       return {
         ...state,
-        bookedConsultations: [...state.bookedConsultations, {...action.consultation}]
+        bookedConsultations: [...state.bookedConsultations, {...action.consultation}],
+        currentBookedConsultationsPage: 1
       }
 
     case SET_IS_SUCCESS:
@@ -244,12 +247,12 @@ const setArchivedConsultationsAC = (archivedConsultations: Array<BookedConsultat
 })
 
 type SetCurrentPageForBookedConsultationsAT = {
-  type: typeof SET_CURRENT_PAGE_FOT_BOOKED_CONSULTATIONS,
-  currentPage: number
+  type: typeof SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS,
+  page: number
 }
 
-export const setCurrentPageForBookedConsultationsAC = (currentPage: number): SetCurrentPageForBookedConsultationsAT => ({
-      type: SET_CURRENT_PAGE_FOT_BOOKED_CONSULTATIONS, currentPage
+export const setCurrentPageForBookedConsultationsAC = (page: number): SetCurrentPageForBookedConsultationsAT => ({
+      type: SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS, page
 })
 
 type SetCurrentPageForArchivedConsultationsAT = {

@@ -7,19 +7,19 @@ import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../
 type PropsType = {
   isAuth: boolean
   isFetching: boolean
-  totalGalleryItemsCount: number
-  galleryPageSize: number
-  currentGalleryPage: number
-  isGalleryItemDeletingInProcess: Array<string>
+  totalCount: number
+  pageSize: number
+  currentPage: number
+  isDeletingInProcess: Array<string>
   tattooStyles: Array<TattooStyleType>
   activeStyle: TattooStyleType
   gallery: Array<GalleryItemType>
   isSuccess: boolean
-  setGalleryPageSize: (galleryPageSize: number) => void
+  setPageSize: (pageSize: number) => void
   bookConsultation: (values: BookConsultationFormValues) => void
   updateGallery: (values: any) => void
   deleteGalleryItem: (itemId: string) => void
-  setCurrentGalleryPage: (page: number) => void
+  setCurrentPage: (page: number) => void
   resetActiveStyle: (style: TattooStyleType) => void
   addTattooStyle: (values: FormData) => void
   editTattooStyle: (vid: string, values: FormData) => void
@@ -31,19 +31,19 @@ type PropsType = {
 export const Portfolio: React.FC<PropsType> = ({
   isAuth,
   isFetching,
-  totalGalleryItemsCount,
-  galleryPageSize,
-  currentGalleryPage,
-  isGalleryItemDeletingInProcess,
+  totalCount,
+  pageSize,
+  currentPage,
+  isDeletingInProcess,
   tattooStyles,
   activeStyle,
   gallery,
   isSuccess,
-  setGalleryPageSize,
+  setPageSize,
   bookConsultation,
   updateGallery,
   deleteGalleryItem,
-  setCurrentGalleryPage,
+  setCurrentPage,
   resetActiveStyle,
   addTattooStyle,
   editTattooStyle,
@@ -75,16 +75,16 @@ export const Portfolio: React.FC<PropsType> = ({
         isAuth={isAuth}
         isFetching={isFetching}
         activeStyle={activeStyle}
-        totalCount={totalGalleryItemsCount}
-        pageSize={galleryPageSize}
-        currentPage={currentGalleryPage}
-        setCurrentGalleryPage={setCurrentGalleryPage}
-        setGalleryPageSize={setGalleryPageSize}
+        totalCount={totalCount}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setPageSize={setPageSize}
         gallery={gallery}
         updateGallery={updateGallery}
         deleteGalleryItem={deleteGalleryItem}
         archiveGalleryItem={archiveGalleryItem}
-        isGalleryItemDeletingInProcess={isGalleryItemDeletingInProcess}
+        isGalleryItemDeletingInProcess={isDeletingInProcess}
         setIsSuccess={setIsSuccess}
       />
     </>

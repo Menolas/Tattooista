@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {useNavigate} from 'react-router-dom'
 import { BookConsultationFormValues, TattooStyleType} from '../../types/Types'
 import {
   getIsFetching,
@@ -33,32 +32,32 @@ import {bookConsultation, setIsSuccessAC} from "../../redux/General/general-redu
 export const PortfolioContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector)
   const isFetching = useSelector(getIsFetching)
-  const totalGalleryItemsCount = useSelector(getTotalGalleryItemsCount)
-  const galleryPageSize = useSelector(getGalleryPageSize)
-  const currentGalleryPage = useSelector(getCurrentGalleryPage)
-  const isGalleryItemDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcess)
+  const totalCount = useSelector(getTotalGalleryItemsCount)
+  const pageSize = useSelector(getGalleryPageSize)
+  const currentPage = useSelector(getCurrentGalleryPage)
+  const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcess)
   const tattooStyles = useSelector(getTattooStylesSelector)
   const activeStyle = useSelector(getActiveStyleSelector)
   const gallery = useSelector(getGallery)
   const isSuccess = useSelector(getIsSuccessSelector)
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
 
   useEffect( () => {
-    dispatch(getActualPortfolio(activeStyle, currentGalleryPage, galleryPageSize)).then(r => {} )
-  }, [activeStyle, currentGalleryPage, galleryPageSize])
+    dispatch(getActualPortfolio(activeStyle, currentPage, pageSize))
+  }, [activeStyle, currentPage, pageSize])
 
-  useEffect(() => {
-    navigate(`?&style=${activeStyle.value}&page=${currentGalleryPage}&limit=${galleryPageSize}`)
-  }, [activeStyle, currentGalleryPage, galleryPageSize])
+  // useEffect(() => {
+  //   navigate(`?&style=${activeStyle.value}&page=${currentPage}&limit=${pageSize}`)
+  // }, [activeStyle, currentPage, pageSize])
 
-  const setCurrentGalleryPageCallBack = (page) => {
+  const setCurrentPageCallBack = (page: number) => {
     dispatch(setCurrentGalleryPageAC(page))
   }
 
-  const setGalleryPageSizeCallBack = (galleryPageSize: number) => {
-    dispatch(setGalleryPageSizeAC(galleryPageSize))
+  const setGalleryPageSizeCallBack = (pageSize: number) => {
+    dispatch(setGalleryPageSizeAC(pageSize))
   }
 
   const bookConsultationCallBack = (values: BookConsultationFormValues) => {
@@ -101,19 +100,19 @@ export const PortfolioContainer: React.FC = () =>  {
     <Portfolio
       isAuth={isAuth}
       isFetching={isFetching}
-      totalGalleryItemsCount={totalGalleryItemsCount}
-      galleryPageSize={galleryPageSize}
-      currentGalleryPage={currentGalleryPage}
-      isGalleryItemDeletingInProcess={isGalleryItemDeletingInProcess}
+      totalCount={totalCount}
+      pageSize={pageSize}
+      currentPage={currentPage}
+      isDeletingInProcess={isDeletingInProcess}
       tattooStyles={tattooStyles}
       activeStyle={activeStyle}
       gallery={gallery}
       isSuccess={isSuccess}
-      setGalleryPageSize={setGalleryPageSizeCallBack}
+      setPageSize={setGalleryPageSizeCallBack}
       bookConsultation={bookConsultationCallBack}
       updateGallery={adminUpdateGalleryCallBack}
       deleteGalleryItem={deleteGalleryItemCallBack}
-      setCurrentGalleryPage={setCurrentGalleryPageCallBack}
+      setCurrentPage={setCurrentPageCallBack}
       resetActiveStyle={resetActiveStyleCallBack}
       addTattooStyle={addTattooStyleCallBack}
       editTattooStyle={editTattooStyleCallBack}

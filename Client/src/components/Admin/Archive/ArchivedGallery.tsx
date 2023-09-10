@@ -15,21 +15,22 @@ import {
     setCurrentArchivedGalleryPageAC
 } from "../../../redux/Portfolio/portfolio-reducer";
 import {SERVER_URL} from "../../../utils/constants";
+// @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
 import {NothingToShow} from "../../common/NothingToShow";
 
 export const ArchivedGallery = () => {
 
-    const totalArchivedGalleryItemsCount = useSelector(getTotalArchivedGalleryItemsCountSelector)
-    const archivedGalleryPageSize = useSelector(getArchivedGalleryPageSizeSelector)
-    const currentArchivedGalleryPage = useSelector(getCurrentArchivedGalleryPageSelector)
+    const totalCount = useSelector(getTotalArchivedGalleryItemsCountSelector)
+    const pageSize = useSelector(getArchivedGalleryPageSizeSelector)
+    const currentPage = useSelector(getCurrentArchivedGalleryPageSelector)
     const archivedGallery = useSelector(getArchivedGallerySelector)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getArchivedGallery(currentArchivedGalleryPage, archivedGalleryPageSize))
-    }, [currentArchivedGalleryPage, archivedGalleryPageSize])
+        dispatch(getArchivedGallery(currentPage, pageSize))
+    }, [currentPage, pageSize])
 
     const onPageChangedCallBack = (page: number) => {
         dispatch(setCurrentArchivedGalleryPageAC(page))
@@ -81,18 +82,15 @@ export const ArchivedGallery = () => {
     return (
         <div>
             <div className="admin__cards-header">
-                {
-                    totalArchivedGalleryItemsCount && totalArchivedGalleryItemsCount > archivedGalleryPageSize &&
-                    <>
-                        <Paginator
-                            totalCount={totalArchivedGalleryItemsCount}
-                            pageSize={archivedGalleryPageSize}
-                            currentPage={currentArchivedGalleryPage}
-                            onPageChanged={onPageChangedCallBack}
-                            setPageLimit={setArchivedGalleryPageSizeACCallBack}
-                        />
-                    </>
-                }
+
+                <Paginator
+                    totalCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChanged={onPageChangedCallBack}
+                    setPageLimit={setArchivedGalleryPageSizeACCallBack}
+                />
+
             </div>
             { archivedGallery.length > 0
                 ? <ul className="gallery__list list">

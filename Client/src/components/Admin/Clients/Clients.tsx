@@ -11,8 +11,10 @@ import {NothingToShow} from "../../common/NothingToShow"
 import {SuccessPopUp} from "../../common/SuccessPopUp"
 import {useDispatch} from "react-redux"
 import {setIsSuccessAC} from "../../../redux/Portfolio/portfolio-reducer"
+import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
+  isFetching: boolean
   isSuccess: boolean
   totalCount: number
   currentPage: number
@@ -20,7 +22,7 @@ type PropsType = {
   clients: Array<ClientType>
   clientsFilter: ClientsFilterType
   isClientDeletingInProcess: Array<string>
-  onPageChanged: (currentPage: number) => void
+  onPageChanged: (page: number) => void
   onFilterChanged: (filter: ClientsFilterType) => void
   addClient: (values: FormData) => void
   deleteClient: (clientId: string, pageSize: number, currentPage: number) => void
@@ -33,6 +35,7 @@ type PropsType = {
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
+    isFetching,
     isSuccess,
     totalCount,
     currentPage,
@@ -110,11 +113,16 @@ export const Clients: React.FC<PropsType> = React.memo(({
             Add Client
           </button>
         </div>
-        { clients.length > 0
-          ? <ul className="admin__cards-list list">
-                { clientsElements }
-            </ul>
-          : <NothingToShow/>
+        {
+            isFetching
+                ? <Preloader />
+                : totalCount && totalCount > 0
+                  ? (
+                      <ul className="admin__cards-list list">
+                            { clientsElements }
+                      </ul>
+                    )
+                  : <NothingToShow/>
         }
         { addClientMode &&
           <ModalPopUp

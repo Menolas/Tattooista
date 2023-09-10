@@ -10,17 +10,20 @@ import {AddConsultationForm} from '../../Forms/AddConsultationForm'
 import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {setIsSuccessAC} from '../../../redux/Portfolio/portfolio-reducer'
 import {useDispatch} from "react-redux";
+import {Preloader} from "../../common/Preloader";
+import {NothingToShow} from "../../common/NothingToShow";
 
 type PropsType = {
+  isFetching: boolean
   isSuccess: boolean
-  totalBookedConsultationsCount: number
+  totalCount: number
   currentBookedConsultationsPage: number
   pageSize: number
   bookedConsultations?: Array<BookedConsultationType>
   bookedConsultationsFilter: BookedConsultationsFilterType
   isStatusChanging?: Array<string>
   isConsultationDeletingInProcess?: Array<string>
-  setCurrentPage: (currentPage: number) => void
+  setCurrentPage: (page: number) => void
   onFilterChanged: (filter: BookedConsultationsFilterType) => void
   changeStatus: (id: string, status: boolean) => void
   deleteConsultation: (id: string, pageSize: number, currentPage: number) => void
@@ -32,8 +35,9 @@ type PropsType = {
 }
 
 export const BookedConsultations: React.FC<PropsType> = React.memo(({
+  isFetching,
   isSuccess,
-  totalBookedConsultationsCount,
+  totalCount,
   currentBookedConsultationsPage,
   pageSize,
   bookedConsultations,
@@ -49,7 +53,7 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
   addBookedConsultation,
   archiveConsultation,
   setIsSuccess
- }) => {
+}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -60,16 +64,16 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
         }
     }, [isSuccess])
 
-  let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false)
+    let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false)
 
-  const closeModal = () => {
-      setAddConsultationMode(false)
-  }
+    const closeModal = () => {
+        setAddConsultationMode(false)
+    }
 
-  const modalTitle = 'Add a Consultation'
-  const successPopUpContent = "You successfully changed your consultations list"
+    const modalTitle = 'Add a Consultation'
+    const successPopUpContent = "You successfully changed your consultations list"
 
-  const bookedConsultationsArray = bookedConsultations?.map(consultation => {
+    const bookedConsultationsArray = bookedConsultations?.map(consultation => {
       return (
         <BookedConsultation
           key={consultation._id}
@@ -84,50 +88,59 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
           archiveConsultation={archiveConsultation}
         />
       )
-  })
+    })
 
-  return (
-    <>
-      <div className="admin__cards-header">
-        <BookedConsultationsSearchForm
-          filter={bookedConsultationsFilter}
-          onFilterChanged={onFilterChanged}
-        />
-        <Paginator
-          totalCount={totalBookedConsultationsCount}
-          pageSize={pageSize}
-          currentPage={currentBookedConsultationsPage}
-          onPageChanged={setCurrentPage}
-          setPageLimit={setPageLimit}
-        />
-        <button
-          className="btn btn--bg btn--light-bg"
-          onClick={() => {setAddConsultationMode(true)}}
-        >
-          Add a consultation
-        </button>
-      </div>
-      <ul className="admin__cards-list list">
-        { bookedConsultationsArray }
-      </ul>
-      { addConsultationMode &&
-          <ModalPopUp
-              modalTitle={modalTitle}
-              closeModal={closeModal}
-          >
-              <AddConsultationForm
-                addBookedConsultation={addBookedConsultation}
-                closeBookingModal={closeModal}
-              />
-          </ModalPopUp>
-      }
-      {
-        isSuccess &&
-        <SuccessPopUp
-            closeModal={setIsSuccess}
-            content={successPopUpContent}
-        />
-      }
-    </>
-  )
+    return (
+      <>
+          <div className="admin__cards-header">
+            <BookedConsultationsSearchForm
+              filter={bookedConsultationsFilter}
+              onFilterChanged={onFilterChanged}
+            />
+            <Paginator
+              totalCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentBookedConsultationsPage}
+              onPageChanged={setCurrentPage}
+              setPageLimit={setPageLimit}
+            />
+            <button
+              className="btn btn--bg btn--light-bg"
+              onClick={() => {setAddConsultationMode(true)}}
+            >
+              Add a consultation
+            </button>
+          </div>
+          {
+              isFetching
+                  ? <Preloader />
+                  : totalCount && totalCount > 0
+                      ? (
+                          <ul className="admin__cards-list list">
+                              { bookedConsultationsArray }
+                          </ul>
+                        )
+                      : <NothingToShow/>
+          }
+
+          { addConsultationMode &&
+              <ModalPopUp
+                  modalTitle={modalTitle}
+                  closeModal={closeModal}
+              >
+                  <AddConsultationForm
+                    addBookedConsultation={addBookedConsultation}
+                    closeBookingModal={closeModal}
+                  />
+              </ModalPopUp>
+          }
+          {
+            isSuccess &&
+            <SuccessPopUp
+                closeModal={setIsSuccess}
+                content={successPopUpContent}
+            />
+          }
+      </>
+    )
 })

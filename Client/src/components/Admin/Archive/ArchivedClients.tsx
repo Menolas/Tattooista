@@ -6,7 +6,7 @@ import {
     ClientsFilterType,
     setArchivedClientsFilter,
     setArchivedClientsPageSize,
-    SetCurrentPageForArchivedClients,
+    setCurrentPageForArchivedClientsAC,
     getArchivedClients, deleteArchivedClient, reactivateClient
 } from "../../../redux/Clients/clients-reducer";
 import {NothingToShow} from "../../common/NothingToShow";
@@ -16,52 +16,49 @@ import {
     getArchivedClientsPageSize,
     getArchivedClientsSelector,
     getClientsIsFetching,
-    getCurrentArchivedClientsPage,
+    getCurrentArchivedClientsPageSelector,
     getTotalArchivedClientsCount
 } from "../../../redux/Clients/clients-selectors";
 import {Preloader} from "../../common/Preloader";
 import {ArchivedClient} from "./ArchivedClient";
-import {useNavigate} from "react-router-dom";
 
 export const ArchivedClients: React.FC = () => {
-    const clientsIsFetching = useSelector(getClientsIsFetching)
+    const isFetching = useSelector(getClientsIsFetching)
     const archivedClients = useSelector(getArchivedClientsSelector)
-    const totalArchivedClientsCount = useSelector(getTotalArchivedClientsCount)
-    const archivedClientsPageSize = useSelector(getArchivedClientsPageSize)
-    const currentArchivedClientsPage = useSelector(getCurrentArchivedClientsPage)
-    const archivedClientsFilter = useSelector(getArchivedClientsFilter)
+    const totalCount = useSelector(getTotalArchivedClientsCount)
+    const pageSize = useSelector(getArchivedClientsPageSize)
+    const currentPage = useSelector(getCurrentArchivedClientsPageSelector)
+    const filter = useSelector(getArchivedClientsFilter)
 
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+    //const navigate = useNavigate()
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search)
+        // const urlParams = new URLSearchParams(window.location.search)
+        // let actualPage = currentPage
+        // let actualFilter = filter
+        // if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
+        // if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
+        // if (!!urlParams.get('status')) actualFilter = { ...actualFilter, gallery: urlParams.get('gallery')}
 
-        let actualPage = currentArchivedClientsPage
-        let actualFilter = archivedClientsFilter
+        dispatch(getArchivedClients(currentPage, pageSize, filter))
+    }, [currentPage, pageSize, filter])
 
-        if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
-        if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
-        if (!!urlParams.get('status')) actualFilter = { ...actualFilter, gallery: urlParams.get('gallery')}
+    // useEffect(() => {
+    //     navigate(`?term=${filter.term}&gallery=${filter.gallery}&page=${currentPage}`)
+    // }, [filter, currentPage])
 
-
-        dispatch(getArchivedClients(actualPage, archivedClientsPageSize, actualFilter))
-    }, [])
-
-    useEffect(() => {
-        navigate(`?term=${archivedClientsFilter.term}&gallery=${archivedClientsFilter.gallery}&page=${currentArchivedClientsPage}`)
-    }, [archivedClientsFilter, currentArchivedClientsPage])
+    const onPageChangedCallBack = (
+        page: number
+    ) => {
+        console.log(page)
+        dispatch(setCurrentPageForArchivedClientsAC(page))
+    }
 
     const setArchivedClientsPageSizeCallBack = (
         pageSize: number
     ) => {
         dispatch(setArchivedClientsPageSize(pageSize))
-    }
-
-    const onPageChangedCallBack = (
-        currentPage: number
-    ) => {
-        dispatch(SetCurrentPageForArchivedClients(currentPage))
     }
 
     const onFilterChangeCallBack = (
@@ -97,28 +94,28 @@ export const ArchivedClients: React.FC = () => {
     return (
         <>
             <div className="admin__cards-header">
-                { totalArchivedClientsCount && totalArchivedClientsCount > archivedClientsPageSize ? (
-                    <>
-                        <ClientSearchFormFormik
-                            clientsFilter={archivedClientsFilter}
-                            onFilterChanged={onFilterChangeCallBack}
-                        />
-                        <Paginator
-                            totalCount={totalArchivedClientsCount}
-                            pageSize={archivedClientsPageSize}
-                            currentPage={currentArchivedClientsPage}
-                            onPageChanged={onPageChangedCallBack}
-                            setPageLimit={setArchivedClientsPageSizeCallBack}
-                        />
-                    </>) : null
-                }
+                <ClientSearchFormFormik
+                    clientsFilter={filter}
+                    onFilterChanged={onFilterChangeCallBack}
+                />
+                <Paginator
+                    totalCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChanged={onPageChangedCallBack}
+                    setPageLimit={setArchivedClientsPageSizeCallBack}
+                />
             </div>
-            {/*{ clientsIsFetching && <Preloader /> }*/}
-            { archivedClients.length > 0
-                ? <ul className="admin__cards-list list">
-                    { clientsElements }
-                </ul>
-                : <NothingToShow/>
+            {
+                isFetching
+                    ? <Preloader />
+                    : totalCount && totalCount > 0
+                        ? (
+                            <ul className="admin__cards-list list">
+                                { clientsElements }
+                            </ul>
+                          )
+                        : <NothingToShow/>
             }
         </>
     )

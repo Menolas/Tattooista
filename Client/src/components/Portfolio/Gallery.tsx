@@ -24,8 +24,8 @@ type PropsType = {
   isGalleryItemDeletingInProcess: Array<string>
   updateGallery: (values: any) => void
   deleteGalleryItem: (itemId: string) => void
-  setCurrentGalleryPage: (page: number) => void
-  setGalleryPageSize: (limit: number) => void
+  setCurrentPage: (page: number) => void
+  setPageSize: (limit: number) => void
   archiveGalleryItem: (id: string) => void
   setIsSuccess: (bol: boolean) => void
 }
@@ -40,8 +40,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   currentPage,
   gallery,
   isGalleryItemDeletingInProcess,
-  setCurrentGalleryPage,
-  setGalleryPageSize,
+  setCurrentPage,
+  setPageSize,
   updateGallery,
   deleteGalleryItem,
   archiveGalleryItem,
@@ -129,8 +129,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               totalCount={totalCount}
               pageSize={pageSize}
               currentPage={currentPage}
-              onPageChanged={setCurrentGalleryPage}
-              setPageLimit={setGalleryPageSize}
+              onPageChanged={setCurrentPage}
+              setPageLimit={setPageSize}
             />
             { isAuth &&
                 <button

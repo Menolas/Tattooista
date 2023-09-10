@@ -26,45 +26,42 @@ import {ArchivedConsultation} from './ArchivedConsultation'
 import {BookedConsultationsSearchForm} from '../../Forms/BookedConsultationsSearchForm'
 
 export const ArchivedConsultations: React.FC = () => {
-    const bookedConsultationsIsFetching = useSelector(getBookedConsultationsIsFetchingSelector)
+    const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
     const archivedConsultations = useSelector(getArchivedConsultationsSelector)
-    const totalArchivedConsultationsCount = useSelector(getTotalArchivedConsultationsCountSelector)
-    const archivedConsultationsPageSize = useSelector(getArchivedConsultationsPageSizeSelector)
-    const currentArchivedConsultationsPage = useSelector(getCurrentArchivedConsultationsPageSelector)
-    const archivedConsultationsFilter = useSelector(getArchivedConsultationsFilterSelector)
+    const totalCount = useSelector(getTotalArchivedConsultationsCountSelector)
+    const pageSize = useSelector(getArchivedConsultationsPageSizeSelector)
+    const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector)
+    const filter = useSelector(getArchivedConsultationsFilterSelector)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search)
+        // const urlParams = new URLSearchParams(window.location.search)
+        // let actualPage = currentPage
+        // let actualFilter = filter
+        // if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
+        // if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
+        // if (!!urlParams.get('status')) actualFilter = { ...actualFilter, status: urlParams.get('status')}
 
-        let actualPage = currentArchivedConsultationsPage
-        let actualFilter = archivedConsultationsFilter
+        dispatch(getArchivedConsultations(currentPage, pageSize, filter))
+    }, [currentPage, pageSize, filter])
 
-        if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
-        if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
-        if (!!urlParams.get('status')) actualFilter = { ...actualFilter, status: urlParams.get('status')}
+    // useEffect(() => {
+    //     navigate(`?term=${filter.term}&status=${filter.status}&page=${currentPage}`)
+    //
+    // }, [filter, currentPage])
 
-
-        dispatch(getArchivedConsultations(actualPage, archivedConsultationsPageSize, actualFilter))
-    }, [currentArchivedConsultationsPage, archivedConsultationsPageSize, archivedConsultationsFilter])
-
-    useEffect(() => {
-        navigate(`?term=${archivedConsultationsFilter.term}&status=${archivedConsultationsFilter.status}&page=${currentArchivedConsultationsPage}`)
-
-    }, [archivedConsultationsFilter, currentArchivedConsultationsPage])
+    const onPageChangedCallBack = (
+        page: number
+    ) => {
+        dispatch(setCurrentPageForArchivedConsultationsAC(page))
+    }
 
     const setArchivedConsultationsPageSizeCallBack = (
         pageSize: number
     ) => {
         dispatch(setArchivedConsultationsPageSizeAC(pageSize))
-    }
-
-    const onPageChangedCallBack = (
-        currentPage: number
-    ) => {
-        dispatch(setCurrentPageForArchivedConsultationsAC(currentPage))
     }
 
     const onFilterChangeCallBack = (
@@ -100,25 +97,21 @@ export const ArchivedConsultations: React.FC = () => {
     return (
         <>
             <div className="admin__cards-header">
-                { totalArchivedConsultationsCount && totalArchivedConsultationsCount > archivedConsultationsPageSize &&
-                    <>
-                        <BookedConsultationsSearchForm
-                            filter={archivedConsultationsFilter}
-                            onFilterChanged={onFilterChangeCallBack}
-                        />
-                        <Paginator
-                            totalCount={totalArchivedConsultationsCount}
-                            pageSize={archivedConsultationsPageSize}
-                            currentPage={currentArchivedConsultationsPage}
-                            onPageChanged={onPageChangedCallBack}
-                            setPageLimit={setArchivedConsultationsPageSizeCallBack}
-                        />
-                    </>
-                }
+                <BookedConsultationsSearchForm
+                    filter={filter}
+                    onFilterChanged={onFilterChangeCallBack}
+                />
+                <Paginator
+                    totalCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChanged={onPageChangedCallBack}
+                    setPageLimit={setArchivedConsultationsPageSizeCallBack}
+                />
             </div>
-            { bookedConsultationsIsFetching
+            { isFetching
                 ? <Preloader />
-                : totalArchivedConsultationsCount && totalArchivedConsultationsCount > 0
+                : totalCount && totalCount > 0
                     ? (
                         <ul className="admin__cards-list list">
                             { archivedConsultationsArray }
