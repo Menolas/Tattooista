@@ -16,11 +16,20 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
   closeModal
 }) => {
 
-  const [imageURL, setImageURL] = useState()
-  const fileReader = new FileReader()
-  fileReader.onloadend = () => {
-    // @ts-ignore
-    setImageURL(fileReader.result)
+  const [imageURLS, setImageURLS] = useState([])
+
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    if (event.target.files && event.target.files.length) {
+      let files = [...event.target.files] || []
+      files.forEach((item, index) => {
+        let reader = new FileReader()
+        reader.onloadend = () => {
+          setImageURLS(_=>[..._,reader.result]); // <-
+        }
+        reader.readAsDataURL(item)
+      })
+    }
   }
 
   const submit = (values: any) => {
@@ -42,14 +51,23 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
     >
       {propsF => {
         return (
-          <Form className="form" encType={"multipart/form-data"}>
+          <Form className="form form--galleryUpload" encType={"multipart/form-data"}>
             <div className="form__input-wrap">
-              <img
-                className="client-profile__gallery-image"
-                src={imageURL ? imageURL : tattooMachine}
-                alt="preview"
-                height="50"
-              />
+              <ul className={"list gallery__uploadedImgPreviews"}>
+                {
+                  imageURLS?.map((item, index) => {
+                    return (
+                        <li className={"gallery__uploadedImgPreviews-item"} key={index}>
+                          <img
+                              src={item}
+                              alt="preview"
+                              height="50"
+                          />
+                        </li>
+                    )
+                  })
+                }
+              </ul>
               <label className="btn btn--sm" htmlFor={"gallery"}>Pick File</label>
               <input
                 className="hidden"
@@ -62,6 +80,7 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
                 onChange={(e) => {
                   if (e.currentTarget.files) {
                     propsF.setFieldValue('gallery', Array.from(e.currentTarget.files))
+                    handleOnChange(e)
                   }
                 }}
               />
