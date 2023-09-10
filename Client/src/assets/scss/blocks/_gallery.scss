@@ -92,6 +92,23 @@
   }
 }
 
+.gallery__uploadedImgPreviews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.gallery__uploadedImgPreviews-item {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
 @media (min-width: 768px) {
 
   .gallery__list {

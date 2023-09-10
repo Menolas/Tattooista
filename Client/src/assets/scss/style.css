@@ -1506,6 +1506,22 @@ img {
   transform: rotate(-45deg);
 }
 
+.gallery__uploadedImgPreviews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.gallery__uploadedImgPreviews-item {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+.gallery__uploadedImgPreviews-item img {
+  object-fit: cover;
+}
+
 @media (min-width: 768px) {
   .gallery__list {
     row-gap: 12px;
