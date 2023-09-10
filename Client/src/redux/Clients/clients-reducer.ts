@@ -10,7 +10,7 @@ const SET_ARCHIVED_CLIENTS_PAGE_SIZE = 'SET_ARCHIVED_CLIENTS_PAGE_SIZE'
 const SET_CLIENTS_FILTER = 'SET_CLIENTS_FILTER'
 const SET_CLIENTS = 'SET_CLIENTS'
 const SET_ARCHIVED_CLIENTS = 'SET_ARCHIVED_CLIENTS'
-const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+const SET_CURRENT_PAGE_FOR_CLIENTS = 'SET_CURRENT_PAGE_FOR_CLIENTS'
 const SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS = 'SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS'
 const SET_FILTER_FOR_ARCHIVED_CLIENTS = 'SET_FILTER_FOR_ARCHIVED_CLIENTS'
 const SET_TOTAL_CLIENTS_COUNT = 'SET_TOTAL_CLIENTS_COUNT'
@@ -59,13 +59,15 @@ export const clientsReducer = (
     case SET_CLIENTS_PAGE_SIZE:
       return {
         ...state,
-        clientsPageSize: action.clientsPageSize
+        clientsPageSize: action.clientsPageSize,
+        currentClientsPage: 1
       }
 
     case SET_ARCHIVED_CLIENTS_PAGE_SIZE:
       return {
         ...state,
-        archivedClientsPageSize: action.pageSize
+        archivedClientsPageSize: action.pageSize,
+        currentArchivedClientsPage: 1
       }
     case SET_CLIENTS_FILTER:
       return {
@@ -84,16 +86,16 @@ export const clientsReducer = (
         ...state,
         archivedClients: action.clients
       }
-    case SET_CURRENT_PAGE:
+    case SET_CURRENT_PAGE_FOR_CLIENTS:
       return {
         ...state,
-        currentClientsPage: action.currentPage,
+        currentClientsPage: action.page,
       }
 
     case SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS:
       return {
         ...state,
-        currentArchivedClientsPage: action.currentPage
+        currentArchivedClientsPage: action.page
       }
 
     case SET_TOTAL_CLIENTS_COUNT:
@@ -175,9 +177,12 @@ export const clientsReducer = (
   }
 }
 
-type ActionsTypes = SetIsSuccessAT | SetClientsPageSizeActionType | SetArchivedClientsPageSizeActionType | SetClientsFilterActionType | SetArchivedClientsFilterAT | SetClientsActionType | SetCurrentPageActionType |
-    SetArchivedClientsAT | SetCurrentPageForArchivedClientsAT | SetClientsTotalCountActionType | SetArchivedClientsTotalCountAT | ToggleIsClientDeletingInProcessActionType |
-    SetIsFetchingActionType | DeleteClientActionType | DeleteArchivedClientAT | EditClientActionType |AddClientActionType | SetClientProfileActionType
+type ActionsTypes = SetIsSuccessAT | SetClientsPageSizeAT | SetArchivedClientsPageSizeAT |
+    SetClientsFilterAT | SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT |
+    SetArchivedClientsAT | SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT |
+    SetArchivedClientsTotalCountAT | ToggleIsClientDeletingInProcessAT |
+    SetIsFetchingAT | DeleteClientAT | DeleteArchivedClientAT | EditClientAT |
+    AddClientAT | SetClientProfileAT
 
 // actions creators
 
@@ -199,43 +204,43 @@ export const setArchivedClientsFilter = (filter: ClientsFilterType): SetArchived
   type: SET_FILTER_FOR_ARCHIVED_CLIENTS, filter
 })
 
-type SetClientsPageSizeActionType = {
+type SetClientsPageSizeAT = {
   type: typeof  SET_CLIENTS_PAGE_SIZE
   clientsPageSize: number
 }
 
-export const setClientsPageSize = (clientsPageSize: number): SetClientsPageSizeActionType => (
+export const setClientsPageSize = (clientsPageSize: number): SetClientsPageSizeAT => (
   {
     type: SET_CLIENTS_PAGE_SIZE, clientsPageSize
   }
 )
 
-type SetArchivedClientsPageSizeActionType = {
+type SetArchivedClientsPageSizeAT = {
   type: typeof SET_ARCHIVED_CLIENTS_PAGE_SIZE
   pageSize: number
 }
 
-export const setArchivedClientsPageSize = (pageSize: number): SetArchivedClientsPageSizeActionType => ({
+export const setArchivedClientsPageSize = (pageSize: number): SetArchivedClientsPageSizeAT => ({
   type: SET_ARCHIVED_CLIENTS_PAGE_SIZE, pageSize
 })
 
-type SetClientsFilterActionType = {
+type SetClientsFilterAT = {
   type: typeof SET_CLIENTS_FILTER
   filter: ClientsFilterType
 }
 
-export const setClientsFilter = (filter: ClientsFilterType): SetClientsFilterActionType => (
+export const setClientsFilter = (filter: ClientsFilterType): SetClientsFilterAT => (
   {
     type: SET_CLIENTS_FILTER, filter
   }
 )
 
-type SetClientsActionType = {
+type SetClientsAT = {
   type: typeof SET_CLIENTS,
   clients: Array<ClientType>
 }
 
-const setClients = (clients: Array<ClientType>): SetClientsActionType => (
+const setClients = (clients: Array<ClientType>): SetClientsAT => (
   {
     type: SET_CLIENTS, clients
   }
@@ -250,32 +255,32 @@ const setArchivedClients = (clients: Array<ClientType>): SetArchivedClientsAT =>
   type: SET_ARCHIVED_CLIENTS, clients
 })
 
-type SetCurrentPageActionType = {
-  type: typeof SET_CURRENT_PAGE,
-  currentPage: number
+type SetCurrentPageAT = {
+  type: typeof SET_CURRENT_PAGE_FOR_CLIENTS,
+  page: number
 }
 
-export const setCurrentPage = (currentPage: number): SetCurrentPageActionType => (
+export const setCurrentClientsPageAC = (page: number): SetCurrentPageAT => (
   {
-    type: SET_CURRENT_PAGE, currentPage
+    type: SET_CURRENT_PAGE_FOR_CLIENTS, page
   }
 )
 
 type SetCurrentPageForArchivedClientsAT = {
   type: typeof SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS,
-  currentPage: number
+  page: number
 }
 
-export const SetCurrentPageForArchivedClients = (currentPage: number): SetCurrentPageForArchivedClientsAT => ({
-  type: SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS, currentPage
+export const setCurrentPageForArchivedClientsAC = (page: number): SetCurrentPageForArchivedClientsAT => ({
+  type: SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS, page
 })
 
-type SetClientsTotalCountActionType = {
+type SetClientsTotalCountAT = {
   type: typeof SET_TOTAL_CLIENTS_COUNT,
   count: number
 }
 
-const setClientsTotalCount = (count: number): SetClientsTotalCountActionType => ({
+const setClientsTotalCount = (count: number): SetClientsTotalCountAT => ({
       type: SET_TOTAL_CLIENTS_COUNT, count
 })
 
@@ -288,35 +293,35 @@ const setArchivedClientsTotalCount = (count: number): SetArchivedClientsTotalCou
   type: SET_ARCHIVED_CLIENTS_TOTAL_COUNT, count
 })
 
-type ToggleIsClientDeletingInProcessActionType = {
+type ToggleIsClientDeletingInProcessAT = {
   type: typeof TOGGLE_IS_CLIENT_DELETING_IN_PROCESS,
   isFetching: boolean,
   clientId: string
 }
 
-const toggleIsClientDeletingInProcess = (isFetching: boolean, clientId: string): ToggleIsClientDeletingInProcessActionType => (
+const toggleIsClientDeletingInProcess = (isFetching: boolean, clientId: string): ToggleIsClientDeletingInProcessAT => (
     {
       type: TOGGLE_IS_CLIENT_DELETING_IN_PROCESS, isFetching, clientId
     }
 )
 
-type SetIsFetchingActionType = {
+type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
   isFetching: boolean,
 }
 
-const setIsFetching = (isFetching: boolean): SetIsFetchingActionType => (
+const setIsFetching = (isFetching: boolean): SetIsFetchingAT => (
   {
     type: TOGGLE_IS_FETCHING, isFetching,
   }
 )
 
-type DeleteClientActionType = {
+type DeleteClientAT = {
   type: typeof DELETE_CLIENT,
   clientId: string
 }
 
-const deleteClientAC = (clientId: string): DeleteClientActionType => ({
+const deleteClientAC = (clientId: string): DeleteClientAT => ({
     type: DELETE_CLIENT, clientId
 })
 
@@ -329,34 +334,34 @@ const deleteArchivedClientAC = (clientId: string): DeleteArchivedClientAT => ({
   type: DELETE_ARCHIVED_CLIENT, clientId
 })
 
-type EditClientActionType = {
+type EditClientAT = {
   type: typeof EDIT_CLIENT,
   client: ClientType
 }
 
-const editClientAC = (client: ClientType): EditClientActionType => (
+const editClientAC = (client: ClientType): EditClientAT => (
   {
     type: EDIT_CLIENT, client
   }
 )
 
-type AddClientActionType = {
+type AddClientAT = {
   type: typeof ADD_CLIENT,
   client: ClientType
 }
 
-const addClientAC = (client: ClientType): AddClientActionType => (
+const addClientAC = (client: ClientType): AddClientAT => (
   {
     type: ADD_CLIENT, client
   }
 )
 
-type SetClientProfileActionType = {
+type SetClientProfileAT = {
   type: typeof SET_CLIENT_PROFILE,
   profile: ClientType
 }
 
-const setClientProfile = (profile: ClientType): SetClientProfileActionType => (
+const setClientProfile = (profile: ClientType): SetClientProfileAT => (
   {
     type: SET_CLIENT_PROFILE, profile
   }
@@ -411,21 +416,6 @@ export const getArchivedClients = (
     }
   } catch (e) {
     dispatch(setIsFetching(false))
-    console.log(e)
-  }
-}
-
-export const clientsOnPageChanged = (
-    currentPage: number,
-    pageSize: number,
-    filter: ClientsFilterType
-): ThunkType => async (
-    dispatch
-) => {
-  try {
-    dispatch(setCurrentPage(currentPage))
-    await dispatch(getClients(currentPage, pageSize, filter))
-  } catch (e) {
     console.log(e)
   }
 }

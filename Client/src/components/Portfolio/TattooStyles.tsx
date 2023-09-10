@@ -146,9 +146,6 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
           </ModalPopUp>
         }
         <div>
-          <h2 className="title title--secondary page-block__title tattoo-style__title">
-            {activeStyle ? activeStyle.value : "---"}
-          </h2>
           <div className="tattoo-style__text">
             {activeStyle ? activeStyle.description : "---"}
           </div>

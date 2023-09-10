@@ -1848,6 +1848,28 @@ img {
   padding: 6px;
   background-color: #fafafa;
 }
+.pagination .pagination__pageLimitButton {
+  padding: 0 9px;
+  height: 32px;
+  max-width: 70px;
+  min-width: 70px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #080808;
+  line-height: 1;
+  background-color: #fafafa;
+  border: none;
+}
+.pagination input.pagination__pageLimit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 9px;
+  max-width: 70px;
+  line-height: 1;
+  background-color: #fafafa;
+  border: none;
+}
 .pagination .pagination__list {
   display: flex;
 }

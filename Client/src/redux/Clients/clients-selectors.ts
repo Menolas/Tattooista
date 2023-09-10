@@ -33,7 +33,7 @@ export const getCurrentClientsPage = (state: AppStateType) => {
   return state.clients.currentClientsPage
 }
 
-export const getCurrentArchivedClientsPage = (state: AppStateType) => {
+export const getCurrentArchivedClientsPageSelector = (state: AppStateType) => {
   return state.clients.currentArchivedClientsPage
 }
 

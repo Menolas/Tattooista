@@ -53,7 +53,16 @@ export const portfolioReducer = (
     case SET_GALLERY_PAGE_SIZE:
       return {
         ...state,
-        galleryPageSize: action.galleryPageSize
+        galleryPageSize: action.pageSize,
+        currentGalleryPage: 1
+
+      }
+
+    case SET_ARCHIVED_GALLERY_PAGE_SIZE:
+      return {
+        ...state,
+        archivedGalleryPageSize: action.pageSize,
+        currentArchivedGalleryPage: 1
       }
 
     case SET_CURRENT_GALLERY_PAGE:
@@ -138,10 +147,10 @@ export const portfolioReducer = (
 
 //action creators
 
-type ActionsTypes = SetIsSuccessAT | SetGalleryPageSizeActionType | SetCurrentGalleryPageActionType |
-    SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountActionType | SetArchivedGalleryTotalCountAT |
-    SetIsFetchingActionType | SetTattooStylesActionType | SetActiveStyleActionType | SetGalleryActionType
-    | SetArchivedGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT
+type ActionsTypes = SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT |
+    SetCurrentGalleryPageAT | SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT |
+    SetArchivedGalleryTotalCountAT | SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT |
+    SetGalleryAT | SetArchivedGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT
 
 // actions creators
 
@@ -154,30 +163,30 @@ export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
   type: SET_IS_SUCCESS, isSuccess
 })
 
-type SetGalleryPageSizeActionType = {
+type SetGalleryPageSizeAT = {
   type: typeof SET_GALLERY_PAGE_SIZE
-  galleryPageSize: number
+  pageSize: number
 }
 
-export const setGalleryPageSizeAC = (galleryPageSize: number): SetGalleryPageSizeActionType => ({
-    type: SET_GALLERY_PAGE_SIZE, galleryPageSize
+export const setGalleryPageSizeAC = (pageSize: number): SetGalleryPageSizeAT => ({
+    type: SET_GALLERY_PAGE_SIZE, pageSize
 })
 
 type SetArchivedGalleryPageSizeAT = {
   type: typeof SET_ARCHIVED_GALLERY_PAGE_SIZE
-  archivedGalleryPageSize: number
+  pageSize: number
 }
 
-export const setArchivedGalleryPageSizeAC = (archivedGalleryPageSize: number): SetArchivedGalleryPageSizeAT => ({
-  type: SET_ARCHIVED_GALLERY_PAGE_SIZE, archivedGalleryPageSize
+export const setArchivedGalleryPageSizeAC = (pageSize: number): SetArchivedGalleryPageSizeAT => ({
+  type: SET_ARCHIVED_GALLERY_PAGE_SIZE, pageSize
 })
 
-type SetCurrentGalleryPageActionType = {
+type SetCurrentGalleryPageAT = {
   type: typeof SET_CURRENT_GALLERY_PAGE,
   page: number
 }
 
-export const setCurrentGalleryPageAC = (page: number): SetCurrentGalleryPageActionType => ({
+export const setCurrentGalleryPageAC = (page: number): SetCurrentGalleryPageAT => ({
     type: SET_CURRENT_GALLERY_PAGE, page
 })
 
@@ -190,12 +199,12 @@ export const setCurrentArchivedGalleryPageAC = (page: number): SetCurrentArchive
   type: SET_CURRENT_ARCHIVED_GALLERY_PAGE, page
 })
 
-type SetGalleryTotalCountActionType = {
+type SetGalleryTotalCountAT = {
   type: typeof SET_GALLERY_TOTAL_COUNT,
   total: number
 }
 
-const setGalleryTotalCountAC = (total: number): SetGalleryTotalCountActionType => ({
+const setGalleryTotalCountAC = (total: number): SetGalleryTotalCountAT => ({
   type: SET_GALLERY_TOTAL_COUNT, total
 })
 
@@ -208,39 +217,39 @@ const setArchivedGalleryTotalCountAC = (totalCount: number): SetArchivedGalleryT
   type: SET_ARCHIVED_GALLERY_TOTAL_COUNT, totalCount
 })
 
-type SetIsFetchingActionType = {
+type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
   isFetching: boolean
 }
 
-const setIsFetchingAC = (isFetching: boolean): SetIsFetchingActionType => ({
+const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
   })
 
-type SetTattooStylesActionType = {
+type SetTattooStylesAT = {
   type: typeof SET_STYLES,
   tattooStyles: Array<TattooStyleType>
 }
 
-const setTattooStylesAC = (tattooStyles: Array<TattooStyleType>): SetTattooStylesActionType => ({
+const setTattooStylesAC = (tattooStyles: Array<TattooStyleType>): SetTattooStylesAT => ({
     type: SET_STYLES, tattooStyles
 })
 
-type SetActiveStyleActionType = {
+type SetActiveStyleAT = {
   type: typeof SET_ACTIVE_STYLE,
   style: TattooStyleType | null
 }
 
-export const setActiveStyleAC = (style: TattooStyleType | null): SetActiveStyleActionType => ({
+export const setActiveStyleAC = (style: TattooStyleType | null): SetActiveStyleAT => ({
     type: SET_ACTIVE_STYLE, style
 })
 
-type SetGalleryActionType = {
+type SetGalleryAT = {
   type: typeof SET_GALLERY,
   gallery: Array<GalleryItemType>
 }
 
-const setGalleryAC = (gallery: Array<GalleryItemType>): SetGalleryActionType => ({
+const setGalleryAC = (gallery: Array<GalleryItemType>): SetGalleryAT => ({
     type: SET_GALLERY, gallery
 })
 
@@ -397,9 +406,6 @@ export const adminUpdateGallery = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setGalleryAC(response.gallery))
       dispatch(setIsSuccessAC(true))
-      // setTimeout( () => {
-      //   dispatch(setIsSuccessAC(false))
-      // }, 2000);
     }
   } catch (e) {
     console.log(e)

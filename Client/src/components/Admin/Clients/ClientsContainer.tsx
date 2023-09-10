@@ -3,7 +3,7 @@ import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {
   getClients,
-  clientsOnPageChanged,
+  setCurrentClientsPageAC,
   clientsOnFilterChanged,
   addClient,
   deleteClient,
@@ -31,46 +31,45 @@ import {useNavigate} from "react-router-dom";
 
 export const ClientsContainer: React.FC = () => {
 
-  const clientsIsFetching = useSelector(getClientsIsFetching)
-  const currentClientsPage = useSelector(getCurrentClientsPage)
-  const totalClientsCount = useSelector(getTotalClientsCount)
-  const clientsPageSize = useSelector(getClientsPageSize)
+  const isFetching = useSelector(getClientsIsFetching)
+  const currentPage = useSelector(getCurrentClientsPage)
+  const totalCount = useSelector(getTotalClientsCount)
+  const pageSize = useSelector(getClientsPageSize)
   const clients = useSelector(getClientsSelector)
-  const clientsFilter = useSelector(getClientsFilter)
-  const isClientDeletingInProcess = useSelector(getIsClientDeletingInProcess)
+  const filter = useSelector(getClientsFilter)
+  const isDeletingInProcess = useSelector(getIsClientDeletingInProcess)
   const isSuccess = useSelector(getIsSuccessSelector)
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
+    console.log(currentPage)
+    // const urlParams = new URLSearchParams(window.location.search)
+    // let actualPage = currentPage
+    // let actualFilter = filter
+    // if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
+    // if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
+    // if (!!urlParams.get('status')) actualFilter = { ...actualFilter, gallery: urlParams.get('gallery')}
 
-    let actualPage = currentClientsPage
-    let actualFilter = clientsFilter
+    dispatch(getClients(currentPage, pageSize, filter))
+  }, [currentPage, pageSize, filter])
 
-    if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
-    if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
-    if (!!urlParams.get('status')) actualFilter = { ...actualFilter, gallery: urlParams.get('gallery')}
+  // useEffect(() => {
+  //   navigate(`?term=${filter.term}&gallery=${filter.gallery}&page=${currentPage}`)
+  // }, [filter, currentPage])
 
-
-    dispatch(getClients(actualPage, clientsPageSize, actualFilter))
-  }, [])
-
-  useEffect(() => {
-    navigate(`?term=${clientsFilter.term}&gallery=${clientsFilter.gallery}&page=${currentClientsPage}`)
-  }, [clientsFilter, currentClientsPage])
-
-  const onPageChangedCallBack = (
-    currentPage: number
+  const setCurrentPageCallBack = (
+    page: number
   ) => {
-    dispatch(clientsOnPageChanged(currentPage, clientsPageSize, clientsFilter))
+    console.log("!!!!!!!!")
+    dispatch(setCurrentClientsPageAC(page))
   }
 
   const onFilterChanged = (
     filter: ClientsFilterType
   ) => {
-    dispatch(clientsOnFilterChanged(clientsPageSize, filter))
+    dispatch(clientsOnFilterChanged(pageSize, filter))
   }
 
   const addClientCallBack = (
@@ -115,29 +114,25 @@ export const ClientsContainer: React.FC = () => {
   }
 
   return (
-    <>
-      { clientsIsFetching
-        ? <Preloader/>
-        : <Clients
-            isSuccess={isSuccess}
-            totalCount={totalClientsCount}
-            currentPage={currentClientsPage}
-            pageSize={clientsPageSize}
-            clients={clients}
-            clientsFilter={clientsFilter}
-            isClientDeletingInProcess={isClientDeletingInProcess}
-            onPageChanged={onPageChangedCallBack}
-            onFilterChanged={onFilterChanged}
-            addClient={addClientCallBack}
-            deleteClient={deleteClientCallBack}
-            editClient={editClientCallBack}
-            setPageLimit={setPageLimit}
-            updateClientGallery={updateClientGalleryCallBack}
-            deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
-            archiveClient={archiveClientCallBack}
-            setIsSuccess={setIsSuccessCallBack}
-          />
-      }
-    </>
+      <Clients
+          isFetching={isFetching}
+          isSuccess={isSuccess}
+          totalCount={totalCount}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          clients={clients}
+          clientsFilter={filter}
+          isClientDeletingInProcess={isDeletingInProcess}
+          onPageChanged={setCurrentPageCallBack}
+          onFilterChanged={onFilterChanged}
+          addClient={addClientCallBack}
+          deleteClient={deleteClientCallBack}
+          editClient={editClientCallBack}
+          setPageLimit={setPageLimit}
+          updateClientGallery={updateClientGalleryCallBack}
+          deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
+          archiveClient={archiveClientCallBack}
+          setIsSuccess={setIsSuccessCallBack}
+      />
   )
 }
