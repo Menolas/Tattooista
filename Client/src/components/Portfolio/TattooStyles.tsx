@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import AliceCarousel from 'react-alice-carousel'
 import 'react-alice-carousel/lib/alice-carousel.css'
 import {TattooStyleType} from '../../types/Types'
+// @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
 import {UpdateTattooStyleFormFormik} from '../Forms/UpdateTattooStyleFormFormik'
 import {ModalPopUp} from '../common/ModalPopUp'
@@ -74,7 +75,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
       )
     })
 
-  return (
+    return (
     <section className="tattoo-style page-block">
       { isAuth &&
         <button
