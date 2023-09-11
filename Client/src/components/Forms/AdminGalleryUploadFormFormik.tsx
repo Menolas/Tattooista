@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { useState } from "react";
-import {Form, Formik} from 'formik'
-//import {ErrorMessageWrapper} from '../../utils/validators'
+import { useState } from 'react'
+import {ErrorMessage, Form, Formik, FormikHelpers, FormikValues} from 'formik'
+import * as yup from "yup";
+import {ErrorMessageWrapper} from '../../utils/validators'
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 
@@ -10,6 +11,30 @@ type PropsType = {
   updateGallery: (values: any) => void
   closeModal: () => void
 }
+
+const FILE_SIZE = 160 * 1024;
+const SUPPORTED_FORMATS = [
+  "image/jpg",
+  "image/jpeg",
+  "image/gif",
+  "image/png"
+];
+
+const validationSchema = yup.object().shape({
+  gallery: yup
+      .mixed()
+      .required("A file is required")
+      // .test(
+      //     "fileSize",
+      //     "File too large",
+      //     value => value && value.size <= FILE_SIZE
+      // )
+      // .test(
+      //     "fileFormat",
+      //     "Unsupported Format",
+      //     value => value && SUPPORTED_FORMATS.includes(value.type)
+      // )
+});
 
 export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
   updateGallery,
@@ -47,6 +72,8 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={validationSchema}
+      validateOnSubmit={true}
       onSubmit={submit}
     >
       {propsF => {
@@ -84,6 +111,9 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
                   }
                 }}
               />
+              <ErrorMessage name='gallery'>
+                {ErrorMessageWrapper}
+              </ErrorMessage>
             </div>
             <button
               type="submit"

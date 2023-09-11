@@ -81,6 +81,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
     }
   }, [isSuccess])
 
+  const modalTitle = `Update you gallery for ${activeStyle.value}`
+
   const GalleryItemsArray = gallery?.map(item => {
     return (
         <li
@@ -143,6 +145,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             { editGalleryMode &&
                 <ModalPopUp
                     closeModal={closeEditGalleryForm}
+                    modalTitle={modalTitle}
                 >
                     <AdminGalleryUploadFormFormik
                         activeStyle={activeStyle.value}
