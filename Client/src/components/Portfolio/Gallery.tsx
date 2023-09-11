@@ -164,7 +164,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                       onClick={() => { closeBigImg() }}>
                     {''}
                   </button>
-                  <img src={`${SERVER_URL}gallery/${activeStyle.value}/${bigImg}`} alt={activeStyle.value} />
+                  <img src={`${SERVER_URL}gallery/${bigImg}`} alt={activeStyle.value} />
               </div>
             </div>
           }

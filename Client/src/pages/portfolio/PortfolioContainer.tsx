@@ -34,7 +34,7 @@ export const PortfolioContainer: React.FC = () =>  {
   const isFetching = useSelector(getIsFetching)
   const totalCount = useSelector(getTotalGalleryItemsCount)
   const pageSize = useSelector(getGalleryPageSize)
-  const currentPage = useSelector(getCurrentGalleryPage)
+  let currentPage = useSelector(getCurrentGalleryPage)
   const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcess)
   const tattooStyles = useSelector(getTattooStylesSelector)
   const activeStyle = useSelector(getActiveStyleSelector)
@@ -45,6 +45,9 @@ export const PortfolioContainer: React.FC = () =>  {
   //const navigate = useNavigate()
 
   useEffect( () => {
+    if (currentPage === 0) {
+      currentPage = 1
+    }
     dispatch(getActualPortfolio(activeStyle, currentPage, pageSize))
   }, [activeStyle, currentPage, pageSize])
 
