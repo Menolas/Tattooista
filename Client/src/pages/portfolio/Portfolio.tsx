@@ -84,7 +84,7 @@ export const Portfolio: React.FC<PropsType> = ({
         updateGallery={updateGallery}
         deleteGalleryItem={deleteGalleryItem}
         archiveGalleryItem={archiveGalleryItem}
-        isGalleryItemDeletingInProcess={isDeletingInProcess}
+        isDeletingInProcess={isDeletingInProcess}
         setIsSuccess={setIsSuccess}
       />
     </>

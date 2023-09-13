@@ -64,6 +64,12 @@
   }
 }
 
+.btn--icon:disabled {
+  svg {
+    fill: $disabled;
+  }
+}
+
 .btn--icon--light {
   svg {
     fill: $dark;

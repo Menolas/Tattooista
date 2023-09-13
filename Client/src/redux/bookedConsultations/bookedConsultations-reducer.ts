@@ -18,7 +18,7 @@ const SET_TOTAL_BOOKED_CONSULTATIONS_COUNT = 'SET_TOTAL_BOOKED_CONSULTATIONS_COU
 const SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT = 'SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS'
-const TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS'
+const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS'
 const DELETE_CONSULTATION = 'DELETE_CONSULTATION'
 const DELETE_ARCHIVED_CONSULTATION = 'DELETE_ARCHIVED_CONSULTATION'
 const ADD_CONSULTATION = 'ADD_CONSULTATION'
@@ -35,7 +35,7 @@ let initialState = {
   currentArchivedConsultationsPage: 1 as number,
   bookedConsultationsIsFetching: false,
   isStatusChanging: [] as Array<string>,
-  isConsultationDeletingInProcess: [] as Array<string>,
+  isDeletingInProcess: [] as Array<string>,
   bookedConsultationsFilter: {
     term: '' as string | null,
     status: 'null' as string | null
@@ -138,12 +138,12 @@ export const bookedConsultationsReducer = (
           ? [...state.isStatusChanging, action.id]
           : state.isStatusChanging.filter(id => id !== action.id)
       }
-    case TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS:
+    case TOGGLE_IS_DELETING_IN_PROCESS:
       return {
         ...state,
-        isConsultationDeletingInProcess: action.isFetching
-          ? [...state.isConsultationDeletingInProcess, action.id]
-          : state.isConsultationDeletingInProcess.filter(id => id !== action.id)
+        isDeletingInProcess: action.isFetching
+          ? [...state.isDeletingInProcess, action.id]
+          : state.isDeletingInProcess.filter(id => id !== action.id)
       }
     case DELETE_CONSULTATION:
       return {
@@ -179,7 +179,7 @@ type ActionsTypes = SetIsSuccessAT | SetBookedConsultationsPageSizeAT | SetArchi
     | SetBookedConsultationsAT | SetArchivedConsultationsAT | SetCurrentPageForBookedConsultationsAT |
     SetCurrentPageForArchivedConsultationsAT | SetBookedConsultationsTotalCountAT | SetArchivedConsultationsTotalCountAT |
     ChangeBookedConsultationStatusAT | SetIsFetchingAT | ToggleIsStatusChangingAT |
-    ToggleIsBookedConsultationDeletingInProcessAT | DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT
+    ToggleIsDeletingInProcessAT | DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT
 
 // actions creators
 
@@ -319,15 +319,15 @@ const toggleIsStatusChangingAC = (isFetching: boolean, id: string): ToggleIsStat
   }
 )
 
-type ToggleIsBookedConsultationDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS,
+type ToggleIsDeletingInProcessAT = {
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
   isFetching: boolean,
   id: string
 }
 
-const toggleIsBookedConsultationDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsBookedConsultationDeletingInProcessAT => (
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
   {
-    type: TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS, isFetching, id
+    type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
   }
 )
 
@@ -448,15 +448,15 @@ export const deleteBookedConsultation = (
     id: string
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsBookedConsultationDeletingInProcessAC(true, id))
+    dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.deleteConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteBookedConsultationAC(id))
-      dispatch(toggleIsBookedConsultationDeletingInProcessAC(false, id))
     }
   } catch (e) {
-    dispatch(toggleIsBookedConsultationDeletingInProcessAC(false, id))
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
@@ -464,15 +464,15 @@ export const deleteArchivedConsultation = (
     id: string
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsBookedConsultationDeletingInProcessAC(true, id))
+    dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.deleteArchivedConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteArchivedConsultationAC(id))
-      dispatch(toggleIsBookedConsultationDeletingInProcessAC(false, id))
     }
   } catch (e) {
-    dispatch(toggleIsBookedConsultationDeletingInProcessAC(false, id))
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
@@ -496,7 +496,7 @@ export const turnConsultationToClient = (
     contacts: {}
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(setIsFetchingAC(true))
+    dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.turnConsultationToClient(
       id,
       fullName,
@@ -509,7 +509,7 @@ export const turnConsultationToClient = (
   } catch (e) {
     console.log(e)
   } finally {
-    dispatch(setIsFetchingAC(false))
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
@@ -517,12 +517,15 @@ export const archiveConsultation = (
     id: string
 ): ThunkType => async (dispatch) => {
   try {
+    dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.archiveConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteBookedConsultationAC(id))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
@@ -530,6 +533,7 @@ export const reactivateConsultation = (
     id: string
 ): ThunkType => async (dispatch) => {
   try {
+    dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.reactivateConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteArchivedConsultationAC(id))
@@ -537,5 +541,7 @@ export const reactivateConsultation = (
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }

@@ -48,6 +48,6 @@ export const getTotalArchivedGalleryItemsCountSelector = (state: AppStateType) =
   return state.portfolio.totalArchivedGalleryItemsCount
 }
 
-export const getIsGalleryItemDeletingInProcess = (state: AppStateType) => {
-  return state.portfolio.isGalleryItemDeletingInProcess
+export const getIsGalleryItemDeletingInProcessSelector = (state: AppStateType) => {
+  return state.portfolio.isDeletingInProcess
 }

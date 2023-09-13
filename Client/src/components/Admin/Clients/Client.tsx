@@ -15,6 +15,7 @@ type PropsType = {
   client: ClientType
   pageSize: number
   currentPage: number
+  isDeletingInProcess: Array<string>
   deleteClient: (clientId: string, pageSize: number, currentPage: number) => void
   editClient: (clientId: string, values: FormData) => void
   updateClientGallery: (clientId: string, values: FormData) => void
@@ -24,6 +25,7 @@ type PropsType = {
 
 export const Client: React.FC<PropsType> = React.memo(({
   client,
+  isDeletingInProcess,
   deleteClient,
   editClient,
   pageSize,
@@ -86,6 +88,7 @@ export const Client: React.FC<PropsType> = React.memo(({
           </button>
           <button
               className={"btn btn--icon"}
+              disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
 
                 archiveClient(client._id)
@@ -95,8 +98,8 @@ export const Client: React.FC<PropsType> = React.memo(({
           </button>
           <button
               className={"btn btn--icon"}
+              disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
-                console.log("it is a hit!!!!!!!!!!!")
                 deleteClient(client._id, pageSize, currentPage)
               }}
           >
@@ -141,6 +144,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             <ClientGalleryUploadFormFormik
                 profileId={client._id}
                 gallery={client.gallery}
+                isDeletingInProcess={isDeletingInProcess}
                 updateClientGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 closeModal={closeEditModal}

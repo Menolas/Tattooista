@@ -11,6 +11,7 @@ import Sprite from '../../assets/svg/sprite.svg'
 type PropsType = {
   profileId: string
   gallery?: Array<string>
+  isDeletingInProcess: Array<string>
   closeModal: () => void
   updateClientGallery: (clientId: string, values: any) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
@@ -19,16 +20,20 @@ type PropsType = {
 export const ClientGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
 profileId,
 gallery,
+isDeletingInProcess,
 updateClientGallery,
 deleteClientGalleryPicture,
 closeModal
 }) => {
+
+  console.log(isDeletingInProcess + "isDeletingInProcess!!!!!!!!")
 
   const [imageURLS, setImageURLS] = useState([])
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     if (event.target.files && event.target.files.length) {
+      // @ts-ignore
       let files = [...event.target.files] || []
       files.forEach((item, index) => {
         let reader = new FileReader()
@@ -67,7 +72,9 @@ closeModal
                       <li className={"client-gallery__item"} key={i}>
                         <button
                             className={"btn btn--icon btn--icon--light"}
+                            disabled={isDeletingInProcess?.some(id => id === item)}
                             onClick={(event) => {
+                              console.log(isDeletingInProcess + "isDeletingInProcess!!!!!!!!")
                               event.preventDefault()
                               deleteClientGalleryPicture(profileId, item)
                             }}

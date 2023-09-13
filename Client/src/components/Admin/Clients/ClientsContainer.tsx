@@ -21,7 +21,7 @@ import {
   getCurrentClientsPage,
   getClientsPageSize,
   getClientsSelector,
-  getIsClientDeletingInProcess,
+  getIsClientDeletingInProcessSelector,
   getClientsFilter,
   getIsSuccessSelector
 } from '../../../redux/Clients/clients-selectors'
@@ -37,14 +37,13 @@ export const ClientsContainer: React.FC = () => {
   const pageSize = useSelector(getClientsPageSize)
   const clients = useSelector(getClientsSelector)
   const filter = useSelector(getClientsFilter)
-  const isDeletingInProcess = useSelector(getIsClientDeletingInProcess)
+  const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
 
   const dispatch = useDispatch()
   //const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(currentPage)
     // const urlParams = new URLSearchParams(window.location.search)
     // let actualPage = currentPage
     // let actualFilter = filter
@@ -62,7 +61,6 @@ export const ClientsContainer: React.FC = () => {
   const setCurrentPageCallBack = (
     page: number
   ) => {
-    console.log("!!!!!!!!")
     dispatch(setCurrentClientsPageAC(page))
   }
 
@@ -122,7 +120,7 @@ export const ClientsContainer: React.FC = () => {
           pageSize={pageSize}
           clients={clients}
           clientsFilter={filter}
-          isClientDeletingInProcess={isDeletingInProcess}
+          isDeletingInProcess={isDeletingInProcess}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChanged}
           addClient={addClientCallBack}

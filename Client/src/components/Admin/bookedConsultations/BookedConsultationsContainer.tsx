@@ -21,7 +21,7 @@ import {
   getBookedConsultationsIsFetchingSelector,
   getBookedConsultationsFilterSelector,
   getIsStatusChangingSelector,
-  getIsConsultationDeletingInProcessSelector,
+  getIsDeletingInProcessSelector,
   getIsSuccessSelector
 } from '../../../redux/bookedConsultations/bookedConsultations-selectors'
 import { BookedConsultations } from './BookedConsultations'
@@ -36,7 +36,7 @@ export const BookedConsultationsContainer: React.FC = () => {
   const bookedConsultations = useSelector(getBookedConsultationsSelector)
   const filter = useSelector(getBookedConsultationsFilterSelector)
   const isStatusChanging = useSelector(getIsStatusChangingSelector)
-  const isDeletingInProcess = useSelector(getIsConsultationDeletingInProcessSelector)
+  const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
 
   const dispatch = useDispatch()
@@ -117,7 +117,7 @@ export const BookedConsultationsContainer: React.FC = () => {
         bookedConsultations={bookedConsultations}
         bookedConsultationsFilter={filter}
         isStatusChanging={isStatusChanging}
-        isConsultationDeletingInProcess={isDeletingInProcess}
+        isDeletingInProcess={isDeletingInProcess}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
         changeStatus={changeBookedConsultationStatusCallBack}

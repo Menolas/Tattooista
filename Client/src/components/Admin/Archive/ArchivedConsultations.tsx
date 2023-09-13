@@ -20,13 +20,14 @@ import {
     getArchivedConsultationsSelector,
     getCurrentArchivedConsultationsPageSelector,
     getBookedConsultationsIsFetchingSelector,
-    getTotalArchivedConsultationsCountSelector,
+    getTotalArchivedConsultationsCountSelector, getIsDeletingInProcessSelector,
 } from '../../../redux/bookedConsultations/bookedConsultations-selectors'
 import {ArchivedConsultation} from './ArchivedConsultation'
 import {BookedConsultationsSearchForm} from '../../Forms/BookedConsultationsSearchForm'
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
+    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector)
     const archivedConsultations = useSelector(getArchivedConsultationsSelector)
     const totalCount = useSelector(getTotalArchivedConsultationsCountSelector)
     const pageSize = useSelector(getArchivedConsultationsPageSizeSelector)
@@ -90,6 +91,7 @@ export const ArchivedConsultations: React.FC = () => {
                     consultation={consultation}
                     deleteArchivedConsultation={deleteArchivedConsultationCallBack}
                     reactivateConsultation={reactivateConsultationCallBack}
+                    isDeletingInProcess={isDeletingInProcess}
                 />
             )
         })

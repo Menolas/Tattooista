@@ -15,7 +15,7 @@ const SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS = 'SET_CURRENT_PAGE_FOR_ARCHIVED_CLI
 const SET_FILTER_FOR_ARCHIVED_CLIENTS = 'SET_FILTER_FOR_ARCHIVED_CLIENTS'
 const SET_TOTAL_CLIENTS_COUNT = 'SET_TOTAL_CLIENTS_COUNT'
 const SET_ARCHIVED_CLIENTS_TOTAL_COUNT = 'SET_TOTAL_ARCHIVED_CLIENTS_COUNT'
-const TOGGLE_IS_CLIENT_DELETING_IN_PROCESS = 'TOGGLE_IS_CLIENT_DELETING_IN_PROCESS'
+const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS'
 const DELETE_CLIENT = 'DELETE_CLIENT'
 const DELETE_ARCHIVED_CLIENT = 'DELETE_ARCHIVED_CLIENT'
 const EDIT_CLIENT = 'EDIT_CLIENT'
@@ -34,7 +34,7 @@ let initialState = {
   currentClientsPage: 1 as number,
   currentArchivedClientsPage: 1 as number,
   clientsIsFetching: false,
-  isClientDeletingInProcess: [] as Array<string>,
+  isDeletingInProcess: [] as Array<string>,
   clientsFilter: {
     term: '' as string | null,
     gallery: "any" as string | null
@@ -152,12 +152,12 @@ export const clientsReducer = (
         clients: [{...action.client}, ...state.clients ]
       }
 
-    case TOGGLE_IS_CLIENT_DELETING_IN_PROCESS:
+    case TOGGLE_IS_DELETING_IN_PROCESS:
       return {
         ...state,
-        isClientDeletingInProcess: action.isFetching
-            ? [...state.isClientDeletingInProcess, action.clientId]
-            : state.isClientDeletingInProcess.filter(id => id !== action.clientId)
+        isDeletingInProcess: action.isFetching
+            ? [...state.isDeletingInProcess, action.id]
+            : state.isDeletingInProcess.filter(id => id !== action.id)
       }
 
     case SET_CLIENT_PROFILE:
@@ -180,7 +180,7 @@ export const clientsReducer = (
 type ActionsTypes = SetIsSuccessAT | SetClientsPageSizeAT | SetArchivedClientsPageSizeAT |
     SetClientsFilterAT | SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT |
     SetArchivedClientsAT | SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT |
-    SetArchivedClientsTotalCountAT | ToggleIsClientDeletingInProcessAT |
+    SetArchivedClientsTotalCountAT | ToggleIsDeletingInProcessAT |
     SetIsFetchingAT | DeleteClientAT | DeleteArchivedClientAT | EditClientAT |
     AddClientAT | SetClientProfileAT
 
@@ -293,15 +293,15 @@ const setArchivedClientsTotalCount = (count: number): SetArchivedClientsTotalCou
   type: SET_ARCHIVED_CLIENTS_TOTAL_COUNT, count
 })
 
-type ToggleIsClientDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_CLIENT_DELETING_IN_PROCESS,
+type ToggleIsDeletingInProcessAT = {
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
   isFetching: boolean,
-  clientId: string
+  id: string
 }
 
-const toggleIsClientDeletingInProcess = (isFetching: boolean, clientId: string): ToggleIsClientDeletingInProcessAT => (
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
     {
-      type: TOGGLE_IS_CLIENT_DELETING_IN_PROCESS, isFetching, clientId
+      type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
     }
 )
 
@@ -434,38 +434,40 @@ export const clientsOnFilterChanged = (
 }
 
 export const deleteClient = (
-    clientId: string,
+    id: string,
 ): ThunkType => async (
     dispatch
 ) => {
   try {
-    dispatch(toggleIsClientDeletingInProcess(true, clientId))
-    let response = await clientsAPI.deleteClient(clientId)
+    dispatch(toggleIsDeletingInProcessAC(true, id))
+    let response = await clientsAPI.deleteClient(id)
     console.log(response)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteClientAC(clientId))
-      dispatch(toggleIsClientDeletingInProcess(false, clientId))
+      dispatch(deleteClientAC(id))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
 export const deleteArchivedClient = (
-    clientId: string,
+    id: string,
 ): ThunkType => async (
     dispatch
 ) => {
   try {
-    //dispatch(toggleIsClientDeletingInProcess(true, clientId))
-    let response = await clientsAPI.deleteArchivedClient(clientId)
+    dispatch(toggleIsDeletingInProcessAC(true, id))
+    let response = await clientsAPI.deleteArchivedClient(id)
     console.log(response)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedClientAC(clientId))
-      //dispatch(toggleIsClientDeletingInProcess(false, clientId))
+      dispatch(deleteArchivedClientAC(id))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
@@ -540,43 +542,53 @@ export const updateClientGallery = (
 }
 
 export const deleteClientGalleryPicture = (
-    clientId: string,
+    id: string,
     picture: string
 ): ThunkType => async (dispatch) => {
+  console.log("It is a hit on deleting!!!!")
   try {
-    let response = await clientsAPI.deleteClientGalleryPicture(clientId, picture)
+    dispatch(toggleIsDeletingInProcessAC(true, picture))
+    let response = await clientsAPI.deleteClientGalleryPicture(id, picture)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client))
       dispatch(editClientAC(response.client))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, picture))
   }
 }
 
 export const archiveClient = (
-    clientId: string
+    id: string
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await clientsAPI.archiveClient(clientId)
+    dispatch(toggleIsDeletingInProcessAC(true, id))
+    let response = await clientsAPI.archiveClient(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteClientAC(clientId))
+      dispatch(deleteClientAC(id))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
 export const reactivateClient = (
-    clientId: string
+    id: string
 ) : ThunkType => async (dispatch) => {
   try {
-    let response = await clientsAPI.reactivateClient(clientId)
+    dispatch(toggleIsDeletingInProcessAC(true, id))
+    let response = await clientsAPI.reactivateClient(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedClientAC(clientId))
+      dispatch(deleteArchivedClientAC(id))
       dispatch(addClientAC(response.client))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }

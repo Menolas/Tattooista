@@ -6,6 +6,7 @@ import {ContactType, BookedConsultationType} from '../../../types/Types'
 
 type PropsType = {
     consultation: BookedConsultationType
+    isDeletingInProcess: Array<string>
     deleteArchivedConsultation: (id: string) => void
     reactivateConsultation: (id: string) => void
 }
@@ -13,7 +14,8 @@ type PropsType = {
 export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
    consultation,
    deleteArchivedConsultation,
-   reactivateConsultation
+   reactivateConsultation,
+   isDeletingInProcess
 }) => {
 
     const archivedBookingContacts: ContactType = consultation.contacts
@@ -42,12 +44,14 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                 <div className="admin__card-action-btns client-profile__action-btns">
                     <button
                         className={"btn btn--icon"}
+                        disabled={isDeletingInProcess?.some(id => id === consultation._id)}
                         onClick={() => reactivateConsultation(consultation._id)}
                     >
                         <svg><use href={`${Sprite}#smile`}/></svg>
                     </button>
                     <button
                         className={"btn btn--icon"}
+                        disabled={isDeletingInProcess?.some(id => id === consultation._id)}
                         onClick={() => {
                             deleteArchivedConsultation(consultation._id)
                         }}

@@ -21,7 +21,7 @@ type PropsType = {
   pageSize: number
   clients: Array<ClientType>
   clientsFilter: ClientsFilterType
-  isClientDeletingInProcess: Array<string>
+  isDeletingInProcess: Array<string>
   onPageChanged: (page: number) => void
   onFilterChanged: (filter: ClientsFilterType) => void
   addClient: (values: FormData) => void
@@ -42,7 +42,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     pageSize,
     clients,
     clientsFilter,
-    isClientDeletingInProcess,
+    isDeletingInProcess,
     onPageChanged,
     onFilterChanged,
     addClient,
@@ -79,6 +79,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
             <Client
                 key={client._id}
                 client={client}
+                isDeletingInProcess={isDeletingInProcess}
                 deleteClient={deleteClient}
                 editClient={editClient}
                 pageSize={pageSize}

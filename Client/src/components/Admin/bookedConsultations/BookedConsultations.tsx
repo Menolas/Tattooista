@@ -22,7 +22,7 @@ type PropsType = {
   bookedConsultations?: Array<BookedConsultationType>
   bookedConsultationsFilter: BookedConsultationsFilterType
   isStatusChanging?: Array<string>
-  isConsultationDeletingInProcess?: Array<string>
+  isDeletingInProcess?: Array<string>
   setCurrentPage: (page: number) => void
   onFilterChanged: (filter: BookedConsultationsFilterType) => void
   changeStatus: (id: string, status: boolean) => void
@@ -43,7 +43,7 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
   bookedConsultations,
   bookedConsultationsFilter,
   isStatusChanging,
-  isConsultationDeletingInProcess,
+  isDeletingInProcess,
   setCurrentPage,
   onFilterChanged,
   changeStatus,
@@ -82,7 +82,7 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
           currentPage={currentBookedConsultationsPage}
           isStatusChanging={isStatusChanging}
           changeStatus={changeStatus}
-          isConsultationDeletingInProcess={isConsultationDeletingInProcess}
+          isDeletingInProcess={isDeletingInProcess}
           deleteConsultation={deleteConsultation}
           turnConsultationToClient={turnConsultationToClient}
           archiveConsultation={archiveConsultation}

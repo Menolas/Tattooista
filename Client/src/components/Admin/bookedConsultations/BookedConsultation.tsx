@@ -7,7 +7,7 @@ type PropsType = {
   consultation: BookedConsultationType
   pageSize: number
   currentPage: number
-  isConsultationDeletingInProcess?: Array<string>
+  isDeletingInProcess?: Array<string>
   isStatusChanging?: Array<string>
   changeStatus: (id: string, status: boolean) => void
   turnConsultationToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
@@ -19,7 +19,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
     consultation,
     pageSize,
     currentPage,
-    isConsultationDeletingInProcess,
+    isDeletingInProcess,
     isStatusChanging,
     changeStatus,
     turnConsultationToClient,
@@ -67,6 +67,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
         </button>
         <button
           className={"btn btn--icon"}
+          disabled={isDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
               turnConsultationToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage)
           }}
@@ -75,6 +76,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
         </button>
         <button
           className={"btn btn--icon"}
+          disabled={isDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
               archiveConsultation(consultation._id)
           }}
@@ -83,7 +85,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
         </button>
         <button
           className={"btn btn--icon"}
-          disabled={isConsultationDeletingInProcess?.some(id => id === consultation._id)}
+          disabled={isDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
               deleteConsultation(consultation._id, pageSize, currentPage)
           }}

@@ -12,6 +12,7 @@ const SET_GALLERY_TOTAL_COUNT = 'SET_GALLERY_TOTAL_COUNT'
 const SET_ARCHIVED_GALLERY_TOTAL_COUNT = 'SET_ARCHIVED_GALLERY_TOTAL_COUNT'
 const SET_STYLES = 'SET_STYLES'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
+const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS'
 const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE'
 const SET_GALLERY = 'SET_GALLERY'
 const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY'
@@ -27,7 +28,7 @@ let initialState = {
   currentGalleryPage: 1 as number | null,
   currentArchivedGalleryPage: 1 as number,
   isFetching: false,
-  isGalleryItemDeletingInProcess: [] as Array<string>,
+  isDeletingInProcess: [] as Array<string>,
   tattooStyles: [] as Array<TattooStyleType>,
   activeStyle: {} as TattooStyleType | null,
   gallery: [] as Array<GalleryItemType>,
@@ -94,6 +95,14 @@ export const portfolioReducer = (
         isFetching: action.isFetching,
       }
 
+    case TOGGLE_IS_DELETING_IN_PROCESS:
+      return {
+        ...state,
+        isDeletingInProcess: action.isFetching
+            ? [...state.isDeletingInProcess, action.id]
+            : state.isDeletingInProcess.filter(id => id !== action.id)
+      }
+
     case SET_STYLES:
       return {
         ...state,
@@ -147,12 +156,24 @@ export const portfolioReducer = (
 
 //action creators
 
-type ActionsTypes = SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT |
+type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT |
     SetCurrentGalleryPageAT | SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT |
     SetArchivedGalleryTotalCountAT | SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT |
     SetGalleryAT | SetArchivedGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT
 
 // actions creators
+
+type ToggleIsDeletingInProcessAT = {
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
+  isFetching: boolean,
+  id: string
+}
+
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
+    {
+      type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
+    }
+)
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
@@ -416,33 +437,40 @@ export const adminUpdateGallery = (
 }
 
 export const deleteGalleryItem = (
-  itemId: string
+  id: string
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await portfolioApi.deleteGalleryItem(itemId)
+    dispatch(toggleIsDeletingInProcessAC(true, id))
+    let response = await portfolioApi.deleteGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteGalleryItemAC(itemId))
+      dispatch(deleteGalleryItemAC(id))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
 export const deleteArchivedGalleryItem = (
-    itemId: string
+    id: string
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await portfolioApi.deleteArchivedGalleryItem(itemId)
+    dispatch(toggleIsDeletingInProcessAC(true, id))
+    let response = await portfolioApi.deleteArchivedGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedGalleryItemAC(itemId))
+      dispatch(deleteArchivedGalleryItemAC(id))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
 export const archiveGalleryItem = (id: string): ThunkType => async (dispatch) => {
   try {
+    dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.archiveGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedGalleryAC(response.gallery))
@@ -450,16 +478,21 @@ export const archiveGalleryItem = (id: string): ThunkType => async (dispatch) =>
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }
 
 export const reactivateArchivedGalleryItem = (id: string): ThunkType => async (dispatch) => {
   try {
+    dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.reactivateArchivedGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteArchivedGalleryItemAC(id))
     }
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
   }
 }

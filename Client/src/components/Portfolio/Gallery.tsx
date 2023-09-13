@@ -21,7 +21,7 @@ type PropsType = {
   currentPage: number
   activeStyle: TattooStyleType
   gallery: Array<GalleryItemType>
-  isGalleryItemDeletingInProcess: Array<string>
+  isDeletingInProcess: Array<string>
   updateGallery: (values: any) => void
   deleteGalleryItem: (itemId: string) => void
   setCurrentPage: (page: number) => void
@@ -39,7 +39,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   pageSize,
   currentPage,
   gallery,
-  isGalleryItemDeletingInProcess,
+  isDeletingInProcess,
   setCurrentPage,
   setPageSize,
   updateGallery,
@@ -98,20 +98,22 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           </div>
           {isAuth &&
             <div className={"gallery__item-actions"}>
+              {/*<button*/}
+              {/*    className={"btn btn--icon"}*/}
+              {/*    onClick={() => {deleteGalleryItem(item.fileName)}}*/}
+              {/*>*/}
+              {/*    <svg><use href={`${Sprite}#edit`}/></svg>*/}
+              {/*</button>*/}
               <button
                   className={"btn btn--icon"}
-                //onClick={() => {deleteGalleryItem(item.fileName)}}
-              >
-                  <svg><use href={`${Sprite}#edit`}/></svg>
-              </button>
-              <button
-                  className={"btn btn--icon"}
+                  disabled={isDeletingInProcess?.some(id => id === item._id)}
                   onClick={() => {archiveGalleryItem(item._id)}}
               >
                   <svg><use href={`${Sprite}#archive`}/></svg>
               </button>
               <button
                   className={"btn btn--icon"}
+                  disabled={isDeletingInProcess?.some(id => id === item._id)}
                   onClick={() => {deleteGalleryItem(item._id)}}
               >
                   <svg><use href={`${Sprite}#trash`}/></svg>

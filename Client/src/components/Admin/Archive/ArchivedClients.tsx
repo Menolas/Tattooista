@@ -17,6 +17,7 @@ import {
     getArchivedClientsSelector,
     getClientsIsFetching,
     getCurrentArchivedClientsPageSelector,
+    getIsClientDeletingInProcessSelector,
     getTotalArchivedClientsCount
 } from "../../../redux/Clients/clients-selectors";
 import {Preloader} from "../../common/Preloader";
@@ -24,6 +25,7 @@ import {ArchivedClient} from "./ArchivedClient";
 
 export const ArchivedClients: React.FC = () => {
     const isFetching = useSelector(getClientsIsFetching)
+    const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector)
     const archivedClients = useSelector(getArchivedClientsSelector)
     const totalCount = useSelector(getTotalArchivedClientsCount)
     const pageSize = useSelector(getArchivedClientsPageSize)
@@ -85,6 +87,7 @@ export const ArchivedClients: React.FC = () => {
                 <ArchivedClient
                     key={client._id}
                     client={client}
+                    isDeletingInProcess={isDeletingInProcess}
                     deleteClient={deleteArchivedClientCallBack}
                     reactivateClient={reactivateClientCallBack}
                 />
