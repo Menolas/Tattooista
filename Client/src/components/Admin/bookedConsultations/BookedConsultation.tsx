@@ -26,6 +26,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
     deleteConsultation,
     archiveConsultation
 }) => {
+    console.log(consultation)
     const bookingContacts: ContactType = consultation.contacts
     const contacts = Object.keys(bookingContacts).map(contact => {
 
@@ -44,6 +45,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
           <span>Name:&nbsp;</span>
           <span>{consultation.fullName}</span>
         </div>
+        <div>{consultation.createdAt.split('T')[0] + ' (' + consultation.createdAt.split('T')[1].split('.')[0] + ')'}</div>
         <div>
           <ul className="list">
             { contacts }

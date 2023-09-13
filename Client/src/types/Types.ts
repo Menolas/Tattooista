@@ -1,3 +1,5 @@
+import {date} from "yup";
+
 export interface ContactType {
     [key: string]: string;
 }
@@ -24,7 +26,7 @@ export type BookedConsultationType = {
     fullName: string
     message?: string
     status: boolean
-    createdAt?: any
+    createdAt?: string
     contacts: {},
 }
 
