@@ -39,8 +39,8 @@ export const getIsStatusChangingSelector = (state: AppStateType) => {
   return state.bookedConsultations.isStatusChanging
 }
 
-export const getIsConsultationDeletingInProcessSelector = (state: AppStateType) => {
-  return state.bookedConsultations.isConsultationDeletingInProcess
+export const getIsDeletingInProcessSelector = (state: AppStateType) => {
+  return state.bookedConsultations.isDeletingInProcess
 }
 
 export const getBookedConsultationsIsFetchingSelector = (state: AppStateType) => {

@@ -9,7 +9,7 @@ import {
   getTotalGalleryItemsCount,
   getGalleryPageSize,
   getCurrentGalleryPage,
-  getIsGalleryItemDeletingInProcess,
+  getIsGalleryItemDeletingInProcessSelector,
   getActiveStyleSelector
 } from '../../redux/Portfolio/portfolio-selectors'
 import {
@@ -35,7 +35,7 @@ export const PortfolioContainer: React.FC = () =>  {
   const totalCount = useSelector(getTotalGalleryItemsCount)
   const pageSize = useSelector(getGalleryPageSize)
   let currentPage = useSelector(getCurrentGalleryPage)
-  const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcess)
+  const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector)
   const tattooStyles = useSelector(getTattooStylesSelector)
   const activeStyle = useSelector(getActiveStyleSelector)
   const gallery = useSelector(getGallery)

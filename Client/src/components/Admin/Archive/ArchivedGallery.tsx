@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     getArchivedGalleryPageSizeSelector,
     getArchivedGallerySelector,
-    getCurrentArchivedGalleryPageSelector,
+    getCurrentArchivedGalleryPageSelector, getIsGalleryItemDeletingInProcessSelector,
     getTotalArchivedGalleryItemsCountSelector
 } from "../../../redux/Portfolio/portfolio-selectors";
 import {Paginator} from "../../common/Paginator";
@@ -25,6 +25,7 @@ export const ArchivedGallery = () => {
     const pageSize = useSelector(getArchivedGalleryPageSizeSelector)
     const currentPage = useSelector(getCurrentArchivedGalleryPageSelector)
     const archivedGallery = useSelector(getArchivedGallerySelector)
+    const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector)
 
     const dispatch = useDispatch()
 
@@ -64,12 +65,14 @@ export const ArchivedGallery = () => {
                 <div className={"gallery__item-actions"}>
                     <button
                         className={"btn btn--icon"}
+                        disabled={isDeletingInProcess?.some(id => id === item._id)}
                         onClick={() => {reactivateArchivedGalleryItemCallBack(item._id)}}
                     >
                         <svg><use href={`${Sprite}#smile`}/></svg>
                     </button>
                     <button
                         className={"btn btn--icon"}
+                        disabled={isDeletingInProcess?.some(id => id === item._id)}
                         onClick={() => {deleteArchivedGalleryItemCallBack(item._id)}}
                     >
                         <svg><use href={`${Sprite}#trash`}/></svg>

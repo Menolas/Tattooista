@@ -232,6 +232,10 @@ img {
   height: 24px;
 }
 
+.btn--icon:disabled svg {
+  fill: #888;
+}
+
 .btn--icon--light svg {
   fill: #080808;
 }

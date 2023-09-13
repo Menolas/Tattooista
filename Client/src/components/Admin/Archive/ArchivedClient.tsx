@@ -1,18 +1,22 @@
 import * as React from 'react'
+// @ts-ignore
 import avatar from '../../../assets/img/fox.webp'
+// @ts-ignore
+import Sprite from '../../../assets/svg/sprite.svg'
 import { NavLink } from 'react-router-dom'
 import {ClientType, ContactsType, ContactType} from '../../../types/Types'
 import { SERVER_URL } from '../../../utils/constants'
-import Sprite from '../../../assets/svg/sprite.svg'
 
 type PropsType = {
   client: ClientType
+  isDeletingInProcess: Array<string>
   deleteClient: (clientId: string) => void
   reactivateClient: (clientId: string) => void
 }
 
 export const ArchivedClient: React.FC<PropsType> = React.memo(({
   client,
+  isDeletingInProcess,
   deleteClient,
   reactivateClient
 }) => {
@@ -48,12 +52,14 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         <div className="admin__card-action-btns client-profile__action-btns">
           <button
               className={"btn btn--icon"}
+              disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => reactivateClient(client._id)}
           >
             <svg><use href={`${Sprite}#smile`}/></svg>
           </button>
           <button
               className={"btn btn--icon"}
+              disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
                 deleteClient(client._id)
               }}

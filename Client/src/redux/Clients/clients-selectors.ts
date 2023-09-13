@@ -41,8 +41,8 @@ export const getClientsIsFetching = (state: AppStateType) => {
   return state.clients.clientsIsFetching
 }
 
-export const getIsClientDeletingInProcess = (state: AppStateType) => {
-  return state.clients.isClientDeletingInProcess
+export const getIsClientDeletingInProcessSelector = (state: AppStateType) => {
+  return state.clients.isDeletingInProcess
 }
 
 export const getClientsFilter = (state: AppStateType) => {
