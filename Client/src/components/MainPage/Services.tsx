@@ -70,23 +70,13 @@ export const Services: React.FC<PropsType> = React.memo(({
               <UpdateServiceItemFormFormik
                   addService={addService}
                   closeModal={closeAddServiceModal}
-                  showSuccessModal={showSuccessModal}
               />
           </ModalPopUp>
-      }
-      {
-        isSuccess &&
-        <ModalPopUp
-          modalTitle={modalTitle}
-          closeModal={closeSuccessModal}
-        >
-          <SuccessModal />
-        </ModalPopUp>
       }
       <h2 className="page-block__title">Studio services</h2>
       <ul className="services__list list">
         { servicesArray }
       </ul>
     </section>
-  );
+  )
 })
