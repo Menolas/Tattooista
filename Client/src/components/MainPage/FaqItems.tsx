@@ -23,20 +23,12 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
 }) => {
 
   const [addFaqItemMode, setAddFaqItemMode] = useState(false)
-  const [isSuccess, setSuccess] = useState(false)
-  const showSuccessModal = () => {
-    setSuccess(true)
-  }
 
-  const closeSuccessModal = () => {
-    setSuccess(false)
-  }
   const closeAddFaqItemModal = () => {
       setAddFaqItemMode(false)
   }
 
-    const modalTitle = ''
-    const addFaqItemModalTitle = 'Add New Faq Item'
+  const addFaqItemModalTitle = 'Add New Faq Item'
 
   const faqItemsArray = faq?.map(item => {
     return (
@@ -70,17 +62,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
             <UpdateFaqItemFormFormik
                 addFaqItem={addFaqItem}
                 closeModal={closeAddFaqItemModal}
-                showSuccessModal={showSuccessModal}
             />
-        </ModalPopUp>
-      }
-      {
-        isSuccess &&
-        <ModalPopUp
-            modalTitle={modalTitle}
-            closeModal={closeSuccessModal}
-        >
-            <SuccessModal />
         </ModalPopUp>
       }
       <h2 className="page-block__title">F.A.Q</h2>

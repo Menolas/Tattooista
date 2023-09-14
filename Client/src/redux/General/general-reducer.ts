@@ -25,6 +25,7 @@ export const generalReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
+  //debugger
 
   switch (action.type) {
 
@@ -59,7 +60,7 @@ export const generalReducer = (
     case SET_IS_SUCCESS:
       return {
         ...state,
-        isSuccess: action.isSuccess
+        isSuccess: action.bol
       }
 
     case SET_IS_SUCCESS_BOOKING:
@@ -89,11 +90,11 @@ export const setIsSuccessBookingAC = (bol: boolean): SetIsSuccessBookingAT => ({
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
-  isSuccess: boolean
+  bol: boolean
 }
 
-export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
-  type: SET_IS_SUCCESS, isSuccess
+export const setIsSuccessAC = (bol: boolean): SetIsSuccessAT => ({
+  type: SET_IS_SUCCESS, bol
 })
 
 type SetPageVisibilityActionType = {
@@ -156,9 +157,11 @@ export const getFaqItems = (): ThunkType => async (
 
 export const addFaqItem = (values: FaqType): ThunkType => async (dispatch) => {
   try {
+    //debugger
     let response = await generalSourcesApi.addFaqItem(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFaqItems(response.faqItems))
+      dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
     console.log(e)
@@ -236,6 +239,7 @@ export const editService = (
     const response = await generalSourcesApi.editService(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServices(response.services))
+      dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
     console.log(e)
@@ -249,6 +253,7 @@ export const addService = (
     const response = await generalSourcesApi.addService(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServices(response.services))
+      dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
     console.log(e)

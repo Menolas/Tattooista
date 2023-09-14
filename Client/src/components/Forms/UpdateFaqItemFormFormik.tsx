@@ -16,14 +16,12 @@ type PropsType = {
     updateFaqItem?: (id: string, values: FaqType) => void
     addFaqItem?: (values: FaqType) => void
     closeModal: () => void
-    showSuccessModal: () => void
 }
 export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
   faqItem,
   updateFaqItem,
   addFaqItem,
   closeModal,
-  showSuccessModal
 }) => {
 
     const initialValues = {
@@ -32,17 +30,16 @@ export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
     }
 
     const submit = (values) => {
-        const formData = new FormData()
-        for (let value in values) {
-            formData.append(value, values[value])
-        }
+        // const formData = new FormData()
+        // for (let value in values) {
+        //     formData.append(value, values[value])
+        // }
         if (faqItem) {
-            updateFaqItem(faqItem._id, formData)
+            updateFaqItem(faqItem._id, values)
         } else {
-            addFaqItem(formData)
+            addFaqItem(values)
         }
         closeModal()
-        showSuccessModal()
     }
 
     return (

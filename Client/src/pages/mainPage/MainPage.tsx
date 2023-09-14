@@ -63,9 +63,9 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   setIsSuccess,
   setIsSuccessBooking
 }) => {
-
   const pageAbout = pages?.find(page => page.name === 'about')
-  const successPopUpContent = "You've booked a consultation! We will contact you soon))"
+  const successBookingPopUpContent = "You've booked a consultation! We will contact you soon))"
+  const successPopUpContent = "You successfully added a new item"
 
   const dispatch = useDispatch()
 
@@ -115,7 +115,11 @@ export const MainPage: React.FC<PropsType> = React.memo(({
       />
       <Booking consentId="consent" bookConsultation={bookConsultation} />
       { isSuccessBooking &&
-        <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+        <SuccessPopUp closeModal={setIsSuccess} content={successBookingPopUpContent}/>
+      }
+      {
+          isSuccess &&
+          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
       }
     </>
   )

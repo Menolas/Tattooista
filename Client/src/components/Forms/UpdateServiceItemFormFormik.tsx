@@ -1,8 +1,10 @@
 import * as React from 'react'
+import {useState} from 'react'
 import {ErrorMessage, Field, Form, Formik} from 'formik'
 import * as yup from 'yup'
 import {ErrorMessageWrapper} from '../../utils/validators'
 import {SERVER_URL} from '../../utils/constants'
+// @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 import {ServiceType} from '../../types/Types'
 
@@ -17,20 +19,19 @@ type PropsType = {
     editService?: (id: string, values: FormData) => void
     addService?: (values: FormData) => void
     closeModal: () => void
-    showSuccessModal: () => void
 }
 export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
     service,
     editService,
     addService,
     closeModal,
-    showSuccessModal
 }) => {
 
     const [imageURL, setImageURL] = useState('')
 
     const fileReader = new FileReader()
     fileReader.onloadend = () => {
+        // @ts-ignore
         setImageURL(fileReader.result)
     }
 
@@ -64,7 +65,6 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
             addService(formData)
         }
         closeModal()
-        showSuccessModal()
     }
 
     return (

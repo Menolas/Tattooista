@@ -22,12 +22,13 @@ import {
   addFaqItem,
   deleteFaqItem,
   bookConsultation,
-  setIsSuccessAC, setIsSuccessBookingAC
+  setIsSuccessAC,
+  setIsSuccessBookingAC
 } from '../../redux/General/general-reducer'
 import { getTattooStyles, setActiveStyleAC } from '../../redux/Portfolio/portfolio-reducer'
 import {getGalleryPageSize, getTattooStylesSelector} from '../../redux/Portfolio/portfolio-selectors'
 import {getAuthSelector} from "../../redux/Auth/auth-selectors";
-import {getIsSuccessSelector} from '../../redux/bookedConsultations/bookedConsultations-selectors'
+import {getIsSuccessSelector} from '../../redux/General/general-selectors'
 
 export const MainPageContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector)
@@ -46,7 +47,7 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(getServices())
     dispatch(getFaqItems())
     dispatch(getPages())
-  }, [])
+  }, [services])
 
   const setActiveStyleCallBack = (style: TattooStyleType) => {
     dispatch(setActiveStyleAC(style))

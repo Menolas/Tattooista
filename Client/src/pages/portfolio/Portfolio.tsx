@@ -56,12 +56,14 @@ export const Portfolio: React.FC<PropsType> = ({
     <>
       <TattooStyles
         isAuth={isAuth}
+        isSuccess={isSuccess}
         tattooStyles={tattooStyles}
         activeStyle={activeStyle}
         resetActiveStyle={resetActiveStyle}
         addTattooStyle={addTattooStyle}
         editTattooStyle={editTattooStyle}
         deleteTattooStyle={deleteTattooStyle}
+        setIsSuccess={setIsSuccess}
       />
 
       { !isAuth &&
