@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const Category = new Schema({
+const TattooStyle = new Schema({
   value: {
     type: String,
     required: true,
@@ -15,4 +15,4 @@ const Category = new Schema({
   }
 });
 
-module.exports = model('Category', Category);
+module.exports = model('TattooStyle', TattooStyle);

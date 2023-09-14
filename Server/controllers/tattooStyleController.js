@@ -1,14 +1,13 @@
-const Category = require('../models/Category')
+const TattooStyle = require('../models/TattooStyle')
 const fs = require("fs");
 
-class categoryController {
+class tattooStyleController {
 
-  async getCategories (req, res) {
+  async getTattooStyles (req, res) {
     const results = {}
     try {
-      const categories = await Category.find()
       results.resultCode = 0
-      results.tattooStyles = categories
+      results.tattooStyles = await TattooStyle.find()
       res.status(200).json(results)
     } catch (e) {
       results.resultCode = 1
@@ -17,20 +16,19 @@ class categoryController {
     }
   }
 
-  async deleteCategory(req, res) {
+  async deleteTattooStyle(req, res) {
     const results = {}
     try {
-      await fs.unlink(`./uploads/wallpapers/${res.category._id}/${res.category.wallPaper}`, err => {
+      await fs.unlink(`./uploads/wallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
         if (err) console.log(err)
       })
-      await fs.rmdir(`./uploads/wallpapers/${res.category._id}`, { recursive:true },err => {
+      await fs.rmdir(`./uploads/wallpapers/${res.tattooStyle._id}`, { recursive:true },err => {
         if (err) console.log(err)
       })
-      await res.category.remove()
+      await res.tattooStyle.remove()
 
-      const styles = await Category.find()
       results.resultCode = 0
-      results.tattooStyles = styles
+      results.tattooStyles = await TattooStyle.find()
       res.status(200).json(results)
     } catch (err) {
       results.resultCode = 1
@@ -39,8 +37,8 @@ class categoryController {
     }
   }
 
-  async addCategory(req, res) {
-    const category = new Category({
+  async addTattooStyle(req, res) {
+    const tattooStyle = new TattooStyle({
       value: req.body.value,
       description: req.body.description
     })
@@ -48,18 +46,18 @@ class categoryController {
     const results = {}
 
     try {
-      const newCategory = await category.save()
+      const newTattooStyle = await tattooStyle.save()
       results.resultCode = 0
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = encodeURI(Date.now() + '_' + file.name)
-        await file.mv(`./uploads/wallpapers/${newCategory._id}/${newFileName}`, err => {
-          category.wallPaper = newFileName
-          category.save()
+        await file.mv(`./uploads/wallpapers/${newTattooStyle._id}/${newFileName}`, err => {
+          tattooStyle.wallPaper = newFileName
+          tattooStyle.save()
         })
       }
-      results.tattooStyles = await Category.find()
+      results.tattooStyles = await TattooStyle.find()
       res.status(201).json(results)
     } catch (err) {
       results.resultCode = 1
@@ -68,9 +66,9 @@ class categoryController {
     }
   }
 
-  async updateCategory(req, res) {
-    res.category.value = req.body.value
-    res.category.description = req.body.description
+  async updateTattooStyle(req, res) {
+    res.tattooStyle.value = req.body.value
+    res.tattooStyle.description = req.body.description
 
     const results = {}
 
@@ -79,18 +77,18 @@ class categoryController {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = encodeURI(Date.now() + '_' + file.name)
-        await fs.unlink(`./uploads/wallpapers/${res.category._id}/${res.category.wallPaper}`, err => {
+        await fs.unlink(`./uploads/wallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
           if (err) console.log(err)
         })
-        await file.mv(`./uploads/wallpapers/${res.category._id}/${newFileName}`, err => {
-          res.category.wallPaper = newFileName
-          console.log(res.category.wallPaper + "!!!!!!!!!!!!!!!")
-          res.category.save()
+        await file.mv(`./uploads/wallpapers/${res.tattooStyle._id}/${newFileName}`, err => {
+          res.tattooStyle.wallPaper = newFileName
+          console.log(res.tattooStyle.wallPaper + "!!!!!!!!!!!!!!!")
+          res.tattooStyle.save()
         })
         //await res.category.save()
       }
       results.resultCode = 0
-      results.tattooStyles = await Category.find()
+      results.tattooStyles = await TattooStyle.find()
       res.status(201).json(results)
     } catch (err) {
       console.log(err)
@@ -102,4 +100,4 @@ class categoryController {
 
 }
 
-module.exports = new categoryController()
+module.exports = new tattooStyleController()

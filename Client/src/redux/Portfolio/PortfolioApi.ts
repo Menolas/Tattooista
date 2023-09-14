@@ -39,7 +39,7 @@ type AddTattooStylesResponseType = {
 export const portfolioApi = {
 
     getTattooStyles() {
-        return instance.get<GetTattooStylesResponseType>('category/')
+        return instance.get<GetTattooStylesResponseType>('tattooStyle/')
             .then(response => {
                 return response.data
             })
@@ -48,7 +48,7 @@ export const portfolioApi = {
     addTattooStyle(
         values: FormData
     ) {
-        return instance.post<AddTattooStylesResponseType>('category/', values)
+        return instance.post<AddTattooStylesResponseType>('tattooStyle/', values)
             .then(response => {
                 return response.data
             })
@@ -59,7 +59,7 @@ export const portfolioApi = {
         id: string,
         values: FormData
     ) {
-        return instance.post<AddTattooStylesResponseType>(`category/${id}`, values)
+        return instance.post<AddTattooStylesResponseType>(`tattooStyle/${id}`, values)
             .then(response => {
                 return response.data
             })
@@ -67,7 +67,7 @@ export const portfolioApi = {
     },
 
     deleteTattooStyle(id: string) {
-        return instance.delete<AddTattooStylesResponseType>(`category/${id}`)
+        return instance.delete<AddTattooStylesResponseType>(`tattooStyle/${id}`)
             .then(response => {
                 return response.data
             })

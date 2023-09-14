@@ -55,7 +55,7 @@ class galleryController {
     try {
       await fs.unlink(`./uploads/gallery/${res.galleryItem.fileName}`, err => {
         if (err) {
-          return res.status(400).send(err)
+          console.log(err)
         }
       })
       await res.galleryItem.remove()
