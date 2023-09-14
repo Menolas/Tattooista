@@ -1,5 +1,4 @@
 const FaqItem = require('../models/FaqItem')
-const Category = require("../models/Category");
 
 class faqController {
 

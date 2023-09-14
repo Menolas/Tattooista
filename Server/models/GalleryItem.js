@@ -9,7 +9,7 @@ const GalleryItem = new Schema({
   
   categories: [{
     type: String,
-    ref: 'Category'
+    ref: 'TattooStyle'
   }],
 
   createdAt: {

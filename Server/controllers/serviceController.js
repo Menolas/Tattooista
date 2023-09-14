@@ -1,7 +1,7 @@
 const Service = require('../models/Service');
 const fs = require("fs");
-const Page = require("../models/Page");
-const Category = require("../models/Category");
+//const Page = require("../models/Page");
+//const Category = require("../models/Category");
 
 class serviceController {
 
