@@ -33,7 +33,7 @@ type GetTattooStylesResponseType = {
 type AddTattooStylesResponseType = {
     resultCode: number
     message?: string
-    tattooStyles: Array<TattooStyleType>
+    tattooStyle: TattooStyleType
 }
 
 export const portfolioApi = {
@@ -67,7 +67,7 @@ export const portfolioApi = {
     },
 
     deleteTattooStyle(id: string) {
-        return instance.delete<AddTattooStylesResponseType>(`tattooStyle/${id}`)
+        return instance.delete(`tattooStyle/${id}`)
             .then(response => {
                 return response.data
             })

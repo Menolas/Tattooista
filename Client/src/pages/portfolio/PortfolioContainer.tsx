@@ -22,7 +22,8 @@ import {
   addTattooStyle,
   editTattooStyle,
   deleteTattooStyle,
-  archiveGalleryItem
+  archiveGalleryItem,
+  getTattooStyles
 } from '../../redux/Portfolio/portfolio-reducer'
 import { Portfolio } from './Portfolio'
 import {getAuthSelector} from '../../redux/Auth/auth-selectors'
@@ -48,7 +49,9 @@ export const PortfolioContainer: React.FC = () =>  {
     if (currentPage === 0) {
       currentPage = 1
     }
+    dispatch(getTattooStyles())
     dispatch(getActualPortfolio(activeStyle, currentPage, pageSize))
+    console.log(activeStyle)
   }, [activeStyle, currentPage, pageSize])
 
   // useEffect(() => {

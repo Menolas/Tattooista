@@ -4,10 +4,11 @@ const fs = require("fs");
 class tattooStyleController {
 
   async getTattooStyles (req, res) {
+    console.log("it is a hit!!!!!!!!")
     const results = {}
     try {
       results.resultCode = 0
-      results.tattooStyles = await TattooStyle.find()
+      results.tattooStyles = await TattooStyle.find().sort({createdAt: -1})
       res.status(200).json(results)
     } catch (e) {
       results.resultCode = 1
@@ -57,7 +58,7 @@ class tattooStyleController {
           tattooStyle.save()
         })
       }
-      results.tattooStyles = await TattooStyle.find()
+      results.tattooStyle = tattooStyle
       res.status(201).json(results)
     } catch (err) {
       results.resultCode = 1
@@ -88,7 +89,7 @@ class tattooStyleController {
         //await res.category.save()
       }
       results.resultCode = 0
-      results.tattooStyles = await TattooStyle.find()
+      results.tattooStyles = res.tattooStyle
       res.status(201).json(results)
     } catch (err) {
       console.log(err)

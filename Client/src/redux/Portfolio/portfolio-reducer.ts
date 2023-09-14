@@ -313,10 +313,10 @@ export const getTattooStyles = (): ThunkType => async (
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.getTattooStyles()
     dispatch(setTattooStylesAC(response.tattooStyles))
-    dispatch(setIsFetchingAC(false))
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 
@@ -326,7 +326,7 @@ export const addTattooStyle = (values: FormData): ThunkType => async (
   try {
     let response = await portfolioApi.addTattooStyle(values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setTattooStylesAC(response.tattooStyles))
+      dispatch(setActiveStyleAC(response.tattooStyle))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
@@ -338,7 +338,7 @@ export const editTattooStyle = (id: string, values: FormData): ThunkType => asyn
   try {
     let response = await portfolioApi.editTattooStyle(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setTattooStylesAC(response.tattooStyles))
+      dispatch(setActiveStyleAC(response.tattooStyle))
     }
   } catch (e) {
     console.log(e)
@@ -349,7 +349,7 @@ export const deleteTattooStyle = (id: string): ThunkType => async (dispatch) => 
   try {
     let response = await portfolioApi.deleteTattooStyle(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setTattooStylesAC(response.tattooStyles))
+      //dispatch(setTattooStylesAC(response.tattooStyles))
       dispatch(setActiveStyleAC(response.tattooStyles[0]))
     }
 
