@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux'
 import {
   getClients,
   setCurrentClientsPageAC,
-  clientsOnFilterChanged,
   addClient,
   deleteClient,
   editClient,
@@ -13,7 +12,8 @@ import {
   deleteClientGalleryPicture,
   archiveClient,
   setClientsPageSize,
-  setIsSuccessAC
+  setIsSuccessAC,
+  setClientsFilterAC
 } from '../../../redux/Clients/clients-reducer'
 import {
   getClientsIsFetching,
@@ -26,8 +26,7 @@ import {
   getIsSuccessSelector
 } from '../../../redux/Clients/clients-selectors'
 import { Clients } from './Clients'
-import { Preloader } from '../../common/Preloader'
-import {useNavigate} from "react-router-dom";
+//import {useNavigate} from "react-router-dom";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -67,7 +66,7 @@ export const ClientsContainer: React.FC = () => {
   const onFilterChanged = (
     filter: ClientsFilterType
   ) => {
-    dispatch(clientsOnFilterChanged(pageSize, filter))
+    dispatch(setClientsFilterAC(filter))
   }
 
   const addClientCallBack = (

@@ -413,19 +413,6 @@ export const getArchivedConsultations = (
   }
 }
 
-export const bookedConsultationsOnFilterChanged = (
-  pageSize: number,
-  filter: BookedConsultationsFilterType
-): ThunkType => async (dispatch) => {
-  try {
-    dispatch(setBookedConsultationsFilterAC(filter))
-    dispatch(setCurrentPageForBookedConsultationsAC(1))
-    await dispatch(getBookedConsultations(1, pageSize, filter))
-  } catch (e) {
-    console.log(e)
-  }
-}
-
 export const changeBookedConsultationStatus = (
   id: string,
   status: boolean
