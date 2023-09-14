@@ -200,7 +200,7 @@ type SetArchivedClientsFilterAT = {
   filter: ClientsFilterType
 }
 
-export const setArchivedClientsFilter = (filter: ClientsFilterType): SetArchivedClientsFilterAT => ({
+export const setArchivedClientsFilterAC = (filter: ClientsFilterType): SetArchivedClientsFilterAT => ({
   type: SET_FILTER_FOR_ARCHIVED_CLIENTS, filter
 })
 
@@ -229,7 +229,7 @@ type SetClientsFilterAT = {
   filter: ClientsFilterType
 }
 
-export const setClientsFilter = (filter: ClientsFilterType): SetClientsFilterAT => (
+export const setClientsFilterAC = (filter: ClientsFilterType): SetClientsFilterAT => (
   {
     type: SET_CLIENTS_FILTER, filter
   }
@@ -416,19 +416,6 @@ export const getArchivedClients = (
     }
   } catch (e) {
     dispatch(setIsFetching(false))
-    console.log(e)
-  }
-}
-
-export const clientsOnFilterChanged = (
-  pageSize: number,
-  filter: ClientsFilterType
-): ThunkType => async (dispatch) => {
-
-  try {
-    dispatch(setClientsFilter(filter))
-    await dispatch(getClients(1, pageSize, filter))
-  } catch (e) {
     console.log(e)
   }
 }

@@ -26,7 +26,6 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
     deleteConsultation,
     archiveConsultation
 }) => {
-    console.log(consultation)
     const bookingContacts: ContactType = consultation.contacts
     const contacts = Object.keys(bookingContacts).map(contact => {
 

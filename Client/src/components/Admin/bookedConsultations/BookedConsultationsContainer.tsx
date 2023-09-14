@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getBookedConsultations,
-  bookedConsultationsOnFilterChanged,
   changeBookedConsultationStatus,
   deleteBookedConsultation,
   turnConsultationToClient,
@@ -11,7 +10,7 @@ import {
   addBookedConsultation,
   BookedConsultationsFilterType,
   archiveConsultation,
-  setCurrentPageForBookedConsultationsAC, setIsSuccessAC,
+  setCurrentPageForBookedConsultationsAC, setIsSuccessAC, setBookedConsultationsFilterAC,
 } from '../../../redux/bookedConsultations/bookedConsultations-reducer'
 import {
   getBookedConsultationsSelector,
@@ -43,7 +42,6 @@ export const BookedConsultationsContainer: React.FC = () => {
   //const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(currentPage)
     //const urlParams = new URLSearchParams(window.location.search)
     //let actualPage = currentPage
     //let actualFilter = filter
@@ -67,7 +65,7 @@ export const BookedConsultationsContainer: React.FC = () => {
   const onFilterChangedCallBack = (
     filter: BookedConsultationsFilterType
   ) => {
-    dispatch(bookedConsultationsOnFilterChanged(pageSize, filter))
+    dispatch(setBookedConsultationsFilterAC(filter))
   }
 
   const changeBookedConsultationStatusCallBack = (

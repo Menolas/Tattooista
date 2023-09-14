@@ -4,10 +4,12 @@ import {ClientSearchFormFormik} from "../../Forms/ClientSearchFormFormik";
 import {Paginator} from "../../common/Paginator";
 import {
     ClientsFilterType,
-    setArchivedClientsFilter,
     setArchivedClientsPageSize,
     setCurrentPageForArchivedClientsAC,
-    getArchivedClients, deleteArchivedClient, reactivateClient
+    getArchivedClients,
+    deleteArchivedClient,
+    reactivateClient,
+    setArchivedClientsFilterAC
 } from "../../../redux/Clients/clients-reducer";
 import {NothingToShow} from "../../common/NothingToShow";
 import {useDispatch, useSelector} from "react-redux";
@@ -66,7 +68,7 @@ export const ArchivedClients: React.FC = () => {
     const onFilterChangeCallBack = (
         filter: ClientsFilterType
     ) => {
-        dispatch(setArchivedClientsFilter(filter))
+        dispatch(setArchivedClientsFilterAC(filter))
     }
 
     const deleteArchivedClientCallBack = (
