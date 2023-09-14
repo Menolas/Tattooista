@@ -327,6 +327,7 @@ export const addTattooStyle = (values: FormData): ThunkType => async (
     let response = await portfolioApi.addTattooStyle(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setTattooStylesAC(response.tattooStyles))
+      dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
     console.log(e)

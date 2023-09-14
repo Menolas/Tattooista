@@ -1,8 +1,10 @@
 import * as React from 'react'
+import {useState} from 'react'
 import {ErrorMessage, Field, Form, Formik} from 'formik'
 import * as yup from 'yup'
 import {ErrorMessageWrapper} from '../../utils/validators'
 import {SERVER_URL} from '../../utils/constants'
+// @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 import {TattooStyleType} from '../../types/Types'
 
@@ -18,20 +20,19 @@ type PropsType = {
     addTattooStyle?: (values: FormData) => void
     editTattooStyle?: (id: string, values: FormData) => void
     closeModal: () => void
-    showSuccessModal: () => void
 }
 export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
     style,
     addTattooStyle,
     editTattooStyle,
     closeModal,
-    showSuccessModal
 }) => {
 
     const [imageURL, setImageURL] = useState('')
 
     const fileReader = new FileReader()
     fileReader.onloadend = () => {
+        // @ts-ignore
         setImageURL(fileReader.result)
     }
 
@@ -60,7 +61,6 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
             addTattooStyle(formData)
         }
         closeModal()
-        showSuccessModal()
     }
 
     return (

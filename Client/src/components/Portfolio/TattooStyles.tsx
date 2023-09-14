@@ -9,6 +9,7 @@ import Sprite from '../../assets/svg/sprite.svg'
 import {UpdateTattooStyleFormFormik} from '../Forms/UpdateTattooStyleFormFormik'
 import {ModalPopUp} from '../common/ModalPopUp'
 import {SuccessModal} from "../SuccessModal";
+import {SuccessPopUp} from "../common/SuccessPopUp";
 
 const responsive = {
   0: {items: 3},
@@ -19,36 +20,31 @@ const responsive = {
 
 type PropsType = {
   isAuth: boolean
+  isSuccess: boolean
   tattooStyles: Array<TattooStyleType>,
   activeStyle: TattooStyleType,
   resetActiveStyle: (style: TattooStyleType) => void
   addTattooStyle: (values: FormData) => void
   editTattooStyle: (id: string, values: FormData) => void
   deleteTattooStyle: (id: string) => void
+  setIsSuccess: (bol: boolean) => void
 }
 
 export const TattooStyles: React.FC<PropsType> = React.memo(({
   isAuth,
+  isSuccess,
   tattooStyles,
   activeStyle,
   resetActiveStyle,
   addTattooStyle,
   editTattooStyle,
-  deleteTattooStyle
+  deleteTattooStyle,
+  setIsSuccess
 }) => {
   const [addTattooStyleMode, setAddTattooStyleMode] = useState(false)
   const [editTattooStyleMode, setEditTattooStyleMode] = useState(false)
-  const [isSuccess, setSuccess] = useState(false)
-  const successModalTitle = ''
   const modalTitle = 'Add a Tattoo Style'
-
-  const showSuccessModal = () => {
-        setSuccess(true)
-  }
-
-  const closeSuccessModal = () => {
-        setSuccess(false)
-  }
+  const successPopUpContent = "You successfully added a new style for your gallery"
 
   const closeModal = () => {
     setAddTattooStyleMode(false)
@@ -75,7 +71,8 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
       )
     })
 
-    return (
+    // @ts-ignore
+  return (
     <section className="tattoo-style page-block">
       { isAuth &&
         <button
@@ -94,18 +91,8 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
               <UpdateTattooStyleFormFormik
                   addTattooStyle={addTattooStyle}
                   closeModal={closeModal}
-                  showSuccessModal={showSuccessModal}
               />
           </ModalPopUp>
-      }
-      {
-        isSuccess &&
-        <ModalPopUp
-            modalTitle={successModalTitle}
-            closeModal={closeSuccessModal}
-        >
-            <SuccessModal />
-        </ModalPopUp>
       }
       <div className="tattoo-style__list">
         <AliceCarousel
@@ -142,9 +129,12 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
                   style={activeStyle}
                   editTattooStyle={editTattooStyle}
                   closeModal={closeEditModal}
-                  showSuccessModal={showSuccessModal}
               />
           </ModalPopUp>
+        }
+        {
+            isSuccess &&
+            <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
         }
         <div>
           <div className="tattoo-style__text">
