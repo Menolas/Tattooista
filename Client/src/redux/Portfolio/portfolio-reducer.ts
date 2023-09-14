@@ -426,8 +426,7 @@ export const adminUpdateGallery = (
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.adminUpdateGallery(tattooStyle, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      //dispatch(setGalleryAC(response.gallery))
-      dispatch(setCurrentGalleryPageAC(1))
+      dispatch(setCurrentGalleryPageAC(0))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
