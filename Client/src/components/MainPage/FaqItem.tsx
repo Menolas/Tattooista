@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { useState } from 'react'
 import {FaqType} from '../../types/Types'
+// @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
 import {ModalPopUp} from '../common/ModalPopUp'
-import {SuccessModal} from "../SuccessModal";
 import {UpdateFaqItemFormFormik} from '../Forms/UpdateFaqItemFormFormik'
 
 type PropsType = {
@@ -22,20 +22,12 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
 
     let [faqItemClasses, setFaqItemClasses] = useState('faq__item')
     const [isEditMode, setIsEditMode] = useState(false)
-    const [isSuccess, setSuccess] = useState(false)
-    const showSuccessModal = () => {
-        setSuccess(true)
-    }
 
-    const closeSuccessModal = () => {
-        setSuccess(false)
-    }
     const closeEditModal = () => {
         setIsEditMode(false)
     }
 
-    const modalTitle = ''
-    const editModalTitle = 'Update "Services" block'
+    const editModalTitle = 'Update FAQ item'
 
     const showFaqItemText = () => {
       setFaqItemClasses('faq__item shown')
@@ -79,20 +71,11 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                 <UpdateFaqItemFormFormik
                     faqItem={faqItem}
                     updateFaqItem={updateFaqItem}
-                    showSuccessModal={showSuccessModal}
                     closeModal={closeEditModal}
                 />
             </ModalPopUp>
           }
-          {
-            isSuccess &&
-            <ModalPopUp
-                modalTitle={modalTitle}
-                closeModal={closeSuccessModal}
-            >
-                <SuccessModal />
-            </ModalPopUp>
-          }
+
           <span className="faq__item-handle">{''}</span>
           <h5 className="faq__item-title">
             {faqItem.question}

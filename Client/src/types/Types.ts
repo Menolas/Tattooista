@@ -69,21 +69,28 @@ export interface LoginFormValues {
 
 export interface BookConsultationFormValues  {
     name: string,
-    contact: string,
-    contactValue: string,
-    message: string,
-    consent: boolean,
+    contact: string
+    email: string
+    phone: string
+    insta: string
+    whatsapp: string
+    messenger: string
+    message: string
+    consent: boolean
 }
 
 export interface AddConsultationFormValues  {
-    name: string,
-    contact: string,
-    contactValue: string,
+    bookingName: string
+    email: string
+    phone: string
+    insta: string
+    whatsapp: string
+    messenger: string
 }
 
 export interface AddClientFormValues {
     avatar: File | string | null,
-    name: string,
+    clientName: string,
     email: string | null,
     insta: string | null,
     messenger: string | null,

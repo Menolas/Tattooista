@@ -33,7 +33,7 @@ class bookingController {
       results.resultCode = 1
       results.message = err.message
       console.log(err)
-      res.status(400).json({ results })
+      res.status(400).json(results)
     }
   }
 
@@ -71,11 +71,17 @@ class bookingController {
 
   async createBooking(req, res) {
     const booking = new Booking({
-      fullName: req.body.name,
+      fullName: req.body.bookingName,
+      contacts: {
+        email: req.body.email,
+        insta: req.body.insta,
+        phone: req.body.phone,
+        whatsapp: req.body.whatsapp,
+        messenger: req.body.messenger
+      },
       message: req.body.message
     });
 
-    booking.contacts = { ...{ [req.body.contact]: req.body.contactValue }}
     const results = {}
 
     try {

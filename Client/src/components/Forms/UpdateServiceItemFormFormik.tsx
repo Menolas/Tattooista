@@ -7,6 +7,7 @@ import {SERVER_URL} from '../../utils/constants'
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 import {ServiceType} from '../../types/Types'
+import {FieldComponent} from "./FieldComponent";
 
 const validationSchema = yup.object().shape({
     title: yup.string()
@@ -74,6 +75,7 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
             onSubmit={submit}
         >
             {propsF => {
+
                 return (
                     <Form className="form form--updateTattooStyle" encType={"multipart/form-data"}>
                         <div className="form__input-wrap form__input-wrap--uploadFile">
@@ -102,74 +104,62 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                                 }}
                             />
                         </div>
-                        <div className="form__input-wrap">
-                            <Field name={'title'} type={'text'} placeholder={'Service Title'}
-                                   onChange={propsF.handleChange}
-                                   value={propsF.values.title}/>
-                            <ErrorMessage name='title'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
-                            <Field
-                                name={'condition_0'}
-                                type={'text'}
-                                onChange={propsF.handleChange}
-                                value={propsF.values.condition_0}/>
-                            <ErrorMessage name='condition_0'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
-                            <Field
-                                name={'condition_1'}
-                                type={'text'}
-                                onChange={propsF.handleChange}
-                                value={propsF.values.condition_1}/>
-                            <ErrorMessage name='condition_1'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
-                            <Field
-                                name={'condition_2'}
-                                type={'text'}
-                                onChange={propsF.handleChange}
-                                value={propsF.values.condition_2}/>
-                            <ErrorMessage name='condition_2'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
-                            <Field
-                                name={'condition_3'}
-                                type={'text'}
-                                onChange={propsF.handleChange}
-                                value={propsF.values.condition_3}/>
-                            <ErrorMessage name='condition_3'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
-                            <Field
-                                name={'condition_4'}
-                                type={'text'}
-                                onChange={propsF.handleChange}
-                                value={propsF.values.condition_4}/>
-                            <ErrorMessage name='condition_4'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
-                            <Field
-                                name={'condition_5'}
-                                type={'text'}
-                                onChange={propsF.handleChange}
-                                value={propsF.values.condition_5}/>
-                            <ErrorMessage name='condition_5'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
+
+                        <FieldComponent
+                            name={'title'}
+                            type={'text'}
+                            placeholder={"Service Title"}
+                            value={propsF.values.title}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldComponent
+                            name={'condition_0'}
+                            type={'text'}
+                            placeholder={"Service condition"}
+                            value={propsF.values.condition_0}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldComponent
+                            name={'condition_1'}
+                            type={'text'}
+                            placeholder={"Service condition"}
+                            value={propsF.values.condition_1}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldComponent
+                            name={'condition_2'}
+                            type={'text'}
+                            placeholder={"Service condition"}
+                            value={propsF.values.condition_2}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldComponent
+                            name={'condition_3'}
+                            type={'text'}
+                            placeholder={"Service condition"}
+                            value={propsF.values.condition_3}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldComponent
+                            name={'condition_4'}
+                            type={'text'}
+                            placeholder={"Service condition"}
+                            value={propsF.values.condition_4}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldComponent
+                            name={'condition_5'}
+                            type={'text'}
+                            placeholder={"Service condition"}
+                            value={propsF.values.condition_5}
+                            onChange={propsF.handleChange}
+                        />
 
                         <button
                             type="submit"

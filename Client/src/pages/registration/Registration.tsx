@@ -8,6 +8,7 @@ type PropsType = {
     isSuccess: boolean
     isAuth: boolean
     user?: IUser
+    registrationError: string | null
     registration: (values: RegistrationFormValues) => void
     setIsSuccess: (bol: boolean) => void
 }
@@ -16,6 +17,7 @@ export const Registration: React.FC<PropsType> = React.memo(({
   isSuccess,
   isAuth,
   user,
+  registrationError,
   registration,
   setIsSuccess
 }) => {
@@ -26,7 +28,8 @@ export const Registration: React.FC<PropsType> = React.memo(({
             { !isAuth &&
                 <div className = "registration__form-wrap form__wrap">
                     <RegistrationForm
-                        isAuth={isAuth}
+                        //isAuth={isAuth}
+                        registrationError={registrationError}
                         registration={registration}
                     />
                 </div>

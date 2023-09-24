@@ -16,6 +16,10 @@ export const getIsSuccessSelector = (state: AppStateType) => {
   return state.auth.isSuccess
 }
 
+export const getRegistrationErrorSelector = (state: AppStateType) => {
+  return state.auth.registrationError
+}
+
 //username: null,
 //password: null,
 

@@ -17,9 +17,13 @@ type LoginResponseType = {
 }
 
 type RegistrationResponseType = {
-    accessToken: string
-    refreshToken: string
-    user: IUser
+    resultCode?: number
+    message?: string
+    user: {
+        user: IUser
+        accessToken: string
+        refreshToken: string
+    }
 }
 
 type LogoutResponseType = {
@@ -44,6 +48,7 @@ export const authAPI = {
   registration(email: string, password: string) {
       return $api.post<RegistrationResponseType>('auth/registration', {email, password})
           .then(res => res.data)
+
   },
 
   login(values: LoginFormValues) {

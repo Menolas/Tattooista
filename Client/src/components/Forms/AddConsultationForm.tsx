@@ -1,16 +1,32 @@
 import * as React from 'react'
 import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues} from 'formik'
 import * as Yup from 'yup'
-import {ErrorMessageWrapper} from '../../utils/validators'
+import {ErrorMessageWrapper, phoneRegex} from '../../utils/validators'
 import {AddConsultationFormValues} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import * as yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
+  bookingName: Yup.string()
       .min(2, 'Must be minimum longer two characters')
       .max(30, 'Must be shorter than 31 character')
       .required('Required Field'),
-  contact: Yup.string().required('Required Field'),
-  contactValue: Yup.string().required('Required Field')
+  email: yup.string()
+      .email("Email should have correct format"),
+  phone: yup
+      .string()
+      .min(8, 'Phone number is too short - should be 8 chars minimum.')
+      .matches(phoneRegex, "That does not look like phone number"),
+  insta: yup
+      .string()
+      .min(3, 'Insta name is too short - should be 3 chars minimum.'),
+  messenger: yup
+      .string()
+      .min(3, 'Messenger name is too short - should be 3 chars minimum.'),
+  whatsapp: yup
+      .string()
+      .min(7, 'Whatsapp number is too short - should be 7 chars minimum.')
+      .matches(phoneRegex, "That does not look like whatsapp number"),
 })
 
 type PropsType = {
@@ -31,9 +47,12 @@ export const AddConsultationForm: React.FC<PropsType> = React.memo(({
   }
 
   const initialValues: AddConsultationFormValues = {
-    name: '',
-    contact: '',
-    contactValue: ''
+    bookingName: '',
+    email: '',
+    phone: '',
+    insta: '',
+    whatsapp: '',
+    messenger: '',
   }
 
   return (
@@ -49,43 +68,50 @@ export const AddConsultationForm: React.FC<PropsType> = React.memo(({
           <Form id="booking"
             className="form booking__form"
           >
-            <div className="form__input-wrap booking__input-wrap">
-              <Field
-                name={'name'}
+            <FieldComponent
+                name={'bookingName'}
                 type={'text'}
                 placeholder={"Customer's Full Name"}
-              />
-              <ErrorMessage name='name'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
+                value={propsF.values.bookingName}
+                onChange={propsF.handleChange}
+            />
 
-            <div className="form__input-wrap booking__input-wrap">
-              <Field
-                name={'contact'}
-                as="select"
-                placeholder={"Choose the way customer want's to be contacted"}
-              >
-                  <option>Choose the way customer want's to be contacted</option>
-                  <option value="email">email</option>
-                  <option value="phone">phone</option>
-                  <option value="whatsapp">whatsapp</option>
-                  <option value="messenger">messenger</option>
-              </Field>
-              <ErrorMessage name='contact'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap booking__input-wrap">
-                <Field
-                  name="contactValue"
-                  type={'text'}
-                  placeholder={'Customers contact'}
-                />
-                <ErrorMessage name='contactValue'>
-                    {ErrorMessageWrapper}
-                </ErrorMessage>
-            </div>
+            <FieldComponent
+                name={'email'}
+                type={'text'}
+                placeholder={'Email'}
+                onChange={propsF.handleChange}
+                value={propsF.values.email}
+            />
+            <FieldComponent
+                name={'phone'}
+                type={'tel'}
+                placeholder={'Phone'}
+                onChange={propsF.handleChange}
+                value={propsF.values.phone}
+            />
+            <FieldComponent
+                name={'insta'}
+                type={'text'}
+                placeholder={'Instagram'}
+                onChange={propsF.handleChange}
+                value={propsF.values.insta}
+            />
+            <FieldComponent
+                name={'messenger'}
+                type={'text'}
+                placeholder={'Messenger'}
+                onChange={propsF.handleChange}
+                value={propsF.values.messenger}
+            />
+            <FieldComponent
+                name={'whatsapp'}
+                type={'text'}
+                placeholder={'Whatsapp'}
+                onChange={propsF.handleChange}
+                value={propsF.values.whatsapp}
+            />
+
             <button
               type="submit"
               disabled={isSubmitting}

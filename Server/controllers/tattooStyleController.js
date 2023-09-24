@@ -4,7 +4,6 @@ const fs = require("fs");
 class tattooStyleController {
 
   async getTattooStyles (req, res) {
-    console.log("it is a hit!!!!!!!!")
     const results = {}
     try {
       results.resultCode = 0

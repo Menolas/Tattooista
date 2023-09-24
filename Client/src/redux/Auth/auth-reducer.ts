@@ -9,12 +9,14 @@ const SET_ADMIN_DATA = 'SET_ADMIN_DATE'
 const SET_AUTH = 'SET_AUTH'
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
+const SET_REGISTRATION_ERROR = 'SET_REGISTRATION_ERROR'
 
 let initialState = {
   user: {} as IUser | null,
   token: null as string | null | undefined,
   isAuth: false as boolean,
-  isSuccess: false as boolean
+  isSuccess: false as boolean,
+  registrationError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -50,13 +52,28 @@ export const authReducer = (
         isSuccess: action.isSuccess
       }
 
+    case SET_REGISTRATION_ERROR:
+      return {
+        ...state,
+        registrationError: action.error
+      }
+
     default: return state
   }
 }
 
-type ActionsTypes = SetIsSuccessAT | SetTokenActionType | SetAdminDataActionType | SetAuthActionType
+type ActionsTypes = SetRegistrationErrorAT | SetIsSuccessAT | SetTokenAT | SetAdminDataAT | SetAuthAT
 
 // actions creators
+
+type SetRegistrationErrorAT = {
+  type: typeof  SET_REGISTRATION_ERROR
+  error: string | undefined
+}
+
+const setRegistrationErrorAC = (error: string |  undefined): SetRegistrationErrorAT => ({
+  type: SET_REGISTRATION_ERROR, error
+})
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
@@ -67,32 +84,32 @@ export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
   type: SET_IS_SUCCESS, isSuccess
 })
 
-type SetTokenActionType = {
+type SetTokenAT = {
   type: typeof SET_ACCESS_TOKEN,
   token: null | string
 }
 
-const setAccessToken = (token: string | null): SetTokenActionType => ({
+const setAccessTokenAC = (token: string | null): SetTokenAT => ({
   type: SET_ACCESS_TOKEN, token
 })
 
-type SetAdminDataActionType = {
+type SetAdminDataAT = {
   type: typeof SET_ADMIN_DATA,
   user: IUser | null
 }
 
-const setAdminData = (
+const setAdminDataAC = (
     user: IUser | null
-): SetAdminDataActionType => ({
+): SetAdminDataAT => ({
     type: SET_ADMIN_DATA, user
 })
 
-type SetAuthActionType = {
+type SetAuthAT = {
   type: typeof SET_AUTH
   isAuth: boolean
 }
 
-const setAuth = (isAuth: boolean): SetAuthActionType => ({
+const setAuth = (isAuth: boolean): SetAuthAT => ({
     type: SET_AUTH, isAuth
 })
 
@@ -121,12 +138,15 @@ export const login = (values: LoginFormValues): ThunkType => async (
 ) => {
   try {
     let response = await authAPI.login(values)
-    dispatch(setAdminData(response.user))
+    dispatch(setAdminDataAC(response.user))
     dispatch(setAuth(true))
-    dispatch(setAccessToken(response.accessToken))
+    dispatch(setAccessTokenAC(response.accessToken))
 
   } catch (e) {
-    console.log(e)
+    // @ts-ignore
+    dispatch(setRegistrationErrorAC(e.response.data.message))
+    // @ts-ignore
+    console.log(e.response.data.message)
   }
 
 }
@@ -137,8 +157,8 @@ export const logout = (): ThunkType => async (
   try {
     const response = await authAPI.logout()
      if(response.deletedCount === 1) {
-       dispatch(setAccessToken(null))
-       dispatch(setAdminData(null))
+       dispatch(setAccessTokenAC(null))
+       dispatch(setAdminDataAC(null))
        dispatch(setAuth(false))
      }
   } catch (e) {
@@ -147,23 +167,30 @@ export const logout = (): ThunkType => async (
 }
 
 export const registration = (values: RegistrationFormValues): ThunkType => async (dispatch) => {
+  debugger
   try {
     let response = await authAPI.registration(values.email, values.password)
-    dispatch(setAuth(true))
-    dispatch(setAdminData(response.user))
-    dispatch(setAccessToken(response.accessToken))
-    dispatch(setIsSuccessAC(true))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setRegistrationErrorAC(''))
+      dispatch(setAuth(true))
+      dispatch(setAdminDataAC(response.user.user))
+      dispatch(setAccessTokenAC(response.user.accessToken))
+      dispatch(setIsSuccessAC(true))
+    }
   } catch (e) {
-    console.log(e)
+    // @ts-ignore
+    dispatch(setRegistrationErrorAC(e.response.data.message))
+    // @ts-ignore
+    console.log(e.response.data.message)
   }
 }
 
 export const checkAuth = ():ThunkType => async (dispatch) => {
   try {
     let response = await authAPI.checkAuth()
-    dispatch(setAccessToken(response.accessToken))
+    dispatch(setAccessTokenAC(response.accessToken))
     dispatch(setAuth(true))
-    dispatch(setAdminData(response.user))
+    dispatch(setAdminDataAC(response.user))
   } catch (e) {
     console.log(e)
   }

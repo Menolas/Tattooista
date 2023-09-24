@@ -16,3 +16,7 @@ export const withAuthRedirect = (Component) => {
 
   return connect(mapStateToPropsForRedirect, {})(RedirectComponent);
 }
+
+// if (isAuth && !user.isActivated) {
+//   return <Navigate to="/registration" />
+// }
