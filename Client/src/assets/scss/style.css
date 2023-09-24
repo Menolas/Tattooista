@@ -66,6 +66,27 @@ img {
   object-fit: cover;
 }
 
+* {
+  scrollbarWidth: thin;
+  scrollbarColor: #aaa #eee;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  backgroundColor: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 6px;
+  height: 6px;
+  backgroundColor: rgba(170, 170, 170, 0.6666666667);
+  borderRadius: 6px;
+}
+
 .background-wrap {
   margin: 0 auto;
   width: 1440px;
@@ -2054,7 +2075,8 @@ img {
   }
 }
 input::placeholder,
-textarea::placeholder {
+textarea::placeholder,
+.css-1jqq78o-placeholder {
   color: #6F6D6D;
   font-weight: 600 !important;
   font-size: 16px !important;
@@ -2068,6 +2090,77 @@ input[type=checkbox] {
 .form {
   color: #080808;
 }
+.form input,
+.form textarea,
+.form select,
+.form .css-13cymwt-control,
+.form .css-t3ipsp-control {
+  padding: 8px 0 12px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  color: #080808;
+  border: 2px solid #080808;
+  border-left: none;
+  border-top: none;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+.form input:hover,
+.form textarea:hover,
+.form select:hover,
+.form .css-13cymwt-control:hover,
+.form .css-t3ipsp-control:hover {
+  border: 2px solid #080808;
+  border-left: none;
+  border-top: none;
+  border-radius: 0;
+}
+.form input:focus,
+.form textarea:focus,
+.form select:focus,
+.form .css-13cymwt-control:focus,
+.form .css-t3ipsp-control:focus {
+  border-left: none;
+  border-top: none;
+  outline: none;
+}
+.form .css-13cymwt-control,
+.form .css-t3ipsp-control {
+  padding: 0;
+}
+.form .css-13cymwt-control:hover,
+.form .css-t3ipsp-control:hover {
+  border: 2px solid #080808;
+  border-left: none;
+  border-top: none;
+}
+.form .css-1u9des2-indicatorSeparator {
+  display: none;
+}
+.form .css-15lsz6c-indicatorContainer svg,
+.form .css-1xc3v61-indicatorContainer svg {
+  width: 25px;
+  height: 25px;
+  fill: #080808;
+}
+.form .css-1xc3v61-indicatorContainer svg {
+  transform: rotate(0deg);
+}
+.form .css-15lsz6c-indicatorContainer svg {
+  transform: rotate(180deg);
+}
+.form .css-1fdsijx-ValueContainer,
+.form .css-qbdosj-Input {
+  padding: 0;
+  height: 32px;
+}
+.form .css-13cymwt-control,
+.form .css-t3ipsp-control,
+.form input {
+  height: 32px;
+}
 
 .form__wrap {
   margin: auto;
@@ -2077,6 +2170,7 @@ input[type=checkbox] {
   background-image: url("../img/form-background.png");
   background-repeat: no-repeat;
   background-color: #fafafa;
+  background-size: cover;
 }
 
 .search-form {
@@ -2106,13 +2200,13 @@ input[type=checkbox] {
 }
 
 .form__input-wrap--uploadFile-img {
-  height: 250px;
+  width: 100%;
+  height: 180px;
   overflow: hidden;
 }
-
-.form--updateAboutForm .form__input-wrap--uploadFile-img {
-  width: 250px;
-  height: 250px;
+.form__input-wrap--uploadFile-img img {
+  object-fit: contain;
+  object-position: center;
 }
 
 .form__uploadFileBtns {
@@ -2139,12 +2233,16 @@ input[type=checkbox] {
 .form__input-wrap--checkbox label {
   display: inline-block;
   position: relative;
-  margin-bottom: 8px;
   padding-left: 28px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #373737;
+}
+
+.form__input-wrap--checkbox label,
+label.form__input-label {
+  margin-bottom: 8px;
   text-transform: uppercase;
+  color: #373737;
+  font-weight: 600;
+  font-size: 12px;
 }
 
 .checkbox {
@@ -2174,31 +2272,6 @@ input[type=checkbox]:checked + label .checkbox::after {
   border-top: none;
   border-radius: 2px;
   transform: rotate(45deg) skew(9deg, 7deg);
-}
-
-input,
-textarea,
-select {
-  padding: 8px 0 12px;
-  width: 100%;
-  font-size: 20px;
-  font-weight: 600;
-  color: #080808;
-  border: 2px solid #080808;
-  border-left: none;
-  border-top: none;
-  background-color: transparent;
-}
-input:focus,
-textarea:focus,
-select:focus {
-  border-left: none;
-  border-top: none;
-  outline: none;
-}
-
-input {
-  height: 32px;
 }
 
 .form__file-input-wrap {
@@ -2233,6 +2306,10 @@ input {
   margin-top: 10px;
   color: rgb(150, 16, 16);
   font-weight: 600;
+}
+.form__error.form__error--api {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .form__avatar {
@@ -2281,6 +2358,9 @@ input {
   }
   .form__input-wrap--checkbox label {
     padding-left: 36px;
+  }
+  .form__input-wrap--checkbox label,
+  label.form__input-label {
     font-size: 14px;
     font-weight: 700;
   }

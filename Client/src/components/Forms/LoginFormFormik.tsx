@@ -1,22 +1,30 @@
 import * as React from 'react'
 import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues} from 'formik'
-import { ErrorMessageWrapper } from '../../utils/validators'
+import { ErrorMessageWrapper, ApiErrorMessage } from '../../utils/validators'
 import * as Yup from 'yup'
 import { Navigate } from 'react-router';
 import { LoginFormValues } from '../../types/Types'
+import {FieldComponent} from "./FieldComponent";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required('Required field'),
-  password: Yup.string().required('Required field')
+  email: Yup
+      .string()
+      .email("Invalid email format")
+      .required('Required field'),
+  password: Yup
+      .string()
+      .required('Required field')
 })
 
 type PropsType = {
   isAuth: boolean
+  registrationError: string
   login: (values: LoginFormValues) => void
 }
 
 export const LoginForm: React.FC<PropsType> = React.memo(({
   isAuth,
+  registrationError,
   login
 }) => {
 
@@ -48,28 +56,25 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
             <h3 className="form__title">
               Login
             </h3>
-            <div className="form__input-wrap">
-              <label>Login</label>
-              <Field
+            { registrationError  !== '' &&
+                <ApiErrorMessage message={registrationError}/>
+            }
+            <FieldComponent
                 name={'email'}
                 type={'text'}
                 placeholder={'Email'}
-              />
-              <ErrorMessage name='email'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap">
-              <label>Password</label>
-              <Field
+                label={'Email'}
+                value={propsF.values.email}
+                onChange={propsF.handleChange}
+            />
+            <FieldComponent
                 name={'password'}
                 type={'password'}
                 placeholder={'xxxxxxxx'}
-              />
-              <ErrorMessage name='password'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
+                label={'Password'}
+                value={propsF.values.password}
+                onChange={propsF.handleChange}
+            />
             <button
               className="btn btn--bg btn--transparent form__submit-btn"
               type="submit"

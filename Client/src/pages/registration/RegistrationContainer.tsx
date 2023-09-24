@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Registration } from '../registration/Registration'
 import { registration } from '../../redux/Auth/auth-reducer'
 
-import {getAuthSelector, getUserSelector, getIsSuccessSelector} from "../../redux/Auth/auth-selectors";
+import {
+    getAuthSelector,
+    getUserSelector,
+    getIsSuccessSelector,
+    getRegistrationErrorSelector
+} from "../../redux/Auth/auth-selectors";
 import {RegistrationFormValues} from "../../types/Types";
 import {setIsSuccessAC} from "../../redux/Auth/auth-reducer";
 
@@ -12,6 +17,7 @@ export const RegistrationContainer: React.FC = () => {
     const isAuth = useSelector(getAuthSelector)
     const user = useSelector(getUserSelector)
     const isSuccess = useSelector(getIsSuccessSelector)
+    const registrationError = useSelector(getRegistrationErrorSelector)
 
     const dispatch = useDispatch()
 
@@ -28,6 +34,7 @@ export const RegistrationContainer: React.FC = () => {
             isSuccess={isSuccess}
             isAuth={isAuth}
             user={user}
+            registrationError={registrationError}
             registration={registrationCallBack}
             setIsSuccess={setIsSuccessCallBack}
         />

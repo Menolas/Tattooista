@@ -213,6 +213,7 @@ export const editAboutPage = (id: string, FormData: FormData): ThunkType => asyn
     const response = await generalSourcesApi.editAboutPage(id, FormData)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setPages(response.pages))
+      dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
     console.log(e);

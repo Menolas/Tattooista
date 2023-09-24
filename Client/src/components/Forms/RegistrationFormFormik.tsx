@@ -1,22 +1,34 @@
 import * as React from 'react'
 import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues} from 'formik'
-import { ErrorMessageWrapper } from '../../utils/validators'
-import * as Yup from 'yup'
-import { Navigate } from 'react-router';
-import {LoginFormValues, RegistrationFormValues} from '../../types/Types'
+// @ts-ignore
+import { ErrorMessageWrapper, ApiErrorMessage} from '../../utils/validators'
+import * as yup from 'yup'
+import {RegistrationFormValues} from '../../types/Types'
+import {FieldComponent} from './FieldComponent'
+import {FieldWrapper} from "./FieldWrapper";
 
-const validationSchema = Yup.object().shape({
-  email: Yup.string().required('Required field'),
-  password: Yup.string().required('Required field')
+const validationSchema = yup.object().shape({
+  email: yup
+      .string()
+      .email("Invalid email format")
+      .required('Required field'),
+  password: yup
+      .string()
+      .min(4, 'Password is too short - should be 4 chars minimum.')
+      .required('Required field'),
+  consent: yup
+      .boolean()
+      .oneOf([true],'If you want to be registered as an admin you need to check this and agree to sare your email with us')
+      .required('Required field')
 })
 
 type PropsType = {
-  isAuth: boolean
+  registrationError: string | null
   registration: (values: RegistrationFormValues) => void
 }
 
 export const RegistrationForm: React.FC<PropsType> = React.memo(({
-  isAuth,
+  registrationError,
   registration
 }) => {
 
@@ -41,33 +53,34 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
         let {isSubmitting} = propsF
 
         return (
-          <Form id="login" className="form">
+          <Form id="registration" className="form">
             <h3 className="form__title">
               Registration
             </h3>
-            <div className="form__input-wrap">
-              <label>Your email</label>
-              <Field
+            {/*<pre>{JSON.stringify(propsF, undefined, 2)}</pre>*/}
+            { registrationError  !== '' &&
+                <ApiErrorMessage message={registrationError}/>
+            }
+            <FieldComponent
                 name={'email'}
                 type={'text'}
                 placeholder={'Email'}
-              />
-              <ErrorMessage name='email'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap">
-              <label>Password</label>
-              <Field
+                label={'Your email'}
+                value={propsF.values.email}
+                onChange={propsF.handleChange}
+            />
+            <FieldComponent
                 name={'password'}
                 type={'password'}
                 placeholder={'xxxxxxxx'}
-              />
-              <ErrorMessage name='password'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap form__input-wrap--checkbox">
+                label={'Password'}
+                value={propsF.values.password}
+                onChange={propsF.handleChange}
+            />
+            <FieldWrapper
+                wrapperClass={'form__input-wrap--checkbox'}
+                name={"consent"}
+            >
               <Field
                   type="checkbox"
                   name="consent"
@@ -77,10 +90,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 <span className="checkbox">{''}</span>
                 CONSENT WITH PROCESSING OF MY PERSONAL DATA
               </label>
-              <ErrorMessage name='consent'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
+            </FieldWrapper>
             <button
               className="btn btn--bg btn--transparent form__submit-btn"
               type="submit"

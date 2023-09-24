@@ -1,10 +1,14 @@
 import * as React from 'react'
+import { useState } from 'react'
 import {ErrorMessage, Field, Form, Formik} from 'formik'
 import * as yup from 'yup'
 import {ErrorMessageWrapper} from '../../utils/validators'
 import {SERVER_URL} from '../../utils/constants'
+// @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 import {PageType} from '../../types/Types'
+import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
 
 const validationSchema = yup.object().shape({
     title: yup.string(),
@@ -15,19 +19,18 @@ type PropsType = {
     pageAbout?: PageType
     editAboutPage: (id: string, values: FormData) => void
     closeModal: () => void
-    showSuccessModal: () => void
 }
 export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
     pageAbout,
     editAboutPage,
-    closeModal,
-    showSuccessModal
+    closeModal
 }) => {
 
     const [imageURL, setImageURL] = useState('')
 
     const fileReader = new FileReader()
     fileReader.onloadend = () => {
+        // @ts-ignore
         setImageURL(fileReader.result)
     }
 
@@ -52,7 +55,6 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
         }
         editAboutPage(pageAbout._id, formData)
         closeModal()
-        showSuccessModal()
     }
 
     return (
@@ -90,15 +92,18 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                 }}
                             />
                         </div>
-                        <div className="form__input-wrap">
-                            <Field name={'title'} type={'text'} placeholder={'Block Title'}
-                                   onChange={propsF.handleChange}
-                                   value={propsF.values.title}/>
-                            <ErrorMessage name='title'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
+
+                        <FieldComponent
+                            name={'title'}
+                            type={'text'}
+                            placeholder={"Block Title"}
+                            value={propsF.values.title}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldWrapper
+                            name={"content"}
+                        >
                             <Field
                                 name={'content'}
                                 component="textarea"
@@ -106,10 +111,8 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                 placeholder={'Describe this Tattoo style'}
                                 onChange={propsF.handleChange}
                                 value={propsF.values.content}/>
-                            <ErrorMessage name='content'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
+                        </FieldWrapper>
+
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}

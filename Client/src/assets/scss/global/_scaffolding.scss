@@ -50,3 +50,24 @@ img {
   height: auto;
   object-fit: cover;
 }
+
+* {
+ scrollbarWidth: thin;
+ scrollbarColor: #aaa #eee;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  backgroundColor: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 6px;
+  height: 6px;
+  backgroundColor: #aaaa;
+  borderRadius: 6px;
+}

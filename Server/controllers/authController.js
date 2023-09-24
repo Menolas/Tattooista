@@ -4,15 +4,20 @@ const ApiError = require('../exeptions/apiErrors')
 
 class AuthController {
   async registration(req, res, next) {
+    const results = {}
     try {
       const errors = validationResult(req)
       if(!errors.isEmpty()) {
+        //results.resultCode = 1
+        //results.errors = errors.array()
         return next(ApiError.BadRequest('Validation error', errors.array()))
       }
       const { email, password} = req.body
       const userData = await userService.registration(email, password)
       res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
-      return res.json(userData)
+      results.resultCode = 0
+      results.user = userData
+      return res.json(results)
     } catch(e) {
       next(e)
     }

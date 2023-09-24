@@ -23,19 +23,11 @@ export const About: React.FC<PropsType> = React.memo(({
 }) => {
 
     const [isEditMode, setIsEditMode] = useState(false)
-    const [isSuccess, setSuccess] = useState(false)
-    const showSuccessModal = () => {
-        setSuccess(true)
-    }
 
-    const closeSuccessModal = () => {
-        setSuccess(false)
-    }
     const closeEditModal = () => {
         setIsEditMode(false)
     }
 
-    const modalTitle = ''
     const editModalTitle = 'Update "about" block'
 
     const imgUrl = pageAbout?.wallPaper ? `url("${SERVER_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("../avatar.jpg")`
@@ -80,17 +72,8 @@ export const About: React.FC<PropsType> = React.memo(({
                         <UpdateAboutPageFormFormik
                             pageAbout={pageAbout}
                             editAboutPage={editAboutPage}
-                            showSuccessModal={showSuccessModal}
                             closeModal={closeEditModal}
                         />
-                    </ModalPopUp>
-                }
-                { isSuccess &&
-                    <ModalPopUp
-                        modalTitle={modalTitle}
-                        closeModal={closeSuccessModal}
-                    >
-                        <SuccessModal/>
                     </ModalPopUp>
                 }
             </section>

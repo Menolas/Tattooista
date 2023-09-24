@@ -1,8 +1,8 @@
 import * as React from 'react'
 import {ErrorMessage, Field, Form, Formik} from 'formik'
 import * as yup from 'yup'
-import {ErrorMessageWrapper} from '../../utils/validators'
 import {FaqType} from '../../types/Types'
+import {FieldComponent} from "./FieldComponent";
 
 const validationSchema = yup.object().shape({
     question: yup.string()
@@ -51,29 +51,22 @@ export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
             {propsF => {
                 return (
                     <Form className="form form--updateTattooStyle">
-                        <div className="form__input-wrap">
-                            <Field
-                               name={'question'}
-                               type={'text'}
-                               placeholder={'FAQ Question'}
-                               onChange={propsF.handleChange}
-                               value={propsF.values.question}
-                            />
-                            <ErrorMessage name='question'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
-                            <Field
-                                name={'answer'}
-                                type={'text'}
-                                placeholder={'FAQ Answer'}
-                                onChange={propsF.handleChange}
-                                value={propsF.values.answer}/>
-                            <ErrorMessage name='answer'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
+                        <FieldComponent
+                            name={'question'}
+                            type={'text'}
+                            placeholder={"FAQ Question"}
+                            value={propsF.values.question}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldComponent
+                            name={'answer'}
+                            type={'text'}
+                            placeholder={"FAQ Answer"}
+                            value={propsF.values.answer}
+                            onChange={propsF.handleChange}
+                        />
+
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}

@@ -2,22 +2,63 @@ import * as React from 'react'
 import { useState } from 'react'
 import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues} from 'formik'
 import * as yup from 'yup'
-import {ErrorMessageWrapper} from '../../utils/validators'
+import {ErrorMessageWrapper, phoneRegex} from '../../utils/validators'
 import {AddClientFormValues, ClientType} from '../../types/Types'
 import {SERVER_URL} from '../../utils/constants'
 // @ts-ignore
 import avatar from '../../assets/img/fox.webp'
+import {FieldComponent} from "./FieldComponent";
+
+interface UpdateClientFormType {
+  avatar: FileList
+  clientName: string
+  email: string
+  phone: string
+  insta: string
+  messenger: string
+  whatsapp: string
+}
+
+export const MAX_FILE_SIZE = 102400
+export const validFileExtensions = { image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'] }
+
+export const isValidFileType = (fileName, fileType) => {
+  return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
+}
+
+export const getAllowedExt = (type) => {
+  return validFileExtensions[type].map((e) => `.${e}`).toString()
+}
+
+let allowedExts = getAllowedExt("image");
 
 const validationSchema = yup.object().shape({
-  name: yup.string()
+  // avatar: yup.mixed().test(
+  //     "is-valid-type", "Not a valid image type",
+  //     value => isValidFileType(value && value[0].name.toLowerCase(), "image"))
+  //     .test("is-valid-size", "Max allowed size is 100KB",
+  //         files => files && files[0].size <= MAX_FILE_SIZE),
+  clientName: yup
+    .string()
+    .min(2, 'Name is too short - should be 2 chars minimum.')
     .matches(/^([^0-9]*)$/, "First name should not contain numbers")
     .required("First name is a required field"),
   email: yup.string()
     .email("Email should have correct format"),
-  insta: yup.string(),
-  messenger: yup.string(),
-  phone: yup.string(),
-  whatsapp: yup.string(),
+  phone: yup
+    .string()
+    .min(8, 'Phone number is too short - should be 8 chars minimum.')
+    .matches(phoneRegex, "That does not look like phone number"),
+  insta: yup
+      .string()
+      .min(3, 'Insta name is too short - should be 3 chars minimum.'),
+  messenger: yup
+      .string()
+      .min(3, 'Messenger name is too short - should be 3 chars minimum.'),
+  whatsapp: yup
+      .string()
+      .min(7, 'Whatsapp number is too short - should be 7 chars minimum.')
+      .matches(phoneRegex, "That does not look like whatsapp number"),
 })
 
 type PropsType = {
@@ -35,7 +76,6 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 }) => {
 
   const [imageURL, setImageURL] = useState('')
-  console.log(imageURL)
 
   const handleOnChange = (event) => {
     event.preventDefault()
@@ -52,7 +92,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 
   const initialValues: AddClientFormValues = {
     avatar: profile && profile.avatar ? profile.avatar : '',
-    name: profile && profile.fullName ? profile.fullName : '',
+    clientName: profile && profile.fullName ? profile.fullName : '',
     email: profile && profile.contacts.email ? profile.contacts.email : '',
     insta: profile && profile.contacts.insta ? profile.contacts.insta : '',
     messenger: profile && profile.contacts.messenger ? profile.contacts.messenger : '',
@@ -83,20 +123,15 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form className="form" encType={"multipart/form-data"}>
+            <pre>{JSON.stringify(propsF, undefined, 2)}</pre>
             <div className="form__input-wrap form__input-wrap--uploadFile">
               <div className="form__avatar">
+
                 {
                   profile &&
                     <img
-                      src={imageURL ? imageURL : `${SERVER_URL}/clients/${profile._id}/avatar/${profile.avatar}`}
+                      src={imageURL ? imageURL : profile?.avatar ? `${SERVER_URL}/clients/${profile._id}/avatar/${profile.avatar}` : avatar}
                       alt="preview"
-                    />
-                }
-                {
-                  !profile &&
-                    <img
-                        src={imageURL ? imageURL : avatar}
-                        alt="preview"
                     />
                 }
 
@@ -107,7 +142,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 id="avatar"
                 name={'avatar'}
                 type={'file'}
-                accept='image/*,.png,.jpg,.web,.jpeg,.webp'
+                accept={allowedExts}
                 value={undefined}
                 onChange={(e) => {
                   propsF.setFieldValue('avatar', e.currentTarget.files[0])
@@ -115,54 +150,48 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 }}
               />
             </div>
-            <div className="form__input-wrap">
-              <Field name={'name'} type={'text'} placeholder={'Full Name'}
-                     onChange={propsF.handleChange}
-                     value={propsF.values.name}/>
-              <ErrorMessage name='name'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap">
-              <Field name={'email'} type={'text'} placeholder={'Email'}
-                     onChange={propsF.handleChange}
-                     value={propsF.values.email}/>
-              <ErrorMessage name='email'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap">
-              <Field name={'phone'} type={'text'} placeholder={'Phone'}
-                     onChange={propsF.handleChange}
-                     value={propsF.values.phone}/>
-              <ErrorMessage name='phone'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap">
-              <Field name={'insta'} type={'text'} placeholder={'Instagram'}
-                     onChange={propsF.handleChange}
-                     value={propsF.values.insta}/>
-              <ErrorMessage name='insta'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap">
-              <Field name={'messenger'} type={'text'} placeholder={'Messenger'}
-                     onChange={propsF.handleChange}
-                     value={propsF.values.messenger}/>
-              <ErrorMessage name='messenger'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
-            <div className="form__input-wrap">
-              <Field name={'whatsapp'} type={'text'} placeholder={'whatsapp'}
-                     onChange={propsF.handleChange}
-                     value={propsF.values.whatsapp}/>
-              <ErrorMessage name='whatsapp'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
+            <FieldComponent
+                name={'clientName'}
+                type={'text'}
+                placeholder={'Full Name'}
+                onChange={propsF.handleChange}
+                value={propsF.values.clientName}
+            />
+            <FieldComponent
+                name={'email'}
+                type={'text'}
+                placeholder={'Email'}
+                onChange={propsF.handleChange}
+                value={propsF.values.email}
+            />
+            <FieldComponent
+                name={'phone'}
+                type={'tel'}
+                placeholder={'Phone'}
+                onChange={propsF.handleChange}
+                value={propsF.values.phone}
+            />
+            <FieldComponent
+                name={'insta'}
+                type={'text'}
+                placeholder={'Instagram'}
+                onChange={propsF.handleChange}
+                value={propsF.values.insta}
+            />
+            <FieldComponent
+                name={'messenger'}
+                type={'text'}
+                placeholder={'Messenger'}
+                onChange={propsF.handleChange}
+                value={propsF.values.messenger}
+            />
+            <FieldComponent
+                name={'whatsapp'}
+                type={'text'}
+                placeholder={'Whatsapp'}
+                onChange={propsF.handleChange}
+                value={propsF.values.whatsapp}
+            />
             <button
               type="submit"
               disabled={propsF.isSubmitting}

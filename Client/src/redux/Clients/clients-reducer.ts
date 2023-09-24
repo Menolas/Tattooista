@@ -464,7 +464,6 @@ export const addClient = (
   try {
     let response = await clientsAPI.addClient(values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      console.log("it is a hit!!!")
       dispatch(addClientAC(response.client))
       dispatch(setIsSuccessAC(true))
     }

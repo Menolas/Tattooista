@@ -85,7 +85,7 @@ class clientsController {
       });
     }
 
-    res.client.fullName = req.body.name
+    res.client.fullName = req.body.clientName
     res.client.contacts.email = req.body.email
     res.client.contacts.insta = req.body.insta
     res.client.contacts.phone = req.body.phone
@@ -158,7 +158,7 @@ class clientsController {
 
   async addClient(req, res) {
     const client = new Client({
-      fullName: req.body.name,
+      fullName: req.body.clientName,
       contacts: {
         email: req.body.email,
         insta: req.body.insta,

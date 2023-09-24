@@ -7,6 +7,8 @@ import {SERVER_URL} from '../../utils/constants'
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 import {TattooStyleType} from '../../types/Types'
+import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
 
 const validationSchema = yup.object().shape({
     value: yup.string()
@@ -98,26 +100,28 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                 }}
                             />
                         </div>
-                        <div className="form__input-wrap">
-                            <Field name={'value'} type={'text'} placeholder={'Tattoo style name'}
-                                   onChange={propsF.handleChange}
-                                   value={propsF.values.value}/>
-                            <ErrorMessage name='value'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
-                        <div className="form__input-wrap">
+
+                        <FieldComponent
+                            name={'value'}
+                            type={'text'}
+                            placeholder={"Tattoo style name"}
+                            value={propsF.values.value}
+                            onChange={propsF.handleChange}
+                        />
+
+                        <FieldWrapper
+                            name={"description"}
+                        >
                             <Field
                                 name={'description'}
                                 component="textarea"
-                                rows={6}
+                                rows={5}
                                 placeholder={'Describe this Tattoo style'}
                                 onChange={propsF.handleChange}
                                 value={propsF.values.description}/>
-                            <ErrorMessage name='description'>
-                                {ErrorMessageWrapper}
-                            </ErrorMessage>
-                        </div>
+
+                        </FieldWrapper>
+
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}
