@@ -6,7 +6,7 @@ export const FormSelect = ({ name, options, handleChange }) => {
     const [field, meta, helpers] = useField(name)
     const { setValue, setTouched, setError } = helpers
     const setFieldProps = (selectedOption) => {
-        console.log("setFieldProps", selectedOption.value)
+        //console.log("setFieldProps", selectedOption.value)
         setTouched(true)
         handleChange(selectedOption.value)
         setValue(selectedOption.value)

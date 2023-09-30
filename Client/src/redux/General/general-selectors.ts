@@ -19,3 +19,11 @@ export const getIsSuccessSelector = (state: AppStateType) => {
 export const getIsSuccessBookingSelector = (state: AppStateType) => {
   return state.general.isSuccessBooking
 }
+
+export const getBookingConsultationApiErrorSelector = (state: AppStateType) => {
+  return state.general.bookingConsultationApiError
+}
+
+export const getIsBookingModalOpenSelector = (state: AppStateType) => {
+  return state.general.isBookingModalOpen
+}

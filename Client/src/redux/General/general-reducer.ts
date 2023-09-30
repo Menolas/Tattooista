@@ -10,6 +10,8 @@ const SET_PAGES = 'SET_PAGES'
 const SET_PAGE_VISIBILITY = 'SET_PAGE_VISIBILITY'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING'
+const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR'
+const SET_IS_BOOKING_MODAL_OPEN = 'SET_IS_BOOKING_MODAL_OPEN'
 
 let initialState = {
   faq: [] as Array<FaqType>,
@@ -17,6 +19,8 @@ let initialState = {
   pages: [] as Array<PageType>,
   isSuccess: false as boolean,
   isSuccessBooking: false as boolean,
+  bookingConsultationApiError: '' as string | undefined,
+  isBookingModalOpen: false as boolean,
 }
 
 export type InitialStateType = typeof initialState
@@ -69,15 +73,47 @@ export const generalReducer = (
         isSuccessBooking: action.bol
       }
 
+    case SET_BOOKING_CONSULTATION_API_ERROR:
+      return {
+        ...state,
+        bookingConsultationApiError: action.error
+      }
+
+    case SET_IS_BOOKING_MODAL_OPEN:
+      return {
+        ...state,
+        isBookingModalOpen: action.bol
+      }
+
     default: return {
       ...state
     }
   }
 }
 
-type ActionsTypes = SetIsSuccessBookingAT | SetIsSuccessAT | SetPageVisibilityActionType | SetPagesActionType | SetFaqItemsActionType | SetServicesActionType
+type ActionsTypes = SetIsBookingModalOpenAT | SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT |
+    SetIsSuccessAT | SetPageVisibilityActionType | SetPagesActionType | SetFaqItemsActionType |
+    SetServicesActionType
 
 // action creators
+
+type SetIsBookingModalOpenAT = {
+  type: typeof SET_IS_BOOKING_MODAL_OPEN
+  bol: boolean
+}
+
+export const setIsBookingModalOpenAC = (bol: boolean): SetIsBookingModalOpenAT => ({
+  type: SET_IS_BOOKING_MODAL_OPEN, bol
+})
+
+type SetBookingConsultationApiErrorAT = {
+  type: typeof  SET_BOOKING_CONSULTATION_API_ERROR
+  error: string | undefined
+}
+
+export const setBookingConsultationApiErrorAC = (error: string | undefined): SetBookingConsultationApiErrorAT  => ({
+  type: SET_BOOKING_CONSULTATION_API_ERROR, error
+})
 
 type SetIsSuccessBookingAT = {
   type: typeof SET_IS_SUCCESS_BOOKING
@@ -279,8 +315,20 @@ export const bookConsultation = (
 ): ThunkType => async (dispatch) => {
   try {
     const response = await generalSourcesApi.bookConsultation(values)
-    dispatch(setIsSuccessBookingAC(true))
+    console.log(response.message)
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setBookingConsultationApiErrorAC(''))
+      dispatch(setIsBookingModalOpenAC(false))
+      dispatch(setIsSuccessBookingAC(true))
+      console.log(response.message)
+    } else {
+      dispatch(setBookingConsultationApiErrorAC(response.message))
+      console.log(response.message)
+    }
   } catch (e) {
+    const response = await generalSourcesApi.bookConsultation(values)
+    dispatch(setBookingConsultationApiErrorAC(response.message))
+    console.log(response.message)
     console.log(e)
   }
 }

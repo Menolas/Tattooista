@@ -17,6 +17,8 @@ import {useEffect} from "react";
 import {setIsSuccessAC} from "../../redux/Clients/clients-reducer";
 import {useDispatch} from "react-redux";
 import {setIsSuccessBookingAC} from "../../redux/General/general-reducer";
+import {ModalPopUp} from "../../components/common/ModalPopUp";
+import {BookingApiError} from "../../components/common/BookindApiError";
 
 type PropsType = {
   isAuth: boolean
@@ -27,6 +29,7 @@ type PropsType = {
   pages: Array<PageType>
   isSuccess: boolean
   isSuccessBooking: boolean
+  bookingConsultationApiError: string
   setActiveStyle: (style: TattooStyleType) => void
   editAboutPage: (id: string, values: FormData) => void
   changePageVisibility: (pageId: string, isActive: boolean) => void
@@ -39,6 +42,7 @@ type PropsType = {
   bookConsultation: (values: BookConsultationFormValues) => void
   setIsSuccess: (bol: boolean) => void
   setIsSuccessBooking: (bol: boolean) => void
+  setBookingConsultationApiError: (error: string) => void
 }
 
 export const MainPage: React.FC<PropsType> = React.memo(({
@@ -50,6 +54,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   pages,
   isSuccess,
   isSuccessBooking,
+  bookingConsultationApiError,
   setActiveStyle,
   editAboutPage,
   changePageVisibility,
@@ -61,7 +66,8 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   deleteFaqItem,
   bookConsultation,
   setIsSuccess,
-  setIsSuccessBooking
+  setIsSuccessBooking,
+  setBookingConsultationApiError
 }) => {
   const pageAbout = pages?.find(page => page.name === 'about')
   const successBookingPopUpContent = "You've booked a consultation! We will contact you soon))"
@@ -84,6 +90,16 @@ export const MainPage: React.FC<PropsType> = React.memo(({
             }, 1500)
         }
   }, [isSuccessBooking])
+
+  useEffect(() => {
+    if (bookingConsultationApiError) {
+        setTimeout( () => {
+            setBookingConsultationApiError('')
+        }, 1500)
+    }
+  }, [bookingConsultationApiError])
+
+  console.log(bookingConsultationApiError)
 
   return (
     <>
@@ -121,6 +137,9 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           isSuccess &&
           <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
       }
+        { bookingConsultationApiError && bookingConsultationApiError !== '' &&
+           <BookingApiError/>
+        }
     </>
   )
 })

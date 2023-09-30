@@ -18,7 +18,7 @@ const options = [
 ]
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
+  bookingName: Yup.string()
       .min(2, 'Must be minimum longer two characters')
       .max(30, 'Must be shorter than 31 character')
       .required('Required Field'),
@@ -67,7 +67,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
 
 
   const submit = (values: BookConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
-    console.log("submit hit!!!!!!!!")
     bookConsultation(values)
     if (closeBookingModal) {
       closeBookingModal();
@@ -77,7 +76,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   }
 
   const initialValues: BookConsultationFormValues = {
-    name: '',
+    bookingName: '',
     contact: null,
     email: '',
     phone: '',
@@ -103,7 +102,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
           >
             {/*<pre>{JSON.stringify(propsF, undefined, 2)}</pre>*/}
             <FieldComponent
-              name={'name'}
+              name={'bookingName'}
               type={'text'}
               placeholder={'Your Full Name'}
               value={propsF.values.name}

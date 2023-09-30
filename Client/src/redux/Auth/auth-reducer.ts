@@ -10,13 +10,15 @@ const SET_AUTH = 'SET_AUTH'
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_REGISTRATION_ERROR = 'SET_REGISTRATION_ERROR'
+const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
 
 let initialState = {
   user: {} as IUser | null,
   token: null as string | null | undefined,
   isAuth: false as boolean,
   isSuccess: false as boolean,
-  registrationError: '' as string | undefined
+  registrationError: '' as string | undefined,
+  loginError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -52,6 +54,12 @@ export const authReducer = (
         isSuccess: action.isSuccess
       }
 
+    case SET_LOGIN_ERROR:
+      return {
+        ...state,
+        loginError: action.error
+      }
+
     case SET_REGISTRATION_ERROR:
       return {
         ...state,
@@ -62,16 +70,25 @@ export const authReducer = (
   }
 }
 
-type ActionsTypes = SetRegistrationErrorAT | SetIsSuccessAT | SetTokenAT | SetAdminDataAT | SetAuthAT
+type ActionsTypes = SetLoginErrorAT | SetRegistrationErrorAT | SetIsSuccessAT | SetTokenAT | SetAdminDataAT | SetAuthAT
 
 // actions creators
+
+type SetLoginErrorAT = {
+  type: typeof SET_LOGIN_ERROR
+  error: string | undefined
+}
+
+const setLoginErrorAC = (error: string | undefined): SetLoginErrorAT => ({
+  type: SET_LOGIN_ERROR, error
+})
 
 type SetRegistrationErrorAT = {
   type: typeof  SET_REGISTRATION_ERROR
   error: string | undefined
 }
 
-const setRegistrationErrorAC = (error: string |  undefined): SetRegistrationErrorAT => ({
+const setRegistrationErrorAC = (error: string | undefined): SetRegistrationErrorAT => ({
   type: SET_REGISTRATION_ERROR, error
 })
 
@@ -138,13 +155,14 @@ export const login = (values: LoginFormValues): ThunkType => async (
 ) => {
   try {
     let response = await authAPI.login(values)
-    dispatch(setAdminDataAC(response.user))
+    dispatch(setLoginErrorAC(''))
+    dispatch(setAdminDataAC(response.userData.user))
     dispatch(setAuth(true))
-    dispatch(setAccessTokenAC(response.accessToken))
+    dispatch(setAccessTokenAC(response.userData.accessToken))
 
   } catch (e) {
     // @ts-ignore
-    dispatch(setRegistrationErrorAC(e.response.data.message))
+    dispatch(setLoginErrorAC(e.response.data.message))
     // @ts-ignore
     console.log(e.response.data.message)
   }

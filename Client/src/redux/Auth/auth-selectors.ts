@@ -20,6 +20,10 @@ export const getRegistrationErrorSelector = (state: AppStateType) => {
   return state.auth.registrationError
 }
 
+export const getLoginErrorSelector = (state: AppStateType) => {
+  return state.auth.loginError
+}
+
 //username: null,
 //password: null,
 
