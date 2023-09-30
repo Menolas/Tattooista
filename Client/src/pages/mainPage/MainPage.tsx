@@ -99,7 +99,6 @@ export const MainPage: React.FC<PropsType> = React.memo(({
     }
   }, [bookingConsultationApiError])
 
-  console.log(bookingConsultationApiError)
 
   return (
     <>

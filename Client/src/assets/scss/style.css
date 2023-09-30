@@ -17,6 +17,7 @@ body {
   font-family: "Monseratt", sans-serif;
   color: #fafafa;
   background-color: #080808;
+  overflow: hidden;
 }
 
 div#root {
@@ -85,6 +86,11 @@ img {
   height: 6px;
   backgroundColor: rgba(170, 170, 170, 0.6666666667);
   borderRadius: 6px;
+}
+
+.app {
+  height: 100vh;
+  overflow: auto;
 }
 
 .background-wrap {
@@ -1250,6 +1256,14 @@ img {
     transform: skew(-30deg, -10deg) rotate(-210deg);
   }
 }
+.fixed .advertisement {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
 .advertisement {
   margin: 0 -16px;
   padding: 16px;

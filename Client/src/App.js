@@ -37,7 +37,7 @@ class App extends Component {
   render() {
 
     return (
-      <div className="App">
+      <div className="app" onScroll={console.log("SCROLL!!")}>
           <SmoothScroll>
             <React.Suspense fallback={<Preloader />}>
               <HeaderContainer />
@@ -83,8 +83,6 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  //isAuth: state.auth.isAuth,
-  //token: state.auth.token,
   initialized: state.app.initialized
 })
 
@@ -93,16 +91,12 @@ const AppContainer = compose(
   connect(mapStateToProps, { initializeApp, checkAuth })
 )(App);
 
-const AhTattooistaApp = (props) => {
+export const AhTattooistaApp = (props) => {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Provider store={store}>
         <AppContainer />
       </Provider>
     </BrowserRouter>
-  );
+  )
 }
-
-//basename={process.env.PUBLIC_URL}
-
-export default AhTattooistaApp
