@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {useDispatch, Provider} from 'react-redux'
 import { compose } from 'redux'
 import { Route, Routes, HashRouter, BrowserRouter } from 'react-router-dom'
@@ -27,6 +27,8 @@ import {checkAuth} from './redux/Auth/auth-reducer'
 
 const App = () => {
 
+    const [scrollTop, setScrollTop] = useState(0)
+
     const dispatch = useDispatch()
 
     useEffect( () => {
@@ -34,8 +36,19 @@ const App = () => {
 
     }, [])
 
+    const handleScroll = event => {
+        console.log("SCROLL!!")
+        setScrollTop(event.currentTarget.scrollTop)
+    }
+
     return (
-        <div className="app" onScroll={console.log("SCROLL!!")}>
+        <div
+            className={scrollTop !== 0 ? "app fixed" : "app"}
+            onScroll={(e) => {
+                console.log("SCROLL!!")
+                handleScroll(e)
+            }}
+        >
             <SmoothScroll>
                 <React.Suspense fallback={<Preloader />}>
                     <HeaderContainer />
