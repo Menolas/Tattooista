@@ -3,6 +3,7 @@ import { Advertisement } from '../../components/Portfolio/Advertisement'
 import { Gallery } from '../../components/Portfolio/Gallery'
 import { TattooStyles } from '../../components/Portfolio/TattooStyles'
 import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
+import {useState} from "react";
 
 type PropsType = {
   isAuth: boolean
@@ -52,8 +53,18 @@ export const Portfolio: React.FC<PropsType> = ({
   setIsSuccess
 }) => {
 
+  const [scrollTop, setScrollTop] = useState(0)
+
+  const handleScroll = event => {
+    console.log("SCROLL!!")
+    setScrollTop(event.currentTarget.scrollTop)
+  }
+
   return (
-    <>
+    <div
+        className={scrollTop > 0 ? "fixed" : ""}
+        onScroll={() => {console.log("SCROLL!!")}}
+    >
       <TattooStyles
         isAuth={isAuth}
         isSuccess={isSuccess}
@@ -89,6 +100,6 @@ export const Portfolio: React.FC<PropsType> = ({
         isDeletingInProcess={isDeletingInProcess}
         setIsSuccess={setIsSuccess}
       />
-    </>
+    </div>
   )
 }

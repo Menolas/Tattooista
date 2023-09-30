@@ -4,6 +4,7 @@ body {
   font-family: 'Monseratt', sans-serif;
   color: $light-text;
   background-color: $dark;
+  overflow: hidden;
 }
 
 div#root {
@@ -70,4 +71,9 @@ img {
   height: 6px;
   backgroundColor: #aaaa;
   borderRadius: 6px;
+}
+
+.app {
+  height: 100vh;
+  overflow: auto;
 }

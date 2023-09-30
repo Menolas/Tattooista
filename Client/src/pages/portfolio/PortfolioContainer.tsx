@@ -51,7 +51,6 @@ export const PortfolioContainer: React.FC = () =>  {
     }
     dispatch(getTattooStyles())
     dispatch(getActualPortfolio(activeStyle, currentPage, pageSize))
-    console.log(activeStyle)
   }, [activeStyle, currentPage, pageSize])
 
   // useEffect(() => {
