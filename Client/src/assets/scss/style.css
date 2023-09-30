@@ -89,6 +89,7 @@ img {
 }
 
 .app {
+  position: relative;
   height: 100vh;
   overflow: auto;
 }
@@ -1261,7 +1262,8 @@ img {
   top: 0;
   left: 0;
   right: 0;
-  width: 100%;
+  margin: 0;
+  z-index: 100;
 }
 
 .advertisement {

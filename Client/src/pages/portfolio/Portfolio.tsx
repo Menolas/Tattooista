@@ -53,18 +53,8 @@ export const Portfolio: React.FC<PropsType> = ({
   setIsSuccess
 }) => {
 
-  const [scrollTop, setScrollTop] = useState(0)
-
-  const handleScroll = event => {
-    console.log("SCROLL!!")
-    setScrollTop(event.currentTarget.scrollTop)
-  }
-
   return (
-    <div
-        className={scrollTop > 0 ? "fixed" : ""}
-        onScroll={() => {console.log("SCROLL!!")}}
-    >
+    <div>
       <TattooStyles
         isAuth={isAuth}
         isSuccess={isSuccess}
