@@ -10,9 +10,12 @@ const instance = axios.create({
 } as CreateAxiosDefaults)
 
 type LoginResponseType = {
-    user: IUser,
-    accessToken: string,
-    refreshToken: string,
+    resultCode?: number
+    userData: {
+        user: IUser
+        accessToken: string
+        refreshToken: string
+    }
     error?: string
 }
 

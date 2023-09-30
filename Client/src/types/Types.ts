@@ -68,7 +68,7 @@ export interface LoginFormValues {
 }
 
 export interface BookConsultationFormValues  {
-    name: string,
+    bookingName: string,
     contact: string
     email: string
     phone: string

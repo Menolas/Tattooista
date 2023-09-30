@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MainPage } from './MainPage'
 import { BookConsultationFormValues, FaqType, TattooStyleType} from '../../types/Types'
 import {
+  getBookingConsultationApiErrorSelector,
   getFaqItemsSelector,
   getIsSuccessBookingSelector,
   getPagesSelector,
@@ -23,7 +24,7 @@ import {
   deleteFaqItem,
   bookConsultation,
   setIsSuccessAC,
-  setIsSuccessBookingAC
+  setIsSuccessBookingAC, setBookingConsultationApiErrorAC
 } from '../../redux/General/general-reducer'
 import { getTattooStyles, setActiveStyleAC } from '../../redux/Portfolio/portfolio-reducer'
 import {getGalleryPageSize, getTattooStylesSelector} from '../../redux/Portfolio/portfolio-selectors'
@@ -39,6 +40,7 @@ export const MainPageContainer: React.FC = () =>  {
   const pages = useSelector(getPagesSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
   const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
+  const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
 
   const dispatch = useDispatch()
 
@@ -97,6 +99,10 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(setIsSuccessBookingAC(bol))
   }
 
+  const setBookingConsultationApiErrorCallBack = (error: string) => {
+    dispatch(setBookingConsultationApiErrorAC(error))
+  }
+
   return (
     <MainPage
       isAuth={isAuth}
@@ -119,6 +125,8 @@ export const MainPageContainer: React.FC = () =>  {
       bookConsultation={bookConsultationCallBack}
       setIsSuccess={setIsSuccessCallBack}
       setIsSuccessBooking={setIsSuccessBookingCallBack}
+      bookingConsultationApiError={bookingConsultationApiError}
+      setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
     />
   )
 }

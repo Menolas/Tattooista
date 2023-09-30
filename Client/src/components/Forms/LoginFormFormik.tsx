@@ -19,12 +19,14 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
   isAuth: boolean
   registrationError: string
+  loginError: string
   login: (values: LoginFormValues) => void
 }
 
 export const LoginForm: React.FC<PropsType> = React.memo(({
   isAuth,
   registrationError,
+  loginError,
   login
 }) => {
 
@@ -56,8 +58,8 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
             <h3 className="form__title">
               Login
             </h3>
-            { registrationError  !== '' &&
-                <ApiErrorMessage message={registrationError}/>
+            { loginError  !== '' &&
+                <ApiErrorMessage message={loginError}/>
             }
             <FieldComponent
                 name={'email'}
