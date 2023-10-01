@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
-import {ErrorMessage, Field, Form, Formik} from 'formik'
+import { Field, Form, Formik} from 'formik'
 import * as yup from 'yup'
-import {ErrorMessageWrapper} from '../../utils/validators'
 import {SERVER_URL} from '../../utils/constants'
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
