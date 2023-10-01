@@ -132,13 +132,12 @@ export const MainPage: React.FC<PropsType> = React.memo(({
       { isSuccessBooking &&
         <SuccessPopUp closeModal={setIsSuccess} content={successBookingPopUpContent}/>
       }
-      {
-          isSuccess &&
-          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
+      { isSuccess &&
+        <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
       }
-        { bookingConsultationApiError && bookingConsultationApiError !== '' &&
-           <BookingApiError/>
-        }
+      { bookingConsultationApiError && bookingConsultationApiError !== '' &&
+        <BookingApiError error={bookingConsultationApiError}/>
+      }
     </>
   )
 })

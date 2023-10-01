@@ -321,15 +321,12 @@ export const bookConsultation = (
       dispatch(setIsBookingModalOpenAC(false))
       dispatch(setIsSuccessBookingAC(true))
       console.log(response.message)
-    } else {
-      dispatch(setBookingConsultationApiErrorAC(response.message))
-      console.log(response.message)
     }
   } catch (e) {
-    const response = await generalSourcesApi.bookConsultation(values)
-    dispatch(setBookingConsultationApiErrorAC(response.message))
-    console.log(response.message)
-    console.log(e)
+    // @ts-ignore
+    dispatch(setBookingConsultationApiErrorAC(e.response.data.message))
+    // @ts-ignore
+    console.log(e.response.data.message)
   }
 }
 
