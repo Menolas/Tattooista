@@ -1,10 +1,15 @@
 import * as React from 'react'
 
-export const BookingApiError = () => {
+type PropsType = {
+    error: string
+}
+
+export const BookingApiError: React.FC<PropsType> = ({error}) => {
     return (
-        <div className="modal-wrap successPopUp">
+        <div className="modal-wrap bookingApiError">
             <div className="modal-wrap__inner-block">
                 <p>Sorry, but something went wrong, please try a bit later</p>
+                <p>{error}</p>
             </div>
         </div>
     )

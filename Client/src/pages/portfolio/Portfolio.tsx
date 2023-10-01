@@ -3,7 +3,8 @@ import { Advertisement } from '../../components/Portfolio/Advertisement'
 import { Gallery } from '../../components/Portfolio/Gallery'
 import { TattooStyles } from '../../components/Portfolio/TattooStyles'
 import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {BookingApiError} from "../../components/common/BookindApiError";
 
 type PropsType = {
   isAuth: boolean
@@ -16,6 +17,7 @@ type PropsType = {
   activeStyle: TattooStyleType
   gallery: Array<GalleryItemType>
   isSuccess: boolean
+  bookingConsultationApiError: string
   setPageSize: (pageSize: number) => void
   bookConsultation: (values: BookConsultationFormValues) => void
   updateGallery: (values: any) => void
@@ -27,6 +29,7 @@ type PropsType = {
   deleteTattooStyle: (id: string) => void
   archiveGalleryItem: (id: string) => void
   setIsSuccess: (bol: boolean) => void
+  setBookingConsultationApiError: (error: string) => void
 }
 
 export const Portfolio: React.FC<PropsType> = ({
@@ -40,6 +43,7 @@ export const Portfolio: React.FC<PropsType> = ({
   activeStyle,
   gallery,
   isSuccess,
+  bookingConsultationApiError,
   setPageSize,
   bookConsultation,
   updateGallery,
@@ -50,8 +54,17 @@ export const Portfolio: React.FC<PropsType> = ({
   editTattooStyle,
   deleteTattooStyle,
   archiveGalleryItem,
-  setIsSuccess
+  setIsSuccess,
+  setBookingConsultationApiError
 }) => {
+
+  useEffect(() => {
+    if (bookingConsultationApiError) {
+      setTimeout( () => {
+        setBookingConsultationApiError('')
+      }, 1500)
+    }
+  }, [bookingConsultationApiError])
 
   return (
     <div>
@@ -90,6 +103,10 @@ export const Portfolio: React.FC<PropsType> = ({
         isDeletingInProcess={isDeletingInProcess}
         setIsSuccess={setIsSuccess}
       />
+
+      { bookingConsultationApiError && bookingConsultationApiError !== '' &&
+          <BookingApiError error={bookingConsultationApiError}/>
+      }
     </div>
   )
 }

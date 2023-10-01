@@ -28,7 +28,8 @@ import {
 import { Portfolio } from './Portfolio'
 import {getAuthSelector} from '../../redux/Auth/auth-selectors'
 import {getIsSuccessSelector} from '../../redux/bookedConsultations/bookedConsultations-selectors'
-import {bookConsultation, setIsSuccessAC} from "../../redux/General/general-reducer";
+import {bookConsultation, setBookingConsultationApiErrorAC, setIsSuccessAC} from "../../redux/General/general-reducer";
+import {getBookingConsultationApiErrorSelector} from "../../redux/General/general-selectors";
 
 export const PortfolioContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector)
@@ -41,6 +42,7 @@ export const PortfolioContainer: React.FC = () =>  {
   const activeStyle = useSelector(getActiveStyleSelector)
   const gallery = useSelector(getGallery)
   const isSuccess = useSelector(getIsSuccessSelector)
+  const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
 
   const dispatch = useDispatch()
   //const navigate = useNavigate()
@@ -101,6 +103,10 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(setIsSuccessAC(bol))
   }
 
+  const setBookingConsultationApiErrorCallBack = (error: string) => {
+    dispatch(setBookingConsultationApiErrorAC(error))
+  }
+
   return (
     <Portfolio
       isAuth={isAuth}
@@ -113,6 +119,7 @@ export const PortfolioContainer: React.FC = () =>  {
       activeStyle={activeStyle}
       gallery={gallery}
       isSuccess={isSuccess}
+      bookingConsultationApiError={bookingConsultationApiError}
       setPageSize={setGalleryPageSizeCallBack}
       bookConsultation={bookConsultationCallBack}
       updateGallery={adminUpdateGalleryCallBack}
@@ -124,6 +131,7 @@ export const PortfolioContainer: React.FC = () =>  {
       deleteTattooStyle={deleteTattooStyleCallBack}
       archiveGalleryItem={archiveGalleryItemCallBack}
       setIsSuccess={setIsSuccessCallBack}
+      setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
     />
   )
 }

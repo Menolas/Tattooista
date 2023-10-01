@@ -1752,6 +1752,12 @@ img {
     width: 705px;
   }
 }
+.modal-wrap.bookingApiError {
+  text-align: center;
+  color: #080808;
+  font-weight: 600;
+}
+
 .booking-modal .booking__form-modal-wrap {
   position: relative;
   padding: 60px 36px;
