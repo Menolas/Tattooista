@@ -23,6 +23,7 @@ type PropsType = {
   bookedConsultationsFilter: BookedConsultationsFilterType
   isStatusChanging?: Array<string>
   isDeletingInProcess?: Array<string>
+  addBookingApiError: string | undefined
   setCurrentPage: (page: number) => void
   onFilterChanged: (filter: BookedConsultationsFilterType) => void
   changeStatus: (id: string, status: boolean) => void
@@ -44,6 +45,7 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
   bookedConsultationsFilter,
   isStatusChanging,
   isDeletingInProcess,
+  addBookingApiError,
   setCurrentPage,
   onFilterChanged,
   changeStatus,
@@ -129,6 +131,7 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
                   closeModal={closeModal}
               >
                   <AddConsultationForm
+                      addBookingApiError={addBookingApiError}
                     addBookedConsultation={addBookedConsultation}
                     closeBookingModal={closeModal}
                   />

@@ -112,9 +112,14 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
             <FieldWrapper
                 wrapperClass={'booking__input-wrap'}
                 name={"contact"}
-                label={'Choose the way you want me to contact you'}
+                //label={'Choose the way you want me to contact you'}
             >
-              <FormSelect name="contact" options={options} handleChange={handleChange} />
+              <FormSelect
+                  name="contact"
+                  options={options}
+                  handleChange={handleChange}
+                  placeholder={'Choose the way you want me to contact you'}
+              />
             </FieldWrapper>
             { contactInput &&
                 <FieldComponent

@@ -302,3 +302,19 @@ input[type="checkbox"]:checked+label .checkbox::after {
     font-weight: 700;
   }
 }
+
+.form__input-wrap {
+  .css-1nmdiq5-menu {
+    margin: 0;
+    font-family: "Monseratt", sans-serif;
+    border: $dark-border;
+    border-radius: 0;
+    border-top: none;
+
+    .css-1n6sfyn-MenuList > div {
+      color: $medium;
+      font-weight: 600;
+    }
+  }
+}
+

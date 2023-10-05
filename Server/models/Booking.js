@@ -21,7 +21,7 @@ const BookingSchema = new mongoose.Schema({
   contacts: {
     email: {
       type: String,
-      default: null
+      unique: true
     },
     insta: {
       type: String,
@@ -29,11 +29,11 @@ const BookingSchema = new mongoose.Schema({
     },
     phone: {
       type: String,
-      default: null
+      unique: true,
     },
     whatsapp: {
       type: String,
-      default: null
+      unique: true,
     },
     messenger: {
       type: String,
