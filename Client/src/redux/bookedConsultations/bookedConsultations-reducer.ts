@@ -23,6 +23,7 @@ const DELETE_CONSULTATION = 'DELETE_CONSULTATION'
 const DELETE_ARCHIVED_CONSULTATION = 'DELETE_ARCHIVED_CONSULTATION'
 const ADD_CONSULTATION = 'ADD_CONSULTATION'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
+const SET_ADD_BOOKING_API_ERROR = 'SET_ADD_BOOKING_API_ERROR'
 
 let initialState = {
   bookedConsultations: [] as Array<BookedConsultationType>,
@@ -44,7 +45,8 @@ let initialState = {
     term: '' as string | null,
     status: 'null' as string | null
   },
-  isSuccess: false as boolean
+  isSuccess: false as boolean,
+  addBookingApiError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -170,11 +172,17 @@ export const bookedConsultationsReducer = (
         isSuccess: action.isSuccess
       }
 
+    case SET_ADD_BOOKING_API_ERROR:
+      return {
+        ...state,
+        addBookingApiError: action.error
+      }
+
     default: return state
   }
 }
 
-type ActionsTypes = SetIsSuccessAT | SetBookedConsultationsPageSizeAT | SetArchivedConsultationsPageSizeAT |
+type ActionsTypes = SetAddBookingApiErrorAT | SetIsSuccessAT | SetBookedConsultationsPageSizeAT | SetArchivedConsultationsPageSizeAT |
     SetBookedConsultationsFilterAT | SetArchivedConsultationsFilterAT
     | SetBookedConsultationsAT | SetArchivedConsultationsAT | SetCurrentPageForBookedConsultationsAT |
     SetCurrentPageForArchivedConsultationsAT | SetBookedConsultationsTotalCountAT | SetArchivedConsultationsTotalCountAT |
@@ -182,6 +190,15 @@ type ActionsTypes = SetIsSuccessAT | SetBookedConsultationsPageSizeAT | SetArchi
     ToggleIsDeletingInProcessAT | DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT
 
 // actions creators
+
+type SetAddBookingApiErrorAT = {
+  type: typeof SET_ADD_BOOKING_API_ERROR
+  error: string | undefined
+}
+
+export const setAddBookingApiErrorAC = (error: string | undefined): SetAddBookingApiErrorAT => ({
+  type: SET_ADD_BOOKING_API_ERROR, error
+})
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
@@ -473,6 +490,8 @@ export const addBookedConsultation = (
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAddBookingApiErrorAC(e.response.data.message))
     console.log(e)
   }
 }

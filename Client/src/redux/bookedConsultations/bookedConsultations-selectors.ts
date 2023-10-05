@@ -58,3 +58,7 @@ export const getArchivedConsultationsFilterSelector = (state: AppStateType) => {
 export const getIsSuccessSelector = (state: AppStateType) => {
   return state.bookedConsultations.isSuccess
 }
+
+export const getAddBookingApiErrorSelector = (state: AppStateType) => {
+  return state.bookedConsultations.addBookingApiError
+}

@@ -21,7 +21,7 @@ import {
   getBookedConsultationsFilterSelector,
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
-  getIsSuccessSelector
+  getIsSuccessSelector, getAddBookingApiErrorSelector
 } from '../../../redux/bookedConsultations/bookedConsultations-selectors'
 import { BookedConsultations } from './BookedConsultations'
 import {AddConsultationFormValues, ContactsType} from '../../../types/Types'
@@ -37,6 +37,7 @@ export const BookedConsultationsContainer: React.FC = () => {
   const isStatusChanging = useSelector(getIsStatusChangingSelector)
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
+  const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
 
   const dispatch = useDispatch()
   //const navigate = useNavigate()
@@ -125,6 +126,7 @@ export const BookedConsultationsContainer: React.FC = () => {
         addBookedConsultation={addBookedConsultationCallBack}
         archiveConsultation={archiveConsultationCallBack}
         setIsSuccess={setIsSuccessCallBack}
+        addBookingApiError={addBookingApiError}
       />
   )
 }
