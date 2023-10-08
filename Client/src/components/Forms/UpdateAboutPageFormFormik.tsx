@@ -56,6 +56,8 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
         closeModal()
     }
 
+    console.log(`${SERVER_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`)
+
     return (
         <Formik
             initialValues={initialValues}

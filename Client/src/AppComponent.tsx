@@ -37,7 +37,7 @@ const App = () => {
     }, [])
 
     const handleScroll = event => {
-        console.log("SCROLL!!")
+        //console.log("SCROLL!!")
         setScrollTop(event.currentTarget.scrollTop)
     }
 
@@ -45,7 +45,6 @@ const App = () => {
         <div
             className={scrollTop !== 0 ? "app fixed" : "app"}
             onScroll={(e) => {
-                console.log("SCROLL!!")
                 handleScroll(e)
             }}
         >

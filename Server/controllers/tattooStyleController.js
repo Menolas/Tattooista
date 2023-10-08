@@ -81,14 +81,12 @@ class tattooStyleController {
           if (err) console.log(err)
         })
         await file.mv(`./uploads/wallpapers/${res.tattooStyle._id}/${newFileName}`, err => {
-          res.tattooStyle.wallPaper = newFileName
-          console.log(res.tattooStyle.wallPaper + "!!!!!!!!!!!!!!!")
-          res.tattooStyle.save()
+          if (err) console.log(err)
         })
-        //await res.category.save()
+        res.tattooStyle.wallPaper = newFileName
       }
       results.resultCode = 0
-      results.tattooStyles = res.tattooStyle
+      results.tattooStyle = await res.tattooStyle.save()
       res.status(201).json(results)
     } catch (err) {
       console.log(err)

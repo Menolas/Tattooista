@@ -36,6 +36,12 @@ type AddTattooStylesResponseType = {
     tattooStyle: TattooStyleType
 }
 
+type EditTattooStyleResponseType = {
+    resultCode: number
+    message?: string
+    tattooStyle: TattooStyleType
+}
+
 export const portfolioApi = {
 
     getTattooStyles() {
@@ -59,7 +65,7 @@ export const portfolioApi = {
         id: string,
         values: FormData
     ) {
-        return instance.post<AddTattooStylesResponseType>(`tattooStyle/${id}`, values)
+        return instance.post<EditTattooStyleResponseType>(`tattooStyle/${id}`, values)
             .then(response => {
                 return response.data
             })
