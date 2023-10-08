@@ -4,7 +4,6 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 const errorMiddleware = require('./middlewares/errorMiddleware')
-
 const fileUpload = require('express-fileupload')
 
 const app = express()
