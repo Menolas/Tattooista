@@ -53,6 +53,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const [ editGalleryMode, setEditGalleryMode] = useState(false)
   const successPopUpContent = `You successfully added images to ${activeStyle.value} style gallery`
 
+
   const dispatch = useDispatch()
 
   const showBigImg = (fileName) => {
@@ -98,12 +99,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           </div>
           {isAuth &&
             <div className={"gallery__item-actions"}>
-              {/*<button*/}
-              {/*    className={"btn btn--icon"}*/}
-              {/*    onClick={() => {deleteGalleryItem(item.fileName)}}*/}
-              {/*>*/}
-              {/*    <svg><use href={`${Sprite}#edit`}/></svg>*/}
-              {/*</button>*/}
+              <button
+                  className={"btn btn--icon"}
+                  //onClick={() => {deleteGalleryItem(item.fileName)}}
+              >
+                  <svg><use href={`${Sprite}#edit`}/></svg>
+              </button>
               <button
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}

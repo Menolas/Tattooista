@@ -83,10 +83,12 @@ class PagesController {
           if (err) console.log(err)
         })
         await file.mv(`./uploads/pageWallpapers/${res.page._id}/${newFileName}`, err => {
-          res.page.wallPaper = newFileName
-          res.page.save()
+          if (err) console.log(err)
         })
+        res.page.wallPaper = newFileName
+        //res.page.save()
       }
+
       await res.page.save()
       results.resultCode = 0
       results.pages = await Page.find()

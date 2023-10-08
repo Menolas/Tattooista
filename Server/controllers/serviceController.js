@@ -52,9 +52,9 @@ class serviceController {
           if (err) console.log(err)
         })
         await file.mv(`./uploads/serviceWallpapers/${res.service._id}/${newFileName}`, err => {
-          res.service.wallPaper = newFileName
-          res.service.save()
+          if (err) console.log(err)
         })
+        res.service.wallPaper = newFileName
       }
       await res.service.save()
       results.resultCode = 0
