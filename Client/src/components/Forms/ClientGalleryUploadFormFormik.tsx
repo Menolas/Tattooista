@@ -11,7 +11,7 @@ import Sprite from '../../assets/svg/sprite.svg'
 type PropsType = {
   profileId: string
   gallery?: Array<string>
-  isDeletingInProcess: Array<string>
+  isDeletingPicturesInProcess: Array<string>
   closeModal: () => void
   updateClientGallery: (clientId: string, values: any) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
@@ -20,13 +20,11 @@ type PropsType = {
 export const ClientGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
 profileId,
 gallery,
-isDeletingInProcess,
+isDeletingPicturesInProcess,
 updateClientGallery,
 deleteClientGalleryPicture,
 closeModal
 }) => {
-
-  console.log(isDeletingInProcess + "isDeletingInProcess!!!!!!!!")
 
   const [imageURLS, setImageURLS] = useState([])
 
@@ -72,9 +70,8 @@ closeModal
                       <li className={"client-gallery__item"} key={i}>
                         <button
                             className={"btn btn--icon btn--icon--light"}
-                            disabled={isDeletingInProcess?.some(id => id === item)}
+                            disabled={isDeletingPicturesInProcess?.some(id => id === item)}
                             onClick={(event) => {
-                              console.log(isDeletingInProcess + "isDeletingInProcess!!!!!!!!")
                               event.preventDefault()
                               deleteClientGalleryPicture(profileId, item)
                             }}
@@ -89,16 +86,6 @@ closeModal
             </ul>
             <div className="form__input-wrap">
               <ul className={"list client-gallery"}>
-                { imageURLS?.length === 0 &&
-                  <li className={"client-gallery__item"}>
-                    <img
-                        className="client-profile__gallery-image"
-                        src={tattooMachine}
-                        alt="preview"
-                        height="50"
-                    />
-                  </li>
-                }
                 {
                   imageURLS?.map((item, index) => {
                     return (

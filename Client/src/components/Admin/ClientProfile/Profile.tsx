@@ -17,7 +17,9 @@ import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer";
 type PropsType = {
   isSuccess: boolean
   profile: ClientType
-  deleteClient: (clientId: string) => void,
+  isDeletingInProcess: Array<string>
+  isDeletingPicturesInProcess: Array<string>
+  deleteClient: (clientId: string) => void
   editClient: (clientId: string, values: FormData) => void
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
@@ -27,6 +29,8 @@ type PropsType = {
 export const Profile: React.FC<PropsType> = React.memo(({
     isSuccess,
     profile,
+    isDeletingInProcess,
+    isDeletingPicturesInProcess,
     deleteClient,
     editClient,
     updateClientGallery,
@@ -113,6 +117,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
           <NavLink
               className="btn btn--icon"
               to={'/admin/clients'}
+              //disabled={isDeletingInProcess?.some(id => id === item)}
               onClick={() => { deleteClient(profile._id) }}
           >
             <svg><use href={`${Sprite}#trash`}/></svg>
@@ -149,6 +154,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
             <ClientGalleryUploadFormFormik
                 profileId={profile._id}
                 gallery={profile.gallery}
+                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 updateClientGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 closeModal={closeModal}

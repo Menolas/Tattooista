@@ -14,7 +14,7 @@ class galleryController {
     let gallery = []
     const results = {}
     try {
-      gallery = await GalleryItem.find({categories: style}).sort({createdAt: -1})
+      gallery = await GalleryItem.find({tattooStyles: style}).sort({createdAt: -1})
       results.resultCode = 0
       results.totalCount = gallery.length
       results.gallery = gallery.slice(startIndex, endIndex)
@@ -91,15 +91,14 @@ class galleryController {
     await gallery.forEach((item) => {
       const newGalleryItem = new GalleryItem({
         fileName: item.toString(),
-        categories: [req.params.style]
+        tattooStyles: [req.params.style]
       })
       newGalleryItem.save()
     })
 
     try {
-      //const newGallery = await GalleryItem.find({categories: req.params.style})
       results.resultCode = 0
-      results.gallery = await GalleryItem.find({categories: req.params.style})
+      results.gallery = await GalleryItem.find({tattooStyles: req.params.style})
       console.log(results.gallery)
       res.json(results)
     } catch (err) {
@@ -112,7 +111,7 @@ class galleryController {
   async archiveGalleryItem(req, res) {
     const archivedGalleryItem = new ArchivedGalleryItem({
       fileName: res.galleryItem.fileName,
-      categories: res.galleryItem.categories
+      tattooStyles: res.galleryItem.tattooStyles
     })
 
     const oldPath = `./uploads/gallery/${res.galleryItem.fileName}`
@@ -139,7 +138,7 @@ class galleryController {
   async reactivateGalleryItem(req, res) {
     const galleryItem = new GalleryItem({
       fileName: res.galleryItem.fileName,
-      categories: res.galleryItem.categories
+      tattooStyles: res.galleryItem.tattooStyles
     })
 
     const results = {}

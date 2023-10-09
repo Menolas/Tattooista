@@ -803,7 +803,11 @@ img {
   width: 260px;
   height: 260px;
   background-size: cover;
+  filter: grayscale(100%);
   z-index: 1;
+}
+.about__img-wrap:hover {
+  filter: none;
 }
 
 .about__img-wrap-decor {
@@ -901,11 +905,10 @@ img {
   height: 300px;
   background-image: url("../img/service.png");
   background-size: cover;
+  filter: grayscale(100%);
 }
-.services__article-img-wrap img {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
+.services__article-img-wrap:hover {
+  filter: none;
 }
 
 .services__item-list {
@@ -1489,6 +1492,9 @@ img {
   overflow: hidden;
   cursor: pointer;
   filter: grayscale(1);
+}
+.gallery__item .gallery__img-wrap:hover {
+  filter: none;
 }
 .gallery__item .gallery__item-actions {
   display: flex;

@@ -34,6 +34,10 @@
     overflow: hidden;
     cursor: pointer;
     filter: grayscale(1);
+
+    &:hover {
+      filter: none;
+    }
   }
 
   .gallery__item-actions {

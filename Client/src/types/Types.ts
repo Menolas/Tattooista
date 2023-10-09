@@ -53,7 +53,7 @@ export type TattooStyleType = {
 export type GalleryItemType = {
     _id: string
     fileName: string
-    categories: Array<String>
+    tattooStyles: Array<String>
 }
 
 export interface RegistrationFormValues {

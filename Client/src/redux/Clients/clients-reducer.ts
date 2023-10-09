@@ -16,6 +16,7 @@ const SET_FILTER_FOR_ARCHIVED_CLIENTS = 'SET_FILTER_FOR_ARCHIVED_CLIENTS'
 const SET_TOTAL_CLIENTS_COUNT = 'SET_TOTAL_CLIENTS_COUNT'
 const SET_ARCHIVED_CLIENTS_TOTAL_COUNT = 'SET_TOTAL_ARCHIVED_CLIENTS_COUNT'
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS'
+const TOGGLE_IS_DELETING_PICTURES_IN_PROCESS = 'TOGGLE_IS_DELETING_PICTURE_IN_PROGRESS'
 const DELETE_CLIENT = 'DELETE_CLIENT'
 const DELETE_ARCHIVED_CLIENT = 'DELETE_ARCHIVED_CLIENT'
 const EDIT_CLIENT = 'EDIT_CLIENT'
@@ -35,6 +36,7 @@ let initialState = {
   currentArchivedClientsPage: 1 as number,
   clientsIsFetching: false,
   isDeletingInProcess: [] as Array<string>,
+  isDeletingPicturesInProcess: [] as Array<string>,
   clientsFilter: {
     term: '' as string | null,
     gallery: "any" as string | null
@@ -160,6 +162,14 @@ export const clientsReducer = (
             : state.isDeletingInProcess.filter(id => id !== action.id)
       }
 
+    case TOGGLE_IS_DELETING_PICTURES_IN_PROCESS:
+      return {
+        ...state,
+        isDeletingPicturesInProcess: action.isFetching
+            ? [...state.isDeletingPicturesInProcess, action.id]
+            : state.isDeletingPicturesInProcess.filter(id => id !== action.id)
+      }
+
     case SET_CLIENT_PROFILE:
       return {
         ...state,
@@ -180,7 +190,7 @@ export const clientsReducer = (
 type ActionsTypes = SetIsSuccessAT | SetClientsPageSizeAT | SetArchivedClientsPageSizeAT |
     SetClientsFilterAT | SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT |
     SetArchivedClientsAT | SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT |
-    SetArchivedClientsTotalCountAT | ToggleIsDeletingInProcessAT |
+    SetArchivedClientsTotalCountAT | ToggleIsDeletingInProcessAT | ToggleIsDeletingPicturesInProcessAT |
     SetIsFetchingAT | DeleteClientAT | DeleteArchivedClientAT | EditClientAT |
     AddClientAT | SetClientProfileAT
 
@@ -293,17 +303,25 @@ const setArchivedClientsTotalCount = (count: number): SetArchivedClientsTotalCou
   type: SET_ARCHIVED_CLIENTS_TOTAL_COUNT, count
 })
 
+type ToggleIsDeletingPicturesInProcessAT = {
+  type: typeof TOGGLE_IS_DELETING_PICTURES_IN_PROCESS
+  isFetching: boolean,
+  id: string
+}
+
+const toggleIsDeletingPicturesInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingPicturesInProcessAT  => ({
+  type: TOGGLE_IS_DELETING_PICTURES_IN_PROCESS, isFetching, id
+})
+
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
   isFetching: boolean,
   id: string
 }
 
-const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
-    {
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
       type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
-    }
-)
+})
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
@@ -533,7 +551,7 @@ export const deleteClientGalleryPicture = (
 ): ThunkType => async (dispatch) => {
   console.log("It is a hit on deleting!!!!")
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, picture))
+    dispatch(toggleIsDeletingPicturesInProcessAC(true, picture))
     let response = await clientsAPI.deleteClientGalleryPicture(id, picture)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client))
@@ -542,7 +560,7 @@ export const deleteClientGalleryPicture = (
   } catch (e) {
     console.log(e)
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, picture))
+    dispatch(toggleIsDeletingPicturesInProcessAC(false, picture))
   }
 }
 

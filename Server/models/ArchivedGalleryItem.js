@@ -6,7 +6,7 @@ const ArchivedGalleryItem = new Schema({
     unique: false,
     required: true
   },
-  categories: [{
+  tattooStyles: [{
     type: String,
     ref: 'Category'
   }],

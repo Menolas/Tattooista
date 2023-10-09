@@ -10,13 +10,19 @@ import {
   deleteClientGalleryPicture
 } from '../../../redux/Clients/clients-reducer'
 import { Profile } from './Profile'
-import { getClientProfileSelector, getIsSuccessSelector } from '../../../redux/Clients/clients-selectors'
-import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer";
+import {
+  getClientProfileSelector, getIsClientDeletingInProcessSelector,
+  getIsDeletingPicturesInProcess,
+  getIsSuccessSelector
+} from '../../../redux/Clients/clients-selectors'
+import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer"
 
 export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
+  const isDeletingInProcess =useSelector(getIsClientDeletingInProcessSelector)
+  const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -58,6 +64,8 @@ export const ProfileContainer: React.FC = () => {
     <Profile
       isSuccess={isSuccess}
       profile={profile}
+      isDeletingInProcess={isDeletingInProcess}
+      isDeletingPicturesInProcess={isDeletingPicturesInProcess}
       deleteClient={deleteClientCallBack}
       editClient={editClientCallBack}
       updateClientGallery={updateClientGalleryCallBack}
