@@ -118,11 +118,12 @@ export const portfolioApi = {
             })
     },
 
-    adminUpdateGallery(style: string, values: FormData) {
+    adminUpdateGallery(style: string, gallery: FormData) {
+        console.log(gallery)
         return instance.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
-          values
+          gallery
         ).then(response => {
-            console.log(response.data + "API !!!!!!!")
+            //console.log(response.data + "API !!!!!!!")
             return response.data
         })
     },
