@@ -23,7 +23,7 @@ const SUPPORTED_FORMATS = [
 const validationSchema = yup.object().shape({
   gallery: yup
       .mixed()
-      .required("A file is required")
+      .required("Pick some files")
       // .test(
       //     "fileSize",
       //     "File too large",

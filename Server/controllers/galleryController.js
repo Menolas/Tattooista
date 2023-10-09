@@ -15,6 +15,7 @@ class galleryController {
     const results = {}
     try {
       gallery = await GalleryItem.find({tattooStyles: style}).sort({createdAt: -1})
+      console.log(gallery)
       results.resultCode = 0
       results.totalCount = gallery.length
       results.gallery = gallery.slice(startIndex, endIndex)
@@ -70,7 +71,8 @@ class galleryController {
   }
 
   async addGalleryItems(req, res) {
-    if (!req.body.gallery) {
+    //console.log(req.files + "!!!!!!!!!files")
+    if (!req.body) {
       return res.status(400).send({
         message: "Data to update can not be empty!"
       })
@@ -83,7 +85,6 @@ class galleryController {
     for (let key in files) {
       const fileNewName = encodeURI(Date.now() + '_' + files[key].name)
       gallery.push(fileNewName)
-      console.log(req.params.style)
       await files[key].mv(`./uploads/gallery/${fileNewName}`, err => {
       })
     }
