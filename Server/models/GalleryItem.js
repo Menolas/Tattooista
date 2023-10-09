@@ -7,7 +7,7 @@ const GalleryItem = new Schema({
     required: true
   },
   
-  categories: [{
+  tattooStyles: [{
     type: String,
     ref: 'TattooStyle'
   }],

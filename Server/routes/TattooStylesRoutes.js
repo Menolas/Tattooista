@@ -4,7 +4,7 @@ const router = new Router()
 const TattooStyle = require('../models/TattooStyle')
 const controller = require('../controllers/tattooStyleController')
 
-//getting all categories
+//getting all tattooStyles
 
 router.get('/', controller.getTattooStyles)
 

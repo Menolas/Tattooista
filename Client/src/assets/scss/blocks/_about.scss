@@ -9,7 +9,12 @@
   width: 260px;
   height: 260px;
   background-size: cover;
+  filter: grayscale(100%);
   z-index: 1;
+
+  &:hover {
+    filter: none;
+  }
 }
 
 .about__img-wrap-decor {

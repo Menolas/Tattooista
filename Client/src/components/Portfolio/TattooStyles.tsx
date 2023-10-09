@@ -71,7 +71,6 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
       )
     })
 
-    // @ts-ignore
   return (
     <section className="tattoo-style page-block">
       { isAuth &&

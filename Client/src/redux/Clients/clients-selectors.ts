@@ -60,3 +60,7 @@ export const getClientProfileSelector = (state: AppStateType) => {
 export const getIsSuccessSelector = (state: AppStateType) => {
   return state.clients.isSuccess
 }
+
+export const getIsDeletingPicturesInProcess = (state: AppStateType) => {
+  return state.clients.isDeletingPicturesInProcess
+}
