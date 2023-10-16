@@ -19,10 +19,10 @@ class tattooStyleController {
   async deleteTattooStyle(req, res) {
     const results = {}
     try {
-      await fs.unlink(`./uploads/wallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
+      await fs.unlink(`./uploads/styleWallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
         if (err) console.log(err)
       })
-      await fs.rmdir(`./uploads/wallpapers/${res.tattooStyle._id}`, { recursive:true },err => {
+      await fs.rmdir(`./uploads/styleWallpapers/${res.tattooStyle._id}`, { recursive:true },err => {
         if (err) console.log(err)
       })
       await res.tattooStyle.remove()
@@ -52,7 +52,7 @@ class tattooStyleController {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = encodeURI(Date.now() + '_' + file.name)
-        await file.mv(`./uploads/wallpapers/${newTattooStyle._id}/${newFileName}`, err => {
+        await file.mv(`./uploads/styleWallpapers/${newTattooStyle._id}/${newFileName}`, err => {
           tattooStyle.wallPaper = newFileName
           tattooStyle.save()
         })
@@ -77,10 +77,10 @@ class tattooStyleController {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = encodeURI(Date.now() + '_' + file.name)
-        await fs.unlink(`./uploads/wallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
+        await fs.unlink(`./uploads/styleWallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
           if (err) console.log(err)
         })
-        await file.mv(`./uploads/wallpapers/${res.tattooStyle._id}/${newFileName}`, err => {
+        await file.mv(`./uploads/styleWallpapers/${res.tattooStyle._id}/${newFileName}`, err => {
           if (err) console.log(err)
         })
         res.tattooStyle.wallPaper = newFileName

@@ -48,11 +48,11 @@ class serviceController {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = encodeURI(Date.now() + '_' + file.name)
-        await fs.unlink(`./uploads/serviceWallpapers/${res.service._id}/${res.service.wallPaper}`, err => {
-          if (err) console.log(err)
+        await fs.unlink(`./uploads/serviceWallpapers/${res.service._id}/${res.service.wallPaper}`, e => {
+          if (e) console.log(e)
         })
-        await file.mv(`./uploads/serviceWallpapers/${res.service._id}/${newFileName}`, err => {
-          if (err) console.log(err)
+        await file.mv(`./uploads/serviceWallpapers/${res.service._id}/${newFileName}`, e => {
+          if (e) console.log(e)
         })
         res.service.wallPaper = newFileName
       }
@@ -104,16 +104,16 @@ class serviceController {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = encodeURI(Date.now() + '_' + file.name)
-        await file.mv(`./uploads/serviceWallpapers/${newService._id}/${newFileName}`, err => {
+        await file.mv(`./uploads/serviceWallpapers/${newService._id}/${newFileName}`, e => {
           service.wallPaper = newFileName
           service.save()
         })
       }
       results.services = await Service.find()
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -122,11 +122,11 @@ class serviceController {
     const results = {}
 
     try {
-      await fs.unlink(`./uploads/serviceWallpapers/${res.service._id}/${res.service.wallPaper}`, err => {
-        if (err) console.log(err)
+      await fs.unlink(`./uploads/serviceWallpapers/${res.service._id}/${res.service.wallPaper}`, e => {
+        if (e) console.log(e)
       })
-      await fs.rmdir(`./uploads/serviceWallpapers/${res.service._id}`, err => {
-        if (err) console.log(err)
+      await fs.rmdir(`./uploads/serviceWallpapers/${res.service._id}`, e => {
+        if (e) console.log(e)
       })
       await res.service.remove()
 
@@ -134,9 +134,9 @@ class serviceController {
       results.resultCode = 0
       results.services = services
       res.status(200).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(500).json(results)
     }
   }

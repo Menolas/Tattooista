@@ -24,9 +24,9 @@ class faqController {
       results.resultCode = 0
       results.faqItems = await FaqItem.find()
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -42,10 +42,10 @@ class faqController {
       results.resultCode = 0
       results.faqItems = await FaqItem.find()
       res.status(201).json(results)
-    } catch (err) {
-      console.log(err)
+    } catch (e) {
+      console.log(e)
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -58,9 +58,9 @@ class faqController {
       results.resultCode = 0
       results.faqItems = await FaqItem.find()
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(500).json(results)
     }
   }

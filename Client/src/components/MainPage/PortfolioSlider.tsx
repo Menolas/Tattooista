@@ -33,7 +33,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
              <NavLink
                  to={`/portfolio?&style=${slider.value}&page=1&limit=${galleryPageSize}`}
                  className="portfolio-slider__link"
-                 style={{ backgroundImage:`url(${SERVER_URL}/wallpapers/${slider._id}/${slider.wallPaper})`}}
+                 style={{ backgroundImage:`url(${SERVER_URL}/styleWallpapers/${slider._id}/${slider.wallPaper})`}}
                  onClick={() => {
                      setActiveStyle(slider)
                      console.log(slider.value)

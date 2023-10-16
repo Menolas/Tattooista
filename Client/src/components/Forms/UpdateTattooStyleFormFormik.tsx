@@ -80,7 +80,7 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                     src={
                                         imageURL ? imageURL
                                             : style && style.wallPaper
-                                            ? `${SERVER_URL}wallpapers/${style._id}/${style.wallPaper}`
+                                            ? `${SERVER_URL}styleWallpapers/${style._id}/${style.wallPaper}`
                                             : tattooMachine
                                     }
                                     alt="preview"

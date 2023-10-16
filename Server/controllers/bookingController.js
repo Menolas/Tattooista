@@ -29,10 +29,10 @@ class bookingController {
       results.totalCount = bookings.length
       results.bookings = bookings.slice(startIndex, endIndex)
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
-      console.log(err)
+      results.message = e.message
+      console.log(e)
       res.status(400).json(results)
     }
   }
@@ -61,38 +61,34 @@ class bookingController {
       results.totalCount = archivedBookings.length
       results.bookings = archivedBookings.slice(startIndex, endIndex)
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
-      console.log(err)
+      results.message = e.message
+      console.log(e)
       res.status(400).json({ results })
     }
   }
 
   async createBooking(req, res) {
-    const booking = new Booking({
-      fullName: req.body.bookingName,
-      contacts: {
-        email: req.body.email,
-        insta: req.body.insta,
-        phone: req.body.phone,
-        whatsapp: req.body.whatsapp,
-        messenger: req.body.messenger
-      },
-      message: req.body.message
-    });
-
     const results = {}
 
     try {
+      const booking = new Booking({
+        fullName: req.body.bookingName,
+        email: req.body.email,
+        phone: req.body.phone,
+        whatsapp: req.body.whatsapp,
+        messenger: req.body.messenger,
+        message: req.body.message
+      })
       await booking.save()
       results.resultCode = 0
       results.booking = booking
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
-      console.log(err)
+      results.message = e.message
+      console.log(e)
       res.status(400).json(results)
     }
   }
@@ -104,9 +100,9 @@ class bookingController {
       await res.booking.remove()
       results.resultCode = 0
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(500).json(results)
     }
   }
@@ -119,9 +115,9 @@ class bookingController {
       results.status = res.booking.status
       results.resultCode = 0
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -139,9 +135,9 @@ class bookingController {
       results.client = client
       results.resultCode = 0
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -167,9 +163,9 @@ class bookingController {
       results.booking = archivedBooking
       res.status(201).json(results)
 
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -194,9 +190,9 @@ class bookingController {
       results.resultCode = 0
       results.booking = booking
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }

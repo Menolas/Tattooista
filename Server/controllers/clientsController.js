@@ -94,15 +94,15 @@ class clientsController {
 
     if (req.files && req.files.avatar) {
       if (res.client.avatar) {
-        await fs.unlink(`./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`, err => {
-          if (err) console.log(err)
+        await fs.unlink(`./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`, e => {
+          if (e) console.log(e)
         })
       }
 
       const file = req.files.avatar
       const newFileName = encodeURI(Date.now() + '_' + file.name)
-      await file.mv(`./uploads/clients/${res.client._id}/avatar/${newFileName}`, err => {
-        if (err) console.log(err)
+      await file.mv(`./uploads/clients/${res.client._id}/avatar/${newFileName}`, e => {
+        if (e) console.log(e)
       })
 
       res.client.avatar = newFileName
@@ -115,9 +115,9 @@ class clientsController {
       results.client = updatedClient
       results.resultCode = 0
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -135,8 +135,8 @@ class clientsController {
     for (let key in files) {
       const fileNewName = encodeURI(Date.now() + '_' + files[key].name)
       newGallery.push(fileNewName)
-      await files[key].mv(`./uploads/clients/${res.client._id}/doneTattooGallery/${fileNewName}`, err => {
-        if (err) if (err) console.log(err)
+      await files[key].mv(`./uploads/clients/${res.client._id}/doneTattooGallery/${fileNewName}`, e => {
+        if (e) if (e) console.log(e)
       })
     }
 
@@ -149,9 +149,9 @@ class clientsController {
       results.client = updatedClient
       results.resultCode = 0
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -172,8 +172,8 @@ class clientsController {
       const file = req.files.avatar
       if (!file) return res.json({error: 'Incorrect input name'})
       const newFileName = encodeURI(Date.now() + '_' + file.name)
-      await file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, err => {
-        if (err) console.log(err)
+      await file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, e => {
+        if (e) console.log(e)
       })
 
       client.avatar = newFileName
@@ -186,9 +186,9 @@ class clientsController {
       results.resultCode = 0
       results.client = newClient
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -213,9 +213,9 @@ class clientsController {
         console.log("Client has an avatar!!!!!")
         const oldPath = `./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`
         const newPath = `./uploads/archivedClients/${archivedClient._id}/avatar/${res.client.avatar}`
-        mv(oldPath, newPath, { mkdirp: true }, function(err) {
-          if (err) {
-            console.log(err)
+        mv(oldPath, newPath, { mkdirp: true }, function(e) {
+          if (e) {
+            console.log(e)
           } else {
             //console.log("Avatar Successfully moved!!!!!!!")
           }
@@ -228,8 +228,8 @@ class clientsController {
         await res.client.gallery.forEach((item, index) => {
           const oldGalleryPath = `./uploads/clients/${res.client._id}/doneTattooGallery/${item}`
           const newGalleryPath = `./uploads/archivedClients/${archivedClient._id}/doneTattooGallery/${item}`
-          mv(oldGalleryPath, newGalleryPath, { mkdirp: true },function (err) {
-            if (err) console.log(err)
+          mv(oldGalleryPath, newGalleryPath, { mkdirp: true },function (e) {
+            if (e) console.log(e)
           })
         })
         await archivedClient.save()
@@ -238,16 +238,16 @@ class clientsController {
 
       await archivedClient.save()
       console.log(archivedClient + "last!!!!!!!!!!!!")
-      fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, err => {
-        if (err) console.log(err)
+      fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, e => {
+        if (e) console.log(e)
       })
       await res.client.remove()
       results.resultCode = 0
       results.client = archivedClient
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -272,9 +272,9 @@ class clientsController {
         console.log("Client has an avatar!!!!!")
         const oldPath = `./uploads/archivedClients/${res.client._id}/avatar/${res.client.avatar}`
         const newPath = `./uploads/clients/${client._id}/avatar/${res.client.avatar}`
-        mv(oldPath, newPath, { mkdirp: true }, function(err) {
-          if (err) {
-            console.log(err)
+        mv(oldPath, newPath, { mkdirp: true }, function(e) {
+          if (e) {
+            console.log(e)
           } else {
             //console.log("Avatar Successfully moved!!!!!!!")
           }
@@ -287,8 +287,8 @@ class clientsController {
         await res.client.gallery.forEach((item, index) => {
           const oldGalleryPath = `./uploads/archivedClients/${res.client._id}/doneTattooGallery/${item}`
           const newGalleryPath = `./uploads/clients/${client._id}/doneTattooGallery/${item}`
-          mv(oldGalleryPath, newGalleryPath, { mkdirp: true },function (err) {
-            if (err) console.log(err)
+          mv(oldGalleryPath, newGalleryPath, { mkdirp: true },function (e) {
+            if (e) console.log(e)
           })
         })
         await client.save()
@@ -297,17 +297,17 @@ class clientsController {
 
       await client.save()
       console.log(client + "last!!!!!!!!!!!!")
-      fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, err => {
-        if (err) console.log(err)
+      fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, e => {
+        if (e) console.log(e)
       })
       await res.client.remove()
       results.resultCode = 0
       results.client = client
       res.status(201).json(results)
 
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
 
@@ -318,37 +318,37 @@ class clientsController {
 
     try {
       if (res.client.avatar) {
-        await fs.unlink(`./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`, err => {
-          if (err) console.log(err)
+        await fs.unlink(`./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`, e => {
+          if (e) console.log(e)
         })
-        await fs.rm(`./uploads/clients/${res.client._id}/avatar`, { recursive:true }, err => {
-          if (err) console.log(err)
+        await fs.rm(`./uploads/clients/${res.client._id}/avatar`, { recursive:true }, e => {
+          if (e) console.log(e)
         })
         if (res.client.gallery.length == 0) {
-          await fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, err => {
-            if (err) console.log(err)
+          await fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, e => {
+            if (e) console.log(e)
           })
         }
       }
       if (res.client.gallery.length != 0) {
         await res.client.gallery.forEach((item) => {
-            fs.unlink(`./uploads/clients/${res.client._id}/doneTattooGallery/${item}`, err => {
-            if (err) console.log(err)
+            fs.unlink(`./uploads/clients/${res.client._id}/doneTattooGallery/${item}`, e => {
+            if (e) console.log(e)
           })
         })
-        await fs.rm(`./uploads/clients/${res.client._id}/doneTattooGallery`, { recursive:true }, err => {
-          if (err) console.log(err)
+        await fs.rm(`./uploads/clients/${res.client._id}/doneTattooGallery`, { recursive:true }, e => {
+          if (e) console.log(e)
         })
-        await fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, err => {
-          if (err) console.log(err)
+        await fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, e => {
+          if (e) console.log(e)
         })
       }
       await res.client.remove()
       results.resultCode = 0
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(500).json(results)
     }
   }
@@ -358,37 +358,37 @@ class clientsController {
 
     try {
       if (res.client.avatar) {
-        await fs.unlink(`./uploads/archivedClients/${res.client._id}/avatar/${res.client.avatar}`, err => {
-          if (err) console.log(err)
+        await fs.unlink(`./uploads/archivedClients/${res.client._id}/avatar/${res.client.avatar}`, e => {
+          if (e) console.log(e)
         })
-        await fs.rm(`./uploads/archivedClients/${res.client._id}/avatar`, { recursive:true }, err => {
-          if (err) console.log(err)
+        await fs.rm(`./uploads/archivedClients/${res.client._id}/avatar`, { recursive:true }, e => {
+          if (e) console.log(e)
         })
         if (res.client.gallery.length == 0) {
-          await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, err => {
-            if (err) console.log(err)
+          await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, e => {
+            if (e) console.log(e)
           })
         }
       }
       if (res.client.gallery.length != 0) {
         await res.client.gallery.forEach((item) => {
-          fs.unlink(`./uploads/archivedClients/${res.client._id}/doneTattooGallery/${item}`, err => {
-            if (err) console.log(err)
+          fs.unlink(`./uploads/archivedClients/${res.client._id}/doneTattooGallery/${item}`, e => {
+            if (e) console.log(e)
           })
         })
-        await fs.rm(`./uploads/archivedClients/${res.client._id}/doneTattooGallery`, { recursive:true }, err => {
-          if (err) console.log(err)
+        await fs.rm(`./uploads/archivedClients/${res.client._id}/doneTattooGallery`, { recursive:true }, e => {
+          if (e) console.log(e)
         })
-        await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, err => {
-          if (err) console.log(err)
+        await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, e => {
+          if (e) console.log(e)
         })
       }
       await res.client.remove()
       results.resultCode = 0
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(500).json(results)
     }
   }
@@ -399,21 +399,21 @@ class clientsController {
 
     try {
       await res.client.gallery.pull(picture)
-      await fs.unlink(`./uploads/clients/${res.client._id}/doneTattooGallery/${picture}`, err => {
-        if (err) console.log(err)
+      await fs.unlink(`./uploads/clients/${res.client._id}/doneTattooGallery/${picture}`, e => {
+        if (e) console.log(e)
       })
 
       if (res.client.gallery.length == 0) {
-        await fs.rm(`./uploads/clients/${res.client._id}/doneTattooGallery`, { recursive:true }, err => {
-          if (err) console.log(err)
+        await fs.rm(`./uploads/clients/${res.client._id}/doneTattooGallery`, { recursive:true }, e => {
+          if (e) console.log(e)
         })
       }
       results.resultCode = 0
       results.client = await res.client.save()
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(500).json(results)
     }
   }

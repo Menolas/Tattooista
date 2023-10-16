@@ -20,11 +20,11 @@ class PagesController {
   // async deletePage(req, res) {
   //   const results = {}
   //   try {
-  //     await fs.unlink(`./uploads/wallpapers/${res.category._id}/${res.category.wallPaper}`, err => {
-  //       if (err) console.log(err)
+  //     await fs.unlink(`./uploads/wallpapers/${res.category._id}/${res.category.wallPaper}`, e => {
+  //       if (e) console.log(e)
   //     })
-  //     await fs.rmdir(`./uploads/wallpapers/${res.category._id}`, err => {
-  //       if (err) console.log(err)
+  //     await fs.rmdir(`./uploads/wallpapers/${res.category._id}`, e => {
+  //       if (e) console.log(e)
   //     })
   //     await res.category.remove()
   //
@@ -32,9 +32,9 @@ class PagesController {
   //     results.resultCode = 0
   //     results.tattooStyles = styles
   //     res.status(200).json(results)
-  //   } catch (err) {
+  //   } catch (e) {
   //     results.resultCode = 1
-  //     results.message = err.message
+  //     results.message = e.message
   //     res.status(500).json(results)
   //   }
   // }
@@ -54,16 +54,16 @@ class PagesController {
   //       const file = req.files.wallPaper
   //       if(!file)  return res.json({error: 'Incorrect input name'})
   //       const newFileName = encodeURI(Date.now() + '_' + file.name)
-  //       await file.mv(`./uploads/pageWallpapers/${newPage._id}/${newFileName}`, err => {
+  //       await file.mv(`./uploads/pageWallpapers/${newPage._id}/${newFileName}`, e => {
   //         category.wallPaper = newFileName
   //         category.save()
   //       })
   //     }
   //     results.tattooStyles = await Category.find()
   //     res.status(201).json(results)
-  //   } catch (err) {
+  //   } catch (e) {
   //     results.resultCode = 1
-  //     results.message = err.message
+  //     results.message = e.message
   //     res.status(400).json(results)
   //   }
   // }
@@ -79,11 +79,11 @@ class PagesController {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = encodeURI(Date.now() + '_' + file.name)
-        await fs.unlink(`./uploads/pageWallpapers/${res.page._id}/${res.page.wallPaper}`, err => {
-          if (err) console.log(err)
+        await fs.unlink(`./uploads/pageWallpapers/${res.page._id}/${res.page.wallPaper}`, e => {
+          if (e) console.log(e)
         })
-        await file.mv(`./uploads/pageWallpapers/${res.page._id}/${newFileName}`, err => {
-          if (err) console.log(err)
+        await file.mv(`./uploads/pageWallpapers/${res.page._id}/${newFileName}`, e => {
+          if (e) console.log(e)
         })
         res.page.wallPaper = newFileName
         //res.page.save()
@@ -93,10 +93,10 @@ class PagesController {
       results.resultCode = 0
       results.pages = await Page.find()
       res.status(201).json(results)
-    } catch (err) {
-      console.log(err)
+    } catch (e) {
+      console.log(e)
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -110,9 +110,9 @@ class PagesController {
       results.resultCode = 0
       results.pages = await Page.find()
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }

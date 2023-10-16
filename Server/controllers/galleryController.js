@@ -15,7 +15,6 @@ class galleryController {
     const results = {}
     try {
       gallery = await GalleryItem.find({tattooStyles: style}).sort({createdAt: -1})
-      console.log(gallery)
       results.resultCode = 0
       results.totalCount = gallery.length
       results.gallery = gallery.slice(startIndex, endIndex)
@@ -54,29 +53,29 @@ class galleryController {
 
     const results = {}
     try {
-      await fs.unlink(`./uploads/gallery/${res.galleryItem.fileName}`, err => {
-        if (err) {
-          console.log(err)
+      await fs.unlink(`./uploads/gallery/${res.galleryItem.fileName}`, e => {
+        if (e) {
+          console.log(e)
         }
       })
       await res.galleryItem.remove()
       results.resultCode = 0
       //results.totalCount = gallery.length
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
 
   async addGalleryItems(req, res) {
-    //console.log(req.files + "!!!!!!!!!files")
-    if (!req.body) {
-      return res.status(400).send({
-        message: "Data to update can not be empty!"
-      })
-    }
+
+    // if (!req.body) {
+    //   return res.status(400).send({
+    //     message: "Data to update can not be empty!"
+    //   })
+    // }
 
     const gallery = []
     const files = req.files
@@ -85,7 +84,8 @@ class galleryController {
     for (let key in files) {
       const fileNewName = encodeURI(Date.now() + '_' + files[key].name)
       gallery.push(fileNewName)
-      await files[key].mv(`./uploads/gallery/${fileNewName}`, err => {
+      await files[key].mv(`./uploads/gallery/${fileNewName}`, e => {
+        if (e) console.log(e)
       })
     }
 
@@ -100,11 +100,10 @@ class galleryController {
     try {
       results.resultCode = 0
       results.gallery = await GalleryItem.find({tattooStyles: req.params.style})
-      console.log(results.gallery)
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -121,17 +120,17 @@ class galleryController {
     const results = {}
 
     try {
-      mv(oldPath, newPath, { mkdirp: true },function (err) {
-        if (err) console.log(err)
+      mv(oldPath, newPath, { mkdirp: true },function (e) {
+        if (e) console.log(e)
       })
       await archivedGalleryItem.save()
       await res.galleryItem.remove()
       results.resultCode = 0
       results.gallery = await ArchivedGalleryItem.find()
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -149,9 +148,9 @@ class galleryController {
       await res.galleryItem.remove()
       results.resultCode = 0
       res.status(201).json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }
@@ -161,9 +160,9 @@ class galleryController {
     const results = {}
 
     try {
-      await fs.unlink(`./uploads/archivedGallery/${res.galleryItem.fileName}`, err => {
-        if (err) {
-          return res.status(400).send(err)
+      await fs.unlink(`./uploads/archivedGallery/${res.galleryItem.fileName}`, e => {
+        if (e) {
+          return res.status(400).send(e)
         }
       })
       await res.galleryItem.remove()
@@ -171,9 +170,9 @@ class galleryController {
       results.resultCode = 0
       //results.gallery = newGallery
       res.json(results)
-    } catch (err) {
+    } catch (e) {
       results.resultCode = 1
-      results.message = err.message
+      results.message = e.message
       res.status(400).json(results)
     }
   }

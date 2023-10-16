@@ -1,13 +1,13 @@
 import * as React from 'react'
-import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues, useField } from 'formik'
+import {Field, Form, Formik, FormikHelpers, FormikValues, useField } from 'formik'
 import {phoneRegex} from '../../utils/validators'
 import * as Yup from 'yup'
-import {BookConsultationFormValues} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
-import {useState} from "react";
-import {FieldWrapper} from "./FieldWrapper";
-import {FormSelect} from "./FormSelect";
-import * as yup from "yup";
+import {BookConsultationFormValues} from '../../types/Types'
+import {FieldComponent} from './FieldComponent'
+import {useState} from "react"
+import {FieldWrapper} from './FieldWrapper'
+import {FormSelect} from './FormSelect'
+import * as yup from "yup"
 
 const options = [
   { value: "email", label: "email" },
@@ -112,7 +112,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
             <FieldWrapper
                 wrapperClass={'booking__input-wrap'}
                 name={"contact"}
-                //label={'Choose the way you want me to contact you'}
             >
               <FormSelect
                   name="contact"
