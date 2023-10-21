@@ -70,7 +70,7 @@ export interface LoginFormValues {
 export interface BookConsultationFormValues  {
     bookingName: string,
     contact: string
-    email: string
+    mail: string
     phone: string
     insta: string
     whatsapp: string

@@ -7,7 +7,7 @@ import {FieldComponent} from './FieldComponent'
 import {useState} from "react"
 import {FieldWrapper} from './FieldWrapper'
 import {FormSelect} from './FormSelect'
-import * as yup from "yup"
+import {Select} from "./Select";
 
 const options = [
   { value: "mail", label: "email" },
@@ -25,6 +25,7 @@ const options = [
 //   insta: 'insta'
 // }
 
+// @ts-ignore
 const validationSchema = Yup.object().shape({
   bookingName: Yup.string()
       .min(2, 'Must be minimum longer two characters')
@@ -32,22 +33,28 @@ const validationSchema = Yup.object().shape({
       .required('Required Field'),
   contact: Yup.string()
       .required("Please select a way to contact you"),
-  email: yup.string()
-      .email("Email should have correct format"),
-  phone: yup
-      .string()
+  mail: Yup.string().when('contact', {
+        is: (contact) => contact === 'mail',
+        then: () => Yup.string().required("Please, provide you email.").email("Email should have correct format")
+      }),
+  phone: Yup.string()
       .min(8, 'Phone number is too short - should be 8 chars minimum.')
-      .matches(phoneRegex, "That does not look like phone number"),
-  insta: yup
-      .string()
+      .matches(phoneRegex, "That does not look like phone number")
+      .when('contact', {
+        is: (contact) => contact === 'phone',
+        then: () => Yup.string().required("Please, provide you phone number.")
+      }),
+  insta: Yup.string()
       .min(3, 'Insta name is too short - should be 3 chars minimum.'),
-  messenger: yup
-      .string()
+  messenger: Yup.string()
       .min(3, 'Messenger name is too short - should be 3 chars minimum.'),
-  whatsapp: yup
-      .string()
+  whatsapp: Yup.string()
       .min(7, 'Whatsapp number is too short - should be 7 chars minimum.')
-      .matches(phoneRegex, "That does not look like whatsapp number"),
+      .matches(phoneRegex, "That does not look like whatsapp number")
+      .when('contact', {
+        is: (contact) => contact === 'whatsapp',
+        then: () => Yup.string().required("Please, provide you whatsapp number.")
+      }),
   message: Yup.string()
       .min(20, 'Must be minimum longer twenty characters')
       .max(200, 'Must be shorter than 200 character')
@@ -86,7 +93,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   const initialValues: BookConsultationFormValues = {
     bookingName: '',
     contact: '',
-    email: '',
+    mail: '',
     phone: '',
     insta: '',
     whatsapp: '',
@@ -127,11 +134,11 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   handleChange={handleChange}
                   placeholder={'Choose the way you want me to contact you'}
               />
+
             </FieldWrapper>
             { contactInput &&
-                //console.log(contactInput === "mail" ? "email" : contactInput)
                 <FieldComponent
-                    name={contactInput === "mail" ? "email" : contactInput}
+                    name={contactInput}
                     type={'text'}
                     placeholder={'Your contact'}
                     value={propsF.values.contactInput}

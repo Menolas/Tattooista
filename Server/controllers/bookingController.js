@@ -75,7 +75,7 @@ class bookingController {
     try {
       const booking = new Booking({
         fullName: req.body.bookingName,
-        email: req.body.email,
+        email: req.body.mail,
         phone: req.body.phone,
         whatsapp: req.body.whatsapp,
         messenger: req.body.messenger,
