@@ -12,6 +12,7 @@ import {SuccessPopUp} from "../../common/SuccessPopUp"
 import {useDispatch} from "react-redux"
 import {setIsSuccessAC} from "../../../redux/Portfolio/portfolio-reducer"
 import {Preloader} from "../../common/Preloader";
+import {BookingApiError} from "../../common/BookindApiError";
 
 type PropsType = {
   isFetching: boolean
@@ -19,6 +20,8 @@ type PropsType = {
   totalCount: number
   currentPage: number
   pageSize: number
+  addClientApiError: string
+  updateClientGalleryApiError: string
   clients: Array<ClientType>
   clientsFilter: ClientsFilterType
   isDeletingInProcess: Array<string>
@@ -32,6 +35,8 @@ type PropsType = {
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (clientId: string) => void
   setIsSuccess: (bol: boolean) => void
+  setAddClientApiError: (error: string) => void
+  setUpdateClientGalleryApiError: (error: string) => void
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
@@ -40,6 +45,8 @@ export const Clients: React.FC<PropsType> = React.memo(({
     totalCount,
     currentPage,
     pageSize,
+    addClientApiError,
+    updateClientGalleryApiError,
     clients,
     clientsFilter,
     isDeletingInProcess,
@@ -52,7 +59,9 @@ export const Clients: React.FC<PropsType> = React.memo(({
     updateClientGallery,
     deleteClientGalleryPicture,
     archiveClient,
-    setIsSuccess
+    setIsSuccess,
+    setAddClientApiError,
+    setUpdateClientGalleryApiError
 }) => {
     const dispatch = useDispatch()
 
@@ -63,6 +72,22 @@ export const Clients: React.FC<PropsType> = React.memo(({
             }, 1500)
         }
     }, [isSuccess])
+
+    useEffect(() => {
+        if (addClientApiError) {
+            setTimeout( () => {
+                setAddClientApiError('')
+            }, 1500)
+        }
+    }, [addClientApiError])
+
+    useEffect(() => {
+        if (updateClientGalleryApiError) {
+            setTimeout( () => {
+                setUpdateClientGalleryApiError('')
+            }, 1500)
+        }
+    }, [updateClientGalleryApiError])
 
   let [addClientMode, setAddClientMode] = useState<boolean>(false)
 
@@ -136,9 +161,18 @@ export const Clients: React.FC<PropsType> = React.memo(({
           />
           </ModalPopUp>
         }
+
         {
           isSuccess &&
           <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
+        }
+
+        { addClientApiError && addClientApiError !== '' &&
+            <BookingApiError error={addClientApiError}/>
+        }
+
+        { updateClientGalleryApiError && updateClientGalleryApiError !== '' &&
+          <BookingApiError error={updateClientGalleryApiError}/>
         }
       </>
   )

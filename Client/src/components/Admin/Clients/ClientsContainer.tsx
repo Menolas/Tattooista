@@ -13,7 +13,7 @@ import {
   archiveClient,
   setClientsPageSize,
   setIsSuccessAC,
-  setClientsFilterAC
+  setClientsFilterAC, setAddClientApiErrorAC, setUpdateClientGalleryApiErrorAC
 } from '../../../redux/Clients/clients-reducer'
 import {
   getClientsIsFetching,
@@ -23,7 +23,7 @@ import {
   getClientsSelector,
   getIsClientDeletingInProcessSelector,
   getClientsFilter,
-  getIsSuccessSelector
+  getIsSuccessSelector, getAddClientApiErrorSelector, getUpdateClientGalleryApiErrorSelector
 } from '../../../redux/Clients/clients-selectors'
 import { Clients } from './Clients'
 //import {useNavigate} from "react-router-dom";
@@ -38,6 +38,8 @@ export const ClientsContainer: React.FC = () => {
   const filter = useSelector(getClientsFilter)
   const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
+  const addClientApiError = useSelector(getAddClientApiErrorSelector)
+  const updateClientGalleryApiError = useSelector(getUpdateClientGalleryApiErrorSelector)
 
   const dispatch = useDispatch()
   //const navigate = useNavigate()
@@ -110,6 +112,14 @@ export const ClientsContainer: React.FC = () => {
     dispatch(setIsSuccessAC(bol))
   }
 
+  const setAddClientApiErrorCallBack = (error: string) => {
+    dispatch(setAddClientApiErrorAC(error))
+  }
+
+  const setUpdateClientGalleryApiErrorCallBack = (error: string) => {
+    dispatch(setUpdateClientGalleryApiErrorAC(error))
+  }
+
   return (
       <Clients
           isFetching={isFetching}
@@ -120,6 +130,8 @@ export const ClientsContainer: React.FC = () => {
           clients={clients}
           clientsFilter={filter}
           isDeletingInProcess={isDeletingInProcess}
+          addClientApiError={addClientApiError}
+          updateClientGalleryApiError={updateClientGalleryApiError}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChanged}
           addClient={addClientCallBack}
@@ -130,6 +142,8 @@ export const ClientsContainer: React.FC = () => {
           deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
           archiveClient={archiveClientCallBack}
           setIsSuccess={setIsSuccessCallBack}
+          setAddClientApiError={setAddClientApiErrorCallBack}
+          setUpdateClientGalleryApiError={setUpdateClientGalleryApiErrorCallBack}
       />
   )
 }

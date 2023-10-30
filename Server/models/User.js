@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const UserSchema = new Schema({
   email: {
@@ -11,7 +11,7 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  
+
   roles: [{
     type: String,
     ref: 'Role'
@@ -25,7 +25,6 @@ const UserSchema = new Schema({
   activationLink: {
     type: String
   }
+})
 
-});
-
-module.exports = model('User', UserSchema);
+module.exports = model('User', UserSchema)

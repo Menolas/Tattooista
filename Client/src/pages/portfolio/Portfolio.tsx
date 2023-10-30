@@ -18,6 +18,8 @@ type PropsType = {
   gallery: Array<GalleryItemType>
   isSuccess: boolean
   bookingConsultationApiError: string
+  updateTattooStyleApiError: string
+  updateServiceApiError: string
   setPageSize: (pageSize: number) => void
   bookConsultation: (values: BookConsultationFormValues) => void
   updateGallery: (values: any) => void
@@ -30,6 +32,8 @@ type PropsType = {
   archiveGalleryItem: (id: string) => void
   setIsSuccess: (bol: boolean) => void
   setBookingConsultationApiError: (error: string) => void
+  setUpdateTattooStyleApiError: (error: string) => void
+  setUpdateServiceApiError: (error: string) => void
 }
 
 export const Portfolio: React.FC<PropsType> = ({
@@ -44,6 +48,8 @@ export const Portfolio: React.FC<PropsType> = ({
   gallery,
   isSuccess,
   bookingConsultationApiError,
+  updateTattooStyleApiError,
+  updateServiceApiError,
   setPageSize,
   bookConsultation,
   updateGallery,
@@ -55,7 +61,9 @@ export const Portfolio: React.FC<PropsType> = ({
   deleteTattooStyle,
   archiveGalleryItem,
   setIsSuccess,
-  setBookingConsultationApiError
+  setBookingConsultationApiError,
+  setUpdateTattooStyleApiError,
+  setUpdateServiceApiError
 }) => {
 
   useEffect(() => {
@@ -65,6 +73,22 @@ export const Portfolio: React.FC<PropsType> = ({
       }, 1500)
     }
   }, [bookingConsultationApiError])
+
+  useEffect(() => {
+    if (updateTattooStyleApiError) {
+      setTimeout( () => {
+        setUpdateTattooStyleApiError('')
+      }, 1500)
+    }
+  }, [updateTattooStyleApiError])
+
+  useEffect(() => {
+    if (updateServiceApiError) {
+      setTimeout( () => {
+        setUpdateServiceApiError('')
+      }, 1500)
+    }
+  }, [updateServiceApiError])
 
   return (
     <div>
@@ -106,6 +130,14 @@ export const Portfolio: React.FC<PropsType> = ({
 
       { bookingConsultationApiError && bookingConsultationApiError !== '' &&
           <BookingApiError error={bookingConsultationApiError}/>
+      }
+
+      { updateTattooStyleApiError && updateTattooStyleApiError !== '' &&
+          <BookingApiError error={updateTattooStyleApiError}/>
+      }
+
+      { updateServiceApiError && updateServiceApiError !== '' &&
+          <BookingApiError error={updateServiceApiError}/>
       }
     </div>
   )

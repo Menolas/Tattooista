@@ -30,6 +30,7 @@ type PropsType = {
   isSuccess: boolean
   isSuccessBooking: boolean
   bookingConsultationApiError: string
+  updateFaqItemApiError: string
   setActiveStyle: (style: TattooStyleType) => void
   editAboutPage: (id: string, values: FormData) => void
   changePageVisibility: (pageId: string, isActive: boolean) => void
@@ -43,6 +44,7 @@ type PropsType = {
   setIsSuccess: (bol: boolean) => void
   setIsSuccessBooking: (bol: boolean) => void
   setBookingConsultationApiError: (error: string) => void
+  setUpdateFaqItemApiError: (error: string) => void
 }
 
 export const MainPage: React.FC<PropsType> = React.memo(({
@@ -55,6 +57,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   isSuccess,
   isSuccessBooking,
   bookingConsultationApiError,
+  updateFaqItemApiError,
   setActiveStyle,
   editAboutPage,
   changePageVisibility,
@@ -67,7 +70,8 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   bookConsultation,
   setIsSuccess,
   setIsSuccessBooking,
-  setBookingConsultationApiError
+  setBookingConsultationApiError,
+  setUpdateFaqItemApiError
 }) => {
   const pageAbout = pages?.find(page => page.name === 'about')
   const successBookingPopUpContent = "You've booked a consultation! We will contact you soon))"
@@ -98,6 +102,14 @@ export const MainPage: React.FC<PropsType> = React.memo(({
         }, 1500)
     }
   }, [bookingConsultationApiError])
+
+  useEffect(() => {
+    if (updateFaqItemApiError) {
+      setTimeout( () => {
+          setUpdateFaqItemApiError('')
+      }, 1500)
+    }
+  }, [updateFaqItemApiError])
 
 
   return (
@@ -137,6 +149,9 @@ export const MainPage: React.FC<PropsType> = React.memo(({
       }
       { bookingConsultationApiError && bookingConsultationApiError !== '' &&
         <BookingApiError error={bookingConsultationApiError}/>
+      }
+      { updateFaqItemApiError && updateFaqItemApiError !== '' &&
+        <BookingApiError error={updateFaqItemApiError}/>
       }
     </>
   )

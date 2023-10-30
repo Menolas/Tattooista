@@ -17,51 +17,57 @@ const BookingSchema = new mongoose.Schema({
     required: true,
     default: false
   },
-  email: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-  phone: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-  whatsapp: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-  messenger: {
-    type: String,
-    trim: true
+  contacts: {
+    email: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    phone: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    whatsapp: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    messenger: {
+      type: String,
+      trim: true
+    },
+    insta: {
+      type: String,
+      trim: true
+    },
   }
 })
 
 BookingSchema.index(
-    { email: 1 },
-    { unique: true, partialFilterExpression: { email: { $exists: true } } }
+    { 'contacts.email': 1 },
+    { unique: true, partialFilterExpression: { 'contacts.email': { $exists: true } } }
 )
 
 BookingSchema.index(
-    { phone: 1 },
-    { unique: true, partialFilterExpression: { phone: { $exists: true } } }
+    { 'contacts.phone': 1 },
+    { unique: true, partialFilterExpression: { 'contacts.phone': { $exists: true } } }
 )
 
 BookingSchema.index(
-    { whatsapp: 1 },
-    { unique: true, partialFilterExpression: { whatsapp: { $exists: true } } }
+    { 'contacts.whatsapp': 1 },
+    { unique: true, partialFilterExpression: { 'contacts.whatsapp': { $exists: true } } }
 )
 
 BookingSchema.pre('save', function(next) {
-  if (this.email === null || this.email === "") {
-    this.email = undefined;
+  if (this.contacts.email === null || this.contacts.email === "") {
+    this.contacts.email = undefined
   }
-  if (this.phone === null || this.phone === "") {
-    this.phone = undefined;
+  if (this.contacts.phone === null || this.contacts.phone === "") {
+    this.contacts.phone = undefined
   }
-  if (this.whatsapp === null || this.whatsapp === "") {
-    this.whatsapp = undefined;
+  if (this.contacts.whatsapp === null || this.contacts.whatsapp === "") {
+    this.contacts.whatsapp = undefined
   }
   next()
 })

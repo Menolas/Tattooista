@@ -162,7 +162,7 @@ export const bookedConsultationsReducer = (
     case ADD_CONSULTATION:
       return {
         ...state,
-        bookedConsultations: [...state.bookedConsultations, {...action.consultation}],
+        bookedConsultations: [{...action.consultation}, ...state.bookedConsultations],
         currentBookedConsultationsPage: 1
       }
 

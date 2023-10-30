@@ -1,18 +1,32 @@
 import * as React from 'react'
 import {useState} from 'react'
-import {ErrorMessage, Field, Form, Formik} from 'formik'
-import * as yup from 'yup'
-import {ErrorMessageWrapper} from '../../utils/validators'
+import {Field, Form, Formik} from 'formik'
+import * as Yup from 'yup'
 import {SERVER_URL} from '../../utils/constants'
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 import {ServiceType} from '../../types/Types'
 import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
 
-const validationSchema = yup.object().shape({
-    title: yup.string()
+const validationSchema = Yup.object().shape({
+    wallPaper: Yup.mixed()
+        .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
+            if (!value) return true
+            return value.size <= 1024 * 1024
+        })
+        .test('fileType', 'Invalid file type', (value: File) => {
+            if (!value) return true
+            return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
+        }),
+    title: Yup.string()
         .required("Name is a required field"),
-    description: yup.string(),
+    condition_0: Yup.string(),
+    condition_1: Yup.string(),
+    condition_2: Yup.string(),
+    condition_3: Yup.string(),
+    condition_4: Yup.string(),
+    condition_5: Yup.string(),
 })
 
 type PropsType = {
@@ -83,7 +97,7 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                                 <img
                                     src={
                                         imageURL ? imageURL
-                                            : service && service.wallPaper
+                                            : service?.wallPaper
                                             ? `${SERVER_URL}/serviceWallpapers/${service._id}/${service.wallPaper}`
                                             : tattooMachine
                                     }
@@ -91,18 +105,20 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                                 />
                             </div>
                             <label className="btn btn--sm" htmlFor={"wallPaper"}>Pick File</label>
-                            <Field
-                                className="hidden"
-                                id="wallPaper"
-                                name={'wallPaper'}
-                                type={'file'}
-                                accept='image/*,.png,.jpg,.web,.jpeg'
-                                value={undefined}
-                                onChange={(e) => {
-                                    propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
-                                    handleOnChange(e)
-                                }}
-                            />
+                            <FieldWrapper name={'wallPaper'}>
+                                <Field
+                                    className="hidden"
+                                    id="wallPaper"
+                                    name={'wallPaper'}
+                                    type={'file'}
+                                    accept='image/*,.png,.jpg,.web,.jpeg'
+                                    value={undefined}
+                                    onChange={(e) => {
+                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
+                                        handleOnChange(e)
+                                    }}
+                                />
+                            </FieldWrapper>
                         </div>
 
                         <FieldComponent

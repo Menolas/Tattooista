@@ -1,29 +1,46 @@
 import * as React from 'react'
 import { useState } from 'react'
-import {Form, Formik} from 'formik'
-//import {ErrorMessageWrapper} from '../../utils/validators'
+import {Field, Form, Formik} from 'formik'
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
-import { SERVER_URL } from '../../utils/constants'
 // @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
+import { SERVER_URL } from '../../utils/constants'
+import {FieldWrapper} from './FieldWrapper'
+import * as Yup from 'yup'
+
+const validationSchema = Yup.object().shape({
+  gallery: Yup.array()
+      .max(5, 'You can upload up to 5 files') // Adjust the maximum number of files as needed
+      .of(
+          Yup.mixed()
+              .test('fileSize', 'Max allowed size is 2MB', (value: File) => {
+                if (!value) return true; // If no file is provided, it's considered valid
+                return value.size <= 1024 * 1024; // Adjust the file size limit as needed (2MB in this example)
+              })
+              .test('fileType', 'Invalid file type', (value: File) => {
+                if (!value) return true; // If no file is provided, it's considered valid
+                return ['image/jpeg', 'image/png', 'application/pdf'].includes(value.type); // Adjust the allowed file types
+              })
+      ),
+})
 
 type PropsType = {
   profileId: string
   gallery?: Array<string>
-  isDeletingPicturesInProcess: Array<string>
+  isDeletingInProcess: Array<string>
   closeModal: () => void
   updateClientGallery: (clientId: string, values: any) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
 }
 
 export const ClientGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
-profileId,
-gallery,
-isDeletingPicturesInProcess,
-updateClientGallery,
-deleteClientGalleryPicture,
-closeModal
+  profileId,
+  gallery,
+  isDeletingInProcess,
+  updateClientGallery,
+  deleteClientGalleryPicture,
+  closeModal
 }) => {
 
   const [imageURLS, setImageURLS] = useState([])
@@ -52,58 +69,68 @@ closeModal
   }
 
   const initialValues = {
-    gallery: null
+    gallery: []
   }
 
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={validationSchema}
       onSubmit={submit}
     >
       {propsF => {
         return (
           <Form className="form form--galleryUpload" encType={"multipart/form-data"}>
-            <ul className={"list client-gallery"}>
-              {
-                gallery?.map((item,i) => {
-                  return (
-                      <li className={"client-gallery__item"} key={i}>
-                        <button
-                            className={"btn btn--icon btn--icon--light"}
-                            disabled={isDeletingPicturesInProcess?.some(id => id === item)}
-                            onClick={(event) => {
-                              event.preventDefault()
-                              deleteClientGalleryPicture(profileId, item)
-                            }}
-                        >
-                          <svg><use href={`${Sprite}#trash`}/></svg>
-                        </button>
-                        <img src={`${SERVER_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
-                      </li>
-                  )
-                })
-              }
-            </ul>
-            <div className="form__input-wrap">
-              <ul className={"list client-gallery"}>
-                {
-                  imageURLS?.map((item, index) => {
-                    return (
-                      <li className={"client-gallery__item"} key={index}>
-                        <img
-                            className="client-profile__gallery-image"
-                            src={item}
-                            alt="preview"
-                            height="50"
-                        />
-                      </li>
-                    )
-                  })
-                }
-              </ul>
+            {
+              gallery &&
+                <ul className={"list client-gallery"}>
+                  {
+                    gallery?.map((item,i) => {
+                      return (
+                          <li className={"client-gallery__item"} key={i}>
+                            <button
+                                className={"btn btn--icon btn--icon--light"}
+                                disabled={isDeletingInProcess?.some(id => id === item)}
+                                onClick={(event) => {
+                                  event.preventDefault()
+                                  deleteClientGalleryPicture(profileId, item)
+                                }}
+                            >
+                              <svg><use href={`${Sprite}#trash`}/></svg>
+                            </button>
+                            <img src={`${SERVER_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
+                          </li>
+                      )
+                    })
+                  }
+                </ul>
+            }
 
+            {
+              imageURLS &&
+                <ul className={"list client-gallery"}>
+                  {
+                    imageURLS?.map((item, index) => {
+                      return (
+                          <li className={"client-gallery__item"} key={index}>
+                            <img
+                                className="client-profile__gallery-image"
+                                src={item}
+                                alt="preview"
+                                height="50"
+                            />
+                          </li>
+                      )
+                    })
+                  }
+                </ul>
+            }
+            <FieldWrapper
+                name={'gallery'}
+                wrapperClass={''}
+            >
               <label className="btn btn--sm" htmlFor={"gallery"}>Pick File</label>
-              <input
+              <Field
                 className="hidden"
                 id="gallery"
                 name={'gallery'}
@@ -116,7 +143,7 @@ closeModal
                   handleOnChange(e)
                 }}
               />
-            </div>
+            </FieldWrapper>
             <button
               type="submit"
               disabled={propsF.isSubmitting}

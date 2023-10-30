@@ -24,6 +24,14 @@ export const getBookingConsultationApiErrorSelector = (state: AppStateType) => {
   return state.general.bookingConsultationApiError
 }
 
+export const getUpdateFaqItemApiErrorSelector = (state: AppStateType) => {
+  return state.general.updateFaqItemApiError
+}
+
 export const getIsBookingModalOpenSelector = (state: AppStateType) => {
   return state.general.isBookingModalOpen
+}
+
+export const getUpdateServiceApiErrorSelector = (state: AppStateType) => {
+  return state.general.updateServiceApiError
 }
