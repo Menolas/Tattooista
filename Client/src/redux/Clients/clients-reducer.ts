@@ -24,6 +24,8 @@ const ADD_CLIENT = 'ADD_CLIENT'
 const SET_CLIENT_PROFILE = 'SET_CLIENT_PROFILE'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
+const SET_ADD_CLIENT_API_ERROR = 'SET_ADD_CLIENT_API_ERROR'
+const SET_UPDATE_CLIENT_GALLERY_API_ERROR = 'SET_UPDATE_CLIENT_GALLERY_API_ERROR'
 
 let initialState = {
   clients: [] as Array<ClientType>,
@@ -46,7 +48,9 @@ let initialState = {
     gallery: "any" as string | null
   },
   profile: {} as ClientType,
-  isSuccess: false as boolean
+  isSuccess: false as boolean,
+  addClientApiError: '' as string | undefined,
+  updateClientGalleryApiError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -182,19 +186,49 @@ export const clientsReducer = (
         isSuccess: action.isSuccess
       }
 
+    case SET_ADD_CLIENT_API_ERROR:
+      return {
+        ...state,
+        addClientApiError: action.error
+      }
+
+    case SET_UPDATE_CLIENT_GALLERY_API_ERROR:
+      return {
+        ...state,
+        updateClientGalleryApiError: action.error
+      }
+
     default: return state
 
   }
 }
 
-type ActionsTypes = SetIsSuccessAT | SetClientsPageSizeAT | SetArchivedClientsPageSizeAT |
-    SetClientsFilterAT | SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT |
-    SetArchivedClientsAT | SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT |
-    SetArchivedClientsTotalCountAT | ToggleIsDeletingInProcessAT | ToggleIsDeletingPicturesInProcessAT |
-    SetIsFetchingAT | DeleteClientAT | DeleteArchivedClientAT | EditClientAT |
-    AddClientAT | SetClientProfileAT
+type ActionsTypes = SetUpdateClientGalleryApiErrorAT | SetAddClientApiErrorAT | SetIsSuccessAT |
+    SetClientsPageSizeAT | SetArchivedClientsPageSizeAT | SetClientsFilterAT |
+    SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT | SetArchivedClientsAT |
+    SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT | SetArchivedClientsTotalCountAT |
+    ToggleIsDeletingInProcessAT | ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT |
+    DeleteClientAT | DeleteArchivedClientAT | EditClientAT | AddClientAT | SetClientProfileAT
 
 // actions creators
+
+type SetUpdateClientGalleryApiErrorAT = {
+  type: typeof SET_UPDATE_CLIENT_GALLERY_API_ERROR
+  error: string
+}
+
+export const setUpdateClientGalleryApiErrorAC = (error: string): SetUpdateClientGalleryApiErrorAT => ({
+  type: SET_UPDATE_CLIENT_GALLERY_API_ERROR, error
+})
+
+type SetAddClientApiErrorAT = {
+  type: typeof SET_ADD_CLIENT_API_ERROR
+  error: string
+}
+
+export const setAddClientApiErrorAC = (error: string): SetAddClientApiErrorAT => ({
+  type: SET_ADD_CLIENT_API_ERROR, error
+})
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
@@ -486,6 +520,8 @@ export const addClient = (
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAddClientApiErrorAC(e.response.data.message))
     console.log(e)
   }
 }
@@ -538,7 +574,8 @@ export const updateClientGallery = (
       dispatch(editClientAC(response.client))
       dispatch(setIsSuccessAC(true))
     }
-  } catch (e) {
+  } catch (e: any) {
+    dispatch(setUpdateClientGalleryApiErrorAC(e.response?.data?.message))
     console.log(e)
   } finally {
     dispatch(setIsFetching(false))
@@ -558,6 +595,7 @@ export const deleteClientGalleryPicture = (
       dispatch(editClientAC(response.client))
     }
   } catch (e) {
+    dispatch(toggleIsDeletingPicturesInProcessAC(false, picture))
     console.log(e)
   } finally {
     dispatch(toggleIsDeletingPicturesInProcessAC(false, picture))

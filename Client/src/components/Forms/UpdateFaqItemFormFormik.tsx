@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {ErrorMessage, Field, Form, Formik} from 'formik'
+import {Form, Formik} from 'formik'
 import * as yup from 'yup'
 import {FaqType} from '../../types/Types'
 import {FieldComponent} from "./FieldComponent";

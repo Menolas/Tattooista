@@ -8,7 +8,8 @@ import {
   getFaqItemsSelector,
   getIsSuccessBookingSelector,
   getPagesSelector,
-  getServicesSelector
+  getServicesSelector,
+  getUpdateFaqItemApiErrorSelector
 } from '../../redux/General/general-selectors'
 import {
   getFaqItems,
@@ -24,7 +25,7 @@ import {
   deleteFaqItem,
   bookConsultation,
   setIsSuccessAC,
-  setIsSuccessBookingAC, setBookingConsultationApiErrorAC
+  setIsSuccessBookingAC, setBookingConsultationApiErrorAC, setUpdateFaqItemApiErrorAC
 } from '../../redux/General/general-reducer'
 import { getTattooStyles, setActiveStyleAC } from '../../redux/Portfolio/portfolio-reducer'
 import {getGalleryPageSize, getTattooStylesSelector} from '../../redux/Portfolio/portfolio-selectors'
@@ -41,6 +42,7 @@ export const MainPageContainer: React.FC = () =>  {
   const isSuccess = useSelector(getIsSuccessSelector)
   const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
+  const updateFaqItemApiError = useSelector(getUpdateFaqItemApiErrorSelector)
 
   const dispatch = useDispatch()
 
@@ -103,6 +105,10 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(setBookingConsultationApiErrorAC(error))
   }
 
+  const setUpdateFaqItemApiErrorCallBack = (error: string) => {
+    dispatch(setUpdateFaqItemApiErrorAC(error))
+  }
+
   return (
     <MainPage
       isAuth={isAuth}
@@ -113,6 +119,7 @@ export const MainPageContainer: React.FC = () =>  {
       pages={pages}
       isSuccess={isSuccess}
       isSuccessBooking={isSuccessBooking}
+      updateFaqItemApiError={updateFaqItemApiError}
       setActiveStyle={setActiveStyleCallBack}
       editAboutPage={editAboutPageCallBack}
       changePageVisibility={changePageVisibilityCallBack}
@@ -127,6 +134,7 @@ export const MainPageContainer: React.FC = () =>  {
       setIsSuccessBooking={setIsSuccessBookingCallBack}
       bookingConsultationApiError={bookingConsultationApiError}
       setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
+      setUpdateFaqItemApiError={setUpdateFaqItemApiErrorCallBack}
     />
   )
 }

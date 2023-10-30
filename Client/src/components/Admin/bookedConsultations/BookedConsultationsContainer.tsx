@@ -10,7 +10,7 @@ import {
   addBookedConsultation,
   BookedConsultationsFilterType,
   archiveConsultation,
-  setCurrentPageForBookedConsultationsAC, setIsSuccessAC, setBookedConsultationsFilterAC,
+  setCurrentPageForBookedConsultationsAC, setIsSuccessAC, setBookedConsultationsFilterAC, setAddBookingApiErrorAC,
 } from '../../../redux/bookedConsultations/bookedConsultations-reducer'
 import {
   getBookedConsultationsSelector,
@@ -106,6 +106,10 @@ export const BookedConsultationsContainer: React.FC = () => {
     dispatch(setIsSuccessAC(bol))
   }
 
+  const setAddBookingApiErrorCallBack = (error: string) => {
+    dispatch(setAddBookingApiErrorAC(error))
+  }
+
   return (
       <BookedConsultations
         isFetching={isFetching}
@@ -117,6 +121,7 @@ export const BookedConsultationsContainer: React.FC = () => {
         bookedConsultationsFilter={filter}
         isStatusChanging={isStatusChanging}
         isDeletingInProcess={isDeletingInProcess}
+        addBookingApiError={addBookingApiError}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
         changeStatus={changeBookedConsultationStatusCallBack}
@@ -126,7 +131,7 @@ export const BookedConsultationsContainer: React.FC = () => {
         addBookedConsultation={addBookedConsultationCallBack}
         archiveConsultation={archiveConsultationCallBack}
         setIsSuccess={setIsSuccessCallBack}
-        addBookingApiError={addBookingApiError}
+        setAddBookingApiError={setAddBookingApiErrorCallBack}
       />
   )
 }

@@ -71,15 +71,16 @@ class bookingController {
 
   async createBooking(req, res) {
     const results = {}
-
     try {
       const booking = new Booking({
         fullName: req.body.bookingName,
-        email: req.body.mail,
-        phone: req.body.phone,
-        whatsapp: req.body.whatsapp,
-        messenger: req.body.messenger,
-        message: req.body.message
+        contacts: {
+          email: req.body.mail,
+          phone: req.body.phone,
+          whatsapp: req.body.whatsapp,
+          messenger: req.body.messenger,
+          message: req.body.message
+        }
       })
       await booking.save()
       results.resultCode = 0
@@ -95,7 +96,6 @@ class bookingController {
 
   async deleteBooking(req, res) {
     const results = {}
-
     try {
       await res.booking.remove()
       results.resultCode = 0

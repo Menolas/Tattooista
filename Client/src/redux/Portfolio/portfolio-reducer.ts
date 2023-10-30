@@ -19,6 +19,7 @@ const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY'
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM'
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
+const SET_UPDATE_TATTOO_STYLE_API_ERROR = 'SET_UPDATE_TATTOO_STYLE_API_ERROR'
 
 let initialState = {
   totalGalleryItemsCount: 0 as number | null,
@@ -33,7 +34,8 @@ let initialState = {
   activeStyle: {} as TattooStyleType | null,
   gallery: [] as Array<GalleryItemType>,
   archivedGallery: [] as Array<GalleryItemType>,
-  isSuccess: false as boolean
+  isSuccess: false as boolean,
+  updateTattooStyleError: '' as string | undefined,
 }
 
 export type InitialStateType = typeof initialState
@@ -148,20 +150,33 @@ export const portfolioReducer = (
         isSuccess: action.isSuccess
       }
 
+    case SET_UPDATE_TATTOO_STYLE_API_ERROR:
+      return {
+        ...state,
+        updateTattooStyleError: action.error
+      }
+
     default: return {
       ...state
     }
   }
 }
 
-//action creators
-
-type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT |
+type ActionsTypes = SetUpdateTattooStyleApiErrorAT | ToggleIsDeletingInProcessAT | SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT |
     SetCurrentGalleryPageAT | SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT |
     SetArchivedGalleryTotalCountAT | SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT |
     SetGalleryAT | SetArchivedGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT
 
 // actions creators
+
+type SetUpdateTattooStyleApiErrorAT = {
+  type: typeof SET_UPDATE_TATTOO_STYLE_API_ERROR
+  error: string | undefined
+}
+
+export const setUpdateTattooStyleApiErrorAC = (error: string | undefined): SetUpdateTattooStyleApiErrorAT => ({
+  type: SET_UPDATE_TATTOO_STYLE_API_ERROR, error
+})
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
@@ -329,7 +344,8 @@ export const addTattooStyle = (values: FormData): ThunkType => async (
       dispatch(setActiveStyleAC(response.tattooStyle))
       dispatch(setIsSuccessAC(true))
     }
-  } catch (e) {
+  } catch (e: any) {
+    dispatch(setUpdateTattooStyleApiErrorAC(e.response?.data?.message || 'An error occurred'))
     console.log(e)
   }
 }
@@ -340,7 +356,8 @@ export const editTattooStyle = (id: string, values: FormData): ThunkType => asyn
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyle))
     }
-  } catch (e) {
+  } catch (e: any) {
+    dispatch(setUpdateTattooStyleApiErrorAC(e.response?.data?.message || 'An error occurred'))
     console.log(e)
   }
 }

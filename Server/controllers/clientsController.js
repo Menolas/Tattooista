@@ -3,6 +3,28 @@ const ArchivedClient = require('../models/ArchivedClient')
 const fs = require("fs")
 const mv = require('mv')
 const move = require('../utils/functions')
+const path = require('path')
+const crypto = require('crypto')
+
+function generateRandomString(length) {
+  return crypto.randomBytes(Math.ceil(length / 2))
+      .toString('hex')
+      .slice(0, length);
+}
+
+function saveFileWithRandomName(filePath, originalName) {
+  const fileExt = path.extname(originalName);
+  const randomFileName = `${generateRandomString(12)}${fileExt}`;
+  const newFilePath = path.join(__dirname, 'uploads', randomFileName);
+
+  fs.rename(filePath, newFilePath, (err) => {
+    if (err) {
+      console.error('Error renaming file:', err);
+    } else {
+      console.log('File saved with a random name:', randomFileName);
+    }
+  });
+}
 
 class clientsController {
 
@@ -111,8 +133,7 @@ class clientsController {
     const results = {}
 
     try {
-      const updatedClient = await res.client.save()
-      results.client = updatedClient
+      results.client = await res.client.save()
       results.resultCode = 0
       res.json(results)
     } catch (e) {
@@ -136,7 +157,8 @@ class clientsController {
       const fileNewName = encodeURI(Date.now() + '_' + files[key].name)
       newGallery.push(fileNewName)
       await files[key].mv(`./uploads/clients/${res.client._id}/doneTattooGallery/${fileNewName}`, e => {
-        if (e) if (e) console.log(e)
+        if (e) console.log(e)
+        res.client.save()
       })
     }
 
@@ -145,8 +167,7 @@ class clientsController {
     const results = {}
 
     try {
-      const updatedClient = await res.client.save()
-      results.client = updatedClient
+      results.client = res.client
       results.resultCode = 0
       res.json(results)
     } catch (e) {
@@ -171,11 +192,12 @@ class clientsController {
     if (req.files && req.files.avatar) {
       const file = req.files.avatar
       if (!file) return res.json({error: 'Incorrect input name'})
+      console.log(file.name + " uploaded file name!!!!!!!!!!!!!!")
       const newFileName = encodeURI(Date.now() + '_' + file.name)
+      console.log(newFileName + " encoded file name!!!!!!!!!!!!!!")
       await file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, e => {
         if (e) console.log(e)
       })
-
       client.avatar = newFileName
     }
 

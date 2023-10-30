@@ -64,3 +64,11 @@ export const getIsSuccessSelector = (state: AppStateType) => {
 export const getIsDeletingPicturesInProcess = (state: AppStateType) => {
   return state.clients.isDeletingPicturesInProcess
 }
+
+export const getAddClientApiErrorSelector = (state: AppStateType) => {
+  return state.clients.addClientApiError
+}
+
+export const getUpdateClientGalleryApiErrorSelector = (state: AppStateType) => {
+  return state.clients.updateClientGalleryApiError
+}

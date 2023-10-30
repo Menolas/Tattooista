@@ -51,3 +51,7 @@ export const getTotalArchivedGalleryItemsCountSelector = (state: AppStateType) =
 export const getIsGalleryItemDeletingInProcessSelector = (state: AppStateType) => {
   return state.portfolio.isDeletingInProcess
 }
+
+export const getUpdateTattooStyleApiErrorSelector = (state: AppStateType) => {
+  return state.portfolio.updateTattooStyleError
+}
