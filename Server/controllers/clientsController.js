@@ -131,12 +131,12 @@ class clientsController {
     const files = req.files
 
     for (let key in files) {
-      const fileNewName = encodeURI(Date.now() + '_' + files[key].name)
+      const fileNewName = generateFileRandomName(files[key].name)
       newGallery.push(fileNewName)
       await files[key].mv(`./uploads/clients/${res.client._id}/doneTattooGallery/${fileNewName}`, e => {
         if (e) console.log(e)
-        res.client.save()
       })
+      await res.client.save()
     }
 
     const oldData = [...res.client.gallery]
@@ -321,13 +321,13 @@ class clientsController {
         await fs.rm(`./uploads/clients/${res.client._id}/avatar`, { recursive:true }, e => {
           if (e) console.log(e)
         })
-        if (res.client.gallery.length == 0) {
+        if (res.client.gallery.length === 0) {
           await fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, e => {
             if (e) console.log(e)
           })
         }
       }
-      if (res.client.gallery.length != 0) {
+      if (res.client.gallery.length !== 0) {
         await res.client.gallery.forEach((item) => {
             fs.unlink(`./uploads/clients/${res.client._id}/doneTattooGallery/${item}`, e => {
             if (e) console.log(e)
@@ -361,13 +361,13 @@ class clientsController {
         await fs.rm(`./uploads/archivedClients/${res.client._id}/avatar`, { recursive:true }, e => {
           if (e) console.log(e)
         })
-        if (res.client.gallery.length == 0) {
+        if (res.client.gallery.length === 0) {
           await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, e => {
             if (e) console.log(e)
           })
         }
       }
-      if (res.client.gallery.length != 0) {
+      if (res.client.gallery.length !== 0) {
         await res.client.gallery.forEach((item) => {
           fs.unlink(`./uploads/archivedClients/${res.client._id}/doneTattooGallery/${item}`, e => {
             if (e) console.log(e)
@@ -400,7 +400,7 @@ class clientsController {
         if (e) console.log(e)
       })
 
-      if (res.client.gallery.length == 0) {
+      if (res.client.gallery.length === 0) {
         await fs.rm(`./uploads/clients/${res.client._id}/doneTattooGallery`, { recursive:true }, e => {
           if (e) console.log(e)
         })

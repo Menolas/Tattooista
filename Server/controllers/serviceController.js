@@ -1,5 +1,6 @@
 const Service = require('../models/Service');
 const fs = require("fs");
+const generateFileRandomName = require("../utils/functions");
 //const Page = require("../models/Page");
 //const Category = require("../models/Category");
 
@@ -47,7 +48,7 @@ class serviceController {
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
-        const newFileName = encodeURI(Date.now() + '_' + file.name)
+        const newFileName = generateFileRandomName(file.name)
         await fs.unlink(`./uploads/serviceWallpapers/${res.service._id}/${res.service.wallPaper}`, e => {
           if (e) console.log(e)
         })
@@ -103,7 +104,7 @@ class serviceController {
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
-        const newFileName = encodeURI(Date.now() + '_' + file.name)
+        const newFileName = generateFileRandomName(file.name)
         await file.mv(`./uploads/serviceWallpapers/${newService._id}/${newFileName}`, e => {
           service.wallPaper = newFileName
           service.save()
