@@ -1,5 +1,7 @@
 const fs = require('fs')
 const mv = require('mv')
+const crypto = require('crypto')
+const path = require('path')
 
 module.exports = function move(oldPath, newPath) {
 
@@ -29,6 +31,19 @@ module.exports = function move(oldPath, newPath) {
         readStream.pipe(writeStream)
     }
 }
+
+const generateRandomString = (length) => {
+    return crypto.randomBytes(Math.ceil(length / 2))
+        .toString('hex')
+        .slice(0, length)
+}
+
+module.exports = function generateFileRandomName (originalName) {
+    const fileExt = path.extname(originalName)
+    return `${generateRandomString(12)}${fileExt}`
+}
+
+
 
 function validateCyrillicFileName(fileName) {
     const cyrillicPattern = /[\u0400-\u04FF]/; // Cyrillic characters range

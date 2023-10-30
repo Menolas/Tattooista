@@ -1,30 +1,8 @@
 const Client = require('../models/Client')
 const ArchivedClient = require('../models/ArchivedClient')
-const fs = require("fs")
+const fs = require('fs')
 const mv = require('mv')
-const move = require('../utils/functions')
-const path = require('path')
-const crypto = require('crypto')
-
-function generateRandomString(length) {
-  return crypto.randomBytes(Math.ceil(length / 2))
-      .toString('hex')
-      .slice(0, length);
-}
-
-function saveFileWithRandomName(filePath, originalName) {
-  const fileExt = path.extname(originalName);
-  const randomFileName = `${generateRandomString(12)}${fileExt}`;
-  const newFilePath = path.join(__dirname, 'uploads', randomFileName);
-
-  fs.rename(filePath, newFilePath, (err) => {
-    if (err) {
-      console.error('Error renaming file:', err);
-    } else {
-      console.log('File saved with a random name:', randomFileName);
-    }
-  });
-}
+const generateFileRandomName = require('../utils/functions')
 
 class clientsController {
 
@@ -122,11 +100,10 @@ class clientsController {
       }
 
       const file = req.files.avatar
-      const newFileName = encodeURI(Date.now() + '_' + file.name)
+      const newFileName = generateFileRandomName(file.name)
       await file.mv(`./uploads/clients/${res.client._id}/avatar/${newFileName}`, e => {
         if (e) console.log(e)
       })
-
       res.client.avatar = newFileName
     }
 
@@ -192,9 +169,7 @@ class clientsController {
     if (req.files && req.files.avatar) {
       const file = req.files.avatar
       if (!file) return res.json({error: 'Incorrect input name'})
-      console.log(file.name + " uploaded file name!!!!!!!!!!!!!!")
-      const newFileName = encodeURI(Date.now() + '_' + file.name)
-      console.log(newFileName + " encoded file name!!!!!!!!!!!!!!")
+      const newFileName = generateFileRandomName(file.name)
       await file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, e => {
         if (e) console.log(e)
       })
