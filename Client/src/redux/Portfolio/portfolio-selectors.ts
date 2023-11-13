@@ -55,3 +55,7 @@ export const getIsGalleryItemDeletingInProcessSelector = (state: AppStateType) =
 export const getUpdateTattooStyleApiErrorSelector = (state: AppStateType) => {
   return state.portfolio.updateTattooStyleError
 }
+
+export const getUpdateGalleryApiErrorSelector = (state: AppStateType) => {
+  return state.portfolio.updateGalleryApiError
+}

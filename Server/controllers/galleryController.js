@@ -1,8 +1,8 @@
 const GalleryItem = require('../models/GalleryItem')
 const ArchivedGalleryItem = require('../models/ArchivedGalleryItem')
-const fs = require("fs")
-const mv = require("mv");
-const generateFileRandomName = require("../utils/functions");
+const fs = require('fs')
+const mv = require('mv')
+const generateFileRandomNameWithDate =require('../utils/functions')
 
 class galleryController {
 
@@ -83,7 +83,7 @@ class galleryController {
     const results = {}
 
     for (let key in files) {
-      const fileNewName = generateFileRandomName(files[key].name)
+      const fileNewName = generateFileRandomNameWithDate(files[key].name)
       gallery.push(fileNewName)
       await files[key].mv(`./uploads/gallery/${fileNewName}`, e => {
         if (e) console.log(e)

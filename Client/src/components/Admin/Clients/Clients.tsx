@@ -9,10 +9,8 @@ import { ClientSearchFormFormik } from '../../Forms/ClientSearchFormFormik'
 import { ClientsFilterType} from '../../../redux/Clients/clients-reducer'
 import {NothingToShow} from "../../common/NothingToShow"
 import {SuccessPopUp} from "../../common/SuccessPopUp"
-import {useDispatch} from "react-redux"
-import {setIsSuccessAC} from "../../../redux/Portfolio/portfolio-reducer"
-import {Preloader} from "../../common/Preloader";
-import {BookingApiError} from "../../common/BookindApiError";
+import {Preloader} from "../../common/Preloader"
+import {ApiErrorMessage} from "../../common/ApiErrorMessage"
 
 type PropsType = {
   isFetching: boolean
@@ -63,7 +61,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setAddClientApiError,
     setUpdateClientGalleryApiError
 }) => {
-    const dispatch = useDispatch()
 
     useEffect(() => {
         if (isSuccess) {
@@ -72,22 +69,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
             }, 1500)
         }
     }, [isSuccess])
-
-    useEffect(() => {
-        if (addClientApiError) {
-            setTimeout( () => {
-                setAddClientApiError('')
-            }, 1500)
-        }
-    }, [addClientApiError])
-
-    useEffect(() => {
-        if (updateClientGalleryApiError) {
-            setTimeout( () => {
-                setUpdateClientGalleryApiError('')
-            }, 1500)
-        }
-    }, [updateClientGalleryApiError])
 
   let [addClientMode, setAddClientMode] = useState<boolean>(false)
 
@@ -168,11 +149,17 @@ export const Clients: React.FC<PropsType> = React.memo(({
         }
 
         { addClientApiError && addClientApiError !== '' &&
-            <BookingApiError error={addClientApiError}/>
+              <ApiErrorMessage
+                  error={addClientApiError}
+                  closeModal={setAddClientApiError}
+              />
         }
 
         { updateClientGalleryApiError && updateClientGalleryApiError !== '' &&
-          <BookingApiError error={updateClientGalleryApiError}/>
+              <ApiErrorMessage
+                  error={updateClientGalleryApiError}
+                  closeModal={setUpdateClientGalleryApiError}
+              />
         }
       </>
   )

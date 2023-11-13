@@ -33,6 +33,11 @@
   .actionBar {
     top: 10px;
     right: 10px;
+    z-index: 9;
+
+    button {
+      background-color: $dark;
+    }
   }
 
   h4 {

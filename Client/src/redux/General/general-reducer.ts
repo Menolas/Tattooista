@@ -13,6 +13,7 @@ const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING'
 const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR'
 const SET_UPDATE_FAQ_ITEM_API_ERROR = 'SET_UPDATE_FAQ_ITEM_API_ERROR'
 const SET_UPDATE_SERVICE_API_ERROR = 'SET_UPDATE_SERVICE_API_ERROR'
+const SET_UPDATE_PAGE_API_ERROR = 'SET_UPDATE_PAGE_API_ERROR'
 const SET_IS_BOOKING_MODAL_OPEN = 'SET_IS_BOOKING_MODAL_OPEN'
 
 let initialState = {
@@ -24,6 +25,7 @@ let initialState = {
   bookingConsultationApiError: '' as string | undefined,
   updateFaqItemApiError: '' as string | undefined,
   updateServiceApiError: '' as string | undefined,
+  updatePageApiError: '' as string | undefined,
   isBookingModalOpen: false as boolean,
 }
 
@@ -95,6 +97,12 @@ export const generalReducer = (
         updateFaqItemApiError: action.error
       }
 
+    case SET_UPDATE_PAGE_API_ERROR:
+      return {
+        ...state,
+        updatePageApiError: action.error
+      }
+
     case SET_IS_BOOKING_MODAL_OPEN:
       return {
         ...state,
@@ -107,7 +115,7 @@ export const generalReducer = (
   }
 }
 
-type ActionsTypes = SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
+type ActionsTypes = SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
     SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetPageVisibilityActionType
     | SetPagesActionType | SetFaqItemsActionType | SetServicesActionType
 
@@ -120,6 +128,15 @@ type SetIsBookingModalOpenAT = {
 
 export const setIsBookingModalOpenAC = (bol: boolean): SetIsBookingModalOpenAT => ({
   type: SET_IS_BOOKING_MODAL_OPEN, bol
+})
+
+type SetUpdatePageApiErrorAT = {
+  type: typeof SET_UPDATE_PAGE_API_ERROR
+  error: string | undefined
+}
+
+export const setUpdatePageApiErrorAC = (error: string | undefined): SetUpdatePageApiErrorAT => ({
+  type: SET_UPDATE_PAGE_API_ERROR, error
 })
 
 type SetUpdateServiceApiErrorAT = {
@@ -286,7 +303,8 @@ export const editAboutPage = (id: string, FormData: FormData): ThunkType => asyn
       dispatch(setPages(response.pages))
       dispatch(setIsSuccessAC(true))
     }
-  } catch (e) {
+  } catch (e: any) {
+    dispatch(setUpdatePageApiErrorAC(e.response?.data?.message || 'An error occurred'))
     console.log(e);
   }
 }

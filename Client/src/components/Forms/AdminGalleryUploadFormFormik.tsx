@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { useState } from 'react'
-import {ErrorMessage, Form, Formik, FormikHelpers, FormikValues} from 'formik'
-import * as yup from "yup";
-import {ErrorMessageWrapper} from '../../utils/validators'
+import { Field, Form, Formik} from 'formik'
+import * as Yup from "yup";
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
+import {FieldWrapper} from "./FieldWrapper";
 
 type PropsType = {
   activeStyle: string
@@ -12,28 +12,20 @@ type PropsType = {
   closeModal: () => void
 }
 
-const FILE_SIZE = 160 * 1024;
-const SUPPORTED_FORMATS = [
-  "image/jpg",
-  "image/jpeg",
-  "image/gif",
-  "image/png"
-];
-
-const validationSchema = yup.object().shape({
-  gallery: yup
-      .mixed()
-      .required("Pick some files")
-      // .test(
-      //     "fileSize",
-      //     "File too large",
-      //     value => value && value.size <= FILE_SIZE
-      // )
-      // .test(
-      //     "fileFormat",
-      //     "Unsupported Format",
-      //     value => value && SUPPORTED_FORMATS.includes(value.type)
-      // )
+const validationSchema = Yup.object().shape({
+  gallery: Yup.array()
+      .max(5, 'You can upload up to 5 files') // Adjust the maximum number of files as needed
+      .of(
+          Yup.mixed()
+              .test('fileSize', 'Max allowed size is 2MB', (value: File) => {
+                if (!value) return true; // If no file is provided, it's considered valid
+                return value.size <= 1024 * 1024; // Adjust the file size limit as needed (2MB in this example)
+              })
+              .test('fileType', 'Invalid file type', (value: File) => {
+                if (!value) return true; // If no file is provided, it's considered valid
+                return ['image/jpeg', 'image/png', 'application/pdf'].includes(value.type); // Adjust the allowed file types
+              })
+      ),
 });
 
 export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
@@ -46,6 +38,7 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     if (event.target.files && event.target.files.length) {
+      // @ts-ignore
       let files = [...event.target.files] || []
       files.forEach((item, index) => {
         let reader = new FileReader()
@@ -79,7 +72,6 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
       {propsF => {
         return (
           <Form className="form form--galleryUpload" encType={"multipart/form-data"}>
-            <div className="form__input-wrap">
               <ul className={"list gallery__uploadedImgPreviews"}>
                 {
                   imageURLS?.map((item, index) => {
@@ -95,26 +87,25 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
                   })
                 }
               </ul>
-              <label className="btn btn--sm" htmlFor={"gallery"}>Pick File</label>
-              <input
-                className="hidden"
-                id="gallery"
-                name={'gallery'}
-                type={'file'}
-                accept="image/*,.png,.jpg,.web,.jpeg,.webp"
-                value={undefined}
-                multiple
-                onChange={(e) => {
-                  if (e.currentTarget.files) {
-                    propsF.setFieldValue('gallery', Array.from(e.currentTarget.files))
-                    handleOnChange(e)
-                  }
-                }}
-              />
-              <ErrorMessage name='gallery'>
-                {ErrorMessageWrapper}
-              </ErrorMessage>
-            </div>
+              <FieldWrapper
+                  name={'gallery'}
+                  wrapperClass={''}
+              >
+                <label className="btn btn--sm" htmlFor={"gallery"}>Pick File</label>
+                <Field
+                    className="hidden"
+                    id="gallery"
+                    name={'gallery'}
+                    type={'file'}
+                    accept="image/*,.png,.jpg,.web,.jpeg,.webp"
+                    value={undefined}
+                    multiple
+                    onChange={(e) => {
+                      propsF.setFieldValue('gallery', Array.from(e.currentTarget.files))
+                      handleOnChange(e)
+                    }}
+                />
+              </FieldWrapper>
             <button
               type="submit"
               disabled={propsF.isSubmitting}

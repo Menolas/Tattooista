@@ -11,14 +11,12 @@ import {
     PageType,
     ServiceType,
     TattooStyleType
-} from "../../types/Types";
-import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+} from "../../types/Types"
+import {SuccessPopUp} from "../../components/common/SuccessPopUp"
 import {useEffect} from "react";
-import {setIsSuccessAC} from "../../redux/Clients/clients-reducer";
-import {useDispatch} from "react-redux";
-import {setIsSuccessBookingAC} from "../../redux/General/general-reducer";
-import {ModalPopUp} from "../../components/common/ModalPopUp";
-import {BookingApiError} from "../../components/common/BookindApiError";
+import {setIsSuccessAC} from "../../redux/Clients/clients-reducer"
+import {useDispatch} from "react-redux"
+import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
 
 type PropsType = {
   isAuth: boolean
@@ -31,6 +29,8 @@ type PropsType = {
   isSuccessBooking: boolean
   bookingConsultationApiError: string
   updateFaqItemApiError: string
+  updateServiceApiError: string
+  updatePageApiError: string
   setActiveStyle: (style: TattooStyleType) => void
   editAboutPage: (id: string, values: FormData) => void
   changePageVisibility: (pageId: string, isActive: boolean) => void
@@ -45,6 +45,8 @@ type PropsType = {
   setIsSuccessBooking: (bol: boolean) => void
   setBookingConsultationApiError: (error: string) => void
   setUpdateFaqItemApiError: (error: string) => void
+  setUpdateServiceApiError: (error: string) => void
+  setUpdatePageApiError: (error: string) => void
 }
 
 export const MainPage: React.FC<PropsType> = React.memo(({
@@ -58,6 +60,8 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   isSuccessBooking,
   bookingConsultationApiError,
   updateFaqItemApiError,
+  updateServiceApiError,
+  updatePageApiError,
   setActiveStyle,
   editAboutPage,
   changePageVisibility,
@@ -71,7 +75,9 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   setIsSuccess,
   setIsSuccessBooking,
   setBookingConsultationApiError,
-  setUpdateFaqItemApiError
+  setUpdateFaqItemApiError,
+  setUpdateServiceApiError,
+  setUpdatePageApiError
 }) => {
   const pageAbout = pages?.find(page => page.name === 'about')
   const successBookingPopUpContent = "You've booked a consultation! We will contact you soon))"
@@ -94,23 +100,6 @@ export const MainPage: React.FC<PropsType> = React.memo(({
             }, 1500)
         }
   }, [isSuccessBooking])
-
-  useEffect(() => {
-    if (bookingConsultationApiError) {
-        setTimeout( () => {
-            setBookingConsultationApiError('')
-        }, 1500)
-    }
-  }, [bookingConsultationApiError])
-
-  useEffect(() => {
-    if (updateFaqItemApiError) {
-      setTimeout( () => {
-          setUpdateFaqItemApiError('')
-      }, 1500)
-    }
-  }, [updateFaqItemApiError])
-
 
   return (
     <>
@@ -148,10 +137,30 @@ export const MainPage: React.FC<PropsType> = React.memo(({
         <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
       }
       { bookingConsultationApiError && bookingConsultationApiError !== '' &&
-        <BookingApiError error={bookingConsultationApiError}/>
+        <ApiErrorMessage
+            error={bookingConsultationApiError}
+            closeModal={setBookingConsultationApiError}
+        />
       }
       { updateFaqItemApiError && updateFaqItemApiError !== '' &&
-        <BookingApiError error={updateFaqItemApiError}/>
+        <ApiErrorMessage
+            error={updateFaqItemApiError}
+            closeModal={setUpdateFaqItemApiError}
+        />
+      }
+      {
+        updateServiceApiError && updateServiceApiError !== '' &&
+            <ApiErrorMessage
+                error={updateServiceApiError}
+                closeModal={setUpdateServiceApiError}
+            />
+      }
+      {
+          updatePageApiError && updatePageApiError !== '' &&
+        <ApiErrorMessage
+            error={updatePageApiError}
+            closeModal={setUpdatePageApiError}
+        />
       }
     </>
   )

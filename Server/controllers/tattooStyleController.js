@@ -1,5 +1,6 @@
 const TattooStyle = require('../models/TattooStyle')
-const fs = require("fs");
+const fs = require("fs")
+const generateFileRandomName = require("../utils/functions")
 
 class tattooStyleController {
 
@@ -51,7 +52,7 @@ class tattooStyleController {
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
-        const newFileName = encodeURI(Date.now() + '_' + file.name)
+        const newFileName = generateFileRandomName(file.name)
         await file.mv(`./uploads/styleWallpapers/${newTattooStyle._id}/${newFileName}`, err => {
           tattooStyle.wallPaper = newFileName
           tattooStyle.save()
@@ -76,7 +77,7 @@ class tattooStyleController {
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
-        const newFileName = encodeURI(Date.now() + '_' + file.name)
+        const newFileName = generateFileRandomName(file.name)
         await fs.unlink(`./uploads/styleWallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
           if (err) console.log(err)
         })

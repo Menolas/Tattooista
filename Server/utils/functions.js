@@ -43,17 +43,22 @@ module.exports = function generateFileRandomName (originalName) {
     return `${generateRandomString(12)}${fileExt}`
 }
 
-
-
-function validateCyrillicFileName(fileName) {
-    const cyrillicPattern = /[\u0400-\u04FF]/; // Cyrillic characters range
-
-    if (cyrillicPattern.test(fileName)) {
-        return true; // Cyrillic characters are present
-    } else {
-        return false; // No Cyrillic characters
-    }
+module.exports = function generateFileRandomNameWithDate (originalName) {
+    const fileExt = path.extname(originalName)
+    return `${Date.now()}_${generateRandomString(12)}${fileExt}`
 }
+
+
+
+// function validateCyrillicFileName(fileName) {
+//     const cyrillicPattern = /[\u0400-\u04FF]/; // Cyrillic characters range
+//
+//     if (cyrillicPattern.test(fileName)) {
+//         return true; // Cyrillic characters are present
+//     } else {
+//         return false; // No Cyrillic characters
+//     }
+// }
 
 // Usage
 // const fileName = 'файл.txt'; // Replace with the actual file name

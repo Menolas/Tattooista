@@ -9,7 +9,7 @@ import {
   getIsSuccessBookingSelector,
   getPagesSelector,
   getServicesSelector,
-  getUpdateFaqItemApiErrorSelector
+  getUpdateFaqItemApiErrorSelector, getUpdatePageApiErrorSelector, getUpdateServiceApiErrorSelector
 } from '../../redux/General/general-selectors'
 import {
   getFaqItems,
@@ -25,7 +25,11 @@ import {
   deleteFaqItem,
   bookConsultation,
   setIsSuccessAC,
-  setIsSuccessBookingAC, setBookingConsultationApiErrorAC, setUpdateFaqItemApiErrorAC
+  setIsSuccessBookingAC,
+  setBookingConsultationApiErrorAC,
+  setUpdateFaqItemApiErrorAC,
+  setUpdateServiceApiErrorAC,
+  setUpdatePageApiErrorAC
 } from '../../redux/General/general-reducer'
 import { getTattooStyles, setActiveStyleAC } from '../../redux/Portfolio/portfolio-reducer'
 import {getGalleryPageSize, getTattooStylesSelector} from '../../redux/Portfolio/portfolio-selectors'
@@ -43,6 +47,8 @@ export const MainPageContainer: React.FC = () =>  {
   const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
   const updateFaqItemApiError = useSelector(getUpdateFaqItemApiErrorSelector)
+  const updateServiceApiError = useSelector(getUpdateServiceApiErrorSelector)
+  const updatePageApiError = useSelector(getUpdatePageApiErrorSelector)
 
   const dispatch = useDispatch()
 
@@ -109,6 +115,14 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(setUpdateFaqItemApiErrorAC(error))
   }
 
+  const setUpdateServiceApiErrorCallBack = (error: string) => {
+    dispatch(setUpdateServiceApiErrorAC(error))
+  }
+
+  const setUpdatePageApiErrorCallBack = (error: string) => {
+    dispatch(setUpdatePageApiErrorAC(error))
+  }
+
   return (
     <MainPage
       isAuth={isAuth}
@@ -120,6 +134,8 @@ export const MainPageContainer: React.FC = () =>  {
       isSuccess={isSuccess}
       isSuccessBooking={isSuccessBooking}
       updateFaqItemApiError={updateFaqItemApiError}
+      updateServiceApiError={updateServiceApiError}
+      updatePageApiError={updatePageApiError}
       setActiveStyle={setActiveStyleCallBack}
       editAboutPage={editAboutPageCallBack}
       changePageVisibility={changePageVisibilityCallBack}
@@ -135,6 +151,8 @@ export const MainPageContainer: React.FC = () =>  {
       bookingConsultationApiError={bookingConsultationApiError}
       setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
       setUpdateFaqItemApiError={setUpdateFaqItemApiErrorCallBack}
+      setUpdateServiceApiError={setUpdateServiceApiErrorCallBack}
+      setUpdatePageApiError={setUpdatePageApiErrorCallBack}
     />
   )
 }

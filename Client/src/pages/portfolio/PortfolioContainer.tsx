@@ -10,7 +10,7 @@ import {
   getGalleryPageSize,
   getCurrentGalleryPage,
   getIsGalleryItemDeletingInProcessSelector,
-  getActiveStyleSelector, getUpdateTattooStyleApiErrorSelector
+  getActiveStyleSelector, getUpdateTattooStyleApiErrorSelector, getUpdateGalleryApiErrorSelector
 } from '../../redux/Portfolio/portfolio-selectors'
 import {
   getActualPortfolio,
@@ -24,7 +24,7 @@ import {
   deleteTattooStyle,
   archiveGalleryItem,
   getTattooStyles,
-  setUpdateTattooStyleApiErrorAC
+  setUpdateTattooStyleApiErrorAC, setUpdateGalleryApiErrorAC
 } from '../../redux/Portfolio/portfolio-reducer'
 import { Portfolio } from './Portfolio'
 import {getAuthSelector} from '../../redux/Auth/auth-selectors'
@@ -32,12 +32,10 @@ import {getIsSuccessSelector} from '../../redux/bookedConsultations/bookedConsul
 import {
   bookConsultation,
   setBookingConsultationApiErrorAC,
-  setIsSuccessAC,
-  setUpdateServiceApiErrorAC
+  setIsSuccessAC
 } from "../../redux/General/general-reducer";
 import {
-  getBookingConsultationApiErrorSelector,
-  getUpdateServiceApiErrorSelector
+  getBookingConsultationApiErrorSelector
 } from "../../redux/General/general-selectors";
 
 export const PortfolioContainer: React.FC = () =>  {
@@ -53,7 +51,7 @@ export const PortfolioContainer: React.FC = () =>  {
   const isSuccess = useSelector(getIsSuccessSelector)
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
   const updateTattooStyleApiError = useSelector(getUpdateTattooStyleApiErrorSelector)
-  const updateServiceApiError = useSelector(getUpdateServiceApiErrorSelector)
+  const updateGalleryApiError = useSelector(getUpdateGalleryApiErrorSelector)
 
   const dispatch = useDispatch()
   //const navigate = useNavigate()
@@ -122,8 +120,8 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(setUpdateTattooStyleApiErrorAC(error))
   }
 
-  const setUpdateServiceApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateServiceApiErrorAC(error))
+  const setUpdateGalleryApiErrorCallBack = (error: string) => {
+    dispatch(setUpdateGalleryApiErrorAC(error))
   }
 
   return (
@@ -140,7 +138,7 @@ export const PortfolioContainer: React.FC = () =>  {
       isSuccess={isSuccess}
       bookingConsultationApiError={bookingConsultationApiError}
       updateTattooStyleApiError={updateTattooStyleApiError}
-      updateServiceApiError={updateServiceApiError}
+      updateGalleryApiError={updateGalleryApiError}
       setPageSize={setGalleryPageSizeCallBack}
       bookConsultation={bookConsultationCallBack}
       updateGallery={adminUpdateGalleryCallBack}
@@ -154,7 +152,7 @@ export const PortfolioContainer: React.FC = () =>  {
       setIsSuccess={setIsSuccessCallBack}
       setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
       setUpdateTattooStyleApiError={setUpdateTattooStyleApiErrorCallBack}
-      setUpdateServiceApiError={setUpdateServiceApiErrorCallBack}
+      setUpdateGalleryApiError={setUpdateGalleryApiErrorCallBack}
     />
   )
 }

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Form, Formik, FormikHelpers, FormikValues} from 'formik'
+import { Form, Formik} from 'formik'
 import * as Yup from 'yup'
 import {phoneRegex, ApiErrorMessage} from '../../utils/validators'
 import {AddConsultationFormValues} from "../../types/Types";
@@ -39,13 +39,11 @@ const initialValues: AddConsultationFormValues = {
 }
 
 type PropsType = {
-  addBookingApiError: string | undefined
   addBookedConsultation: (values: AddConsultationFormValues) => void
   closeBookingModal: () => void
 }
 
 export const AddConsultationForm: React.FC<PropsType> = React.memo(({
-  addBookingApiError,
   addBookedConsultation,
   closeBookingModal,
 }) => {
@@ -70,9 +68,6 @@ export const AddConsultationForm: React.FC<PropsType> = React.memo(({
           <Form id="booking"
             className="form booking__form"
           >
-            { addBookingApiError  !== '' &&
-                <ApiErrorMessage message={addBookingApiError}/>
-            }
             <FieldComponent
                 name={'bookingName'}
                 type={'text'}
