@@ -59,8 +59,8 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
     closeModal()
   }
 
-  const initialValues: any = {
-    gallery: null
+  const initialValues = {
+    gallery: []
   }
 
   return (
@@ -73,40 +73,43 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
       {propsF => {
         return (
           <Form className="form form--galleryUpload" encType={"multipart/form-data"}>
-              <ul className={"list gallery__uploadedImgPreviews"}>
-                {
-                  imageURLS?.map((item, index) => {
-                    return (
-                        <li className={"gallery__uploadedImgPreviews-item"} key={index}>
-                          <img
-                              src={item}
-                              alt="preview"
-                              height="50"
-                          />
-                        </li>
-                    )
-                  })
-                }
-              </ul>
-              <FieldWrapper
+            { imageURLS &&
+                <ul className={"list gallery__uploadedImgPreviews"}>
+                  {
+                    imageURLS?.map((item, index) => {
+                      return (
+                          <li className={"gallery__uploadedImgPreviews-item"} key={index}>
+                            <img
+                                src={item}
+                                alt="preview"
+                                height="50"
+                            />
+                          </li>
+                      )
+                    })
+                  }
+                </ul>
+            }
+
+            <FieldWrapper
+                name={'gallery'}
+                wrapperClass={''}
+            >
+              <label className="btn btn--sm" htmlFor={"gallery"}>Pick File</label>
+              <Field
+                  className="hidden"
+                  id="gallery"
                   name={'gallery'}
-                  wrapperClass={''}
-              >
-                <label className="btn btn--sm" htmlFor={"gallery"}>Pick File</label>
-                <Field
-                    className="hidden"
-                    id="gallery"
-                    name={'gallery'}
-                    type={'file'}
-                    accept="image/*,.png,.jpg,.web,.jpeg,.webp"
-                    value={undefined}
-                    multiple
-                    onChange={(e) => {
-                      propsF.setFieldValue('gallery', Array.from(e.currentTarget.files))
-                      handleOnChange(e)
-                    }}
-                />
-              </FieldWrapper>
+                  type={'file'}
+                  accept="image/*,.png,.jpg,.web,.jpeg,.webp"
+                  value={undefined}
+                  multiple
+                  onChange={(e) => {
+                    propsF.setFieldValue('gallery', Array.from(e.currentTarget.files))
+                    handleOnChange(e)
+                  }}
+              />
+            </FieldWrapper>
             <button
               type="submit"
               disabled={propsF.isSubmitting}
