@@ -38,6 +38,7 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     if (event.target.files && event.target.files.length) {
+      setImageURLS([])
       // @ts-ignore
       let files = [...event.target.files] || []
       files.forEach((item, index) => {
