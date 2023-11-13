@@ -63,7 +63,7 @@ export const ClientGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
 
   const submit = (values) => {
     const formData = new FormData()
-    values['gallery'].forEach((file) => formData.append(file.name, file))
+    values['gallery'].forEach((file: File) => formData.append(file.name, file))
     formData.append('gallery', values['gallery'])
     updateClientGallery(profileId, formData)
     closeModal()
