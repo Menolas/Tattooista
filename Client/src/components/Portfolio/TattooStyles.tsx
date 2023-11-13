@@ -1,15 +1,16 @@
-import * as React from 'react'
-import {useState} from 'react'
-import classNames from 'classnames'
-import AliceCarousel from 'react-alice-carousel'
-import 'react-alice-carousel/lib/alice-carousel.css'
-import {TattooStyleType} from '../../types/Types'
+import * as React from "react"
+import {useState} from "react"
+import * as classNames from "classnames"
+import "react-alice-carousel/lib/alice-carousel.css"
+import {TattooStyleType} from "../../types/Types"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
-import {UpdateTattooStyleFormFormik} from '../Forms/UpdateTattooStyleFormFormik'
-import {ModalPopUp} from '../common/ModalPopUp'
-import {SuccessModal} from "../SuccessModal";
-import {SuccessPopUp} from "../common/SuccessPopUp";
+import Sprite from "../../assets/svg/sprite.svg"
+import {UpdateTattooStyleFormFormik} from "../Forms/UpdateTattooStyleFormFormik"
+import {ModalPopUp} from "../common/ModalPopUp"
+import {SuccessPopUp} from "../common/SuccessPopUp"
+import AliceCarousel from 'react-alice-carousel'
+
+//onst AliceCarousel: any = require('react-alice-carousel');
 
 const responsive = {
   0: {items: 3},
@@ -98,7 +99,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
           items={tattooStylesAliceArray}
           responsive={responsive}
           controlsStrategy="alternate"
-          mouseTracking
+          mouseTracking={true}
         />
       </div>
       <div className="tattoo-style__item-content">
@@ -121,7 +122,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
         {
           editTattooStyleMode &&
           <ModalPopUp
-              modalTitle={modalTitle}
+              modalTitle={'Update tattoo style'}
               closeModal={closeEditModal}
           >
               <UpdateTattooStyleFormFormik

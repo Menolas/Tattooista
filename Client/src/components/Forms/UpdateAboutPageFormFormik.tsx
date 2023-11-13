@@ -1,17 +1,26 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { Field, Form, Formik} from 'formik'
-import * as yup from 'yup'
 import {SERVER_URL} from '../../utils/constants'
 // @ts-ignore
 import tattooMachine from '../../assets/img/tattoo-machine.webp'
 import {PageType} from '../../types/Types'
 import {FieldComponent} from "./FieldComponent";
 import {FieldWrapper} from "./FieldWrapper";
+import * as Yup from "yup";
 
-const validationSchema = yup.object().shape({
-    title: yup.string(),
-    content: yup.string(),
+const validationSchema = Yup.object().shape({
+    wallPaper: Yup.mixed()
+        .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
+            if (!value) return true
+            return value.size <= 1024 * 1024
+        })
+        .test('fileType', 'Invalid file type', (value: File) => {
+            if (!value) return true
+            return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
+        }),
+    title: Yup.string(),
+    content: Yup.string(),
 })
 
 type PropsType = {
@@ -80,18 +89,20 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                 />
                             </div>
                             <label className="btn btn--sm" htmlFor={"wallPaper"}>Pick File</label>
-                            <Field
-                                className="hidden"
-                                id="wallPaper"
-                                name={'wallPaper'}
-                                type={'file'}
-                                accept='image/*,.png,.jpg,.web,.jpeg'
-                                value={undefined}
-                                onChange={(e) => {
-                                    propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
-                                    handleOnChange(e)
-                                }}
-                            />
+                            <FieldWrapper name={'wallPaper'}>
+                                <Field
+                                    className="hidden"
+                                    id="wallPaper"
+                                    name={'wallPaper'}
+                                    type={'file'}
+                                    accept='image/*,.png,.jpg,.web,.jpeg'
+                                    value={undefined}
+                                    onChange={(e) => {
+                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
+                                        handleOnChange(e)
+                                    }}
+                                />
+                            </FieldWrapper>
                         </div>
 
                         <FieldComponent

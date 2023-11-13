@@ -892,6 +892,10 @@ img {
 .services__article .actionBar {
   top: 10px;
   right: 10px;
+  z-index: 9;
+}
+.services__article .actionBar button {
+  background-color: #080808;
 }
 .services__article h4 {
   margin-top: 0;
@@ -1758,7 +1762,7 @@ img {
     width: 705px;
   }
 }
-.modal-wrap.bookingApiError {
+.modal-wrap.apiErrorMessage {
   text-align: center;
   color: #080808;
   font-weight: 600;

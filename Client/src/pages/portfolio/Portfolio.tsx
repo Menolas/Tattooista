@@ -2,9 +2,9 @@ import * as React from 'react'
 import { Advertisement } from '../../components/Portfolio/Advertisement'
 import { Gallery } from '../../components/Portfolio/Gallery'
 import { TattooStyles } from '../../components/Portfolio/TattooStyles'
-import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
-import {useEffect, useState} from "react";
-import {BookingApiError} from "../../components/common/BookindApiError";
+import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types"
+import {useEffect} from "react";
+import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
 
 type PropsType = {
   isAuth: boolean
@@ -19,7 +19,7 @@ type PropsType = {
   isSuccess: boolean
   bookingConsultationApiError: string
   updateTattooStyleApiError: string
-  updateServiceApiError: string
+  updateGalleryApiError: string
   setPageSize: (pageSize: number) => void
   bookConsultation: (values: BookConsultationFormValues) => void
   updateGallery: (values: any) => void
@@ -33,7 +33,7 @@ type PropsType = {
   setIsSuccess: (bol: boolean) => void
   setBookingConsultationApiError: (error: string) => void
   setUpdateTattooStyleApiError: (error: string) => void
-  setUpdateServiceApiError: (error: string) => void
+  setUpdateGalleryApiError: (error:string) => void
 }
 
 export const Portfolio: React.FC<PropsType> = ({
@@ -49,7 +49,7 @@ export const Portfolio: React.FC<PropsType> = ({
   isSuccess,
   bookingConsultationApiError,
   updateTattooStyleApiError,
-  updateServiceApiError,
+  updateGalleryApiError,
   setPageSize,
   bookConsultation,
   updateGallery,
@@ -63,32 +63,8 @@ export const Portfolio: React.FC<PropsType> = ({
   setIsSuccess,
   setBookingConsultationApiError,
   setUpdateTattooStyleApiError,
-  setUpdateServiceApiError
+  setUpdateGalleryApiError
 }) => {
-
-  useEffect(() => {
-    if (bookingConsultationApiError) {
-      setTimeout( () => {
-        setBookingConsultationApiError('')
-      }, 1500)
-    }
-  }, [bookingConsultationApiError])
-
-  useEffect(() => {
-    if (updateTattooStyleApiError) {
-      setTimeout( () => {
-        setUpdateTattooStyleApiError('')
-      }, 1500)
-    }
-  }, [updateTattooStyleApiError])
-
-  useEffect(() => {
-    if (updateServiceApiError) {
-      setTimeout( () => {
-        setUpdateServiceApiError('')
-      }, 1500)
-    }
-  }, [updateServiceApiError])
 
   return (
     <div>
@@ -129,16 +105,26 @@ export const Portfolio: React.FC<PropsType> = ({
       />
 
       { bookingConsultationApiError && bookingConsultationApiError !== '' &&
-          <BookingApiError error={bookingConsultationApiError}/>
+          <ApiErrorMessage
+              error={bookingConsultationApiError}
+              closeModal={setBookingConsultationApiError}
+          />
       }
 
       { updateTattooStyleApiError && updateTattooStyleApiError !== '' &&
-          <BookingApiError error={updateTattooStyleApiError}/>
+          <ApiErrorMessage
+              error={updateTattooStyleApiError}
+              closeModal={setUpdateTattooStyleApiError}
+          />
       }
 
-      { updateServiceApiError && updateServiceApiError !== '' &&
-          <BookingApiError error={updateServiceApiError}/>
+      { updateGalleryApiError && updateGalleryApiError !== '' &&
+          <ApiErrorMessage
+              error={updateGalleryApiError}
+              closeModal={setUpdateGalleryApiError}
+          />
       }
+
     </div>
   )
 }

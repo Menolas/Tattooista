@@ -1,5 +1,6 @@
 const Page = require('../models/Page')
 const fs = require("fs");
+const generateFileRandomName = require("../utils/functions");
 
 class PagesController {
 
@@ -78,7 +79,7 @@ class PagesController {
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
-        const newFileName = encodeURI(Date.now() + '_' + file.name)
+        const newFileName = generateFileRandomName(file.name)
         await fs.unlink(`./uploads/pageWallpapers/${res.page._id}/${res.page.wallPaper}`, e => {
           if (e) console.log(e)
         })
@@ -86,7 +87,6 @@ class PagesController {
           if (e) console.log(e)
         })
         res.page.wallPaper = newFileName
-        //res.page.save()
       }
 
       await res.page.save()

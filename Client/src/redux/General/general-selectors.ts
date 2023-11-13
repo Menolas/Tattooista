@@ -35,3 +35,7 @@ export const getIsBookingModalOpenSelector = (state: AppStateType) => {
 export const getUpdateServiceApiErrorSelector = (state: AppStateType) => {
   return state.general.updateServiceApiError
 }
+
+export const getUpdatePageApiErrorSelector = (state: AppStateType) => {
+  return state.general.updatePageApiError
+}

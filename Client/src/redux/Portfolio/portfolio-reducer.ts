@@ -20,6 +20,7 @@ const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM'
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_UPDATE_TATTOO_STYLE_API_ERROR = 'SET_UPDATE_TATTOO_STYLE_API_ERROR'
+const SET_UPDATE_GALLERY_API_ERROR = 'SET_UPDATE_GALLERY_API_ERROR'
 
 let initialState = {
   totalGalleryItemsCount: 0 as number | null,
@@ -36,6 +37,7 @@ let initialState = {
   archivedGallery: [] as Array<GalleryItemType>,
   isSuccess: false as boolean,
   updateTattooStyleError: '' as string | undefined,
+  updateGalleryApiError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -156,18 +158,34 @@ export const portfolioReducer = (
         updateTattooStyleError: action.error
       }
 
+    case SET_UPDATE_GALLERY_API_ERROR:
+      return {
+        ...state,
+        updateGalleryApiError: action.error
+      }
+
     default: return {
       ...state
     }
   }
 }
 
-type ActionsTypes = SetUpdateTattooStyleApiErrorAT | ToggleIsDeletingInProcessAT | SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT |
-    SetCurrentGalleryPageAT | SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT |
-    SetArchivedGalleryTotalCountAT | SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT |
-    SetGalleryAT | SetArchivedGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT
+type ActionsTypes = SetUpdateGalleryApiErrorAT | SetUpdateTattooStyleApiErrorAT | ToggleIsDeletingInProcessAT |
+    SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT | SetCurrentGalleryPageAT |
+    SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT | SetIsFetchingAT |
+    SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT | DeleteGalleryItemAT |
+    DeleteArchivedGalleryItemAT
 
 // actions creators
+
+type SetUpdateGalleryApiErrorAT = {
+  type: typeof SET_UPDATE_GALLERY_API_ERROR
+  error: string | undefined
+}
+
+export const setUpdateGalleryApiErrorAC = (error: string | undefined): SetUpdateGalleryApiErrorAT => ({
+  type: SET_UPDATE_GALLERY_API_ERROR, error
+})
 
 type SetUpdateTattooStyleApiErrorAT = {
   type: typeof SET_UPDATE_TATTOO_STYLE_API_ERROR
@@ -446,7 +464,8 @@ export const adminUpdateGallery = (
       dispatch(setCurrentGalleryPageAC(0))
       dispatch(setIsSuccessAC(true))
     }
-  } catch (e) {
+  } catch (e: any) {
+    dispatch(setUpdateGalleryApiErrorAC(e.response?.data?.message || 'An error occurred'))
     console.log(e)
   } finally {
     dispatch(setIsFetchingAC(false))

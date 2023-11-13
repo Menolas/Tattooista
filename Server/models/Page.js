@@ -13,7 +13,7 @@ const PageSchema = new mongoose.Schema({
     default: true
   },
   title: {
-    type: String
+    type: String,
   },
   wallPaper: {
     type: String

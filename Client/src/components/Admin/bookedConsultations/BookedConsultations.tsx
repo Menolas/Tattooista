@@ -7,12 +7,12 @@ import { BookedConsultationsSearchForm } from '../../Forms/BookedConsultationsSe
 import { BookedConsultationsFilterType } from '../../../redux/bookedConsultations/bookedConsultations-reducer'
 import {ModalPopUp} from '../../common/ModalPopUp'
 import {AddConsultationForm} from '../../Forms/AddConsultationForm'
-import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {SuccessPopUp} from "../../common/SuccessPopUp"
 import {setIsSuccessAC} from '../../../redux/Portfolio/portfolio-reducer'
-import {useDispatch} from "react-redux";
-import {Preloader} from "../../common/Preloader";
-import {NothingToShow} from "../../common/NothingToShow";
-import {BookingApiError} from "../../common/BookindApiError";
+import {useDispatch} from "react-redux"
+import {Preloader} from "../../common/Preloader"
+import {NothingToShow} from "../../common/NothingToShow"
+import {ApiErrorMessage} from "../../common/ApiErrorMessage"
 
 type PropsType = {
   isFetching: boolean
@@ -68,14 +68,6 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
             }, 1500)
         }
     }, [isSuccess])
-
-    useEffect(() => {
-        if (addBookingApiError) {
-            setTimeout( () => {
-                setAddBookingApiError('')
-            }, 1500)
-        }
-    }, [addBookingApiError])
 
     let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false)
 
@@ -142,7 +134,6 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
                   closeModal={closeModal}
               >
                   <AddConsultationForm
-                    addBookingApiError={addBookingApiError}
                     addBookedConsultation={addBookedConsultation}
                     closeBookingModal={closeModal}
                   />
@@ -156,7 +147,10 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
             />
           }
           { addBookingApiError && addBookingApiError !== '' &&
-              <BookingApiError error={addBookingApiError}/>
+              <ApiErrorMessage
+                  error={addBookingApiError}
+                  closeModal={setAddBookingApiError}
+              />
           }
       </>
     )
