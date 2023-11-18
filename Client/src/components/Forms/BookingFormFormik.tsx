@@ -7,7 +7,6 @@ import {FieldComponent} from './FieldComponent'
 import {useState} from "react"
 import {FieldWrapper} from './FieldWrapper'
 import {FormSelect} from './FormSelect'
-import {Select} from "./Select";
 
 const options = [
   { value: "mail", label: "email" },
