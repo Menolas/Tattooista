@@ -57,6 +57,10 @@ export const BookedConsultationsContainer: React.FC = () => {
   //   navigate(`?term=${filter.term}&status=${filter.status}&page=${currentPage}`)
   // }, [navigate, filter, currentPage])
 
+  useEffect(() => {
+    dispatch(setCurrentPageForBookedConsultationsAC(1))
+  }, [filter])
+
   const setCurrentPageCallBack = (
     page: number
   ) => {

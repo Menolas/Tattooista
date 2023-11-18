@@ -11,24 +11,24 @@ class clientsController {
     const limit = parseInt(req.query.limit)
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
-    let clients = []
-    const term = req.query.term
     const gallery = req.query.gallery
+    const term = req.query.term
+    let clients = []
     const results = {}
 
     try {
       if (gallery === 'any' && !term) {
         clients = await Client.find().sort({createdAt: -1})
       } else if (gallery === '1' && !term) {
-        clients = await Client.find({$where: "this.gallery.length > 0"}).sort({createdAt: -1})
+        clients = await Client.find({gallery: {$exists: true, $not: {$size: 0}}}).sort({createdAt: -1})
       } else if (gallery === '0' && !term) {
-        clients = await Client.find({$where: "this.gallery.length < 1"}).sort({createdAt: -1})
+        clients = await Client.find({gallery: {$exists: true, $size: 0}}).sort({createdAt: -1})
       } else if (gallery === 'any' && term) {
         clients = await Client.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       } else if (gallery === '1' && term) {
-        clients = await Client.find({$where: "this.gallery.length > 0", fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        clients = await Client.find({gallery: {$exists: true, $not: { $size: 0}}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       } else if (gallery === '0' && term) {
-        clients = await Client.find({$where: "this.gallery.length < 1", fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        clients = await Client.find({gallery: {$exists: true, $size: 0}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
 
       results.resultCode = 0
@@ -54,15 +54,15 @@ class clientsController {
       if (gallery === 'any' && !term) {
         archivedClients = await ArchivedClient.find().sort({createdAt: -1})
       } else if (gallery === '1' && !term) {
-        archivedClients = await ArchivedClient.find({$where: "this.gallery.length > 0"}).sort({createdAt: -1})
+        archivedClients = await ArchivedClient.find({gallery: { $exists: true, $not: { $size: 0 }}}).sort({createdAt: -1})
       } else if (gallery === '0' && !term) {
-        archivedClients = await ArchivedClient.find({$where: "this.gallery.length < 1"}).sort({createdAt: -1})
+        archivedClients = await ArchivedClient.find({gallery: { $exists: true, $size: 0 }}).sort({createdAt: -1})
       } else if (gallery === 'any' && term) {
         archivedClients = await ArchivedClient.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       } else if (gallery === '1' && term) {
-        archivedClients = await ArchivedClient.find({$where: "this.gallery.length > 0", fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        archivedClients = await ArchivedClient.find({gallery: { $exists: true, $not: { $size: 0 }}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       } else if (gallery === '0' && term) {
-        archivedClients = await ArchivedClient.find({$where: "this.gallery.length < 1", fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        archivedClients = await ArchivedClient.find({gallery: {$exists: true, $size: 0}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
 
       results.resultCode = 0
@@ -144,7 +144,7 @@ class clientsController {
     const results = {}
 
     try {
-      results.client = res.client
+      results.client = await res.client.save()
       results.resultCode = 0
       res.json(results)
     } catch (e) {

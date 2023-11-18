@@ -100,12 +100,10 @@ export const Clients: React.FC<PropsType> = React.memo(({
   return (
       <>
         <div className="admin__cards-header">
-          { totalCount > pageSize &&
-              <ClientSearchFormFormik
-                clientsFilter={clientsFilter}
-                onFilterChanged={onFilterChanged}
-              />
-          }
+          <ClientSearchFormFormik
+            clientsFilter={clientsFilter}
+            onFilterChanged={onFilterChanged}
+          />
           <Paginator
               totalCount={totalCount}
               pageSize={pageSize}

@@ -19,11 +19,12 @@ import {
   getClientsIsFetching,
   getTotalClientsCount,
   getCurrentClientsPage,
-  getClientsPageSize,
   getClientsSelector,
   getIsClientDeletingInProcessSelector,
-  getClientsFilter,
-  getIsSuccessSelector, getAddClientApiErrorSelector, getUpdateClientGalleryApiErrorSelector
+  getIsSuccessSelector,
+  getAddClientApiErrorSelector,
+  getUpdateClientGalleryApiErrorSelector,
+  getClientsFilterSelector, getClientsPageSizeSelector
 } from '../../../redux/Clients/clients-selectors'
 import { Clients } from './Clients'
 //import {useNavigate} from "react-router-dom";
@@ -33,9 +34,9 @@ export const ClientsContainer: React.FC = () => {
   const isFetching = useSelector(getClientsIsFetching)
   const currentPage = useSelector(getCurrentClientsPage)
   const totalCount = useSelector(getTotalClientsCount)
-  const pageSize = useSelector(getClientsPageSize)
+  const pageSize = useSelector(getClientsPageSizeSelector)
   const clients = useSelector(getClientsSelector)
-  const filter = useSelector(getClientsFilter)
+  const filter = useSelector(getClientsFilterSelector)
   const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
   const addClientApiError = useSelector(getAddClientApiErrorSelector)
@@ -59,13 +60,17 @@ export const ClientsContainer: React.FC = () => {
   //   navigate(`?term=${filter.term}&gallery=${filter.gallery}&page=${currentPage}`)
   // }, [filter, currentPage])
 
+  useEffect(() => {
+    dispatch(setCurrentClientsPageAC(1))
+  }, [filter])
+
   const setCurrentPageCallBack = (
     page: number
   ) => {
     dispatch(setCurrentClientsPageAC(page))
   }
 
-  const onFilterChanged = (
+  const onFilterChangedCallBack = (
     filter: ClientsFilterType
   ) => {
     dispatch(setClientsFilterAC(filter))
@@ -90,7 +95,7 @@ export const ClientsContainer: React.FC = () => {
     dispatch(editClient(clientId, values))
   }
 
-  const setPageLimit = (
+  const setPageLimitCallBack = (
     clientsPageSize: number
   ) => {
     dispatch(setClientsPageSize(clientsPageSize))
@@ -133,11 +138,11 @@ export const ClientsContainer: React.FC = () => {
           addClientApiError={addClientApiError}
           updateClientGalleryApiError={updateClientGalleryApiError}
           onPageChanged={setCurrentPageCallBack}
-          onFilterChanged={onFilterChanged}
+          onFilterChanged={onFilterChangedCallBack}
           addClient={addClientCallBack}
           deleteClient={deleteClientCallBack}
           editClient={editClientCallBack}
-          setPageLimit={setPageLimit}
+          setPageLimit={setPageLimitCallBack}
           updateClientGallery={updateClientGalleryCallBack}
           deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
           archiveClient={archiveClientCallBack}

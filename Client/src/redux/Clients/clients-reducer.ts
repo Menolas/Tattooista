@@ -284,7 +284,7 @@ type SetClientsAT = {
   clients: Array<ClientType>
 }
 
-const setClients = (clients: Array<ClientType>): SetClientsAT => (
+const setClientsAC = (clients: Array<ClientType>): SetClientsAT => (
   {
     type: SET_CLIENTS, clients
   }
@@ -438,7 +438,7 @@ export const getClients = (
       clientsPageSize,
       clientsFilter
     )
-    dispatch(setClients(response.clients))
+    dispatch(setClientsAC(response.clients))
     dispatch(setClientsTotalCount(response.totalCount))
     dispatch(setIsFetching(false))
   } catch (e) {
