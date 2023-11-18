@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {Field, Form, Formik} from 'formik'
 import {ClientsFilterType} from '../../redux/Clients/clients-reducer'
-import {BookedConsultationsFilterType} from "../../redux/bookedConsultations/bookedConsultations-reducer"
 
 const ClientsSearchFormValidate = (values: FormType) => {
   const errors = {}

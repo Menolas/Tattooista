@@ -13,7 +13,7 @@ export const getArchivedClientsSelector = (state: AppStateType) => {
 
 //reselect library selector
 
-export const getClientsPageSize = (state: AppStateType) => {
+export const getClientsPageSizeSelector = (state: AppStateType) => {
   return state.clients.clientsPageSize
 }
 
@@ -45,7 +45,7 @@ export const getIsClientDeletingInProcessSelector = (state: AppStateType) => {
   return state.clients.isDeletingInProcess
 }
 
-export const getClientsFilter = (state: AppStateType) => {
+export const getClientsFilterSelector = (state: AppStateType) => {
   return state.clients.clientsFilter
 }
 
