@@ -6,16 +6,14 @@ import {SERVER_URL} from "../../utils/constants"
 
 type PropsType = {
     folder: string
-    activeStyle: string
     galleryItem: GalleryItemType
     styles: Array<TattooStyleType>
-    updateGalleryItem: (id: string, values: object, activeStyle: string) => void
+    updateGalleryItem: (id: string, values: object) => void
     closeModal?: () => void
 }
 
 export const UpdateGalleryItemForm: React.FC<PropsType> = ({
     folder,
-    activeStyle,
     galleryItem,
     styles,
     updateGalleryItem,
@@ -28,7 +26,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
 
     const submit = (values: any) => {
         console.log(values)
-        updateGalleryItem(galleryItem._id, values, activeStyle)
+        updateGalleryItem(galleryItem._id, values)
         closeModal()
     }
 

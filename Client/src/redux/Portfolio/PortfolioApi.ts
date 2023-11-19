@@ -141,6 +141,13 @@ export const portfolioApi = {
             })
     },
 
+    updateArchiveGalleryItem(id: string, values: object) {
+        return instance.patch(`gallery/updateArchivedGalleryItem/${id}`, values)
+            .then(response => {
+                return response.data
+            })
+    },
+
     reactivateArchivedGalleryItem(id: string) {
         return instance.get(`gallery/reactivate/${id}`)
             .then(response => {

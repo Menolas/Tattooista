@@ -544,3 +544,15 @@ export const updateGalleryItem = (id: string, values: object, activeStyle: strin
     console.log(e)
   }
 }
+
+export const updateArchivedGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
+  try {
+    let response = await portfolioApi.updateArchiveGalleryItem(id, values)
+    if (response.resultCode === ResultCodesEnum.Success) {
+      console.log(response)
+      //dispatch(setGalleryAC(response.gallery))
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}

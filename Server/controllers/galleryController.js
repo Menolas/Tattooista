@@ -51,6 +51,29 @@ class galleryController {
     }
   }
 
+  async updateArchivedGalleryItem(req, res) {
+    const styles = req.body.values
+
+    res.archivedGalleryItem.tattooStyles = []
+    for (let key in styles) {
+      if (styles[key]) {
+        res.archivedGalleryItem.tattooStyles.push(key)
+      }
+    }
+    await res.archivedGalleryItem.save()
+    const results = {}
+
+    try {
+      results.archivedGallery = await ArchivedGalleryItem.find().sort({createdAt: -1})
+      results.resultCode = 0
+      res.json(results)
+    } catch (e) {
+      results.resultCode = 1
+      results.message = e.message
+      res.status(400).json(results)
+    }
+  }
+
   async getArchivedGalleryItems(req, res) {
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
@@ -94,13 +117,11 @@ class galleryController {
   }
 
   async addGalleryItems(req, res) {
-
     // if (!req.body) {
     //   return res.status(400).send({
     //     message: "Data to update can not be empty!"
     //   })
     // }
-
     const gallery = []
     const files = req.files
     const results = {}

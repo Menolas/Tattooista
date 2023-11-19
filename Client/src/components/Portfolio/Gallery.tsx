@@ -30,7 +30,7 @@ type PropsType = {
   setPageSize: (limit: number) => void
   archiveGalleryItem: (id: string) => void
   setIsSuccess: (bol: boolean) => void
-  updateGalleryItem: (id: string, values: object, activeStyle: string) => void
+  updateGalleryItem: (id: string, values: object) => void
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
@@ -196,7 +196,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           >
             <UpdateGalleryItemForm
                 folder={'gallery'}
-                activeStyle={activeStyle._id}
                 galleryItem={editGalleryItem}
                 styles={tattooStyles}
                 updateGalleryItem={updateGalleryItem}

@@ -34,6 +34,10 @@ router.post('/archive/:id', getGalleryItem, controller.archiveGalleryItem)
 
 router.get('/reactivate/:id', getArchivedGalleryItem, controller.reactivateGalleryItem)
 
+//updating archived gallery item
+
+router.patch('/updateArchivedGalleryItem/:id', getArchivedGalleryItem, controller.updateArchivedGalleryItem)
+
 async function getGalleryItem(req, res, next) {
   let galleryItem
   try {
