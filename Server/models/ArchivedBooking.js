@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const ArchivedBookingSchema = new mongoose.Schema({
   fullName: {
@@ -42,4 +42,4 @@ const ArchivedBookingSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('ArchivedBooking', ArchivedBookingSchema);
+module.exports = mongoose.model('ArchivedBooking', ArchivedBookingSchema)

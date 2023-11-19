@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const TattooStyle = new Schema({
   value: {
@@ -7,16 +7,20 @@ const TattooStyle = new Schema({
     unique: true
   },
   wallPaper: {
-    type: String,
+    type: String
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now
+  },
+  nonStyle: {
+    type: Boolean,
+    default: false
   }
 });
 
-module.exports = model('TattooStyle', TattooStyle);
+module.exports = model('TattooStyle', TattooStyle)

@@ -549,8 +549,7 @@ export const updateArchivedGalleryItem = (id: string, values: object): ThunkType
   try {
     let response = await portfolioApi.updateArchiveGalleryItem(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      console.log(response)
-      //dispatch(setGalleryAC(response.gallery))
+      dispatch(setArchivedGalleryAC(response.archivedGallery))
     }
   } catch (e) {
     console.log(e)

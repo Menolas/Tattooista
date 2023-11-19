@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const ArchivedTattooStyle = new Schema({
   value: {
@@ -15,4 +15,4 @@ const ArchivedTattooStyle = new Schema({
   }
 });
 
-module.exports = model('ArchivedTattooStyle', ArchivedTattooStyle);
+module.exports = model('ArchivedTattooStyle', ArchivedTattooStyle)

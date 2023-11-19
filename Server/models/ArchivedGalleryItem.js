@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const ArchivedGalleryItem = new Schema({
   fileName: {
@@ -23,4 +23,4 @@ const ArchivedGalleryItem = new Schema({
 //Realistic
 //Designs
 //OldSchool
-module.exports = model('ArchivedGalleryItem', ArchivedGalleryItem);
+module.exports = model('ArchivedGalleryItem', ArchivedGalleryItem)

@@ -68,4 +68,4 @@ ClientSchema.pre('save', function(next) {
   next()
 })
 
-module.exports = mongoose.model('Client', ClientSchema);
+module.exports = mongoose.model('Client', ClientSchema)
