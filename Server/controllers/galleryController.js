@@ -28,6 +28,29 @@ class galleryController {
     }
   }
 
+  async updateGalleryItem(req, res) {
+    const styles = req.body.values
+
+    res.galleryItem.tattooStyles = []
+    for (let key in styles) {
+      if (styles[key]) {
+        res.galleryItem.tattooStyles.push(key)
+      }
+    }
+    await res.galleryItem.save()
+    const results = {}
+
+    try {
+      results.gallery = await GalleryItem.find({tattooStyles: req.body.activeStyle}).sort({createdAt: -1})
+      results.resultCode = 0
+      res.json(results)
+    } catch (e) {
+      results.resultCode = 1
+      results.message = e.message
+      res.status(400).json(results)
+    }
+  }
+
   async getArchivedGalleryItems(req, res) {
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
@@ -138,15 +161,21 @@ class galleryController {
 
   async reactivateGalleryItem(req, res) {
     const galleryItem = new GalleryItem({
-      fileName: res.galleryItem.fileName,
-      tattooStyles: res.galleryItem.tattooStyles
+      fileName: res.archivedGalleryItem.fileName,
+      tattooStyles: res.archivedGalleryItem.tattooStyles
     })
 
     const results = {}
 
+    const oldPath = `./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`
+    const newPath = `./uploads/gallery/${res.archivedGalleryItem.fileName}`
+
     try {
+      mv(oldPath, newPath, { mkdirp: true },function (e) {
+        if (e) console.log(e)
+      })
       await galleryItem.save()
-      await res.galleryItem.remove()
+      await res.archivedGalleryItem.remove()
       results.resultCode = 0
       res.status(201).json(results)
     } catch (e) {
@@ -161,12 +190,12 @@ class galleryController {
     const results = {}
 
     try {
-      await fs.unlink(`./uploads/archivedGallery/${res.galleryItem.fileName}`, e => {
+      await fs.unlink(`./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`, e => {
         if (e) {
           return res.status(400).send(e)
         }
       })
-      await res.galleryItem.remove()
+      await res.archivedGalleryItem.remove()
       const newGallery = await ArchivedGalleryItem.find()
       results.resultCode = 0
       //results.gallery = newGallery

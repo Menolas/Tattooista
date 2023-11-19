@@ -8,7 +8,7 @@ import {FieldWrapper} from "./FieldWrapper";
 
 type PropsType = {
   activeStyle: string
-  updateGallery: (values: any) => void
+  updateGallery: (style: string, values: any) => void
   closeModal: () => void
 }
 
@@ -29,6 +29,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
+  activeStyle,
   updateGallery,
   closeModal
 }) => {
@@ -55,7 +56,7 @@ export const AdminGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
     const formData = new FormData()
     values['gallery'].forEach((file: File) => formData.append(file.name, file))
     formData.append('gallery', values['gallery'])
-    updateGallery(formData)
+    updateGallery(activeStyle, formData)
     closeModal()
   }
 

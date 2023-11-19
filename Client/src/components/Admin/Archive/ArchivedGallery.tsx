@@ -1,10 +1,11 @@
 import * as React from 'react'
-import { useEffect } from 'react'
+import {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {
+    getActiveStyleSelector,
     getArchivedGalleryPageSizeSelector,
     getArchivedGallerySelector,
-    getCurrentArchivedGalleryPageSelector, getIsGalleryItemDeletingInProcessSelector,
+    getCurrentArchivedGalleryPageSelector, getIsGalleryItemDeletingInProcessSelector, getTattooStylesSelector,
     getTotalArchivedGalleryItemsCountSelector
 } from "../../../redux/Portfolio/portfolio-selectors";
 import {Paginator} from "../../common/Paginator";
@@ -12,12 +13,14 @@ import {
     deleteArchivedGalleryItem,
     getArchivedGallery, reactivateArchivedGalleryItem,
     setArchivedGalleryPageSizeAC,
-    setCurrentArchivedGalleryPageAC
+    setCurrentArchivedGalleryPageAC, updateGalleryItem
 } from "../../../redux/Portfolio/portfolio-reducer";
 import {SERVER_URL} from "../../../utils/constants";
 // @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
 import {NothingToShow} from "../../common/NothingToShow";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm";
 
 export const ArchivedGallery = () => {
 
@@ -26,6 +29,8 @@ export const ArchivedGallery = () => {
     const currentPage = useSelector(getCurrentArchivedGalleryPageSelector)
     const archivedGallery = useSelector(getArchivedGallerySelector)
     const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector)
+    const tattooStyles = useSelector(getTattooStylesSelector)
+    const activeStyle = useSelector(getActiveStyleSelector)
 
     const dispatch = useDispatch()
 
@@ -49,6 +54,15 @@ export const ArchivedGallery = () => {
         dispatch(reactivateArchivedGalleryItem(id))
     }
 
+    const updateGalleryItemCallBack = (id: string, values: object, activeStyle: string) => {
+        dispatch(updateGalleryItem(id, values, activeStyle))
+    }
+
+    const [ editGalleryItem, setEditGalleryItem ] = useState(null)
+    const closeGalleryItemEditModal = () => {
+        setEditGalleryItem(null)
+    }
+
     const galleryItems = archivedGallery.map(item => {
         return (
             <li
@@ -63,6 +77,12 @@ export const ArchivedGallery = () => {
                     {''}
                 </div>
                 <div className={"gallery__item-actions"}>
+                    <button
+                        className={"btn btn--icon"}
+                        onClick={() => {setEditGalleryItem(item)}}
+                    >
+                        <svg><use href={`${Sprite}#edit`}/></svg>
+                    </button>
                     <button
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
@@ -100,6 +120,22 @@ export const ArchivedGallery = () => {
                     { galleryItems }
                 </ul>
                 : <NothingToShow/>
+            }
+            {
+                editGalleryItem &&
+                <ModalPopUp
+                    closeModal={closeGalleryItemEditModal}
+                    modalTitle={'Update tattoo styles for this image'}
+                >
+                    <UpdateGalleryItemForm
+                        folder={'archivedGallery'}
+                        activeStyle={activeStyle._id}
+                        galleryItem={editGalleryItem}
+                        styles={tattooStyles}
+                        updateGalleryItem={updateGalleryItemCallBack}
+                        closeModal={closeGalleryItemEditModal}
+                    />
+                </ModalPopUp>
             }
         </div>
     )

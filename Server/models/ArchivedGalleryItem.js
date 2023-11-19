@@ -8,7 +8,7 @@ const ArchivedGalleryItem = new Schema({
   },
   tattooStyles: [{
     type: String,
-    ref: 'Category'
+    ref: 'TattooStyle'
   }],
   createdAt: {
     type: Date,

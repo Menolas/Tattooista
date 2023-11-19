@@ -318,3 +318,17 @@ input[type="checkbox"]:checked+label .checkbox::after {
   }
 }
 
+.galleryItem-illustration {
+  width: 150px;
+  height: 150px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.form--updateGalleryItem {
+  .form__input-wrap {
+    margin-bottom: 20px;
+  }
+}
+

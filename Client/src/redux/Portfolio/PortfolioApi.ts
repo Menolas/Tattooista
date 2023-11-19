@@ -119,7 +119,6 @@ export const portfolioApi = {
     },
 
     adminUpdateGallery(style: string, gallery: FormData) {
-        console.log(gallery)
         return instance.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
           gallery
         ).then(response => {
@@ -135,8 +134,15 @@ export const portfolioApi = {
             })
     },
 
+    updateGalleryItem(id: string, values: object, activeStyle: string) {
+        return instance.patch(`gallery/updateGalleryItem/${id}`, {values, activeStyle})
+            .then(response => {
+                return response.data
+            })
+    },
+
     reactivateArchivedGalleryItem(id: string) {
-        return instance.get(`gallery/archive/${id}`)
+        return instance.get(`gallery/reactivate/${id}`)
             .then(response => {
                 return response.data
             })
