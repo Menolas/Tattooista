@@ -47,7 +47,8 @@ export type TattooStyleType = {
     _id: string,
     value: string,
     wallPaper: string,
-    description: string
+    description: string,
+    nonStyle: boolean
 }
 
 export type GalleryItemType = {

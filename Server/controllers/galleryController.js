@@ -1,5 +1,6 @@
 const GalleryItem = require('../models/GalleryItem')
 const ArchivedGalleryItem = require('../models/ArchivedGalleryItem')
+const TattooStyle = require('../models/TattooStyle')
 const fs = require('fs')
 const mv = require('mv')
 const generateFileRandomNameWithDate =require('../utils/functions')
@@ -7,7 +8,6 @@ const generateFileRandomNameWithDate =require('../utils/functions')
 class galleryController {
 
   async getGalleryItems(req, res) {
-    const style = req.query.style
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
     const startIndex = (page - 1) * limit
@@ -15,7 +15,18 @@ class galleryController {
     let gallery = []
     const results = {}
     try {
-      gallery = await GalleryItem.find({tattooStyles: style}).sort({createdAt: -1})
+      const styles = await TattooStyle.find({_id: req.query.style})
+      if (styles.length > 0) {
+        const style = styles[0]; // Access the first element
+        console.log(style.nonStyle + '!!!!!!!!!!!!!!!!!!');
+        if (style.nonStyle) {
+          gallery = await GalleryItem.find({ tattooStyles: { $exists: true, $size: 0 } }).sort({ createdAt: -1 });
+        } else {
+          gallery = await GalleryItem.find({ tattooStyles: req.query.style }).sort({ createdAt: -1 });
+        }
+      } else {
+        console.log('Style not found');
+      }
       results.resultCode = 0
       results.totalCount = gallery.length
       results.gallery = gallery.slice(startIndex, endIndex)
@@ -52,8 +63,8 @@ class galleryController {
   }
 
   async updateArchivedGalleryItem(req, res) {
-    const styles = req.body.values
-
+    const styles = req.body
+    console.log(req.body + '!!!!!!!!!!!!!!!!!!!!!!!!')
     res.archivedGalleryItem.tattooStyles = []
     for (let key in styles) {
       if (styles[key]) {

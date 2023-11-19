@@ -20,21 +20,24 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
     closeModal
 }) => {
 
+    console.log(styles + '!!!!!!!!!!!!!!!!!')
+
     const handleChange = (input: string) => {
         //console.log(options)
     }
 
     const submit = (values: any) => {
-        console.log(values)
         updateGalleryItem(galleryItem._id, values)
         closeModal()
     }
 
     let initialValues = {}
     styles.forEach((style) => {
-        initialValues[style._id] = galleryItem.tattooStyles.includes(style._id)
+        if (!style.nonStyle) {
+            initialValues[style._id] = galleryItem.tattooStyles.includes(style._id)
+        }
+        console.log(style.nonStyle + '!!!!!!!!!!!!')
     })
-    console.log(initialValues)
 
     return (
         <Formik
@@ -45,27 +48,28 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                 let {isSubmitting} = propsF
 
                 const tattooStyles = styles.map((style) => {
-                    //const result = styles.find(({_id}) => _id === item)
-                    return (
-                        <FieldWrapper
-                            key={style._id}
-                            wrapperClass={'form__input-wrap--checkbox'}
-                            name={style._id}
-                        >
-                            <Field
-                                type="checkbox"
+                    if (!style.nonStyle) {
+                        return (
+                            <FieldWrapper
+                                key={style._id}
+                                wrapperClass={'form__input-wrap--checkbox'}
                                 name={style._id}
-                                id={style._id}
-                                //value={propsF.values.concent}
-                                onChange={propsF.handleChange}
-                            />
-                            <label htmlFor={style._id}>
-                                <span className="checkbox">{''}</span>
-                                {style.value}
-                            </label>
+                            >
+                                <Field
+                                    type="checkbox"
+                                    name={style._id}
+                                    id={style._id}
+                                    //value={propsF.values.concent}
+                                    onChange={propsF.handleChange}
+                                />
+                                <label htmlFor={style._id}>
+                                    <span className="checkbox">{''}</span>
+                                    {style.value}
+                                </label>
 
-                        </FieldWrapper>
-                    )
+                            </FieldWrapper>
+                        )
+                    }
                 })
 
                 return (

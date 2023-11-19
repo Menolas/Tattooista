@@ -19,6 +19,6 @@ const PageSchema = new mongoose.Schema({
     type: String
   },
   content: String
-});
+})
 
 module.exports = mongoose.model('Page', PageSchema)
