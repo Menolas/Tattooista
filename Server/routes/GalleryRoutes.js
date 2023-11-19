@@ -8,6 +8,10 @@ const controller = require('../controllers/galleryController')
 //getting all gallery items
 router.get('/', controller.getGalleryItems)
 
+//updating gallery item
+
+router.patch('/updateGalleryItem/:id', getGalleryItem, controller.updateGalleryItem)
+
 // getting all archived gallery items
 
 router.get('/archive/', controller.getArchivedGalleryItems)
@@ -28,7 +32,7 @@ router.post('/archive/:id', getGalleryItem, controller.archiveGalleryItem)
 
 // reactivating gallery item
 
-router.get('/archive/:id', getArchivedGalleryItem, controller.reactivateGalleryItem)
+router.get('/reactivate/:id', getArchivedGalleryItem, controller.reactivateGalleryItem)
 
 async function getGalleryItem(req, res, next) {
   let galleryItem
@@ -46,17 +50,17 @@ async function getGalleryItem(req, res, next) {
 }
 
 async function getArchivedGalleryItem(req, res, next) {
-  let galleryItem
+  let archivedGalleryItem
   try {
-    galleryItem = await ArchivedGalleryItem.findById(req.params.id)
-    if (galleryItem == null) {
+    archivedGalleryItem = await ArchivedGalleryItem.findById(req.params.id)
+    if (archivedGalleryItem == null) {
       return res.status(404).json({ message: 'Cannot find galleryItem' })
     }
   } catch (err) {
     return res.status(500).json({ message: err.message })
   }
 
-  res.galleryItem = galleryItem
+  res.archivedGalleryItem = archivedGalleryItem
   next();
 }
 

@@ -24,7 +24,7 @@ import {
   deleteTattooStyle,
   archiveGalleryItem,
   getTattooStyles,
-  setUpdateTattooStyleApiErrorAC, setUpdateGalleryApiErrorAC
+  setUpdateTattooStyleApiErrorAC, setUpdateGalleryApiErrorAC, updateGalleryItem
 } from '../../redux/Portfolio/portfolio-reducer'
 import { Portfolio } from './Portfolio'
 import {getAuthSelector} from '../../redux/Auth/auth-selectors'
@@ -80,8 +80,8 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(bookConsultation(values))
   }
 
-  const adminUpdateGalleryCallBack = (values: any) => {
-    dispatch(adminUpdateGallery(activeStyle.value, values))
+  const adminUpdateGalleryCallBack = (style: string, values: any) => {
+    dispatch(adminUpdateGallery(style, values))
   }
 
   const deleteGalleryItemCallBack = (itemId: string) => {
@@ -124,6 +124,10 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(setUpdateGalleryApiErrorAC(error))
   }
 
+  const updateGalleryItemCallBack = (id: string, values: object, activeStyle: string) => {
+    dispatch(updateGalleryItem(id, values, activeStyle))
+  }
+
   return (
     <Portfolio
       isAuth={isAuth}
@@ -153,6 +157,7 @@ export const PortfolioContainer: React.FC = () =>  {
       setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
       setUpdateTattooStyleApiError={setUpdateTattooStyleApiErrorCallBack}
       setUpdateGalleryApiError={setUpdateGalleryApiErrorCallBack}
+      updateGalleryItem={updateGalleryItemCallBack}
     />
   )
 }

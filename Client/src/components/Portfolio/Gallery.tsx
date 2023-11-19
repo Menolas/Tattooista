@@ -11,6 +11,7 @@ import {Paginator} from '../common/Paginator'
 import {SuccessPopUp} from "../common/SuccessPopUp";
 import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer";
 import {useDispatch} from "react-redux";
+import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm";
 
 type PropsType = {
   isSuccess: boolean
@@ -22,12 +23,14 @@ type PropsType = {
   activeStyle: TattooStyleType
   gallery: Array<GalleryItemType>
   isDeletingInProcess: Array<string>
-  updateGallery: (values: any) => void
+  tattooStyles: Array<TattooStyleType>
+  updateGallery: (style: string, values: any) => void
   deleteGalleryItem: (itemId: string) => void
   setCurrentPage: (page: number) => void
   setPageSize: (limit: number) => void
   archiveGalleryItem: (id: string) => void
   setIsSuccess: (bol: boolean) => void
+  updateGalleryItem: (id: string, values: object, activeStyle: string) => void
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
@@ -40,17 +43,20 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   currentPage,
   gallery,
   isDeletingInProcess,
+  tattooStyles,
   setCurrentPage,
   setPageSize,
   updateGallery,
   deleteGalleryItem,
   archiveGalleryItem,
-  setIsSuccess
+  setIsSuccess,
+  updateGalleryItem
 }) => {
   //debugger
 
   let [bigImg, setBigImg] = useState('')
   const [ editGalleryMode, setEditGalleryMode] = useState(false)
+  const [ editGalleryItem, setEditGalleryItem ] = useState(null)
   const successPopUpContent = `You successfully added images to ${activeStyle.value} style gallery`
 
 
@@ -72,6 +78,10 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 
   const closeEditGalleryForm = () => {
     setEditGalleryMode(false)
+  }
+
+  const closeGalleryItemEditModal = () => {
+    setEditGalleryItem(null)
   }
 
   useEffect(() => {
@@ -101,7 +111,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             <div className={"gallery__item-actions"}>
               <button
                   className={"btn btn--icon"}
-                  //onClick={() => {deleteGalleryItem(item.fileName)}}
+                  onClick={() => {setEditGalleryItem(item)}}
               >
                   <svg><use href={`${Sprite}#edit`}/></svg>
               </button>
@@ -121,6 +131,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               </button>
             </div>
           }
+
         </li>
     )
   })
@@ -151,7 +162,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                     modalTitle={modalTitle}
                 >
                     <AdminGalleryUploadFormFormik
-                        activeStyle={activeStyle.value}
+                        activeStyle={activeStyle._id}
                         updateGallery={updateGallery}
                         closeModal={closeEditGalleryForm}
                     />
@@ -176,6 +187,24 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           }
         </section>
       )}
+
+      {
+          editGalleryItem &&
+          <ModalPopUp
+              closeModal={closeGalleryItemEditModal}
+              modalTitle={'Update tattoo styles for this image'}
+          >
+            <UpdateGalleryItemForm
+                folder={'gallery'}
+                activeStyle={activeStyle._id}
+                galleryItem={editGalleryItem}
+                styles={tattooStyles}
+                updateGalleryItem={updateGalleryItem}
+                closeModal={closeGalleryItemEditModal}
+            />
+          </ModalPopUp>
+      }
+
       {
           isSuccess &&
           <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>

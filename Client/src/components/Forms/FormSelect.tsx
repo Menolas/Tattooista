@@ -8,7 +8,7 @@ export const FormSelect = ({ name, options, handleChange, placeholder }) => {
     const { setValue, setTouched, setError } = helpers
     const [selectedOption, setSelectedOption] = useState("none")
     const setFieldProps = (selectedOption) => {
-        console.log("setFieldProps", selectedOption.value)
+        //console.log("setFieldProps", selectedOption.value)
         setTouched(true)
         handleChange(selectedOption.value)
         setSelectedOption(selectedOption.value)
@@ -26,6 +26,7 @@ export const FormSelect = ({ name, options, handleChange, placeholder }) => {
                 return option.value === selectedOption;
             })}
             placeholder={placeholder}
+            //isMulti
         />
     )
 }

@@ -1,37 +1,42 @@
 import * as React from 'react'
-import { Form, Formik, FormikHelpers, FormikValues, useField } from 'formik'
+import {Field, Form, Formik} from 'formik'
 import { GalleryItemType, TattooStyleType} from "../../types/Types"
-import {FormSelect} from "./FormSelect"
 import {FieldWrapper} from "./FieldWrapper"
 import {SERVER_URL} from "../../utils/constants"
 
 type PropsType = {
+    folder: string
+    activeStyle: string
     galleryItem: GalleryItemType
     styles: Array<TattooStyleType>
-    updateGalleryItem: (values: GalleryItemType) => void
+    updateGalleryItem: (id: string, values: object, activeStyle: string) => void
     closeModal?: () => void
 }
 
 export const UpdateGalleryItemForm: React.FC<PropsType> = ({
+    folder,
+    activeStyle,
     galleryItem,
     styles,
     updateGalleryItem,
     closeModal
 }) => {
 
-    const options = styles.map(style => style.value)
-
     const handleChange = (input: string) => {
-        console.log(options)
+        //console.log(options)
     }
 
     const submit = (values: any) => {
-        console.log(options)
+        console.log(values)
+        updateGalleryItem(galleryItem._id, values, activeStyle)
+        closeModal()
     }
 
-    const initialValues = {
-        styles: []
-    }
+    let initialValues = {}
+    styles.forEach((style) => {
+        initialValues[style._id] = galleryItem.tattooStyles.includes(style._id)
+    })
+    console.log(initialValues)
 
     return (
         <Formik
@@ -41,33 +46,56 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
             {(propsF) => {
                 let {isSubmitting} = propsF
 
+                const tattooStyles = styles.map((style) => {
+                    //const result = styles.find(({_id}) => _id === item)
+                    return (
+                        <FieldWrapper
+                            key={style._id}
+                            wrapperClass={'form__input-wrap--checkbox'}
+                            name={style._id}
+                        >
+                            <Field
+                                type="checkbox"
+                                name={style._id}
+                                id={style._id}
+                                //value={propsF.values.concent}
+                                onChange={propsF.handleChange}
+                            />
+                            <label htmlFor={style._id}>
+                                <span className="checkbox">{''}</span>
+                                {style.value}
+                            </label>
+
+                        </FieldWrapper>
+                    )
+                })
+
                 return (
                     <Form
                         id={"updateGalleryItem"}
-                        className={"form"}
+                        className={"form form--updateGalleryItem"}
                         >
                         <div
-                            style={{ backgroundImage: `url(${SERVER_URL}gallery/${galleryItem.fileName})` }}
+                            className={'galleryItem-illustration'}
+                            style={{ backgroundImage: `url(${SERVER_URL}${folder}/${galleryItem.fileName})` }}
                         >
 
                         </div>
-                        <FieldWrapper
-                            wrapperClass={''}
-                            name={'styles'}
+                        {tattooStyles}
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="btn btn--bg btn--transparent form__submit-btn"
                         >
-                            <FormSelect
-                                name={'styles'}
-                                options={options}
-                                handleChange={handleChange}
-                                placeholder={'Choose tattoo styles for this image'}
-                            />
-
-                        </FieldWrapper>
+                            {isSubmitting
+                                ? 'Please wait...'
+                                : 'Update Gallery Item Styles'
+                            }
+                        </button>
                     </Form>
                 )
 
             }}
         </Formik>
     )
-
 }

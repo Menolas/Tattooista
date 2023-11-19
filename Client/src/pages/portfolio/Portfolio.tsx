@@ -22,7 +22,7 @@ type PropsType = {
   updateGalleryApiError: string
   setPageSize: (pageSize: number) => void
   bookConsultation: (values: BookConsultationFormValues) => void
-  updateGallery: (values: any) => void
+  updateGallery: (style: string, values: any) => void
   deleteGalleryItem: (itemId: string) => void
   setCurrentPage: (page: number) => void
   resetActiveStyle: (style: TattooStyleType) => void
@@ -34,6 +34,7 @@ type PropsType = {
   setBookingConsultationApiError: (error: string) => void
   setUpdateTattooStyleApiError: (error: string) => void
   setUpdateGalleryApiError: (error:string) => void
+  updateGalleryItem: (id: string, values: object, activeStyle) => void
 }
 
 export const Portfolio: React.FC<PropsType> = ({
@@ -63,7 +64,8 @@ export const Portfolio: React.FC<PropsType> = ({
   setIsSuccess,
   setBookingConsultationApiError,
   setUpdateTattooStyleApiError,
-  setUpdateGalleryApiError
+  setUpdateGalleryApiError,
+  updateGalleryItem
 }) => {
 
   return (
@@ -97,11 +99,13 @@ export const Portfolio: React.FC<PropsType> = ({
         setCurrentPage={setCurrentPage}
         setPageSize={setPageSize}
         gallery={gallery}
+        tattooStyles={tattooStyles}
         updateGallery={updateGallery}
         deleteGalleryItem={deleteGalleryItem}
         archiveGalleryItem={archiveGalleryItem}
         isDeletingInProcess={isDeletingInProcess}
         setIsSuccess={setIsSuccess}
+        updateGalleryItem={updateGalleryItem}
       />
 
       { bookingConsultationApiError && bookingConsultationApiError !== '' &&

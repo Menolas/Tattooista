@@ -414,7 +414,7 @@ export const getActualPortfolio = (
       }
     }
     if (activeStyle) {
-      let responseGallery = await portfolioApi.getGalleryItems(activeStyle.value, currentPage, pageSize)
+      let responseGallery = await portfolioApi.getGalleryItems(activeStyle._id, currentPage, pageSize)
       if (responseGallery.resultCode === ResultCodesEnum.Success) {
         dispatch(setGalleryAC(responseGallery.gallery))
         dispatch(setGalleryTotalCountAC(responseGallery.totalCount))
@@ -530,5 +530,17 @@ export const reactivateArchivedGalleryItem = (id: string): ThunkType => async (d
     console.log(e)
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id))
+  }
+}
+
+export const updateGalleryItem = (id: string, values: object, activeStyle: string): ThunkType => async (dispatch) => {
+  try {
+    let response = await portfolioApi.updateGalleryItem(id, values, activeStyle)
+    if (response.resultCode === ResultCodesEnum.Success) {
+      console.log(response.gallery)
+      dispatch(setGalleryAC(response.gallery))
+    }
+  } catch (e) {
+    console.log(e)
   }
 }
