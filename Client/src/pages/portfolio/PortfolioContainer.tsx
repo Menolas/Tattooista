@@ -124,8 +124,8 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(setUpdateGalleryApiErrorAC(error))
   }
 
-  const updateGalleryItemCallBack = (id: string, values: object, activeStyle: string) => {
-    dispatch(updateGalleryItem(id, values, activeStyle))
+  const updateGalleryItemCallBack = (id: string, values: object) => {
+    dispatch(updateGalleryItem(id, values, activeStyle._id))
   }
 
   return (

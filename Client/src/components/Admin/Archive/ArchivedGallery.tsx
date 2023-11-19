@@ -13,7 +13,7 @@ import {
     deleteArchivedGalleryItem,
     getArchivedGallery, reactivateArchivedGalleryItem,
     setArchivedGalleryPageSizeAC,
-    setCurrentArchivedGalleryPageAC, updateGalleryItem
+    setCurrentArchivedGalleryPageAC, updateArchivedGalleryItem, updateGalleryItem
 } from "../../../redux/Portfolio/portfolio-reducer";
 import {SERVER_URL} from "../../../utils/constants";
 // @ts-ignore
@@ -30,7 +30,6 @@ export const ArchivedGallery = () => {
     const archivedGallery = useSelector(getArchivedGallerySelector)
     const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector)
     const tattooStyles = useSelector(getTattooStylesSelector)
-    const activeStyle = useSelector(getActiveStyleSelector)
 
     const dispatch = useDispatch()
 
@@ -54,8 +53,8 @@ export const ArchivedGallery = () => {
         dispatch(reactivateArchivedGalleryItem(id))
     }
 
-    const updateGalleryItemCallBack = (id: string, values: object, activeStyle: string) => {
-        dispatch(updateGalleryItem(id, values, activeStyle))
+    const updateArchivedGalleryItemCallBack = (id: string, values: object) => {
+        dispatch(updateArchivedGalleryItem(id, values))
     }
 
     const [ editGalleryItem, setEditGalleryItem ] = useState(null)
@@ -129,10 +128,9 @@ export const ArchivedGallery = () => {
                 >
                     <UpdateGalleryItemForm
                         folder={'archivedGallery'}
-                        activeStyle={activeStyle._id}
                         galleryItem={editGalleryItem}
                         styles={tattooStyles}
-                        updateGalleryItem={updateGalleryItemCallBack}
+                        updateGalleryItem={updateArchivedGalleryItemCallBack}
                         closeModal={closeGalleryItemEditModal}
                     />
                 </ModalPopUp>

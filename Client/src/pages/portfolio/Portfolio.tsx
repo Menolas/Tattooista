@@ -34,7 +34,7 @@ type PropsType = {
   setBookingConsultationApiError: (error: string) => void
   setUpdateTattooStyleApiError: (error: string) => void
   setUpdateGalleryApiError: (error:string) => void
-  updateGalleryItem: (id: string, values: object, activeStyle) => void
+  updateGalleryItem: (id: string, values: object) => void
 }
 
 export const Portfolio: React.FC<PropsType> = ({
