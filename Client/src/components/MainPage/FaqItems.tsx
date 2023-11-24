@@ -3,8 +3,8 @@ import {useState} from 'react'
 import { FaqType } from '../../types/Types'
 import { FaqItem } from './FaqItem'
 import {ModalPopUp} from '../common/ModalPopUp'
-import {SuccessModal} from "../SuccessModal";
 import {UpdateFaqItemFormFormik} from '../Forms/UpdateFaqItemFormFormik'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
   isAuth: boolean

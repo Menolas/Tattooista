@@ -5,6 +5,7 @@ import {FaqType} from '../../types/Types'
 import Sprite from '../../assets/svg/sprite.svg'
 import {ModalPopUp} from '../common/ModalPopUp'
 import {UpdateFaqItemFormFormik} from '../Forms/UpdateFaqItemFormFormik'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
   isAuth: boolean
@@ -49,12 +50,16 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
           {isAuth &&
             <div className={"actionBar"}>
                 <button
+                    data-tooltip-id="faq-tooltip"
+                    data-tooltip-content="Edit FAQ item"
                     className={"btn btn--icon"}
                     onClick={() => {setIsEditMode(true)}}
                 >
                     <svg><use href={`${Sprite}#edit`}/></svg>
                 </button>
                 <button
+                    data-tooltip-id="faq-tooltip"
+                    data-tooltip-content="Delete FAQ item"
                     className={"btn btn--icon"}
                     onClick={() => {deleteFaqItem(faqItem._id)}}
                 >
@@ -84,6 +89,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
         <p className="faq__item-text">
           {faqItem.answer}
         </p>
+        <Tooltip id="faq-tooltip" />
       </li>
     )
 })

@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 // @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
 import {ContactType, BookedConsultationType} from '../../../types/Types'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
     consultation: BookedConsultationType
@@ -43,6 +44,8 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                 </NavLink>
                 <div className="admin__card-action-btns client-profile__action-btns">
                     <button
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Restore consultation"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === consultation._id)}
                         onClick={() => reactivateConsultation(consultation._id)}
@@ -50,6 +53,8 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                         <svg><use href={`${Sprite}#smile`}/></svg>
                     </button>
                     <button
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Delete consultation"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === consultation._id)}
                         onClick={() => {
@@ -65,6 +70,7 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                     { contacts }
                 </ul>
             </div>
+            <Tooltip id="my-tooltip" />
         </li>
     )
 })

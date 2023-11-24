@@ -21,6 +21,7 @@ import Sprite from '../../../assets/svg/sprite.svg'
 import {NothingToShow} from "../../common/NothingToShow";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm";
+import {Tooltip} from "react-tooltip";
 
 export const ArchivedGallery = () => {
 
@@ -77,12 +78,16 @@ export const ArchivedGallery = () => {
                 </div>
                 <div className={"gallery__item-actions"}>
                     <button
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Edit archived gallery item"
                         className={"btn btn--icon"}
                         onClick={() => {setEditGalleryItem(item)}}
                     >
                         <svg><use href={`${Sprite}#edit`}/></svg>
                     </button>
                     <button
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Restore archived gallery item"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
                         onClick={() => {reactivateArchivedGalleryItemCallBack(item._id)}}
@@ -90,6 +95,8 @@ export const ArchivedGallery = () => {
                         <svg><use href={`${Sprite}#smile`}/></svg>
                     </button>
                     <button
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Delete archived gallery item"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
                         onClick={() => {deleteArchivedGalleryItemCallBack(item._id)}}
@@ -135,6 +142,7 @@ export const ArchivedGallery = () => {
                     />
                 </ModalPopUp>
             }
+            <Tooltip id="my-tooltip" />
         </div>
     )
 }

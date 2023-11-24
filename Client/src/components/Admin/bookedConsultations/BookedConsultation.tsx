@@ -2,6 +2,7 @@ import * as React from 'react'
 import {ContactType, BookedConsultationType} from '../../../types/Types'
 // @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
   consultation: BookedConsultationType
@@ -57,6 +58,11 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
       </div>
       <div className="admin__card-action-btns">
         <button
+          data-tooltip-id="my-tooltip"
+          data-tooltip-content={ !consultation.status
+                                    ? "Mark consultation as contacted"
+                                    : "Mark consultation as not contacted"
+                               }
           className={"btn btn--icon"}
           disabled={ isStatusChanging?.some(id => id === consultation._id) }
           onClick={() => {changeStatus(consultation._id, consultation.status)}}
@@ -67,6 +73,8 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
           }
         </button>
         <button
+          data-tooltip-id="my-tooltip"
+          data-tooltip-content="Create client from consultation"
           className={"btn btn--icon"}
           disabled={isDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
@@ -76,6 +84,8 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
             <svg><use href={`${Sprite}#users-medical`}/></svg>
         </button>
         <button
+          data-tooltip-id="my-tooltip"
+          data-tooltip-content="Move consultation to archive"
           className={"btn btn--icon"}
           disabled={isDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
@@ -85,6 +95,8 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
             <svg><use href={`${Sprite}#archive`}/></svg>
         </button>
         <button
+          data-tooltip-id="my-tooltip"
+          data-tooltip-content="Delete consultation"
           className={"btn btn--icon"}
           disabled={isDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
@@ -94,6 +106,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
             <svg><use href={`${Sprite}#trash`}/></svg>
         </button>
       </div>
+      <Tooltip id="my-tooltip" />
     </li>
   )
 })

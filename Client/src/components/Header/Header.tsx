@@ -5,6 +5,7 @@ import { MainNav } from '../MainNav'
 import { Logo } from '../Logo'
 // @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
     isAuth: boolean
@@ -25,17 +26,32 @@ export const Header: React.FC<PropsType> = ({
       <SocialNav />
       { isAuth
         ? <>
-              <NavLink to="/admin/bookedConsultations" className="main-header__admin-link">
+              <NavLink
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Admin page"
+                  to="/admin/bookedConsultations"
+                  className="main-header__admin-link"
+              >
                 <svg><use href={`${Sprite}#admin`}/></svg>
               </NavLink>
-              <NavLink to="/" className="main-header__admin-link" onClick={() => { logout() }}>
+              <NavLink
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Log out"
+                  to="/" className="main-header__admin-link"
+                  onClick={() => { logout() }}
+              >
                 <svg><use href={`${Sprite}#logout`}/></svg>
               </NavLink>
           </>
-        : <NavLink to="/login" className="main-header__admin-link">
+        : <NavLink
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Log in"
+              to="/login"
+              className="main-header__admin-link">
               <svg><use href={`${Sprite}#login`}/></svg>
           </NavLink>
       }
+      <Tooltip id="my-tooltip" />
     </header>
   );
 }

@@ -4,8 +4,9 @@ import avatar from '../../../assets/img/fox.webp'
 // @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
 import { NavLink } from 'react-router-dom'
-import {ClientType, ContactsType, ContactType} from '../../../types/Types'
+import {ClientType, ContactType} from '../../../types/Types'
 import { SERVER_URL } from '../../../utils/constants'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
   client: ClientType
@@ -51,6 +52,8 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         </NavLink>
         <div className="admin__card-action-btns client-profile__action-btns">
           <button
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Restore client"
               className={"btn btn--icon"}
               disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => reactivateClient(client._id)}
@@ -58,6 +61,8 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             <svg><use href={`${Sprite}#smile`}/></svg>
           </button>
           <button
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Delete client"
               className={"btn btn--icon"}
               disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
@@ -85,6 +90,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
           </ul>
         </div>
       }
+      <Tooltip id="my-tooltip" />
     </li>
   )
 })
