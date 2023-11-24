@@ -1,11 +1,13 @@
 import * as React from 'react'
 import { useState } from 'react'
 import {ServiceType} from '../../types/Types'
+// @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
 import {ModalPopUp} from '../common/ModalPopUp'
 import {SuccessModal} from '../SuccessModal'
 import {UpdateServiceItemFormFormik} from '../Forms/UpdateServiceItemFormFormik'
 import {SERVER_URL} from '../../utils/constants'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
     isAuth: boolean
@@ -47,12 +49,16 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                 {isAuth &&
                     <div className={"actionBar"}>
                         <button
+                            data-tooltip-id="service-tooltip"
+                            data-tooltip-content="Edit service item"
                             className={"btn btn--icon"}
                             onClick={() => {setIsEditMode(true)}}
                         >
                             <svg><use href={`${Sprite}#edit`}/></svg>
                         </button>
                         <button
+                            data-tooltip-id="service-tooltip"
+                            data-tooltip-content="Delete service item"
                             className={"btn btn--icon"}
                             onClick={() => {deleteService(service._id)}}
                         >
@@ -80,7 +86,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                     <UpdateServiceItemFormFormik
                         service={service}
                         editService={editService}
-                        showSuccessModal={showSuccessModal}
+                        //showSuccessModal={showSuccessModal}
                         closeModal={closeEditModal}
                     />
                 </ModalPopUp>
@@ -94,6 +100,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                     <SuccessModal />
                 </ModalPopUp>
             }
+            <Tooltip id="service-tooltip" />
         </li>
     )
 })

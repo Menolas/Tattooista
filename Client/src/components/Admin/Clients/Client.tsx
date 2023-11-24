@@ -10,6 +10,7 @@ import { SERVER_URL } from '../../../utils/constants'
 import { ModalPopUp } from '../../common/ModalPopUp'
 import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
 import {ClientGalleryUploadFormFormik} from '../../Forms/ClientGalleryUploadFormFormik'
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
   client: ClientType
@@ -75,18 +76,24 @@ export const Client: React.FC<PropsType> = React.memo(({
         </NavLink>
         <div className="client-profile__action-btns admin__card-action-btns">
           <button
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Edit client"
               className={"btn btn--icon"}
               onClick={() => {setEditClientMode(true)}}
           >
             <svg><use href={`${Sprite}#edit`}/></svg>
           </button>
           <button
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Edit client's gallery"
               className={"btn btn--icon"}
               onClick={() => {setEditGalleryMode(true)}}
           >
             <svg><use href={`${Sprite}#images-user`}/></svg>
           </button>
           <button
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Move client to archive"
               className={"btn btn--icon"}
               disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
@@ -97,6 +104,8 @@ export const Client: React.FC<PropsType> = React.memo(({
             <svg><use href={`${Sprite}#archive`}/></svg>
           </button>
           <button
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Delete client"
               className={"btn btn--icon"}
               disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
@@ -151,6 +160,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             />
           </ModalPopUp>
       }
+      <Tooltip id="my-tooltip" />
     </li>
   )
 })

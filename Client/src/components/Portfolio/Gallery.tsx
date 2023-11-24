@@ -5,6 +5,7 @@ import {GalleryItemType, TattooStyleType} from '../../types/Types'
 import { ModalPopUp } from '../common/ModalPopUp'
 import { AdminGalleryUploadFormFormik } from '../Forms/AdminGalleryUploadFormFormik'
 import {SERVER_URL} from '../../utils/constants'
+import { Tooltip } from 'react-tooltip'
 // @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
 import {Paginator} from '../common/Paginator'
@@ -110,12 +111,16 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           {isAuth &&
             <div className={"gallery__item-actions"}>
               <button
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Edit gallery item"
                   className={"btn btn--icon"}
                   onClick={() => {setEditGalleryItem(item)}}
               >
                   <svg><use href={`${Sprite}#edit`}/></svg>
               </button>
               <button
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Move gallery item to archive"
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}
                   onClick={() => {archiveGalleryItem(item._id)}}
@@ -123,6 +128,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   <svg><use href={`${Sprite}#archive`}/></svg>
               </button>
               <button
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Delete gallery item"
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}
                   onClick={() => {deleteGalleryItem(item._id)}}
@@ -208,6 +215,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           isSuccess &&
           <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
       }
+      <Tooltip id="my-tooltip" />
     </>
   )
 })

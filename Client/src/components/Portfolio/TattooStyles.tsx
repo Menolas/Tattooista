@@ -8,9 +8,8 @@ import Sprite from "../../assets/svg/sprite.svg"
 import {UpdateTattooStyleFormFormik} from "../Forms/UpdateTattooStyleFormFormik"
 import {ModalPopUp} from "../common/ModalPopUp"
 import {SuccessPopUp} from "../common/SuccessPopUp"
-import AliceCarousel from 'react-alice-carousel'
-
-//onst AliceCarousel: any = require('react-alice-carousel');
+import AliceCarousel from "react-alice-carousel"
+import {Tooltip} from "react-tooltip"
 
 const responsive = {
   0: {items: 3},
@@ -106,12 +105,16 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
         { isAuth &&
           <div className={"tattoo-style__item-actions"}>
             <button
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Edit tattoo style"
                 className={"btn btn--icon"}
                 onClick={() => {setEditTattooStyleMode(true)}}
             >
                 <svg><use href={`${Sprite}#edit`}/></svg>
             </button>
             <button
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Delete tattoo style"
                 className={"btn btn--icon"}
                 onClick={() => {deleteTattooStyle(activeStyle._id)}}
             >
@@ -142,6 +145,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
           </div>
         </div>
       </div>
+      <Tooltip id="my-tooltip" />
     </section>
   )
 })

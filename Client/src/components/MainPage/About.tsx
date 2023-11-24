@@ -7,6 +7,7 @@ import {SERVER_URL} from '../../utils/constants'
 import {ModalPopUp} from "../common/ModalPopUp";
 import { UpdateAboutPageFormFormik } from '../Forms/UpdateAboutPageFormFormik'
 import {SuccessModal} from "../SuccessModal";
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
     isAuth: boolean
@@ -38,6 +39,12 @@ export const About: React.FC<PropsType> = React.memo(({
                 { isAuth &&
                     <div className={"actionBar"}>
                         <button
+                            data-tooltip-id="about-tooltip"
+                            data-tooltip-content={
+                                pageAbout.isActive
+                                ? 'Hide "about me" block'
+                                : 'Show "about me" block'
+                            }
                             className={"btn btn--icon"}
                             onClick={() => {
                                 changePageVisibility(pageAbout._id, pageAbout.isActive)
@@ -49,6 +56,8 @@ export const About: React.FC<PropsType> = React.memo(({
                             }
                         </button>
                         <button
+                            data-tooltip-id="about-tooltip"
+                            data-tooltip-content='Edit "about me" block'
                             className={"btn btn--icon"}
                             onClick={() => setIsEditMode(true)}
                         >
@@ -76,6 +85,7 @@ export const About: React.FC<PropsType> = React.memo(({
                         />
                     </ModalPopUp>
                 }
+                <Tooltip id="about-tooltip" />
             </section>
     )
 })
