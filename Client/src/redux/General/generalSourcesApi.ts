@@ -8,7 +8,7 @@ const instance = axios.create({
 
 type GetPagesResponseType = {
     resultCode: number
-    pages: Array<PageType>
+    page: PageType
     message?: string
 }
 
@@ -57,28 +57,22 @@ export const generalSourcesApi = {
             })
     },
 
-    getPages() {
-        return instance.get<GetPagesResponseType>('pages/')
+    getAboutPage() {
+        return instance.get<GetPagesResponseType>('pages/about')
             .then(response => {
                 return response.data
             })
     },
 
-    editAboutPage(
-        id: string,
-        values: FormData,
-    ) {
-        return instance.post(`pages/${id}`, values)
+    editAboutPage(values: FormData) {
+        return instance.post(`pages/about`, values)
             .then(response => {
                 return response.data
             })
     },
 
-    changePageVisibility(
-        pageId: string,
-        isActive: boolean
-    ) {
-        return instance.patch(`pages/visibility/${pageId}`, {isActive: isActive})
+    changeAboutPageVisibility(isActive: boolean) {
+        return instance.patch(`pages/visibility/about`, {isActive: isActive})
             .then(response => {
                 return response.data
             })

@@ -7,16 +7,18 @@ import {
   getBookingConsultationApiErrorSelector,
   getFaqItemsSelector,
   getIsSuccessBookingSelector,
-  getPagesSelector,
+  getPageAboutSelector,
   getServicesSelector,
-  getUpdateFaqItemApiErrorSelector, getUpdatePageApiErrorSelector, getUpdateServiceApiErrorSelector
+  getUpdateFaqItemApiErrorSelector,
+  getUpdatePageApiErrorSelector,
+  getUpdateServiceApiErrorSelector
 } from '../../redux/General/general-selectors'
 import {
   getFaqItems,
-  getPages,
+  getAboutPage,
   getServices,
   editAboutPage,
-  changePageVisibility,
+  changeAboutPageVisibility,
   editService,
   addService,
   deleteService,
@@ -42,7 +44,7 @@ export const MainPageContainer: React.FC = () =>  {
   const tattooStyles = useSelector(getTattooStylesSelector)
   const services = useSelector(getServicesSelector)
   const faq = useSelector(getFaqItemsSelector)
-  const pages = useSelector(getPagesSelector)
+  const pageAbout = useSelector(getPageAboutSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
   const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
@@ -56,19 +58,23 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(getTattooStyles())
     dispatch(getServices())
     dispatch(getFaqItems())
-    dispatch(getPages())
+    dispatch(getAboutPage())
+    console.log(pageAbout)
   }, [])
+
+  // const pageAbout = pages?.find(page => page.name === 'about')
+  // console.log(pageAbout)
 
   const setActiveStyleCallBack = (style: TattooStyleType) => {
     dispatch(setActiveStyleAC(style))
   }
 
-  const editAboutPageCallBack = (id: string, values: FormData) => {
-    dispatch(editAboutPage(id, values))
+  const editAboutPageCallBack = (values: FormData) => {
+    dispatch(editAboutPage(values))
   }
 
-  const changePageVisibilityCallBack = (pageId: string, isActive: boolean) => {
-    dispatch(changePageVisibility(pageId, isActive))
+  const changeAboutPageVisibilityCallBack = (isActive: boolean) => {
+    dispatch(changeAboutPageVisibility(isActive))
   }
 
   const editServiceCallBack = (id: string, values: FormData) => {
@@ -130,7 +136,7 @@ export const MainPageContainer: React.FC = () =>  {
       tattooStyles={tattooStyles}
       services={services}
       faq={faq}
-      pages={pages}
+      pageAbout={pageAbout}
       isSuccess={isSuccess}
       isSuccessBooking={isSuccessBooking}
       updateFaqItemApiError={updateFaqItemApiError}
@@ -138,7 +144,7 @@ export const MainPageContainer: React.FC = () =>  {
       updatePageApiError={updatePageApiError}
       setActiveStyle={setActiveStyleCallBack}
       editAboutPage={editAboutPageCallBack}
-      changePageVisibility={changePageVisibilityCallBack}
+      changeAboutPageVisibility={changeAboutPageVisibilityCallBack}
       editService={editServiceCallBack}
       addService={addServiceCallBack}
       deleteService={deleteServiceCallBack}

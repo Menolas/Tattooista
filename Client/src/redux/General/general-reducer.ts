@@ -6,8 +6,8 @@ import {ResultCodesEnum} from '../../utils/constants'
 
 const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS'
 const SET_SERVICES = 'SET_SERVICES'
-const SET_PAGES = 'SET_PAGES'
-const SET_PAGE_VISIBILITY = 'SET_PAGE_VISIBILITY'
+const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE'
+const SET_ABOUT_PAGE_VISIBILITY = 'SET_PAGE_VISIBILITY'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING'
 const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR'
@@ -19,7 +19,7 @@ const SET_IS_BOOKING_MODAL_OPEN = 'SET_IS_BOOKING_MODAL_OPEN'
 let initialState = {
   faq: [] as Array<FaqType>,
   services: [] as Array<ServiceType>,
-  pages: [] as Array<PageType>,
+  pageAbout: {} as PageType,
   isSuccess: false as boolean,
   isSuccessBooking: false as boolean,
   bookingConsultationApiError: '' as string | undefined,
@@ -50,21 +50,16 @@ export const generalReducer = (
         services: action.services
       }
 
-    case SET_PAGES:
+    case SET_ABOUT_PAGE:
       return {
         ...state,
-        pages: action.pages
+        pageAbout: action.page
       }
 
-    case SET_PAGE_VISIBILITY:
+    case SET_ABOUT_PAGE_VISIBILITY:
       return {
         ...state,
-        pages: state.pages.map(page => {
-          if (page._id === action.pageId) {
-            return { ...page, isActive: action.isActive}
-          }
-          return page
-        })
+        pageAbout: { ...state.pageAbout, isActive: action.bol}
       }
 
     case SET_IS_SUCCESS:
@@ -116,8 +111,8 @@ export const generalReducer = (
 }
 
 type ActionsTypes = SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
-    SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetPageVisibilityActionType
-    | SetPagesActionType | SetFaqItemsActionType | SetServicesActionType
+    SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetAboutPageVisibilityAT
+    | SetAboutPageAT | SetFaqItemsAT | SetServicesAT
 
 // action creators
 
@@ -184,44 +179,41 @@ export const setIsSuccessAC = (bol: boolean): SetIsSuccessAT => ({
   type: SET_IS_SUCCESS, bol
 })
 
-type SetPageVisibilityActionType = {
-  type: typeof SET_PAGE_VISIBILITY
-  pageId: string
-  isActive: boolean
+type SetAboutPageVisibilityAT = {
+  type: typeof SET_ABOUT_PAGE_VISIBILITY
+  bol: boolean
 }
 
-const setPageVisibility = (pageId: string, isActive: boolean): SetPageVisibilityActionType => ({
-  type: SET_PAGE_VISIBILITY, pageId, isActive
+const seAboutPageVisibilityAC = (bol: boolean): SetAboutPageVisibilityAT => ({
+  type: SET_ABOUT_PAGE_VISIBILITY, bol
 })
 
-type SetPagesActionType = {
-  type: typeof SET_PAGES,
-  pages: Array<PageType>
+type SetAboutPageAT = {
+  type: typeof SET_ABOUT_PAGE,
+  page: PageType
 }
 
-const setPages = (pages: Array<PageType>): SetPagesActionType => (
-    {
-      type: SET_PAGES, pages
-    }
-)
+const setAboutPageAC = (page: PageType): SetAboutPageAT => ({
+      type: SET_ABOUT_PAGE, page
+})
 
-type SetFaqItemsActionType = {
+type SetFaqItemsAT = {
   type: typeof SET_FAQ_ITEMS,
   faqItems: Array<FaqType>
 }
 
-const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsActionType => (
+const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => (
   {
     type: SET_FAQ_ITEMS, faqItems
   }
 )
 
-type SetServicesActionType = {
+type SetServicesAT = {
   type: typeof SET_SERVICES,
   services: Array<ServiceType>
 }
 
-const setServices = (services: Array<ServiceType>): SetServicesActionType => (
+const setServices = (services: Array<ServiceType>): SetServicesAT => (
   {
     type: SET_SERVICES, services
   }
@@ -288,20 +280,21 @@ export const getServices = (): ThunkType => async (dispatch) => {
   }
 }
 
-export const getPages = (): ThunkType => async (dispatch) => {
+export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.getPages()
-    dispatch(setPages(response.pages))
+    const response = await generalSourcesApi.getAboutPage()
+    dispatch(setAboutPageAC(response.page))
+    console.log(response.page)
   } catch (e) {
     console.log(e);
   }
 }
 
-export const editAboutPage = (id: string, FormData: FormData): ThunkType => async (dispatch) => {
+export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.editAboutPage(id, FormData)
+    const response = await generalSourcesApi.editAboutPage(FormData)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setPages(response.pages))
+      dispatch(setAboutPageAC(response.page))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e: any) {
@@ -310,13 +303,12 @@ export const editAboutPage = (id: string, FormData: FormData): ThunkType => asyn
   }
 }
 
-export const changePageVisibility = (
-    pageId: string,
+export const changeAboutPageVisibility = (
     isActive: boolean
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.changePageVisibility(pageId, isActive)
-    dispatch(setPageVisibility(pageId, !isActive))
+    const response = await generalSourcesApi.changeAboutPageVisibility(isActive)
+    dispatch(seAboutPageVisibilityAC(!isActive))
   } catch (e) {
     console.log(e)
   }

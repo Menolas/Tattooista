@@ -24,7 +24,7 @@ type PropsType = {
   tattooStyles: Array<TattooStyleType>
   services: Array<ServiceType>
   faq: Array<FaqType>
-  pages: Array<PageType>
+  pageAbout: PageType
   isSuccess: boolean
   isSuccessBooking: boolean
   bookingConsultationApiError: string
@@ -32,8 +32,8 @@ type PropsType = {
   updateServiceApiError: string
   updatePageApiError: string
   setActiveStyle: (style: TattooStyleType) => void
-  editAboutPage: (id: string, values: FormData) => void
-  changePageVisibility: (pageId: string, isActive: boolean) => void
+  editAboutPage: (values: FormData) => void
+  changeAboutPageVisibility: (isActive: boolean) => void
   editService: (id: string, values: FormData) => void
   addService: (values: FormData) => void
   deleteService: (id: string) => void
@@ -55,7 +55,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   tattooStyles,
   services,
   faq,
-  pages,
+  pageAbout,
   isSuccess,
   isSuccessBooking,
   bookingConsultationApiError,
@@ -64,7 +64,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   updatePageApiError,
   setActiveStyle,
   editAboutPage,
-  changePageVisibility,
+  changeAboutPageVisibility,
   editService,
   addService,
   deleteService,
@@ -79,9 +79,10 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   setUpdateServiceApiError,
   setUpdatePageApiError
 }) => {
-  const pageAbout = pages?.find(page => page.name === 'about')
+
   const successBookingPopUpContent = "You've booked a consultation! We will contact you soon))"
   const successPopUpContent = "You successfully added a new item"
+
 
   const dispatch = useDispatch()
 
@@ -109,12 +110,15 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           setActiveStyle={setActiveStyle}
           tattooStyles={tattooStyles}
       />
-      <About
-          isAuth={isAuth}
-          pageAbout={pageAbout}
-          editAboutPage={editAboutPage}
-          changePageVisibility={changePageVisibility}
-      />
+        { (isAuth || pageAbout.isActive) &&
+            <About
+                isAuth={isAuth}
+                pageAbout={pageAbout}
+                editAboutPage={editAboutPage}
+                changeAboutPageVisibility={changeAboutPageVisibility}
+            />
+        }
+
       <Services
           isAuth={isAuth}
           services={services}
