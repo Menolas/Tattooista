@@ -260,6 +260,7 @@ export const updateFaqItem = (id: string, values: any): ThunkType => async (disp
     let response = await generalSourcesApi.updateFaqItem(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFaqItems(response.faqItems))
+      dispatch(setIsSuccessAC(true))
     }
   } catch (e: any) {
     dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'))

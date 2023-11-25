@@ -4,7 +4,6 @@ import {ServiceType} from '../../types/Types'
 import {ServiceItem} from './ServiceItem'
 import {ModalPopUp} from '../common/ModalPopUp'
 import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik";
-import {SuccessModal} from "../SuccessModal";
 
 type PropsType = {
   isAuth: boolean
@@ -23,19 +22,10 @@ export const Services: React.FC<PropsType> = React.memo(({
 }) => {
 
   const [addServiceMode, setAddServiceMode] = useState(false)
-  const [isSuccess, setSuccess] = useState(false)
-  const showSuccessModal = () => {
-        setSuccess(true)
-  }
-
-  const closeSuccessModal = () => {
-    setSuccess(false)
-  }
   const closeAddServiceModal = () => {
     setAddServiceMode(false)
   }
 
-  const modalTitle = ''
   const addServiceModalTitle = 'Add New Service'
 
   const servicesArray = services.map(item => {
