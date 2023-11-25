@@ -1,3 +1,4 @@
+const GalleryItem = require('../models/GalleryItem')
 const TattooStyle = require('../models/TattooStyle')
 const fs = require("fs")
 const generateFileRandomName = require("../utils/functions")
@@ -25,6 +26,10 @@ class tattooStyleController {
       })
       await fs.rmdir(`./uploads/styleWallpapers/${res.tattooStyle._id}`, { recursive:true },err => {
         if (err) console.log(err)
+      })
+      const galleryItems = await GalleryItem.find({_id: res.tattooStyle._id})
+      await galleryItems.forEach(item => {
+        item.tattooStyles.pull({_id: res.tattooStyle._id})
       })
       await res.tattooStyle.remove()
 
@@ -70,6 +75,10 @@ class tattooStyleController {
   async updateTattooStyle(req, res) {
     res.tattooStyle.value = req.body.value
     res.tattooStyle.description = req.body.description
+    // const galleryItems = await GalleryItem.find({_id: res.tattooStyle._id})
+    // await galleryItems.forEach(item => {
+    //   item.tattooStyles.pull({_id: res.tattooStyle._id})
+    // })
 
     const results = {}
 
