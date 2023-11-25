@@ -4,12 +4,11 @@ const generateFileRandomName = require("../utils/functions");
 
 class PagesController {
 
-  async getPages (req, res) {
+  async getAboutPage (req, res) {
     const results = {}
     try {
-      const pages = await Page.find()
+      results.page = await Page.findOne({name: 'about'})
       results.resultCode = 0
-      results.pages = pages
       res.status(200).json(results)
     } catch (e) {
       results.resultCode = 1
@@ -18,105 +17,48 @@ class PagesController {
     }
   }
 
-  // async deletePage(req, res) {
-  //   const results = {}
-  //   try {
-  //     await fs.unlink(`./uploads/wallpapers/${res.category._id}/${res.category.wallPaper}`, e => {
-  //       if (e) console.log(e)
-  //     })
-  //     await fs.rmdir(`./uploads/wallpapers/${res.category._id}`, e => {
-  //       if (e) console.log(e)
-  //     })
-  //     await res.category.remove()
-  //
-  //     const styles = await Category.find()
-  //     results.resultCode = 0
-  //     results.tattooStyles = styles
-  //     res.status(200).json(results)
-  //   } catch (e) {
-  //     results.resultCode = 1
-  //     results.message = e.message
-  //     res.status(500).json(results)
-  //   }
-  // }
-
-  // async addPage(req, res) {
-  //   const page = new Page({
-  //     name: req.body.name,
-  //     content: req.body.content
-  //   })
-  //
-  //   const results = {}
-  //
-  //   try {
-  //     const newPage = await page.save()
-  //     results.resultCode = 0
-  //     if(req.files && req.files.wallPaper) {
-  //       const file = req.files.wallPaper
-  //       if(!file)  return res.json({error: 'Incorrect input name'})
-  //       const newFileName = encodeURI(Date.now() + '_' + file.name)
-  //       await file.mv(`./uploads/pageWallpapers/${newPage._id}/${newFileName}`, e => {
-  //         category.wallPaper = newFileName
-  //         category.save()
-  //       })
-  //     }
-  //     results.tattooStyles = await Category.find()
-  //     res.status(201).json(results)
-  //   } catch (e) {
-  //     results.resultCode = 1
-  //     results.message = e.message
-  //     res.status(400).json(results)
-  //   }
-  // }
-
-  async updatePage(req, res) {
-    res.page.title = req.body.title
-    res.page.content = req.body.content
-
-    const results = {}
-
+  async updateAboutPage(req, res) {
     try {
+      const page = await Page.findOne({name: 'about'})
+      page.title = req.body.title
+      page.content = req.body.content
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = generateFileRandomName(file.name)
-        await fs.unlink(`./uploads/pageWallpapers/${res.page._id}/${res.page.wallPaper}`, e => {
+        await fs.unlink(`./uploads/pageWallpapers/${page._id}/${page.wallPaper}`, e => {
           if (e) console.log(e)
         })
-        await file.mv(`./uploads/pageWallpapers/${res.page._id}/${newFileName}`, e => {
+        await file.mv(`./uploads/pageWallpapers/${page._id}/${newFileName}`, e => {
           if (e) console.log(e)
         })
-        res.page.wallPaper = newFileName
+        page.wallPaper = newFileName
       }
 
-      await res.page.save()
-      results.resultCode = 0
-      results.pages = await Page.find()
-      res.status(201).json(results)
+      const updatePage = await page.save()
+      res.status(201).json({resultCode: 0, page: updatePage})
     } catch (e) {
       console.log(e)
-      results.resultCode = 1
-      results.message = e.message
-      res.status(400).json(results)
+      res.status(400).json({resultCode: 1, message: e.message})
     }
   }
 
-  async changePageVisibility(req, res) {
-    res.page.isActive = !req.body.isActive
-    const results = {}
-
+  async changeAboutPageVisibility(req, res) {
     try {
-      await  res.page.save()
-      results.resultCode = 0
-      results.pages = await Page.find()
-      res.status(201).json(results)
+      const page = await Page.findOne({name: 'about'})
+
+      if (!page) {
+        return res.status(404).json({ resultCode: 1, message: 'Page not found' });
+      }
+      page.isActive = !page.isActive
+
+      console.log(page + "  Page !!!!!!!!!!")
+      const updatePage = await page.save()
+      res.status(201).json({resultCode: 0, page: updatePage})
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      res.status(400).json(results)
+      res.status(400).json({resultCode: 1, message: e.message})
     }
   }
-
 }
 
 module.exports = new PagesController()

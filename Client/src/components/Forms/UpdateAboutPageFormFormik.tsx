@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
     pageAbout?: PageType
-    editAboutPage: (id: string, values: FormData) => void
+    editAboutPage: (values: FormData) => void
     closeModal: () => void
 }
 export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
@@ -61,7 +61,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
         for (let value in values) {
             formData.append(value, values[value])
         }
-        editAboutPage(pageAbout._id, formData)
+        editAboutPage(formData)
         closeModal()
     }
 

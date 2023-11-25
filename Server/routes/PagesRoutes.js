@@ -5,15 +5,15 @@ const controller = require('../controllers/PagesController')
 
 //getting all pages
 
-router.get('/', controller.getPages)
+router.get('/about', controller.getAboutPage)
 
 // updating page
 
-router.post('/:id', getPage, controller.updatePage)
+router.post('/about', controller.updateAboutPage)
 
 // change page visibility
 
-router.patch('/visibility/:id', getPage, controller.changePageVisibility)
+router.patch('/visibility/about', controller.changeAboutPageVisibility)
 
 async function getPage(req, res, next) {
   let page
