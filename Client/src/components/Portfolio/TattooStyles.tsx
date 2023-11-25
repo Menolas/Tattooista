@@ -112,14 +112,20 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
             >
                 <svg><use href={`${Sprite}#edit`}/></svg>
             </button>
-            <button
-                data-tooltip-id="my-tooltip"
-                data-tooltip-content="Delete tattoo style"
-                className={"btn btn--icon"}
-                onClick={() => {deleteTattooStyle(activeStyle._id)}}
-            >
-                <svg><use href={`${Sprite}#trash`}/></svg>
-            </button>
+            { !activeStyle.nonStyle &&
+              <button
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Delete tattoo style"
+                  className={"btn btn--icon"}
+                  onClick={() => {
+                    deleteTattooStyle(activeStyle._id)
+                  }}
+              >
+                <svg>
+                  <use href={`${Sprite}#trash`}/>
+                </svg>
+              </button>
+            }
           </div>
         }
         {
