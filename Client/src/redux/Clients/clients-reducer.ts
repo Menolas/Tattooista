@@ -324,7 +324,7 @@ type SetClientsTotalCountAT = {
   count: number
 }
 
-const setClientsTotalCount = (count: number): SetClientsTotalCountAT => ({
+const setClientsTotalCountAC = (count: number): SetClientsTotalCountAT => ({
       type: SET_TOTAL_CLIENTS_COUNT, count
 })
 
@@ -333,7 +333,7 @@ type SetArchivedClientsTotalCountAT = {
   count: number
 }
 
-const setArchivedClientsTotalCount = (count: number): SetArchivedClientsTotalCountAT => ({
+const setArchivedClientsTotalCountAC = (count: number): SetArchivedClientsTotalCountAT => ({
   type: SET_ARCHIVED_CLIENTS_TOTAL_COUNT, count
 })
 
@@ -362,7 +362,7 @@ type SetIsFetchingAT = {
   isFetching: boolean,
 }
 
-const setIsFetching = (isFetching: boolean): SetIsFetchingAT => (
+const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => (
   {
     type: TOGGLE_IS_FETCHING, isFetching,
   }
@@ -432,17 +432,17 @@ export const getClients = (
     getState
 ) => {
   try {
-    dispatch(setIsFetching(true))
+    dispatch(setIsFetchingAC(true))
     let response = await clientsAPI.getClients(
       currentClientPage,
       clientsPageSize,
       clientsFilter
     )
     dispatch(setClientsAC(response.clients))
-    dispatch(setClientsTotalCount(response.totalCount))
-    dispatch(setIsFetching(false))
+    dispatch(setClientsTotalCountAC(response.totalCount))
+    dispatch(setIsFetchingAC(false))
   } catch (e) {
-    dispatch(setIsFetching(false))
+    dispatch(setIsFetchingAC(false))
     console.log(e)
   }
 }
@@ -455,7 +455,7 @@ export const getArchivedClients = (
     dispatch
 ) => {
   try {
-    dispatch(setIsFetching(true))
+    dispatch(setIsFetchingAC(true))
     let response = await clientsAPI.getArchivedClients(
         currentPage,
         pageSize,
@@ -463,11 +463,11 @@ export const getArchivedClients = (
     )
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedClients(response.clients))
-      dispatch(setArchivedClientsTotalCount(response.totalCount))
-      dispatch(setIsFetching(false))
+      dispatch(setArchivedClientsTotalCountAC(response.totalCount))
+      dispatch(setIsFetchingAC(false))
     }
   } catch (e) {
-    dispatch(setIsFetching(false))
+    dispatch(setIsFetchingAC(false))
     console.log(e)
   }
 }
@@ -531,16 +531,16 @@ export const editClient = (
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(setIsFetching(true))
+    dispatch(setIsFetchingAC(true))
     let response = await clientsAPI.editClient(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(editClientAC(response.client))
       dispatch(setClientProfile(response.client))
       dispatch(setIsSuccessAC(true))
     }
-    dispatch(setIsFetching(false))
+    dispatch(setIsFetchingAC(false))
   } catch (e) {
-    dispatch(setIsFetching(false))
+    dispatch(setIsFetchingAC(false))
     console.log(e)
   }
 }
@@ -549,15 +549,15 @@ export const getClientProfile = (
   clientId: string): ThunkType => async (
   dispatch
 ) => {
-  dispatch(setIsFetching(true));
+  dispatch(setIsFetchingAC(true));
   try {
     let response = await clientsAPI.getClientProfile(clientId)
     if (response) {
       dispatch(setClientProfile(response))
-      dispatch(setIsFetching(false))
+      dispatch(setIsFetchingAC(false))
     }
   } catch (e) {
-    dispatch(setIsFetching(false))
+    dispatch(setIsFetchingAC(false))
     console.log(e)
   }
 }
@@ -567,7 +567,7 @@ export const updateClientGallery = (
   values: any
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(setIsFetching(true))
+    dispatch(setIsFetchingAC(true))
     let response = await clientsAPI.updateClientGallery(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client))
@@ -578,7 +578,7 @@ export const updateClientGallery = (
     dispatch(setUpdateClientGalleryApiErrorAC(e.response?.data?.message))
     console.log(e)
   } finally {
-    dispatch(setIsFetching(false))
+    dispatch(setIsFetchingAC(false))
   }
 }
 

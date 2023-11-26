@@ -64,7 +64,6 @@ export const ProfileContainer: React.FC = () => {
     <Profile
       isSuccess={isSuccess}
       profile={profile}
-      isDeletingInProcess={isDeletingInProcess}
       isDeletingPicturesInProcess={isDeletingPicturesInProcess}
       deleteClient={deleteClientCallBack}
       editClient={editClientCallBack}

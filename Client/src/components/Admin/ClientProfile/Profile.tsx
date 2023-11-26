@@ -17,7 +17,6 @@ import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer";
 type PropsType = {
   isSuccess: boolean
   profile: ClientType
-  isDeletingInProcess: Array<string>
   isDeletingPicturesInProcess: Array<string>
   deleteClient: (clientId: string) => void
   editClient: (clientId: string, values: FormData) => void
@@ -26,10 +25,14 @@ type PropsType = {
   setIsSuccess: (bol: boolean) => void
 }
 
+type GalleryItemPropsType = {
+  profileId: string
+  item: string
+}
+
 export const Profile: React.FC<PropsType> = React.memo(({
     isSuccess,
     profile,
-    isDeletingInProcess,
     isDeletingPicturesInProcess,
     deleteClient,
     editClient,
@@ -48,8 +51,19 @@ export const Profile: React.FC<PropsType> = React.memo(({
   }, [isSuccess])
 
   //debugger
-  let [editClientMode, setEditClientMode] = useState<boolean>(false)
-  let [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
+  const [editClientMode, setEditClientMode] = useState<boolean>(false)
+  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
+  const [bigImg, setBigImg] = useState('')
+
+  const showBigImg = (fileName) => {
+    if (!bigImg) {
+      setBigImg(fileName)
+    }
+  }
+
+  const closeBigImg = () => {
+    setBigImg('')
+  }
   const successPopUpContent = "You successfully added changes to your clients list"
   const modalTitle = 'EDIT CLIENT'
 
@@ -77,6 +91,16 @@ export const Profile: React.FC<PropsType> = React.memo(({
   const Avatar = profile.avatar
       ? `${SERVER_URL}/clients/${profile._id}/avatar/${profile.avatar}`
       : avatar
+
+  const GalleryItem: React.FC<GalleryItemPropsType> = ({item,profileId}) => {
+    return (
+        <li
+            onClick={() => { showBigImg(item) }}
+        >
+          <img src={`${SERVER_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
+        </li>
+    )
+  }
 
   return (
     <div className="client-profile">
@@ -117,7 +141,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
           <NavLink
               className="btn btn--icon"
               to={'/admin/clients'}
-              //disabled={isDeletingInProcess?.some(id => id === item)}
               onClick={() => { deleteClient(profile._id) }}
           >
             <svg><use href={`${Sprite}#trash`}/></svg>
@@ -165,15 +188,19 @@ export const Profile: React.FC<PropsType> = React.memo(({
           isSuccess &&
           <SuccessPopUp closeModal={setIsSuccessAC} content={successPopUpContent} />
       }
+      {
+          bigImg &&
+          <div className="gallery__large-wrap modal-wrap">
+            <div className="gallery__large">
+              <button
+                  className="close-btn gallery__item-close-btn"
+                  onClick={() => { closeBigImg() }}>
+                {''}
+              </button>
+              <img src={`${SERVER_URL}/clients/${profile._id}/doneTattooGallery/${bigImg}`} alt={''} />
+            </div>
+          </div>
+      }
     </div>
   )
 })
-
-type GalleryItemPropsType = {
-  profileId: string
-  item: string
-}
-
-const GalleryItem: React.FC<GalleryItemPropsType> = ({item,profileId}) => {
-  return <li><img src={`${SERVER_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/></li>
-}
