@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
   profileId: string
   gallery?: Array<string>
-  isDeletingInProcess: Array<string>
+  isDeletingPicturesInProcess: Array<string>
   closeModal: () => void
   updateClientGallery: (clientId: string, values: any) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
@@ -37,7 +37,7 @@ type PropsType = {
 export const ClientGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
   profileId,
   gallery,
-  isDeletingInProcess,
+  isDeletingPicturesInProcess,
   updateClientGallery,
   deleteClientGalleryPicture,
   closeModal
@@ -91,7 +91,7 @@ export const ClientGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
                           <li className={"client-gallery__item"} key={i}>
                             <button
                                 className={"btn btn--icon btn--icon--light"}
-                                disabled={isDeletingInProcess?.some(id => id === item)}
+                                disabled={isDeletingPicturesInProcess?.some(id => id === item)}
                                 onClick={(event) => {
                                   event.preventDefault()
                                   deleteClientGalleryPicture(profileId, item)
