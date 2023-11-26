@@ -38,6 +38,18 @@ export const ArchivedGallery = () => {
         dispatch(getArchivedGallery(currentPage, pageSize))
     }, [currentPage, pageSize])
 
+    const [bigImg, setBigImg] = useState('')
+
+    const showBigImg = (fileName) => {
+        if (!bigImg) {
+            setBigImg(fileName)
+        }
+    }
+
+    const closeBigImg = () => {
+        setBigImg('')
+    }
+
     const onPageChangedCallBack = (page: number) => {
         dispatch(setCurrentArchivedGalleryPageAC(page))
     }
@@ -70,6 +82,7 @@ export const ArchivedGallery = () => {
                 className="gallery__item"
             >
                 <div
+                    onClick={() => { showBigImg(item.fileName) }}
                     className={"gallery__img-wrap"}
                     //onClick={() => { showBigImg(item.fileName) }}
                     style={{ backgroundImage: `url(${SERVER_URL}archivedGallery/${item.fileName})` }}
@@ -126,6 +139,19 @@ export const ArchivedGallery = () => {
                     { galleryItems }
                 </ul>
                 : <NothingToShow/>
+            }
+            {
+                bigImg &&
+                <div className="gallery__large-wrap modal-wrap">
+                    <div className="gallery__large">
+                        <button
+                            className="close-btn gallery__item-close-btn"
+                            onClick={() => { closeBigImg() }}>
+                            {''}
+                        </button>
+                        <img src={`${SERVER_URL}archivedGallery/${bigImg}`} alt={''} />
+                    </div>
+                </div>
             }
             {
                 editGalleryItem &&
