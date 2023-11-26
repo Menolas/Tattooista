@@ -55,7 +55,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 }) => {
   //debugger
 
-  let [bigImg, setBigImg] = useState('')
+  const [bigImg, setBigImg] = useState('')
   const [ editGalleryMode, setEditGalleryMode] = useState(false)
   const [ editGalleryItem, setEditGalleryItem ] = useState(null)
   const successPopUpContent = `You successfully added images to ${activeStyle.value} style gallery`

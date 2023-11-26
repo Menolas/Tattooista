@@ -36,8 +36,20 @@ export const Client: React.FC<PropsType> = React.memo(({
   archiveClient,
 }) => {
 
-  let [editClientMode, setEditClientMode] = useState<boolean>(false)
-  let [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
+  const [editClientMode, setEditClientMode] = useState<boolean>(false)
+  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
+
+  const [bigImg, setBigImg] = useState('')
+
+  const showBigImg = (fileName) => {
+    if (!bigImg) {
+      setBigImg(fileName)
+    }
+  }
+
+  const closeBigImg = () => {
+    setBigImg('')
+  }
 
   const closeEditModal = () => {
     setEditClientMode(false)
@@ -126,9 +138,16 @@ export const Client: React.FC<PropsType> = React.memo(({
         <div className="client-profile__gallery">
           <ul className="client-profile__gallery-list list">
             {
-              client.gallery.map(item => <li key={item}>
-                <img src={`${SERVER_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
-              </li>)
+              client.gallery.map(item => {
+                return (
+                    <li
+                        key={item}
+                        onClick={() => { showBigImg(item) }}
+                    >
+                      <img src={`${SERVER_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
+                    </li>
+                )
+              })
             }
           </ul>
         </div>
@@ -159,6 +178,19 @@ export const Client: React.FC<PropsType> = React.memo(({
                 closeModal={closeEditModal}
             />
           </ModalPopUp>
+      }
+      {
+          bigImg &&
+          <div className="gallery__large-wrap modal-wrap">
+            <div className="gallery__large">
+              <button
+                  className="close-btn gallery__item-close-btn"
+                  onClick={() => { closeBigImg() }}>
+                {''}
+              </button>
+              <img src={`${SERVER_URL}/clients/${client._id}/doneTattooGallery/${bigImg}`} alt={''} />
+            </div>
+          </div>
       }
       <Tooltip id="my-tooltip" />
     </li>

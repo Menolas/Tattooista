@@ -3,7 +3,6 @@ import { Advertisement } from '../../components/Portfolio/Advertisement'
 import { Gallery } from '../../components/Portfolio/Gallery'
 import { TattooStyles } from '../../components/Portfolio/TattooStyles'
 import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types"
-import {useEffect} from "react";
 import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
 
 type PropsType = {

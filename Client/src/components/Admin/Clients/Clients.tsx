@@ -70,7 +70,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
         }
     }, [isSuccess])
 
-  let [addClientMode, setAddClientMode] = useState<boolean>(false)
+  const [addClientMode, setAddClientMode] = useState<boolean>(false)
 
   const closeModal = () => {
     setAddClientMode(false)
