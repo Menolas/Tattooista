@@ -13,6 +13,7 @@ import { ClientGalleryUploadFormFormik } from '../../Forms/ClientGalleryUploadFo
 import {useDispatch} from "react-redux";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer";
+import {Tooltip} from "react-tooltip";
 
 type PropsType = {
   isSuccess: boolean
@@ -120,18 +121,24 @@ export const Profile: React.FC<PropsType> = React.memo(({
         </div>
         <div className="client-profile__action-btns">
           <button
+              data-tooltip-id="profile-tooltip"
+              data-tooltip-content="Edit client info"
               className="btn btn--icon"
               onClick={() => { setEditClientMode(true) }}
           >
             <svg><use href={`${Sprite}#edit`}/></svg>
           </button>
           <button
+              data-tooltip-id="profile-tooltip"
+              data-tooltip-content="Edit client's tattoos gallery"
               className="btn btn--icon"
               onClick={() => { setEditGalleryMode(true) }}
           >
             <svg><use href={`${Sprite}#images-user`}/></svg>
           </button>
           <NavLink
+              data-tooltip-id="profile-tooltip"
+              data-tooltip-content="Move client to archive client"
               className={"btn btn--icon"}
               to={'/admin/clients'}
               //onClick={() => {}}
@@ -139,6 +146,8 @@ export const Profile: React.FC<PropsType> = React.memo(({
             <svg><use href={`${Sprite}#archive`}/></svg>
           </NavLink>
           <NavLink
+              data-tooltip-id="profile-tooltip"
+              data-tooltip-content="Delete client"
               className="btn btn--icon"
               to={'/admin/clients'}
               onClick={() => { deleteClient(profile._id) }}
@@ -177,7 +186,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
             <ClientGalleryUploadFormFormik
                 profileId={profile._id}
                 gallery={profile.gallery}
-                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 updateClientGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 closeModal={closeModal}
@@ -201,6 +209,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
             </div>
           </div>
       }
+      <Tooltip id="profile-tooltip" />
     </div>
   )
 })

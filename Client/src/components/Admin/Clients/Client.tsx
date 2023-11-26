@@ -172,7 +172,6 @@ export const Client: React.FC<PropsType> = React.memo(({
             <ClientGalleryUploadFormFormik
                 profileId={client._id}
                 gallery={client.gallery}
-                isDeletingInProcess={isDeletingInProcess}
                 updateClientGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 closeModal={closeEditModal}
