@@ -10,7 +10,8 @@ import { SERVER_URL } from '../../../utils/constants'
 import { ModalPopUp } from '../../common/ModalPopUp'
 import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
 import {ClientGalleryUploadFormFormik} from '../../Forms/ClientGalleryUploadFormFormik'
-import {Tooltip} from "react-tooltip";
+import {Tooltip} from "react-tooltip"
+import {Confirmation} from "../../common/Confirmation"
 
 type PropsType = {
   client: ClientType
@@ -38,6 +39,7 @@ export const Client: React.FC<PropsType> = React.memo(({
 
   const [editClientMode, setEditClientMode] = useState<boolean>(false)
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
+  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
 
   const [bigImg, setBigImg] = useState('')
 
@@ -56,6 +58,10 @@ export const Client: React.FC<PropsType> = React.memo(({
     setEditGalleryMode(false)
   }
 
+  const closeModal = () => {
+    setNeedConfirmation(false)
+  }
+
   const modalTitle = 'EDIT CLIENT'
 
   const clientContacts: ContactType = client.contacts
@@ -69,6 +75,10 @@ export const Client: React.FC<PropsType> = React.memo(({
   })
 
   const clientAvatar = client.avatar ? `${SERVER_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar
+
+  const deleteClientCallBack = () => {
+    deleteClient(client._id, pageSize, currentPage)
+  }
 
   return (
     <li className="admin__card admin__card--client">
@@ -121,7 +131,7 @@ export const Client: React.FC<PropsType> = React.memo(({
               className={"btn btn--icon"}
               disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
-                deleteClient(client._id, pageSize, currentPage)
+                setNeedConfirmation(true)
               }}
           >
             <svg><use href={`${Sprite}#trash`}/></svg>
@@ -151,6 +161,19 @@ export const Client: React.FC<PropsType> = React.memo(({
             }
           </ul>
         </div>
+      }
+      {
+        needConfirmation &&
+          <ModalPopUp
+              modalTitle={''}
+              closeModal={closeModal}
+          >
+            <Confirmation
+                content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                confirm={deleteClientCallBack}
+                cancel={closeModal}
+            />
+          </ModalPopUp>
       }
       { editClientMode &&
         <ModalPopUp
