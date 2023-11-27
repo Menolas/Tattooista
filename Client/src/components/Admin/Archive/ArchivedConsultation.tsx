@@ -4,6 +4,9 @@ import { NavLink } from 'react-router-dom'
 import Sprite from '../../../assets/svg/sprite.svg'
 import {ContactType, BookedConsultationType} from '../../../types/Types'
 import {Tooltip} from "react-tooltip";
+import {useState} from "react";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {Confirmation} from "../../common/Confirmation";
 
 type PropsType = {
     consultation: BookedConsultationType
@@ -18,6 +21,16 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
    reactivateConsultation,
    isDeletingInProcess
 }) => {
+
+    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
+
+    const closeModal = () => {
+        setNeedConfirmation(false)
+    }
+
+    const deleteConsultationCallBack = () => {
+        deleteArchivedConsultation(consultation._id)
+    }
 
     const archivedBookingContacts: ContactType = consultation.contacts
 
@@ -58,7 +71,7 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === consultation._id)}
                         onClick={() => {
-                            deleteArchivedConsultation(consultation._id)
+                            setNeedConfirmation(true)
                         }}
                     >
                         <svg><use href={`${Sprite}#trash`}/></svg>
@@ -70,6 +83,19 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                     { contacts }
                 </ul>
             </div>
+            {
+                needConfirmation &&
+                <ModalPopUp
+                    modalTitle={''}
+                    closeModal={closeModal}
+                >
+                    <Confirmation
+                        content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                        confirm={deleteConsultationCallBack}
+                        cancel={closeModal}
+                    />
+                </ModalPopUp>
+            }
             <Tooltip id="my-tooltip" />
         </li>
     )

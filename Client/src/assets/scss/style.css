@@ -2661,4 +2661,21 @@ input[type=checkbox]:checked + label .checkbox::after {
   display: none;
 }
 
+.confirmation {
+  color: #080808;
+}
+
+.confirmation__text {
+  text-align: center;
+  font-weight: 600;
+}
+
+.confirmation__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
 /*# sourceMappingURL=style.css.map */

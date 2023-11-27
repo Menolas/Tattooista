@@ -140,7 +140,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
           />
           </ModalPopUp>
         }
-
         {
           isSuccess &&
           <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />

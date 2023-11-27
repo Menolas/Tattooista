@@ -3,6 +3,9 @@ import {ContactType, BookedConsultationType} from '../../../types/Types'
 // @ts-ignore
 import Sprite from '../../../assets/svg/sprite.svg'
 import {Tooltip} from "react-tooltip";
+import {useState} from "react";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {Confirmation} from "../../common/Confirmation";
 
 type PropsType = {
   consultation: BookedConsultationType
@@ -27,6 +30,17 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
     deleteConsultation,
     archiveConsultation
 }) => {
+
+    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
+
+    const closeModal = () => {
+        setNeedConfirmation(false)
+    }
+
+    const deleteConsultationCallBack = () => {
+        deleteConsultation(consultation._id, pageSize, currentPage)
+    }
+
     const bookingContacts: ContactType = consultation.contacts
     const contacts = Object.keys(bookingContacts).map(contact => {
 
@@ -100,12 +114,25 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
           className={"btn btn--icon"}
           disabled={isDeletingInProcess?.some(id => id === consultation._id)}
           onClick={() => {
-              deleteConsultation(consultation._id, pageSize, currentPage)
+              setNeedConfirmation(true)
           }}
         >
             <svg><use href={`${Sprite}#trash`}/></svg>
         </button>
       </div>
+        {
+            needConfirmation &&
+            <ModalPopUp
+                modalTitle={''}
+                closeModal={closeModal}
+            >
+                <Confirmation
+                    content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                    confirm={deleteConsultationCallBack}
+                    cancel={closeModal}
+                />
+            </ModalPopUp>
+        }
       <Tooltip id="my-tooltip" />
     </li>
   )

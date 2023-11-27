@@ -12,9 +12,9 @@ export const Confirmation: React.FC<PropsType> = ({
     cancel
 }) => {
     return (
-        <div>
-            <p>{content}</p>
-            <div>
+        <div className={'confirmation'}>
+            <p className={'confirmation__text'}>{content}</p>
+            <div className={'confirmation__actions'}>
                 <button
                     className={"btn"}
                     onClick={() => {confirm()}}

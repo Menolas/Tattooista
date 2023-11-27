@@ -6,7 +6,10 @@ import Sprite from '../../../assets/svg/sprite.svg'
 import { NavLink } from 'react-router-dom'
 import {ClientType, ContactType} from '../../../types/Types'
 import { SERVER_URL } from '../../../utils/constants'
-import {Tooltip} from "react-tooltip";
+import {Tooltip} from "react-tooltip"
+import {Confirmation} from "../../common/Confirmation"
+import {useState} from "react";
+import {ModalPopUp} from "../../common/ModalPopUp";
 
 type PropsType = {
   client: ClientType
@@ -21,6 +24,16 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   deleteClient,
   reactivateClient
 }) => {
+
+  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
+
+  const closeModal = () => {
+    setNeedConfirmation(false)
+  }
+
+  const deleteClientCallBack = () => {
+    deleteClient(client._id)
+  }
 
   const clientContacts: ContactType = client.contacts
 
@@ -66,7 +79,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
               className={"btn btn--icon"}
               disabled={isDeletingInProcess?.some(id => id === client._id)}
               onClick={() => {
-                deleteClient(client._id)
+                setNeedConfirmation(true)
               }}
           >
             <svg><use href={`${Sprite}#trash`}/></svg>
@@ -89,6 +102,19 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             }
           </ul>
         </div>
+      }
+      {
+          needConfirmation &&
+          <ModalPopUp
+              modalTitle={''}
+              closeModal={closeModal}
+          >
+            <Confirmation
+                content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                confirm={deleteClientCallBack}
+                cancel={closeModal}
+            />
+          </ModalPopUp>
       }
       <Tooltip id="my-tooltip" />
     </li>

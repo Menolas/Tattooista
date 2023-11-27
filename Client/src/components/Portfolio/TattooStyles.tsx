@@ -10,6 +10,7 @@ import {ModalPopUp} from "../common/ModalPopUp"
 import {SuccessPopUp} from "../common/SuccessPopUp"
 import AliceCarousel from "react-alice-carousel"
 import {Tooltip} from "react-tooltip"
+import {Confirmation} from "../common/Confirmation";
 
 const responsive = {
   0: {items: 3},
@@ -43,6 +44,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
 }) => {
   const [addTattooStyleMode, setAddTattooStyleMode] = useState(false)
   const [editTattooStyleMode, setEditTattooStyleMode] = useState(false)
+  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
   const modalTitle = 'Add a Tattoo Style'
   const successPopUpContent = "You successfully added a new style for your gallery"
 
@@ -52,6 +54,14 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
 
   const closeEditModal = () => {
       setEditTattooStyleMode(false)
+  }
+
+  const closeConfirmationModal = () => {
+    setNeedConfirmation(false)
+  }
+
+  const deleteTattooStyleCallBack = () => {
+    deleteTattooStyle(activeStyle._id)
   }
 
   const tattooStylesAliceArray = tattooStyles
@@ -118,7 +128,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
                   data-tooltip-content="Delete tattoo style"
                   className={"btn btn--icon"}
                   onClick={() => {
-                    deleteTattooStyle(activeStyle._id)
+                    setNeedConfirmation(true)
                   }}
               >
                 <svg>
@@ -140,6 +150,19 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
                   closeModal={closeEditModal}
               />
           </ModalPopUp>
+        }
+        {
+            needConfirmation &&
+            <ModalPopUp
+                modalTitle={''}
+                closeModal={closeModal}
+            >
+              <Confirmation
+                  content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                  confirm={deleteTattooStyleCallBack}
+                  cancel={closeConfirmationModal}
+              />
+            </ModalPopUp>
         }
         {
             isSuccess &&
