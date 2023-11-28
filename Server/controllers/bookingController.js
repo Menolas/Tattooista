@@ -78,9 +78,9 @@ class bookingController {
           email: req.body.mail,
           phone: req.body.phone,
           whatsapp: req.body.whatsapp,
-          messenger: req.body.messenger,
-          message: req.body.message
-        }
+          messenger: req.body.messenger
+        },
+        message: req.body.message
       })
       await booking.save()
       results.resultCode = 0
