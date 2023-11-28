@@ -18,7 +18,7 @@ type PropsType = {
   pageSize: number
   currentPage: number
   isDeletingInProcess: Array<string>
-  deleteClient: (clientId: string, pageSize: number, currentPage: number) => void
+  deleteClient: (clientId: string) => void
   editClient: (clientId: string, values: FormData) => void
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
@@ -77,7 +77,7 @@ export const Client: React.FC<PropsType> = React.memo(({
   const clientAvatar = client.avatar ? `${SERVER_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar
 
   const deleteClientCallBack = () => {
-    deleteClient(client._id, pageSize, currentPage)
+    deleteClient(client._id)
   }
 
   return (
