@@ -55,7 +55,6 @@ export const ArchivedClients: React.FC = () => {
     const onPageChangedCallBack = (
         page: number
     ) => {
-        console.log(page)
         dispatch(setCurrentPageForArchivedClientsAC(page))
     }
 

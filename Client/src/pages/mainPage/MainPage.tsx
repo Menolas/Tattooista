@@ -17,6 +17,7 @@ import {useEffect} from "react";
 import {setIsSuccessAC} from "../../redux/Clients/clients-reducer"
 import {useDispatch} from "react-redux"
 import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
+import {Preloader} from "../../components/common/Preloader";
 
 type PropsType = {
   isAuth: boolean
@@ -25,6 +26,7 @@ type PropsType = {
   services: Array<ServiceType>
   faq: Array<FaqType>
   pageAbout: PageType
+  isGeneralFetching: boolean
   isSuccess: boolean
   isSuccessBooking: boolean
   bookingConsultationApiError: string
@@ -56,6 +58,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   services,
   faq,
   pageAbout,
+  isGeneralFetching,
   isSuccess,
   isSuccessBooking,
   bookingConsultationApiError,
@@ -104,36 +107,41 @@ export const MainPage: React.FC<PropsType> = React.memo(({
 
   return (
     <>
-      <MainOffer bookConsultation={bookConsultation} />
-      <PortfolioSlider
-          galleryPageSize={galleryPageSize}
-          setActiveStyle={setActiveStyle}
-          tattooStyles={tattooStyles}
-      />
-        { (isAuth || pageAbout.isActive) &&
-            <About
-                isAuth={isAuth}
-                pageAbout={pageAbout}
-                editAboutPage={editAboutPage}
-                changeAboutPageVisibility={changeAboutPageVisibility}
-            />
-        }
+      { isGeneralFetching
+          ? <Preloader />
+          : <>
+              <MainOffer bookConsultation={bookConsultation} />
+              <PortfolioSlider
+                  galleryPageSize={galleryPageSize}
+                  setActiveStyle={setActiveStyle}
+                  tattooStyles={tattooStyles}
+              />
+              { (isAuth || pageAbout.isActive) &&
+                  <About
+                      isAuth={isAuth}
+                      pageAbout={pageAbout}
+                      editAboutPage={editAboutPage}
+                      changeAboutPageVisibility={changeAboutPageVisibility}
+                  />
+              }
 
-      <Services
-          isAuth={isAuth}
-          services={services}
-          editService={editService}
-          addService={addService}
-          deleteService={deleteService}
-      />
-      <FaqItems
-          isAuth={isAuth}
-          faq={faq}
-          updateFaqItem={updateFaqItem}
-          addFaqItem={addFaqItem}
-          deleteFaqItem={deleteFaqItem}
-      />
-      <Booking consentId="consent" bookConsultation={bookConsultation} />
+              <Services
+                  isAuth={isAuth}
+                  services={services}
+                  editService={editService}
+                  addService={addService}
+                  deleteService={deleteService}
+              />
+              <FaqItems
+                  isAuth={isAuth}
+                  faq={faq}
+                  updateFaqItem={updateFaqItem}
+                  addFaqItem={addFaqItem}
+                  deleteFaqItem={deleteFaqItem}
+              />
+              <Booking consentId="consent" bookConsultation={bookConsultation} />
+          </>
+      }
       { isSuccessBooking &&
         <SuccessPopUp closeModal={setIsSuccess} content={successBookingPopUpContent}/>
       }

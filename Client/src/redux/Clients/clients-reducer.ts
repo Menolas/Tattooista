@@ -36,7 +36,7 @@ let initialState = {
   archivedClientsPageSize: 5 as number,
   currentClientsPage: 1 as number,
   currentArchivedClientsPage: 1 as number,
-  clientsIsFetching: false,
+  clientsIsFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   isDeletingPicturesInProcess: [] as Array<string>,
   clientsFilter: {
@@ -129,17 +129,34 @@ export const clientsReducer = (
       }
 
     case DELETE_CLIENT:
-      return {
-        ...state,
-        clients: state.clients.filter(client => client._id !== action.clientId)
-
+      if (state.clients.length > 1) {
+        return {
+          ...state,
+          clients: state.clients.filter(client => client._id !== action.clientId),
+          totalClientsCount: state.totalClientsCount - 1
+        }
+      } else {
+        return {
+          ...state,
+          currentClientsPage: state.currentClientsPage - 1
+        }
       }
+
 
     case DELETE_ARCHIVED_CLIENT:
-      return {
-        ...state,
-        archivedClients: state.archivedClients.filter(client => client._id !== action.clientId)
+      if (state.archivedClients.length > 1) {
+        return {
+          ...state,
+          archivedClients: state.archivedClients.filter(client => client._id !== action.clientId),
+          totalArchivedClientsCount: state.totalArchivedClientsCount - 1
+        }
+      } else {
+        return {
+          ...state,
+          currentArchivedClientsPage: state.currentArchivedClientsPage - 1
+        }
       }
+
 
     case EDIT_CLIENT:
       return {
@@ -153,9 +170,17 @@ export const clientsReducer = (
       }
 
     case ADD_CLIENT:
-      return {
-        ...state,
-        clients: [{...action.client}, ...state.clients ]
+      if (state.clients.length < state.clientsPageSize) {
+        return {
+          ...state,
+          clients: [{...action.client}, ...state.clients ],
+          totalClientsCount: state.totalClientsCount + 1
+        }
+      } else {
+        return {
+          ...state,
+          currentClientsPage: state.currentClientsPage + 1
+        }
       }
 
     case TOGGLE_IS_DELETING_IN_PROCESS:
@@ -499,7 +524,7 @@ export const deleteArchivedClient = (
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await clientsAPI.deleteArchivedClient(id)
-    console.log(response)
+    //console.log(response)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteArchivedClientAC(id))
     }

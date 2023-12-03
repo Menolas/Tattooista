@@ -148,22 +148,58 @@ export const bookedConsultationsReducer = (
           : state.isDeletingInProcess.filter(id => id !== action.id)
       }
     case DELETE_CONSULTATION:
-      return {
-        ...state,
-        bookedConsultations: state.bookedConsultations.filter(consultation => consultation._id !== action.id)
+      if (state.bookedConsultations.length > 1) {
+        console.log(state.bookedConsultations.length + "array length > 1 !!!!!!!!")
+        return {
+          ...state,
+          bookedConsultations: state.bookedConsultations.filter(consultation => consultation._id !== action.id),
+          totalBookedConsultationsCount: state.totalBookedConsultationsCount - 1
+        }
+      } else if (state.currentBookedConsultationsPage > 1) {
+        console.log(state.currentBookedConsultationsPage + "current page > 1!!!!!!!!")
+        return {
+          ...state,
+          currentBookedConsultationsPage: state.currentBookedConsultationsPage - 1
+        }
+      } else if (state.currentBookedConsultationsPage === 1 && state.totalBookedConsultationsCount > state.bookedConsultationsPageSize) {
+        console.log(state.currentBookedConsultationsPage + "current page = 1!!!!!!!!")
+        return {
+          ...state,
+          currentBookedConsultationsPage: state.currentBookedConsultationsPage + 1
+        }
+      } else if (state.currentBookedConsultationsPage === 1 && state.totalBookedConsultationsCount === 1){
+        return {
+          ...state,
+          bookedConsultations: []
+        }
+      }
+    case DELETE_ARCHIVED_CONSULTATION:
+      if (state.archivedConsultations.length > 1) {
+        return {
+          ...state,
+          archivedConsultations: state.archivedConsultations.filter(consultation => consultation._id !== action.id),
+          totalArchivedConsultationsCount: state.totalArchivedConsultationsCount - 1
+        }
+      } else {
+        return {
+          ...state,
+          currentArchivedConsultationsPage: state.currentArchivedConsultationsPage - 1
+        }
       }
 
-    case DELETE_ARCHIVED_CONSULTATION:
-      return {
-        ...state,
-        archivedConsultations: state.archivedConsultations.filter(consultation => consultation._id !== action.id)
-      }
 
     case ADD_CONSULTATION:
-      return {
-        ...state,
-        bookedConsultations: [{...action.consultation}, ...state.bookedConsultations],
-        currentBookedConsultationsPage: 1
+      if (state.bookedConsultations.length < state.bookedConsultationsPageSize) {
+        return {
+          ...state,
+          bookedConsultations: [{...action.consultation}, ...state.bookedConsultations],
+          totalBookedConsultationsCount: state.totalBookedConsultationsCount + 1
+        }
+      } else {
+        return {
+          ...state,
+          currentBookedConsultationsPage: state.currentBookedConsultationsPage + 1
+        }
       }
 
     case SET_IS_SUCCESS:
@@ -400,6 +436,7 @@ export const getBookedConsultations = (
     )
     dispatch(setBookedConsultationsAC(response.bookings))
     dispatch(setBookedConsultationsTotalCountAC(response.totalCount))
+    dispatch(setCurrentPageForBookedConsultationsAC(response.page))
     dispatch(setIsFetchingAC(false))
   } catch (e) {
     dispatch(setIsFetchingAC(false))

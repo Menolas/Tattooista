@@ -27,7 +27,7 @@ let initialState = {
   totalArchivedGalleryItemsCount: 0 as number | null,
   galleryPageSize: 4 as number | null,
   archivedGalleryPageSize: 5 as number,
-  currentGalleryPage: 1 as number | null,
+  currentGalleryPage: 1 as number,
   currentArchivedGalleryPage: 1 as number,
   isFetching: false,
   isDeletingInProcess: [] as Array<string>,
@@ -135,10 +135,18 @@ export const portfolioReducer = (
       }
 
     case DELETE_GALLERY_ITEM:
-      return {
-        ...state,
-        gallery: state.gallery.filter(item => item._id !== action.itemId)
+      if (state.gallery.length > 1) {
+        return {
+          ...state,
+          gallery: state.gallery.filter(item => item._id !== action.itemId)
+        }
+      } else {
+        return {
+          ...state,
+          currentGalleryPage: state.currentGalleryPage - 1
+        }
       }
+
 
     case DELETE_ARCHIVED_GALLERY_ITEM:
       return {

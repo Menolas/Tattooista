@@ -51,7 +51,7 @@ export const BookedConsultationsContainer: React.FC = () => {
     //if (!!urlParams.get('status')) actualFilter = { ...actualFilter, status: urlParams.get('status')}
 
     dispatch(getBookedConsultations(currentPage, pageSize, filter))
-  }, [currentPage, pageSize, filter,])
+  }, [currentPage, pageSize, filter])
 
   // useEffect(() => {
   //   navigate(`?term=${filter.term}&status=${filter.status}&page=${currentPage}`)
