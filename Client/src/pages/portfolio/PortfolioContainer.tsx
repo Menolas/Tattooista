@@ -85,7 +85,7 @@ export const PortfolioContainer: React.FC = () =>  {
   }
 
   const deleteGalleryItemCallBack = (itemId: string) => {
-    dispatch(deleteGalleryItem(itemId))
+    dispatch(deleteGalleryItem(itemId, gallery, currentPage, totalCount, pageSize, activeStyle))
   }
 
   const resetActiveStyleCallBack = (style: TattooStyleType) => {

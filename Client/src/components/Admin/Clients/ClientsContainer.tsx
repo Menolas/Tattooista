@@ -79,13 +79,13 @@ export const ClientsContainer: React.FC = () => {
   const addClientCallBack = (
     values: FormData
   ) => {
-    dispatch(addClient(values))
+    dispatch(addClient(values, totalCount))
   }
 
   const deleteClientCallBack = (
     clientId: string
   ) => {
-    dispatch(deleteClient(clientId))
+    dispatch(deleteClient(clientId, clients, currentPage, totalCount, pageSize, filter))
   }
 
   const editClientCallBack = (

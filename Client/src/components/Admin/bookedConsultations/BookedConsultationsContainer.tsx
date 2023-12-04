@@ -24,7 +24,7 @@ import {
   getIsSuccessSelector, getAddBookingApiErrorSelector
 } from '../../../redux/bookedConsultations/bookedConsultations-selectors'
 import { BookedConsultations } from './BookedConsultations'
-import {AddConsultationFormValues, ContactsType} from '../../../types/Types'
+import {AddConsultationFormValues, BookedConsultationType, ContactsType} from '../../../types/Types'
 
 export const BookedConsultationsContainer: React.FC = () => {
 
@@ -80,8 +80,10 @@ export const BookedConsultationsContainer: React.FC = () => {
     dispatch(changeBookedConsultationStatus(id, status))
   }
 
-  const deleteConsultationCallBack = (id: string) => {
-    dispatch(deleteBookedConsultation(id))
+  const deleteConsultationCallBack = (
+      id: string,
+  ) => {
+    dispatch(deleteBookedConsultation(id, bookedConsultations, currentPage, totalCount, pageSize, filter))
   }
 
   const turnConsultationToClientCallBack = (
@@ -99,11 +101,11 @@ export const BookedConsultationsContainer: React.FC = () => {
   }
 
   const addBookedConsultationCallBack = (values: AddConsultationFormValues) => {
-    dispatch(addBookedConsultation(values))
+    dispatch(addBookedConsultation(values, totalCount))
   }
 
   const archiveConsultationCallBack = (id: string) => {
-    dispatch(archiveConsultation(id))
+    dispatch(archiveConsultation(id, bookedConsultations, currentPage, totalCount, pageSize, filter))
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {

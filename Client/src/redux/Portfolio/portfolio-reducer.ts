@@ -50,6 +50,7 @@ export type InitialStateType = typeof initialState
 //Designs Here you can see some of my designs and drawings.
 //OldSchool
 //No style Here the images of tattoos which difficult to define which style it is actually
+
 export const portfolioReducer = (
   state = initialState,
   action: ActionsTypes): InitialStateType => {
@@ -135,18 +136,10 @@ export const portfolioReducer = (
       }
 
     case DELETE_GALLERY_ITEM:
-      if (state.gallery.length > 1) {
-        return {
-          ...state,
-          gallery: state.gallery.filter(item => item._id !== action.itemId)
-        }
-      } else {
-        return {
-          ...state,
-          currentGalleryPage: state.currentGalleryPage - 1
-        }
+      return {
+        ...state,
+        gallery: state.gallery.filter(item => item._id !== action.itemId)
       }
-
 
     case DELETE_ARCHIVED_GALLERY_ITEM:
       return {
@@ -469,6 +462,7 @@ export const adminUpdateGallery = (
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.adminUpdateGallery(tattooStyle, values)
     if (response.resultCode === ResultCodesEnum.Success) {
+      //dispatch(setGalleryAC(response.gallery))
       dispatch(setCurrentGalleryPageAC(0))
       dispatch(setIsSuccessAC(true))
     }
@@ -481,13 +475,30 @@ export const adminUpdateGallery = (
 }
 
 export const deleteGalleryItem = (
-  id: string
+  id: string,
+  gallery: Array<GalleryItemType>,
+  currentPage: number,
+  total: number,
+  pageLimit: number,
+  style: TattooStyleType | null
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.deleteGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteGalleryItemAC(id))
+      if (gallery.length > 1) {
+        dispatch(deleteGalleryItemAC(id))
+        dispatch(setGalleryTotalCountAC(total - 1))
+      } else {
+        let newPage =
+            currentPage > 1
+                ? currentPage - 1
+                : (total - 1) > pageLimit
+                    ? currentPage + 1
+                    : 1
+        await dispatch(getActualPortfolio(style, newPage, pageLimit))
+      }
+
     }
   } catch (e) {
     console.log(e)
@@ -497,13 +508,28 @@ export const deleteGalleryItem = (
 }
 
 export const deleteArchivedGalleryItem = (
-    id: string
+    id: string,
+    gallery: Array<GalleryItemType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.deleteArchivedGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedGalleryItemAC(id))
+      if (gallery.length > 1) {
+        dispatch(deleteArchivedGalleryItemAC(id))
+        dispatch(setArchivedGalleryTotalCountAC(total - 1))
+      } else {
+        let newPage =
+            currentPage > 1
+                ? currentPage - 1
+                : (total - 1) > pageLimit
+                    ? currentPage + 1
+                    : 1
+        await dispatch(getArchivedGallery(newPage, pageLimit))
+      }
     }
   } catch (e) {
     console.log(e)

@@ -24,6 +24,7 @@ import {
 } from '../../../redux/bookedConsultations/bookedConsultations-selectors'
 import {ArchivedConsultation} from './ArchivedConsultation'
 import {BookedConsultationsSearchForm} from '../../Forms/BookedConsultationsSearchForm'
+import {BookedConsultationType} from "../../../types/Types";
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
@@ -74,7 +75,14 @@ export const ArchivedConsultations: React.FC = () => {
     const deleteArchivedConsultationCallBack = (
         clientId: string
     ) => {
-        dispatch(deleteArchivedConsultation(clientId))
+        dispatch(deleteArchivedConsultation(
+            clientId,
+            archivedConsultations,
+            currentPage,
+            totalCount,
+            pageSize,
+            filter
+        ))
     }
 
     const reactivateConsultationCallBack = (
