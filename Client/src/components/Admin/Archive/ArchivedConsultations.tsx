@@ -88,7 +88,14 @@ export const ArchivedConsultations: React.FC = () => {
     const reactivateConsultationCallBack = (
         id: string
     ) => {
-        dispatch(reactivateConsultation(id))
+        dispatch(reactivateConsultation(
+            id,
+            archivedConsultations,
+            currentPage,
+            totalCount,
+            pageSize,
+            filter
+        ))
     }
 
     const archivedConsultationsArray = archivedConsultations

@@ -4,6 +4,7 @@ import { BookedConsultationType } from "../../types/Types"
 import { AppStateType } from "../redux-store"
 import { ThunkAction } from "redux-thunk"
 import type {} from "redux-thunk/extend-redux"
+import {getNewPage} from "../../utils/functions"
 
 const SET_BOOKED_CONSULTATIONS_PAGE_SIZE = 'SET_BOOKED_CONSULTATIONS_PAGE_SIZE'
 const SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE = 'SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE'
@@ -393,6 +394,40 @@ const addBookedConsultationAC = (consultation: BookedConsultationType): AddBooke
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
+const deleteBookingThunk = (
+    id: string,
+    bookings: Array<BookedConsultationType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: BookedConsultationsFilterType
+): ThunkType => async (dispatch) => {
+  if (bookings.length > 1) {
+    dispatch(deleteBookedConsultationAC(id))
+    dispatch(setBookedConsultationsTotalCountAC(total - 1))
+  } else {
+    const newPage = getNewPage(currentPage, total, pageLimit)
+    await dispatch(getBookedConsultations(newPage, pageLimit, filter))
+  }
+}
+
+const deleteArchivedBookingThunk = (
+    id: string,
+    bookings: Array<BookedConsultationType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: BookedConsultationsFilterType
+): ThunkType => async (dispatch) => {
+  if (bookings.length > 1) {
+    dispatch(deleteArchivedConsultationAC(id))
+    dispatch(setArchivedConsultationsTotalCountAC(total - 1))
+  } else {
+    const newPage = getNewPage(currentPage, total, pageLimit)
+    await dispatch(getArchivedConsultations(newPage, pageLimit, filter))
+  }
+}
+
 export const getBookedConsultations = (
   currentPage: number,
   pageSize: number,
@@ -471,18 +506,7 @@ export const deleteBookedConsultation = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.deleteConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      if (bookings.length > 1) {
-        dispatch(deleteBookedConsultationAC(id))
-        dispatch(setBookedConsultationsTotalCountAC(total - 1))
-      } else {
-        let newPage =
-            currentPage > 1
-                ? currentPage - 1
-                : (total - 1) > pageLimit
-                    ? currentPage + 1
-                    : 1
-        await dispatch(getBookedConsultations(newPage, pageLimit, filter))
-      }
+      await dispatch(deleteBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -503,19 +527,7 @@ export const deleteArchivedConsultation = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.deleteArchivedConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      if (bookings.length > 1) {
-        dispatch(deleteArchivedConsultationAC(id))
-        dispatch(setArchivedConsultationsTotalCountAC(total - 1))
-      } else {
-        let newPage =
-            currentPage > 1
-                ? currentPage - 1
-                : (total - 1) > pageLimit
-                    ? currentPage + 1
-                    : 1
-        await dispatch(getArchivedConsultations(newPage, pageLimit, filter))
-      }
-
+      await dispatch(deleteArchivedBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -545,7 +557,12 @@ export const addBookedConsultation = (
 export const turnConsultationToClient = (
     id: string,
     fullName: string,
-    contacts: {}
+    contacts: {},
+    bookings: Array<BookedConsultationType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
@@ -555,7 +572,7 @@ export const turnConsultationToClient = (
       contacts
     )
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteBookedConsultationAC(id))
+      await dispatch(deleteBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
@@ -577,19 +594,7 @@ export const archiveConsultation = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.archiveConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      if (bookings.length > 1) {
-        dispatch(deleteBookedConsultationAC(id))
-        dispatch(setBookedConsultationsTotalCountAC(total - 1))
-      } else {
-        let newPage =
-            currentPage > 1
-                ? currentPage - 1
-                : (total - 1) > pageLimit
-                    ? currentPage + 1
-                    : 1
-        await dispatch(getBookedConsultations(newPage, pageLimit, filter))
-      }
-
+      await dispatch(deleteBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -599,13 +604,18 @@ export const archiveConsultation = (
 }
 
 export const reactivateConsultation = (
-    id: string
+    id: string,
+    bookings: Array<BookedConsultationType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.reactivateConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedConsultationAC(id))
+      await dispatch(deleteArchivedBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
       dispatch(addBookedConsultationAC(response.booking))
     }
   } catch (e) {

@@ -79,7 +79,7 @@ export const ArchivedClients: React.FC = () => {
     const reactivateClientCallBack = (
         clientId: string
     ) => {
-        dispatch(reactivateClient(clientId))
+        dispatch(reactivateClient(clientId, archivedClients, currentPage, totalCount, pageSize, filter))
     }
 
     const clientsElements = archivedClients

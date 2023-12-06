@@ -107,7 +107,6 @@ export const bookedConsultationsAPI = {
   archiveConsultation(
       id: string
   ) {
-    console.log("it is a hit!!!!!")
     return instance.post(`bookings/archive/${id}`)
         .then(response => {
           return response.data

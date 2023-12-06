@@ -30,6 +30,7 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
 
     const deleteConsultationCallBack = () => {
         deleteArchivedConsultation(consultation._id)
+        setNeedConfirmation(false)
     }
 
     const archivedBookingContacts: ContactType = consultation.contacts

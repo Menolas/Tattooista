@@ -39,6 +39,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
 
     const deleteConsultationCallBack = () => {
         deleteConsultation(consultation._id)
+        setNeedConfirmation(false)
     }
 
     const bookingContacts: ContactType = consultation.contacts

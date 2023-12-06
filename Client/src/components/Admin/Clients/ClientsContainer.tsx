@@ -110,7 +110,7 @@ export const ClientsContainer: React.FC = () => {
   }
 
   const archiveClientCallBack = (clientId: string) => {
-    dispatch(archiveClient(clientId))
+    dispatch(archiveClient(clientId, clients, currentPage, totalCount, pageSize, filter))
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {

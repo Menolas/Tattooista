@@ -91,7 +91,7 @@ export const BookedConsultationsContainer: React.FC = () => {
     fullName: string,
     contacts?: ContactsType | {}
   ) => {
-    dispatch(turnConsultationToClient(id, fullName, contacts))
+    dispatch(turnConsultationToClient(id, fullName, contacts, bookedConsultations, currentPage, totalCount, pageSize, filter))
   }
 
   const setBookedConsultationsPageSizeCallBack = (
