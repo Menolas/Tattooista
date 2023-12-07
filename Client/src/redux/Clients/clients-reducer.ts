@@ -444,8 +444,13 @@ const deleteClientThunk = (
     dispatch(deleteClientAC(id))
     dispatch(setClientsTotalCountAC(total -1))
   } else {
-    const newPage = getNewPage(currentPage, total, pageLimit)
-    await dispatch(getClients(newPage, pageLimit, filter))
+    const newPage = getNewPage(currentPage)
+    if (currentPage === newPage) {
+      await dispatch(getClients(newPage, pageLimit, filter))
+    }
+    dispatch(deleteClientAC(id))
+    dispatch(setCurrentClientsPageAC(newPage))
+
   }
 }
 
@@ -461,8 +466,12 @@ const deleteArchivedClientThunk = (
     dispatch(deleteArchivedClientAC(id))
     dispatch(setArchivedClientsTotalCountAC(total - 1))
   } else {
-    const newPage = getNewPage(currentPage, total, pageLimit)
-    await dispatch(getArchivedClients(newPage, pageLimit, filter))
+    const newPage = getNewPage(currentPage)
+    if (currentPage === newPage) {
+      await dispatch(getArchivedClients(newPage, pageLimit, filter))
+    }
+    dispatch(deleteArchivedClientAC(id))
+    dispatch(setCurrentPageForArchivedClientsAC(newPage))
   }
 }
 
@@ -692,6 +701,8 @@ export const reactivateClient = (
       await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAddClientApiErrorAC(e.response.data.message))
     console.log(e)
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id))

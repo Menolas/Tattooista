@@ -406,8 +406,12 @@ const deleteBookingThunk = (
     dispatch(deleteBookedConsultationAC(id))
     dispatch(setBookedConsultationsTotalCountAC(total - 1))
   } else {
-    const newPage = getNewPage(currentPage, total, pageLimit)
-    await dispatch(getBookedConsultations(newPage, pageLimit, filter))
+    const newPage = getNewPage(currentPage)
+    if (currentPage === newPage) {
+      await dispatch(getBookedConsultations(newPage, pageLimit, filter))
+    }
+    dispatch(deleteBookedConsultationAC(id))
+    dispatch(setCurrentPageForBookedConsultationsAC(newPage))
   }
 }
 
@@ -423,8 +427,12 @@ const deleteArchivedBookingThunk = (
     dispatch(deleteArchivedConsultationAC(id))
     dispatch(setArchivedConsultationsTotalCountAC(total - 1))
   } else {
-    const newPage = getNewPage(currentPage, total, pageLimit)
-    await dispatch(getArchivedConsultations(newPage, pageLimit, filter))
+    const newPage = getNewPage(currentPage)
+    if (currentPage === newPage) {
+      await dispatch(getArchivedConsultations(newPage, pageLimit, filter))
+    }
+    dispatch(deleteArchivedConsultationAC(id))
+    dispatch(setCurrentPageForArchivedConsultationsAC(newPage))
   }
 }
 
@@ -576,6 +584,8 @@ export const turnConsultationToClient = (
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAddBookingApiErrorAC(e.response.data.message))
     console.log(e)
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id))
@@ -619,6 +629,8 @@ export const reactivateConsultation = (
       dispatch(addBookedConsultationAC(response.booking))
     }
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAddBookingApiErrorAC(e.response.data.message))
     console.log(e)
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id))

@@ -122,7 +122,6 @@ export const portfolioApi = {
         return instance.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
           gallery
         ).then(response => {
-            //console.log(response.data + "API !!!!!!!")
             return response.data
         })
     },

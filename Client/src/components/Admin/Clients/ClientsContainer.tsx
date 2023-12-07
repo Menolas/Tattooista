@@ -27,6 +27,7 @@ import {
   getClientsFilterSelector, getClientsPageSizeSelector
 } from '../../../redux/Clients/clients-selectors'
 import { Clients } from './Clients'
+import {getAddBookingApiErrorSelector} from "../../../redux/bookedConsultations/bookedConsultations-selectors";
 //import {useNavigate} from "react-router-dom";
 
 export const ClientsContainer: React.FC = () => {

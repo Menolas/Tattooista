@@ -132,8 +132,8 @@ class bookingController {
     const results = {}
 
     try {
-      await res.booking.remove()
       await client.save()
+      await res.booking.remove()
       results.client = client
       results.resultCode = 0
       res.status(201).json(results)

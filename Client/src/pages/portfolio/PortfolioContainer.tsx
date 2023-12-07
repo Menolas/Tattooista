@@ -5,7 +5,7 @@ import { BookConsultationFormValues, TattooStyleType} from '../../types/Types'
 import {
   getIsFetching,
   getTattooStylesSelector,
-  getGallery,
+  getGallerySelector,
   getTotalGalleryItemsCount,
   getGalleryPageSize,
   getCurrentGalleryPage,
@@ -13,7 +13,7 @@ import {
   getActiveStyleSelector, getUpdateTattooStyleApiErrorSelector, getUpdateGalleryApiErrorSelector
 } from '../../redux/Portfolio/portfolio-selectors'
 import {
-  getActualPortfolio,
+  getGallery,
   adminUpdateGallery,
   deleteGalleryItem,
   setGalleryPageSizeAC,
@@ -24,7 +24,7 @@ import {
   deleteTattooStyle,
   archiveGalleryItem,
   getTattooStyles,
-  setUpdateTattooStyleApiErrorAC, setUpdateGalleryApiErrorAC, updateGalleryItem
+  setUpdateTattooStyleApiErrorAC, setUpdateGalleryApiErrorAC, updateGalleryItem, setActiveStyleAC
 } from '../../redux/Portfolio/portfolio-reducer'
 import { Portfolio } from './Portfolio'
 import {getAuthSelector} from '../../redux/Auth/auth-selectors'
@@ -46,8 +46,8 @@ export const PortfolioContainer: React.FC = () =>  {
   let currentPage = useSelector(getCurrentGalleryPage)
   const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector)
   const tattooStyles = useSelector(getTattooStylesSelector)
-  const activeStyle = useSelector(getActiveStyleSelector)
-  const gallery = useSelector(getGallery)
+  let activeStyle = useSelector(getActiveStyleSelector)
+  const gallery = useSelector(getGallerySelector)
   const isSuccess = useSelector(getIsSuccessSelector)
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
   const updateTattooStyleApiError = useSelector(getUpdateTattooStyleApiErrorSelector)
@@ -60,8 +60,15 @@ export const PortfolioContainer: React.FC = () =>  {
     if (currentPage === 0) {
       currentPage = 1
     }
-    dispatch(getTattooStyles())
-    dispatch(getActualPortfolio(activeStyle, currentPage, pageSize))
+
+    dispatch(getTattooStyles()).then(r => {
+      if (!activeStyle?._id) {
+        activeStyle = tattooStyles[0]
+        dispatch(setActiveStyleAC(tattooStyles[0]))
+      }
+      dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
+    })
+
   }, [activeStyle, currentPage, pageSize])
 
   // useEffect(() => {
@@ -104,8 +111,8 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(deleteTattooStyle(id))
   }
 
-  const archiveGalleryItemCallBack = (id: string) => {
-    dispatch(archiveGalleryItem(id))
+  const archiveGalleryItemCallBack = (itemId: string) => {
+    dispatch(archiveGalleryItem(itemId, gallery, currentPage, totalCount, pageSize, activeStyle))
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {

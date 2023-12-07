@@ -62,8 +62,8 @@ export const ArchivedGallery = () => {
         dispatch(deleteArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize))
     }
 
-    const reactivateArchivedGalleryItemCallBack = (id: string) => {
-        dispatch(reactivateArchivedGalleryItem(id))
+    const reactivateArchivedGalleryItemCallBack = (itemId: string) => {
+        dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize))
     }
 
     const updateArchivedGalleryItemCallBack = (id: string, values: object) => {

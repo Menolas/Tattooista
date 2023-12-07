@@ -9,7 +9,7 @@ import {
     BookedConsultationsFilterType,
     deleteArchivedConsultation,
     getArchivedConsultations,
-    reactivateConsultation,
+    reactivateConsultation, setAddBookingApiErrorAC,
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
     setCurrentPageForArchivedConsultationsAC
@@ -20,11 +20,11 @@ import {
     getArchivedConsultationsSelector,
     getCurrentArchivedConsultationsPageSelector,
     getBookedConsultationsIsFetchingSelector,
-    getTotalArchivedConsultationsCountSelector, getIsDeletingInProcessSelector,
+    getTotalArchivedConsultationsCountSelector, getIsDeletingInProcessSelector, getAddBookingApiErrorSelector,
 } from '../../../redux/bookedConsultations/bookedConsultations-selectors'
 import {ArchivedConsultation} from './ArchivedConsultation'
 import {BookedConsultationsSearchForm} from '../../Forms/BookedConsultationsSearchForm'
-import {BookedConsultationType} from "../../../types/Types";
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
@@ -34,6 +34,7 @@ export const ArchivedConsultations: React.FC = () => {
     const pageSize = useSelector(getArchivedConsultationsPageSizeSelector)
     const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector)
     const filter = useSelector(getArchivedConsultationsFilterSelector)
+    const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -98,6 +99,10 @@ export const ArchivedConsultations: React.FC = () => {
         ))
     }
 
+    const setAddBookingApiErrorCallBack = (error: string) => {
+        dispatch(setAddBookingApiErrorAC(error))
+    }
+
     const archivedConsultationsArray = archivedConsultations
         .map(consultation => {
             return (
@@ -134,6 +139,13 @@ export const ArchivedConsultations: React.FC = () => {
                             { archivedConsultationsArray }
                         </ul>
                     ) : <NothingToShow/>
+            }
+
+            { addBookingApiError && addBookingApiError !== '' &&
+                <ApiErrorMessage
+                    error={addBookingApiError}
+                    closeModal={setAddBookingApiErrorCallBack}
+                />
             }
         </>
     )
