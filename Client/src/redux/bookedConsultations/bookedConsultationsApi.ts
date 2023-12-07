@@ -11,6 +11,7 @@ type GetBookedConsultationsResponseType = {
   resultCode: number
   bookings: Array<BookedConsultationType>
   totalCount: number
+  page: number
   message?: string
 }
 
@@ -76,7 +77,6 @@ export const bookedConsultationsAPI = {
   },
 
   deleteArchivedConsultation(id: string) {
-    console.log("it is a hit!!!!!!!!!!!!")
     return instance.delete<DeleteConsultationResponseType>(`bookings/archive/${id}`)
         .then(response => {
           return response.data
@@ -99,7 +99,7 @@ export const bookedConsultationsAPI = {
       fullName,
       contacts
     }).then(response => {
-      console.log(response)
+      //console.log(response)
         return response.data
     })
   },
@@ -107,7 +107,6 @@ export const bookedConsultationsAPI = {
   archiveConsultation(
       id: string
   ) {
-    console.log("it is a hit!!!!!")
     return instance.post(`bookings/archive/${id}`)
         .then(response => {
           return response.data

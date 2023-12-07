@@ -7,8 +7,6 @@ class bookingController {
   async getBookings (req, res) {
     let page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
-    const startIndex = (page - 1) * limit
-    const endIndex = page * limit
     const status = req.query.status
     const term = req.query.term
     let bookings = []
@@ -25,9 +23,13 @@ class bookingController {
         bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
 
+      const startIndex = (page - 1) * limit
+      const endIndex = page * limit
+
       results.resultCode = 0
       results.totalCount = bookings.length
       results.bookings = bookings.slice(startIndex, endIndex)
+      results.page = page
       res.json(results)
     } catch (e) {
       results.resultCode = 1
@@ -130,8 +132,8 @@ class bookingController {
     const results = {}
 
     try {
-      await res.booking.remove()
       await client.save()
+      await res.booking.remove()
       results.client = client
       results.resultCode = 0
       res.status(201).json(results)

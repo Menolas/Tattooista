@@ -122,7 +122,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
             >
                 <svg><use href={`${Sprite}#edit`}/></svg>
             </button>
-            { !activeStyle.nonStyle &&
+            { !activeStyle?.nonStyle &&
               <button
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Delete tattoo style"

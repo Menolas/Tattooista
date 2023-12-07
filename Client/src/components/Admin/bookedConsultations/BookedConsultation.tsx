@@ -15,7 +15,7 @@ type PropsType = {
   isStatusChanging?: Array<string>
   changeStatus: (id: string, status: boolean) => void
   turnConsultationToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
-  deleteConsultation: (id: string, pageSize: number, currentPage: number) => void
+  deleteConsultation: (id: string) => void
   archiveConsultation: (id: string) => void
 }
 
@@ -38,7 +38,8 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
     }
 
     const deleteConsultationCallBack = () => {
-        deleteConsultation(consultation._id, pageSize, currentPage)
+        deleteConsultation(consultation._id)
+        setNeedConfirmation(false)
     }
 
     const bookingContacts: ContactType = consultation.contacts

@@ -12,6 +12,10 @@ export const getPageAboutSelector = (state: AppStateType) => {
   return state.general.pageAbout
 }
 
+export const getIsGeneralFetchingSelector = (state: AppStateType) => {
+  return state.general.isGeneralFetching
+}
+
 export const getIsSuccessSelector = (state: AppStateType) => {
   return state.general.isSuccess
 }

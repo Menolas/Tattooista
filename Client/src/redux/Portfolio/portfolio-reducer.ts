@@ -1,8 +1,9 @@
-import { portfolioApi } from './PortfolioApi'
-import { TattooStyleType, GalleryItemType } from '../../types/Types'
-import {ThunkAction} from 'redux-thunk'
-import {AppStateType} from '../redux-store'
-import {ResultCodesEnum} from '../../utils/constants'
+import { portfolioApi } from "./PortfolioApi"
+import { TattooStyleType, GalleryItemType } from "../../types/Types"
+import {ThunkAction} from "redux-thunk"
+import {AppStateType} from "../redux-store"
+import {ResultCodesEnum} from "../../utils/constants"
+import {getNewPage} from "../../utils/functions"
 
 const SET_GALLERY_PAGE_SIZE = 'SET_GALLERY_PAGE_SIZE'
 const SET_ARCHIVED_GALLERY_PAGE_SIZE = 'SET_ARCHIVED_GALLERY_PAGE_SIZE'
@@ -27,7 +28,7 @@ let initialState = {
   totalArchivedGalleryItemsCount: 0 as number | null,
   galleryPageSize: 4 as number | null,
   archivedGalleryPageSize: 5 as number,
-  currentGalleryPage: 1 as number | null,
+  currentGalleryPage: 1 as number,
   currentArchivedGalleryPage: 1 as number,
   isFetching: false,
   isDeletingInProcess: [] as Array<string>,
@@ -50,6 +51,7 @@ export type InitialStateType = typeof initialState
 //Designs Here you can see some of my designs and drawings.
 //OldSchool
 //No style Here the images of tattoos which difficult to define which style it is actually
+
 export const portfolioReducer = (
   state = initialState,
   action: ActionsTypes): InitialStateType => {
@@ -339,13 +341,75 @@ const deleteArchivedGalleryItemAC = (itemId: string): DeleteArchivedGalleryItemA
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
+const deleteGalleryItemThunk = (
+    id: string,
+    styleId: string,
+    gallery: Array<GalleryItemType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number
+): ThunkType => async (dispatch) => {
+  if (gallery.length > 1) {
+    dispatch(deleteGalleryItemAC(id))
+    dispatch(setGalleryTotalCountAC(total - 1))
+  } else {
+    const newPage = getNewPage(currentPage)
+    dispatch(deleteGalleryItemAC(id))
+    dispatch(setCurrentGalleryPageAC(newPage))
+    if (currentPage === newPage) {
+      await dispatch(getGallery(styleId, newPage, pageLimit))
+    }
+  }
+}
+
+const deleteArchivedGalleryItemThunk = (
+    id: string,
+    archivedGallery: Array<GalleryItemType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number
+): ThunkType => async (dispatch) => {
+  if (archivedGallery.length > 1) {
+    dispatch(deleteArchivedGalleryItemAC(id))
+    dispatch(setArchivedGalleryTotalCountAC(total - 1))
+  } else {
+    const newPage = getNewPage(currentPage)
+    if (currentPage === newPage) {
+      await dispatch(getArchivedGallery(newPage, pageLimit))
+    }
+    dispatch(deleteArchivedGalleryItemAC(id))
+    dispatch(setCurrentArchivedGalleryPageAC(newPage))
+  }
+}
+
 export const getTattooStyles = (): ThunkType => async (
   dispatch
 ) => {
   try {
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.getTattooStyles()
-    dispatch(setTattooStylesAC(response.tattooStyles))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setTattooStylesAC(response.tattooStyles))
+    }
+  } catch (e) {
+    console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
+  }
+}
+
+export const getGallery = (
+    styleId: string,
+    currentPage: number,
+    pageSize: number
+): ThunkType => async (dispatch) => {
+  try {
+    dispatch(setIsFetchingAC(true))
+    let response = await portfolioApi.getGalleryItems(styleId, currentPage, pageSize)
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setGalleryAC(response.gallery))
+      dispatch(setGalleryTotalCountAC(response.totalCount))
+    }
   } catch (e) {
     console.log(e)
   } finally {
@@ -393,40 +457,6 @@ export const deleteTattooStyle = (id: string): ThunkType => async (dispatch) => 
   }
 }
 
-export const getActualPortfolio = (
-    style: TattooStyleType | null,
-    currentPage: number,
-    pageSize: number
-): ThunkType => async (dispatch) => {
-  //debugger
-  try {
-    dispatch(setIsFetchingAC(true))
-    let responseStyles = await portfolioApi.getTattooStyles()
-    let activeStyle
-    if (responseStyles.resultCode === ResultCodesEnum.Success) {
-      const styles = responseStyles.tattooStyles
-      dispatch(setTattooStylesAC(styles))
-      if (style?._id) {
-        activeStyle = style
-      } else {
-        activeStyle = styles[0]
-        dispatch(setActiveStyleAC(activeStyle))
-      }
-    }
-    if (activeStyle) {
-      let responseGallery = await portfolioApi.getGalleryItems(activeStyle._id, currentPage, pageSize)
-      if (responseGallery.resultCode === ResultCodesEnum.Success) {
-        dispatch(setGalleryAC(responseGallery.gallery))
-        dispatch(setGalleryTotalCountAC(responseGallery.totalCount))
-      }
-      dispatch(setIsFetchingAC(false))
-    }
-  } catch (e) {
-    dispatch(setIsFetchingAC(false))
-    console.log(e)
-  }
-}
-
 export const getArchivedGallery = (
     currentArchivedGalleryPage: number,
     archivedGalleryPageSize: number,
@@ -461,8 +491,7 @@ export const adminUpdateGallery = (
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.adminUpdateGallery(tattooStyle, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setCurrentGalleryPageAC(0))
-      dispatch(setIsSuccessAC(true))
+      dispatch(setCurrentGalleryPageAC(1))
     }
   } catch (e: any) {
     dispatch(setUpdateGalleryApiErrorAC(e.response?.data?.message || 'An error occurred'))
@@ -473,13 +502,18 @@ export const adminUpdateGallery = (
 }
 
 export const deleteGalleryItem = (
-  id: string
+  id: string,
+  gallery: Array<GalleryItemType>,
+  currentPage: number,
+  total: number,
+  pageLimit: number,
+  style: TattooStyleType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.deleteGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteGalleryItemAC(id))
+      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit))
     }
   } catch (e) {
     console.log(e)
@@ -489,13 +523,17 @@ export const deleteGalleryItem = (
 }
 
 export const deleteArchivedGalleryItem = (
-    id: string
+    id: string,
+    gallery: Array<GalleryItemType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.deleteArchivedGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedGalleryItemAC(id))
+      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit))
     }
   } catch (e) {
     console.log(e)
@@ -504,13 +542,19 @@ export const deleteArchivedGalleryItem = (
   }
 }
 
-export const archiveGalleryItem = (id: string): ThunkType => async (dispatch) => {
+export const archiveGalleryItem = (
+    id: string,
+    gallery: Array<GalleryItemType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    style: TattooStyleType
+): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.archiveGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setArchivedGalleryAC(response.gallery))
-      dispatch(deleteGalleryItemAC(id))
+      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit))
     }
   } catch (e) {
     console.log(e)
@@ -519,12 +563,18 @@ export const archiveGalleryItem = (id: string): ThunkType => async (dispatch) =>
   }
 }
 
-export const reactivateArchivedGalleryItem = (id: string): ThunkType => async (dispatch) => {
+export const reactivateArchivedGalleryItem = (
+    id: string,
+    gallery: Array<GalleryItemType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number
+): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await portfolioApi.reactivateArchivedGalleryItem(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedGalleryItemAC(id))
+      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit))
     }
   } catch (e) {
     console.log(e)

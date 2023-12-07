@@ -1,9 +1,10 @@
-import { clientsAPI } from './clientApi'
-import { ResultCodesEnum } from '../../utils/constants'
-import { ClientType } from '../../types/Types'
-import { AppStateType } from '../redux-store'
-import { ThunkAction } from 'redux-thunk'
-import type {} from 'redux-thunk/extend-redux'
+import { clientsAPI } from "./clientApi"
+import { ResultCodesEnum } from "../../utils/constants"
+import { ClientType } from "../../types/Types"
+import { AppStateType } from "../redux-store"
+import { ThunkAction } from "redux-thunk"
+import type {} from "redux-thunk/extend-redux"
+import {getNewPage} from "../../utils/functions"
 
 const SET_CLIENTS_PAGE_SIZE = 'SET_CLIENTS_PAGE_SIZE'
 const SET_ARCHIVED_CLIENTS_PAGE_SIZE = 'SET_ARCHIVED_CLIENTS_PAGE_SIZE'
@@ -36,7 +37,7 @@ let initialState = {
   archivedClientsPageSize: 5 as number,
   currentClientsPage: 1 as number,
   currentArchivedClientsPage: 1 as number,
-  clientsIsFetching: false,
+  clientsIsFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   isDeletingPicturesInProcess: [] as Array<string>,
   clientsFilter: {
@@ -132,14 +133,22 @@ export const clientsReducer = (
       return {
         ...state,
         clients: state.clients.filter(client => client._id !== action.clientId)
-
       }
 
     case DELETE_ARCHIVED_CLIENT:
-      return {
-        ...state,
-        archivedClients: state.archivedClients.filter(client => client._id !== action.clientId)
+      if (state.archivedClients.length > 1) {
+        return {
+          ...state,
+          archivedClients: state.archivedClients.filter(client => client._id !== action.clientId),
+          totalArchivedClientsCount: state.totalArchivedClientsCount - 1
+        }
+      } else {
+        return {
+          ...state,
+          currentArchivedClientsPage: state.currentArchivedClientsPage - 1
+        }
       }
+
 
     case EDIT_CLIENT:
       return {
@@ -155,7 +164,7 @@ export const clientsReducer = (
     case ADD_CLIENT:
       return {
         ...state,
-        clients: [{...action.client}, ...state.clients ]
+        clients: [{...action.client}, ...state.clients ],
       }
 
     case TOGGLE_IS_DELETING_IN_PROCESS:
@@ -423,6 +432,49 @@ const setClientProfile = (profile: ClientType): SetClientProfileAT => (
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
+const deleteClientThunk = (
+    id: string,
+    clients: Array<ClientType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: ClientsFilterType
+): ThunkType => async (dispatch) => {
+  if (clients.length > 1) {
+    dispatch(deleteClientAC(id))
+    dispatch(setClientsTotalCountAC(total -1))
+  } else {
+    const newPage = getNewPage(currentPage)
+    if (currentPage === newPage) {
+      await dispatch(getClients(newPage, pageLimit, filter))
+    }
+    dispatch(deleteClientAC(id))
+    dispatch(setCurrentClientsPageAC(newPage))
+
+  }
+}
+
+const deleteArchivedClientThunk = (
+    id: string,
+    archivedClients: Array<ClientType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: ClientsFilterType
+): ThunkType => async (dispatch) => {
+  if (archivedClients.length > 1) {
+    dispatch(deleteArchivedClientAC(id))
+    dispatch(setArchivedClientsTotalCountAC(total - 1))
+  } else {
+    const newPage = getNewPage(currentPage)
+    if (currentPage === newPage) {
+      await dispatch(getArchivedClients(newPage, pageLimit, filter))
+    }
+    dispatch(deleteArchivedClientAC(id))
+    dispatch(setCurrentPageForArchivedClientsAC(newPage))
+  }
+}
+
 export const getClients = (
   currentClientPage: number,
   clientsPageSize: number,
@@ -474,15 +526,19 @@ export const getArchivedClients = (
 
 export const deleteClient = (
     id: string,
+    clients: Array<ClientType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: ClientsFilterType
 ): ThunkType => async (
     dispatch
 ) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await clientsAPI.deleteClient(id)
-    console.log(response)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteClientAC(id))
+      await dispatch(deleteClientThunk(id, clients, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -493,15 +549,20 @@ export const deleteClient = (
 
 export const deleteArchivedClient = (
     id: string,
+    archivedClients: Array<ClientType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: ClientsFilterType
 ): ThunkType => async (
     dispatch
 ) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await clientsAPI.deleteArchivedClient(id)
-    console.log(response)
+    //console.log(response)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedClientAC(id))
+      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -511,12 +572,14 @@ export const deleteArchivedClient = (
 }
 
 export const addClient = (
-    values: FormData
+    values: FormData,
+    total: number
 ): ThunkType => async (dispatch) => {
   try {
     let response = await clientsAPI.addClient(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addClientAC(response.client))
+      dispatch(setClientsTotalCountAC(total + 1))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
@@ -603,13 +666,18 @@ export const deleteClientGalleryPicture = (
 }
 
 export const archiveClient = (
-    id: string
+    id: string,
+    clients: Array<ClientType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: ClientsFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await clientsAPI.archiveClient(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteClientAC(id))
+      await dispatch(deleteClientThunk(id, clients, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -619,16 +687,22 @@ export const archiveClient = (
 }
 
 export const reactivateClient = (
-    id: string
+    id: string,
+    archivedClients: Array<ClientType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: ClientsFilterType
 ) : ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await clientsAPI.reactivateClient(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(deleteArchivedClientAC(id))
-      dispatch(addClientAC(response.client))
+      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAddClientApiErrorAC(e.response.data.message))
     console.log(e)
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id))

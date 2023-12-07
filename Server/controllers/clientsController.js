@@ -289,11 +289,9 @@ class clientsController {
           })
         })
         await client.save()
-        console.log(client + "in cycle!!!!!!!!!!!!")
       }
 
       await client.save()
-      console.log(client + "last!!!!!!!!!!!!")
       fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, e => {
         if (e) console.log(e)
       })

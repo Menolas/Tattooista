@@ -27,6 +27,7 @@ import {
   getClientsFilterSelector, getClientsPageSizeSelector
 } from '../../../redux/Clients/clients-selectors'
 import { Clients } from './Clients'
+import {getAddBookingApiErrorSelector} from "../../../redux/bookedConsultations/bookedConsultations-selectors";
 //import {useNavigate} from "react-router-dom";
 
 export const ClientsContainer: React.FC = () => {
@@ -79,13 +80,13 @@ export const ClientsContainer: React.FC = () => {
   const addClientCallBack = (
     values: FormData
   ) => {
-    dispatch(addClient(values))
+    dispatch(addClient(values, totalCount))
   }
 
   const deleteClientCallBack = (
     clientId: string
   ) => {
-    dispatch(deleteClient(clientId))
+    dispatch(deleteClient(clientId, clients, currentPage, totalCount, pageSize, filter))
   }
 
   const editClientCallBack = (
@@ -110,7 +111,7 @@ export const ClientsContainer: React.FC = () => {
   }
 
   const archiveClientCallBack = (clientId: string) => {
-    dispatch(archiveClient(clientId))
+    dispatch(archiveClient(clientId, clients, currentPage, totalCount, pageSize, filter))
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {

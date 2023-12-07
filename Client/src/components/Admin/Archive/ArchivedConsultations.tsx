@@ -9,7 +9,7 @@ import {
     BookedConsultationsFilterType,
     deleteArchivedConsultation,
     getArchivedConsultations,
-    reactivateConsultation,
+    reactivateConsultation, setAddBookingApiErrorAC,
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
     setCurrentPageForArchivedConsultationsAC
@@ -20,10 +20,11 @@ import {
     getArchivedConsultationsSelector,
     getCurrentArchivedConsultationsPageSelector,
     getBookedConsultationsIsFetchingSelector,
-    getTotalArchivedConsultationsCountSelector, getIsDeletingInProcessSelector,
+    getTotalArchivedConsultationsCountSelector, getIsDeletingInProcessSelector, getAddBookingApiErrorSelector,
 } from '../../../redux/bookedConsultations/bookedConsultations-selectors'
 import {ArchivedConsultation} from './ArchivedConsultation'
 import {BookedConsultationsSearchForm} from '../../Forms/BookedConsultationsSearchForm'
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
@@ -33,6 +34,7 @@ export const ArchivedConsultations: React.FC = () => {
     const pageSize = useSelector(getArchivedConsultationsPageSizeSelector)
     const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector)
     const filter = useSelector(getArchivedConsultationsFilterSelector)
+    const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -74,13 +76,31 @@ export const ArchivedConsultations: React.FC = () => {
     const deleteArchivedConsultationCallBack = (
         clientId: string
     ) => {
-        dispatch(deleteArchivedConsultation(clientId))
+        dispatch(deleteArchivedConsultation(
+            clientId,
+            archivedConsultations,
+            currentPage,
+            totalCount,
+            pageSize,
+            filter
+        ))
     }
 
     const reactivateConsultationCallBack = (
         id: string
     ) => {
-        dispatch(reactivateConsultation(id))
+        dispatch(reactivateConsultation(
+            id,
+            archivedConsultations,
+            currentPage,
+            totalCount,
+            pageSize,
+            filter
+        ))
+    }
+
+    const setAddBookingApiErrorCallBack = (error: string) => {
+        dispatch(setAddBookingApiErrorAC(error))
     }
 
     const archivedConsultationsArray = archivedConsultations
@@ -119,6 +139,13 @@ export const ArchivedConsultations: React.FC = () => {
                             { archivedConsultationsArray }
                         </ul>
                     ) : <NothingToShow/>
+            }
+
+            { addBookingApiError && addBookingApiError !== '' &&
+                <ApiErrorMessage
+                    error={addBookingApiError}
+                    closeModal={setAddBookingApiErrorCallBack}
+                />
             }
         </>
     )

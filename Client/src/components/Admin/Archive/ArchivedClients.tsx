@@ -9,11 +9,12 @@ import {
     getArchivedClients,
     deleteArchivedClient,
     reactivateClient,
-    setArchivedClientsFilterAC
+    setArchivedClientsFilterAC, setAddClientApiErrorAC
 } from "../../../redux/Clients/clients-reducer";
 import {NothingToShow} from "../../common/NothingToShow";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    getAddClientApiErrorSelector,
     getArchivedClientsFilter,
     getArchivedClientsPageSize,
     getArchivedClientsSelector,
@@ -24,6 +25,7 @@ import {
 } from "../../../redux/Clients/clients-selectors";
 import {Preloader} from "../../common/Preloader";
 import {ArchivedClient} from "./ArchivedClient";
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 
 export const ArchivedClients: React.FC = () => {
     const isFetching = useSelector(getClientsIsFetching)
@@ -33,6 +35,7 @@ export const ArchivedClients: React.FC = () => {
     const pageSize = useSelector(getArchivedClientsPageSize)
     const currentPage = useSelector(getCurrentArchivedClientsPageSelector)
     const filter = useSelector(getArchivedClientsFilter)
+    const addClientApiError = useSelector(getAddClientApiErrorSelector)
 
     const dispatch = useDispatch()
     //const navigate = useNavigate()
@@ -55,7 +58,6 @@ export const ArchivedClients: React.FC = () => {
     const onPageChangedCallBack = (
         page: number
     ) => {
-        console.log(page)
         dispatch(setCurrentPageForArchivedClientsAC(page))
     }
 
@@ -74,13 +76,17 @@ export const ArchivedClients: React.FC = () => {
     const deleteArchivedClientCallBack = (
         clientId: string
     ) => {
-        dispatch(deleteArchivedClient(clientId))
+        dispatch(deleteArchivedClient(clientId, archivedClients, currentPage, totalCount, pageSize, filter))
     }
 
     const reactivateClientCallBack = (
         clientId: string
     ) => {
-        dispatch(reactivateClient(clientId))
+        dispatch(reactivateClient(clientId, archivedClients, currentPage, totalCount, pageSize, filter))
+    }
+
+    const setAddClientApiErrorCallBack = (error: string) => {
+        dispatch(setAddClientApiErrorAC(error))
     }
 
     const clientsElements = archivedClients
@@ -121,6 +127,13 @@ export const ArchivedClients: React.FC = () => {
                             </ul>
                           )
                         : <NothingToShow/>
+            }
+
+            { addClientApiError && addClientApiError !== '' &&
+                <ApiErrorMessage
+                    error={addClientApiError}
+                    closeModal={setAddClientApiErrorCallBack}
+                />
             }
         </>
     )

@@ -5,7 +5,7 @@ import { MainPage } from './MainPage'
 import { BookConsultationFormValues, FaqType, TattooStyleType} from '../../types/Types'
 import {
   getBookingConsultationApiErrorSelector,
-  getFaqItemsSelector,
+  getFaqItemsSelector, getIsGeneralFetchingSelector,
   getIsSuccessBookingSelector,
   getPageAboutSelector,
   getServicesSelector,
@@ -37,6 +37,7 @@ import { getTattooStyles, setActiveStyleAC } from '../../redux/Portfolio/portfol
 import {getGalleryPageSize, getTattooStylesSelector} from '../../redux/Portfolio/portfolio-selectors'
 import {getAuthSelector} from "../../redux/Auth/auth-selectors";
 import {getIsSuccessSelector} from '../../redux/General/general-selectors'
+import {Preloader} from "../../components/common/Preloader";
 
 export const MainPageContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector)
@@ -45,6 +46,7 @@ export const MainPageContainer: React.FC = () =>  {
   const services = useSelector(getServicesSelector)
   const faq = useSelector(getFaqItemsSelector)
   const pageAbout = useSelector(getPageAboutSelector)
+  const isGeneralFetching = useSelector(getIsGeneralFetchingSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
   const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
@@ -59,7 +61,6 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(getServices())
     dispatch(getFaqItems())
     dispatch(getAboutPage())
-    console.log(pageAbout)
   }, [])
 
   // const pageAbout = pages?.find(page => page.name === 'about')
@@ -130,35 +131,36 @@ export const MainPageContainer: React.FC = () =>  {
   }
 
   return (
-    <MainPage
-      isAuth={isAuth}
-      galleryPageSize={galleryPageSize}
-      tattooStyles={tattooStyles}
-      services={services}
-      faq={faq}
-      pageAbout={pageAbout}
-      isSuccess={isSuccess}
-      isSuccessBooking={isSuccessBooking}
-      updateFaqItemApiError={updateFaqItemApiError}
-      updateServiceApiError={updateServiceApiError}
-      updatePageApiError={updatePageApiError}
-      setActiveStyle={setActiveStyleCallBack}
-      editAboutPage={editAboutPageCallBack}
-      changeAboutPageVisibility={changeAboutPageVisibilityCallBack}
-      editService={editServiceCallBack}
-      addService={addServiceCallBack}
-      deleteService={deleteServiceCallBack}
-      addFaqItem={addFaqItemCallBack}
-      updateFaqItem={updateFaqItemCallBack}
-      deleteFaqItem={deleteFaqItemCallBack}
-      bookConsultation={bookConsultationCallBack}
-      setIsSuccess={setIsSuccessCallBack}
-      setIsSuccessBooking={setIsSuccessBookingCallBack}
-      bookingConsultationApiError={bookingConsultationApiError}
-      setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
-      setUpdateFaqItemApiError={setUpdateFaqItemApiErrorCallBack}
-      setUpdateServiceApiError={setUpdateServiceApiErrorCallBack}
-      setUpdatePageApiError={setUpdatePageApiErrorCallBack}
-    />
+         <MainPage
+          isAuth={isAuth}
+          galleryPageSize={galleryPageSize}
+          tattooStyles={tattooStyles}
+          services={services}
+          faq={faq}
+          pageAbout={pageAbout}
+          isGeneralFetching={isGeneralFetching}
+          isSuccess={isSuccess}
+          isSuccessBooking={isSuccessBooking}
+          updateFaqItemApiError={updateFaqItemApiError}
+          updateServiceApiError={updateServiceApiError}
+          updatePageApiError={updatePageApiError}
+          setActiveStyle={setActiveStyleCallBack}
+          editAboutPage={editAboutPageCallBack}
+          changeAboutPageVisibility={changeAboutPageVisibilityCallBack}
+          editService={editServiceCallBack}
+          addService={addServiceCallBack}
+          deleteService={deleteServiceCallBack}
+          addFaqItem={addFaqItemCallBack}
+          updateFaqItem={updateFaqItemCallBack}
+          deleteFaqItem={deleteFaqItemCallBack}
+          bookConsultation={bookConsultationCallBack}
+          setIsSuccess={setIsSuccessCallBack}
+          setIsSuccessBooking={setIsSuccessBookingCallBack}
+          bookingConsultationApiError={bookingConsultationApiError}
+          setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
+          setUpdateFaqItemApiError={setUpdateFaqItemApiErrorCallBack}
+          setUpdateServiceApiError={setUpdateServiceApiErrorCallBack}
+          setUpdatePageApiError={setUpdatePageApiErrorCallBack}
+      />
   )
 }

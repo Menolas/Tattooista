@@ -8,6 +8,7 @@ const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS'
 const SET_SERVICES = 'SET_SERVICES'
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE'
 const SET_ABOUT_PAGE_VISIBILITY = 'SET_PAGE_VISIBILITY'
+const SET_IS_GENERAL_FETCHING = 'SET_IS_GENERAL_FETCHING'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING'
 const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR'
@@ -20,6 +21,7 @@ let initialState = {
   faq: [] as Array<FaqType>,
   services: [] as Array<ServiceType>,
   pageAbout: {} as PageType,
+  isGeneralFetching: false as boolean,
   isSuccess: false as boolean,
   isSuccessBooking: false as boolean,
   bookingConsultationApiError: '' as string | undefined,
@@ -60,6 +62,12 @@ export const generalReducer = (
       return {
         ...state,
         pageAbout: { ...state.pageAbout, isActive: action.bol}
+      }
+
+    case SET_IS_GENERAL_FETCHING:
+      return {
+        ...state,
+        isGeneralFetching: action.bol
       }
 
     case SET_IS_SUCCESS:
@@ -110,7 +118,7 @@ export const generalReducer = (
   }
 }
 
-type ActionsTypes = SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
+type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
     SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetAboutPageVisibilityAT
     | SetAboutPageAT | SetFaqItemsAT | SetServicesAT
 
@@ -170,6 +178,16 @@ export const setIsSuccessBookingAC = (bol: boolean): SetIsSuccessBookingAT => ({
   type: SET_IS_SUCCESS_BOOKING, bol
 })
 
+type SetIsGeneralFetchingAT = {
+  type: typeof SET_IS_GENERAL_FETCHING
+  bol: boolean
+}
+
+export const setIsGeneralFetchingAC = (bol: boolean): SetIsGeneralFetchingAT => ({
+  type: SET_IS_GENERAL_FETCHING, bol
+})
+
+
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
   bol: boolean
@@ -227,10 +245,13 @@ export const getFaqItems = (): ThunkType => async (
     dispatch
 ) => {
   try {
+    dispatch(setIsGeneralFetchingAC(true))
     let response = await generalSourcesApi.getFaqItems()
     dispatch(setFaqItems(response))
   } catch (e) {
     console.log(e)
+  } finally {
+    dispatch(setIsGeneralFetchingAC(false))
   }
 }
 
@@ -273,20 +294,25 @@ export const deleteFaqItem = (id: string): ThunkType => async (dispatch) => {
 
 export const getServices = (): ThunkType => async (dispatch) => {
   try {
+    dispatch(setIsGeneralFetchingAC(true))
     let response = await generalSourcesApi.getServices()
     dispatch(setServices(response));
   } catch (e) {
     console.log(e);
+  } finally {
+    dispatch(setIsGeneralFetchingAC(false))
   }
 }
 
 export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {
+    dispatch(setIsGeneralFetchingAC(true))
     const response = await generalSourcesApi.getAboutPage()
     dispatch(setAboutPageAC(response.page))
-    console.log(response.page)
   } catch (e) {
     console.log(e);
+  } finally {
+    dispatch(setIsGeneralFetchingAC(false))
   }
 }
 

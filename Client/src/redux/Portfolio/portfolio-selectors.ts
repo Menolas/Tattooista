@@ -16,7 +16,7 @@ export const getActiveStyleSelector = (state: AppStateType) => {
 //   return state.portfolio.activeStyleValue
 // }
 
-export const getGallery = (state: AppStateType) => {
+export const getGallerySelector = (state: AppStateType) => {
   return state.portfolio.gallery
 }
 

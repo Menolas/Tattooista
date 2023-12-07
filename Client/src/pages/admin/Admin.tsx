@@ -19,7 +19,7 @@ const adminButtonsData = [
     },
     {
         btnText: "Archive",
-        btnUrl: "archive/archivedClients"
+        btnUrl: "archive/archivedConsultations"
     }
 ]
 
