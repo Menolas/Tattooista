@@ -25,6 +25,7 @@ import { ArchivedConsultations } from './components/Admin/Archive/ArchivedConsul
 import {ArchivedGallery} from './components/Admin/Archive/ArchivedGallery'
 import {RegistrationContainer} from "./pages/registration/RegistrationContainer";
 import {checkAuth} from "./redux/Auth/auth-reducer";
+import {ScrollToTopButton} from "./components/common/ScrollToTopButton";
 
 class App extends Component {
 
@@ -74,6 +75,7 @@ class App extends Component {
                 </Routes>
               </main>
               <Contacts />
+              <ScrollToTopButton/>
               <Footer />
             </React.Suspense>
           </SmoothScroll>
