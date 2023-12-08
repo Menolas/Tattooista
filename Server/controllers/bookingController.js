@@ -77,10 +77,11 @@ class bookingController {
       const booking = new Booking({
         fullName: req.body.bookingName,
         contacts: {
-          email: req.body.mail,
+          email: req.body.email,
           phone: req.body.phone,
           whatsapp: req.body.whatsapp,
-          messenger: req.body.messenger
+          messenger: req.body.messenger,
+          insta: req.body.insta
         },
         message: req.body.message
       })
