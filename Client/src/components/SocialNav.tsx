@@ -1,8 +1,7 @@
-import * as React from 'react'
-import { NavLink } from 'react-router-dom'
+import * as React from "react"
 // @ts-ignore
-import Sprite from '../assets/svg/sprite.svg'
-import {Tooltip} from "react-tooltip";
+import Sprite from "../assets/svg/sprite.svg"
+
 
 export const SocialNav: React.FC = React.memo(() => {
   return (
@@ -18,7 +17,6 @@ export const SocialNav: React.FC = React.memo(() => {
             <span><svg><use href={`${Sprite}#instagram`}/></svg></span>
             Instagram
           </a>
-          {/*<Tooltip id="social-istagram" place="bottom" effect="solid"/>*/}
         </li>
         <li className="social-nav__item">
           <a

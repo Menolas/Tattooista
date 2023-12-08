@@ -24,6 +24,7 @@ import { ArchivedConsultations } from './components/Admin/Archive/ArchivedConsul
 import {ArchivedGallery} from './components/Admin/Archive/ArchivedGallery'
 import {RegistrationContainer} from './pages/registration/RegistrationContainer'
 import {checkAuth} from './redux/Auth/auth-reducer'
+import {ScrollToTopButton} from "./components/common/ScrollToTopButton";
 
 const App = () => {
 
@@ -36,17 +37,17 @@ const App = () => {
 
     }, [])
 
-    const handleScroll = event => {
-        //console.log("SCROLL!!")
-        setScrollTop(event.currentTarget.scrollTop)
-    }
+    // const handleScroll = event => {
+    //     console.log("SCROLL!!")
+    //     setScrollTop(event.currentTarget.scrollTop)
+    // }
 
     return (
         <div
             className={scrollTop !== 0 ? "app fixed" : "app"}
-            onScroll={(e) => {
-                handleScroll(e)
-            }}
+            // onScroll={(e) => {
+            //     handleScroll(e)
+            // }}
         >
             <SmoothScroll>
                 <React.Suspense fallback={<Preloader />}>
@@ -84,6 +85,7 @@ const App = () => {
                         </Routes>
                     </main>
                     <Contacts />
+                    <ScrollToTopButton/>
                     <Footer />
                 </React.Suspense>
             </SmoothScroll>
