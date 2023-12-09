@@ -112,7 +112,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
               setPageLimit={setPageLimit}
           />
           <button
-            className="btn btn--bg btn--light-bg"
+            className="btn btn--bg btn--light-bg add-btn"
             onClick={() => {setAddClientMode(true)}}
           >
             Add Client

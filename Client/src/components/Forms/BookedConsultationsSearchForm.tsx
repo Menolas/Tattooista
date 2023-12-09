@@ -1,6 +1,8 @@
-import * as React from 'react'
-import {Field, Form, Formik} from 'formik'
-import {BookedConsultationsFilterType} from '../../redux/bookedConsultations/bookedConsultations-reducer'
+import * as React from "react"
+import {Field, Form, Formik} from "formik"
+import {BookedConsultationsFilterType} from "../../redux/bookedConsultations/bookedConsultations-reducer"
+// @ts-ignore
+import Sprite from "../../assets/svg/sprite.svg"
 
 type FormType = {
   term: string
@@ -48,6 +50,7 @@ export const BookedConsultationsSearchForm: React.FC<PropsType> = React.memo(({
               className={"form search-form"}
             >
               <Field
+                className={"search-input"}
                 type="text"
                 name="term"
                 placeholder={"Search..."}
@@ -59,10 +62,10 @@ export const BookedConsultationsSearchForm: React.FC<PropsType> = React.memo(({
                 <option value="false">Only not contacted</option>
               </Field>
               <button
-                className={"btn btn--sm"}
+                className={"btn btn--sm btn--light-bg search-submit"}
                 type="submit" disabled={isSubmitting}
               >
-                Find
+                <svg><use href={`${Sprite}#search`}/></svg>
               </button>
             </Form>
           )

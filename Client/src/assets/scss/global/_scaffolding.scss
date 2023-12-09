@@ -34,6 +34,7 @@ svg {
 
 * {
   scrollbar-width: thin;
+  scrollbar-color: #aaa #eee;
 }
 
 .hidden {
@@ -50,11 +51,7 @@ img {
   width: 100%;
   height: auto;
   object-fit: cover;
-}
-
-* {
- scrollbarWidth: thin;
- scrollbarColor: #aaa #eee;
+  filter: grayscale(100%);
 }
 
 ::-webkit-scrollbar {
@@ -63,14 +60,14 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  backgroundColor: transparent;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   width: 6px;
   height: 6px;
-  backgroundColor: #aaaa;
-  borderRadius: 6px;
+  background-color: #aaaa;
+  border-radius: 6px;
 }
 
 .app {

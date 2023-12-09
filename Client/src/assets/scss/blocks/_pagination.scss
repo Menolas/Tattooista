@@ -1,7 +1,9 @@
 .pagination {
   display: flex;
   align-items: center;
-  column-gap: 20px;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
 
   .page-limit {
     display: flex;
@@ -37,9 +39,18 @@
     justify-content: center;
     padding: 0 9px;
     max-width: 70px;
+    height: 32px;
+    font-size: 20px;
+    font-weight: 600;
+    color: $dark;
     line-height: 1;
     background-color: $light;
     border: none;
+    border-radius: 0;
+
+    &:focus {
+      border-radius: 0;
+    }
   }
 
   .pagination__list {
@@ -61,6 +72,20 @@
       left: 0;
       right: 0;
       bottom: -2px;
+    }
+  }
+
+  .paginator__total {
+    width: 100%;
+  }
+}
+
+@media (min-width: 900px) {
+  .pagination {
+    width: auto;
+
+    .paginator__total {
+      width: auto;
     }
   }
 }
