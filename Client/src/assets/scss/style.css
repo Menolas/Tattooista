@@ -44,6 +44,7 @@ svg {
 
 * {
   scrollbar-width: thin;
+  scrollbar-color: #aaa #eee;
 }
 
 .hidden {
@@ -60,11 +61,7 @@ img {
   width: 100%;
   height: auto;
   object-fit: cover;
-}
-
-* {
-  scrollbarWidth: thin;
-  scrollbarColor: #aaa #eee;
+  filter: grayscale(100%);
 }
 
 ::-webkit-scrollbar {
@@ -73,14 +70,14 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  backgroundColor: transparent;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   width: 6px;
   height: 6px;
-  backgroundColor: rgba(170, 170, 170, 0.6666666667);
-  borderRadius: 6px;
+  background-color: rgba(170, 170, 170, 0.6666666667);
+  border-radius: 6px;
 }
 
 .app {
@@ -213,6 +210,9 @@ img {
 }
 .btn--light-bg::before {
   display: none;
+}
+.btn--light-bg svg {
+  fill: #080808;
 }
 
 .btn--dark-bg {
@@ -1464,9 +1464,11 @@ img {
 }
 .gallery .gallery__header {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 20px;
 }
-.gallery .gallery__header .btn {
+.gallery .gallery__header .add-btn {
   margin-left: auto;
 }
 
@@ -1476,16 +1478,17 @@ img {
   flex-wrap: wrap;
   column-gap: 1%;
   row-gap: 10px;
+  justify-content: space-between;
 }
 
 .gallery__item {
   display: flex;
   flex-direction: column;
-  width: 24%;
-  height: 120px;
+  width: 100%;
+  height: 320px;
 }
 .gallery__item .gallery__img-wrap {
-  height: 80%;
+  height: 82%;
   background-size: cover;
   overflow: hidden;
   cursor: pointer;
@@ -1516,10 +1519,25 @@ img {
   width: auto;
   border: 4px solid #fafafa;
 }
+.gallery__large::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 10;
+}
 .gallery__large img {
   height: 100%;
   width: auto;
   max-width: 90vw;
+}
+.gallery__large:hover img {
+  filter: none;
 }
 
 .gallery__item-close-btn {
@@ -1566,13 +1584,16 @@ img {
 .gallery__uploadedImgPreviews-item img {
   object-fit: cover;
 }
+.gallery__uploadedImgPreviews-item:hover img {
+  filter: none;
+}
 
 @media (min-width: 768px) {
   .gallery__list {
     row-gap: 12px;
   }
   .gallery__item {
-    height: 250px;
+    width: 49%;
   }
 }
 @media (min-width: 990px) {
@@ -1583,7 +1604,10 @@ img {
     row-gap: 16px;
   }
   .gallery__item {
-    height: 290px;
+    width: 24%;
+  }
+  .gallery__item .gallery__img-wrap {
+    height: 85%;
   }
 }
 @media (min-width: 1400px) {
@@ -1790,7 +1814,7 @@ img {
   }
 }
 .admin {
-  padding-top: 140px;
+  padding-top: 40px;
 }
 .admin .admin__header {
   display: flex;
@@ -1815,6 +1839,10 @@ img {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 20px;
+}
+.admin .admin__cards-header .add-btn {
+  margin-left: auto;
 }
 .admin .admin__cards-list {
   display: flex;
@@ -1899,10 +1927,17 @@ img {
   gap: 12px;
 }
 
+@media (min-width: 900px) {
+  .admin {
+    padding-top: 100px;
+  }
+}
 .pagination {
   display: flex;
   align-items: center;
-  column-gap: 20px;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
 }
 .pagination .page-limit {
   display: flex;
@@ -1934,9 +1969,17 @@ img {
   justify-content: center;
   padding: 0 9px;
   max-width: 70px;
+  height: 32px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #080808;
   line-height: 1;
   background-color: #fafafa;
   border: none;
+  border-radius: 0;
+}
+.pagination input.pagination__pageLimit:focus {
+  border-radius: 0;
 }
 .pagination .pagination__list {
   display: flex;
@@ -1962,7 +2005,18 @@ img {
   right: 0;
   bottom: -2px;
 }
+.pagination .paginator__total {
+  width: 100%;
+}
 
+@media (min-width: 900px) {
+  .pagination {
+    width: auto;
+  }
+  .pagination .paginator__total {
+    width: auto;
+  }
+}
 .preloader {
   display: flex;
   justify-content: center;
@@ -2041,6 +2095,9 @@ img {
   width: 100%;
   object-position: center;
 }
+.client-profile__gallery-list li:hover img {
+  filter: none;
+}
 
 .client-profile__action-btns {
   position: relative;
@@ -2112,7 +2169,8 @@ textarea::placeholder,
   font-family: "Monseratt", sans-serif;
 }
 
-input[type=checkbox] {
+input[type=checkbox],
+input[type=file] {
   display: none;
 }
 
@@ -2221,6 +2279,7 @@ input[type=checkbox] {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 16px;
 }
 
 .form--updateTattooStyle .form__input-wrap--uploadFile {
@@ -2384,6 +2443,9 @@ input[type=checkbox]:checked + label .checkbox::after {
   }
   .form__input-wrap {
     margin-bottom: 46px;
+  }
+  .form__input-wrap.form__input-wrap--uploadFile {
+    margin-bottom: 20px;
   }
   .form__input-wrap--checkbox label {
     padding-left: 36px;
@@ -2596,8 +2658,8 @@ input[type=checkbox]:checked + label .checkbox::after {
 }
 .search-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 20px;
 }
 .search-form select,
 .search-form input {
@@ -2614,7 +2676,24 @@ input[type=checkbox]:checked + label .checkbox::after {
   height: 42px;
   border: none;
 }
+.search-form .search-input {
+  width: 100%;
+}
+.search-form .search-submit svg {
+  width: 26px;
+  height: 26px;
+}
 
+@media (min-width: 768px) {
+  .search-form .search-input {
+    width: 60%;
+    flex-grow: 1;
+  }
+  .search-form .search-submit svg {
+    width: 30px;
+    height: 30px;
+  }
+}
 .confetti {
   position: fixed;
   top: 0;
@@ -2640,6 +2719,9 @@ input[type=checkbox]:checked + label .checkbox::after {
   text-align: center;
 }
 
+.breadcrumbs {
+  margin-bottom: 16px;
+}
 .breadcrumbs .list {
   display: flex;
   gap: 8px;
@@ -2647,6 +2729,7 @@ input[type=checkbox]:checked + label .checkbox::after {
 .breadcrumbs .btn {
   font-weight: 500;
   border: none;
+  text-decoration: none;
 }
 .breadcrumbs .btn::before {
   bottom: 50%;
@@ -2655,7 +2738,6 @@ input[type=checkbox]:checked + label .checkbox::after {
 .breadcrumbs .list li:first-child .btn::before {
   display: none;
 }
-
 .confirmation {
   color: #080808;
 }

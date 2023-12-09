@@ -10,7 +10,7 @@ export const ArchiveContainer: React.FC = () => {
                     <ul className={"list"}>
                         <li>
                             <NavLink
-                                className={"btn btn--sm btn--dark-bg"}
+                                className={({isActive}) =>(isActive ? 'btn btn--sm btn--light-bg active' : 'btn btn--sm btn--dark-bg')}
                                 to={'archivedConsultations'}
                             >
                                 ArchivedConsultations
@@ -19,7 +19,7 @@ export const ArchiveContainer: React.FC = () => {
                         </li>
                         <li>
                             <NavLink
-                                className={"btn btn--sm btn--dark-bg"}
+                                className={({isActive}) =>(isActive ? 'btn btn--sm btn--light-bg active' : 'btn btn--sm btn--dark-bg')}
                                 to={'archivedClients'}
                             >
                                 ArchivedClients
@@ -27,7 +27,7 @@ export const ArchiveContainer: React.FC = () => {
                         </li>
                         <li>
                             <NavLink
-                                className={"btn btn--sm btn--dark-bg"}
+                                className={({isActive}) =>(isActive ? 'btn btn--sm btn--light-bg active' : 'btn btn--sm btn--dark-bg')}
                                 to={'archivedGallery'}
                             >
                                 ArchivedGalleryItems

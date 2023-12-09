@@ -157,7 +157,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             />
             { isAuth &&
                 <button
-                    className={"btn btn--light-bg btn--sm"}
+                    className={"btn btn--light-bg btn--sm add-btn"}
                     onClick={openEditGalleryForm}
                 >
                     Add Tattoos
@@ -188,7 +188,10 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                       onClick={() => { closeBigImg() }}>
                     {''}
                   </button>
-                  <img src={`${SERVER_URL}gallery/${bigImg}`} alt={activeStyle.value} />
+                  <img
+                      src={`${SERVER_URL}gallery/${bigImg}`} alt={activeStyle.value}
+                      contextMenu='alert("Вы не можете сохранить это изображение.");return false;'
+                  />
               </div>
             </div>
           }

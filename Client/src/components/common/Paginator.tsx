@@ -91,7 +91,6 @@ export const Paginator: React.FC<PropsType> = React.memo(({
           </ul>
           <div className={"paginator__total"}>
               Total: <span>{totalCount}</span>
-              Current Page: <span>{currentPage}</span>
           </div>
 
       </div>

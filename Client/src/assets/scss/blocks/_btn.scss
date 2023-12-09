@@ -27,6 +27,10 @@
   &::before {
     display: none;
   }
+
+  svg {
+    fill: $dark;
+  }
 }
 
 .btn--dark-bg {

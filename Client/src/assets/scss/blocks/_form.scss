@@ -7,7 +7,8 @@ textarea::placeholder,
   font-family: 'Monseratt', sans-serif;
 }
 
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="file"] {
   display: none;
 }
 
@@ -121,6 +122,7 @@ input[type="checkbox"] {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-bottom: 16px;
   }
 }
 
@@ -286,6 +288,10 @@ input[type="checkbox"]:checked+label .checkbox::after {
 
   .form__input-wrap {
     margin-bottom: 46px;
+
+    &.form__input-wrap--uploadFile {
+      margin-bottom: 20px;
+    }
   }
 
   .form__input-wrap--checkbox {

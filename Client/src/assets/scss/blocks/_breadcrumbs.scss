@@ -1,4 +1,6 @@
 .breadcrumbs {
+  margin-bottom: 16px;
+
   .list {
     display: flex;
     gap: 8px;
@@ -7,6 +9,7 @@
   .btn {
     font-weight: 500;
     border: none;
+    text-decoration: none;
     &::before {
       bottom: 50%;
       transform: translate(0, 50%);
@@ -15,5 +18,9 @@
 
   .list li:first-child .btn::before {
     display: none;
+  }
+
+  .btn.active {
+
   }
 }

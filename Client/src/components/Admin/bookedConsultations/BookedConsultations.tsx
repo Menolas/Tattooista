@@ -110,7 +110,7 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
               setPageLimit={setPageLimit}
             />
             <button
-              className="btn btn--bg btn--light-bg"
+              className="btn btn--bg btn--light-bg add-btn"
               onClick={() => {setAddConsultationMode(true)}}
             >
               Add a consultation

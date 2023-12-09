@@ -1,5 +1,5 @@
 .admin {
-  padding-top: 140px;
+  padding-top: 40px;
 
   .admin__header {
     display: flex;
@@ -24,6 +24,11 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 20px;
+
+    .add-btn {
+      margin-left: auto;
+    }
   }
 
   .admin__cards-list {
@@ -119,5 +124,11 @@
       display: flex;
       gap: 12px;
     }
+  }
+}
+
+@media (min-width: 900px) {
+  .admin {
+    padding-top: 100px;
   }
 }

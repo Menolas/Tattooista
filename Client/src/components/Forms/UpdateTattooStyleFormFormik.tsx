@@ -95,7 +95,7 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                 />
                             </div>
                             <label className="btn btn--sm" htmlFor={"wallPaper"}>Pick File</label>
-                            <FieldWrapper name={'wallPaper'}>
+                            <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                                 <Field
                                     className="hidden"
                                     id="wallPaper"
