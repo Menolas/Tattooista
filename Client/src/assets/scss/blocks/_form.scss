@@ -103,10 +103,6 @@ input[type="file"] {
   background-size: cover;
 }
 
-.search-form {
-  width: 100%;
-}
-
 .form__title {
   margin-top: 0;
   margin-bottom: 27px;
@@ -271,6 +267,12 @@ input[type="checkbox"]:checked+label .checkbox::after {
       height: 100px;
     }
   }
+}
+
+.form__link {
+  display: inline-block;
+  margin-top: 20px;
+  font-weight: 500;
 }
 
 @media (min-width: 990px) {

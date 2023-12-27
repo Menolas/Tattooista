@@ -1,6 +1,6 @@
-import * as React from 'react'
-import {Field, Form, Formik} from 'formik'
-import {ClientsFilterType} from '../../redux/Clients/clients-reducer'
+import * as React from "react"
+import {Field, Form, Formik} from "formik"
+import {UsersFilterType} from "../../redux/Users/users-reducer"
 
 const ClientsSearchFormValidate = (values: FormType) => {
   return {}
@@ -8,38 +8,38 @@ const ClientsSearchFormValidate = (values: FormType) => {
 
 type FormType = {
   term: string
-  gallery: string
+  role: string
 }
 
 type PropsType = {
-  clientsFilter: ClientsFilterType
-  onFilterChanged: (filter: ClientsFilterType) => void
+  filter: UsersFilterType
+  onFilterChanged: (filter: UsersFilterType) => void
 }
 
 
-export const ClientSearchFormFormik: React.FC<PropsType> = React.memo(({
-  clientsFilter,
+export const UserSearchFormFormik: React.FC<PropsType> = React.memo(({
+  filter,
   onFilterChanged
 }) => {
 
   const submit = (values: FormType, {setSubmitting}: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    const filter: ClientsFilterType = {
+    const filter: UsersFilterType = {
       term: values.term,
-      gallery: values.gallery
+      role: values.role
     }
     onFilterChanged(filter)
     setSubmitting(false)
   }
 
   const initialValues = {
-    term: clientsFilter.term,
-    gallery: clientsFilter.gallery
+    term: filter.term,
+    role: filter.role
   }
 
   return (
     <Formik
       initialValues={initialValues}
-      validate={ClientsSearchFormValidate}
+      //validate={ClientsSearchFormValidate}
       onSubmit={submit}
     >
       {
@@ -56,10 +56,10 @@ export const ClientSearchFormFormik: React.FC<PropsType> = React.memo(({
                 placeholder={"Search..."}
               />
 
-              <Field name="gallery" as="select">
+              <Field name="role" as="select">
                 <option value="any">All</option>
-                <option value="1">Only with Tattoos Gallery</option>
-                <option value="0">Only without Tattoos Gallery</option>
+                <option value="1">Only with Admin Role</option>
+                <option value="0">Only with User Role</option>
               </Field>
               <button
                 className={"btn btn--sm"}

@@ -262,11 +262,9 @@ type SetClientsPageSizeAT = {
   clientsPageSize: number
 }
 
-export const setClientsPageSize = (clientsPageSize: number): SetClientsPageSizeAT => (
-  {
+export const setClientsPageSize = (clientsPageSize: number): SetClientsPageSizeAT => ({
     type: SET_CLIENTS_PAGE_SIZE, clientsPageSize
-  }
-)
+})
 
 type SetArchivedClientsPageSizeAT = {
   type: typeof SET_ARCHIVED_CLIENTS_PAGE_SIZE
@@ -313,11 +311,9 @@ type SetCurrentPageAT = {
   page: number
 }
 
-export const setCurrentClientsPageAC = (page: number): SetCurrentPageAT => (
-  {
+export const setCurrentClientsPageAC = (page: number): SetCurrentPageAT => ({
     type: SET_CURRENT_PAGE_FOR_CLIENTS, page
-  }
-)
+})
 
 type SetCurrentPageForArchivedClientsAT = {
   type: typeof SET_CURRENT_PAGE_FOR_ARCHIVED_CLIENTS,

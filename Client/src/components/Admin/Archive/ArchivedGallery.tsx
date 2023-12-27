@@ -1,27 +1,30 @@
-import * as React from 'react'
-import {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from "react-redux";
+import * as React from "react"
+import {useEffect, useState} from "react"
+import {useDispatch, useSelector} from "react-redux"
 import {
-    getActiveStyleSelector,
     getArchivedGalleryPageSizeSelector,
     getArchivedGallerySelector,
-    getCurrentArchivedGalleryPageSelector, getIsGalleryItemDeletingInProcessSelector, getTattooStylesSelector,
+    getCurrentArchivedGalleryPageSelector,
+    getIsGalleryItemDeletingInProcessSelector,
+    getTattooStylesSelector,
     getTotalArchivedGalleryItemsCountSelector
-} from "../../../redux/Portfolio/portfolio-selectors";
-import {Paginator} from "../../common/Paginator";
+} from "../../../redux/Portfolio/portfolio-selectors"
+import {Paginator} from "../../common/Paginator"
 import {
     deleteArchivedGalleryItem,
-    getArchivedGallery, reactivateArchivedGalleryItem,
+    getArchivedGallery,
+    reactivateArchivedGalleryItem,
     setArchivedGalleryPageSizeAC,
-    setCurrentArchivedGalleryPageAC, updateArchivedGalleryItem, updateGalleryItem
-} from "../../../redux/Portfolio/portfolio-reducer";
-import {SERVER_URL} from "../../../utils/constants";
+    setCurrentArchivedGalleryPageAC,
+    updateArchivedGalleryItem
+} from "../../../redux/Portfolio/portfolio-reducer"
+import { API_URL } from "../../../http"
 // @ts-ignore
-import Sprite from '../../../assets/svg/sprite.svg'
-import {NothingToShow} from "../../common/NothingToShow";
-import {ModalPopUp} from "../../common/ModalPopUp";
-import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm";
-import {Tooltip} from "react-tooltip";
+import Sprite from "../../../assets/svg/sprite.svg"
+import {NothingToShow} from "../../common/NothingToShow"
+import {ModalPopUp} from "../../common/ModalPopUp"
+import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm"
+import {Tooltip} from "react-tooltip"
 
 export const ArchivedGallery = () => {
 
@@ -85,7 +88,7 @@ export const ArchivedGallery = () => {
                     onClick={() => { showBigImg(item.fileName) }}
                     className={"gallery__img-wrap"}
                     //onClick={() => { showBigImg(item.fileName) }}
-                    style={{ backgroundImage: `url(${SERVER_URL}archivedGallery/${item.fileName})` }}
+                    style={{ backgroundImage: `url(${API_URL}/archivedGallery/${item.fileName})` }}
                 >
                     {''}
                 </div>
@@ -149,7 +152,7 @@ export const ArchivedGallery = () => {
                             onClick={() => { closeBigImg() }}>
                             {''}
                         </button>
-                        <img src={`${SERVER_URL}archivedGallery/${bigImg}`} alt={''} />
+                        <img src={`${API_URL}/archivedGallery/${bigImg}`} alt={''} />
                     </div>
                 </div>
             }

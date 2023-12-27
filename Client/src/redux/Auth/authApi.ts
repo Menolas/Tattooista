@@ -1,12 +1,11 @@
 import $api, {API_URL} from '../../http'
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from 'axios'
 import {LoginFormValues, RegistrationFormValues} from '../../types/Types'
-import { SERVER_URL } from '../../utils/constants'
-import {IUser} from "../../types/IUser";
+import {IUser} from "../../types/Types";
 //import {CreateAxiosDefaults} from 'axios/index'
 
 const instance = axios.create({
-  baseURL: SERVER_URL
+  baseURL: API_URL
 } as CreateAxiosDefaults)
 
 type LoginResponseType = {
@@ -22,7 +21,7 @@ type LoginResponseType = {
 type RegistrationResponseType = {
     resultCode?: number
     message?: string
-    user: {
+    userData: {
         user: IUser
         accessToken: string
         refreshToken: string
@@ -30,8 +29,22 @@ type RegistrationResponseType = {
 }
 
 type LogoutResponseType = {
-    deletedCount: number
-    acknowledged: boolean
+    resultCode?: number
+    token: {
+        deletedCount: number
+        acknowledged: boolean
+    }
+}
+
+type CheckAuthResponseType = {
+    resultCode?: number
+    message?: string
+    userData: {
+        isAuth?: boolean
+        user: IUser
+        accessToken: string
+        refreshToken: string
+    }
 }
 
 export const authAPI = {
@@ -48,15 +61,15 @@ export const authAPI = {
     })
   },
 
-  registration(email: string, password: string) {
-      return $api.post<RegistrationResponseType>('auth/registration', {email, password})
+  registration(displayName: string, email: string, password: string) {
+      return $api.post<RegistrationResponseType>('auth/registration', {displayName, email, password})
           .then(res => res.data)
 
   },
 
   login(values: LoginFormValues) {
       return $api.post<LoginResponseType>('auth/login',  values)
-        .then(res => res.data)
+        .then(response => response.data)
   },
 
   logout() {
@@ -65,7 +78,7 @@ export const authAPI = {
   },
 
   checkAuth() {
-      return axios.get(`${API_URL}/auth/refresh`, {withCredentials: true})
+      return axios.get<CheckAuthResponseType>(`${API_URL}/auth/refresh`, {withCredentials: true})
           .then(response => response.data)
   }
 }

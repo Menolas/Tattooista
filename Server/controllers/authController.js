@@ -1,6 +1,7 @@
 const userService = require('../services/userService')
 const {validationResult} = require('express-validator')
 const ApiError = require('../exeptions/apiErrors')
+const UserModel = require("../models/User");
 
 class AuthController {
   async registration(req, res, next) {
@@ -12,11 +13,12 @@ class AuthController {
         //results.errors = errors.array()
         return next(ApiError.BadRequest('Validation error', errors.array()))
       }
-      const { email, password} = req.body
-      const userData = await userService.registration(email, password)
+      const { displayName, email, password} = req.body
+      console.log(req.body)
+      const userData = await userService.registration(displayName, email, password)
       res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
       results.resultCode = 0
-      results.user = userData
+      results.userData = userData
       return res.json(results)
     } catch(e) {
       next(e)
@@ -38,11 +40,14 @@ class AuthController {
   }
 
   async logout(req, res, next) {
+    const results = {}
     try {
       const {refreshToken} = req.cookies
       const token = await userService.logout(refreshToken)
       res.clearCookie('refreshToken')
-      return res.json(token)
+      results.resultCode = 0
+      results.token = token
+      return res.json(results)
     } catch(e) {
       next(e)
     }
@@ -59,22 +64,16 @@ class AuthController {
   }
 
   async refresh(req, res, next) {
+    const results = {}
     try {
       const {refreshToken} = req.cookies
       const userData = await userService.refresh(refreshToken)
       if (userData) {
         res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
-        return res.json(userData)
+        results.resultCode = 0
+        results.userData = userData
+        return res.json(results)
       }
-    } catch(e) {
-      next(e)
-    }
-  }
-
-  async getUsers(req, res, next) {
-    try {
-      const users = await userService.getAllUsers()
-      res.json(users)
     } catch(e) {
       next(e)
     }

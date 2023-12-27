@@ -4,7 +4,7 @@ import { Preloader } from '../common/Preloader'
 import {GalleryItemType, TattooStyleType} from '../../types/Types'
 import { ModalPopUp } from '../common/ModalPopUp'
 import { AdminGalleryUploadFormFormik } from '../Forms/AdminGalleryUploadFormFormik'
-import {SERVER_URL} from '../../utils/constants'
+import {API_URL} from "../../http"
 import { Tooltip } from 'react-tooltip'
 // @ts-ignore
 import Sprite from '../../assets/svg/sprite.svg'
@@ -104,7 +104,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           <div
             className={"gallery__img-wrap"}
             onClick={() => { showBigImg(item.fileName) }}
-            style={{ backgroundImage: `url(${SERVER_URL}gallery/${item.fileName})` }}
+            style={{ backgroundImage: `url(${API_URL}/gallery/${item.fileName})` }}
           >
             {''}
           </div>
@@ -189,7 +189,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                     {''}
                   </button>
                   <img
-                      src={`${SERVER_URL}gallery/${bigImg}`} alt={activeStyle.value}
+                      src={`${API_URL}/gallery/${bigImg}`} alt={activeStyle.value}
                       contextMenu='alert("Вы не можете сохранить это изображение.");return false;'
                   />
               </div>

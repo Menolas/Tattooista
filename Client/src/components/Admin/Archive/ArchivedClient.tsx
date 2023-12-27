@@ -1,15 +1,15 @@
-import * as React from 'react'
+import * as React from "react"
 // @ts-ignore
-import avatar from '../../../assets/img/fox.webp'
+import avatar from "../../../assets/img/fox.webp"
 // @ts-ignore
-import Sprite from '../../../assets/svg/sprite.svg'
-import { NavLink } from 'react-router-dom'
-import {ClientType, ContactType} from '../../../types/Types'
-import { SERVER_URL } from '../../../utils/constants'
+import Sprite from "../../../assets/svg/sprite.svg"
+import { NavLink } from "react-router-dom"
+import {ClientType, ContactType} from "../../../types/Types"
+import { API_URL } from "../../../http"
 import {Tooltip} from "react-tooltip"
 import {Confirmation} from "../../common/Confirmation"
-import {useState} from "react";
-import {ModalPopUp} from "../../common/ModalPopUp";
+import {useState} from "react"
+import {ModalPopUp} from "../../common/ModalPopUp"
 
 type PropsType = {
   client: ClientType
@@ -45,7 +45,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
       </li> : null
   })
 
-  const clientAvatar = client.avatar ? `${SERVER_URL}/archivedClients/${client._id}/avatar/${client.avatar}` : avatar
+  const clientAvatar = client.avatar ? `${API_URL}/archivedClients/${client._id}/avatar/${client.avatar}` : avatar
 
   return (
     <li className="admin__card admin__card--client">
@@ -97,7 +97,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
           <ul className="client-profile__gallery-list list">
             {
               client.gallery?.map((item, i) => <li key={i}>
-                <img src={`${SERVER_URL}/archivedClients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
+                <img src={`${API_URL}/archivedClients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
               </li>)
             }
           </ul>

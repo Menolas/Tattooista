@@ -1,22 +1,26 @@
-import * as React from 'react'
-import {ErrorMessage, Field, Form, Formik, FormikHelpers, FormikValues} from 'formik'
+import * as React from "react"
+import { Field, Form, Formik, FormikHelpers, FormikValues } from "formik"
 // @ts-ignore
-import { ErrorMessageWrapper, ApiErrorMessage} from '../../utils/validators'
-import * as yup from 'yup'
-import {RegistrationFormValues} from '../../types/Types'
-import {FieldComponent} from './FieldComponent'
-import {FieldWrapper} from "./FieldWrapper";
+import { ErrorMessageWrapper, ApiErrorMessage} from "../../utils/validators"
+import * as Yup from "yup"
+import {RegistrationFormValues} from "../../types/Types"
+import {FieldComponent} from "./FieldComponent"
+import {FieldWrapper} from "./FieldWrapper"
 
-const validationSchema = yup.object().shape({
-  email: yup
+const validationSchema = Yup.object().shape({
+  displayName: Yup
+      .string()
+      .min(2, 'Display is too short - should be 4 chars minimum.')
+      .required('Required field'),
+  email: Yup
       .string()
       .email("Invalid email format")
       .required('Required field'),
-  password: yup
+  password: Yup
       .string()
       .min(4, 'Password is too short - should be 4 chars minimum.')
       .required('Required field'),
-  consent: yup
+  consent: Yup
       .boolean()
       .oneOf([true],'If you want to be registered as an admin you need to check this and agree to sare your email with us')
       .required('Required field')
@@ -38,6 +42,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
   }
 
   const initialValues: RegistrationFormValues = {
+      displayName: '',
       email: '',
       password: '',
       consent: false,
@@ -54,13 +59,18 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form id="registration" className="form">
-            <h3 className="form__title">
-              Registration
-            </h3>
-            {/*<pre>{JSON.stringify(propsF, undefined, 2)}</pre>*/}
+            <h3 className="form__title">Registration</h3>
             { registrationError  !== '' &&
                 <ApiErrorMessage message={registrationError}/>
             }
+            <FieldComponent
+                name={'displayName'}
+                type={'text'}
+                placeholder={'Display Name'}
+                label={'Your display name'}
+                value={propsF.values.displayName}
+                onChange={propsF.handleChange}
+            />
             <FieldComponent
                 name={'email'}
                 type={'text'}

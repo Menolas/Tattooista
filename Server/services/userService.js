@@ -1,4 +1,5 @@
 const UserModel = require('../models/User')
+const Role = require('../models/Role')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const mailService = require('./mailService')
@@ -7,20 +8,31 @@ const UserDto = require('../dtos/user-dto')
 const ApiError = require('../exeptions/apiErrors')
 
 class UserService {
-    async registration(email, password) {
-        const candidate = await  UserModel.findOne({email})
-        if (candidate) {
+    async registration(displayName, email, password) {
+        const displayNameCandidate = await  UserModel.findOne({displayName})
+        if (displayNameCandidate) {
+            throw ApiError.BadRequest(`The user with Display Name ${displayName} already exist`)
+        }
+        const emailCandidate = await  UserModel.findOne({email})
+        if (emailCandidate) {
             throw ApiError.BadRequest(`The user with email ${email} already exist`)
         }
         const hashPassword = await bcrypt.hash(password, 3)
+        const userRole = await Role.findOne({value: "USER"})
         const activationLink = uuid.v4()
-        const user = await UserModel.create({email, password: hashPassword, activationLink})
+        const user = await UserModel.create({displayName, email, password: hashPassword, roles: [userRole.value], activationLink})
         await mailService.sendActivationMail(email, `${process.env.API_URL}/auth/activate/${activationLink}`)
 
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
-        return { ...tokens, user: userDto }
+        return {
+            ...tokens,
+            user: {
+                displayName: userDto.displayName,
+                isActivated: userDto.isActivated
+            }
+        }
     }
 
     async activate(activationLink){
@@ -44,34 +56,46 @@ class UserService {
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
-        return {...tokens, user: userDto}
+        return {
+            ...tokens,
+            user: {
+                displayName: userDto.displayName,
+                isActivated: userDto.isActivated
+            }
+        }
     }
 
     async logout(refreshToken) {
-        const token = await tokenService.removeToken(refreshToken)
-        return token
+        return await tokenService.removeToken(refreshToken)
     }
 
     async refresh(refreshToken) {
         if (!refreshToken) {
-            throw ApiError.UnauthorizedError()
-            return {user: undefined}
+            //throw ApiError.UnauthorizedError()
+            return {
+                isAuth: false
+            }
         }
         const userData = tokenService.validateRefreshToken(refreshToken)
         const tokenFromDb = await tokenService.findToken(refreshToken)
         if (!userData || !tokenFromDb) {
             //throw ApiError.UnauthorizedError()
+            return {
+                isAuth: false
+            }
         }
         const user = await UserModel.findById(userData.id)
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
-        return {...tokens, user: userDto}
-    }
-
-    async getAllUsers() {
-        const users = await UserModel.find()
-        return users
+        return {
+            ...tokens,
+            isAuth: true,
+            user: {
+                displayName: userDto.displayName,
+                isActivated: userDto.isActivated
+            }
+        }
     }
 
 }

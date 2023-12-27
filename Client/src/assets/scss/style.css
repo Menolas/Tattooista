@@ -19,6 +19,10 @@ body {
   background-color: #080808;
 }
 
+a {
+  color: inherit;
+}
+
 div#root {
   min-height: 100vh;
 }
@@ -1856,18 +1860,28 @@ img {
   padding: 20px;
   border: 2px solid #fafafa;
 }
-.admin .admin__card.admin__card--client {
+.admin .admin__card.admin__card--client, .admin .admin__card.admin__card--user {
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
 }
-.admin .admin__card-header {
+.admin .admin__card.admin__card--user .admin__card-link {
   display: flex;
+  gap: 20px;
+}
+.admin .admin__cards-header {
+  display: flex;
+  margin-bottom: 20px;
 }
 .admin .admin__card-details {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.admin .admin__card-roles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .admin .admin__card-avatar-wrap {
   width: 50px;
@@ -1885,6 +1899,10 @@ img {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
+}
+.admin .admin__card-avatar {
+  width: 50px;
+  height: 50px;
 }
 
 .admin__card-link {
@@ -1926,10 +1944,19 @@ img {
   display: flex;
   gap: 12px;
 }
+.admin__card .admin__card-details {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
 
 @media (min-width: 900px) {
   .admin {
     padding-top: 100px;
+  }
+  .admin .admin__card-avatar {
+    width: 80px;
+    height: 80px;
   }
 }
 .pagination {
@@ -1991,7 +2018,6 @@ img {
 .pagination .pagination__item.currentPage {
   position: relative;
   font-weight: 700;
-  color: pink;
 }
 .pagination .pagination__item.currentPage::after {
   content: "";
@@ -2045,7 +2071,6 @@ img {
   position: absolute;
   left: 0;
   top: 0;
-  margin-right: 20px;
   width: 50px;
   height: 50px;
   overflow: hidden;
@@ -2111,6 +2136,7 @@ img {
   .client-profile .client-profile__header {
     align-items: flex-start;
     flex-direction: row;
+    gap: 20px;
     padding-left: 0;
   }
   .client-profile .client-profile__avatar {
@@ -2134,7 +2160,7 @@ img {
   }
 }
 .login {
-  padding-top: 152px;
+  padding-top: 30px;
   color: #080808;
 }
 .login h2 {
@@ -2156,6 +2182,9 @@ img {
 }
 
 @media (min-width: 990px) {
+  .login {
+    padding-top: 100px;
+  }
   .login__form-wrap {
     width: 615px;
   }
@@ -2258,10 +2287,6 @@ input[type=file] {
   background-repeat: no-repeat;
   background-color: #fafafa;
   background-size: cover;
-}
-
-.search-form {
-  width: 100%;
 }
 
 .form__title {
@@ -2429,6 +2454,12 @@ input[type=checkbox]:checked + label .checkbox::after {
 }
 .form--galleryUpload .client-gallery__item img {
   height: 100px;
+}
+
+.form__link {
+  display: inline-block;
+  margin-top: 20px;
+  font-weight: 500;
 }
 
 @media (min-width: 990px) {
@@ -2660,6 +2691,7 @@ input[type=checkbox]:checked + label .checkbox::after {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  width: 100%;
 }
 .search-form select,
 .search-form input {
@@ -2685,6 +2717,9 @@ input[type=checkbox]:checked + label .checkbox::after {
 }
 
 @media (min-width: 768px) {
+  .search-form {
+    flex-wrap: nowrap;
+  }
   .search-form .search-input {
     width: 60%;
     flex-grow: 1;

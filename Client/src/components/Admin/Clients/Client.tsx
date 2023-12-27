@@ -1,17 +1,17 @@
-import * as React from 'react'
-import {useState} from 'react'
+import * as React from "react"
+import {useState} from "react"
 // @ts-ignore
-import avatar from '../../../assets/img/fox.webp'
+import avatar from "../../../assets/img/fox.webp"
 // @ts-ignore
-import Sprite from '../../../assets/svg/sprite.svg'
-import { NavLink } from 'react-router-dom'
-import {ClientType, ContactType} from '../../../types/Types'
-import { SERVER_URL } from '../../../utils/constants'
-import { ModalPopUp } from '../../common/ModalPopUp'
-import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
-import {ClientGalleryUploadFormFormik} from '../../Forms/ClientGalleryUploadFormFormik'
-import {Tooltip} from "react-tooltip"
-import {Confirmation} from "../../common/Confirmation"
+import Sprite from "../../../assets/svg/sprite.svg"
+import { NavLink } from "react-router-dom"
+import { ClientType, ContactType } from "../../../types/Types"
+import { API_URL } from "../../../http"
+import { ModalPopUp } from "../../common/ModalPopUp"
+import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
+import { ClientGalleryUploadFormFormik } from "../../Forms/ClientGalleryUploadFormFormik"
+import { Tooltip } from "react-tooltip"
+import { Confirmation } from "../../common/Confirmation"
 
 type PropsType = {
   client: ClientType
@@ -74,7 +74,7 @@ export const Client: React.FC<PropsType> = React.memo(({
       </li> : null
   })
 
-  const clientAvatar = client.avatar ? `${SERVER_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar
+  const clientAvatar = client.avatar ? `${API_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar
 
   const deleteClientCallBack = () => {
     deleteClient(client._id)
@@ -154,7 +154,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                         key={item}
                         onClick={() => { showBigImg(item) }}
                     >
-                      <img src={`${SERVER_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
+                      <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
                     </li>
                 )
               })
@@ -210,7 +210,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                   onClick={() => { closeBigImg() }}>
                 {''}
               </button>
-              <img src={`${SERVER_URL}/clients/${client._id}/doneTattooGallery/${bigImg}`} alt={''} />
+              <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${bigImg}`} alt={''} />
             </div>
           </div>
       }

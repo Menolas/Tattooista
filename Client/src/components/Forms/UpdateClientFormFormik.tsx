@@ -1,14 +1,14 @@
-import * as React from 'react'
-import { useState } from 'react'
-import {Field, Form, Formik, FormikHelpers, FormikValues} from 'formik'
-import {phoneRegex} from '../../utils/validators'
-import {AddClientFormValues, ClientType} from '../../types/Types'
-import {SERVER_URL} from '../../utils/constants'
+import * as React from "react"
+import { useState } from "react"
+import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik"
+import {phoneRegex} from "../../utils/validators"
+import {AddClientFormValues, ClientType} from "../../types/Types"
+import {API_URL} from "../../http"
 // @ts-ignore
-import avatar from '../../assets/img/fox.webp'
-import {FieldComponent} from './FieldComponent'
-import * as Yup from 'yup'
-import {FieldWrapper} from './FieldWrapper'
+import avatar from "../../assets/img/fox.webp"
+import {FieldComponent} from "./FieldComponent"
+import * as Yup from "yup"
+import {FieldWrapper} from "./FieldWrapper"
 
 interface UpdateClientFormType {
   avatar: FileList
@@ -122,7 +122,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                   src={imageURL
                       ? imageURL
                       : profile?.avatar
-                          ? `${SERVER_URL}/clients/${profile._id}/avatar/${profile.avatar}`
+                          ? `${API_URL}/clients/${profile._id}/avatar/${profile.avatar}`
                           : avatar
                   }
                   alt="preview"

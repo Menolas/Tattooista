@@ -1,6 +1,6 @@
-import * as React from 'react'
-import {useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import * as React from "react"
+import {useEffect} from "react"
+import {useDispatch, useSelector} from "react-redux"
 import {
   getClients,
   setCurrentClientsPageAC,
@@ -25,10 +25,9 @@ import {
   getAddClientApiErrorSelector,
   getUpdateClientGalleryApiErrorSelector,
   getClientsFilterSelector, getClientsPageSizeSelector
-} from '../../../redux/Clients/clients-selectors'
-import { Clients } from './Clients'
-import {getAddBookingApiErrorSelector} from "../../../redux/bookedConsultations/bookedConsultations-selectors";
-//import {useNavigate} from "react-router-dom";
+} from "../../../redux/Clients/clients-selectors"
+import { Clients } from "./Clients"
+//import {useNavigate} from "react-router-dom"
 
 export const ClientsContainer: React.FC = () => {
 

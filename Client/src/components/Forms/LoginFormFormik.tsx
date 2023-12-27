@@ -1,10 +1,11 @@
-import * as React from 'react'
-import { Form, Formik, FormikHelpers, FormikValues} from 'formik'
-import { ApiErrorMessage } from '../../utils/validators'
-import * as Yup from 'yup'
-import { Navigate } from 'react-router';
-import { LoginFormValues } from '../../types/Types'
-import {FieldComponent} from "./FieldComponent";
+import * as React from "react"
+import { Form, Formik, FormikHelpers, FormikValues} from "formik"
+import { ApiErrorMessage } from "../../utils/validators"
+import * as Yup from "yup"
+import { Navigate } from "react-router"
+import { LoginFormValues } from "../../types/Types"
+import {FieldComponent} from "./FieldComponent"
+import { NavLink } from "react-router-dom"
 
 const validationSchema = Yup.object().shape({
   email: Yup
@@ -18,14 +19,12 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
   isAuth: boolean
-  registrationError: string
   loginError: string
   login: (values: LoginFormValues) => void
 }
 
 export const LoginForm: React.FC<PropsType> = React.memo(({
   isAuth,
-  registrationError,
   loginError,
   login
 }) => {
@@ -87,6 +86,9 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                   : 'Log In'
               }
             </button>
+            <NavLink className={'form__link'} to={'/registration'}>
+              Need registration?
+            </NavLink>
           </Form>
         )
       }}

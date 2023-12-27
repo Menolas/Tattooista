@@ -1,23 +1,36 @@
-import {date} from "yup";
+export type IUser = {
+    displayName: string | undefined
+    isActivated: boolean
+    avatar?: string
+}
+
+export type UserType = {
+    "_id": string
+    "displayName": string
+    "email": string
+    isActivated: boolean
+    avatar: string
+    roles: Array<string>
+}
 
 export interface ContactType {
-    [key: string]: string;
+    [key: string]: string
 }
 
 export type ContactsType = {
-    "email": string | undefined,
-    "insta": string | undefined,
-    "messenger": string | undefined,
-    "phone": string | undefined,
-    "whatsapp": string | undefined,
+    "email": string | undefined
+    "insta": string | undefined
+    "messenger": string | undefined
+    "phone": string | undefined
+    "whatsapp": string | undefined
 }
 
 export type ClientType = {
     _id: string
     fullName: string
     createdAt?: any
-    contacts: ContactType,
-    avatar?: File | string,
+    contacts: ContactType
+    avatar?: File | string
     gallery?: Array<string>
 }
 
@@ -44,10 +57,10 @@ export type ServiceType = {
 }
 
 export type TattooStyleType = {
-    _id: string,
-    value: string,
-    wallPaper: string,
-    description: string,
+    _id: string
+    value: string
+    wallPaper: string
+    description: string
     nonStyle: boolean
 }
 
@@ -58,6 +71,7 @@ export type GalleryItemType = {
 }
 
 export interface RegistrationFormValues {
+    displayName: string
     email: string
     password: string
     consent: boolean
@@ -69,7 +83,7 @@ export interface LoginFormValues {
 }
 
 export interface BookConsultationFormValues  {
-    bookingName: string,
+    bookingName: string
     contact: string
     mail: string
     phone: string
@@ -90,13 +104,13 @@ export interface AddConsultationFormValues  {
 }
 
 export interface AddClientFormValues {
-    avatar: File | string | null,
-    clientName: string,
-    email: string | null,
-    insta: string | null,
-    messenger: string | null,
-    phone: string | null,
-    whatsapp: string | null,
+    avatar: File | string | null
+    clientName: string
+    email: string | null
+    insta: string | null
+    messenger: string | null
+    phone: string | null
+    whatsapp: string | null
 }
 
 export type PageType = {

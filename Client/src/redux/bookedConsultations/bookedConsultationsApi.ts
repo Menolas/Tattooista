@@ -1,10 +1,10 @@
-import axios, { CreateAxiosDefaults } from 'axios'
-import { BookedConsultationType, ContactsType, ClientType } from '../../types/Types'
-import { SERVER_URL } from '../../utils/constants'
-import { BookedConsultationsFilterType } from './bookedConsultations-reducer'
+import axios, { CreateAxiosDefaults } from "axios"
+import { BookedConsultationType, ContactsType, ClientType } from "../../types/Types"
+import {API_URL} from "../../http"
+import { BookedConsultationsFilterType } from "./bookedConsultations-reducer"
 
 const instance = axios.create({
-  baseURL: SERVER_URL
+  baseURL: API_URL
 } as CreateAxiosDefaults)
 
 type GetBookedConsultationsResponseType = {
