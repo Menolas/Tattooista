@@ -7,6 +7,10 @@ body {
   //overflow: hidden;
 }
 
+a {
+  color: inherit;
+}
+
 div#root {
   min-height: 100vh;
 }

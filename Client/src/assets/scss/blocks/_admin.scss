@@ -43,21 +43,34 @@
     justify-content: space-between;
     padding: 20px;
     border: $light-border;
-    &.admin__card--client {
+    &.admin__card--client,
+    &.admin__card--user {
       flex-direction: column;
       align-items: flex-start;
       gap: 12px;
     }
+
+    &.admin__card--user .admin__card-link {
+      display: flex;
+      gap: 20px;
+    }
   }
 
-  .admin__card-header {
+  .admin__cards-header {
     display: flex;
+    margin-bottom: 20px;
   }
 
   .admin__card-details {
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+
+  .admin__card-roles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .admin__card-avatar-wrap {
@@ -79,6 +92,11 @@
     display: flex;
     flex-direction: column;
     row-gap: 8px;
+  }
+
+  .admin__card-avatar {
+    width: 50px;
+    height: 50px;
   }
 }
 
@@ -125,10 +143,23 @@
       gap: 12px;
     }
   }
+
+  .admin__card-details {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+  }
 }
 
 @media (min-width: 900px) {
   .admin {
     padding-top: 100px;
+
+    .admin__card-avatar {
+      width: 80px;
+      height: 80px;
+    }
   }
+
+
 }

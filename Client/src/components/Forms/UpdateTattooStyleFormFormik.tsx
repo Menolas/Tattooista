@@ -1,13 +1,13 @@
-import * as React from 'react'
-import {useState} from 'react'
-import {Field, Form, Formik} from 'formik'
-import * as Yup from 'yup'
-import {SERVER_URL} from '../../utils/constants'
+import * as React from "react"
+import {useState} from "react"
+import {Field, Form, Formik} from "formik"
+import * as Yup from "yup"
+import {API_URL} from "../../http"
 // @ts-ignore
-import tattooMachine from '../../assets/img/tattoo-machine.webp'
-import {TattooStyleType} from '../../types/Types'
-import {FieldComponent} from './FieldComponent'
-import {FieldWrapper} from './FieldWrapper'
+import tattooMachine from "../../assets/img/tattoo-machine.webp"
+import {TattooStyleType} from "../../types/Types"
+import {FieldComponent} from "./FieldComponent"
+import {FieldWrapper} from "./FieldWrapper"
 
 const validationSchema = Yup.object().shape({
     wallPaper: Yup.mixed()
@@ -88,7 +88,7 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                 <img
                                     src={imageURL ? imageURL
                                             : style && style.wallPaper
-                                            ? `${SERVER_URL}styleWallpapers/${style._id}/${style.wallPaper}`
+                                            ? `${API_URL}styleWallpapers/${style._id}/${style.wallPaper}`
                                             : tattooMachine
                                     }
                                     alt="preview"

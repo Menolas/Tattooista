@@ -1,19 +1,19 @@
-import * as React from 'react'
-import {useEffect, useState} from 'react'
-import { NavLink } from 'react-router-dom'
+import * as React from "react"
+import {useEffect, useState} from "react"
+import { NavLink } from "react-router-dom"
 // @ts-ignore
-import avatar from '../../../assets/img/fox.webp'
-import {ClientType, ContactType} from '../../../types/Types'
-import { SERVER_URL } from '../../../utils/constants'
-import { ModalPopUp } from '../../common/ModalPopUp'
-import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
+import avatar from "../../../assets/img/fox.webp"
+import {ClientType, ContactType} from "../../../types/Types"
+import { API_URL } from "../../../http"
+import { ModalPopUp } from "../../common/ModalPopUp"
+import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
 // @ts-ignore
-import Sprite from '../../../assets/svg/sprite.svg'
-import { ClientGalleryUploadFormFormik } from '../../Forms/ClientGalleryUploadFormFormik'
-import {useDispatch} from "react-redux";
-import {SuccessPopUp} from "../../common/SuccessPopUp";
-import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer";
-import {Tooltip} from "react-tooltip";
+import Sprite from "../../../assets/svg/sprite.svg"
+import { ClientGalleryUploadFormFormik } from "../../Forms/ClientGalleryUploadFormFormik"
+import {useDispatch} from "react-redux"
+import {SuccessPopUp} from "../../common/SuccessPopUp"
+import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer"
+import {Tooltip} from "react-tooltip"
 
 type PropsType = {
   isSuccess: boolean
@@ -90,7 +90,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
 
 
   const Avatar = profile.avatar
-      ? `${SERVER_URL}/clients/${profile._id}/avatar/${profile.avatar}`
+      ? `${API_URL}/clients/${profile._id}/avatar/${profile.avatar}`
       : avatar
 
   const GalleryItem: React.FC<GalleryItemPropsType> = ({item,profileId}) => {
@@ -98,7 +98,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
         <li
             onClick={() => { showBigImg(item) }}
         >
-          <img src={`${SERVER_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
+          <img src={`${API_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
         </li>
     )
   }
@@ -205,7 +205,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
                   onClick={() => { closeBigImg() }}>
                 {''}
               </button>
-              <img src={`${SERVER_URL}/clients/${profile._id}/doneTattooGallery/${bigImg}`} alt={''} />
+              <img src={`${API_URL}/clients/${profile._id}/doneTattooGallery/${bigImg}`} alt={''} />
             </div>
           </div>
       }

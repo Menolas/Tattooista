@@ -1,5 +1,5 @@
 .login {
-  padding-top: 152px;
+  padding-top: 30px;
   color: $dark-text;
 
   h2 {
@@ -22,6 +22,10 @@
 }
 
 @media (min-width: 990px) {
+
+  .login {
+    padding-top: 100px;
+  }
 
   .login__form-wrap {
     width: 615px;

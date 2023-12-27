@@ -10,8 +10,7 @@ type FormType = {
 }
 
 const bookedConsultationsSearchFormValidate = (values: FormType) => {
-  const errors = {}
-  return errors
+  return {}
 }
 
 type PropsType = {

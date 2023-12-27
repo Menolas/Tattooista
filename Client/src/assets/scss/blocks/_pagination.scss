@@ -65,7 +65,6 @@
   .pagination__item.currentPage {
     position: relative;
     font-weight: 700;
-    color: pink;
 
     &::after {
       @include element-style(100%, 1px, $light-text);

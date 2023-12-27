@@ -1,8 +1,9 @@
-import * as React from 'react'
-import { NavLink } from 'react-router-dom'
-import { Outlet } from 'react-router-dom'
-import { withAuthRedirect } from '../../hoc/withAuthRedirect'
-import { compose } from 'redux'
+import * as React from "react"
+import {Navigate, NavLink} from "react-router-dom"
+import { Outlet } from "react-router-dom"
+import { withAuthRedirect } from "../../hoc/withAuthRedirect"
+import {useSelector} from "react-redux"
+import {getAuthSelector, getUserSelector} from "../../redux/Auth/auth-selectors"
 
 const adminButtonsData = [
     {
@@ -20,6 +21,10 @@ const adminButtonsData = [
     {
         btnText: "Archive",
         btnUrl: "archive/archivedConsultations"
+    },
+    {
+        btnText: "Users",
+        btnUrl: "users"
     }
 ]
 
@@ -38,6 +43,15 @@ const adminButtons = adminButtonsData.map((btn, i ) => {
 
 const Admin: React.FC = React.memo(() => {
 
+  const isAuth = useSelector(getAuthSelector)
+  const user = useSelector(getUserSelector)
+  console.log(user)
+
+  if (!isAuth) return <Navigate to='/login' />
+  if (isAuth && user.isActivated !== true) {
+    return <Navigate to="/registration" />
+  }
+
   return (
     <div className="admin">
       <div className="admin__header">
@@ -50,4 +64,4 @@ const Admin: React.FC = React.memo(() => {
   )
 })
 
-export default compose(withAuthRedirect)(Admin)
+export default Admin

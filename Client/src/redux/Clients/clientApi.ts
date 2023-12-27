@@ -1,11 +1,11 @@
-import axios, {CreateAxiosDefaults} from 'axios'
-import {ClientType, AddClientFormValues } from '../../types/Types'
-import { SERVER_URL } from '../../utils/constants'
-import {ClientsFilterType} from "./clients-reducer";
+import axios, {CreateAxiosDefaults} from "axios"
+import {ClientType, AddClientFormValues } from "../../types/Types"
+import {API_URL} from "../../http"
+import {ClientsFilterType} from "./clients-reducer"
 
 const instance = axios.create({
   withCredentials: false,
-  baseURL: SERVER_URL
+  baseURL: API_URL
 } as CreateAxiosDefaults)
 
 type GetClientsResponseType = {
@@ -32,10 +32,9 @@ export const clientsAPI = {
     pageSize = 5,
     filter: ClientsFilterType
   ) {
-    return instance.get<GetClientsResponseType>(`clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.gallery}`)
-        .then(response => {
-          return response.data
-        })
+    return instance.get<GetClientsResponseType>(
+        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.gallery}`)
+        .then(response => response.data)
   },
 
   getArchivedClients(
@@ -44,38 +43,28 @@ export const clientsAPI = {
       filter: ClientsFilterType
   ) {
       return instance.get<GetClientsResponseType>(`clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.gallery}`)
-          .then(response => {
-              return response.data
-          })
+          .then(response => response.data)
   },
 
   getClientProfile(clientId: string) {
     return instance.get<ClientType>(`clients/${clientId}`)
-        .then(response => {
-            return response.data
-        })
+        .then(response =>response.data)
   },
 
   updateClientGallery(clientId: string, values: FormData) {
     return instance.post<UpdateClientResponseType>(`clients/updateGallery/${clientId}`,
         values
-    ).then(response => {
-        return response.data
-    })
+    ).then(response => response.data)
   },
 
   deleteClient(clientId: string) {
     return instance.delete<DeleteClientResponseType>(`clients/${clientId}`)
-        .then(response => {
-          return response.data
-        })
+        .then(response => response.data)
   },
 
   deleteArchivedClient(clientId: string) {
     return instance.delete<DeleteClientResponseType>(`clients/archive/${clientId}`)
-        .then(response => {
-            return response.data
-        })
+        .then(response => response.data)
   },
 
   addClient(
@@ -83,9 +72,7 @@ export const clientsAPI = {
     //values: AddClientFormValues
   ) {
     return instance.post<UpdateClientResponseType>('clients', values)
-      .then(response => {
-        return response.data
-      })
+      .then(response => response.data)
   },
 
   editClient(
@@ -93,9 +80,7 @@ export const clientsAPI = {
     values: FormData,
   ) {
      return instance.post<UpdateClientResponseType>(`clients/edit/${clientId}`, values)
-        .then(response => {
-            return response.data
-        })
+        .then(response => response.data)
   },
 
   deleteClientGalleryPicture(
@@ -103,26 +88,20 @@ export const clientsAPI = {
       picture: string
   ) {
       return instance.delete(`clients/updateGallery/${clientId}?&picture=${picture}`)
-          .then(response => {
-              return response.data
-          })
+          .then(response => response.data)
   },
 
   archiveClient(
       clientId: string
   ) {
       return instance.post(`clients/archive/${clientId}`)
-          .then(response => {
-              return response.data
-          })
+          .then(response => response.data)
   },
 
   reactivateClient(
     clientId: string
   ) {
     return instance.get(`clients/archive/${clientId}`)
-        .then(response => {
-            return response.data
-        })
+        .then(response => response.data)
   }
 }

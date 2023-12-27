@@ -1,13 +1,13 @@
-import * as React from 'react'
-import { useState } from 'react'
-import {Field, Form, Formik} from 'formik'
+import * as React from "react"
+import { useState } from "react"
+import {Field, Form, Formik} from "formik"
 // @ts-ignore
-import tattooMachine from '../../assets/img/tattoo-machine.webp'
+import tattooMachine from "../../assets/img/tattoo-machine.webp"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
-import { SERVER_URL } from '../../utils/constants'
-import {FieldWrapper} from './FieldWrapper'
-import * as Yup from 'yup'
+import Sprite from "../../assets/svg/sprite.svg"
+import {API_URL} from "../../http"
+import {FieldWrapper} from "./FieldWrapper"
+import * as Yup from "yup"
 
 const validationSchema = Yup.object().shape({
   gallery: Yup.array()
@@ -97,7 +97,7 @@ export const ClientGalleryUploadFormFormik: React.FC<PropsType> = React.memo(({
                             >
                               <svg><use href={`${Sprite}#trash`}/></svg>
                             </button>
-                            <img src={`${SERVER_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
+                            <img src={`${API_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
                           </li>
                       )
                     })

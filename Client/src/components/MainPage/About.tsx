@@ -1,12 +1,12 @@
-import * as React from 'react'
-import {useState} from 'react'
-import {PageType} from '../../types/Types'
+import * as React from "react"
+import {useState} from "react"
+import {PageType} from "../../types/Types"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
-import {SERVER_URL} from '../../utils/constants'
-import {ModalPopUp} from "../common/ModalPopUp";
-import { UpdateAboutPageFormFormik } from '../Forms/UpdateAboutPageFormFormik'
-import {Tooltip} from "react-tooltip";
+import Sprite from "../../assets/svg/sprite.svg"
+import {API_URL} from "../../http"
+import {ModalPopUp} from "../common/ModalPopUp"
+import { UpdateAboutPageFormFormik } from "../Forms/UpdateAboutPageFormFormik"
+import {Tooltip} from "react-tooltip"
 
 type PropsType = {
     isAuth: boolean
@@ -30,7 +30,7 @@ export const About: React.FC<PropsType> = React.memo(({
 
     const editModalTitle = 'Update "about" block'
 
-    const imgUrl = pageAbout?.wallPaper ? `url("${SERVER_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("../avatar.jpg")`
+    const imgUrl = pageAbout?.wallPaper ? `url("${API_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("../avatar.jpg")`
 
     return (
         <section className="page-block about">

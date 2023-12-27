@@ -17,6 +17,7 @@ const tattooStylesRouter = require('./routes/TattooStylesRoutes')
 const faqRouter = require('./routes/FaqRoutes')
 const serviceRouter = require('./routes/ServiceRoutes')
 const pagesRouter = require('./routes/PagesRoutes')
+const usersRouter = require('./routes/UsersRoutes')
 //const rateLimit = require("express-rate-limit")
 
 app.use(express.json())
@@ -35,6 +36,7 @@ app.use('/tattooStyle/', tattooStylesRouter)
 app.use('/faq/', faqRouter)
 app.use('/services/', serviceRouter)
 app.use('/pages/', pagesRouter)
+app.use('/users/', usersRouter)
 app.use(errorMiddleware)
 
 // const limiter = rateLimit({

@@ -1,9 +1,16 @@
-import axios, { CreateAxiosDefaults } from 'axios'
-import {FaqType, ServiceType, PageType, BookedConsultationType, BookConsultationFormValues} from '../../types/Types'
-import { SERVER_URL } from '../../utils/constants'
+import axios, { CreateAxiosDefaults } from "axios"
+import {
+    FaqType,
+    ServiceType,
+    PageType,
+    BookedConsultationType,
+    BookConsultationFormValues
+} from "../../types/Types"
+import {API_URL} from "../../http"
+
 
 const instance = axios.create({
-    baseURL: SERVER_URL
+    baseURL: API_URL
 } as CreateAxiosDefaults)
 
 type GetPagesResponseType = {

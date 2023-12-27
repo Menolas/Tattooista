@@ -1,12 +1,11 @@
-import { applyMiddleware, combineReducers, createStore, compose } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-import { portfolioReducer } from './Portfolio/portfolio-reducer'
-import { generalReducer } from './General/general-reducer'
-import { bookedConsultationsReducer } from './bookedConsultations/bookedConsultations-reducer'
-import { clientsReducer } from './Clients/clients-reducer'
-import { authReducer } from './Auth/auth-reducer'
-import { adminReducer } from './admin-reducer'
-import { appReducer } from './app-reducer'
+import { applyMiddleware, combineReducers, createStore, compose } from "redux"
+import thunkMiddleware from "redux-thunk"
+import { portfolioReducer } from "./Portfolio/portfolio-reducer"
+import { generalReducer } from "./General/general-reducer"
+import { bookedConsultationsReducer } from "./bookedConsultations/bookedConsultations-reducer"
+import { clientsReducer } from "./Clients/clients-reducer"
+import { authReducer } from "./Auth/auth-reducer"
+import { usersReducer} from "./Users/users-reducer"
 
 let rootReducer = combineReducers({
   portfolio: portfolioReducer,
@@ -14,8 +13,7 @@ let rootReducer = combineReducers({
   bookedConsultations: bookedConsultationsReducer,
   clients: clientsReducer,
   auth: authReducer,
-  admin: adminReducer,
-  app: appReducer,
+  users: usersReducer,
 })
 
 type RootReducerType = typeof rootReducer; // (global-state: AppStateType) => AppStateType

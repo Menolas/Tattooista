@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import AliceCarousel from 'react-alice-carousel'
 import 'react-alice-carousel/lib/alice-carousel.css'
 import { TattooStyleType } from '../../types/Types'
-import {SERVER_URL} from '../../utils/constants'
+import {API_URL} from "../../http"
 
 type PropsType = {
     galleryPageSize: number
@@ -33,7 +33,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
              <NavLink
                  to={`/portfolio?&style=${slider.value}&page=1&limit=${galleryPageSize}`}
                  className="portfolio-slider__link"
-                 style={{ backgroundImage:`url(${SERVER_URL}/styleWallpapers/${slider._id}/${slider.wallPaper})`}}
+                 style={{ backgroundImage:`url(${API_URL}/styleWallpapers/${slider._id}/${slider.wallPaper})`}}
                  onClick={() => {
                      setActiveStyle(slider)
                      console.log(slider.value)

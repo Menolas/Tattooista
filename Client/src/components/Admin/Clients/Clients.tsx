@@ -1,12 +1,12 @@
-import * as React from 'react'
-import {useEffect, useState} from 'react'
-import { Client } from './Client'
-import { Paginator } from '../../common/Paginator'
-import { ModalPopUp } from '../../common/ModalPopUp'
-import { UpdateClientForm } from '../../Forms/UpdateClientFormFormik'
-import { ClientType } from '../../../types/Types'
-import { ClientSearchFormFormik } from '../../Forms/ClientSearchFormFormik'
-import { ClientsFilterType} from '../../../redux/Clients/clients-reducer'
+import * as React from "react"
+import {useEffect, useState} from "react"
+import { Client } from "./Client"
+import { Paginator } from "../../common/Paginator"
+import { ModalPopUp } from "../../common/ModalPopUp"
+import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
+import { ClientType } from "../../../types/Types"
+import { ClientSearchFormFormik } from "../../Forms/ClientSearchFormFormik"
+import { ClientsFilterType} from "../../../redux/Clients/clients-reducer"
 import {NothingToShow} from "../../common/NothingToShow"
 import {SuccessPopUp} from "../../common/SuccessPopUp"
 import {Preloader} from "../../common/Preloader"

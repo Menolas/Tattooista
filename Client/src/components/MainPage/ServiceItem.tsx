@@ -1,13 +1,13 @@
-import * as React from 'react'
-import { useState } from 'react'
-import {ServiceType} from '../../types/Types'
+import * as React from "react"
+import { useState } from "react"
+import {ServiceType} from "../../types/Types"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
-import {ModalPopUp} from '../common/ModalPopUp'
-import {SuccessModal} from '../SuccessModal'
-import {UpdateServiceItemFormFormik} from '../Forms/UpdateServiceItemFormFormik'
-import {SERVER_URL} from '../../utils/constants'
-import {Tooltip} from "react-tooltip";
+import Sprite from "../../assets/svg/sprite.svg"
+import {ModalPopUp} from "../common/ModalPopUp"
+import {SuccessModal} from "../SuccessModal"
+import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik"
+import {API_URL} from "../../http"
+import {Tooltip} from "react-tooltip"
 
 type PropsType = {
     isAuth: boolean
@@ -25,9 +25,6 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
 
     const [isEditMode, setIsEditMode] = useState(false)
     const [isSuccess, setSuccess] = useState(false)
-    const showSuccessModal = () => {
-        setSuccess(true)
-    }
 
     const closeSuccessModal = () => {
         setSuccess(false)
@@ -68,7 +65,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                 }
                 <div
                     className="services__article-img-wrap"
-                    style={{ backgroundImage: service.wallPaper ? `url(${SERVER_URL}/serviceWallpapers/${service._id}/${service.wallPaper})` : ''}}
+                    style={{ backgroundImage: service.wallPaper ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})` : ''}}
                 >{''}</div>
                 <div className="services__article-text-block">
                     <h4>{service.title}:</h4>

@@ -1,13 +1,13 @@
-import * as React from 'react'
-import { useState } from 'react'
-import { Field, Form, Formik} from 'formik'
-import {SERVER_URL} from '../../utils/constants'
+import * as React from "react"
+import { useState } from "react"
+import { Field, Form, Formik} from "formik"
+import {API_URL} from "../../http"
 // @ts-ignore
-import tattooMachine from '../../assets/img/tattoo-machine.webp'
-import {PageType} from '../../types/Types'
-import {FieldComponent} from "./FieldComponent";
-import {FieldWrapper} from "./FieldWrapper";
-import * as Yup from "yup";
+import tattooMachine from "../../assets/img/tattoo-machine.webp"
+import {PageType} from "../../types/Types"
+import {FieldComponent} from "./FieldComponent"
+import {FieldWrapper} from "./FieldWrapper"
+import * as Yup from "yup"
 
 const validationSchema = Yup.object().shape({
     wallPaper: Yup.mixed()
@@ -65,7 +65,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
         closeModal()
     }
 
-    console.log(`${SERVER_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`)
+    console.log(`${API_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`)
 
     return (
         <Formik
@@ -82,7 +82,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                     src={
                                         imageURL ? imageURL
                                             : pageAbout?.wallPaper
-                                            ? `${SERVER_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`
+                                            ? `${API_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`
                                             : tattooMachine
                                     }
                                     alt="preview"

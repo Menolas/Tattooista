@@ -1,8 +1,8 @@
-import * as React from 'react'
-import {Field, Form, Formik} from 'formik'
+import * as React from "react"
+import {Field, Form, Formik} from "formik"
 import { GalleryItemType, TattooStyleType} from "../../types/Types"
 import {FieldWrapper} from "./FieldWrapper"
-import {SERVER_URL} from "../../utils/constants"
+import {API_URL} from "../../http"
 
 type PropsType = {
     folder: string
@@ -79,7 +79,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                         >
                         <div
                             className={'galleryItem-illustration'}
-                            style={{ backgroundImage: `url(${SERVER_URL}${folder}/${galleryItem.fileName})` }}
+                            style={{ backgroundImage: `url(${API_URL}${folder}/${galleryItem.fileName})` }}
                         >
 
                         </div>

@@ -1,6 +1,16 @@
 const { Schema, model } = require('mongoose')
 
 const UserSchema = new Schema({
+  avatar: {
+    type: String
+  },
+
+  displayName: {
+    type: String,
+    unique: true,
+    required: true
+  },
+
   email: {
     type: String,
     unique: true,
@@ -24,7 +34,11 @@ const UserSchema = new Schema({
 
   activationLink: {
     type: String
-  }
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 module.exports = model('User', UserSchema)

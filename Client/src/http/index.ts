@@ -1,5 +1,5 @@
-import axios from 'axios'
-import {AuthResponse} from "../types/response/AuthResponse";
+import axios from "axios"
+import {AuthResponse} from "../types/response/AuthResponse"
 export const API_URL = `http://localhost:3030`
 
 const $api = axios.create({
