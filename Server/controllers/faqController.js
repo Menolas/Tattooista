@@ -3,9 +3,11 @@ const FaqItem = require('../models/FaqItem')
 class faqController {
 
   async getFaqItems(req, res) {
+    const results = {}
     try {
-      const faqItems = await FaqItem.find()
-      res.json(faqItems)
+      results.resultCode = 0
+      results.faqItems = await FaqItem.find()
+      res.json(results)
     } catch (e) {
       console.log(e)
     }

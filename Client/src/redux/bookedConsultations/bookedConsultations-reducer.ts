@@ -453,11 +453,10 @@ export const getBookedConsultations = (
     )
     dispatch(setBookedConsultationsAC(response.bookings))
     dispatch(setBookedConsultationsTotalCountAC(response.totalCount))
-    dispatch(setCurrentPageForBookedConsultationsAC(response.page))
-    dispatch(setIsFetchingAC(false))
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 
@@ -476,11 +475,11 @@ export const getArchivedConsultations = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedConsultationsTotalCountAC(response.totalCount))
       dispatch(setArchivedConsultationsAC(response.bookings))
-      dispatch(setIsFetchingAC(false))
     }
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 
@@ -494,11 +493,11 @@ export const changeBookedConsultationStatus = (
     let response = await bookedConsultationsAPI.changeConsultationStatus(id, status)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(changeBookedConsultationStatusAC(id, response.status))
-      dispatch(toggleIsStatusChangingAC(false, id))
     }
   } catch (e) {
-    dispatch(toggleIsStatusChangingAC(false, id))
     console.log(e)
+  } finally {
+    dispatch(toggleIsStatusChangingAC(false, id))
   }
 }
 
@@ -626,7 +625,6 @@ export const reactivateConsultation = (
     let response = await bookedConsultationsAPI.reactivateConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
-      dispatch(addBookedConsultationAC(response.booking))
     }
   } catch (e) {
     // @ts-ignore

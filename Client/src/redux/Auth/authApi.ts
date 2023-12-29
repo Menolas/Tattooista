@@ -8,6 +8,11 @@ const instance = axios.create({
   baseURL: API_URL
 } as CreateAxiosDefaults)
 
+type CommonResponseFields = {
+    resultCode: number
+    message?: string
+}
+
 type LoginResponseType = {
     resultCode?: number
     userData: {
@@ -18,9 +23,7 @@ type LoginResponseType = {
     error?: string
 }
 
-type RegistrationResponseType = {
-    resultCode?: number
-    message?: string
+type RegistrationResponseType = CommonResponseFields & {
     userData: {
         user: IUser
         accessToken: string
@@ -28,17 +31,14 @@ type RegistrationResponseType = {
     }
 }
 
-type LogoutResponseType = {
-    resultCode?: number
+type LogoutResponseType = CommonResponseFields & {
     token: {
         deletedCount: number
         acknowledged: boolean
     }
 }
 
-type CheckAuthResponseType = {
-    resultCode?: number
-    message?: string
+type CheckAuthResponseType = CommonResponseFields & {
     userData: {
         isAuth?: boolean
         user: IUser
@@ -61,8 +61,8 @@ export const authAPI = {
     })
   },
 
-  registration(displayName: string, email: string, password: string) {
-      return $api.post<RegistrationResponseType>('auth/registration', {displayName, email, password})
+  registration(values: RegistrationFormValues) {
+      return $api.post<RegistrationResponseType>('auth/registration', values)
           .then(res => res.data)
 
   },

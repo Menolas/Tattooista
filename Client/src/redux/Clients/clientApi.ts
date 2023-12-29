@@ -1,5 +1,5 @@
 import axios, {CreateAxiosDefaults} from "axios"
-import {ClientType, AddClientFormValues } from "../../types/Types"
+import {ClientType } from "../../types/Types"
 import {API_URL} from "../../http"
 import {ClientsFilterType} from "./clients-reducer"
 
@@ -8,22 +8,29 @@ const instance = axios.create({
   baseURL: API_URL
 } as CreateAxiosDefaults)
 
-type GetClientsResponseType = {
-    resultCode: number,
+type CommonResponseFields = {
+  resultCode: number
+  message?: string
+}
+
+type DeleteClientResponseType = CommonResponseFields
+
+type ArchiveClientResponseType = CommonResponseFields
+
+type ReactivateClientResponseType = CommonResponseFields
+
+type GetClientsResponseType = CommonResponseFields & {
     clients: Array<ClientType>,
     totalCount: number
 }
 
-type DeleteClientResponseType = {
-  resultCode: number,
-  message?: string
+type UpdateClientResponseType = CommonResponseFields & {
+  client: ClientType
 }
 
-type UpdateClientResponseType = {
-  client: ClientType
-  resultCode: number,
-  message?: string
-}
+type GetClientProfileResponseType = UpdateClientResponseType
+
+type DeleteClientGalleryPictureResponseType = UpdateClientResponseType
 
 export const clientsAPI = {
 
@@ -47,8 +54,8 @@ export const clientsAPI = {
   },
 
   getClientProfile(clientId: string) {
-    return instance.get<ClientType>(`clients/${clientId}`)
-        .then(response =>response.data)
+    return instance.get<GetClientProfileResponseType>(`clients/${clientId}`)
+        .then(response => response.data)
   },
 
   updateClientGallery(clientId: string, values: FormData) {
@@ -87,21 +94,21 @@ export const clientsAPI = {
       clientId: string,
       picture: string
   ) {
-      return instance.delete(`clients/updateGallery/${clientId}?&picture=${picture}`)
+      return instance.delete<DeleteClientGalleryPictureResponseType>(`clients/updateGallery/${clientId}?&picture=${picture}`)
           .then(response => response.data)
   },
 
   archiveClient(
       clientId: string
   ) {
-      return instance.post(`clients/archive/${clientId}`)
+      return instance.post<ArchiveClientResponseType>(`clients/archive/${clientId}`)
           .then(response => response.data)
   },
 
   reactivateClient(
     clientId: string
   ) {
-    return instance.get(`clients/archive/${clientId}`)
+    return instance.get<ReactivateClientResponseType>(`clients/archive/${clientId}`)
         .then(response => response.data)
   }
 }

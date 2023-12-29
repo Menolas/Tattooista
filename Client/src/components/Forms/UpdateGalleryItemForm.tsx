@@ -79,7 +79,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                         >
                         <div
                             className={'galleryItem-illustration'}
-                            style={{ backgroundImage: `url(${API_URL}${folder}/${galleryItem.fileName})` }}
+                            style={{ backgroundImage: `url(${API_URL}/${folder}/${galleryItem.fileName})` }}
                         >
 
                         </div>

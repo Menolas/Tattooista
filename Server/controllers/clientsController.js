@@ -70,12 +70,23 @@ class clientsController {
       results.clients = archivedClients.slice(startIndex, endIndex)
       res.json(results)
     } catch (e) {
-      res.status(500).json({ message: e.message })
+      results.resultCode = 1
+      results.message = e.message
+      res.status(400).json(results)
     }
   }
 
   async getClient(req, res) {
-    res.send(res.client);
+    const results = {}
+    try {
+      results.client = res.client
+      results.resultCode = 0
+      res.send(results)
+    } catch (e) {
+      results.resultCode = 1
+      results.message = e.message
+      res.status(400).json(results)
+    }
   }
 
   async editClient(req, res) {
@@ -240,7 +251,6 @@ class clientsController {
       })
       await res.client.remove()
       results.resultCode = 0
-      results.client = archivedClient
       res.status(201).json(results)
     } catch (e) {
       results.resultCode = 1
@@ -297,15 +307,12 @@ class clientsController {
       })
       await res.client.remove()
       results.resultCode = 0
-      results.client = client
       res.status(201).json(results)
-
     } catch (e) {
       results.resultCode = 1
       results.message = e.message
       res.status(400).json(results)
     }
-
   }
 
   async deleteClient(req, res) {

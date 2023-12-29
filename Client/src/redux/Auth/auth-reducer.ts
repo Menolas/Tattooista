@@ -27,7 +27,6 @@ export const authReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
-  console.log(state.user)
 
   switch (action.type) {
 
@@ -143,7 +142,6 @@ export const login = (values: LoginFormValues): ThunkType => async (
     if(response.resultCode === 0) {
       dispatch(setLoginErrorAC(''))
       dispatch(setUserDataAC(response.userData.user))
-      console.log(response.userData.user)
       dispatch(setAuth(true))
       dispatch(setAccessTokenAC(response.userData.accessToken))
     }
@@ -166,6 +164,7 @@ export const logout = (): ThunkType => async (
        dispatch(setAccessTokenAC(null))
        dispatch(setUserDataAC(null))
        dispatch(setAuth(false))
+       console.log("setAuth - False!!!")
      }
   } catch (e) {
     console.log(e)
@@ -174,7 +173,7 @@ export const logout = (): ThunkType => async (
 
 export const registration = (values: RegistrationFormValues): ThunkType => async (dispatch) => {
   try {
-    let response = await authAPI.registration(values.displayName, values.email, values.password)
+    let response = await authAPI.registration(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setRegistrationErrorAC(''))
       dispatch(setAuth(true))

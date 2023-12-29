@@ -1,18 +1,19 @@
-import * as React from 'react'
-import {useEffect, useState} from 'react'
-import { Preloader } from '../common/Preloader'
-import {GalleryItemType, TattooStyleType} from '../../types/Types'
+import * as React from "react"
+import {useEffect, useState} from "react"
+import { Preloader } from "../common/Preloader"
+import {GalleryItemType, TattooStyleType} from "../../types/Types"
 import { ModalPopUp } from '../common/ModalPopUp'
-import { AdminGalleryUploadFormFormik } from '../Forms/AdminGalleryUploadFormFormik'
+import { AdminGalleryUploadFormFormik } from "../Forms/AdminGalleryUploadFormFormik"
 import {API_URL} from "../../http"
-import { Tooltip } from 'react-tooltip'
+import { Tooltip } from "react-tooltip"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
-import {Paginator} from '../common/Paginator'
-import {SuccessPopUp} from "../common/SuccessPopUp";
-import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer";
-import {useDispatch} from "react-redux";
-import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm";
+import Sprite from "../../assets/svg/sprite.svg"
+import {Paginator} from "../common/Paginator"
+import {SuccessPopUp} from "../common/SuccessPopUp"
+import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer"
+import {useDispatch} from "react-redux"
+import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm"
+import {NothingToShow} from "../common/NothingToShow";
 
 type PropsType = {
   isSuccess: boolean
@@ -144,81 +145,83 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   })
 
   return (
-    <>
-      { isFetching ? <Preloader/> :  (
-        <section className="gallery page-block">
-          <div className={"gallery__header"}>
-            <Paginator
-              totalCount={totalCount}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChanged={setCurrentPage}
-              setPageLimit={setPageSize}
-            />
-            { isAuth &&
-                <button
-                    className={"btn btn--light-bg btn--sm add-btn"}
-                    onClick={openEditGalleryForm}
-                >
-                    Add Tattoos
-                </button>
-            }
-            { editGalleryMode &&
-                <ModalPopUp
-                    closeModal={closeEditGalleryForm}
-                    modalTitle={modalTitle}
-                >
-                    <AdminGalleryUploadFormFormik
-                        activeStyle={activeStyle._id}
-                        updateGallery={updateGallery}
-                        closeModal={closeEditGalleryForm}
-                    />
-                </ModalPopUp>
-            }
-          </div>
-          <ul className="gallery__list list">
-            { GalleryItemsArray }
-          </ul>
-          {
-            bigImg &&
-            <div className="gallery__large-wrap modal-wrap">
-              <div className="gallery__large">
-                  <button
-                      className="close-btn gallery__item-close-btn"
-                      onClick={() => { closeBigImg() }}>
-                    {''}
-                  </button>
-                  <img
-                      src={`${API_URL}/gallery/${bigImg}`} alt={activeStyle.value}
-                      contextMenu='alert("Вы не можете сохранить это изображение.");return false;'
-                  />
-              </div>
-            </div>
+      <section className="gallery page-block">
+        <div className={"gallery__header"}>
+          <Paginator
+            totalCount={totalCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChanged={setCurrentPage}
+            setPageLimit={setPageSize}
+          />
+          { isAuth &&
+              <button
+                  className={"btn btn--light-bg btn--sm add-btn"}
+                  onClick={openEditGalleryForm}
+              >
+                  Add Tattoos
+              </button>
           }
-        </section>
-      )}
-
-      {
-          editGalleryItem &&
-          <ModalPopUp
-              closeModal={closeGalleryItemEditModal}
-              modalTitle={'Update tattoo styles for this image'}
-          >
-            <UpdateGalleryItemForm
-                folder={'gallery'}
-                galleryItem={editGalleryItem}
-                styles={tattooStyles}
-                updateGalleryItem={updateGalleryItem}
+        </div>
+        {
+          isFetching
+            ? <Preloader />
+            : totalCount && totalCount > 0
+              ? (
+                    <ul className="gallery__list list">
+                      { GalleryItemsArray }
+                    </ul>
+                )
+              : <NothingToShow/>
+        }
+        {
+          bigImg &&
+          <div className="gallery__large-wrap modal-wrap">
+            <div className="gallery__large">
+                <button
+                    className="close-btn gallery__item-close-btn"
+                    onClick={() => { closeBigImg() }}>
+                  {''}
+                </button>
+                <img
+                    src={`${API_URL}/gallery/${bigImg}`} alt={activeStyle.value}
+                    contextMenu='alert("Вы не можете сохранить это изображение.");return false;'
+                />
+            </div>
+          </div>
+        }
+        {
+            editGalleryItem &&
+            <ModalPopUp
                 closeModal={closeGalleryItemEditModal}
-            />
-          </ModalPopUp>
-      }
-
-      {
-          isSuccess &&
-          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
-      }
-      <Tooltip id="my-tooltip" />
-    </>
+                modalTitle={'Update tattoo styles for this image'}
+            >
+              <UpdateGalleryItemForm
+                  folder={'gallery'}
+                  galleryItem={editGalleryItem}
+                  styles={tattooStyles}
+                  updateGalleryItem={updateGalleryItem}
+                  closeModal={closeGalleryItemEditModal}
+              />
+            </ModalPopUp>
+        }
+        { editGalleryMode &&
+            <ModalPopUp
+                closeModal={closeEditGalleryForm}
+                modalTitle={modalTitle}
+            >
+              <AdminGalleryUploadFormFormik
+                  activeStyle={activeStyle._id}
+                  updateGallery={updateGallery}
+                  closeModal={closeEditGalleryForm}
+              />
+            </ModalPopUp>
+        }
+        {
+            isSuccess &&
+            <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+        }
+        <Tooltip id="my-tooltip" />
+      </section>
   )
 })

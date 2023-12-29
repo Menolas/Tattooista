@@ -4,7 +4,6 @@ import { ResultCodesEnum } from "../../utils/constants"
 import { AppStateType } from "../redux-store"
 import { ThunkAction } from "redux-thunk"
 import {usersAPI} from "./usersApi"
-import {ClientsFilterType} from "../Clients/clients-reducer";
 
 const SET_USERS = 'SET_USERS'
 const SET_USERS_TOTAL_COUNT = 'SET_USERS_TOTAL_COUNT'

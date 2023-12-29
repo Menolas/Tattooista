@@ -1,8 +1,8 @@
-import { generalSourcesApi } from './generalSourcesApi'
-import {BookConsultationFormValues, FaqType, PageType, ServiceType} from '../../types/Types'
-import {ThunkAction} from 'redux-thunk'
-import {AppStateType} from '../redux-store'
-import {ResultCodesEnum} from '../../utils/constants'
+import { generalSourcesApi } from "./generalSourcesApi"
+import {BookConsultationFormValues, FaqType, PageType, ServiceType} from "../../types/Types"
+import {ThunkAction} from "redux-thunk"
+import {AppStateType} from "../redux-store"
+import {ResultCodesEnum} from "../../utils/constants"
 
 const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS'
 const SET_SERVICES = 'SET_SERVICES'
@@ -247,7 +247,9 @@ export const getFaqItems = (): ThunkType => async (
   try {
     dispatch(setIsGeneralFetchingAC(true))
     let response = await generalSourcesApi.getFaqItems()
-    dispatch(setFaqItems(response))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setFaqItems(response.faqItems))
+    }
   } catch (e) {
     console.log(e)
   } finally {
@@ -296,9 +298,11 @@ export const getServices = (): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsGeneralFetchingAC(true))
     let response = await generalSourcesApi.getServices()
-    dispatch(setServices(response));
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setServices(response.services))
+    }
   } catch (e) {
-    console.log(e);
+    console.log(e)
   } finally {
     dispatch(setIsGeneralFetchingAC(false))
   }
@@ -308,9 +312,11 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsGeneralFetchingAC(true))
     const response = await generalSourcesApi.getAboutPage()
-    dispatch(setAboutPageAC(response.page))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setAboutPageAC(response.page))
+    }
   } catch (e) {
-    console.log(e);
+    console.log(e)
   } finally {
     dispatch(setIsGeneralFetchingAC(false))
   }
@@ -325,7 +331,7 @@ export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch)
     }
   } catch (e: any) {
     dispatch(setUpdatePageApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e);
+    console.log(e)
   }
 }
 

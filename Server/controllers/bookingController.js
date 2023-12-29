@@ -29,7 +29,6 @@ class bookingController {
       results.resultCode = 0
       results.totalCount = bookings.length
       results.bookings = bookings.slice(startIndex, endIndex)
-      results.page = page
       res.json(results)
     } catch (e) {
       results.resultCode = 1
@@ -135,7 +134,6 @@ class bookingController {
     try {
       await client.save()
       await res.booking.remove()
-      results.client = client
       results.resultCode = 0
       res.status(201).json(results)
     } catch (e) {

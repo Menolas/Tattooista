@@ -149,7 +149,6 @@ export const clientsReducer = (
         }
       }
 
-
     case EDIT_CLIENT:
       return {
         ...state,
@@ -611,13 +610,13 @@ export const getClientProfile = (
   dispatch(setIsFetchingAC(true));
   try {
     let response = await clientsAPI.getClientProfile(clientId)
-    if (response) {
-      dispatch(setClientProfile(response))
-      dispatch(setIsFetchingAC(false))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setClientProfile(response.client))
     }
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 

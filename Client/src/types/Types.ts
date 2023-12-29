@@ -38,7 +38,7 @@ export type BookedConsultationType = {
     _id: string
     fullName: string
     message?: string
-    status: boolean
+    status?: boolean
     createdAt?: string
     contacts: {},
 }
