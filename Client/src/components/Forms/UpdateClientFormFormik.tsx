@@ -10,16 +10,6 @@ import {FieldComponent} from "./FieldComponent"
 import * as Yup from "yup"
 import {FieldWrapper} from "./FieldWrapper"
 
-interface UpdateClientFormType {
-  avatar: FileList
-  clientName: string
-  email: string
-  phone: string
-  insta: string
-  messenger: string
-  whatsapp: string
-}
-
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
       .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
@@ -49,7 +39,7 @@ const validationSchema = Yup.object().shape({
   messenger: Yup.string()
       .min(3, 'Messenger name is too short - should be 3 chars minimum.'),
   whatsapp: Yup.string()
-      .min(7, 'Whatsapp number is too short - should be 7 chars minimum.')
+      .min(8, 'Whatsapp number is too short - should be 8 chars minimum.')
       .matches(phoneRegex, 'That does not look like whatsapp number'),
 })
 
@@ -115,7 +105,6 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form className="form" encType={"multipart/form-data"}>
-            {/*<pre>{JSON.stringify(propsF, undefined, 2)}</pre>*/}
             <div className="form__input-wrap form__input-wrap--uploadFile">
               <div className="form__avatar">
                 <img

@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { useState } from 'react'
-import { Field, Form, Formik} from 'formik'
-import * as Yup from "yup";
+import * as React from "react"
+import { useState } from "react"
+import { Field, Form, Formik} from "formik"
+import * as Yup from "yup"
 // @ts-ignore
-import tattooMachine from '../../assets/img/tattoo-machine.webp'
-import {FieldWrapper} from "./FieldWrapper";
+import tattooMachine from "../../assets/img/tattoo-machine.webp"
+import {FieldWrapper} from "./FieldWrapper"
 
 type PropsType = {
   activeStyle: string

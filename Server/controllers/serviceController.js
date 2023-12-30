@@ -1,22 +1,21 @@
-const Service = require('../models/Service');
-const fs = require("fs");
-const generateFileRandomName = require("../utils/functions");
-//const Page = require("../models/Page");
-//const Category = require("../models/Category");
+const Service = require("../models/Service")
+const fs = require("fs")
+const generateFileRandomName = require("../utils/functions")
 
 class serviceController {
 
   async getServices(req, res) {
+    const results = {}
     try {
-      const services = await Service.find();
-      res.json(services);
+      results.resultCode = 0
+      results.services = await Service.find()
+      res.json(results)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
   async updateService(req, res) {
-    console.log(res.service)
     res.service.title = req.body.title
 
     const conditions = []
@@ -40,7 +39,6 @@ class serviceController {
     }
 
     res.service.conditions = [...conditions]
-
 
     const results = {}
 
@@ -143,4 +141,4 @@ class serviceController {
   }
 }
 
-module.exports = new serviceController();
+module.exports = new serviceController()

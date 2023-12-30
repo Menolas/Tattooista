@@ -1,8 +1,8 @@
-import * as React from 'react'
-import {RegistrationForm} from '../../components/Forms/RegistrationFormFormik'
-import {RegistrationFormValues} from "../../types/Types";
-import {IUser} from "../../types/IUser";
-import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+import * as React from "react"
+import {RegistrationForm} from "../../components/Forms/RegistrationFormFormik"
+import {RegistrationFormValues} from "../../types/Types"
+import {IUser} from "../../types/Types"
+import {SuccessPopUp} from "../../components/common/SuccessPopUp"
 
 type PropsType = {
     isSuccess: boolean

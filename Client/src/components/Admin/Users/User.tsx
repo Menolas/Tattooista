@@ -24,7 +24,7 @@ export const User: React.FC<PropsType> = ({
     const userAvatar = user.avatar ? `${API_URL}/users/${user._id}/avatar/${user.avatar}` : avatar
 
     return (
-        <li className="admin__card admin__card--user">
+        <li key={user._id} className="admin__card admin__card--user">
             <div className="client-profile__header">
                 <NavLink
                     to={`/admin/profile?clientId=${user._id}`}
@@ -44,20 +44,20 @@ export const User: React.FC<PropsType> = ({
                         <div className="admin__card-roles">
                             <span>roles:&nbsp;</span>
                             { user.roles.map(role => {
-                                return <span>{role}</span>
+                                return <span key={role}>{role}</span>
                             })}
                         </div>
                     </div>
                 </NavLink>
                 <div className="client-profile__action-btns admin__card-action-btns">
-                    <button
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Edit client"
-                        className={"btn btn--icon"}
-                        //onClick={() => {setEditClientMode(true)}}
-                    >
-                        <svg><use href={`${Sprite}#edit`}/></svg>
-                    </button>
+                    {/*<button*/}
+                    {/*    data-tooltip-id="my-tooltip"*/}
+                    {/*    data-tooltip-content="Edit client"*/}
+                    {/*    className={"btn btn--icon"}*/}
+                    {/*    //onClick={() => {setEditClientMode(true)}}*/}
+                    {/*>*/}
+                    {/*    <svg><use href={`${Sprite}#edit`}/></svg>*/}
+                    {/*</button>*/}
                     <button
                         data-tooltip-id="my-tooltip"
                         data-tooltip-content="Delete client"

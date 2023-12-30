@@ -1,5 +1,5 @@
-import * as React from 'react'
-import Confetti from 'react-confetti'
+import * as React from "react"
+import Confetti from "react-confetti"
 
 export const ConfettiContainer = () => {
     return (

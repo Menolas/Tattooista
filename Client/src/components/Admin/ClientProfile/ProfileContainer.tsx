@@ -1,20 +1,21 @@
-import * as React from 'react'
-import {useEffect} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import * as React from "react"
+import {useEffect} from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import {
   getClientProfile,
   updateClientGallery,
   editClient,
   deleteClient,
-  deleteClientGalleryPicture
-} from '../../../redux/Clients/clients-reducer'
-import { Profile } from './Profile'
+  deleteClientGalleryPicture, deleteClientFromProfile
+} from "../../../redux/Clients/clients-reducer"
+import { Profile } from "./Profile"
 import {
-  getClientProfileSelector, getIsClientDeletingInProcessSelector,
+  getClientProfileSelector,
+  getIsClientDeletingInProcessSelector,
   getIsDeletingPicturesInProcess,
   getIsSuccessSelector
-} from '../../../redux/Clients/clients-selectors'
+} from "../../../redux/Clients/clients-selectors"
 import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer"
 
 export const ProfileContainer: React.FC = () => {
@@ -41,7 +42,7 @@ export const ProfileContainer: React.FC = () => {
   }, [profile])
 
   const deleteClientCallBack = (clientId: string) => {
-    dispatch(deleteClient(clientId))
+    dispatch(deleteClientFromProfile(clientId))
   }
 
   const editClientCallBack = (clientId: string, values: FormData) => {

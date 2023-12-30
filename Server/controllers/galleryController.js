@@ -18,14 +18,14 @@ class galleryController {
       const styles = await TattooStyle.find({_id: req.query.style})
       if (styles.length > 0) {
         const style = styles[0]; // Access the first element
-        console.log(style.nonStyle + '!!!!!!! nonstyle !!!!!!!!!!!!!!!!!!');
+        //console.log(style.nonStyle + '!!!!!!! nonstyle !!!!!!!!!!!!!!!!!!');
         if (style.nonStyle) {
           gallery = await GalleryItem.find( {$or: [{ tattooStyles: { $exists: true, $size: 0 } }, { tattooStyles:req.query.style }]}).sort({ createdAt: -1 });
         } else {
           gallery = await GalleryItem.find({ tattooStyles: req.query.style }).sort({ createdAt: -1 });
         }
       } else {
-        console.log('Style not found');
+        //console.log('Style not found');
       }
       results.resultCode = 0
       results.totalCount = gallery.length
@@ -40,19 +40,17 @@ class galleryController {
   }
 
   async updateGalleryItem(req, res) {
+    const results = {}
     const styles = req.body.values
-
     res.galleryItem.tattooStyles = []
     for (let key in styles) {
       if (styles[key]) {
         res.galleryItem.tattooStyles.push(key)
       }
     }
-    await res.galleryItem.save()
-    const results = {}
 
     try {
-      results.gallery = await GalleryItem.find({tattooStyles: req.body.activeStyle}).sort({createdAt: -1})
+      results.galleryItem = await res.galleryItem.save()
       results.resultCode = 0
       res.json(results)
     } catch (e) {
@@ -63,19 +61,18 @@ class galleryController {
   }
 
   async updateArchivedGalleryItem(req, res) {
+    const results = {}
     const styles = req.body
-    console.log(req.body + '!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.log(req.body + 'req body !!!!!!!!!!!!!!!!!!!!!!!!')
     res.archivedGalleryItem.tattooStyles = []
     for (let key in styles) {
       if (styles[key]) {
         res.archivedGalleryItem.tattooStyles.push(key)
       }
     }
-    await res.archivedGalleryItem.save()
-    const results = {}
 
     try {
-      results.archivedGallery = await ArchivedGalleryItem.find().sort({createdAt: -1})
+      results.archivedGalleryItem = await res.archivedGalleryItem.save()
       results.resultCode = 0
       res.json(results)
     } catch (e) {
@@ -182,7 +179,6 @@ class galleryController {
       await archivedGalleryItem.save()
       await res.galleryItem.remove()
       results.resultCode = 0
-      results.gallery = await ArchivedGalleryItem.find()
       res.status(201).json(results)
     } catch (e) {
       results.resultCode = 1

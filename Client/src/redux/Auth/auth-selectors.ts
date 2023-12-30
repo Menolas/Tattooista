@@ -1,4 +1,4 @@
-import { AppStateType } from '../redux-store'
+import { AppStateType } from "../redux-store"
 
 export const getAuthSelector = (state: AppStateType) => {
   return state.auth.isAuth
@@ -23,17 +23,3 @@ export const getRegistrationErrorSelector = (state: AppStateType) => {
 export const getLoginErrorSelector = (state: AppStateType) => {
   return state.auth.loginError
 }
-
-//username: null,
-//password: null,
-
-
-
-
-
-
-
-
-
-
-

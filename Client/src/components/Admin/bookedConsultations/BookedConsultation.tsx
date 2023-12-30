@@ -1,11 +1,11 @@
-import * as React from 'react'
-import {ContactType, BookedConsultationType} from '../../../types/Types'
+import * as React from "react"
+import {ContactType, BookedConsultationType} from "../../../types/Types"
 // @ts-ignore
-import Sprite from '../../../assets/svg/sprite.svg'
-import {Tooltip} from "react-tooltip";
-import {useState} from "react";
-import {ModalPopUp} from "../../common/ModalPopUp";
-import {Confirmation} from "../../common/Confirmation";
+import Sprite from "../../../assets/svg/sprite.svg"
+import {Tooltip} from "react-tooltip"
+import {useState} from "react"
+import {ModalPopUp} from "../../common/ModalPopUp"
+import {Confirmation} from "../../common/Confirmation"
 
 type PropsType = {
   consultation: BookedConsultationType

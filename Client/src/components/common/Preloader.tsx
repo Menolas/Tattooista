@@ -1,5 +1,6 @@
-import * as React from 'react'
-import PreloaderImg from '../../assets/img/PreloaderImg.svg'
+import * as React from "react"
+// @ts-ignore
+import PreloaderImg from "../../assets/img/PreloaderImg.svg"
 
 export const Preloader = () => {
   return (

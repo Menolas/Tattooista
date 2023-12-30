@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { NavLink } from 'react-router-dom'
-import { SocialNav } from '../SocialNav'
-import { MainNav } from '../MainNav'
-import { Logo } from '../Logo'
+import * as React from "react"
+import { NavLink } from "react-router-dom"
+import { SocialNav } from "../SocialNav"
+import { MainNav } from "../MainNav"
+import { Logo } from "../Logo"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
-import {Tooltip} from "react-tooltip";
+import Sprite from "../../assets/svg/sprite.svg"
+import {Tooltip} from "react-tooltip"
 
 type PropsType = {
     isAuth: boolean

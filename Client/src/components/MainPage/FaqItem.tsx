@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { useState } from 'react'
-import {FaqType} from '../../types/Types'
+import * as React from "react"
+import { useState } from "react"
+import {FaqType} from "../../types/Types"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
-import {ModalPopUp} from '../common/ModalPopUp'
-import {UpdateFaqItemFormFormik} from '../Forms/UpdateFaqItemFormFormik'
-import {Tooltip} from "react-tooltip";
+import Sprite from "../../assets/svg/sprite.svg"
+import {ModalPopUp} from "../common/ModalPopUp"
+import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik"
+import {Tooltip} from "react-tooltip"
 
 type PropsType = {
   isAuth: boolean

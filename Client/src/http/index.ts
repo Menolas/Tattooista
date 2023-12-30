@@ -1,6 +1,13 @@
 import axios from "axios"
-import {AuthResponse} from "../types/response/AuthResponse"
+import {IUser} from "../types/Types"
+
 export const API_URL = `http://localhost:3030`
+
+export interface AuthResponse {
+    accessToken: string
+    refreshToken: string
+    user: IUser
+}
 
 const $api = axios.create({
     withCredentials: true,

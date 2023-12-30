@@ -1,11 +1,12 @@
-import * as React from 'react'
-import {useEffect} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { MainPage } from './MainPage'
-import { BookConsultationFormValues, FaqType, TattooStyleType} from '../../types/Types'
+import * as React from "react"
+import {useEffect} from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { MainPage } from "./MainPage"
+import { BookConsultationFormValues, FaqType, TattooStyleType} from "../../types/Types"
 import {
   getBookingConsultationApiErrorSelector,
-  getFaqItemsSelector, getIsGeneralFetchingSelector,
+  getFaqItemsSelector,
+  getIsGeneralFetchingSelector,
   getIsSuccessBookingSelector,
   getPageAboutSelector,
   getServicesSelector,
@@ -32,12 +33,11 @@ import {
   setUpdateFaqItemApiErrorAC,
   setUpdateServiceApiErrorAC,
   setUpdatePageApiErrorAC
-} from '../../redux/General/general-reducer'
-import { getTattooStyles, setActiveStyleAC } from '../../redux/Portfolio/portfolio-reducer'
-import {getGalleryPageSize, getTattooStylesSelector} from '../../redux/Portfolio/portfolio-selectors'
-import {getAuthSelector} from "../../redux/Auth/auth-selectors";
-import {getIsSuccessSelector} from '../../redux/General/general-selectors'
-import {Preloader} from "../../components/common/Preloader";
+} from "../../redux/General/general-reducer"
+import { getTattooStyles, setActiveStyleAC } from "../../redux/Portfolio/portfolio-reducer"
+import {getGalleryPageSize, getTattooStylesSelector} from "../../redux/Portfolio/portfolio-selectors"
+import {getAuthSelector} from "../../redux/Auth/auth-selectors"
+import {getIsSuccessSelector} from "../../redux/General/general-selectors"
 
 export const MainPageContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector)
@@ -62,9 +62,6 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(getFaqItems())
     dispatch(getAboutPage())
   }, [])
-
-  // const pageAbout = pages?.find(page => page.name === 'about')
-  // console.log(pageAbout)
 
   const setActiveStyleCallBack = (style: TattooStyleType) => {
     dispatch(setActiveStyleAC(style))

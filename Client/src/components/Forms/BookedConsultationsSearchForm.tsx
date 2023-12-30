@@ -9,10 +9,6 @@ type FormType = {
   status: string
 }
 
-const bookedConsultationsSearchFormValidate = (values: FormType) => {
-  return {}
-}
-
 type PropsType = {
   filter: BookedConsultationsFilterType
   onFilterChanged: (filter: BookedConsultationsFilterType) => void
@@ -38,7 +34,6 @@ export const BookedConsultationsSearchForm: React.FC<PropsType> = React.memo(({
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      validate={bookedConsultationsSearchFormValidate}
       onSubmit={submit}
     >
       {

@@ -1,6 +1,6 @@
-const Page = require('../models/Page')
-const fs = require("fs");
-const generateFileRandomName = require("../utils/functions");
+const Page = require("../models/Page")
+const fs = require("fs")
+const generateFileRandomName = require("../utils/functions")
 
 class PagesController {
 
@@ -18,6 +18,8 @@ class PagesController {
   }
 
   async updateAboutPage(req, res) {
+    const results = {}
+
     try {
       const page = await Page.findOne({name: 'about'})
       page.title = req.body.title
@@ -35,11 +37,14 @@ class PagesController {
         page.wallPaper = newFileName
       }
 
-      const updatePage = await page.save()
-      res.status(201).json({resultCode: 0, page: updatePage})
+      results.resultCode = 0
+      results.page = await page.save()
+      res.status(201).json(results)
     } catch (e) {
       console.log(e)
-      res.status(400).json({resultCode: 1, message: e.message})
+      results.resultCode = 1
+      results.message = e.message
+      res.status(400).json(results)
     }
   }
 

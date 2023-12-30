@@ -1,4 +1,4 @@
-import {AppStateType} from '../redux-store'
+import { AppStateType } from "../redux-store"
 
 export const getFaqItemsSelector = (state: AppStateType) => {
   return state.general.faq

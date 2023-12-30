@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import { HashLink } from 'react-router-hash-link'
+import * as React from "react"
+import { useState } from "react"
+import { NavLink } from "react-router-dom"
+import { HashLink } from "react-router-hash-link"
 
 export const MainNav: React.FC = React.memo(() => {
   let [mainNavMenuModal, setMainMenu] = useState(false)

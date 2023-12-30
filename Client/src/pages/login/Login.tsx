@@ -1,6 +1,6 @@
-import * as React from 'react'
-import {LoginForm} from '../../components/Forms/LoginFormFormik'
-import {LoginFormValues} from "../../types/Types";
+import * as React from "react"
+import {LoginForm} from "../../components/Forms/LoginFormFormik"
+import {LoginFormValues} from "../../types/Types"
 
 type PropsType = {
   isAuth: boolean

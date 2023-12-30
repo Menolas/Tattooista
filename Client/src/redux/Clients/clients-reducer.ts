@@ -149,7 +149,6 @@ export const clientsReducer = (
         }
       }
 
-
     case EDIT_CLIENT:
       return {
         ...state,
@@ -543,6 +542,24 @@ export const deleteClient = (
   }
 }
 
+export const deleteClientFromProfile = (
+    id: string,
+): ThunkType => async (
+    dispatch
+) => {
+  try {
+    dispatch(toggleIsDeletingInProcessAC(true, id))
+    let response = await clientsAPI.deleteClient(id)
+    if (response.resultCode === ResultCodesEnum.Success) {
+      await dispatch(deleteClientAC(id))
+    }
+  } catch (e) {
+    console.log(e)
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id))
+  }
+}
+
 export const deleteArchivedClient = (
     id: string,
     archivedClients: Array<ClientType>,
@@ -611,13 +628,13 @@ export const getClientProfile = (
   dispatch(setIsFetchingAC(true));
   try {
     let response = await clientsAPI.getClientProfile(clientId)
-    if (response) {
-      dispatch(setClientProfile(response))
-      dispatch(setIsFetchingAC(false))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setClientProfile(response.client))
     }
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 

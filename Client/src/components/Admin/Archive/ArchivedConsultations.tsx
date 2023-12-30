@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { useEffect } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {Paginator} from '../../common/Paginator'
-import {NothingToShow} from '../../common/NothingToShow'
-import {Preloader} from '../../common/Preloader'
-import {useNavigate} from 'react-router-dom'
+import * as React from "react"
+import { useEffect } from "react"
+import {useDispatch, useSelector} from "react-redux"
+import {Paginator} from "../../common/Paginator"
+import {NothingToShow} from "../../common/NothingToShow"
+import {Preloader} from "../../common/Preloader"
+import {useNavigate} from "react-router-dom"
 import {
     BookedConsultationsFilterType,
     deleteArchivedConsultation,
@@ -13,18 +13,20 @@ import {
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
     setCurrentPageForArchivedConsultationsAC
-} from '../../../redux/bookedConsultations/bookedConsultations-reducer'
+} from "../../../redux/bookedConsultations/bookedConsultations-reducer"
 import {
     getArchivedConsultationsFilterSelector,
     getArchivedConsultationsPageSizeSelector,
     getArchivedConsultationsSelector,
     getCurrentArchivedConsultationsPageSelector,
     getBookedConsultationsIsFetchingSelector,
-    getTotalArchivedConsultationsCountSelector, getIsDeletingInProcessSelector, getAddBookingApiErrorSelector,
-} from '../../../redux/bookedConsultations/bookedConsultations-selectors'
-import {ArchivedConsultation} from './ArchivedConsultation'
-import {BookedConsultationsSearchForm} from '../../Forms/BookedConsultationsSearchForm'
-import {ApiErrorMessage} from "../../common/ApiErrorMessage";
+    getTotalArchivedConsultationsCountSelector,
+    getIsDeletingInProcessSelector,
+    getAddBookingApiErrorSelector,
+} from "../../../redux/bookedConsultations/bookedConsultations-selectors"
+import {ArchivedConsultation} from "./ArchivedConsultation"
+import {BookedConsultationsSearchForm} from "../../Forms/BookedConsultationsSearchForm"
+import {ApiErrorMessage} from "../../common/ApiErrorMessage"
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)

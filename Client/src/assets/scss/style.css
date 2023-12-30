@@ -1482,7 +1482,6 @@ img {
   flex-wrap: wrap;
   column-gap: 1%;
   row-gap: 10px;
-  justify-content: space-between;
 }
 
 .gallery__item {

@@ -1,5 +1,5 @@
 import axios, { CreateAxiosDefaults } from "axios"
-import { BookedConsultationType, ContactsType, ClientType } from "../../types/Types"
+import { BookedConsultationType, ContactsType } from "../../types/Types"
 import {API_URL} from "../../http"
 import { BookedConsultationsFilterType } from "./bookedConsultations-reducer"
 
@@ -7,35 +7,32 @@ const instance = axios.create({
   baseURL: API_URL
 } as CreateAxiosDefaults)
 
-type GetBookedConsultationsResponseType = {
+type CommonResponseFields = {
   resultCode: number
+  message?: string
+}
+
+type DeleteConsultationResponseType = CommonResponseFields
+
+type TurnConsultationToClientResponseType = CommonResponseFields
+
+type ArchiveConsultationResponseType = CommonResponseFields
+
+type ReactivateConsultationResponseType = CommonResponseFields
+
+type GetBookedConsultationsResponseType = CommonResponseFields & {
   bookings: Array<BookedConsultationType>
   totalCount: number
-  page: number
-  message?: string
 }
 
-type TurnConsultationToClientResponseType = {
-  resultCode: number
-  client: ClientType
-  message?: string
-}
+type GetArchivedConsultationsResponseType = GetBookedConsultationsResponseType
 
-type ChangeConsultationStatusResponseType = {
-  resultCode: number
+type ChangeConsultationStatusResponseType = CommonResponseFields & {
   status: boolean
-  message?: string
 }
 
-type AddConsultationResponseType = {
-  resultCode: number
+type AddConsultationResponseType = CommonResponseFields & {
   booking: BookedConsultationType
-  message?: string
-}
-
-type DeleteConsultationResponseType = {
-  resultCode: number
-  message?: string
 }
 
 export const bookedConsultationsAPI = {
@@ -46,9 +43,7 @@ export const bookedConsultationsAPI = {
     filter: BookedConsultationsFilterType
   ) {
     return instance.get<GetBookedConsultationsResponseType>(`bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.status}`)
-      .then(response => {
-        return response.data
-      })
+      .then(response => response.data)
   },
 
   getArchivedConsultations(
@@ -56,38 +51,28 @@ export const bookedConsultationsAPI = {
       pageSize: number,
       filter: BookedConsultationsFilterType
   ) {
-    return instance.get(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.status}`)
-        .then(response => {
-          return response.data
-        })
+    return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.status}`)
+        .then(response => response.data)
   },
 
   changeConsultationStatus(id: string, status: boolean) {
     return instance.patch<ChangeConsultationStatusResponseType>(`bookings/status/${id}`, {status: status})
-      .then(response => {
-        return response.data
-      })
+      .then(response => response.data)
   },
 
   deleteConsultation(id: string) {
     return instance.delete<DeleteConsultationResponseType>(`bookings/${id}`)
-      .then(response => {
-        return response.data
-      })
+      .then(response => response.data)
   },
 
   deleteArchivedConsultation(id: string) {
     return instance.delete<DeleteConsultationResponseType>(`bookings/archive/${id}`)
-        .then(response => {
-          return response.data
-        })
+        .then(response => response.data)
   },
 
   addConsultation(values: any) {
     return instance.post<AddConsultationResponseType>('bookings', values)
-      .then(response => {
-        return response.data
-      })
+      .then(response => response.data)
   },
 
   turnConsultationToClient(
@@ -98,27 +83,20 @@ export const bookedConsultationsAPI = {
     return instance.post<TurnConsultationToClientResponseType>(`bookings/bookingToClient/${id}`, {
       fullName,
       contacts
-    }).then(response => {
-      //console.log(response)
-        return response.data
-    })
+    }).then(response => response.data)
   },
 
   archiveConsultation(
       id: string
   ) {
-    return instance.post(`bookings/archive/${id}`)
-        .then(response => {
-          return response.data
-        })
+    return instance.post<ArchiveConsultationResponseType>(`bookings/archive/${id}`)
+        .then(response => response.data)
   },
 
   reactivateConsultation(
       id: string
   ) {
-    return instance.get(`bookings/archive/${id}`)
-        .then(response => {
-          return response.data
-        })
+    return instance.get<ReactivateConsultationResponseType>(`bookings/archive/${id}`)
+        .then(response => response.data)
   }
 }

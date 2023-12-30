@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { SocialNav } from '../SocialNav'
+import * as React from "react"
+import { SocialNav } from "../SocialNav"
 
 export const Footer = React.memo(() => {
   return (

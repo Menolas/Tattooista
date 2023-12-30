@@ -1,10 +1,10 @@
-import * as React from 'react'
-import {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {logout} from '../../redux/Auth/auth-reducer'
-import { Header } from './Header'
-import {getAuthSelector} from '../../redux/Auth/auth-selectors'
-import {useLocation} from 'react-router-dom'
+import * as React from "react"
+import {useEffect, useState} from "react"
+import {useDispatch, useSelector} from "react-redux"
+import {logout} from "../../redux/Auth/auth-reducer"
+import { Header } from "./Header"
+import {getAuthSelector} from "../../redux/Auth/auth-selectors"
+import {useLocation} from "react-router-dom"
 
 export const HeaderContainer: React.FC = () => {
 

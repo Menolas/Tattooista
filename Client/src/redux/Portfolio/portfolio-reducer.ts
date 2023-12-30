@@ -16,6 +16,8 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS'
 const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE'
 const SET_GALLERY = 'SET_GALLERY'
+const UPDATE_GALLERY_ITEM = 'UPDATE_GALLERY_ITEM'
+const UPDATE_ARCHIVED_GALLERY_ITEM = 'UPDATE_ARCHIVED_GALLERY_ITEM'
 const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY'
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM'
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM'
@@ -148,6 +150,30 @@ export const portfolioReducer = (
         archivedGallery: state.archivedGallery.filter(item => item._id !== action.itemId)
       }
 
+    case UPDATE_GALLERY_ITEM:
+      return {
+        ...state,
+        gallery: state.gallery.map(item => {
+          if (item._id === action.galleryItem._id) {
+            item.tattooStyles = action.galleryItem.tattooStyles
+          }
+
+          return item
+        })
+      }
+
+    case UPDATE_ARCHIVED_GALLERY_ITEM:
+      return {
+        ...state,
+        archivedGallery: state.archivedGallery.map(item => {
+          if (item._id === action.archivedGalleryItem._id) {
+            item.tattooStyles = action.archivedGalleryItem.tattooStyles
+          }
+
+          return item
+        })
+      }
+
     case SET_IS_SUCCESS:
       return {
         ...state,
@@ -176,7 +202,7 @@ type ActionsTypes = SetUpdateGalleryApiErrorAT | SetUpdateTattooStyleApiErrorAT 
     SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT | SetCurrentGalleryPageAT |
     SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT | SetIsFetchingAT |
     SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT | DeleteGalleryItemAT |
-    DeleteArchivedGalleryItemAT
+    DeleteArchivedGalleryItemAT | UpdateGalleryItemAT | UpdateArchivedGalleryItemAT
 
 // actions creators
 
@@ -334,6 +360,24 @@ type DeleteArchivedGalleryItemAT = {
 
 const deleteArchivedGalleryItemAC = (itemId: string): DeleteArchivedGalleryItemAT => ({
   type: DELETE_ARCHIVED_GALLERY_ITEM, itemId
+})
+
+type UpdateGalleryItemAT = {
+  type: typeof UPDATE_GALLERY_ITEM
+  galleryItem: GalleryItemType
+}
+
+const updateGalleryItemAC = (galleryItem: GalleryItemType): UpdateGalleryItemAT => ({
+  type: UPDATE_GALLERY_ITEM, galleryItem
+})
+
+type UpdateArchivedGalleryItemAT = {
+  type: typeof UPDATE_ARCHIVED_GALLERY_ITEM
+  archivedGalleryItem: GalleryItemType
+}
+
+const updateArchivedGalleryItemAC = (archivedGalleryItem: GalleryItemType): UpdateArchivedGalleryItemAT => ({
+  type: UPDATE_ARCHIVED_GALLERY_ITEM, archivedGalleryItem
 })
 
 
@@ -583,12 +627,12 @@ export const reactivateArchivedGalleryItem = (
   }
 }
 
-export const updateGalleryItem = (id: string, values: object, activeStyle: string): ThunkType => async (dispatch) => {
+export const updateGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
   try {
-    let response = await portfolioApi.updateGalleryItem(id, values, activeStyle)
+    let response = await portfolioApi.updateGalleryItem(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      console.log(response.gallery)
-      dispatch(setGalleryAC(response.gallery))
+      //console.log(response.gallery)
+      dispatch(updateGalleryItemAC(response.galleryItem))
     }
   } catch (e) {
     console.log(e)
@@ -599,7 +643,7 @@ export const updateArchivedGalleryItem = (id: string, values: object): ThunkType
   try {
     let response = await portfolioApi.updateArchiveGalleryItem(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setArchivedGalleryAC(response.archivedGallery))
+      dispatch(updateArchivedGalleryItemAC(response.archivedGalleryItem))
     }
   } catch (e) {
     console.log(e)

@@ -12,7 +12,7 @@ import {
 import {Paginator} from "../../common/Paginator"
 import {
     deleteArchivedGalleryItem,
-    getArchivedGallery,
+    getArchivedGallery, getTattooStyles,
     reactivateArchivedGalleryItem,
     setArchivedGalleryPageSizeAC,
     setCurrentArchivedGalleryPageAC,
@@ -38,6 +38,9 @@ export const ArchivedGallery = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if (tattooStyles.length === 0) {
+            dispatch(getTattooStyles())
+        }
         dispatch(getArchivedGallery(currentPage, pageSize))
     }, [currentPage, pageSize])
 

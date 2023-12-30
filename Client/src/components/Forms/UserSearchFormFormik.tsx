@@ -2,10 +2,6 @@ import * as React from "react"
 import {Field, Form, Formik} from "formik"
 import {UsersFilterType} from "../../redux/Users/users-reducer"
 
-const ClientsSearchFormValidate = (values: FormType) => {
-  return {}
-}
-
 type FormType = {
   term: string
   role: string
@@ -39,7 +35,6 @@ export const UserSearchFormFormik: React.FC<PropsType> = React.memo(({
   return (
     <Formik
       initialValues={initialValues}
-      //validate={ClientsSearchFormValidate}
       onSubmit={submit}
     >
       {
