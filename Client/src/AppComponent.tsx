@@ -38,7 +38,6 @@ const App = () => {
     const dispatch = useDispatch()
 
     useEffect( () => {
-        //console.log("useEffectCheckAuth!!!!!!!!")
         //console.log('URL changed:', location.pathname);
         dispatch(checkAuth())
 

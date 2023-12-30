@@ -406,4 +406,3 @@ export const bookConsultation = (
     console.log(e)
   }
 }
-

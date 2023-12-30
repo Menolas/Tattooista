@@ -1,7 +1,6 @@
-import * as React from 'react'
-import { useState } from 'react'
-import {BookingForm} from '../Forms/BookingFormFormik'
-import {BookConsultationFormValues} from '../../types/Types'
+import * as React from "react"
+import {BookingForm} from "../Forms/BookingFormFormik"
+import {BookConsultationFormValues} from "../../types/Types"
 
 type PropsType = {
   consentId: string

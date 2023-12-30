@@ -1,16 +1,16 @@
-import * as React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Registration } from '../registration/Registration'
-import { registration } from '../../redux/Auth/auth-reducer'
+import * as React from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Registration } from "./Registration"
+import { registration } from "../../redux/Auth/auth-reducer"
 
 import {
     getAuthSelector,
     getUserSelector,
     getIsSuccessSelector,
     getRegistrationErrorSelector
-} from "../../redux/Auth/auth-selectors";
-import {RegistrationFormValues} from "../../types/Types";
-import {setIsSuccessAC} from "../../redux/Auth/auth-reducer";
+} from "../../redux/Auth/auth-selectors"
+import {RegistrationFormValues} from "../../types/Types"
+import {setIsSuccessAC} from "../../redux/Auth/auth-reducer"
 
 export const RegistrationContainer: React.FC = () => {
 

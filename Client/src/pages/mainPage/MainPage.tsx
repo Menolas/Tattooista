@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { MainOffer } from '../../components/MainPage/MainOffer'
-import { PortfolioSlider } from '../../components/MainPage/PortfolioSlider'
-import { About } from '../../components/MainPage/About'
-import { Services } from '../../components/MainPage/Services'
-import { FaqItems } from '../../components/MainPage/FaqItems'
-import { Booking } from '../../components/MainPage/Booking'
+import * as React from "react"
+import { MainOffer } from "../../components/MainPage/MainOffer"
+import { PortfolioSlider } from "../../components/MainPage/PortfolioSlider"
+import { About } from "../../components/MainPage/About"
+import { Services } from "../../components/MainPage/Services"
+import { FaqItems } from "../../components/MainPage/FaqItems"
+import { Booking } from "../../components/MainPage/Booking"
 import {
     BookConsultationFormValues,
     FaqType,
@@ -17,7 +17,7 @@ import {useEffect} from "react";
 import {setIsSuccessAC} from "../../redux/Clients/clients-reducer"
 import {useDispatch} from "react-redux"
 import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
-import {Preloader} from "../../components/common/Preloader";
+import {Preloader} from "../../components/common/Preloader"
 
 type PropsType = {
   isAuth: boolean

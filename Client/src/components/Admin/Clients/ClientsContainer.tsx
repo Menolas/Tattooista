@@ -13,8 +13,10 @@ import {
   archiveClient,
   setClientsPageSize,
   setIsSuccessAC,
-  setClientsFilterAC, setAddClientApiErrorAC, setUpdateClientGalleryApiErrorAC
-} from '../../../redux/Clients/clients-reducer'
+  setClientsFilterAC,
+  setAddClientApiErrorAC,
+  setUpdateClientGalleryApiErrorAC
+} from "../../../redux/Clients/clients-reducer"
 import {
   getClientsIsFetching,
   getTotalClientsCount,
@@ -24,10 +26,10 @@ import {
   getIsSuccessSelector,
   getAddClientApiErrorSelector,
   getUpdateClientGalleryApiErrorSelector,
-  getClientsFilterSelector, getClientsPageSizeSelector
+  getClientsFilterSelector,
+  getClientsPageSizeSelector
 } from "../../../redux/Clients/clients-selectors"
 import { Clients } from "./Clients"
-//import {useNavigate} from "react-router-dom"
 
 export const ClientsContainer: React.FC = () => {
 
@@ -43,22 +45,10 @@ export const ClientsContainer: React.FC = () => {
   const updateClientGalleryApiError = useSelector(getUpdateClientGalleryApiErrorSelector)
 
   const dispatch = useDispatch()
-  //const navigate = useNavigate()
 
   useEffect(() => {
-    // const urlParams = new URLSearchParams(window.location.search)
-    // let actualPage = currentPage
-    // let actualFilter = filter
-    // if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
-    // if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
-    // if (!!urlParams.get('status')) actualFilter = { ...actualFilter, gallery: urlParams.get('gallery')}
-
     dispatch(getClients(currentPage, pageSize, filter))
   }, [currentPage, pageSize, filter])
-
-  // useEffect(() => {
-  //   navigate(`?term=${filter.term}&gallery=${filter.gallery}&page=${currentPage}`)
-  // }, [filter, currentPage])
 
   useEffect(() => {
     dispatch(setCurrentClientsPageAC(1))

@@ -1,9 +1,9 @@
-import * as React from 'react'
-import {useState} from 'react'
-import { FaqType } from '../../types/Types'
-import { FaqItem } from './FaqItem'
-import {ModalPopUp} from '../common/ModalPopUp'
-import {UpdateFaqItemFormFormik} from '../Forms/UpdateFaqItemFormFormik'
+import * as React from "react"
+import {useState} from "react"
+import { FaqType } from "../../types/Types"
+import { FaqItem } from "./FaqItem"
+import {ModalPopUp} from "../common/ModalPopUp"
+import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik"
 
 type PropsType = {
   isAuth: boolean

@@ -1,8 +1,7 @@
-import $api, {API_URL} from '../../http'
-import axios, {AxiosRequestConfig, CreateAxiosDefaults} from 'axios'
-import {LoginFormValues, RegistrationFormValues} from '../../types/Types'
-import {IUser} from "../../types/Types";
-//import {CreateAxiosDefaults} from 'axios/index'
+import $api, {API_URL} from "../../http"
+import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios"
+import {LoginFormValues, RegistrationFormValues} from "../../types/Types"
+import {IUser} from "../../types/Types"
 
 const instance = axios.create({
   baseURL: API_URL

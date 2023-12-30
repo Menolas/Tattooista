@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux'
+import * as React from "react"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import {
   getBookedConsultations,
   changeBookedConsultationStatus,
@@ -10,8 +10,11 @@ import {
   addBookedConsultation,
   BookedConsultationsFilterType,
   archiveConsultation,
-  setCurrentPageForBookedConsultationsAC, setIsSuccessAC, setBookedConsultationsFilterAC, setAddBookingApiErrorAC,
-} from '../../../redux/bookedConsultations/bookedConsultations-reducer'
+  setCurrentPageForBookedConsultationsAC,
+  setIsSuccessAC,
+  setBookedConsultationsFilterAC,
+  setAddBookingApiErrorAC,
+} from "../../../redux/bookedConsultations/bookedConsultations-reducer"
 import {
   getBookedConsultationsSelector,
   getBookedConsultationsPageSizeSelector,
@@ -21,9 +24,10 @@ import {
   getBookedConsultationsFilterSelector,
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
-  getIsSuccessSelector, getAddBookingApiErrorSelector
-} from '../../../redux/bookedConsultations/bookedConsultations-selectors'
-import { BookedConsultations } from './BookedConsultations'
+  getIsSuccessSelector,
+  getAddBookingApiErrorSelector
+} from "../../../redux/bookedConsultations/bookedConsultations-selectors"
+import { BookedConsultations } from "./BookedConsultations"
 import {AddConsultationFormValues, BookedConsultationType, ContactsType} from '../../../types/Types'
 
 export const BookedConsultationsContainer: React.FC = () => {
@@ -40,22 +44,10 @@ export const BookedConsultationsContainer: React.FC = () => {
   const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
 
   const dispatch = useDispatch()
-  //const navigate = useNavigate()
 
   useEffect(() => {
-    //const urlParams = new URLSearchParams(window.location.search)
-    //let actualPage = currentPage
-    //let actualFilter = filter
-    //if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
-    //if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
-    //if (!!urlParams.get('status')) actualFilter = { ...actualFilter, status: urlParams.get('status')}
-
     dispatch(getBookedConsultations(currentPage, pageSize, filter))
   }, [currentPage, pageSize, filter])
-
-  // useEffect(() => {
-  //   navigate(`?term=${filter.term}&status=${filter.status}&page=${currentPage}`)
-  // }, [navigate, filter, currentPage])
 
   useEffect(() => {
     dispatch(setCurrentPageForBookedConsultationsAC(1))

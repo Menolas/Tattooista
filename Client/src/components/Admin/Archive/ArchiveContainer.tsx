@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { Outlet } from 'react-router-dom'
-import { NavLink } from 'react-router-dom'
+import * as React from "react"
+import { Outlet } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 export const ArchiveContainer: React.FC = () => {
     return (

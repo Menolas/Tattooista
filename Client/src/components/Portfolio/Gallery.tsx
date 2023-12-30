@@ -13,7 +13,7 @@ import {SuccessPopUp} from "../common/SuccessPopUp"
 import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer"
 import {useDispatch} from "react-redux"
 import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm"
-import {NothingToShow} from "../common/NothingToShow";
+import {NothingToShow} from "../common/NothingToShow"
 
 type PropsType = {
   isSuccess: boolean

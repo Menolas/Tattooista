@@ -1,4 +1,4 @@
-import {AppStateType} from '../redux-store'
+import { AppStateType } from "../redux-store"
 
 export const getIsFetching = (state: AppStateType) => {
   return state.portfolio.isFetching
@@ -11,10 +11,6 @@ export const getTattooStylesSelector = (state: AppStateType) => {
 export const getActiveStyleSelector = (state: AppStateType) => {
   return state.portfolio.activeStyle
 }
-
-// export const getActiveStyleValue = (state: AppStateType) => {
-//   return state.portfolio.activeStyleValue
-// }
 
 export const getGallerySelector = (state: AppStateType) => {
   return state.portfolio.gallery

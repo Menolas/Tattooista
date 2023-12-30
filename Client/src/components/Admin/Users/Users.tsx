@@ -3,9 +3,9 @@ import { User } from "./User"
 import {Paginator} from "../../common/Paginator"
 import {UserType} from "../../../types/Types"
 import {UsersFilterType} from "../../../redux/Users/users-reducer"
-import {Preloader} from "../../common/Preloader";
-import {NothingToShow} from "../../common/NothingToShow";
-import {UserSearchFormFormik} from "../../Forms/UserSearchFormFormik";
+import {Preloader} from "../../common/Preloader"
+import {NothingToShow} from "../../common/NothingToShow"
+import {UserSearchFormFormik} from "../../Forms/UserSearchFormFormik"
 
 type PropsType = {
     users: Array<UserType>

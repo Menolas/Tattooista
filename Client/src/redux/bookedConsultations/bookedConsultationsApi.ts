@@ -1,5 +1,5 @@
 import axios, { CreateAxiosDefaults } from "axios"
-import { BookedConsultationType, ContactsType, ClientType } from "../../types/Types"
+import { BookedConsultationType, ContactsType } from "../../types/Types"
 import {API_URL} from "../../http"
 import { BookedConsultationsFilterType } from "./bookedConsultations-reducer"
 

@@ -1,12 +1,12 @@
-import * as React from 'react'
-import {Field, Form, Formik, FormikHelpers, FormikValues, useField } from 'formik'
-import {phoneRegex} from '../../utils/validators'
-import * as Yup from 'yup'
-import {BookConsultationFormValues} from '../../types/Types'
-import {FieldComponent} from './FieldComponent'
+import * as React from "react"
+import {Field, Form, Formik, FormikHelpers, FormikValues } from "formik"
+import {phoneRegex} from "../../utils/validators"
+import * as Yup from "yup"
+import {BookConsultationFormValues} from "../../types/Types"
+import {FieldComponent} from "./FieldComponent"
 import {useState} from "react"
-import {FieldWrapper} from './FieldWrapper'
-import {FormSelect} from './FormSelect'
+import {FieldWrapper} from "./FieldWrapper"
+import {FormSelect} from "./FormSelect"
 
 const options = [
   { value: "mail", label: "email" },
@@ -16,49 +16,40 @@ const options = [
   { value: "insta", label: "inst" }
 ]
 
-// const inputNames = {
-//   mail: 'email',
-//   phone: 'phone',
-//   whatsapp: 'whatsapp',
-//   messenger: 'messenger',
-//   insta: 'insta'
-// }
-
 // @ts-ignore
 const validationSchema = Yup.object().shape({
   bookingName: Yup.string()
-      .min(2, 'Must be minimum longer two characters')
-      .max(30, 'Must be shorter than 31 character')
-      .required('Required Field'),
+      .min(2, "Must be minimum longer two characters")
+      .max(30, "Must be shorter than 31 character")
+      .required("Required Field"),
   contact: Yup.string()
       .required("Please select a way to contact you"),
   mail: Yup.string().when('contact', {
         is: (contact) => contact === 'mail',
         then: () => Yup.string().required("Please, provide you email.").email("Email should have correct format")
       }),
-  phone: Yup.string()
-      .min(8, 'Phone number is too short - should be 8 chars minimum.')
-      .matches(phoneRegex, "That does not look like phone number")
-      .when('contact', {
+  phone: Yup.string().when('contact', {
         is: (contact) => contact === 'phone',
         then: () => Yup.string().required("Please, provide you phone number.")
+            .min(8, "Phone number is too short - should be 8 chars minimum.")
+            .matches(phoneRegex, "That does not look like phone number.")
       }),
   insta: Yup.string()
-      .min(3, 'Insta name is too short - should be 3 chars minimum.'),
+      .min(3, "Insta name is too short - should be 3 chars minimum."),
   messenger: Yup.string()
-      .min(3, 'Messenger name is too short - should be 3 chars minimum.'),
+      .min(3, "Messenger name is too short - should be 3 chars minimum."),
   whatsapp: Yup.string()
-      .min(7, 'Whatsapp number is too short - should be 7 chars minimum.')
+      .min(8, "Whatsapp number is too short - should be 8 chars minimum.")
       .matches(phoneRegex, "That does not look like whatsapp number")
       .when('contact', {
         is: (contact) => contact === 'whatsapp',
         then: () => Yup.string().required("Please, provide you whatsapp number.")
       }),
   message: Yup.string()
-      .min(20, 'Must be minimum longer twenty characters')
-      .max(200, 'Must be shorter than 200 character')
-      .required('Required Field'),
-  consent: Yup.boolean().oneOf([true],'Required Field')
+      .min(20, "Must be minimum longer twenty characters")
+      .max(200, "Must be shorter than 200 character")
+      .required("Required Field"),
+  consent: Yup.boolean().oneOf([true],"Required Field")
 })
 
 type PropsType = {
@@ -85,8 +76,8 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
     if (closeBookingModal) {
       closeBookingModal();
     }
-    actions.setSubmitting(false)
-    actions.resetForm()
+    //actions.setSubmitting(false)
+    //actions.resetForm()
   }
 
   const initialValues: BookConsultationFormValues = {
@@ -108,13 +99,11 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
         onSubmit={submit}
       >
       {(propsF) => {
-        let {isSubmitting} = propsF
 
         return (
           <Form id="booking"
             className="form booking__form"
           >
-            {/*<pre>{JSON.stringify(propsF, undefined, 2)}</pre>*/}
             <FieldComponent
               name={'bookingName'}
               type={'text'}
@@ -164,7 +153,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   type="checkbox"
                   name="consent"
                   id={consentId}
-                  value={propsF.values.concent}
+                  value={propsF.values.consent}
                   onChange={propsF.handleChange}
               />
               <label htmlFor={consentId}>
@@ -174,10 +163,10 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
             </FieldWrapper>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={propsF.isSubmitting}
               className="btn btn--bg btn--transparent form__submit-btn booking__submit-btn"
             >
-                {isSubmitting
+                {propsF.isSubmitting
                     ? 'Please wait...'
                     : 'BOOK A CONSULTATION'
                 }

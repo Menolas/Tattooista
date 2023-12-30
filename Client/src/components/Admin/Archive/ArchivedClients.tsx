@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { useEffect} from 'react'
-import {ClientSearchFormFormik} from "../../Forms/ClientSearchFormFormik";
-import {Paginator} from "../../common/Paginator";
+import * as React from "react"
+import { useEffect} from "react"
+import {ClientSearchFormFormik} from "../../Forms/ClientSearchFormFormik"
+import {Paginator} from "../../common/Paginator"
 import {
     ClientsFilterType,
     setArchivedClientsPageSize,
@@ -10,9 +10,9 @@ import {
     deleteArchivedClient,
     reactivateClient,
     setArchivedClientsFilterAC, setAddClientApiErrorAC
-} from "../../../redux/Clients/clients-reducer";
-import {NothingToShow} from "../../common/NothingToShow";
-import {useDispatch, useSelector} from "react-redux";
+} from "../../../redux/Clients/clients-reducer"
+import {NothingToShow} from "../../common/NothingToShow"
+import {useDispatch, useSelector} from "react-redux"
 import {
     getAddClientApiErrorSelector,
     getArchivedClientsFilter,
@@ -22,10 +22,10 @@ import {
     getCurrentArchivedClientsPageSelector,
     getIsClientDeletingInProcessSelector,
     getTotalArchivedClientsCount
-} from "../../../redux/Clients/clients-selectors";
-import {Preloader} from "../../common/Preloader";
-import {ArchivedClient} from "./ArchivedClient";
-import {ApiErrorMessage} from "../../common/ApiErrorMessage";
+} from "../../../redux/Clients/clients-selectors"
+import {Preloader} from "../../common/Preloader"
+import {ArchivedClient} from "./ArchivedClient"
+import {ApiErrorMessage} from "../../common/ApiErrorMessage"
 
 export const ArchivedClients: React.FC = () => {
     const isFetching = useSelector(getClientsIsFetching)

@@ -1,9 +1,9 @@
-import * as React from 'react'
-import { Form, Formik} from 'formik'
+import * as React from "react"
+import { Form, Formik} from "formik"
 import * as Yup from 'yup'
-import {phoneRegex, ApiErrorMessage} from '../../utils/validators'
-import {AddConsultationFormValues} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
+import {phoneRegex} from "../../utils/validators"
+import {AddConsultationFormValues} from "../../types/Types"
+import {FieldComponent} from "./FieldComponent"
 
 const validationSchema = Yup.object().shape({
   bookingName: Yup.string()

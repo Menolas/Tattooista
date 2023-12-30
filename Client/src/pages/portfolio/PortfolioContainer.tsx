@@ -1,7 +1,7 @@
-import * as React from 'react'
-import {useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import { BookConsultationFormValues, TattooStyleType} from '../../types/Types'
+import * as React from "react"
+import {useEffect} from "react"
+import {useDispatch, useSelector} from "react-redux"
+import { BookConsultationFormValues, TattooStyleType} from "../../types/Types"
 import {
   getIsFetching,
   getTattooStylesSelector,
@@ -10,8 +10,10 @@ import {
   getGalleryPageSize,
   getCurrentGalleryPage,
   getIsGalleryItemDeletingInProcessSelector,
-  getActiveStyleSelector, getUpdateTattooStyleApiErrorSelector, getUpdateGalleryApiErrorSelector
-} from '../../redux/Portfolio/portfolio-selectors'
+  getActiveStyleSelector,
+  getUpdateTattooStyleApiErrorSelector,
+  getUpdateGalleryApiErrorSelector
+} from "../../redux/Portfolio/portfolio-selectors"
 import {
   getGallery,
   adminUpdateGallery,
@@ -24,19 +26,22 @@ import {
   deleteTattooStyle,
   archiveGalleryItem,
   getTattooStyles,
-  setUpdateTattooStyleApiErrorAC, setUpdateGalleryApiErrorAC, updateGalleryItem, setActiveStyleAC
-} from '../../redux/Portfolio/portfolio-reducer'
-import { Portfolio } from './Portfolio'
-import {getAuthSelector} from '../../redux/Auth/auth-selectors'
-import {getIsSuccessSelector} from '../../redux/bookedConsultations/bookedConsultations-selectors'
+  setUpdateTattooStyleApiErrorAC,
+  setUpdateGalleryApiErrorAC,
+  updateGalleryItem,
+  setActiveStyleAC
+} from "../../redux/Portfolio/portfolio-reducer"
+import { Portfolio } from "./Portfolio"
+import {getAuthSelector} from "../../redux/Auth/auth-selectors"
+import {getIsSuccessSelector} from "../../redux/bookedConsultations/bookedConsultations-selectors"
 import {
   bookConsultation,
   setBookingConsultationApiErrorAC,
   setIsSuccessAC
-} from "../../redux/General/general-reducer";
+} from "../../redux/General/general-reducer"
 import {
   getBookingConsultationApiErrorSelector
-} from "../../redux/General/general-selectors";
+} from "../../redux/General/general-selectors"
 
 export const PortfolioContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector)
@@ -54,7 +59,6 @@ export const PortfolioContainer: React.FC = () =>  {
   const updateGalleryApiError = useSelector(getUpdateGalleryApiErrorSelector)
 
   const dispatch = useDispatch()
-  //const navigate = useNavigate()
 
   useEffect( () => {
     if (currentPage === 0) {
@@ -70,10 +74,6 @@ export const PortfolioContainer: React.FC = () =>  {
     })
 
   }, [activeStyle, currentPage, pageSize])
-
-  // useEffect(() => {
-  //   navigate(`?&style=${activeStyle.value}&page=${currentPage}&limit=${pageSize}`)
-  // }, [activeStyle, currentPage, pageSize])
 
   const setCurrentPageCallBack = (page: number) => {
     dispatch(setCurrentGalleryPageAC(page))
@@ -132,7 +132,7 @@ export const PortfolioContainer: React.FC = () =>  {
   }
 
   const updateGalleryItemCallBack = (id: string, values: object) => {
-    dispatch(updateGalleryItem(id, values, activeStyle._id))
+    dispatch(updateGalleryItem(id, values))
   }
 
   return (

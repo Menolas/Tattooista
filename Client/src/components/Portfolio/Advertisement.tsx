@@ -1,15 +1,15 @@
-import * as React from 'react'
-import {useEffect, useState} from 'react'
+import * as React from "react"
+import {useEffect, useState} from "react"
 // @ts-ignore
-import Sprite from '../../assets/svg/sprite.svg'
+import Sprite from "../../assets/svg/sprite.svg"
 import { NavLink } from "react-router-dom"
-import { ModalPopUp } from '../common/ModalPopUp'
-import { BookingForm } from '../Forms/BookingFormFormik'
-import {BookConsultationFormValues} from '../../types/Types'
-import {SuccessPopUp} from "../common/SuccessPopUp";
-import {useDispatch, useSelector} from "react-redux";
-import {getIsSuccessBookingSelector} from "../../redux/General/general-selectors";
-import {setIsSuccessBookingAC} from "../../redux/General/general-reducer";
+import { ModalPopUp } from "../common/ModalPopUp"
+import { BookingForm } from "../Forms/BookingFormFormik"
+import {BookConsultationFormValues} from "../../types/Types"
+import {SuccessPopUp} from "../common/SuccessPopUp"
+import {useDispatch, useSelector} from "react-redux"
+import {getIsSuccessBookingSelector} from "../../redux/General/general-selectors"
+import {setIsSuccessBookingAC} from "../../redux/General/general-reducer"
 
 type PropsType = {
   bookConsultation: (values: BookConsultationFormValues) => void
@@ -58,17 +58,17 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
           <ul className="social-share__list list">
             <li className="social-share__item">
               <NavLink to="#" className="social-share__link">
-                <svg><use href={`${Sprite}#instagram`}></use></svg>
+                <svg><use href={`${Sprite}#instagram`}/></svg>
               </NavLink>
             </li>
             <li className="social-share__item">
               <NavLink to="#" className="social-share__link">
-                <svg><use href={`${Sprite}#facebook`}></use></svg>
+                <svg><use href={`${Sprite}#facebook`}/></svg>
               </NavLink>
             </li>
             <li className="social-share__item">
               <NavLink to="#" className="social-share__link">
-                <svg><use href={`${Sprite}#phone`}></use></svg>
+                <svg><use href={`${Sprite}#phone`}/></svg>
               </NavLink>
             </li>
           </ul>

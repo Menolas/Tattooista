@@ -6,7 +6,8 @@ import {
     getUsers,
     setClientsFilterAC,
     setUsersCurrentPageAC,
-    setUsersPageLimitAC, UsersFilterType
+    setUsersPageLimitAC,
+    UsersFilterType
 } from "../../../redux/Users/users-reducer"
 import {
     getUsersCurrentPageSelector, getUsersFiletSelector,
@@ -15,7 +16,7 @@ import {
     getUsersSelector,
     getUsersTotalCountSelector
 } from "../../../redux/Users/users-selectors"
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors"
 
 export const UsersContainer: React.FC = () => {
 

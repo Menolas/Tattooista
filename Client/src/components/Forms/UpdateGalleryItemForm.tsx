@@ -20,12 +20,6 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
     closeModal
 }) => {
 
-    console.log(styles + '!!!!!!!!!!!!!!!!!')
-
-    const handleChange = (input: string) => {
-        //console.log(options)
-    }
-
     const submit = (values: any) => {
         updateGalleryItem(galleryItem._id, values)
         closeModal()
@@ -36,7 +30,6 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
         if (!style.nonStyle) {
             initialValues[style._id] = galleryItem.tattooStyles.includes(style._id)
         }
-        console.log(style.nonStyle + '!!!!!!!!!!!!')
     })
 
     return (
@@ -59,7 +52,6 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                                     type="checkbox"
                                     name={style._id}
                                     id={style._id}
-                                    //value={propsF.values.concent}
                                     onChange={propsF.handleChange}
                                 />
                                 <label htmlFor={style._id}>

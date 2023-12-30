@@ -1,8 +1,8 @@
-import * as React from 'react'
-import {Form, Formik} from 'formik'
-import * as yup from 'yup'
-import {FaqType} from '../../types/Types'
-import {FieldComponent} from "./FieldComponent";
+import * as React from "react"
+import {Form, Formik} from "formik"
+import * as yup from "yup"
+import {FaqType} from "../../types/Types"
+import {FieldComponent} from "./FieldComponent"
 
 const validationSchema = yup.object().shape({
     question: yup.string()
@@ -30,10 +30,6 @@ export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
     }
 
     const submit = (values) => {
-        // const formData = new FormData()
-        // for (let value in values) {
-        //     formData.append(value, values[value])
-        // }
         if (faqItem) {
             updateFaqItem(faqItem._id, values)
         } else {

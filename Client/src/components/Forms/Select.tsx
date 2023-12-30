@@ -1,6 +1,6 @@
-import * as React from 'react'
-import {Field } from 'formik'
-import {FieldWrapper} from './FieldWrapper'
+import * as React from "react"
+import {Field } from "formik"
+import {FieldWrapper} from "./FieldWrapper"
 
 const options = [
   { value: "mail", label: "email" },

@@ -1,4 +1,4 @@
-import {AppStateType} from '../redux-store'
+import {AppStateType} from "../redux-store"
 
 //primitive selector
 export const getBookedConsultationsSelector = (state: AppStateType) => {

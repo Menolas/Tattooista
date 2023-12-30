@@ -1,8 +1,8 @@
-import * as React from 'react'
-import { useState } from 'react'
-import { ModalPopUp } from '../common/ModalPopUp'
-import { BookingForm } from '../Forms/BookingFormFormik'
-import {BookConsultationFormValues} from '../../types/Types'
+import * as React from "react"
+import { useState } from "react"
+import { ModalPopUp } from "../common/ModalPopUp"
+import { BookingForm } from "../Forms/BookingFormFormik"
+import {BookConsultationFormValues} from "../../types/Types"
 
 type PropsType = {
   bookConsultation: (values: BookConsultationFormValues) => void

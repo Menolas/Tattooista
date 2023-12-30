@@ -1,9 +1,16 @@
-import * as React from 'react'
+import * as React from "react"
 
-export const NothingToShow = () => {
+type PropsType = {
+    nothingToShowText?: string
+}
+
+export const NothingToShow: React.FC<PropsType> = ({nothingToShowText}) => {
     return (
         <div className={"nothingToShow"}>
-            <p>Nothing to show here - create a client</p>
+            <p>
+                Nothing to show here yet
+                {nothingToShowText}
+            </p>
         </div>
     )
 }

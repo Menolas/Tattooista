@@ -164,7 +164,6 @@ export const logout = (): ThunkType => async (
        dispatch(setAccessTokenAC(null))
        dispatch(setUserDataAC(null))
        dispatch(setAuth(false))
-       console.log("setAuth - False!!!")
      }
   } catch (e) {
     console.log(e)

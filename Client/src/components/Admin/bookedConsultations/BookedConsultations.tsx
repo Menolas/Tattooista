@@ -1,14 +1,14 @@
-import * as React from 'react'
-import {useEffect, useState} from 'react'
-import { Paginator } from '../../common/Paginator'
-import { BookedConsultation } from './BookedConsultation'
-import {AddConsultationFormValues, BookedConsultationType} from '../../../types/Types'
-import { BookedConsultationsSearchForm } from '../../Forms/BookedConsultationsSearchForm'
-import { BookedConsultationsFilterType } from '../../../redux/bookedConsultations/bookedConsultations-reducer'
-import {ModalPopUp} from '../../common/ModalPopUp'
-import {AddConsultationForm} from '../../Forms/AddConsultationForm'
+import * as React from "react"
+import {useEffect, useState} from "react"
+import { Paginator } from "../../common/Paginator"
+import { BookedConsultation } from "./BookedConsultation"
+import {AddConsultationFormValues, BookedConsultationType} from "../../../types/Types"
+import { BookedConsultationsSearchForm } from "../../Forms/BookedConsultationsSearchForm"
+import { BookedConsultationsFilterType } from "../../../redux/bookedConsultations/bookedConsultations-reducer"
+import {ModalPopUp} from "../../common/ModalPopUp"
+import {AddConsultationForm} from "../../Forms/AddConsultationForm"
 import {SuccessPopUp} from "../../common/SuccessPopUp"
-import {setIsSuccessAC} from '../../../redux/Portfolio/portfolio-reducer'
+import {setIsSuccessAC} from "../../../redux/Portfolio/portfolio-reducer"
 import {useDispatch} from "react-redux"
 import {Preloader} from "../../common/Preloader"
 import {NothingToShow} from "../../common/NothingToShow"
