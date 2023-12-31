@@ -125,34 +125,29 @@ class galleryController {
   }
 
   async addGalleryItems(req, res) {
-    // if (!req.body) {
-    //   return res.status(400).send({
-    //     message: "Data to update can not be empty!"
-    //   })
-    // }
-    const gallery = []
+    let gallery = []
     const files = req.files
     const results = {}
 
-    for (let key in files) {
-      const fileNewName = generateFileRandomNameWithDate(files[key].name)
-      gallery.push(fileNewName)
-      await files[key].mv(`./uploads/gallery/${fileNewName}`, e => {
-        if (e) console.log(e)
-      })
-    }
-
-    await gallery.forEach((item) => {
-      const newGalleryItem = new GalleryItem({
-        fileName: item.toString(),
-        tattooStyles: [req.params.style]
-      })
-      newGalleryItem.save()
-    })
-
     try {
+      for (let key in files) {
+        const fileNewName = generateFileRandomNameWithDate(files[key].name)
+        gallery.push(fileNewName)
+        await files[key].mv(`./uploads/gallery/${fileNewName}`, e => {
+          if (e) console.log(e)
+        })
+      }
+      let updatedGallery = gallery.map((item) => {
+        const newGalleryItem = new GalleryItem({
+          fileName: item.toString(),
+          tattooStyles: [req.params.style]
+        })
+        newGalleryItem.save()
+        return newGalleryItem
+      })
       results.resultCode = 0
-      results.gallery = await GalleryItem.find({tattooStyles: req.params.style})
+      results.gallery = updatedGallery
+      console.log(updatedGallery)
       res.json(results)
     } catch (e) {
       results.resultCode = 1

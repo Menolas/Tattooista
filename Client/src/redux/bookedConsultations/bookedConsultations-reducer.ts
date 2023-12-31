@@ -40,11 +40,11 @@ let initialState = {
   isDeletingInProcess: [] as Array<string>,
   bookedConsultationsFilter: {
     term: '' as string | null,
-    status: 'null' as string | null
+    condition: 'any' as string | null
   },
   archivedConsultationsFilter: {
     term: '' as string | null,
-    status: 'null' as string | null
+    condition: 'any' as string | null
   },
   isSuccess: false as boolean,
   addBookingApiError: '' as string | undefined

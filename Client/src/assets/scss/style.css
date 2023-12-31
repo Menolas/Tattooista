@@ -2461,6 +2461,26 @@ input[type=checkbox]:checked + label .checkbox::after {
   font-weight: 500;
 }
 
+.search-form .select-block {
+  min-width: 200px;
+  background-color: #fafafa;
+}
+.search-form .select-block div[class*=-control] {
+  height: 100%;
+  border: none;
+}
+.search-form .select-block div[class*=-ValueContainer] {
+  padding-left: 10px;
+  height: 100%;
+  border: none;
+}
+.search-form .select-block div[class*=-ValueContainer] div[class*=-placeholder] {
+  color: #080808;
+}
+.search-form .select-block div[class*=-Input] {
+  display: none;
+}
+
 @media (min-width: 990px) {
   input::placeholder,
   textarea::placeholder {

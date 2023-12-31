@@ -3,7 +3,7 @@ import { UserType } from "../../types/Types"
 import { ResultCodesEnum } from "../../utils/constants"
 import { AppStateType } from "../redux-store"
 import { ThunkAction } from "redux-thunk"
-import {usersAPI} from "./usersApi"
+import { usersAPI } from "./usersApi"
 
 const SET_USERS = 'SET_USERS'
 const SET_USERS_TOTAL_COUNT = 'SET_USERS_TOTAL_COUNT'
@@ -21,7 +21,7 @@ let initialState = {
     isDeletingInProcess: [] as Array<string>,
     usersFilter: {
         term: '' as string | null,
-        role: "any" as string | null
+        condition: 'any' as string | null
     }
 }
 

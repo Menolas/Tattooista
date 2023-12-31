@@ -3,7 +3,6 @@ import {useEffect, useState} from "react"
 import { Paginator } from "../../common/Paginator"
 import { BookedConsultation } from "./BookedConsultation"
 import {AddConsultationFormValues, BookedConsultationType} from "../../../types/Types"
-import { BookedConsultationsSearchForm } from "../../Forms/BookedConsultationsSearchForm"
 import { BookedConsultationsFilterType } from "../../../redux/bookedConsultations/bookedConsultations-reducer"
 import {ModalPopUp} from "../../common/ModalPopUp"
 import {AddConsultationForm} from "../../Forms/AddConsultationForm"
@@ -13,6 +12,8 @@ import {useDispatch} from "react-redux"
 import {Preloader} from "../../common/Preloader"
 import {NothingToShow} from "../../common/NothingToShow"
 import {ApiErrorMessage} from "../../common/ApiErrorMessage"
+import {SearchFilterForm} from "../../Forms/SearchFilterForm"
+import { bookingFilterSelectOptions } from "../../../utils/constants"
 
 type PropsType = {
   isFetching: boolean
@@ -98,7 +99,8 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
     return (
       <>
           <div className="admin__cards-header">
-            <BookedConsultationsSearchForm
+            <SearchFilterForm
+              options={bookingFilterSelectOptions}
               filter={bookedConsultationsFilter}
               onFilterChanged={onFilterChanged}
             />

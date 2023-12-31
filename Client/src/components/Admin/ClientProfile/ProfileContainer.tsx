@@ -7,7 +7,7 @@ import {
   updateClientGallery,
   editClient,
   deleteClient,
-  deleteClientGalleryPicture, deleteClientFromProfile
+  deleteClientGalleryPicture, deleteClientFromProfile, archiveClientFromProfile
 } from "../../../redux/Clients/clients-reducer"
 import { Profile } from "./Profile"
 import {
@@ -53,6 +53,10 @@ export const ProfileContainer: React.FC = () => {
     dispatch(updateClientGallery(clientId, values))
   }
 
+  const archiveClientCallBack = (id: string) => {
+    dispatch(archiveClientFromProfile(id))
+  }
+
   const deleteClientGalleryPictureCallBack = (clientId: string, picture: string) => {
     dispatch(deleteClientGalleryPicture(clientId, picture))
   }
@@ -70,6 +74,7 @@ export const ProfileContainer: React.FC = () => {
       editClient={editClientCallBack}
       updateClientGallery={updateClientGalleryCallBack}
       deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
+      archiveClient={archiveClientCallBack}
       setIsSuccess={setIsSuccessCallBack}
     />
   )

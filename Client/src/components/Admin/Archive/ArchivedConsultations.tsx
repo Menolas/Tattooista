@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from "react-redux"
 import {Paginator} from "../../common/Paginator"
 import {NothingToShow} from "../../common/NothingToShow"
 import {Preloader} from "../../common/Preloader"
-import {useNavigate} from "react-router-dom"
 import {
     BookedConsultationsFilterType,
     deleteArchivedConsultation,
@@ -25,8 +24,9 @@ import {
     getAddBookingApiErrorSelector,
 } from "../../../redux/bookedConsultations/bookedConsultations-selectors"
 import {ArchivedConsultation} from "./ArchivedConsultation"
-import {BookedConsultationsSearchForm} from "../../Forms/BookedConsultationsSearchForm"
 import {ApiErrorMessage} from "../../common/ApiErrorMessage"
+import {SearchFilterForm} from "../../Forms/SearchFilterForm"
+import {bookingFilterSelectOptions} from "../../../utils/constants"
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
@@ -39,23 +39,10 @@ export const ArchivedConsultations: React.FC = () => {
     const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
 
     const dispatch = useDispatch()
-    const navigate = useNavigate()
 
     useEffect(() => {
-        // const urlParams = new URLSearchParams(window.location.search)
-        // let actualPage = currentPage
-        // let actualFilter = filter
-        // if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
-        // if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
-        // if (!!urlParams.get('status')) actualFilter = { ...actualFilter, status: urlParams.get('status')}
-
         dispatch(getArchivedConsultations(currentPage, pageSize, filter))
     }, [currentPage, pageSize, filter])
-
-    // useEffect(() => {
-    //     navigate(`?term=${filter.term}&status=${filter.status}&page=${currentPage}`)
-    //
-    // }, [filter, currentPage])
 
     const onPageChangedCallBack = (
         page: number
@@ -121,7 +108,8 @@ export const ArchivedConsultations: React.FC = () => {
     return (
         <>
             <div className="admin__cards-header">
-                <BookedConsultationsSearchForm
+                <SearchFilterForm
+                    options={bookingFilterSelectOptions}
                     filter={filter}
                     onFilterChanged={onFilterChangeCallBack}
                 />

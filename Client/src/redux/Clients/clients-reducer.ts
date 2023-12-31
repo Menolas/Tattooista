@@ -42,11 +42,11 @@ let initialState = {
   isDeletingPicturesInProcess: [] as Array<string>,
   clientsFilter: {
     term: '' as string | null,
-    gallery: "any" as string | null
+    condition: "any" as string | null
   },
   archivedClientsFilter: {
     term: '' as string | null,
-    gallery: "any" as string | null
+    condition: "any" as string | null
   },
   profile: {} as ClientType,
   isSuccess: false as boolean,
@@ -696,6 +696,19 @@ export const archiveClient = (
     console.log(e)
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id))
+  }
+}
+
+export const archiveClientFromProfile = (
+    id: string
+): ThunkType => async (dispatch) => {
+  try {
+    let response = await clientsAPI.archiveClient(id)
+    if (response.resultCode === ResultCodesEnum.Success) {
+      await dispatch(deleteClientAC(id))
+    }
+  } catch (e) {
+    console.log(e)
   }
 }
 

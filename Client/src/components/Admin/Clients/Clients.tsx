@@ -5,12 +5,13 @@ import { Paginator } from "../../common/Paginator"
 import { ModalPopUp } from "../../common/ModalPopUp"
 import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
 import { ClientType } from "../../../types/Types"
-import { ClientSearchFormFormik } from "../../Forms/ClientSearchFormFormik"
 import { ClientsFilterType} from "../../../redux/Clients/clients-reducer"
 import {NothingToShow} from "../../common/NothingToShow"
 import {SuccessPopUp} from "../../common/SuccessPopUp"
 import {Preloader} from "../../common/Preloader"
 import {ApiErrorMessage} from "../../common/ApiErrorMessage"
+import {SearchFilterForm} from "../../Forms/SearchFilterForm"
+import {clientFilterSelectOptions} from "../../../utils/constants"
 
 type PropsType = {
   isFetching: boolean
@@ -23,6 +24,7 @@ type PropsType = {
   clients: Array<ClientType>
   clientsFilter: ClientsFilterType
   isDeletingInProcess: Array<string>
+  isDeletingPicturesInProcess: Array<string>
   onPageChanged: (page: number) => void
   onFilterChanged: (filter: ClientsFilterType) => void
   addClient: (values: FormData) => void
@@ -48,6 +50,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     clients,
     clientsFilter,
     isDeletingInProcess,
+    isDeletingPicturesInProcess,
     onPageChanged,
     onFilterChanged,
     addClient,
@@ -86,6 +89,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 key={client._id}
                 client={client}
                 isDeletingInProcess={isDeletingInProcess}
+                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 deleteClient={deleteClient}
                 editClient={editClient}
                 pageSize={pageSize}
@@ -100,8 +104,9 @@ export const Clients: React.FC<PropsType> = React.memo(({
   return (
       <>
         <div className="admin__cards-header">
-          <ClientSearchFormFormik
-            clientsFilter={clientsFilter}
+          <SearchFilterForm
+            options={clientFilterSelectOptions}
+            filter={clientsFilter}
             onFilterChanged={onFilterChanged}
           />
           <Paginator

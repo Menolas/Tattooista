@@ -15,15 +15,15 @@ class usersController {
         try {
             if (role === 'any' && !term) {
                 users = await User.find().sort({createdAt: -1})
-            } else if (role === '1' && !term) {
+            } else if (role === 'true' && !term) {
                 users = await User.find({roles: "ADMIN"}).sort({createdAt: -1})
-            } else if (role === '0' && !term) {
+            } else if (role === 'false' && !term) {
                 users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}}).sort({createdAt: -1})
             } else if (role === 'any' && term) {
                 users = await User.find({displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
-            } else if (role === '1' && term) {
+            } else if (role === 'true' && term) {
                 users = await User.find({roles: "ADMIN", displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
-            } else if (role === '0' && term) {
+            } else if (role === 'false' && term) {
                 users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
             }
 

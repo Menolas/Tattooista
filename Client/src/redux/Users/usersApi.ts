@@ -21,7 +21,7 @@ export const usersAPI = {
         filter: UsersFilterType
     ) {
         return instance.get<GetUsersResponseType>(
-            `users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.role}`, {
+            `users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`, {
             withCredentials: true
         })
             .then(response => response.data)
