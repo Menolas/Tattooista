@@ -44,6 +44,10 @@ export const getIsClientDeletingInProcessSelector = (state: AppStateType) => {
   return state.clients.isDeletingInProcess
 }
 
+export const getIsDeletingPicturesInProcessSelector = (state: AppStateType) => {
+  return state.clients.isDeletingPicturesInProcess
+}
+
 export const getClientsFilterSelector = (state: AppStateType) => {
   return state.clients.clientsFilter
 }

@@ -16,6 +16,7 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS'
 const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE'
 const SET_GALLERY = 'SET_GALLERY'
+const UPDATE_GALLERY = 'UPDATE_GALLERY'
 const UPDATE_GALLERY_ITEM = 'UPDATE_GALLERY_ITEM'
 const UPDATE_ARCHIVED_GALLERY_ITEM = 'UPDATE_ARCHIVED_GALLERY_ITEM'
 const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY'
@@ -138,6 +139,12 @@ export const portfolioReducer = (
         archivedGallery: [...action.archivedGallery]
       }
 
+    case UPDATE_GALLERY:
+      return {
+        ...state,
+        gallery: action.gallery.concat(state.gallery)
+      }
+
     case DELETE_GALLERY_ITEM:
       return {
         ...state,
@@ -201,7 +208,7 @@ export const portfolioReducer = (
 type ActionsTypes = SetUpdateGalleryApiErrorAT | SetUpdateTattooStyleApiErrorAT | ToggleIsDeletingInProcessAT |
     SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT | SetCurrentGalleryPageAT |
     SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT | SetIsFetchingAT |
-    SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT | DeleteGalleryItemAT |
+    SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT | UpdateGalleryAT | DeleteGalleryItemAT |
     DeleteArchivedGalleryItemAT | UpdateGalleryItemAT | UpdateArchivedGalleryItemAT
 
 // actions creators
@@ -342,6 +349,15 @@ type SetArchivedGalleryAT = {
 
 const setArchivedGalleryAC = (archivedGallery: Array<GalleryItemType>): SetArchivedGalleryAT => ({
   type: SET_ARCHIVED_GALLERY, archivedGallery
+})
+
+type UpdateGalleryAT = {
+  type: typeof UPDATE_GALLERY,
+  gallery: Array<GalleryItemType>
+}
+
+const updateGalleryAC = (gallery: Array<GalleryItemType>): UpdateGalleryAT => ({
+  type: UPDATE_GALLERY, gallery
 })
 
 type DeleteGalleryItemAT = {
@@ -535,7 +551,7 @@ export const adminUpdateGallery = (
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.adminUpdateGallery(tattooStyle, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setCurrentGalleryPageAC(1))
+      dispatch(updateGalleryAC(response.gallery))
     }
   } catch (e: any) {
     dispatch(setUpdateGalleryApiErrorAC(e.response?.data?.message || 'An error occurred'))
@@ -631,7 +647,6 @@ export const updateGalleryItem = (id: string, values: object): ThunkType => asyn
   try {
     let response = await portfolioApi.updateGalleryItem(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      //console.log(response.gallery)
       dispatch(updateGalleryItemAC(response.galleryItem))
     }
   } catch (e) {

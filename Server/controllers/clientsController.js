@@ -19,15 +19,15 @@ class clientsController {
     try {
       if (gallery === 'any' && !term) {
         clients = await Client.find().sort({createdAt: -1})
-      } else if (gallery === '1' && !term) {
+      } else if (gallery === 'true' && !term) {
         clients = await Client.find({gallery: {$exists: true, $not: {$size: 0}}}).sort({createdAt: -1})
-      } else if (gallery === '0' && !term) {
+      } else if (gallery === 'false' && !term) {
         clients = await Client.find({gallery: {$exists: true, $size: 0}}).sort({createdAt: -1})
       } else if (gallery === 'any' && term) {
         clients = await Client.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
-      } else if (gallery === '1' && term) {
+      } else if (gallery === 'true' && term) {
         clients = await Client.find({gallery: {$exists: true, $not: { $size: 0}}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
-      } else if (gallery === '0' && term) {
+      } else if (gallery === 'false' && term) {
         clients = await Client.find({gallery: {$exists: true, $size: 0}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
 
@@ -53,15 +53,15 @@ class clientsController {
     try {
       if (gallery === 'any' && !term) {
         archivedClients = await ArchivedClient.find().sort({createdAt: -1})
-      } else if (gallery === '1' && !term) {
+      } else if (gallery === 'true' && !term) {
         archivedClients = await ArchivedClient.find({gallery: { $exists: true, $not: { $size: 0 }}}).sort({createdAt: -1})
-      } else if (gallery === '0' && !term) {
+      } else if (gallery === 'false' && !term) {
         archivedClients = await ArchivedClient.find({gallery: { $exists: true, $size: 0 }}).sort({createdAt: -1})
       } else if (gallery === 'any' && term) {
         archivedClients = await ArchivedClient.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
-      } else if (gallery === '1' && term) {
+      } else if (gallery === 'true' && term) {
         archivedClients = await ArchivedClient.find({gallery: { $exists: true, $not: { $size: 0 }}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
-      } else if (gallery === '0' && term) {
+      } else if (gallery === 'false' && term) {
         archivedClients = await ArchivedClient.find({gallery: {$exists: true, $size: 0}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
 

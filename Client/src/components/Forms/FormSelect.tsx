@@ -17,6 +17,7 @@ export const FormSelect = ({ name, options, handleChange, placeholder }) => {
 
     return (
         <Select
+            className={"select-block"}
             name={name}
             onChange={setFieldProps}
             options={options}

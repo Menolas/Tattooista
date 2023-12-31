@@ -4,8 +4,8 @@ import {useDispatch, useSelector} from "react-redux"
 import { Users } from "./Users"
 import {
     getUsers,
-    setClientsFilterAC,
     setUsersCurrentPageAC,
+    setUsersFilterAC,
     setUsersPageLimitAC,
     UsersFilterType
 } from "../../../redux/Users/users-reducer"
@@ -42,7 +42,7 @@ export const UsersContainer: React.FC = () => {
     }
 
     const setClientsFilterCallBack = (filter: UsersFilterType) => {
-        dispatch(setClientsFilterAC(filter))
+        dispatch(setUsersFilterAC(filter))
     }
 
     return (

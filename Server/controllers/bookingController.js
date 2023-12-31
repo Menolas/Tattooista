@@ -13,13 +13,13 @@ class bookingController {
     const results = {}
 
     try {
-      if (status === 'null' && !term) {
+      if (status === 'any' && !term) {
         bookings = await Booking.find().sort({createdAt: -1})
-      } else if (status !== 'null' && !term) {
+      } else if (status !== 'any' && !term) {
         bookings = await Booking.find({status: status}).sort({createdAt: -1})
-      } else if (status !== 'null' && term) {
+      } else if (status !== 'any' && term) {
         bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
-      } else if (status === 'null' && term) {
+      } else if (status === 'any' && term) {
         bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
 
@@ -49,13 +49,13 @@ class bookingController {
     const results = {}
 
     try {
-      if (status === 'null' && !term) {
+      if (status === 'any' && !term) {
         archivedBookings = await ArchivedBooking.find().sort({createdAt: -1})
-      } else if (status !== 'null' && !term) {
+      } else if (status !== 'any' && !term) {
         archivedBookings = await ArchivedBooking.find({status: status}).sort({createdAt: -1})
-      } else if (status !== 'null' && term) {
+      } else if (status !== 'any' && term) {
         archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
-      } else if (status === 'null' && term) {
+      } else if (status === 'any' && term) {
         archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
       }
       results.resultCode = 0

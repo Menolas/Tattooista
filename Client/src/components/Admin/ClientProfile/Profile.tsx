@@ -9,7 +9,7 @@ import { ModalPopUp } from "../../common/ModalPopUp"
 import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg"
-import { ClientGalleryUploadFormFormik } from "../../Forms/ClientGalleryUploadFormFormik"
+import { GalleryUploadForm } from "../../Forms/GalleryUploadForm"
 import {useDispatch} from "react-redux"
 import {SuccessPopUp} from "../../common/SuccessPopUp"
 import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer"
@@ -23,6 +23,7 @@ type PropsType = {
   editClient: (clientId: string, values: FormData) => void
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
+  archiveClient: (id: string) => void
   setIsSuccess: (bol: boolean) => void
 }
 
@@ -38,7 +39,8 @@ export const Profile: React.FC<PropsType> = React.memo(({
     deleteClient,
     editClient,
     updateClientGallery,
-    deleteClientGalleryPicture
+    deleteClientGalleryPicture,
+    archiveClient
 }) => {
 
   const dispatch = useDispatch()
@@ -141,7 +143,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
               data-tooltip-content="Move client to archive client"
               className={"btn btn--icon"}
               to={'/admin/clients'}
-              //onClick={() => {}}
+              onClick={() => {archiveClient(profile._id)}}
           >
             <svg><use href={`${Sprite}#archive`}/></svg>
           </NavLink>
@@ -183,10 +185,11 @@ export const Profile: React.FC<PropsType> = React.memo(({
               modalTitle="Edit Gallery"
               closeModal={closeModal}
           >
-            <ClientGalleryUploadFormFormik
-                profileId={profile._id}
+            <GalleryUploadForm
+                updateId={profile._id}
                 gallery={profile.gallery}
-                updateClientGallery={updateClientGallery}
+                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+                updateGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 closeModal={closeModal}
             />

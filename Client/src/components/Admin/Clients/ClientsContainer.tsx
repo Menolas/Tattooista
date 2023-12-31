@@ -27,7 +27,7 @@ import {
   getAddClientApiErrorSelector,
   getUpdateClientGalleryApiErrorSelector,
   getClientsFilterSelector,
-  getClientsPageSizeSelector
+  getClientsPageSizeSelector, getIsDeletingPicturesInProcessSelector
 } from "../../../redux/Clients/clients-selectors"
 import { Clients } from "./Clients"
 
@@ -40,6 +40,7 @@ export const ClientsContainer: React.FC = () => {
   const clients = useSelector(getClientsSelector)
   const filter = useSelector(getClientsFilterSelector)
   const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector)
+  const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
   const addClientApiError = useSelector(getAddClientApiErrorSelector)
   const updateClientGalleryApiError = useSelector(getUpdateClientGalleryApiErrorSelector)
@@ -125,6 +126,7 @@ export const ClientsContainer: React.FC = () => {
           clients={clients}
           clientsFilter={filter}
           isDeletingInProcess={isDeletingInProcess}
+          isDeletingPicturesInProcess={isDeletingPicturesInProcess}
           addClientApiError={addClientApiError}
           updateClientGalleryApiError={updateClientGalleryApiError}
           onPageChanged={setCurrentPageCallBack}

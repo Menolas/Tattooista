@@ -55,6 +55,7 @@ class UserService {
         }
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
+        console.log("token generated with login!!!!!!!!!!")
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
         return {
             ...tokens,
@@ -66,6 +67,7 @@ class UserService {
     }
 
     async logout(refreshToken) {
+        console.log("token removed cause of logout!!!!!!!!")
         return await tokenService.removeToken(refreshToken)
     }
 
@@ -87,6 +89,7 @@ class UserService {
         const user = await UserModel.findById(userData.id)
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
+        console.log("token generated with refresh!!!!!!!!!!")
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
         return {
             ...tokens,

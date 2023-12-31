@@ -40,7 +40,7 @@ export const clientsAPI = {
     filter: ClientsFilterType
   ) {
     return instance.get<GetClientsResponseType>(
-        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.gallery}`)
+        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)
         .then(response => response.data)
   },
 
@@ -49,7 +49,8 @@ export const clientsAPI = {
       pageSize = 5,
       filter: ClientsFilterType
   ) {
-      return instance.get<GetClientsResponseType>(`clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.gallery}`)
+      return instance.get<GetClientsResponseType>(
+          `clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)
           .then(response => response.data)
   },
 

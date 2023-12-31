@@ -1,6 +1,5 @@
 import * as React from "react"
 import { useEffect} from "react"
-import {ClientSearchFormFormik} from "../../Forms/ClientSearchFormFormik"
 import {Paginator} from "../../common/Paginator"
 import {
     ClientsFilterType,
@@ -26,6 +25,8 @@ import {
 import {Preloader} from "../../common/Preloader"
 import {ArchivedClient} from "./ArchivedClient"
 import {ApiErrorMessage} from "../../common/ApiErrorMessage"
+import {clientFilterSelectOptions} from "../../../utils/constants";
+import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 
 export const ArchivedClients: React.FC = () => {
     const isFetching = useSelector(getClientsIsFetching)
@@ -38,22 +39,10 @@ export const ArchivedClients: React.FC = () => {
     const addClientApiError = useSelector(getAddClientApiErrorSelector)
 
     const dispatch = useDispatch()
-    //const navigate = useNavigate()
 
     useEffect(() => {
-        // const urlParams = new URLSearchParams(window.location.search)
-        // let actualPage = currentPage
-        // let actualFilter = filter
-        // if (!!urlParams.get('page')) actualPage = Number(urlParams.get('page'))
-        // if (!!urlParams.get('term')) actualFilter = { ...actualFilter, term: urlParams.get('term') as string }
-        // if (!!urlParams.get('status')) actualFilter = { ...actualFilter, gallery: urlParams.get('gallery')}
-
         dispatch(getArchivedClients(currentPage, pageSize, filter))
     }, [currentPage, pageSize, filter])
-
-    // useEffect(() => {
-    //     navigate(`?term=${filter.term}&gallery=${filter.gallery}&page=${currentPage}`)
-    // }, [filter, currentPage])
 
     const onPageChangedCallBack = (
         page: number
@@ -105,8 +94,9 @@ export const ArchivedClients: React.FC = () => {
     return (
         <>
             <div className="admin__cards-header">
-                <ClientSearchFormFormik
-                    clientsFilter={filter}
+                <SearchFilterForm
+                    options={clientFilterSelectOptions}
+                    filter={filter}
                     onFilterChanged={onFilterChangeCallBack}
                 />
                 <Paginator

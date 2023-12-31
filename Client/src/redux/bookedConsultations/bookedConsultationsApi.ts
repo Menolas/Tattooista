@@ -42,7 +42,7 @@ export const bookedConsultationsAPI = {
     pageSize: number,
     filter: BookedConsultationsFilterType
   ) {
-    return instance.get<GetBookedConsultationsResponseType>(`bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.status}`)
+    return instance.get<GetBookedConsultationsResponseType>(`bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`)
       .then(response => response.data)
   },
 
@@ -51,7 +51,7 @@ export const bookedConsultationsAPI = {
       pageSize: number,
       filter: BookedConsultationsFilterType
   ) {
-    return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.status}`)
+    return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`)
         .then(response => response.data)
   },
 

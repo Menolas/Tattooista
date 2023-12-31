@@ -9,7 +9,7 @@ import { ClientType, ContactType } from "../../../types/Types"
 import { API_URL } from "../../../http"
 import { ModalPopUp } from "../../common/ModalPopUp"
 import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
-import { ClientGalleryUploadFormFormik } from "../../Forms/ClientGalleryUploadFormFormik"
+import { GalleryUploadForm } from "../../Forms/GalleryUploadForm"
 import { Tooltip } from "react-tooltip"
 import { Confirmation } from "../../common/Confirmation"
 
@@ -18,6 +18,7 @@ type PropsType = {
   pageSize: number
   currentPage: number
   isDeletingInProcess: Array<string>
+  isDeletingPicturesInProcess: Array<string>
   deleteClient: (clientId: string) => void
   editClient: (clientId: string, values: FormData) => void
   updateClientGallery: (clientId: string, values: FormData) => void
@@ -28,6 +29,7 @@ type PropsType = {
 export const Client: React.FC<PropsType> = React.memo(({
   client,
   isDeletingInProcess,
+  isDeletingPicturesInProcess,
   deleteClient,
   editClient,
   pageSize,
@@ -192,10 +194,11 @@ export const Client: React.FC<PropsType> = React.memo(({
               modalTitle="Edit Gallery"
               closeModal={closeEditModal}
           >
-            <ClientGalleryUploadFormFormik
-                profileId={client._id}
+            <GalleryUploadForm
+                updateId={client._id}
                 gallery={client.gallery}
-                updateClientGallery={updateClientGallery}
+                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+                updateGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 closeModal={closeEditModal}
             />

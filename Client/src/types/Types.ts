@@ -121,3 +121,8 @@ export type PageType = {
     content: string
     wallPaper: Array<string>
 }
+
+export type SelectOptionType = {
+    value: string
+    label: string
+}

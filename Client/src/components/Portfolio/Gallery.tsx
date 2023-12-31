@@ -3,7 +3,6 @@ import {useEffect, useState} from "react"
 import { Preloader } from "../common/Preloader"
 import {GalleryItemType, TattooStyleType} from "../../types/Types"
 import { ModalPopUp } from '../common/ModalPopUp'
-import { AdminGalleryUploadFormFormik } from "../Forms/AdminGalleryUploadFormFormik"
 import {API_URL} from "../../http"
 import { Tooltip } from "react-tooltip"
 // @ts-ignore
@@ -14,6 +13,7 @@ import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer"
 import {useDispatch} from "react-redux"
 import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm"
 import {NothingToShow} from "../common/NothingToShow"
+import {GalleryUploadForm} from "../Forms/GalleryUploadForm";
 
 type PropsType = {
   isSuccess: boolean
@@ -210,8 +210,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                 closeModal={closeEditGalleryForm}
                 modalTitle={modalTitle}
             >
-              <AdminGalleryUploadFormFormik
-                  activeStyle={activeStyle._id}
+              <GalleryUploadForm
+                  updateId={activeStyle._id}
                   updateGallery={updateGallery}
                   closeModal={closeEditGalleryForm}
               />

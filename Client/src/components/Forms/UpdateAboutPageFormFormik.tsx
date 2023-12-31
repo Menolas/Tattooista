@@ -8,16 +8,17 @@ import {PageType} from "../../types/Types"
 import {FieldComponent} from "./FieldComponent"
 import {FieldWrapper} from "./FieldWrapper"
 import * as Yup from "yup"
+import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators"
 
 const validationSchema = Yup.object().shape({
     wallPaper: Yup.mixed()
         .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
             if (!value) return true
-            return value.size <= 1024 * 1024
+            return isFileSizeValid([value], MAX_FILE_SIZE)
         })
         .test('fileType', 'Invalid file type', (value: File) => {
             if (!value) return true
-            return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
+            return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
         }),
     title: Yup.string(),
     content: Yup.string(),

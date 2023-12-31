@@ -7,7 +7,6 @@ import {ResultCodesEnum} from "../../utils/constants"
 const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS'
 const SET_SERVICES = 'SET_SERVICES'
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE'
-const SET_ABOUT_PAGE_VISIBILITY = 'SET_PAGE_VISIBILITY'
 const SET_IS_GENERAL_FETCHING = 'SET_IS_GENERAL_FETCHING'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING'
@@ -56,12 +55,6 @@ export const generalReducer = (
       return {
         ...state,
         pageAbout: action.page
-      }
-
-    case SET_ABOUT_PAGE_VISIBILITY:
-      return {
-        ...state,
-        pageAbout: { ...state.pageAbout, isActive: action.bol}
       }
 
     case SET_IS_GENERAL_FETCHING:
@@ -119,8 +112,8 @@ export const generalReducer = (
 }
 
 type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
-    SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetAboutPageVisibilityAT
-    | SetAboutPageAT | SetFaqItemsAT | SetServicesAT
+    SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetAboutPageAT |
+    SetFaqItemsAT | SetServicesAT
 
 // action creators
 
@@ -195,15 +188,6 @@ type SetIsSuccessAT = {
 
 export const setIsSuccessAC = (bol: boolean): SetIsSuccessAT => ({
   type: SET_IS_SUCCESS, bol
-})
-
-type SetAboutPageVisibilityAT = {
-  type: typeof SET_ABOUT_PAGE_VISIBILITY
-  bol: boolean
-}
-
-const seAboutPageVisibilityAC = (bol: boolean): SetAboutPageVisibilityAT => ({
-  type: SET_ABOUT_PAGE_VISIBILITY, bol
 })
 
 type SetAboutPageAT = {
@@ -340,7 +324,9 @@ export const changeAboutPageVisibility = (
 ): ThunkType => async (dispatch) => {
   try {
     const response = await generalSourcesApi.changeAboutPageVisibility(isActive)
-    dispatch(seAboutPageVisibilityAC(!isActive))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setAboutPageAC(response.page))
+    }
   } catch (e) {
     console.log(e)
   }

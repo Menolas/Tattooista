@@ -3,32 +3,40 @@ import {Field, Form, Formik} from "formik"
 import {BookedConsultationsFilterType} from "../../redux/bookedConsultations/bookedConsultations-reducer"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
+import {FormSelect} from "./FormSelect"
+import {SelectOptionType} from "../../types/Types"
+
+const handleChange = () => {
+  console.log("HandleChange!!!")
+}
 
 type FormType = {
   term: string
-  status: string
+  condition: string
 }
 
 type PropsType = {
+  options: Array<SelectOptionType>
   filter: BookedConsultationsFilterType
   onFilterChanged: (filter: BookedConsultationsFilterType) => void
 }
 
-export const BookedConsultationsSearchForm: React.FC<PropsType> = React.memo(({
+export const SearchFilterForm: React.FC<PropsType> = React.memo(({
+  options,
   filter,
   onFilterChanged
 }) => {
   const submit = (values: FormType, {setSubmitting}: { setSubmitting: (isSubmitting: boolean) => void }) => {
     const filter: BookedConsultationsFilterType = {
       term: values.term,
-      status: values.status
+      condition: values.condition
     }
     onFilterChanged(filter)
     setSubmitting(false)
   }
   const initialValues = {
     term: filter.term,
-    status: filter.status
+    condition: filter.condition
   }
   return (
     <Formik
@@ -49,12 +57,12 @@ export const BookedConsultationsSearchForm: React.FC<PropsType> = React.memo(({
                 name="term"
                 placeholder={"Search..."}
               />
-
-              <Field name="status" as="select">
-                <option value="null">All</option>
-                <option value="true">Only contacted</option>
-                <option value="false">Only not contacted</option>
-              </Field>
+              <FormSelect
+                  name="condition"
+                  options={options}
+                  handleChange={handleChange}
+                  placeholder={'All'}
+              />
               <button
                 className={"btn btn--sm btn--light-bg search-submit"}
                 type="submit" disabled={isSubmitting}

@@ -5,7 +5,8 @@ import {UserType} from "../../../types/Types"
 import {UsersFilterType} from "../../../redux/Users/users-reducer"
 import {Preloader} from "../../common/Preloader"
 import {NothingToShow} from "../../common/NothingToShow"
-import {UserSearchFormFormik} from "../../Forms/UserSearchFormFormik"
+import { usersFilterSelectOptions } from "../../../utils/constants"
+import {SearchFilterForm} from "../../Forms/SearchFilterForm"
 
 type PropsType = {
     users: Array<UserType>
@@ -43,7 +44,8 @@ export const Users: React.FC<PropsType> = ({
     return (
         <>
             <div className="admin__cards-header">
-                <UserSearchFormFormik
+                <SearchFilterForm
+                    options={usersFilterSelectOptions}
                     filter={filter}
                     onFilterChanged={setClientsFilter}
                 />

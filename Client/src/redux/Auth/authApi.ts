@@ -30,12 +30,7 @@ type RegistrationResponseType = CommonResponseFields & {
     }
 }
 
-type LogoutResponseType = CommonResponseFields & {
-    token: {
-        deletedCount: number
-        acknowledged: boolean
-    }
-}
+type LogoutResponseType = CommonResponseFields
 
 type CheckAuthResponseType = CommonResponseFields & {
     userData: {
@@ -48,17 +43,17 @@ type CheckAuthResponseType = CommonResponseFields & {
 
 export const authAPI = {
 
-  auth(token: string | null) {
-    //debugger;
-    return instance.get<number>('auth/', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    } as AxiosRequestConfig)
-    .then(response => {
-      return response.data
-    })
-  },
+  // auth(token: string | null) {
+  //   //debugger;
+  //   return instance.get<number>('auth/', {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`
+  //     }
+  //   } as AxiosRequestConfig)
+  //   .then(response => {
+  //     return response.data
+  //   })
+  // },
 
   registration(values: RegistrationFormValues) {
       return $api.post<RegistrationResponseType>('auth/registration', values)
@@ -77,7 +72,7 @@ export const authAPI = {
   },
 
   checkAuth() {
-      return axios.get<CheckAuthResponseType>(`${API_URL}/auth/refresh`, {withCredentials: true})
+      return $api.get<CheckAuthResponseType>(`${API_URL}/auth/refresh`, {withCredentials: true})
           .then(response => response.data)
   }
 }
