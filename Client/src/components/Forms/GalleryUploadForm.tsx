@@ -1,8 +1,9 @@
 import * as React from "react"
 import { useState } from "react"
 import {Field, Form, Formik} from "formik"
+import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid } from "../../utils/validators"
 // @ts-ignore
-import tattooMachine from "../../assets/img/tattoo-machine.webp"
+//import tattooMachine from "../../assets/img/tattoo-machine.webp"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import {API_URL} from "../../http"
@@ -11,16 +12,16 @@ import * as Yup from "yup"
 
 const filesUploadingValidationSchema = Yup.object().shape({
   gallery: Yup.array()
-      .max(5, 'You can upload up to 5 files')
+      .max(5, "You can upload up to 5 files")
       .of(
           Yup.mixed()
-              .test('fileSize', 'Max allowed size is 2MB', (value: File) => {
+              .test('fileSize', "Max allowed size is 2MB ", (value: File) => {
                 if (!value) return true
-                return value.size <= 1024 * 1024
+                return isFileSizeValid([value], MAX_FILE_SIZE)
               })
-              .test('fileType', 'Invalid file type', (value: File) => {
+              .test('fileType', "Invalid file type", (value: File) => {
                 if (!value) return true
-                return ['image/jpeg', 'image/png', 'application/pdf'].includes(value.type)
+                return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
               })
       ),
 })

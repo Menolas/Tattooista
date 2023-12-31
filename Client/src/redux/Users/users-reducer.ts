@@ -83,7 +83,7 @@ type SetUsersFilterAT = {
     filter: UsersFilterType
 }
 
-export const setClientsFilterAC = (filter: UsersFilterType): SetUsersFilterAT => (
+export const setUsersFilterAC = (filter: UsersFilterType): SetUsersFilterAT => (
     {
         type: SET_USERS_FILTER, filter
     }

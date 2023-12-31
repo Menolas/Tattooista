@@ -1,7 +1,13 @@
 import * as React from "react"
 import { useState } from "react"
 import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik"
-import {phoneRegex} from "../../utils/validators"
+import {
+  isFileSizeValid,
+  isFileTypesValid,
+  MAX_FILE_SIZE,
+  phoneRegex,
+  VALID_FILE_EXTENSIONS
+} from "../../utils/validators"
 import {AddClientFormValues, ClientType} from "../../types/Types"
 import {API_URL} from "../../http"
 // @ts-ignore
@@ -14,11 +20,11 @@ const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
       .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
         if (!value) return true
-        return value.size <= 1024 * 1024
+        return isFileSizeValid([value], MAX_FILE_SIZE)
       })
       .test('fileType', 'Invalid file type', (value: File) => {
         if (!value) return true
-        return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
+        return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
       }),
   clientName: Yup.string()
     .min(2, 'Name is too short - should be 2 chars minimum.')

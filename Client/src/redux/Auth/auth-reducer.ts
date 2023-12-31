@@ -158,6 +158,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
 export const logout = (): ThunkType => async (
     dispatch
 ) => {
+  console.log("hit logout!!!")
   try {
     const response = await authAPI.logout()
      if(response.resultCode === 0) {
@@ -189,10 +190,11 @@ export const registration = (values: RegistrationFormValues): ThunkType => async
 }
 
 export const checkAuth = ():ThunkType => async (dispatch) => {
+  console.log("hit checkAuth!!!")
   try {
     let response = await authAPI.checkAuth()
     if (response.resultCode === ResultCodesEnum.Success) {
-      if (response.userData.isAuth) {
+      if (response.userData.isAuth === true) {
         dispatch(setAccessTokenAC(response.userData.accessToken))
         dispatch(setAuth(true))
         dispatch(setUserDataAC(response.userData.user))
