@@ -15,7 +15,7 @@
   }
 
   .admin__view-btns {
-    display: flex;
+    display: none;
     column-gap: 10px;
   }
 
@@ -39,7 +39,6 @@
 
   .admin__card {
     display: flex;
-    align-items: center;
     justify-content: space-between;
     padding: 20px;
     border: $light-border;
@@ -114,6 +113,7 @@
 }
 
 .admin__card {
+  flex-direction: column;
   .client-profile__header {
     display: flex;
     align-items: flex-start;
@@ -131,9 +131,11 @@
   }
 
   .admin__card-action-btns {
+    order: 0;
     display: flex;
     align-items: center;
     align-self: self-start;
+    margin: -20px -20px 20px auto;
   }
 
   .client-profile__gallery {
@@ -145,9 +147,19 @@
   }
 
   .admin__card-details {
+    order: 1;
     display: flex;
     flex-direction: column;
     row-gap: 8px;
+    max-width: 100%;
+    overflow: hidden;
+
+    span:not(.admin__card__data-type),
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 
@@ -155,11 +167,27 @@
   .admin {
     padding-top: 100px;
 
+    .admin__view-btns {
+      display: flex;
+    }
+
     .admin__card-avatar {
       width: 80px;
       height: 80px;
     }
   }
 
+  .admin__card {
+    flex-direction: row;
+    align-items: center;
 
+    .admin__card-details {
+      order: 0;
+    }
+
+    .admin__card-action-btns {
+      order: 1;
+      margin: 0 0 0 auto;
+    }
+  }
 }

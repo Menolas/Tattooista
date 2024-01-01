@@ -1,4 +1,25 @@
-import * as React from "react";
+export const ADMIN_BUTTONS_DATA = [
+    {
+        btnText: "Booked Consultations",
+        btnUrl: "bookedConsultations"
+    },
+    {
+        btnText: "Clients",
+        btnUrl: "clients"
+    },
+    {
+        btnText: "Portfolio",
+        btnUrl: "portfolio"
+    },
+    {
+        btnText: "Archive",
+        btnUrl: "archive/archivedConsultations"
+    },
+    {
+        btnText: "Users",
+        btnUrl: "users"
+    }
+]
 
 export enum ResultCodesEnum {
     Success = 0,
