@@ -88,7 +88,7 @@ export const Client: React.FC<PropsType> = React.memo(({
         <NavLink
             to={`/admin/profile?clientId=${client._id}`}
             className="admin__card-link client-profile">
-          <div className="client-profile__avatar">
+          <div className="admin__card-avatar">
             <img src={clientAvatar} alt={""}/>
           </div>
           <div className="client-profile__details">

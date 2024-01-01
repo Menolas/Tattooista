@@ -47,7 +47,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
 
         return bookingContacts[contact] ?
             <li key={contact}>
-                <span>{contact}:&nbsp;</span>
+                <span className={"admin__card__data-type"}>{contact}:&nbsp;</span>
                 <span>{bookingContacts[contact]}</span>
             </li> : null
 
@@ -57,7 +57,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
     <li className="admin__card">
       <div className="admin__card-details">
         <div className="admin__card-name">
-          <span>Name:&nbsp;</span>
+          <span className={"admin__card__data-type"}>Name:&nbsp;</span>
           <span>{consultation.fullName}</span>
         </div>
         <div>{consultation.createdAt.split('T')[0] + ' (' + consultation.createdAt.split('T')[1].split('.')[0] + ')'}</div>
@@ -67,7 +67,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
           </ul>
         </div>
         <div className="admin__card-message">
-          <span>Message:&nbsp;</span>
+          <span className={"admin__card__data-type"}>Message:&nbsp;</span>
           <p>{consultation.message}</p>
         </div>
       </div>

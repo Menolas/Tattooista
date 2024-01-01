@@ -3,31 +3,10 @@ import {Navigate, NavLink} from "react-router-dom"
 import { Outlet } from "react-router-dom"
 import {useSelector} from "react-redux"
 import {getAuthSelector, getUserSelector} from "../../redux/Auth/auth-selectors"
+import {AdminPanelMobileMenu} from "../../components/AdminPanelMobileMenu"
+import { ADMIN_BUTTONS_DATA } from "../../utils/constants"
 
-const adminButtonsData = [
-    {
-        btnText: "Booked Consultations",
-        btnUrl: "bookedConsultations"
-    },
-    {
-        btnText: "Clients",
-        btnUrl: "clients"
-    },
-    {
-        btnText: "Portfolio",
-        btnUrl: "portfolio"
-    },
-    {
-        btnText: "Archive",
-        btnUrl: "archive/archivedConsultations"
-    },
-    {
-        btnText: "Users",
-        btnUrl: "users"
-    }
-]
-
-const adminButtons = adminButtonsData.map((btn, i ) => {
+const adminButtons = ADMIN_BUTTONS_DATA.map((btn, i ) => {
 
     return (
         <NavLink
@@ -53,6 +32,7 @@ const Admin: React.FC = React.memo(() => {
   return (
     <div className="admin">
       <div className="admin__header">
+        <AdminPanelMobileMenu />
         <div className="admin__view-btns">
             {adminButtons}
         </div>
