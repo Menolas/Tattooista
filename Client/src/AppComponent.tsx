@@ -27,6 +27,7 @@ import {RegistrationContainer} from "./pages/registration/RegistrationContainer"
 import {checkAuth} from "./redux/Auth/auth-reducer"
 import {ScrollToTopButton} from "./components/common/ScrollToTopButton"
 import {UsersContainer} from "./components/Admin/Users/UsersContainer"
+import {NotFound} from "./components/404-page";
 
 const App = () => {
 
@@ -90,6 +91,7 @@ const App = () => {
                                 <Route path={`users`}
                                        element={<UsersContainer/>} />
                             </Route>
+                            <Route path="*" element={<NotFound />} />
                         </Routes>
                     </main>
                     <Contacts />

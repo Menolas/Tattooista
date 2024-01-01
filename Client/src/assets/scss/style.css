@@ -2907,5 +2907,19 @@ input[type=checkbox]:checked + label .checkbox::after {
     display: none;
   }
 }
+.not-found {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.not-found img {
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .not-found img {
+    width: 400px;
+  }
+}
 
 /*# sourceMappingURL=style.css.map */
