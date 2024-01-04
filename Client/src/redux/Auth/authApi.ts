@@ -12,14 +12,12 @@ type CommonResponseFields = {
     message?: string
 }
 
-type LoginResponseType = {
-    resultCode?: number
+type LoginResponseType = CommonResponseFields & {
     userData: {
         user: IUser
         accessToken: string
         refreshToken: string
     }
-    error?: string
 }
 
 type RegistrationResponseType = CommonResponseFields & {

@@ -21,7 +21,7 @@ class AuthController {
     }
   }
 
-  async login(req, res, next) {
+  async login(req, res) {
     const results = {}
     try {
       const {email, password} = req.body
@@ -31,11 +31,14 @@ class AuthController {
       results.userData = userData
       return res.json(results)
     } catch(e) {
-      next(e)
+      results.resultCode = 1
+      results.message = e.message
+      console.log(e)
+      res.status(400).json(results)
     }
   }
 
-  async logout(req, res, next) {
+  async logout(req, res) {
     const results = {}
     try {
       const {refreshToken} = req.cookies
@@ -44,17 +47,24 @@ class AuthController {
       results.resultCode = 0
       return res.json(results)
     } catch(e) {
-      next(e)
+      results.resultCode = 1
+      results.message = e.message
+      console.log(e)
+      res.status(400).json(results)
     }
   }
 
-  async activate(req, res, next) {
+  async activate(req, res) {
+    const results = {}
     try {
       const activationLink = req.params.link
       await userService.activate(activationLink)
       return res.redirect(process.env.CLIENT_URL)
     } catch(e) {
-      next(e)
+      results.resultCode = 1
+      results.message = e.message
+      console.log(e)
+      res.status(400).json(results)
     }
   }
 

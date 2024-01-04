@@ -87,6 +87,11 @@ class UserService {
             }
         }
         const user = await UserModel.findById(userData.id)
+        if (!user) {
+            return {
+                isAuth: false
+            }
+        }
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
         console.log("token generated with refresh!!!!!!!!!!")

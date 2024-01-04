@@ -23,3 +23,11 @@ export const getUsersIsFetching = (state: AppStateType) => {
 export const getUsersFiletSelector = (state: AppStateType) => {
     return state.users.usersFilter
 }
+
+export const getRolesSelector = (state: AppStateType) => {
+    return state.users.roles
+}
+
+export const getIsSuccessSelector = (state: AppStateType) => {
+    return state.users.isSuccess
+}
