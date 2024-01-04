@@ -614,10 +614,10 @@ export const editClient = (
       dispatch(setClientProfile(response.client))
       dispatch(setIsSuccessAC(true))
     }
-    dispatch(setIsFetchingAC(false))
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 

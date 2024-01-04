@@ -1,3 +1,8 @@
+export type RoleType = {
+    _id: string
+    value: string
+}
+
 export type IUser = {
     displayName: string | undefined
     isActivated: boolean
@@ -6,8 +11,8 @@ export type IUser = {
 
 export type UserType = {
     "_id": string
-    "displayName": string
-    "email": string
+    displayName: string
+    email: string
     isActivated: boolean
     avatar: string
     roles: Array<string>
@@ -18,11 +23,11 @@ export interface ContactType {
 }
 
 export type ContactsType = {
-    "email": string | undefined
-    "insta": string | undefined
-    "messenger": string | undefined
-    "phone": string | undefined
-    "whatsapp": string | undefined
+    email: string | undefined
+    insta: string | undefined
+    messenger: string | undefined
+    phone: string | undefined
+    whatsapp: string | undefined
 }
 
 export type ClientType = {
@@ -111,6 +116,13 @@ export interface AddClientFormValues {
     messenger: string | null
     phone: string | null
     whatsapp: string | null
+}
+
+export interface UpdateUserFormValues {
+    avatar: File | string | null
+    displayName: string
+    email: string
+    roles: Array<string>
 }
 
 export type PageType = {

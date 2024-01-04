@@ -1,9 +1,10 @@
 import type {} from "redux-thunk/extend-redux"
-import { UserType } from "../../types/Types"
+import {ClientType, RoleType, UserType} from "../../types/Types"
 import { ResultCodesEnum } from "../../utils/constants"
 import { AppStateType } from "../redux-store"
 import { ThunkAction } from "redux-thunk"
 import { usersAPI } from "./usersApi"
+import { getNewPage } from "../../utils/functions"
 
 const SET_USERS = 'SET_USERS'
 const SET_USERS_TOTAL_COUNT = 'SET_USERS_TOTAL_COUNT'
@@ -11,9 +12,16 @@ const SET_USERS_PAGE_LIMIT = 'SET_PAGE_LIMIT'
 const SET_USERS_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const SET_USERS_FILTER = 'SET_USERS_FILTER'
+const DELETE_USER = 'DELETE_USER'
+const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS'
+const SET_ROLES = 'SET_ROLES'
+const EDIT_USER = 'EDIT_USER'
+const ADD_USER = 'ADD_USER'
+const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 
 let initialState = {
     users: [] as Array<UserType>,
+    roles: [] as Array<RoleType>,
     totalUsersCount: 0 as number,
     usersIsFetching: false as boolean,
     pageLimit: 5 as number,
@@ -22,7 +30,8 @@ let initialState = {
     usersFilter: {
         term: '' as string | null,
         condition: 'any' as string | null
-    }
+    },
+    isSuccess: false as boolean,
 }
 
 export type InitialStateType = typeof initialState
@@ -69,14 +78,79 @@ export const usersReducer = (
                 pageLimit: action.pageLimit
             }
 
+        case DELETE_USER:
+            return {
+                ...state,
+                users: state.users.filter(user => user._id !== action.userId)
+            }
+
+        case TOGGLE_IS_DELETING_IN_PROCESS:
+            return {
+                ...state,
+                isDeletingInProcess: action.isFetching
+                    ? [...state.isDeletingInProcess, action.id]
+                    : state.isDeletingInProcess.filter(id => id !== action.id)
+            }
+
+        case SET_ROLES:
+            return {
+                ...state,
+                roles: action.roles
+            }
+
+        case EDIT_USER:
+            return {
+                ...state,
+                users: state.users.map(user => {
+                    if (user._id === action.user._id) {
+                        return { ...action.user }
+                    }
+
+                    return user
+                })
+            }
+
+        case ADD_USER:
+            return {
+                ...state,
+                users: [{...action.user}, ...state.users ],
+            }
+
+        case SET_IS_SUCCESS:
+            return {
+                ...state,
+                isSuccess: action.isSuccess
+            }
+
         default: return state
     }
 }
 
 type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
-    SetUsersTotalCountAT | SetUsersCurrentPageAT | SetPageLimitAT
+    SetUsersTotalCountAT | SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
+    ToggleIsDeletingInProcessAT | SetRolesAT | EditUserAT | SetIsSuccessAT | AddUserAT
 
 //actions creators
+
+type AddUserAT = {
+    type: typeof ADD_USER,
+    user: UserType
+}
+
+const addUserAC = (user: UserType): AddUserAT => (
+    {
+        type: ADD_USER, user
+    }
+)
+
+type SetIsSuccessAT = {
+    type: typeof SET_IS_SUCCESS
+    isSuccess: boolean
+}
+
+export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
+    type: SET_IS_SUCCESS, isSuccess
+})
 
 type SetUsersFilterAT = {
     type: typeof SET_USERS_FILTER
@@ -134,7 +208,58 @@ export const setUsersPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
     type: SET_USERS_PAGE_LIMIT, pageLimit
 })
 
+type DeleteUserAT = {
+    type: typeof DELETE_USER,
+    userId: string
+}
+
+const deleteUserAC = (userId: string): DeleteUserAT => ({
+    type: DELETE_USER, userId
+})
+
+type ToggleIsDeletingInProcessAT = {
+    type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
+    isFetching: boolean,
+    id: string
+}
+
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
+    type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
+})
+
+type SetRolesAT = {
+    type: typeof SET_ROLES,
+    roles: Array<RoleType>
+}
+
+const setRolesAC = (roles: Array<RoleType>): SetRolesAT => ({
+    type: SET_ROLES, roles
+})
+
+type EditUserAT = {
+    type: typeof EDIT_USER,
+    user: UserType
+}
+
+const editUserAC = (user: UserType): EditUserAT => ({
+    type: EDIT_USER, user
+})
+
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+
+export const getRoles = (): ThunkType => async (dispatch) => {
+    try {
+        dispatch(toggleIsFetchingAC(true))
+        let response = await usersAPI.getRoles()
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(setRolesAC(response.roles))
+        }
+    } catch (e) {
+        console.log(e)
+    } finally {
+        dispatch(toggleIsFetchingAC(false))
+    }
+}
 
 export const getUsers = (
     currentPage: number,
@@ -156,5 +281,85 @@ export const getUsers = (
         console.log(e)
     } finally {
         dispatch(toggleIsFetchingAC(false))
+    }
+}
+
+const deleteUserThunk = (
+    id: string,
+    users: Array<UserType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: UsersFilterType
+): ThunkType => async (dispatch) => {
+    if (users.length > 1) {
+        dispatch(deleteUserAC(id))
+        dispatch(setUsersTotalCountAC(total -1))
+    } else {
+        const newPage = getNewPage(currentPage)
+        if (currentPage === newPage) {
+            await dispatch(getUsers(newPage, pageLimit, filter))
+        }
+        dispatch(deleteUserAC(id))
+        dispatch(setUsersCurrentPageAC(newPage))
+
+    }
+}
+
+export const deleteUser = (
+    id: string,
+    users: Array<UserType>,
+    currentPage: number,
+    total: number,
+    pageLimit: number,
+    filter: UsersFilterType
+): ThunkType => async (
+    dispatch
+) => {
+    try {
+        dispatch(toggleIsDeletingInProcessAC(true, id))
+        let response = await usersAPI.deleteUser(id)
+        if (response.resultCode === ResultCodesEnum.Success) {
+            await dispatch(deleteUserThunk(id, users, currentPage, total, pageLimit, filter))
+        }
+    } catch (e) {
+        console.log(e)
+    } finally {
+        dispatch(toggleIsDeletingInProcessAC(false, id))
+    }
+}
+
+export const updateUser = (
+    id: string,
+    values: FormData
+): ThunkType => async (dispatch) => {
+    try {
+        dispatch(toggleIsFetchingAC(true))
+        let response = await usersAPI.updateUser(id, values)
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(editUserAC(response.user))
+            dispatch(setIsSuccessAC(true))
+        }
+    } catch (e) {
+        console.log(e)
+    } finally {
+        dispatch(toggleIsFetchingAC(false))
+    }
+
+}
+
+export const addUser = (
+    values: FormData,
+    total: number
+): ThunkType => async (dispatch) => {
+    try {
+        let response = await usersAPI.addUser(values)
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(addUserAC(response.user))
+            dispatch(setIsSuccessAC(true))
+            dispatch(setUsersTotalCountAC(total + 1))
+        }
+    } catch (e) {
+        console.log(e)
     }
 }

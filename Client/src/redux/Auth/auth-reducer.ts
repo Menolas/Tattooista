@@ -145,14 +145,10 @@ export const login = (values: LoginFormValues): ThunkType => async (
       dispatch(setAuth(true))
       dispatch(setAccessTokenAC(response.userData.accessToken))
     }
-
   } catch (e) {
     // @ts-ignore
     dispatch(setLoginErrorAC(e.response.data.message))
-    // @ts-ignore
-    console.log(e.response.data.message)
   }
-
 }
 
 export const logout = (): ThunkType => async (
@@ -190,7 +186,7 @@ export const registration = (values: RegistrationFormValues): ThunkType => async
 }
 
 export const checkAuth = ():ThunkType => async (dispatch) => {
-  console.log("hit checkAuth!!!")
+
   try {
     let response = await authAPI.checkAuth()
     if (response.resultCode === ResultCodesEnum.Success) {

@@ -18,7 +18,6 @@ class galleryController {
       const styles = await TattooStyle.find({_id: req.query.style})
       if (styles.length > 0) {
         const style = styles[0]; // Access the first element
-        //console.log(style.nonStyle + '!!!!!!! nonstyle !!!!!!!!!!!!!!!!!!');
         if (style.nonStyle) {
           gallery = await GalleryItem.find( {$or: [{ tattooStyles: { $exists: true, $size: 0 } }, { tattooStyles:req.query.style }]}).sort({ createdAt: -1 });
         } else {

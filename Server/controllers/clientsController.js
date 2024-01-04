@@ -218,7 +218,6 @@ class clientsController {
 
     try {
       if (res.client.avatar) {
-        console.log("Client has an avatar!!!!!")
         const oldPath = `./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`
         const newPath = `./uploads/archivedClients/${archivedClient._id}/avatar/${res.client.avatar}`
         mv(oldPath, newPath, { mkdirp: true }, function(e) {
