@@ -1,6 +1,6 @@
-import axios, { CreateAxiosDefaults } from "axios"
+import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios"
 import { BookedConsultationType, ContactsType } from "../../types/Types"
-import {API_URL} from "../../http"
+import $api, {API_URL} from "../../http"
 import { BookedConsultationsFilterType } from "./bookedConsultations-reducer"
 
 const instance = axios.create({
@@ -38,12 +38,15 @@ type AddConsultationResponseType = CommonResponseFields & {
 export const bookedConsultationsAPI = {
 
   getBookedConsultations(
+    token: string | null,
     currentPage: number,
     pageSize: number,
     filter: BookedConsultationsFilterType
   ) {
-    return instance.get<GetBookedConsultationsResponseType>(`bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`)
-      .then(response => response.data)
+    return instance.get<GetBookedConsultationsResponseType>(
+        `${API_URL}/bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
+        {headers: {Authorization: `Bearer ${token}`}} as AxiosRequestConfig
+    ).then(response => response.data)
   },
 
   getArchivedConsultations(

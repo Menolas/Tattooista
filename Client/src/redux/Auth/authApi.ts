@@ -1,11 +1,6 @@
 import $api, {API_URL} from "../../http"
-import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios"
 import {LoginFormValues, RegistrationFormValues} from "../../types/Types"
 import {IUser} from "../../types/Types"
-
-const instance = axios.create({
-  baseURL: API_URL
-} as CreateAxiosDefaults)
 
 type CommonResponseFields = {
     resultCode: number
@@ -70,7 +65,9 @@ export const authAPI = {
   },
 
   checkAuth() {
-      return $api.get<CheckAuthResponseType>(`${API_URL}/auth/refresh`, {withCredentials: true})
-          .then(response => response.data)
+      return $api.get<CheckAuthResponseType>(
+          `${API_URL}/auth/refresh`,
+          {withCredentials: true}
+      ).then(response => response.data)
   }
 }
