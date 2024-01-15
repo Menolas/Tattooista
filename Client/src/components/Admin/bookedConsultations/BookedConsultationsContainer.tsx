@@ -29,6 +29,7 @@ import {
 } from "../../../redux/bookedConsultations/bookedConsultations-selectors"
 import { BookedConsultations } from "./BookedConsultations"
 import {AddConsultationFormValues, BookedConsultationType, ContactsType} from '../../../types/Types'
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const BookedConsultationsContainer: React.FC = () => {
 
@@ -42,11 +43,12 @@ export const BookedConsultationsContainer: React.FC = () => {
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector)
   const isSuccess = useSelector(getIsSuccessSelector)
   const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
+  const token = useSelector(getTokenSelector)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getBookedConsultations(currentPage, pageSize, filter))
+    dispatch(getBookedConsultations(token, currentPage, pageSize, filter))
   }, [currentPage, pageSize, filter])
 
   useEffect(() => {

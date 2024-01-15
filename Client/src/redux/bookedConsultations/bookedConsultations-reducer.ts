@@ -395,6 +395,7 @@ const addBookedConsultationAC = (consultation: BookedConsultationType): AddBooke
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 const deleteBookingThunk = (
+    token: string | null,
     id: string,
     bookings: Array<BookedConsultationType>,
     currentPage: number,
@@ -408,7 +409,7 @@ const deleteBookingThunk = (
   } else {
     const newPage = getNewPage(currentPage)
     if (currentPage === newPage) {
-      await dispatch(getBookedConsultations(newPage, pageLimit, filter))
+      await dispatch(getBookedConsultations(token, newPage, pageLimit, filter))
     }
     dispatch(deleteBookedConsultationAC(id))
     dispatch(setCurrentPageForBookedConsultationsAC(newPage))
@@ -437,6 +438,7 @@ const deleteArchivedBookingThunk = (
 }
 
 export const getBookedConsultations = (
+  token: string | null,
   currentPage: number,
   pageSize: number,
   filter: BookedConsultationsFilterType
@@ -447,6 +449,7 @@ export const getBookedConsultations = (
   try {
     dispatch(setIsFetchingAC(true))
     let response = await bookedConsultationsAPI.getBookedConsultations(
+      token,
       currentPage,
       pageSize,
       filter
@@ -502,6 +505,7 @@ export const changeBookedConsultationStatus = (
 }
 
 export const deleteBookedConsultation = (
+    token: string | null,
     id: string,
     bookings: Array<BookedConsultationType>,
     currentPage: number,
@@ -513,7 +517,7 @@ export const deleteBookedConsultation = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.deleteConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -562,6 +566,7 @@ export const addBookedConsultation = (
 }
 
 export const turnConsultationToClient = (
+    token: string | null,
     id: string,
     fullName: string,
     contacts: {},
@@ -579,7 +584,7 @@ export const turnConsultationToClient = (
       contacts
     )
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e) {
@@ -592,6 +597,7 @@ export const turnConsultationToClient = (
 }
 
 export const archiveConsultation = (
+    token: string | null,
     id: string,
     bookings: Array<BookedConsultationType>,
     currentPage: number,
@@ -603,7 +609,7 @@ export const archiveConsultation = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.archiveConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
