@@ -1,7 +1,7 @@
 const Router = require('express')
 const router = new Router()
 const Page = require('../models/Page')
-const controller = require('../controllers/PagesController')
+const controller = require('../controllers/pagesController')
 
 //getting all pages
 

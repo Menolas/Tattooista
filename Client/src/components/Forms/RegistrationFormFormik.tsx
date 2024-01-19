@@ -1,13 +1,32 @@
 import * as React from "react"
 import { Field, Form, Formik, FormikHelpers, FormikValues } from "formik"
 // @ts-ignore
-import { ErrorMessageWrapper, ApiErrorMessage} from "../../utils/validators"
+import {
+  ErrorMessageWrapper,
+  ApiErrorMessage,
+  isFileSizeValid,
+  MAX_FILE_SIZE,
+  isFileTypesValid, VALID_FILE_EXTENSIONS
+} from "../../utils/validators"
 import * as Yup from "yup"
 import {RegistrationFormValues} from "../../types/Types"
 import {FieldComponent} from "./FieldComponent"
 import {FieldWrapper} from "./FieldWrapper"
+import {useState} from "react"
+import {API_URL} from "../../http"
+// @ts-ignore
+import avatar from "../../assets/img/fox.webp"
 
 const validationSchema = Yup.object().shape({
+  avatar: Yup.mixed()
+      .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
+        if (!value) return true
+        return isFileSizeValid([value], MAX_FILE_SIZE)
+      })
+      .test('fileType', 'Invalid file type', (value: File) => {
+        if (!value) return true
+        return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
+      }),
   displayName: Yup
       .string()
       .min(2, 'Display is too short - should be 4 chars minimum.')
@@ -36,23 +55,39 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
   registration
 }) => {
 
+  const [imageURL, setImageURL] = useState('')
+
+  const handleOnChange = (event) => {
+    event.preventDefault()
+    if (event.target.files && event.target.files.length) {
+      const file = event.target.files[0]
+      const fileReader = new FileReader()
+      fileReader.onloadend = () => {
+        // @ts-ignore
+        setImageURL(fileReader.result)
+      }
+      fileReader.readAsDataURL(file)
+    }
+  }
+
   const submit = (values: RegistrationFormValues, actions: FormikHelpers<FormikValues>) => {
     registration(values)
     actions.setSubmitting(false)
   }
 
   const initialValues: RegistrationFormValues = {
-      displayName: '',
-      email: '',
-      password: '',
-      consent: false,
+    avatar: '',
+    displayName: '',
+    email: '',
+    password: '',
+    consent: false,
   }
 
   return (
     <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={submit}
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={submit}
     >
       {(propsF) => {
         let {isSubmitting} = propsF
@@ -63,6 +98,28 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
             { registrationError  !== '' &&
                 <ApiErrorMessage message={registrationError}/>
             }
+            <div className="form__input-wrap form__input-wrap--uploadFile">
+              <div className="form__avatar">
+                <img
+                    src={ imageURL ? imageURL :  avatar }
+                    alt="preview"
+                />
+              </div>
+              <label className="btn btn--sm" htmlFor={"avatar"}>Pick File</label>
+              <FieldWrapper name={'avatar'}>
+                <Field
+                    className="hidden"
+                    id="avatar"
+                    name={'avatar'}
+                    type={'file'}
+                    value={undefined}
+                    onChange={(e) => {
+                      propsF.setFieldValue('avatar', e.currentTarget.files[0])
+                      handleOnChange(e)
+                    }}
+                />
+              </FieldWrapper>
+            </div>
             <FieldComponent
                 name={'displayName'}
                 type={'text'}

@@ -2,7 +2,7 @@ import * as React from "react"
 import { User } from "./User"
 import {Paginator} from "../../common/Paginator"
 import {RoleType, UserType} from "../../../types/Types"
-import {updateUser, UsersFilterType} from "../../../redux/Users/users-reducer"
+import {UsersFilterType} from "../../../redux/Users/users-reducer"
 import {Preloader} from "../../common/Preloader"
 import {NothingToShow} from "../../common/NothingToShow"
 import { usersFilterSelectOptions } from "../../../utils/constants"
@@ -55,7 +55,7 @@ export const Users: React.FC<PropsType> = ({
     }
 
     const modalTitle = 'ADD USER'
-    const successPopUpContent = "You successfully added user"
+    const successPopUpContent = "You successfully updated user"
 
     const usersElements = users.map(user => {
         return (

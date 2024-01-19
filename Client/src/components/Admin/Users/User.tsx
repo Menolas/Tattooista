@@ -68,7 +68,7 @@ export const User: React.FC<PropsType> = ({
                         <div className="admin__card-roles">
                             <span>roles:&nbsp;</span>
                             { user.roles.length > 0
-                                ? user.roles.map(role => <span key={role}>{role}</span>)
+                                ? user.roles.map(role => <span key={role._id}>{role.value}</span>)
                                 : <span>{''}</span>
                             }
                         </div>
