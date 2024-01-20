@@ -1,5 +1,6 @@
 import * as React from "react"
 import {useEffect, useState} from "react"
+import { Navigate } from "react-router"
 import { Paginator } from "../../common/Paginator"
 import { BookedConsultation } from "./BookedConsultation"
 import {AddConsultationFormValues, BookedConsultationType} from "../../../types/Types"
@@ -26,6 +27,7 @@ type PropsType = {
   isStatusChanging?: Array<string>
   isDeletingInProcess?: Array<string>
   addBookingApiError: string | undefined
+  accessError: string | undefined
   setCurrentPage: (page: number) => void
   onFilterChanged: (filter: BookedConsultationsFilterType) => void
   changeStatus: (id: string, status: boolean) => void
@@ -49,6 +51,7 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
   isStatusChanging,
   isDeletingInProcess,
   addBookingApiError,
+  accessError,
   setCurrentPage,
   onFilterChanged,
   changeStatus,
@@ -98,61 +101,66 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
 
     return (
       <>
-          <div className="admin__cards-header">
-            <SearchFilterForm
-              options={bookingFilterSelectOptions}
-              filter={bookedConsultationsFilter}
-              onFilterChanged={onFilterChanged}
-            />
-            <Paginator
-              totalCount={totalCount}
-              pageSize={pageSize}
-              currentPage={currentBookedConsultationsPage}
-              onPageChanged={setCurrentPage}
-              setPageLimit={setPageLimit}
-            />
-            <button
-              className="btn btn--bg btn--light-bg add-btn"
-              onClick={() => {setAddConsultationMode(true)}}
-            >
-              Add a consultation
-            </button>
-          </div>
-          {
-              isFetching
-                  ? <Preloader />
-                  : totalCount && totalCount > 0
-                      ? (
-                          <ul className="admin__cards-list list">
-                              { bookedConsultationsArray }
-                          </ul>
-                        )
-                      : <NothingToShow/>
-          }
+          { (accessError && accessError !== '')
+              ? <Navigate to="/noAccess" />
+              : <>
+                  <div className="admin__cards-header">
+                      <SearchFilterForm
+                          options={bookingFilterSelectOptions}
+                          filter={bookedConsultationsFilter}
+                          onFilterChanged={onFilterChanged}
+                      />
+                      <Paginator
+                          totalCount={totalCount}
+                          pageSize={pageSize}
+                          currentPage={currentBookedConsultationsPage}
+                          onPageChanged={setCurrentPage}
+                          setPageLimit={setPageLimit}
+                      />
+                      <button
+                          className="btn btn--bg btn--light-bg add-btn"
+                          onClick={() => {setAddConsultationMode(true)}}
+                      >
+                          Add a consultation
+                      </button>
+                  </div>
+                  {
+                      isFetching
+                          ? <Preloader />
+                          : totalCount && totalCount > 0
+                              ? (
+                                  <ul className="admin__cards-list list">
+                                      { bookedConsultationsArray }
+                                  </ul>
+                              )
+                              : <NothingToShow/>
+                  }
 
-          { addConsultationMode &&
-              <ModalPopUp
-                  modalTitle={modalTitle}
-                  closeModal={closeModal}
-              >
-                  <AddConsultationForm
-                    addBookedConsultation={addBookedConsultation}
-                    closeBookingModal={closeModal}
-                  />
-              </ModalPopUp>
-          }
-          {
-            isSuccess &&
-            <SuccessPopUp
-                closeModal={setIsSuccess}
-                content={successPopUpContent}
-            />
-          }
-          { addBookingApiError && addBookingApiError !== '' &&
-              <ApiErrorMessage
-                  error={addBookingApiError}
-                  closeModal={setAddBookingApiError}
-              />
+                  { addConsultationMode &&
+                      <ModalPopUp
+                          modalTitle={modalTitle}
+                          closeModal={closeModal}
+                      >
+                          <AddConsultationForm
+                              addBookedConsultation={addBookedConsultation}
+                              closeBookingModal={closeModal}
+                          />
+                      </ModalPopUp>
+                  }
+                  {
+                      isSuccess &&
+                      <SuccessPopUp
+                          closeModal={setIsSuccess}
+                          content={successPopUpContent}
+                      />
+                  }
+                  { addBookingApiError && addBookingApiError !== '' &&
+                      <ApiErrorMessage
+                          error={addBookingApiError}
+                          closeModal={setAddBookingApiError}
+                      />
+                  }
+                </>
           }
       </>
     )

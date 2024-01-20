@@ -16,6 +16,7 @@ module.exports = function (roles) {
       const roleIds = await Promise.all(roleObjectPromises)
 
       const token = req.headers.authorization.split(' ')[1]
+      //const {refreshToken} = req.cookies
       if (!token) {
         return res.status(403).json({ message: "User is not authorized" })
       }
@@ -25,9 +26,10 @@ module.exports = function (roles) {
       let hasRole = false
       userRoles.forEach(role => {
         roleIds.forEach(roleId => {
-          console.log(roleId + " " + role + "  in loop !!!!!!!!!!!!!!!!!!!!!")
-          if (roleId == role) {
+          if (roleId.toString() === role) {
             hasRole = true
+            console.log(JSON.stringify(roleId) + "  roleId type !!!!!!!!!!!!!!!!!!!!!")
+            console.log(typeof role + "  role type !!!!!!!!!!!!!!!!!!!!!")
           }
         })
         // if (roleIds.includes(role)) {
@@ -35,7 +37,7 @@ module.exports = function (roles) {
         // }
       })
       if (!hasRole) {
-        return res.status(403).json({ message: "You not authorized to see this page" })
+        return res.status(403).json({ message: roleIds })
       }
       next()
     } catch (e) {

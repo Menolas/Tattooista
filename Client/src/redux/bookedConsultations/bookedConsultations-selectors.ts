@@ -62,3 +62,7 @@ export const getIsSuccessSelector = (state: AppStateType) => {
 export const getAddBookingApiErrorSelector = (state: AppStateType) => {
   return state.bookedConsultations.addBookingApiError
 }
+
+export const getAccessErrorSelector = (state: AppStateType) => {
+  return state.bookedConsultations.accessError
+}
