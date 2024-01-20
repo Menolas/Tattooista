@@ -90,7 +90,6 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
       onSubmit={submit}
     >
       {(propsF) => {
-        let {isSubmitting} = propsF
 
         return (
           <Form id="registration" className="form">
@@ -161,9 +160,9 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
             <button
               className="btn btn--bg btn--transparent form__submit-btn"
               type="submit"
-              disabled={isSubmitting}
+              disabled={propsF.isSubmitting}
             >
-              {isSubmitting
+              {propsF.isSubmitting
                   ? 'Please wait...'
                   : 'Sign Up'
               }

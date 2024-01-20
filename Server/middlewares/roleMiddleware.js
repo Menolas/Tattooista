@@ -21,14 +21,21 @@ module.exports = function (roles) {
       }
 
       const { roles: userRoles } = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+
       let hasRole = false
       userRoles.forEach(role => {
-        if (roleIds.includes(role)) {
-          hasRole = true
-        }
+        roleIds.forEach(roleId => {
+          console.log(roleId + " " + role + "  in loop !!!!!!!!!!!!!!!!!!!!!")
+          if (roleId == role) {
+            hasRole = true
+          }
+        })
+        // if (roleIds.includes(role)) {
+        //   hasRole = true
+        // }
       })
       if (!hasRole) {
-        return res.status(403).json({ message: "You do not have access" })
+        return res.status(403).json({ message: "You not authorized to see this page" })
       }
       next()
     } catch (e) {
