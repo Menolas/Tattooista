@@ -15,7 +15,7 @@ export type UserType = {
     email: string
     isActivated: boolean
     avatar: string
-    roles: Array<string>
+    roles: Array<RoleType> | Array<String>
 }
 
 export interface ContactType {
@@ -76,6 +76,7 @@ export type GalleryItemType = {
 }
 
 export interface RegistrationFormValues {
+    avatar: File | string
     displayName: string
     email: string
     password: string

@@ -42,6 +42,7 @@ class AuthController {
     const results = {}
     try {
       const {refreshToken} = req.cookies
+      console.log(req.cookies + " coocies!!!!!!!!!!!!!!!!!")
       await userService.logout(refreshToken)
       res.clearCookie('refreshToken')
       results.resultCode = 0

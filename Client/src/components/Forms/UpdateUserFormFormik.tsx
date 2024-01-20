@@ -27,7 +27,6 @@ const validationSchema = Yup.object().shape({
       }),
   displayName: Yup.string()
     .min(2, 'Name is too short - should be 2 chars minimum.')
-    .matches(/^([^0-9]*)$/, "First name should not contain numbers")
     .required("First name is a required field"),
   email: Yup.string()
     .email("Email should have correct format")
@@ -72,19 +71,12 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     }
   }
 
-  // let initialRolesValues = {}
-  // roles?.forEach((role) => {
-  //   initialRolesValues[role.value] = profile.roles?.includes(role.value)
-  // })
-
-  console.log(roles + "roles !!!!!!!!!!!!!!")
-
   let initialValues = {
     avatar: profile && profile.avatar ? profile.avatar : '',
     displayName: profile && profile.displayName ? profile.displayName : '',
     email: profile && profile.email ? profile.email : '',
     password: '',
-    roles: profile && profile.roles ? profile.roles : []
+    roles: profile && profile.roles ? profile?.roles.map(role => role._id) : []
   }
 
   const submit = (values: AddClientFormValues, actions: FormikHelpers<FormikValues>) => {
@@ -107,6 +99,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
       onSubmit={submit}
     >
       {(propsF) => {
+        let {isSubmitting} = propsF
 
         const rolesFields = roles.map((role) => {
           return (
@@ -118,9 +111,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                 <Field
                     type="checkbox"
                     name={'roles'}
-                    id={role.value}
-                    value={role.value}
-                    checked={propsF.values.roles.includes(role.value)}
+                    id={role._id}
+                    value={role._id}
+                    checked={propsF.values.roles.includes(role._id)}
                     onChange={(e) => {
                       if (e.target.checked) {
                         propsF.setFieldValue('roles', [...propsF.values.roles, e.target.value])
@@ -129,7 +122,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                       }
                     }}
                 />
-                <label htmlFor={role.value}>
+                <label htmlFor={role._id}>
                   <span className="checkbox">{''}</span>
                   {role.value}
                 </label>

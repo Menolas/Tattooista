@@ -20,9 +20,15 @@ class UserService {
         const hashPassword = await bcrypt.hash(password, 3)
         const userRole = await Role.findOne({value: "USER"})
         const activationLink = uuid.v4()
-        const user = await UserModel.create({displayName, email, password: hashPassword, roles: [userRole.value], activationLink})
-        await mailService.sendActivationMail(email, `${process.env.API_URL}/auth/activate/${activationLink}`)
+        let user = await UserModel.create({
+            displayName,
+            email,
+            password: hashPassword,
+            roles: [userRole._id],
+            activationLink
+        })
 
+        await mailService.sendActivationMail(email, `${process.env.API_URL}/auth/activate/${activationLink}`)
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
@@ -54,8 +60,8 @@ class UserService {
             throw ApiError.BadRequest('wrong password')
         }
         const userDto = new UserDto(user)
+        console.log(userDto.roles + " login userDto !!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         const tokens = tokenService.generateTokens({...userDto})
-        console.log("token generated with login!!!!!!!!!!")
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
         return {
             ...tokens,
@@ -67,7 +73,6 @@ class UserService {
     }
 
     async logout(refreshToken) {
-        console.log("token removed cause of logout!!!!!!!!")
         return await tokenService.removeToken(refreshToken)
     }
 
@@ -94,7 +99,6 @@ class UserService {
         }
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
-        console.log("token generated with refresh!!!!!!!!!!")
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
         return {
             ...tokens,

@@ -4,6 +4,7 @@ const Booking = require('../models/Booking')
 const ArchivedBooking = require('../models/ArchivedBooking')
 const controller = require('../controllers/bookingController')
 const roleMiddleware = require('../middlewares/roleMiddleware')
+const Role = require("../models/Role")
 
 // Getting bookings
 router.get('/', roleMiddleware(["ADMIN"]), controller.getBookings )

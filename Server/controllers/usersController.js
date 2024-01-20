@@ -33,17 +33,18 @@ class usersController {
 
         try {
             if (role === 'any' && !term) {
-                users = await User.find().sort({createdAt: -1})
+                users = await User.find().sort({createdAt: -1}).populate('roles')
+                console.log(users[0].roles + " user roles !!!!!")
             } else if (role === 'true' && !term) {
-                users = await User.find({roles: "ADMIN"}).sort({createdAt: -1})
+                users = await User.find({roles: "ADMIN"}).sort({createdAt: -1}).populate('roles')
             } else if (role === 'false' && !term) {
-                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}}).sort({createdAt: -1})
+                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}}).sort({createdAt: -1}).populate('roles')
             } else if (role === 'any' && term) {
-                users = await User.find({displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+                users = await User.find({displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles')
             } else if (role === 'true' && term) {
-                users = await User.find({roles: "ADMIN", displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+                users = await User.find({roles: "ADMIN", displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles')
             } else if (role === 'false' && term) {
-                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles')
             }
 
             results.resultCode = 0
@@ -86,7 +87,8 @@ class usersController {
         res.user.email = req.body.email
         const roles = req.body.roles
         if (roles === "" || roles === null) {
-            res.user.roles = ["USER"]
+            const userRole = await Role.findOne({value: "USER"})
+            res.user.roles = [userRole._id]
         } else {
             res.user.roles = roles.split(',')
         }
@@ -106,6 +108,8 @@ class usersController {
             res.user.avatar = newFileName
         }
 
+        await res.user.populate('roles')
+
         const results = {}
 
         try {
@@ -120,13 +124,23 @@ class usersController {
     }
 
     async addUser (req, res) {
+
         const results = {}
         try {
             const displayName = req.body.displayName
             const email = req.body.email
             const password = req.body.password
+            const roles = req.body.roles
             await userService.registration(displayName, email, password)
             const user = await User.findOne({displayName})
+
+            if (roles === "" || roles === null) {
+                const userRole = await Role.findOne({value: "USER"})
+                user.roles = [userRole._id]
+            } else {
+                user.roles = roles.split(',')
+            }
+            await user.populate('roles')
 
             if (req.files && req.files.avatar) {
                 const file = req.files.avatar
