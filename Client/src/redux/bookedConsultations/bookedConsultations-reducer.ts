@@ -25,6 +25,7 @@ const DELETE_ARCHIVED_CONSULTATION = 'DELETE_ARCHIVED_CONSULTATION'
 const ADD_CONSULTATION = 'ADD_CONSULTATION'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_ADD_BOOKING_API_ERROR = 'SET_ADD_BOOKING_API_ERROR'
+const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR'
 
 let initialState = {
   bookedConsultations: [] as Array<BookedConsultationType>,
@@ -47,7 +48,8 @@ let initialState = {
     condition: 'any' as string | null
   },
   isSuccess: false as boolean,
-  addBookingApiError: '' as string | undefined
+  addBookingApiError: '' as string | undefined,
+  accessError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -170,7 +172,6 @@ export const bookedConsultationsReducer = (
         }
       }
 
-
     case ADD_CONSULTATION:
       return {
         ...state,
@@ -189,6 +190,12 @@ export const bookedConsultationsReducer = (
         addBookingApiError: action.error
       }
 
+    case SET_ACCESS_ERROR:
+      return {
+        ...state,
+        accessError: action.error
+      }
+
     default: return state
   }
 }
@@ -198,9 +205,19 @@ type ActionsTypes = SetAddBookingApiErrorAT | SetIsSuccessAT | SetBookedConsulta
     | SetBookedConsultationsAT | SetArchivedConsultationsAT | SetCurrentPageForBookedConsultationsAT |
     SetCurrentPageForArchivedConsultationsAT | SetBookedConsultationsTotalCountAT | SetArchivedConsultationsTotalCountAT |
     ChangeBookedConsultationStatusAT | SetIsFetchingAT | ToggleIsStatusChangingAT |
-    ToggleIsDeletingInProcessAT | DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT
+    ToggleIsDeletingInProcessAT | DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT |
+    SetAccessErrorAT
 
 // actions creators
+
+type SetAccessErrorAT = {
+  type: typeof SET_ACCESS_ERROR
+  error: string | undefined
+}
+
+export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+  type: SET_ACCESS_ERROR, error
+})
 
 type SetAddBookingApiErrorAT = {
   type: typeof SET_ADD_BOOKING_API_ERROR
@@ -454,9 +471,12 @@ export const getBookedConsultations = (
       pageSize,
       filter
     )
+    dispatch(setAccessErrorAC(''))
     dispatch(setBookedConsultationsAC(response.bookings))
     dispatch(setBookedConsultationsTotalCountAC(response.totalCount))
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAccessErrorAC(e.response.data.message))
     console.log(e)
   } finally {
     dispatch(setIsFetchingAC(false))

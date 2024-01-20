@@ -25,7 +25,7 @@ import {
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
   getIsSuccessSelector,
-  getAddBookingApiErrorSelector
+  getAddBookingApiErrorSelector, getAccessErrorSelector
 } from "../../../redux/bookedConsultations/bookedConsultations-selectors"
 import { BookedConsultations } from "./BookedConsultations"
 import {AddConsultationFormValues, BookedConsultationType, ContactsType} from '../../../types/Types'
@@ -44,6 +44,7 @@ export const BookedConsultationsContainer: React.FC = () => {
   const isSuccess = useSelector(getIsSuccessSelector)
   const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
   const token = useSelector(getTokenSelector)
+  const accessError = useSelector(getAccessErrorSelector)
 
   const dispatch = useDispatch()
 
@@ -77,7 +78,7 @@ export const BookedConsultationsContainer: React.FC = () => {
   const deleteConsultationCallBack = (
       id: string,
   ) => {
-    dispatch(deleteBookedConsultation(id, bookedConsultations, currentPage, totalCount, pageSize, filter))
+    dispatch(deleteBookedConsultation(token, id, bookedConsultations, currentPage, totalCount, pageSize, filter))
   }
 
   const turnConsultationToClientCallBack = (
@@ -85,7 +86,7 @@ export const BookedConsultationsContainer: React.FC = () => {
     fullName: string,
     contacts?: ContactsType | {}
   ) => {
-    dispatch(turnConsultationToClient(id, fullName, contacts, bookedConsultations, currentPage, totalCount, pageSize, filter))
+    dispatch(turnConsultationToClient(token, id, fullName, contacts, bookedConsultations, currentPage, totalCount, pageSize, filter))
   }
 
   const setBookedConsultationsPageSizeCallBack = (
@@ -99,7 +100,7 @@ export const BookedConsultationsContainer: React.FC = () => {
   }
 
   const archiveConsultationCallBack = (id: string) => {
-    dispatch(archiveConsultation(id, bookedConsultations, currentPage, totalCount, pageSize, filter))
+    dispatch(archiveConsultation(token, id, bookedConsultations, currentPage, totalCount, pageSize, filter))
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {
@@ -122,6 +123,7 @@ export const BookedConsultationsContainer: React.FC = () => {
         isStatusChanging={isStatusChanging}
         isDeletingInProcess={isDeletingInProcess}
         addBookingApiError={addBookingApiError}
+        accessError={accessError}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
         changeStatus={changeBookedConsultationStatusCallBack}

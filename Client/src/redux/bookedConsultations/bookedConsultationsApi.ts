@@ -45,9 +45,20 @@ export const bookedConsultationsAPI = {
   ) {
     return instance.get<GetBookedConsultationsResponseType>(
         `${API_URL}/bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
-        {headers: {Authorization: `Bearer ${token}`}} as AxiosRequestConfig
+        { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
     ).then(response => response.data)
   },
+
+  // getBookedConsultationsWithoutToken(
+  //     currentPage: number,
+  //     pageSize: number,
+  //     filter: BookedConsultationsFilterType
+  // ) {
+  //   return $api.get<GetBookedConsultationsResponseType>(
+  //       `${API_URL}/bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
+  //       {withCredentials: true}
+  //   ).then(response => response.data)
+  // },
 
   getArchivedConsultations(
       currentPage: number,
@@ -74,8 +85,8 @@ export const bookedConsultationsAPI = {
   },
 
   addConsultation(values: any) {
-    return instance.post<AddConsultationResponseType>('bookings', values)
-      .then(response => response.data)
+    return instance.post<AddConsultationResponseType>(`${API_URL}/bookings`, values)
+        .then(response => response.data)
   },
 
   turnConsultationToClient(

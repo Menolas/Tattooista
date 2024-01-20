@@ -27,7 +27,8 @@ import {RegistrationContainer} from "./pages/registration/RegistrationContainer"
 import {checkAuth} from "./redux/Auth/auth-reducer"
 import {ScrollToTopButton} from "./components/common/ScrollToTopButton"
 import {UsersContainer} from "./components/Admin/Users/UsersContainer"
-import {NotFound} from "./components/404-page";
+import {NotFound} from "./components/404-page"
+import {NoAccess} from "./components/NoAccess"
 
 const App = () => {
 
@@ -92,6 +93,7 @@ const App = () => {
                                        element={<UsersContainer/>} />
                             </Route>
                             <Route path="*" element={<NotFound />} />
+                            <Route path={`noAccess`} element={<NoAccess />} />
                         </Routes>
                     </main>
                     <Contacts />
