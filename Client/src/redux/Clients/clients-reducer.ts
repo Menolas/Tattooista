@@ -27,6 +27,7 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_ADD_CLIENT_API_ERROR = 'SET_ADD_CLIENT_API_ERROR'
 const SET_UPDATE_CLIENT_GALLERY_API_ERROR = 'SET_UPDATE_CLIENT_GALLERY_API_ERROR'
+const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR'
 
 let initialState = {
   clients: [] as Array<ClientType>,
@@ -51,7 +52,8 @@ let initialState = {
   profile: {} as ClientType,
   isSuccess: false as boolean,
   addClientApiError: '' as string | undefined,
-  updateClientGalleryApiError: '' as string | undefined
+  updateClientGalleryApiError: '' as string | undefined,
+  accessError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -206,6 +208,12 @@ export const clientsReducer = (
         updateClientGalleryApiError: action.error
       }
 
+    case SET_ACCESS_ERROR:
+      return {
+        ...state,
+        accessError: action.error
+      }
+
     default: return state
 
   }
@@ -216,9 +224,19 @@ type ActionsTypes = SetUpdateClientGalleryApiErrorAT | SetAddClientApiErrorAT | 
     SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT | SetArchivedClientsAT |
     SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT | SetArchivedClientsTotalCountAT |
     ToggleIsDeletingInProcessAT | ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT |
-    DeleteClientAT | DeleteArchivedClientAT | EditClientAT | AddClientAT | SetClientProfileAT
+    DeleteClientAT | DeleteArchivedClientAT | EditClientAT | AddClientAT | SetClientProfileAT |
+    SetAccessErrorAT
 
 // actions creators
+
+type SetAccessErrorAT = {
+  type: typeof SET_ACCESS_ERROR
+  error: string | undefined
+}
+
+export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+  type: SET_ACCESS_ERROR, error
+})
 
 type SetUpdateClientGalleryApiErrorAT = {
   type: typeof SET_UPDATE_CLIENT_GALLERY_API_ERROR
@@ -428,6 +446,7 @@ const setClientProfile = (profile: ClientType): SetClientProfileAT => (
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 const deleteClientThunk = (
+    token: string,
     id: string,
     clients: Array<ClientType>,
     currentPage: number,
@@ -441,7 +460,7 @@ const deleteClientThunk = (
   } else {
     const newPage = getNewPage(currentPage)
     if (currentPage === newPage) {
-      await dispatch(getClients(newPage, pageLimit, filter))
+      await dispatch(getClients(token, newPage, pageLimit, filter))
     }
     dispatch(deleteClientAC(id))
     dispatch(setCurrentClientsPageAC(newPage))
@@ -471,6 +490,7 @@ const deleteArchivedClientThunk = (
 }
 
 export const getClients = (
+  token: string | null,
   currentClientPage: number,
   clientsPageSize: number,
   clientsFilter: ClientsFilterType
@@ -481,16 +501,20 @@ export const getClients = (
   try {
     dispatch(setIsFetchingAC(true))
     let response = await clientsAPI.getClients(
+      token,
       currentClientPage,
       clientsPageSize,
       clientsFilter
     )
+    dispatch(setAccessErrorAC(''))
     dispatch(setClientsAC(response.clients))
     dispatch(setClientsTotalCountAC(response.totalCount))
-    dispatch(setIsFetchingAC(false))
   } catch (e) {
-    dispatch(setIsFetchingAC(false))
+    // @ts-ignore
+    dispatch(setAccessErrorAC(e.response.data.message))
     console.log(e)
+  } finally {
+    dispatch(setIsFetchingAC(false))
   }
 }
 
@@ -520,6 +544,7 @@ export const getArchivedClients = (
 }
 
 export const deleteClient = (
+    token: string,
     id: string,
     clients: Array<ClientType>,
     currentPage: number,
@@ -533,7 +558,7 @@ export const deleteClient = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await clientsAPI.deleteClient(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteClientThunk(id, clients, currentPage, total, pageLimit, filter))
+      await dispatch(deleteClientThunk(token, id, clients, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -679,6 +704,7 @@ export const deleteClientGalleryPicture = (
 }
 
 export const archiveClient = (
+    token: string,
     id: string,
     clients: Array<ClientType>,
     currentPage: number,
@@ -690,7 +716,7 @@ export const archiveClient = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await clientsAPI.archiveClient(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteClientThunk(id, clients, currentPage, total, pageLimit, filter))
+      await dispatch(deleteClientThunk(token, id, clients, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)

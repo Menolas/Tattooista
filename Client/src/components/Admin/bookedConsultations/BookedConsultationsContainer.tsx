@@ -50,7 +50,7 @@ export const BookedConsultationsContainer: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBookedConsultations(token, currentPage, pageSize, filter))
-  }, [currentPage, pageSize, filter])
+  }, [token, currentPage, pageSize, filter])
 
   useEffect(() => {
     dispatch(setCurrentPageForBookedConsultationsAC(1))

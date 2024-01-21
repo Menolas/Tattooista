@@ -75,3 +75,7 @@ export const getAddClientApiErrorSelector = (state: AppStateType) => {
 export const getUpdateClientGalleryApiErrorSelector = (state: AppStateType) => {
   return state.clients.updateClientGalleryApiError
 }
+
+export const getAccessErrorSelector = (state: AppStateType) => {
+  return state.clients.accessError
+}

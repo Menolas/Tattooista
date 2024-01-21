@@ -12,6 +12,7 @@ import {Preloader} from "../../common/Preloader"
 import {ApiErrorMessage} from "../../common/ApiErrorMessage"
 import {SearchFilterForm} from "../../Forms/SearchFilterForm"
 import {clientFilterSelectOptions} from "../../../utils/constants"
+import {Navigate} from "react-router";
 
 type PropsType = {
   isFetching: boolean
@@ -21,6 +22,7 @@ type PropsType = {
   pageSize: number
   addClientApiError: string
   updateClientGalleryApiError: string
+  accessError: string
   clients: Array<ClientType>
   clientsFilter: ClientsFilterType
   isDeletingInProcess: Array<string>
@@ -47,6 +49,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     pageSize,
     addClientApiError,
     updateClientGalleryApiError,
+    accessError,
     clients,
     clientsFilter,
     isDeletingInProcess,
@@ -103,66 +106,73 @@ export const Clients: React.FC<PropsType> = React.memo(({
 
   return (
       <>
-        <div className="admin__cards-header">
-          <SearchFilterForm
-            options={clientFilterSelectOptions}
-            filter={clientsFilter}
-            onFilterChanged={onFilterChanged}
-          />
-          <Paginator
-              totalCount={totalCount}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChanged={onPageChanged}
-              setPageLimit={setPageLimit}
-          />
-          <button
-            className="btn btn--bg btn--light-bg add-btn"
-            onClick={() => {setAddClientMode(true)}}
-          >
-            Add Client
-          </button>
-        </div>
-        {
-            isFetching
-                ? <Preloader />
-                : totalCount && totalCount > 0
-                  ? (
-                      <ul className="admin__cards-list list">
-                            { clientsElements }
-                      </ul>
-                    )
-                  : <NothingToShow/>
-        }
-        { addClientMode &&
-          <ModalPopUp
-            modalTitle={modalTitle}
-            closeModal={closeModal}
-          >
-          <UpdateClientForm
-            addClient={addClient}
-            closeModal={closeModal}
-          />
-          </ModalPopUp>
-        }
-        {
-          isSuccess &&
-          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
-        }
+          {(accessError && accessError !== '')
+              ? <Navigate to="/noAccess"/>
+              : <>
+                  <div className="admin__cards-header">
+                      <SearchFilterForm
+                          options={clientFilterSelectOptions}
+                          filter={clientsFilter}
+                          onFilterChanged={onFilterChanged}
+                      />
+                      <Paginator
+                          totalCount={totalCount}
+                          pageSize={pageSize}
+                          currentPage={currentPage}
+                          onPageChanged={onPageChanged}
+                          setPageLimit={setPageLimit}
+                      />
+                      <button
+                          className="btn btn--bg btn--light-bg add-btn"
+                          onClick={() => {
+                              setAddClientMode(true)
+                          }}
+                      >
+                          Add Client
+                      </button>
+                  </div>
+                  {
+                      isFetching
+                          ? <Preloader/>
+                          : totalCount && totalCount > 0
+                              ? (
+                                  <ul className="admin__cards-list list">
+                                      {clientsElements}
+                                  </ul>
+                              )
+                              : <NothingToShow/>
+                  }
+                  {addClientMode &&
+                      <ModalPopUp
+                          modalTitle={modalTitle}
+                          closeModal={closeModal}
+                      >
+                          <UpdateClientForm
+                              addClient={addClient}
+                              closeModal={closeModal}
+                          />
+                      </ModalPopUp>
+                  }
+                  {
+                      isSuccess &&
+                      <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+                  }
 
-        { addClientApiError && addClientApiError !== '' &&
-              <ApiErrorMessage
-                  error={addClientApiError}
-                  closeModal={setAddClientApiError}
-              />
-        }
+                  {addClientApiError && addClientApiError !== '' &&
+                      <ApiErrorMessage
+                          error={addClientApiError}
+                          closeModal={setAddClientApiError}
+                      />
+                  }
 
-        { updateClientGalleryApiError && updateClientGalleryApiError !== '' &&
-              <ApiErrorMessage
-                  error={updateClientGalleryApiError}
-                  closeModal={setUpdateClientGalleryApiError}
-              />
-        }
+                  {updateClientGalleryApiError && updateClientGalleryApiError !== '' &&
+                      <ApiErrorMessage
+                          error={updateClientGalleryApiError}
+                          closeModal={setUpdateClientGalleryApiError}
+                      />
+                  }
+              </>
+          }
       </>
   )
 })

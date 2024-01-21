@@ -30,7 +30,8 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
 }) => {
 
   if (isAuth) {
-    return <Navigate to="/admin/bookedConsultations" />
+    //return <Navigate to="/admin/bookedConsultations" />
+    return <Navigate to="/admin" />
   }
 
   const submit = (values: LoginFormValues, actions: FormikHelpers<FormikValues>) => {

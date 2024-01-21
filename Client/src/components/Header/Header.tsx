@@ -29,7 +29,8 @@ export const Header: React.FC<PropsType> = ({
               <NavLink
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Admin page"
-                  to="/admin/bookedConsultations"
+                  //to="/admin/bookedConsultations"
+                  to="/admin"
                   className="main-header__admin-link"
               >
                 <svg><use href={`${Sprite}#admin`}/></svg>

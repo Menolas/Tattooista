@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios"
-import { BookedConsultationType, ContactsType } from "../../types/Types"
+import {AddConsultationFormValues, BookedConsultationType, ContactsType} from "../../types/Types"
 import $api, {API_URL} from "../../http"
 import { BookedConsultationsFilterType } from "./bookedConsultations-reducer"
 
@@ -61,12 +61,14 @@ export const bookedConsultationsAPI = {
   // },
 
   getArchivedConsultations(
+      token: string,
       currentPage: number,
       pageSize: number,
       filter: BookedConsultationsFilterType
   ) {
-    return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`)
-        .then(response => response.data)
+    return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
+        { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
+    ).then(response => response.data)
   },
 
   changeConsultationStatus(id: string, status: boolean) {
@@ -84,7 +86,7 @@ export const bookedConsultationsAPI = {
         .then(response => response.data)
   },
 
-  addConsultation(values: any) {
+  addConsultation(values: AddConsultationFormValues) {
     return instance.post<AddConsultationResponseType>(`${API_URL}/bookings`, values)
         .then(response => response.data)
   },

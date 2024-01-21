@@ -26,8 +26,8 @@ type PropsType = {
   bookedConsultationsFilter: BookedConsultationsFilterType
   isStatusChanging?: Array<string>
   isDeletingInProcess?: Array<string>
-  addBookingApiError: string | undefined
-  accessError: string | undefined
+  addBookingApiError: string
+  accessError: string
   setCurrentPage: (page: number) => void
   onFilterChanged: (filter: BookedConsultationsFilterType) => void
   changeStatus: (id: string, status: boolean) => void
