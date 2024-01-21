@@ -102,11 +102,11 @@ export interface BookConsultationFormValues  {
 
 export interface AddConsultationFormValues  {
     bookingName: string
-    email: string
-    phone: string
-    insta: string
-    whatsapp: string
-    messenger: string
+    email?: string
+    phone?: string
+    insta?: string
+    whatsapp?: string
+    messenger?: string
 }
 
 export interface AddClientFormValues {

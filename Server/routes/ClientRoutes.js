@@ -4,9 +4,10 @@ const path = require('path')
 const Client = require('../models/Client')
 const ArchivedClient = require('../models/ArchivedClient')
 const controller = require('../controllers/clientsController')
+const roleMiddleware = require("../middlewares/roleMiddleware");
 
 // Getting all
-router.get('/', controller.getClients);
+router.get('/', roleMiddleware(["ADMIN"]), controller.getClients)
 
 // get archived clients
 

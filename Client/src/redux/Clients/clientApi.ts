@@ -2,6 +2,7 @@ import axios, {CreateAxiosDefaults} from "axios"
 import {ClientType } from "../../types/Types"
 import {API_URL} from "../../http"
 import {ClientsFilterType} from "./clients-reducer"
+import {AxiosRequestConfig} from "axios/index";
 
 const instance = axios.create({
   withCredentials: false,
@@ -35,12 +36,14 @@ type DeleteClientGalleryPictureResponseType = UpdateClientResponseType
 export const clientsAPI = {
 
   getClients(
+    token: string | null,
     currentPage = 1,
     pageSize = 5,
     filter: ClientsFilterType
   ) {
     return instance.get<GetClientsResponseType>(
-        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)
+        `${API_URL}/clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
+        { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
         .then(response => response.data)
   },
 

@@ -1,6 +1,6 @@
 import { bookedConsultationsAPI } from "./bookedConsultationsApi"
 import { ResultCodesEnum } from "../../utils/constants"
-import { BookedConsultationType } from "../../types/Types"
+import {AddConsultationFormValues, BookedConsultationType} from "../../types/Types"
 import { AppStateType } from "../redux-store"
 import { ThunkAction } from "redux-thunk"
 import type {} from "redux-thunk/extend-redux"
@@ -434,6 +434,7 @@ const deleteBookingThunk = (
 }
 
 const deleteArchivedBookingThunk = (
+    token: string,
     id: string,
     bookings: Array<BookedConsultationType>,
     currentPage: number,
@@ -447,7 +448,7 @@ const deleteArchivedBookingThunk = (
   } else {
     const newPage = getNewPage(currentPage)
     if (currentPage === newPage) {
-      await dispatch(getArchivedConsultations(newPage, pageLimit, filter))
+      await dispatch(getArchivedConsultations(token, newPage, pageLimit, filter))
     }
     dispatch(deleteArchivedConsultationAC(id))
     dispatch(setCurrentPageForArchivedConsultationsAC(newPage))
@@ -484,6 +485,7 @@ export const getBookedConsultations = (
 }
 
 export const getArchivedConsultations = (
+    token: string,
     currentPage: number,
     pageSize: number,
     filter: BookedConsultationsFilterType
@@ -491,15 +493,19 @@ export const getArchivedConsultations = (
   try {
     dispatch(setIsFetchingAC(true))
     let response = await bookedConsultationsAPI.getArchivedConsultations(
+        token,
         currentPage,
         pageSize,
         filter
     )
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setAccessErrorAC(''))
       dispatch(setArchivedConsultationsTotalCountAC(response.totalCount))
       dispatch(setArchivedConsultationsAC(response.bookings))
     }
   } catch (e) {
+    // @ts-ignore
+    dispatch(setAccessErrorAC(e.response.data.message))
     console.log(e)
   } finally {
     dispatch(setIsFetchingAC(false))
@@ -547,6 +553,7 @@ export const deleteBookedConsultation = (
 }
 
 export const deleteArchivedConsultation = (
+    token: string,
     id: string,
     bookings: Array<BookedConsultationType>,
     currentPage: number,
@@ -558,7 +565,7 @@ export const deleteArchivedConsultation = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.deleteArchivedConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     console.log(e)
@@ -568,7 +575,7 @@ export const deleteArchivedConsultation = (
 }
 
 export const addBookedConsultation = (
-  values: any,
+  values: AddConsultationFormValues,
   total: number
 ): ThunkType => async (dispatch) => {
   try {
@@ -639,6 +646,7 @@ export const archiveConsultation = (
 }
 
 export const reactivateConsultation = (
+    token: string,
     id: string,
     bookings: Array<BookedConsultationType>,
     currentPage: number,
@@ -650,7 +658,7 @@ export const reactivateConsultation = (
     dispatch(toggleIsDeletingInProcessAC(true, id))
     let response = await bookedConsultationsAPI.reactivateConsultation(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedBookingThunk(id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
     }
   } catch (e) {
     // @ts-ignore

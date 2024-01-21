@@ -30,6 +30,8 @@ import {
   getClientsPageSizeSelector, getIsDeletingPicturesInProcessSelector
 } from "../../../redux/Clients/clients-selectors"
 import { Clients } from "./Clients"
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getAccessErrorSelector} from "../../../redux/bookedConsultations/bookedConsultations-selectors";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -44,11 +46,13 @@ export const ClientsContainer: React.FC = () => {
   const isSuccess = useSelector(getIsSuccessSelector)
   const addClientApiError = useSelector(getAddClientApiErrorSelector)
   const updateClientGalleryApiError = useSelector(getUpdateClientGalleryApiErrorSelector)
+  const token = useSelector(getTokenSelector)
+  const accessError = useSelector(getAccessErrorSelector)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getClients(currentPage, pageSize, filter))
+    dispatch(getClients(token, currentPage, pageSize, filter))
   }, [currentPage, pageSize, filter])
 
   useEffect(() => {
@@ -76,7 +80,7 @@ export const ClientsContainer: React.FC = () => {
   const deleteClientCallBack = (
     clientId: string
   ) => {
-    dispatch(deleteClient(clientId, clients, currentPage, totalCount, pageSize, filter))
+    dispatch(deleteClient(token, clientId, clients, currentPage, totalCount, pageSize, filter))
   }
 
   const editClientCallBack = (
@@ -101,7 +105,7 @@ export const ClientsContainer: React.FC = () => {
   }
 
   const archiveClientCallBack = (clientId: string) => {
-    dispatch(archiveClient(clientId, clients, currentPage, totalCount, pageSize, filter))
+    dispatch(archiveClient(token, clientId, clients, currentPage, totalCount, pageSize, filter))
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {
@@ -129,6 +133,7 @@ export const ClientsContainer: React.FC = () => {
           isDeletingPicturesInProcess={isDeletingPicturesInProcess}
           addClientApiError={addClientApiError}
           updateClientGalleryApiError={updateClientGalleryApiError}
+          accessError={accessError}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChangedCallBack}
           addClient={addClientCallBack}

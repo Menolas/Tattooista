@@ -22,11 +22,14 @@ import {
     getTotalArchivedConsultationsCountSelector,
     getIsDeletingInProcessSelector,
     getAddBookingApiErrorSelector,
+    getAccessErrorSelector,
 } from "../../../redux/bookedConsultations/bookedConsultations-selectors"
 import {ArchivedConsultation} from "./ArchivedConsultation"
 import {ApiErrorMessage} from "../../common/ApiErrorMessage"
 import {SearchFilterForm} from "../../Forms/SearchFilterForm"
 import {bookingFilterSelectOptions} from "../../../utils/constants"
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {Navigate} from "react-router";
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
@@ -37,12 +40,14 @@ export const ArchivedConsultations: React.FC = () => {
     const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector)
     const filter = useSelector(getArchivedConsultationsFilterSelector)
     const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
+    const token = useSelector(getTokenSelector)
+    const accessError = useSelector(getAccessErrorSelector)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getArchivedConsultations(currentPage, pageSize, filter))
-    }, [currentPage, pageSize, filter])
+        dispatch(getArchivedConsultations(token, currentPage, pageSize, filter))
+    }, [token, currentPage, pageSize, filter])
 
     const onPageChangedCallBack = (
         page: number
@@ -66,6 +71,7 @@ export const ArchivedConsultations: React.FC = () => {
         clientId: string
     ) => {
         dispatch(deleteArchivedConsultation(
+            token,
             clientId,
             archivedConsultations,
             currentPage,
@@ -79,6 +85,7 @@ export const ArchivedConsultations: React.FC = () => {
         id: string
     ) => {
         dispatch(reactivateConsultation(
+            token,
             id,
             archivedConsultations,
             currentPage,
@@ -107,35 +114,40 @@ export const ArchivedConsultations: React.FC = () => {
 
     return (
         <>
-            <div className="admin__cards-header">
-                <SearchFilterForm
-                    options={bookingFilterSelectOptions}
-                    filter={filter}
-                    onFilterChanged={onFilterChangeCallBack}
-                />
-                <Paginator
-                    totalCount={totalCount}
-                    pageSize={pageSize}
-                    currentPage={currentPage}
-                    onPageChanged={onPageChangedCallBack}
-                    setPageLimit={setArchivedConsultationsPageSizeCallBack}
-                />
-            </div>
-            { isFetching
-                ? <Preloader />
-                : totalCount && totalCount > 0
-                    ? (
-                        <ul className="admin__cards-list list">
-                            { archivedConsultationsArray }
-                        </ul>
-                    ) : <NothingToShow/>
-            }
+            {(accessError && accessError !== '')
+                ? <Navigate to="/noAccess"/>
+                : <>
+                    <div className="admin__cards-header">
+                        <SearchFilterForm
+                            options={bookingFilterSelectOptions}
+                            filter={filter}
+                            onFilterChanged={onFilterChangeCallBack}
+                        />
+                        <Paginator
+                            totalCount={totalCount}
+                            pageSize={pageSize}
+                            currentPage={currentPage}
+                            onPageChanged={onPageChangedCallBack}
+                            setPageLimit={setArchivedConsultationsPageSizeCallBack}
+                        />
+                    </div>
+                    {isFetching
+                        ? <Preloader/>
+                        : totalCount && totalCount > 0
+                            ? (
+                                <ul className="admin__cards-list list">
+                                    {archivedConsultationsArray}
+                                </ul>
+                            ) : <NothingToShow/>
+                    }
 
-            { addBookingApiError && addBookingApiError !== '' &&
-                <ApiErrorMessage
-                    error={addBookingApiError}
-                    closeModal={setAddBookingApiErrorCallBack}
-                />
+                    {addBookingApiError && addBookingApiError !== '' &&
+                        <ApiErrorMessage
+                            error={addBookingApiError}
+                            closeModal={setAddBookingApiErrorCallBack}
+                        />
+                    }
+                </>
             }
         </>
     )

@@ -37,7 +37,7 @@ module.exports = function (roles) {
         // }
       })
       if (!hasRole) {
-        return res.status(403).json({ message: roleIds })
+        return res.status(403).json({ message: "No access for you" })
       }
       next()
     } catch (e) {
