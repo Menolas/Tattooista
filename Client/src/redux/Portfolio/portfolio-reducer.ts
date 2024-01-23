@@ -29,8 +29,8 @@ const SET_UPDATE_GALLERY_API_ERROR = 'SET_UPDATE_GALLERY_API_ERROR'
 let initialState = {
   totalGalleryItemsCount: 0 as number | null,
   totalArchivedGalleryItemsCount: 0 as number | null,
-  galleryPageSize: 4 as number | null,
-  archivedGalleryPageSize: 5 as number,
+  galleryPageSize: 16 as number | null,
+  archivedGalleryPageSize: 16 as number,
   currentGalleryPage: 1 as number,
   currentArchivedGalleryPage: 1 as number,
   isFetching: false,

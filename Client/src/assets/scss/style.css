@@ -1493,6 +1493,8 @@ img {
 .gallery__item .gallery__img-wrap {
   height: 82%;
   background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   overflow: hidden;
   cursor: pointer;
   filter: grayscale(1);
