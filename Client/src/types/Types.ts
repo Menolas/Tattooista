@@ -57,7 +57,7 @@ export type FaqType = {
 export type ServiceType = {
     _id: string
     title: string
-    wallPaper: string
+    wallPaper?: string
     conditions: Array<string>
 }
 
@@ -69,10 +69,15 @@ export type TattooStyleType = {
     nonStyle: boolean
 }
 
+export type GalleryCreatedAtType = {
+    $date: string
+}
+
 export type GalleryItemType = {
     _id: string
     fileName: string
     tattooStyles: Array<String>
+    createdAt?: GalleryCreatedAtType
 }
 
 export interface RegistrationFormValues {
@@ -132,7 +137,7 @@ export type PageType = {
     isActive: boolean
     title: string
     content: string
-    wallPaper: Array<string>
+    wallPaper: string
 }
 
 export type SelectOptionType = {

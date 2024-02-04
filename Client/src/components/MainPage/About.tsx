@@ -9,6 +9,7 @@ import { UpdateAboutPageFormFormik } from "../Forms/UpdateAboutPageFormFormik"
 import {Tooltip} from "react-tooltip"
 
 type PropsType = {
+    fakeApi: boolean
     isAuth: boolean
     pageAbout?: PageType
     editAboutPage: (values: FormData) => void
@@ -16,6 +17,7 @@ type PropsType = {
 }
 
 export const About: React.FC<PropsType> = React.memo(({
+     fakeApi,
      isAuth,
      pageAbout,
      editAboutPage,
@@ -30,7 +32,9 @@ export const About: React.FC<PropsType> = React.memo(({
 
     const editModalTitle = 'Update "about" block'
 
-    const imgUrl = pageAbout?.wallPaper ? `url("${API_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("../avatar.jpg")`
+    const imgUrl = fakeApi
+        ? `url("./uploads/avatars/avatar.jpg")`
+        : pageAbout?.wallPaper ? `url("${API_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("./uploads/avatars/avatar.jpg")`
 
     return (
         <section className="page-block about">

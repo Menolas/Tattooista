@@ -6,6 +6,7 @@ import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../
 import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
 
 type PropsType = {
+  fakeApi: boolean
   isAuth: boolean
   isFetching: boolean
   totalCount: number
@@ -37,6 +38,7 @@ type PropsType = {
 }
 
 export const Portfolio: React.FC<PropsType> = ({
+  fakeApi,
   isAuth,
   isFetching,
   totalCount,
@@ -88,6 +90,7 @@ export const Portfolio: React.FC<PropsType> = ({
       }
 
       <Gallery
+        fakeApi={fakeApi}
         isSuccess={isSuccess}
         isAuth={isAuth}
         isFetching={isFetching}

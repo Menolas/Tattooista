@@ -472,9 +472,11 @@ export const getBookedConsultations = (
       pageSize,
       filter
     )
-    dispatch(setAccessErrorAC(''))
-    dispatch(setBookedConsultationsAC(response.bookings))
-    dispatch(setBookedConsultationsTotalCountAC(response.totalCount))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setAccessErrorAC(''))
+      dispatch(setBookedConsultationsAC(response.bookings))
+      dispatch(setBookedConsultationsTotalCountAC(response.totalCount))
+    }
   } catch (e) {
     // @ts-ignore
     dispatch(setAccessErrorAC(e.response.data.message))

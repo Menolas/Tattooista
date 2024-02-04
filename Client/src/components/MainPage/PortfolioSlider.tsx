@@ -6,6 +6,7 @@ import { TattooStyleType } from "../../types/Types"
 import {API_URL} from "../../http"
 
 type PropsType = {
+    fakeApi: boolean
     galleryPageSize: number
     tattooStyles: Array<TattooStyleType>
     setActiveStyle: (style: TattooStyleType) => void
@@ -19,12 +20,16 @@ const responsive = {
 }
 
 export const PortfolioSlider: React.FC<PropsType> = React.memo(({
+  fakeApi,
   galleryPageSize,
   tattooStyles,
   setActiveStyle
 }) => {
-  //debugger
-  const sliders = tattooStyles?.map((slider) => {
+
+  const sliders = tattooStyles?.filter(slider => slider.value !== "No Style").map((slider) => {
+     const wallpaperUrl = fakeApi
+         ? `./uploads/TattooStylesWallpapers/${slider.wallPaper}`
+         : `${API_URL}/styleWallpapers/${slider._id}/${slider.wallPaper}`
      return (
          <div
              className="slider-item"
@@ -33,18 +38,17 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
              <NavLink
                  to={`/portfolio?&style=${slider.value}&page=1&limit=${galleryPageSize}`}
                  className="portfolio-slider__link"
-                 style={{ backgroundImage:`url(${API_URL}/styleWallpapers/${slider._id}/${slider.wallPaper})`}}
+                 style={{backgroundImage: `url(${wallpaperUrl})`}}
                  onClick={() => {
                      setActiveStyle(slider)
-                     console.log(slider.value)
                  }}
              >
-                <h4 className="slider-item-title">{slider.value}</h4>
-            </NavLink>
+                 <h4 className="slider-item-title">{slider.value}</h4>
+             </NavLink>
          </div>
      )
   })
-    
+
     return (
       <section className="page-block portfolio-slider">
           <h2 className="page-block__title">Portfolio</h2>

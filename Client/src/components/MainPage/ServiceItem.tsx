@@ -10,6 +10,7 @@ import {API_URL} from "../../http"
 import {Tooltip} from "react-tooltip"
 
 type PropsType = {
+    fakeApi: boolean
     isAuth: boolean
     service: ServiceType
     editService: (id: string, values: FormData) => void
@@ -17,6 +18,7 @@ type PropsType = {
 }
 
 export const ServiceItem: React.FC<PropsType> = React.memo(({
+    fakeApi,
     isAuth,
     service,
     editService,
@@ -39,6 +41,12 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
     const conditions = service.conditions.map((item, i) => {
       return <li key = { i }>{item}</li>
     })
+
+    const wallPaperUrl = fakeApi
+        ? './uploads/ServicesWallpapers/service.jpg'
+        : service.wallPaper
+            ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
+            : './uploads/ServicesWallpapers/service.jpg'
 
     return (
         <li className="services__item">
@@ -65,7 +73,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                 }
                 <div
                     className="services__article-img-wrap"
-                    style={{ backgroundImage: service.wallPaper ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})` : ''}}
+                    style={{ backgroundImage: `url(${wallPaperUrl})`}}
                 >{''}</div>
                 <div className="services__article-text-block">
                     <h4>{service.title}:</h4>

@@ -12,7 +12,7 @@ import {
   getIsGalleryItemDeletingInProcessSelector,
   getActiveStyleSelector,
   getUpdateTattooStyleApiErrorSelector,
-  getUpdateGalleryApiErrorSelector
+  getUpdateGalleryApiErrorSelector, getFakeApiSelector
 } from "../../redux/Portfolio/portfolio-selectors"
 import {
   getGallery,
@@ -57,6 +57,7 @@ export const PortfolioContainer: React.FC = () =>  {
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
   const updateTattooStyleApiError = useSelector(getUpdateTattooStyleApiErrorSelector)
   const updateGalleryApiError = useSelector(getUpdateGalleryApiErrorSelector)
+  const fakeApi = useSelector(getFakeApiSelector)
 
   const dispatch = useDispatch()
 
@@ -137,6 +138,7 @@ export const PortfolioContainer: React.FC = () =>  {
 
   return (
     <Portfolio
+      fakeApi={fakeApi}
       isAuth={isAuth}
       isFetching={isFetching}
       totalCount={totalCount}

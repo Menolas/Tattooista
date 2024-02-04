@@ -20,6 +20,7 @@ import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
 import {Preloader} from "../../components/common/Preloader"
 
 type PropsType = {
+  fakeApi: boolean
   isAuth: boolean
   galleryPageSize: number
   tattooStyles: Array<TattooStyleType>
@@ -52,6 +53,7 @@ type PropsType = {
 }
 
 export const MainPage: React.FC<PropsType> = React.memo(({
+  fakeApi,
   isAuth,
   galleryPageSize,
   tattooStyles,
@@ -112,12 +114,14 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           : <>
               <MainOffer bookConsultation={bookConsultation} />
               <PortfolioSlider
+                  fakeApi={fakeApi}
                   galleryPageSize={galleryPageSize}
                   setActiveStyle={setActiveStyle}
                   tattooStyles={tattooStyles}
               />
               { (isAuth || pageAbout.isActive) &&
                   <About
+                      fakeApi={fakeApi}
                       isAuth={isAuth}
                       pageAbout={pageAbout}
                       editAboutPage={editAboutPage}
@@ -126,6 +130,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
               }
 
               <Services
+                  fakeApi={fakeApi}
                   isAuth={isAuth}
                   services={services}
                   editService={editService}

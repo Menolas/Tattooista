@@ -1,8 +1,11 @@
 import { generalSourcesApi } from "./generalSourcesApi"
-import {BookConsultationFormValues, FaqType, PageType, ServiceType} from "../../types/Types"
-import {ThunkAction} from "redux-thunk"
-import {AppStateType} from "../redux-store"
-import {ResultCodesEnum} from "../../utils/constants"
+import { BookConsultationFormValues, FaqType, PageType, ServiceType } from "../../types/Types"
+import { ThunkAction } from "redux-thunk"
+import { AppStateType } from "../redux-store"
+import { ResultCodesEnum } from "../../utils/constants"
+import { faqItems } from "../../data/FaqData"
+import { services } from "../../data/ServicesData"
+import { pages } from "../../data/PagesData"
 
 const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS'
 const SET_SERVICES = 'SET_SERVICES'
@@ -236,6 +239,7 @@ export const getFaqItems = (): ThunkType => async (
     }
   } catch (e) {
     console.log(e)
+    dispatch(setFaqItems(faqItems))
   } finally {
     dispatch(setIsGeneralFetchingAC(false))
   }
@@ -287,6 +291,7 @@ export const getServices = (): ThunkType => async (dispatch) => {
     }
   } catch (e) {
     console.log(e)
+    dispatch(setServices(services))
   } finally {
     dispatch(setIsGeneralFetchingAC(false))
   }
@@ -298,9 +303,11 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
     const response = await generalSourcesApi.getAboutPage()
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAboutPageAC(response.page))
+      console.log(response.page + " page !!!!!!!!!!!!!!!!!!!!!!")
     }
   } catch (e) {
     console.log(e)
+    dispatch(setAboutPageAC(pages))
   } finally {
     dispatch(setIsGeneralFetchingAC(false))
   }

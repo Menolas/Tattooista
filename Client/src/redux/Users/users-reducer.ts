@@ -18,6 +18,7 @@ const SET_ROLES = 'SET_ROLES'
 const EDIT_USER = 'EDIT_USER'
 const ADD_USER = 'ADD_USER'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
+const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR'
 
 let initialState = {
     users: [] as Array<UserType>,
@@ -32,6 +33,7 @@ let initialState = {
         condition: 'any' as string | null
     },
     isSuccess: false as boolean,
+    accessError: '' as string | undefined
 }
 
 export type InitialStateType = typeof initialState
@@ -122,6 +124,12 @@ export const usersReducer = (
                 isSuccess: action.isSuccess
             }
 
+        case SET_ACCESS_ERROR:
+            return {
+                ...state,
+                accessError: action.error
+            }
+
         default: return state
     }
 }
@@ -129,8 +137,18 @@ export const usersReducer = (
 type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
     SetUsersTotalCountAT | SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
     ToggleIsDeletingInProcessAT | SetRolesAT | EditUserAT | SetIsSuccessAT | AddUserAT
+    | SetAccessErrorAT
 
 //actions creators
+
+type SetAccessErrorAT = {
+    type: typeof SET_ACCESS_ERROR
+    error: string | undefined
+}
+
+export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+    type: SET_ACCESS_ERROR, error
+})
 
 type AddUserAT = {
     type: typeof ADD_USER,
@@ -262,6 +280,7 @@ export const getRoles = (): ThunkType => async (dispatch) => {
 }
 
 export const getUsers = (
+    token: string,
     currentPage: number,
     pageLimit: number,
     filter: UsersFilterType
@@ -269,15 +288,19 @@ export const getUsers = (
     try {
         dispatch(toggleIsFetchingAC(true))
         let response = await usersAPI.getUsers(
+            token,
             currentPage,
             pageLimit,
             filter
         )
         if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(setAccessErrorAC(''))
             dispatch(setUsersAC(response.users))
             dispatch(setUsersTotalCountAC(response.totalCount))
         }
     } catch (e) {
+        // @ts-ignore
+        dispatch(setAccessErrorAC(e.response.message))
         console.log(e)
     } finally {
         dispatch(toggleIsFetchingAC(false))
@@ -285,6 +308,7 @@ export const getUsers = (
 }
 
 const deleteUserThunk = (
+    token: string,
     id: string,
     users: Array<UserType>,
     currentPage: number,
@@ -298,7 +322,7 @@ const deleteUserThunk = (
     } else {
         const newPage = getNewPage(currentPage)
         if (currentPage === newPage) {
-            await dispatch(getUsers(newPage, pageLimit, filter))
+            await dispatch(getUsers(token, newPage, pageLimit, filter))
         }
         dispatch(deleteUserAC(id))
         dispatch(setUsersCurrentPageAC(newPage))
@@ -307,6 +331,7 @@ const deleteUserThunk = (
 }
 
 export const deleteUser = (
+    token: string,
     id: string,
     users: Array<UserType>,
     currentPage: number,
@@ -320,7 +345,7 @@ export const deleteUser = (
         dispatch(toggleIsDeletingInProcessAC(true, id))
         let response = await usersAPI.deleteUser(id)
         if (response.resultCode === ResultCodesEnum.Success) {
-            await dispatch(deleteUserThunk(id, users, currentPage, total, pageLimit, filter))
+            await dispatch(deleteUserThunk(token, id, users, currentPage, total, pageLimit, filter))
         }
     } catch (e) {
         console.log(e)

@@ -35,7 +35,11 @@ import {
   setUpdatePageApiErrorAC
 } from "../../redux/General/general-reducer"
 import { getTattooStyles, setActiveStyleAC } from "../../redux/Portfolio/portfolio-reducer"
-import {getGalleryPageSize, getTattooStylesSelector} from "../../redux/Portfolio/portfolio-selectors"
+import {
+  getFakeApiSelector,
+  getGalleryPageSize,
+  getTattooStylesSelector
+} from "../../redux/Portfolio/portfolio-selectors"
 import {getAuthSelector} from "../../redux/Auth/auth-selectors"
 import {getIsSuccessSelector} from "../../redux/General/general-selectors"
 
@@ -53,6 +57,7 @@ export const MainPageContainer: React.FC = () =>  {
   const updateFaqItemApiError = useSelector(getUpdateFaqItemApiErrorSelector)
   const updateServiceApiError = useSelector(getUpdateServiceApiErrorSelector)
   const updatePageApiError = useSelector(getUpdatePageApiErrorSelector)
+  const fakeApi = useSelector(getFakeApiSelector)
 
   const dispatch = useDispatch()
 
@@ -129,6 +134,7 @@ export const MainPageContainer: React.FC = () =>  {
 
   return (
          <MainPage
+          fakeApi={fakeApi}
           isAuth={isAuth}
           galleryPageSize={galleryPageSize}
           tattooStyles={tattooStyles}
