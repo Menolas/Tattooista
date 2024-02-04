@@ -4,6 +4,8 @@ import {ThunkAction} from "redux-thunk"
 import {AppStateType} from "../redux-store"
 import {ResultCodesEnum} from "../../utils/constants"
 import {getNewPage} from "../../utils/functions"
+import {tattooStyles} from "../../data/StylesData"
+import { gallery } from "../../data/GalleryData"
 
 const SET_GALLERY_PAGE_SIZE = 'SET_GALLERY_PAGE_SIZE'
 const SET_ARCHIVED_GALLERY_PAGE_SIZE = 'SET_ARCHIVED_GALLERY_PAGE_SIZE'
@@ -25,6 +27,7 @@ const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_UPDATE_TATTOO_STYLE_API_ERROR = 'SET_UPDATE_TATTOO_STYLE_API_ERROR'
 const SET_UPDATE_GALLERY_API_ERROR = 'SET_UPDATE_GALLERY_API_ERROR'
+const SET_FAKE_API = 'SET_FAKE_API'
 
 let initialState = {
   totalGalleryItemsCount: 0 as number | null,
@@ -33,7 +36,7 @@ let initialState = {
   archivedGalleryPageSize: 16 as number,
   currentGalleryPage: 1 as number,
   currentArchivedGalleryPage: 1 as number,
-  isFetching: false,
+  isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   tattooStyles: [] as Array<TattooStyleType>,
   activeStyle: {} as TattooStyleType | null,
@@ -41,7 +44,8 @@ let initialState = {
   archivedGallery: [] as Array<GalleryItemType>,
   isSuccess: false as boolean,
   updateTattooStyleError: '' as string | undefined,
-  updateGalleryApiError: '' as string | undefined
+  updateGalleryApiError: '' as string | undefined,
+  fakeApi: false as boolean
 }
 
 export type InitialStateType = typeof initialState
@@ -199,6 +203,12 @@ export const portfolioReducer = (
         updateGalleryApiError: action.error
       }
 
+    case SET_FAKE_API:
+      return {
+        ...state,
+        fakeApi: action.fakeApi
+      }
+
     default: return {
       ...state
     }
@@ -209,9 +219,18 @@ type ActionsTypes = SetUpdateGalleryApiErrorAT | SetUpdateTattooStyleApiErrorAT 
     SetIsSuccessAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT | SetCurrentGalleryPageAT |
     SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT | SetIsFetchingAT |
     SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT | UpdateGalleryAT | DeleteGalleryItemAT |
-    DeleteArchivedGalleryItemAT | UpdateGalleryItemAT | UpdateArchivedGalleryItemAT
+    DeleteArchivedGalleryItemAT | UpdateGalleryItemAT | UpdateArchivedGalleryItemAT | SetFakeApiAT
 
 // actions creators
+
+type SetFakeApiAT = {
+  type: typeof SET_FAKE_API
+  fakeApi: boolean
+}
+
+const setFakeApiAC = (fakeApi: boolean): SetFakeApiAT => ({
+  type: SET_FAKE_API, fakeApi
+})
 
 type SetUpdateGalleryApiErrorAT = {
   type: typeof SET_UPDATE_GALLERY_API_ERROR
@@ -449,10 +468,13 @@ export const getTattooStyles = (): ThunkType => async (
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.getTattooStyles()
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setFakeApiAC(false))
       dispatch(setTattooStylesAC(response.tattooStyles))
     }
   } catch (e) {
     console.log(e)
+    dispatch(setTattooStylesAC(tattooStyles))
+    dispatch(setFakeApiAC(true))
   } finally {
     dispatch(setIsFetchingAC(false))
   }
@@ -467,11 +489,17 @@ export const getGallery = (
     dispatch(setIsFetchingAC(true))
     let response = await portfolioApi.getGalleryItems(styleId, currentPage, pageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setFakeApiAC(false))
       dispatch(setGalleryAC(response.gallery))
       dispatch(setGalleryTotalCountAC(response.totalCount))
     }
   } catch (e) {
     console.log(e)
+    dispatch(setFakeApiAC(true))
+    const galleryByStyle = gallery.filter((item) => item.tattooStyles.includes(styleId))
+    console.log(galleryByStyle)
+    dispatch(setGalleryAC(galleryByStyle))
+    dispatch(setGalleryTotalCountAC(galleryByStyle.length))
   } finally {
     dispatch(setIsFetchingAC(false))
   }

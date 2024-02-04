@@ -1,4 +1,4 @@
-import axios, {CreateAxiosDefaults} from "axios"
+import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios"
 import {RoleType, UserType} from "../../types/Types"
 import {API_URL} from "../../http"
 import {UsersFilterType} from "./users-reducer"
@@ -38,15 +38,15 @@ export const usersAPI = {
     },
 
     getUsers(
+        token: string,
         currentPage = 1,
         pageSize = 5,
         filter: UsersFilterType
     ) {
         return instance.get<GetUsersResponseType>(
-            `users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`, {
-            withCredentials: true
-        })
-            .then(response => response.data)
+            `${API_URL}/users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`,
+            { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
+                .then(response => response.data)
     },
 
     deleteUser(userId: string) {

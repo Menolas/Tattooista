@@ -8,7 +8,7 @@ const User = require("../models/User")
 router.get('/roles', controller.getRoles)
 
 //Getting users
-router.get('/', controller.getUsers)
+router.get('/', roleMiddleware(["SUPERADMIN"]), controller.getUsers)
 //router.get('/users', authMiddleware, authController.getUsers)
 
 // delete user

@@ -506,9 +506,11 @@ export const getClients = (
       clientsPageSize,
       clientsFilter
     )
-    dispatch(setAccessErrorAC(''))
-    dispatch(setClientsAC(response.clients))
-    dispatch(setClientsTotalCountAC(response.totalCount))
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setAccessErrorAC(''))
+      dispatch(setClientsAC(response.clients))
+      dispatch(setClientsTotalCountAC(response.totalCount))
+    }
   } catch (e) {
     // @ts-ignore
     dispatch(setAccessErrorAC(e.response.data.message))

@@ -31,3 +31,7 @@ export const getRolesSelector = (state: AppStateType) => {
 export const getIsSuccessSelector = (state: AppStateType) => {
     return state.users.isSuccess
 }
+
+export const getAccessErrorSelector = (state: AppStateType) => {
+    return state.users.accessError
+}

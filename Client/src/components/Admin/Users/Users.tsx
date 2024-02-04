@@ -11,6 +11,7 @@ import {useState} from "react";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {UpdateUserForm} from "../../Forms/UpdateUserFormFormik";
 import {ModalPopUp} from "../../common/ModalPopUp";
+import {Navigate} from "react-router";
 
 type PropsType = {
     roles: Array<RoleType>
@@ -21,6 +22,7 @@ type PropsType = {
     currentPage: number
     pageLimit: number
     isSuccess: boolean
+    accessError: string
     setUsersPageLimit: (limit:number) => void
     setUsersCurrentPage: (page: number) => void
     setClientsFilter: (filter: UsersFilterType) => void
@@ -39,6 +41,7 @@ export const Users: React.FC<PropsType> = ({
    currentPage,
    pageLimit,
    isSuccess,
+   accessError,
    setUsersPageLimit,
    setUsersCurrentPage,
    setClientsFilter,
@@ -69,59 +72,68 @@ export const Users: React.FC<PropsType> = ({
         )
     })
 
+    console.log(accessError + " accessError !!!!!!!!!!!!!!!!!!!")
+
     return (
         <>
-            <div className="admin__cards-header">
-                <SearchFilterForm
-                    options={usersFilterSelectOptions}
-                    filter={filter}
-                    onFilterChanged={setClientsFilter}
-                />
-                <Paginator
-                    totalCount={total}
-                    pageSize={pageLimit}
-                    currentPage={currentPage}
-                    onPageChanged={setUsersCurrentPage}
-                    setPageLimit={setUsersPageLimit}
-                />
-                <button
-                    className="btn btn--bg btn--light-bg add-btn"
-                    onClick={() => {setAddUserMode(true)}}
-                >
-                    Add User
-                </button>
-            </div>
-            {
-                isFetching
-                    ? <Preloader />
-                    : total && total > 0
-                        ? (
-                            <ul className="admin__cards-list list">
-                                {usersElements}
-                            </ul>
-                        )
-                    : <NothingToShow />
-            }
+            {(accessError && accessError !== '')
+                ? <Navigate to="/noAccess"/>
+                : <>
+                    <div className="admin__cards-header">
+                        <SearchFilterForm
+                            options={usersFilterSelectOptions}
+                            filter={filter}
+                            onFilterChanged={setClientsFilter}
+                        />
+                        <Paginator
+                            totalCount={total}
+                            pageSize={pageLimit}
+                            currentPage={currentPage}
+                            onPageChanged={setUsersCurrentPage}
+                            setPageLimit={setUsersPageLimit}
+                        />
+                        <button
+                            className="btn btn--bg btn--light-bg add-btn"
+                            onClick={() => {
+                                setAddUserMode(true)
+                            }}
+                        >
+                            Add User
+                        </button>
+                    </div>
+                    {
+                        isFetching
+                            ? <Preloader/>
+                            : total && total > 0
+                                ? (
+                                    <ul className="admin__cards-list list">
+                                        {usersElements}
+                                    </ul>
+                                )
+                                : <NothingToShow/>
+                    }
 
-            {
-                addUserMode &&
-                <ModalPopUp
-                    modalTitle={modalTitle}
-                    closeModal={closeModal}
-                >
-                    <UpdateUserForm
-                        roles={roles}
-                        addUser={addUser}
-                        closeModal={closeModal}
-                    />
-                </ModalPopUp>
-            }
+                    {
+                        addUserMode &&
+                        <ModalPopUp
+                            modalTitle={modalTitle}
+                            closeModal={closeModal}
+                        >
+                            <UpdateUserForm
+                                roles={roles}
+                                addUser={addUser}
+                                closeModal={closeModal}
+                            />
+                        </ModalPopUp>
+                    }
 
-            {
-                isSuccess &&
-                <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
-            }
+                    {
+                        isSuccess &&
+                        <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+                    }
 
+                </>
+            }
         </>
     )
 }

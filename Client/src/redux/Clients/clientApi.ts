@@ -44,7 +44,7 @@ export const clientsAPI = {
     return instance.get<GetClientsResponseType>(
         `${API_URL}/clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
-        .then(response => response.data)
+            .then(response => response.data)
   },
 
   getArchivedClients(

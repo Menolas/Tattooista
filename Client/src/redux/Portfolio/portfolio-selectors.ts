@@ -55,3 +55,7 @@ export const getUpdateTattooStyleApiErrorSelector = (state: AppStateType) => {
 export const getUpdateGalleryApiErrorSelector = (state: AppStateType) => {
   return state.portfolio.updateGalleryApiError
 }
+
+export const getFakeApiSelector = (state: AppStateType) => {
+  return state.portfolio.fakeApi
+}

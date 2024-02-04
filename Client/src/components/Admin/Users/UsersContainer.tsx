@@ -16,11 +16,13 @@ import {
 import {
     getIsSuccessSelector,
     getRolesSelector,
-    getUsersCurrentPageSelector, getUsersFiletSelector,
+    getUsersCurrentPageSelector,
+    getUsersFiletSelector,
     getUsersIsFetching,
     getUsersPageLimitSelector,
     getUsersSelector,
-    getUsersTotalCountSelector
+    getUsersTotalCountSelector,
+    getAccessErrorSelector
 } from "../../../redux/Users/users-selectors"
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors"
 
@@ -35,12 +37,14 @@ export const UsersContainer: React.FC = () => {
     const pageLimit = useSelector(getUsersPageLimitSelector)
     const filter = useSelector(getUsersFiletSelector)
     const isSuccess = useSelector(getIsSuccessSelector)
+    const accessError = useSelector(getAccessErrorSelector)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getRoles())
-        dispatch(getUsers(currentPage, pageLimit, filter))
-    }, [currentPage, pageLimit, filter])
+        dispatch(getUsers(token, currentPage, pageLimit, filter))
+    }, [token, currentPage, pageLimit, filter])
 
     const setUsersPageLimitCallBack = (limit: number) => {
         dispatch(setUsersPageLimitAC(limit))
@@ -55,7 +59,7 @@ export const UsersContainer: React.FC = () => {
     }
 
     const deleteUserCallBack = (userId: string) => {
-        dispatch(deleteUser(userId, users, currentPage, total, pageLimit, filter))
+        dispatch(deleteUser(token, userId, users, currentPage, total, pageLimit, filter))
     }
 
     const setIsSuccessCallBack = (bol: boolean) => {
@@ -83,6 +87,7 @@ export const UsersContainer: React.FC = () => {
             currentPage={currentPage}
             pageLimit={pageLimit}
             isSuccess={isSuccess}
+            accessError={accessError}
             setUsersPageLimit={setUsersPageLimitCallBack}
             setUsersCurrentPage={setUsersCurrentPageCallBack}
             setClientsFilter={setClientsFilterCallBack}

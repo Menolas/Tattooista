@@ -16,6 +16,7 @@ import {NothingToShow} from "../common/NothingToShow"
 import {GalleryUploadForm} from "../Forms/GalleryUploadForm";
 
 type PropsType = {
+  fakeApi: boolean
   isSuccess: boolean
   isAuth: boolean
   isFetching: boolean
@@ -36,6 +37,7 @@ type PropsType = {
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
+  fakeApi,
   isSuccess,
   isAuth,
   isFetching,
@@ -97,6 +99,11 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const modalTitle = `Update you gallery for ${activeStyle?.value}`
 
   const GalleryItemsArray = gallery?.map(item => {
+
+    const GalleryImgUrl = fakeApi
+        ? `./uploads/gallery/${item.fileName}`
+        : `${API_URL}/gallery/${item.fileName}`
+
     return (
         <li
             key={item._id}
@@ -105,7 +112,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           <div
             className={"gallery__img-wrap"}
             onClick={() => { showBigImg(item.fileName) }}
-            style={{ backgroundImage: `url(${API_URL}/gallery/${item.fileName})` }}
+            style={{ backgroundImage: `url(${GalleryImgUrl})` }}
           >
             {''}
           </div>
