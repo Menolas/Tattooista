@@ -1145,7 +1145,7 @@ svg {
   display: flex;
   padding: 40px 0;
   width: 100%;
-  background-image: url("../img/map.PNG");
+  background-image: url("../../../public/uploads/map.png");
   background-size: cover;
   background-position: center;
 }
