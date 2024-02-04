@@ -1098,7 +1098,7 @@ img {
   display: flex;
   padding: 40px 0;
   width: 100%;
-  background-image: url("../img/map.PNG");
+  background-image: url("../img/map.png");
   background-size: cover;
   background-position: center;
 }
