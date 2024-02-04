@@ -191,7 +191,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   {''}
                 </button>
                 <img
-                    src={`${API_URL}/gallery/${bigImg}`} alt={activeStyle.value}
+                    src={ fakeApi ? `./uploads/gallery/${bigImg}` : `${API_URL}/gallery/${bigImg}`} alt={activeStyle.value}
                     contextMenu='alert("Вы не можете сохранить это изображение.");return false;'
                 />
             </div>
