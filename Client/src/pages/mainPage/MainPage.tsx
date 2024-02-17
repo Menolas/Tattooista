@@ -21,7 +21,7 @@ import {Preloader} from "../../components/common/Preloader"
 
 type PropsType = {
   fakeApi: boolean
-  isAuth: boolean
+  isAuth: string
   galleryPageSize: number
   tattooStyles: Array<TattooStyleType>
   services: Array<ServiceType>

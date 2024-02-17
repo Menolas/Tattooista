@@ -40,10 +40,12 @@ import {
   getGalleryPageSize,
   getTattooStylesSelector
 } from "../../redux/Portfolio/portfolio-selectors"
-import {getAuthSelector} from "../../redux/Auth/auth-selectors"
+import {getAuthSelector, getRolesSelector} from "../../redux/Auth/auth-selectors"
 import {getIsSuccessSelector} from "../../redux/General/general-selectors"
 
 export const MainPageContainer: React.FC = () =>  {
+
+  const roles = useSelector(getRolesSelector)
   const isAuth = useSelector(getAuthSelector)
   const galleryPageSize = useSelector(getGalleryPageSize)
   const tattooStyles = useSelector(getTattooStylesSelector)

@@ -3,7 +3,7 @@ import {LoginForm} from "../../components/Forms/LoginFormFormik"
 import {LoginFormValues} from "../../types/Types"
 
 type PropsType = {
-  isAuth: boolean
+  isAuth: null | string
   loginError: string
   login: (values: LoginFormValues) => void
 }

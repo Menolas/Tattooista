@@ -23,3 +23,7 @@ export const getRegistrationErrorSelector = (state: AppStateType) => {
 export const getLoginErrorSelector = (state: AppStateType) => {
   return state.auth.loginError
 }
+
+export const getRolesSelector = (state: AppStateType) => {
+  return state.auth.roles
+}

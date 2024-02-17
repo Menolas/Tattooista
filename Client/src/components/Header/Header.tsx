@@ -6,9 +6,10 @@ import { Logo } from "../Logo"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import {Tooltip} from "react-tooltip"
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
-    isAuth: boolean
+    isAuth: string | null
     headerClasses: string | null
     logout: () => void
 }
@@ -24,34 +25,45 @@ export const Header: React.FC<PropsType> = ({
       <Logo />
       <MainNav/>
       <SocialNav />
-      { isAuth
-        ? <>
-              <NavLink
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Admin page"
-                  //to="/admin/bookedConsultations"
-                  to="/admin"
-                  className="main-header__admin-link"
-              >
-                <svg><use href={`${Sprite}#admin`}/></svg>
-              </NavLink>
-              <NavLink
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Log out"
-                  to="/" className="main-header__admin-link"
-                  onClick={() => { logout() }}
-              >
-                <svg><use href={`${Sprite}#logout`}/></svg>
-              </NavLink>
-          </>
-        : <NavLink
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Log in"
-              to="/login"
-              className="main-header__admin-link">
-              <svg><use href={`${Sprite}#login`}/></svg>
-          </NavLink>
-      }
+        { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+
+            <NavLink
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Admin page"
+                //to="/admin/bookedConsultations"
+                to="/admin"
+                className="main-header__admin-link"
+            >
+                <svg>
+                    <use href={`${Sprite}#admin`}/>
+                </svg>
+            </NavLink>
+        }
+        { isAuth
+            ? (
+                <NavLink
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Log out"
+                    to="/" className="main-header__admin-link"
+                    onClick={() => {
+                        logout()
+                    }}
+                >
+                    <svg>
+                        <use href={`${Sprite}#logout`}/>
+                    </svg>
+                </NavLink>
+              )
+            : (
+                <NavLink
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Log in"
+                    to="/login"
+                    className="main-header__admin-link">
+                    <svg><use href={`${Sprite}#login`}/></svg>
+                </NavLink>
+            )
+        }
       <Tooltip id="my-tooltip" />
     </header>
   );

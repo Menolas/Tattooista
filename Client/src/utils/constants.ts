@@ -21,6 +21,10 @@ export const ADMIN_BUTTONS_DATA = [
     }
 ]
 
+export const SUPER_ADMIN = 'SUPER_ADMIN'
+export const ADMIN = 'ADMIN'
+export const USER = 'USER'
+
 export enum ResultCodesEnum {
     Success = 0,
     Error = 1

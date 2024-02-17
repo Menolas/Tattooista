@@ -7,10 +7,11 @@ import {API_URL} from "../../http"
 import {ModalPopUp} from "../common/ModalPopUp"
 import { UpdateAboutPageFormFormik } from "../Forms/UpdateAboutPageFormFormik"
 import {Tooltip} from "react-tooltip"
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
     fakeApi: boolean
-    isAuth: boolean
+    isAuth: string
     pageAbout?: PageType
     editAboutPage: (values: FormData) => void
     changeAboutPageVisibility: (isActive: boolean) => void
@@ -38,7 +39,7 @@ export const About: React.FC<PropsType> = React.memo(({
 
     return (
         <section className="page-block about">
-            { isAuth &&
+            { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                 <div className={"actionBar"}>
                     <button
                         data-tooltip-id="about-tooltip"
