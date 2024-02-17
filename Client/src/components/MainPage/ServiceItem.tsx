@@ -8,10 +8,11 @@ import {SuccessModal} from "../SuccessModal"
 import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik"
 import {API_URL} from "../../http"
 import {Tooltip} from "react-tooltip"
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
     fakeApi: boolean
-    isAuth: boolean
+    isAuth: string
     service: ServiceType
     editService: (id: string, values: FormData) => void
     deleteService: (id: string) => void
@@ -51,7 +52,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
     return (
         <li className="services__item">
             <article className="services__article">
-                {isAuth &&
+                { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                     <div className={"actionBar"}>
                         <button
                             data-tooltip-id="service-tooltip"

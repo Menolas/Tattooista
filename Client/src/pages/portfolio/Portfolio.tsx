@@ -4,10 +4,11 @@ import { Gallery } from "../../components/Portfolio/Gallery"
 import { TattooStyles } from "../../components/Portfolio/TattooStyles"
 import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types"
 import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
   fakeApi: boolean
-  isAuth: boolean
+  isAuth: string
   isFetching: boolean
   totalCount: number
   pageSize: number
@@ -83,7 +84,7 @@ export const Portfolio: React.FC<PropsType> = ({
         setIsSuccess={setIsSuccess}
       />
 
-      { !isAuth &&
+      { (isAuth !== ADMIN || isAuth !== SUPER_ADMIN) &&
           <Advertisement
               bookConsultation={bookConsultation}
           />

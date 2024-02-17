@@ -7,7 +7,7 @@ import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik"
 
 type PropsType = {
   fakeApi: boolean
-  isAuth: boolean
+  isAuth: string
   services: Array<ServiceType>
   editService: (id: string, values: FormData) => void
   addService: (values: FormData) => void

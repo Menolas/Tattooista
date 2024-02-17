@@ -6,9 +6,10 @@ import Sprite from "../../assets/svg/sprite.svg"
 import {ModalPopUp} from "../common/ModalPopUp"
 import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik"
 import {Tooltip} from "react-tooltip"
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
-  isAuth: boolean
+  isAuth: string
   faqItem: FaqType
   updateFaqItem: (id: string, values: any) => void
   deleteFaqItem: (id: string) => void
@@ -47,7 +48,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
         onMouseOut={() => { hideFaqItemText() }}
       >
         <div className="faq__item-header">
-          {isAuth &&
+          { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
             <div className={"actionBar"}>
                 <button
                     data-tooltip-id="faq-tooltip"

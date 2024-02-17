@@ -2,10 +2,12 @@ import { authAPI } from "./authApi"
 import { ResultCodesEnum } from "../../utils/constants"
 import { ThunkAction } from "redux-thunk"
 import { AppStateType } from "../redux-store"
-import { LoginFormValues, RegistrationFormValues} from "../../types/Types"
+import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types"
 import { IUser } from "../../types/Types"
+import {getUserRole} from "../../utils/functions";
 
 const SET_USER_DATA = 'SET_USER_DATE'
+const SET_ROLES = 'SET_ROLES'
 const SET_AUTH = 'SET_AUTH'
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
@@ -14,8 +16,9 @@ const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
 
 let initialState = {
   user: {} as IUser | null,
+  roles: [] as Array<RoleType>,
   token: null as string | null | undefined,
-  isAuth: false as boolean,
+  isAuth: null as string | null,
   isSuccess: false as boolean,
   registrationError: '' as string | undefined,
   loginError: '' as string | undefined
@@ -27,8 +30,14 @@ export const authReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
+  //console.log(state.isAuth + " isAuth in state!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
   switch (action.type) {
+    case SET_ROLES:
+      return {
+        ...state,
+        roles: action.roles
+      }
 
     case SET_ACCESS_TOKEN:
       return  {
@@ -70,9 +79,19 @@ export const authReducer = (
   }
 }
 
-type ActionsTypes = SetLoginErrorAT | SetRegistrationErrorAT | SetIsSuccessAT | SetTokenAT | SetUserDataAT | SetAuthAT
+type ActionsTypes = SetLoginErrorAT | SetRegistrationErrorAT | SetIsSuccessAT | SetTokenAT |
+    SetUserDataAT | SetAuthAT | SetRolesAT
 
 // actions creators
+
+type SetRolesAT = {
+  type: typeof SET_ROLES,
+  roles: Array<RoleType>
+}
+
+const setRolesAC = (roles: Array<RoleType>): SetRolesAT => ({
+  type: SET_ROLES, roles
+})
 
 type SetLoginErrorAT = {
   type: typeof SET_LOGIN_ERROR
@@ -123,10 +142,10 @@ const setUserDataAC = (
 
 type SetAuthAT = {
   type: typeof SET_AUTH
-  isAuth: boolean
+  isAuth: null | string
 }
 
-const setAuth = (isAuth: boolean): SetAuthAT => ({
+const setAuth = (isAuth: null | string): SetAuthAT => ({
     type: SET_AUTH, isAuth
 })
 
@@ -142,8 +161,10 @@ export const login = (values: LoginFormValues): ThunkType => async (
     if(response.resultCode === 0) {
       dispatch(setLoginErrorAC(''))
       dispatch(setUserDataAC(response.userData.user))
-      dispatch(setAuth(true))
+      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)))
+      //console.log("getUserRole in login")
       dispatch(setAccessTokenAC(response.userData.accessToken))
+      dispatch(setRolesAC(response.userData.roles))
     }
   } catch (e) {
     // @ts-ignore
@@ -154,13 +175,13 @@ export const login = (values: LoginFormValues): ThunkType => async (
 export const logout = (): ThunkType => async (
     dispatch
 ) => {
-  console.log("hit logout!!!")
+  //console.log("hit logout!!!")
   try {
     const response = await authAPI.logout()
      if(response.resultCode === 0) {
        dispatch(setAccessTokenAC(null))
        dispatch(setUserDataAC(null))
-       dispatch(setAuth(false))
+       dispatch(setAuth(null))
      }
   } catch (e) {
     console.log(e)
@@ -172,10 +193,12 @@ export const registration = (values: RegistrationFormValues): ThunkType => async
     let response = await authAPI.registration(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setRegistrationErrorAC(''))
-      dispatch(setAuth(true))
+      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)))
+      //console.log("getUserRole in registration")
       dispatch(setUserDataAC(response.userData.user))
       dispatch(setAccessTokenAC(response.userData.accessToken))
       dispatch(setIsSuccessAC(true))
+      dispatch(setRolesAC(response.userData.roles))
     }
   } catch (e) {
     // @ts-ignore
@@ -192,8 +215,10 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
     if (response.resultCode === ResultCodesEnum.Success) {
       if (response.userData.isAuth === true) {
         dispatch(setAccessTokenAC(response.userData.accessToken))
-        dispatch(setAuth(true))
         dispatch(setUserDataAC(response.userData.user))
+        dispatch(setRolesAC(response.userData.roles))
+        dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)))
+        //console.log("getUserRole in checkAuth")
       }
     }
   } catch (e) {

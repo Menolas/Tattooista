@@ -1098,7 +1098,7 @@ img {
   display: flex;
   padding: 40px 0;
   width: 100%;
-  background-image: url("../img/map.png");
+  background-image: url("../img/map.PNG");
   background-size: cover;
   background-position: center;
 }
@@ -2882,6 +2882,8 @@ input[type=checkbox]:checked + label .checkbox::after {
   transition: all 0.3s ease-in-out;
 }
 .admin-panel-mobile .admin-panel-mobile__dropdown {
+  height: 0;
+  overflow: hidden;
   transition: all 0.3s ease-in-out;
   z-index: 10;
 }

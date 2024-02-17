@@ -6,6 +6,7 @@ export type RoleType = {
 export type IUser = {
     displayName: string | undefined
     isActivated: boolean
+    roles: Array<string>
     avatar?: string
 }
 

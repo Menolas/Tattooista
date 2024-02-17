@@ -14,11 +14,12 @@ import {useDispatch} from "react-redux"
 import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm"
 import {NothingToShow} from "../common/NothingToShow"
 import {GalleryUploadForm} from "../Forms/GalleryUploadForm";
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
   fakeApi: boolean
   isSuccess: boolean
-  isAuth: boolean
+  isAuth: string
   isFetching: boolean
   totalCount: number
   pageSize: number
@@ -116,7 +117,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           >
             {''}
           </div>
-          {isAuth &&
+          {(isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
             <div className={"gallery__item-actions"}>
               <button
                   data-tooltip-id="my-tooltip"
@@ -161,7 +162,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             onPageChanged={setCurrentPage}
             setPageLimit={setPageSize}
           />
-          { isAuth &&
+          { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
               <button
                   className={"btn btn--light-bg btn--sm add-btn"}
                   onClick={openEditGalleryForm}

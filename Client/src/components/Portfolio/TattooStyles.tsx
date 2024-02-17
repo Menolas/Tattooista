@@ -11,6 +11,7 @@ import {SuccessPopUp} from "../common/SuccessPopUp"
 import AliceCarousel from "react-alice-carousel"
 import {Tooltip} from "react-tooltip"
 import {Confirmation} from "../common/Confirmation";
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 const responsive = {
   0: {items: 3},
@@ -20,7 +21,7 @@ const responsive = {
 }
 
 type PropsType = {
-  isAuth: boolean
+  isAuth: string
   isSuccess: boolean
   tattooStyles: Array<TattooStyleType>,
   activeStyle: TattooStyleType,
@@ -83,7 +84,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
 
   return (
     <section className="tattoo-style page-block">
-      { isAuth &&
+      { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
         <button
             className={"btn btn--sm btn--light-bg"}
             onClick={() => {setAddTattooStyleMode(true)}}
@@ -112,7 +113,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
         />
       </div>
       <div className="tattoo-style__item-content">
-        { isAuth &&
+        { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
           <div className={"tattoo-style__item-actions"}>
             <button
                 data-tooltip-id="my-tooltip"

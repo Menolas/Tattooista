@@ -1,5 +1,5 @@
 import $api, {API_URL} from "../../http"
-import {LoginFormValues, RegistrationFormValues} from "../../types/Types"
+import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types"
 import {IUser} from "../../types/Types"
 
 type CommonResponseFields = {
@@ -12,6 +12,7 @@ type LoginResponseType = CommonResponseFields & {
         user: IUser
         accessToken: string
         refreshToken: string
+        roles: Array<RoleType>
     }
 }
 
@@ -20,6 +21,7 @@ type RegistrationResponseType = CommonResponseFields & {
         user: IUser
         accessToken: string
         refreshToken: string
+        roles: Array<RoleType>
     }
 }
 
@@ -31,6 +33,7 @@ type CheckAuthResponseType = CommonResponseFields & {
         user: IUser
         accessToken: string
         refreshToken: string
+        roles: Array<RoleType>
     }
 }
 
@@ -65,9 +68,7 @@ export const authAPI = {
   },
 
   checkAuth() {
-      return $api.get<CheckAuthResponseType>(
-          `${API_URL}/auth/refresh`,
-          {withCredentials: true}
-      ).then(response => response.data)
+      return $api.get<CheckAuthResponseType>(`${API_URL}/auth/refresh`)
+          .then(response => response.data)
   }
 }

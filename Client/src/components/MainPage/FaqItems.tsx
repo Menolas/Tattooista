@@ -4,9 +4,10 @@ import { FaqType } from "../../types/Types"
 import { FaqItem } from "./FaqItem"
 import {ModalPopUp} from "../common/ModalPopUp"
 import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik"
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
-  isAuth: boolean
+  isAuth: string
   faq: Array<FaqType>
   updateFaqItem: (id: string, values: any) => void
   addFaqItem: (values: FaqType) => void
@@ -44,7 +45,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   return (
     <section className="page-block faq" id="faq">
       {
-        isAuth &&
+        (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
         <button
             className={"btn btn--bg btn--light-bg"}
             onClick={() => {setAddFaqItemMode(true)}}

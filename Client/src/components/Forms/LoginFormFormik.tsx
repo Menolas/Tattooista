@@ -6,6 +6,7 @@ import { Navigate } from "react-router"
 import { LoginFormValues } from "../../types/Types"
 import {FieldComponent} from "./FieldComponent"
 import { NavLink } from "react-router-dom"
+import {ADMIN, SUPER_ADMIN, USER} from "../../utils/constants";
 
 const validationSchema = Yup.object().shape({
   email: Yup
@@ -18,7 +19,7 @@ const validationSchema = Yup.object().shape({
 })
 
 type PropsType = {
-  isAuth: boolean
+  isAuth: null | string
   loginError: string
   login: (values: LoginFormValues) => void
 }
@@ -29,9 +30,15 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
   login
 }) => {
 
-  if (isAuth) {
-    //return <Navigate to="/admin/bookedConsultations" />
-    return <Navigate to="/admin" />
+  console.log(isAuth + "is Auth!!!!!!!!!!!!")
+
+  if (isAuth === ADMIN || isAuth === SUPER_ADMIN) {
+    return <Navigate to="/admin/bookedConsultations" />
+  }
+
+  if (isAuth === USER) {
+    console.log(isAuth + " isAuth in login form!!!!!!!!!!!!!!!")
+    return <Navigate to="/" />
   }
 
   const submit = (values: LoginFormValues, actions: FormikHelpers<FormikValues>) => {

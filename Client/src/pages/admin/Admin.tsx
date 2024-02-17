@@ -3,39 +3,113 @@ import {Navigate, NavLink} from "react-router-dom"
 import { Outlet } from "react-router-dom"
 import {useSelector} from "react-redux"
 import {getAuthSelector, getUserSelector} from "../../redux/Auth/auth-selectors"
-import {AdminPanelMobileMenu} from "../../components/AdminPanelMobileMenu"
-import { ADMIN_BUTTONS_DATA } from "../../utils/constants"
-
-const adminButtons = ADMIN_BUTTONS_DATA.map((btn, i ) => {
-
-    return (
-        <NavLink
-            key={i}
-            to={btn.btnUrl}
-            className={({ isActive }) => (isActive ? 'btn btn--bg btn--light-bg' : 'btn btn--bg btn--dark-bg')}
-        >
-            {btn.btnText}
-        </NavLink>
-    )
-})
+import {ADMIN, ADMIN_BUTTONS_DATA, SUPER_ADMIN} from "../../utils/constants"
+// @ts-ignore
+import Sprite from "../../assets/svg/sprite.svg";
+import { useState} from "react";
 
 const Admin: React.FC = React.memo(() => {
 
   const isAuth = useSelector(getAuthSelector)
   const user = useSelector(getUserSelector)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   if (!isAuth) return <Navigate to='/login' />
   if (isAuth && user.isActivated !== true) {
     return <Navigate to="/registration" />
   }
 
+  const AdminButton = ({
+    btn
+  }: {
+      btn: {
+          btnText: string
+          btnUrl: string
+      }
+  }) => {
+      return (
+        <li key={btn.btnText}>
+            <NavLink
+                to={btn.btnUrl}
+                className={ (isActive) => isActive ? 'btn btn--bg btn--light-bg' : 'btn btn--bg btn--dark-bg' }
+            >
+                {btn.btnText}
+            </NavLink>
+        </li>
+      )
+  }
+
+  const AdminButtonMobile = ({
+    btn
+  }: {
+    btn: {
+        btnText: string
+        btnUrl: string
+    }
+  }) => {
+        return (
+            <li key={btn.btnUrl}>
+                <NavLink
+                    to={btn.btnUrl}
+                    className={'btn btn--bg btn--dark-bg'}
+                    onClick={() => {setIsMobileMenuOpen(false)}}
+                >
+                    {btn.btnText}
+                </NavLink>
+            </li>
+        )
+  }
+
+  const adminButtons = ADMIN_BUTTONS_DATA.map((btn, i ) => {
+    if (isAuth === "ADMIN") {
+        if (btn.btnText !== "Users") {
+            return <AdminButton btn={btn} key={`${btn.btnText}-${i}`}/>
+        }
+    }
+    if (isAuth === "SUPER_ADMIN") {
+      return <AdminButton btn={btn} key={`${btn.btnText}-${i}`}/>
+    }
+    return null
+  })
+
+  const adminButtonsMobile = ADMIN_BUTTONS_DATA.map((btn, i ) => {
+    if (isAuth === "ADMIN") {
+        if (btn.btnText !== "Users") {
+            return <AdminButtonMobile btn={btn} key={`${btn.btnUrl}-${i}`}/>
+        }
+    }
+    if (isAuth === "SUPER_ADMIN") {
+        return <AdminButtonMobile btn={btn} key={`${btn.btnUrl}-${i}`}/>
+    }
+    return null
+  })
+
   return (
     <div className="admin">
       <div className="admin__header">
-        <AdminPanelMobileMenu />
-        <div className="admin__view-btns">
-            {adminButtons}
+        <div
+          className={isMobileMenuOpen ? "admin-panel-mobile show" : "admin-panel-mobile"}
+        >
+          <button
+              className={"btn btn--bg btn--light-bg admin-panel-mobile__initiate-btn"}
+              onClick={() => {
+                  setIsMobileMenuOpen(!isMobileMenuOpen)
+              }}
+          >
+              Admin Panel
+              <svg><use href={`${Sprite}#chevron-down`}/></svg>
+          </button>
+          <div
+              className={'admin-panel-mobile__dropdown'}
+          >
+              <ul className={"list admin-panel-mobile__dropdown-list"}>
+                  {adminButtonsMobile}
+              </ul>
+          </div>
         </div>
+        <ul className="list admin__view-btns">
+            {adminButtons}
+        </ul>
       </div>
       <Outlet />
     </div>

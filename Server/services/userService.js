@@ -36,8 +36,11 @@ class UserService {
             ...tokens,
             user: {
                 displayName: userDto.displayName,
-                isActivated: userDto.isActivated
-            }
+                isActivated: userDto.isActivated,
+                roles: userDto.roles,
+                avatar: userDto.avatar
+            },
+            roles: await Role.find()
         }
     }
 
@@ -60,15 +63,17 @@ class UserService {
             throw ApiError.BadRequest('wrong password')
         }
         const userDto = new UserDto(user)
-        console.log(userDto.roles + " login userDto !!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
         return {
             ...tokens,
             user: {
                 displayName: userDto.displayName,
-                isActivated: userDto.isActivated
-            }
+                isActivated: userDto.isActivated,
+                roles: userDto.roles,
+                avatar: userDto.avatar
+            },
+            roles: await Role.find()
         }
     }
 
@@ -105,8 +110,11 @@ class UserService {
             isAuth: true,
             user: {
                 displayName: userDto.displayName,
-                isActivated: userDto.isActivated
-            }
+                isActivated: userDto.isActivated,
+                roles: userDto.roles,
+                avatar: userDto.avatar
+            },
+            roles: await Role.find()
         }
     }
 

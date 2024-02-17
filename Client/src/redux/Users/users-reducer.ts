@@ -1,5 +1,5 @@
 import type {} from "redux-thunk/extend-redux"
-import {ClientType, RoleType, UserType} from "../../types/Types"
+import { RoleType, UserType } from "../../types/Types"
 import { ResultCodesEnum } from "../../utils/constants"
 import { AppStateType } from "../redux-store"
 import { ThunkAction } from "redux-thunk"
@@ -55,6 +55,7 @@ export const usersReducer = (
                 ...state,
                 users: action.users
             }
+
         case TOGGLE_IS_FETCHING:
             return {
                 ...state,
