@@ -159,7 +159,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
                 closeModal={closeModal}
             >
               <Confirmation
-                  content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                  content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
                   confirm={deleteTattooStyleCallBack}
                   cancel={closeConfirmationModal}
               />

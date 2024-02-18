@@ -30,7 +30,7 @@ const SET_UPDATE_GALLERY_API_ERROR = 'SET_UPDATE_GALLERY_API_ERROR'
 const SET_FAKE_API = 'SET_FAKE_API'
 
 let initialState = {
-  totalGalleryItemsCount: 0 as number | null,
+  totalGalleryItemsCount: 0 as number,
   totalArchivedGalleryItemsCount: 0 as number | null,
   galleryPageSize: 16 as number | null,
   archivedGalleryPageSize: 16 as number,
@@ -62,6 +62,7 @@ export type InitialStateType = typeof initialState
 export const portfolioReducer = (
   state = initialState,
   action: ActionsTypes): InitialStateType => {
+  console.log(state.gallery + " state for gallery!!!!!!!!!!!!!!!!")
 
   switch (action.type) {
     case SET_GALLERY_PAGE_SIZE:
@@ -146,7 +147,8 @@ export const portfolioReducer = (
     case UPDATE_GALLERY:
       return {
         ...state,
-        gallery: action.gallery.concat(state.gallery)
+        gallery: [...action.gallery.concat(state.gallery)],
+        totalGalleryItemsCount: state.totalGalleryItemsCount + action.gallery.length
       }
 
     case DELETE_GALLERY_ITEM:

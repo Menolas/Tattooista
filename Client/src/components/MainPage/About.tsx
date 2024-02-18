@@ -38,7 +38,7 @@ export const About: React.FC<PropsType> = React.memo(({
         : pageAbout?.wallPaper ? `url("${API_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("./uploads/avatars/avatar.jpg")`
 
     return (
-        <section className="page-block about">
+        <section className="page-block about" id="about">
             { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                 <div className={"actionBar"}>
                     <button
