@@ -11,19 +11,19 @@ export const MainNav: React.FC = React.memo(() => {
 
     {
       text: 'Tattoo Artist',
-      url: '#about',
+      url: '/#about',
     },
     {
       text: 'Studio Services',
-      url: '#services',
+      url: '/#services',
     },
     {
       text: 'F.A.Q',
-      url: '#faq',
+      url: '/#faq',
     },
     {
       text: 'Booking',
-      url: '#booking',
+      url: '/#booking',
     },
     {
       text: 'Contacts',

@@ -87,9 +87,19 @@ export const MainPage: React.FC<PropsType> = React.memo(({
 
   const successBookingPopUpContent = "You've booked a consultation! We will contact you soon))"
   const successPopUpContent = "You successfully added a new item"
-
-
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    // Check if the URL contains a hash
+    if (window.location.hash) {
+      // Get the target element using the hash
+      const targetElement = document.querySelector(window.location.hash)
+      // Scroll to the target element
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (isSuccess) {

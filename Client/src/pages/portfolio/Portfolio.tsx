@@ -84,7 +84,7 @@ export const Portfolio: React.FC<PropsType> = ({
         setIsSuccess={setIsSuccess}
       />
 
-      { (isAuth !== ADMIN || isAuth !== SUPER_ADMIN) &&
+      { (isAuth !== ADMIN && isAuth !== SUPER_ADMIN) &&
           <Advertisement
               bookConsultation={bookConsultation}
           />
