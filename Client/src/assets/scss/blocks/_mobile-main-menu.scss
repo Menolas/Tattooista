@@ -1,0 +1,48 @@
+.mobile-main-menu {
+  position: fixed;
+  top: 90px;
+  left: auto;
+  right: 0;
+  padding: 3rem 1rem;
+  width: 100%;
+  background-color: $dark;
+  background-image: url("../img/body-bg.jpg");
+  overflow: hidden;
+  transform: translate(100%, 0);
+  transition: all 0.3s ease;
+
+  &::before {
+    @include element-style(100%, 100%, $dark);
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: -20px;
+    box-shadow: inset 0 0 2000px rgba(48, 48, 48, 0.7);
+    filter: blur(20px);
+    z-index: -1;
+  }
+
+  .mobile-main-menu__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
+  .mobile-main-menu__item {
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}

@@ -23,19 +23,19 @@ export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) =>
   }
 
   return (
-    <div className = "main-offer">
+    <div className = "main-offer container">
       <div className = "main-offer__content-wrap">
         <span className = "main-offer__decorative-text">Tattoo Artist</span>
         <h1 className = "title title--first main-offer__title">
-          <span>Hobf</span>
           <span>Adelaine</span>
+          <span>Hobf</span>
         </h1>
         <span className = "main-offer__motto">Your philosophy on your skin</span>
       </div>
       <button
-        className = "btn btn--light-bg main-header__btn"
+        className = "btn btn--transparent main-header__btn"
         onClick = { showBookConsultationModal }>
-        BOOK A CONSULTATION
+        Book a consultation
       </button>
       { bookingModal &&
         <ModalPopUp

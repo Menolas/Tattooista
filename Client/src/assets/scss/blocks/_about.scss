@@ -1,6 +1,5 @@
 .about {
   position: relative;
-  padding-bottom: 50px;
   text-align: center;
 }
 
@@ -19,7 +18,7 @@
 
 .about__img-wrap-decor {
   position: relative;
-  margin: 0 auto;
+  margin: 0 auto 75px;
   width: 260px;
   height: 260px;
 
@@ -34,10 +33,28 @@
 
 .about__content {
   position: relative;
-  padding: 0.5rem 1rem;
+  margin-bottom: 40px;
+  text-align: left;
   line-height: 1.7;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 10;
+}
+
+.about__add-block {
+  .social-nav {
+    margin-bottom: 40px;
+
+    .social-nav__list {
+      gap: 20px;
+    }
+
+    .social-nav__item {
+      svg {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  }
 }
 
 @media(min-width: 990px) {

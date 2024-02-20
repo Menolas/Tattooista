@@ -23,8 +23,12 @@ export const Header: React.FC<PropsType> = ({
   return (
     <header className = { 'main-header container ' + headerClasses }>
       <Logo />
-      <MainNav/>
+      <MainNav
+          isAuth={isAuth}
+          logout={logout}
+      />
       <SocialNav />
+      <nav className={'admin-nav'}>
         { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
 
             <NavLink
@@ -45,9 +49,7 @@ export const Header: React.FC<PropsType> = ({
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Log out"
                     to="/" className="main-header__admin-link"
-                    onClick={() => {
-                        logout()
-                    }}
+                    onClick={logout}
                 >
                     <svg>
                         <use href={`${Sprite}#logout`}/>
@@ -64,6 +66,7 @@ export const Header: React.FC<PropsType> = ({
                 </NavLink>
             )
         }
+      </nav>
       <Tooltip id="my-tooltip" />
     </header>
   );

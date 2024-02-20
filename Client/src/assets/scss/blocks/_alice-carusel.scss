@@ -38,17 +38,23 @@
             }
           }
 
-          .slider-item-title {
-            margin: 0;
-            padding: 8px 0;
+          .slider-item-title__wrap {
             width: 100%;
-            text-align: center;
+            background-color: rgba(255, 255, 255, 0.15);
+          }
+
+          .slider-item-title {
+            position: relative;
+            margin: 0;
+            padding: 13px 16px;
+            width: 100%;
             height: auto;
             font-size: 28px;
-            font-weight: 700;
+            font-weight: 500;
             line-height: 0.9;
-            text-shadow: 6px 2px 2px rgba(0, 0, 0, 0.95);
-            background-color: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
           }
         }
       }
@@ -58,14 +64,37 @@
 
 .portfolio-slider {
   .alice-carousel {
+
+    .alice-carousel__dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 35px;
+      margin-bottom: 0;
+
+      .alice-carousel__dots-item {
+        margin: 0;
+        width: 10px;
+        height: 9px;
+        border-radius: 0;
+        background-color: $light;
+
+        &.__active {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+
     .alice-carousel__prev-btn,
     .alice-carousel__next-btn {
       position: absolute;
-      top: 42%;
+      bottom: 9px;
       padding: 0;
       width: 45px;
       height: 30px;
-      transform: translate(0, -50%);
+      transform: translate(0, 50%);
 
       .alice-carousel__next-btn-wrapper,
       .alice-carousel__prev-btn-wrapper {

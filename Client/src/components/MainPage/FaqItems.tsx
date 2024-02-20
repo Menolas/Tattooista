@@ -43,7 +43,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   })
 
   return (
-    <section className="page-block faq" id="faq">
+    <section className="page-block faq container" id="faq">
       {
         (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
         <button

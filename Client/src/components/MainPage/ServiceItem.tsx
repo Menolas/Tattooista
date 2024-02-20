@@ -13,6 +13,7 @@ import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 type PropsType = {
     fakeApi: boolean
     isAuth: string
+    serviceIndex: number
     service: ServiceType
     editService: (id: string, values: FormData) => void
     deleteService: (id: string) => void
@@ -21,6 +22,7 @@ type PropsType = {
 export const ServiceItem: React.FC<PropsType> = React.memo(({
     fakeApi,
     isAuth,
+    serviceIndex,
     service,
     editService,
     deleteService
@@ -51,6 +53,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
 
     return (
         <li className="services__item">
+            <span className={'services__item-index'}>{`0${serviceIndex}`}</span>
             <article className="services__article">
                 { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                     <div className={"actionBar"}>
