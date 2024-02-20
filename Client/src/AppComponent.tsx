@@ -60,7 +60,7 @@ const App = () => {
             <SmoothScroll>
                 <React.Suspense fallback={<Preloader />}>
                     <HeaderContainer />
-                    <main className={"site-main container"}>
+                    <main className={"site-main"}>
                         <Routes>
                             <Route path='/'
                                    element={<MainPageContainer />} />

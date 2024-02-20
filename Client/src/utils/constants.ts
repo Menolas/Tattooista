@@ -1,3 +1,48 @@
+export const mainNavHashLinksData = [
+
+    {
+        text: 'Tattoo Artist',
+        url: '/#about',
+    },
+    {
+        text: 'Studio Services',
+        url: '/#services',
+    },
+    {
+        text: 'F.A.Q',
+        url: '/#faq',
+    },
+    {
+        text: 'Booking',
+        url: '/#booking',
+    },
+    {
+        text: 'Contacts',
+        url: '#contacts',
+    },
+]
+
+export const socialLinksData = [
+    {
+        text: "Instagram",
+        tooltipText: "My Instagram",
+        url: "https://www.instagram.com/adelainehobf/",
+        icon: "instagram"
+    },
+    {
+        text: "Facebook",
+        tooltipText: "My Facebook",
+        url: "https://www.facebook.com/a.hobf",
+        icon: "facebook"
+    },
+    {
+        text: "Call me",
+        tooltipText: "My Instagram",
+        url: "tel:+4745519015",
+        icon: "phone"
+    },
+]
+
 export const ADMIN_BUTTONS_DATA = [
     {
         btnText: "Booked Consultations",

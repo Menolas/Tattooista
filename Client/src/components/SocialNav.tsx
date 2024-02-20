@@ -1,45 +1,30 @@
 import * as React from "react"
 // @ts-ignore
 import Sprite from "../assets/svg/sprite.svg"
+import { socialLinksData } from "../utils/constants"
+
+const socialLinks = socialLinksData.map(item => {
+  return (
+      <li className="social-nav__item">
+        <a
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content={item.tooltipText}
+            className="social-nav__link"
+            href={item.url}
+            target={"_blank"}>
+          <span><svg><use href={`${Sprite}#${item.icon}`}/></svg></span>
+          {item.text}
+        </a>
+      </li>
+  )
+})
 
 
 export const SocialNav: React.FC = React.memo(() => {
   return (
     <nav className="social-nav">
       <ul className="social-nav__list">
-        <li className="social-nav__item">
-          <a
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Look at my Instagram"
-              className="social-nav__link"
-              href="https://www.instagram.com/adelainehobf/"
-              target={"_blank"}>
-            <span><svg><use href={`${Sprite}#instagram`}/></svg></span>
-            Instagram
-          </a>
-        </li>
-        <li className="social-nav__item">
-          <a
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Look at my Facebook"
-              className="social-nav__link"
-              href="https://www.facebook.com/a.hobf"
-              target={"_blank"}>
-            <span><svg><use href={`${Sprite}#facebook`}/></svg></span>
-            Messenger
-          </a>
-        </li>
-        <li className="social-nav__item">
-          <a
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Call me"
-              className="social-nav__link"
-              href="tel:+4745519015"
-              target={"_blank"}>
-            <span><svg><use href={`${Sprite}#phone`}/></svg></span>
-            Facebook
-          </a>
-        </li>
+        {socialLinks}
       </ul>
     </nav>
   )

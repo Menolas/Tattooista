@@ -1,6 +1,6 @@
 import * as React from "react"
 import {useState} from "react"
-import {PageType} from "../../types/Types"
+import {BookConsultationFormValues, PageType} from "../../types/Types"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import {API_URL} from "../../http"
@@ -8,6 +8,9 @@ import {ModalPopUp} from "../common/ModalPopUp"
 import { UpdateAboutPageFormFormik } from "../Forms/UpdateAboutPageFormFormik"
 import {Tooltip} from "react-tooltip"
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {SocialNav} from "../SocialNav";
+import {BookingForm} from "../Forms/BookingFormFormik";
+import {BookingButton} from "../common/BookingButton";
 
 type PropsType = {
     fakeApi: boolean
@@ -15,6 +18,7 @@ type PropsType = {
     pageAbout?: PageType
     editAboutPage: (values: FormData) => void
     changeAboutPageVisibility: (isActive: boolean) => void
+    bookConsultation: (values: BookConsultationFormValues) => void
 }
 
 export const About: React.FC<PropsType> = React.memo(({
@@ -22,7 +26,8 @@ export const About: React.FC<PropsType> = React.memo(({
      isAuth,
      pageAbout,
      editAboutPage,
-     changeAboutPageVisibility
+     changeAboutPageVisibility,
+     bookConsultation
 }) => {
 
     const [isEditMode, setIsEditMode] = useState(false)
@@ -38,7 +43,7 @@ export const About: React.FC<PropsType> = React.memo(({
         : pageAbout?.wallPaper ? `url("${API_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("./uploads/avatars/avatar.jpg")`
 
     return (
-        <section className="page-block about" id="about">
+        <section className="page-block about container" id="about">
             { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                 <div className={"actionBar"}>
                     <button
@@ -75,7 +80,13 @@ export const About: React.FC<PropsType> = React.memo(({
                     style={{backgroundImage: imgUrl}}
                 >{''}</div>
             </div>
+            <h3 className={'page-block__title-secondary'}>Facts about me</h3>
             <div className={"about__content"}>{pageAbout?.content}</div>
+            <div className={'about__add-block'}>
+                <h3 className={'page-block__title-secondary'}>Follow me</h3>
+                <SocialNav />
+                <BookingButton bookConsultation={bookConsultation} />
+            </div>
             { isEditMode &&
                 <ModalPopUp
                     modalTitle={editModalTitle}

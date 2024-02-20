@@ -1,20 +1,29 @@
 .page-block {
   position: relative;
-  padding-top: 40px;
-  padding-bottom: 30px;
+  padding-top: 70px;
 
-  &::after {
-    @include element-style(100%, 16px, $dark);
-    bottom: 0;
-    right: 0;
-  }
+  //&::after {
+  //  @include element-style(100%, 16px, $dark);
+  //  bottom: 0;
+  //  right: 0;
+  //}
 }
 
 .page-block__title {
   margin-top: 0;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   text-align: center;
-  font-size: 32px;
+  font-size: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.page-block__title-secondary {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: left;
+  font-size: 25px;
+  font-weight: 600;
 }
 
 @media(min-width: 990px) {

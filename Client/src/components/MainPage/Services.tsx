@@ -30,12 +30,13 @@ export const Services: React.FC<PropsType> = React.memo(({
 
   const addServiceModalTitle = 'Add New Service'
 
-  const servicesArray = services.map(item => {
+  const servicesArray = services.map((item, i) => {
     return (
       <ServiceItem
         key={item._id}
         fakeApi={fakeApi}
         isAuth={isAuth}
+        serviceIndex={i + 1}
         service={item}
         editService={editService}
         deleteService={deleteService}
@@ -44,7 +45,7 @@ export const Services: React.FC<PropsType> = React.memo(({
   })
 
   return (
-    <section className="page-block services" id="services">
+    <section className="page-block services container" id="services">
       {
          isAuth &&
          <button

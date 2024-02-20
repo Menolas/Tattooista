@@ -43,7 +43,9 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
                      setActiveStyle(slider)
                  }}
              >
-                 <h4 className="slider-item-title">{slider.value}</h4>
+                 <div className={'slider-item-title__wrap'}>
+                     <h4 className="slider-item-title">{slider.value}</h4>
+                 </div>
              </NavLink>
          </div>
      )
