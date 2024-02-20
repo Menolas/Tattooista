@@ -10,12 +10,14 @@
 }
 
 .page-block__title {
+  position: relative;
   margin-top: 0;
   margin-bottom: 40px;
   text-align: center;
   font-size: 30px;
   font-weight: 700;
   text-transform: uppercase;
+  z-index: 1;
 }
 
 .page-block__title-secondary {
