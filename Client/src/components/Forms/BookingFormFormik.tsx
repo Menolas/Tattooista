@@ -104,6 +104,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
           <Form id="booking"
             className="form booking__form"
           >
+            <h3 className="form__title">
+              FILL THE FORM AND WE WILL CONTACT YOU SOON
+            </h3>
             <FieldComponent
               name={'bookingName'}
               type={'text'}
@@ -140,11 +143,22 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
               <Field
                   component="textarea"
                   name="message"
+                  row={8}
                   placeholder={'Your message'}
                   value={propsF.values.message}
                   onChange={propsF.handleChange}
               />
             </FieldWrapper>
+            <button
+              type="submit"
+              disabled={propsF.isSubmitting}
+              className="btn btn--bg btn--dark-bg form__submit-btn booking__submit-btn"
+            >
+                {propsF.isSubmitting
+                    ? 'Please wait...'
+                    : 'Book a consultation'
+                }
+            </button>
             <FieldWrapper
                 wrapperClass={'form__input-wrap--checkbox'}
                 name={"consent"}
@@ -161,16 +175,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 CONSENT WITH PROCESSING OF MY PERSONAL DATA
               </label>
             </FieldWrapper>
-            <button
-              type="submit"
-              disabled={propsF.isSubmitting}
-              className="btn btn--bg btn--transparent form__submit-btn booking__submit-btn"
-            >
-                {propsF.isSubmitting
-                    ? 'Please wait...'
-                    : 'BOOK A CONSULTATION'
-                }
-            </button>
           </Form>
         )
       }}

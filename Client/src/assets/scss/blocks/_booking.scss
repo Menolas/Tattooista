@@ -1,7 +1,12 @@
+.booking {
+  padding-top: 0;
+}
+
 .booking__content {
   display: flex;
-  margin: 0 auto;
-  width: 100%;
+  margin-left: -16px;
+  margin-right: -16px;
+  width: 100vw;
 }
 
 .booking__img-wrap {
@@ -9,7 +14,7 @@
 }
 
 .booking__form-page-wrap {
-  padding: 60px 36px;
+  padding: 60px 16px;
   width: 100%;
   background-image: url("../img/form-background.png");
   background-repeat: no-repeat;
