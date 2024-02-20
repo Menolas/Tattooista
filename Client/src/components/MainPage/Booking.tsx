@@ -10,7 +10,7 @@ type PropsType = {
 export const Booking: React.FC<PropsType> = React.memo(({consentId, bookConsultation}) => {
 
   return (
-    <section className = "page-block booking" id="bookingSection">
+    <section className = "page-block booking container" id="bookingSection">
       <h2 className = "page-block__title">Apply for booking</h2>
       <div className = "booking__content">
         <div className = "booking__form-page-wrap">
