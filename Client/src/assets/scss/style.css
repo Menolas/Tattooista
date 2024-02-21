@@ -856,36 +856,24 @@ img {
   text-align: center;
 }
 
-.about__img-wrap {
+.about__img-wrap-decor {
   position: relative;
-  width: 260px;
-  height: 260px;
+  margin: 0 auto 45px;
+  width: 100%;
+  height: calc(100vw - 2rem);
+  border: 2px solid #fafafa;
+}
+.about__img-wrap-decor .about__img-wrap {
+  position: relative;
+  margin: -22px auto 0;
+  width: calc(100vw - (2rem + 44px));
+  height: calc(100vw - 2rem);
   background-size: cover;
   filter: grayscale(100%);
   z-index: 1;
 }
-.about__img-wrap:hover {
+.about__img-wrap-decor .about__img-wrap:hover {
   filter: none;
-}
-
-.about__img-wrap-decor {
-  position: relative;
-  margin: 0 auto 75px;
-  width: 260px;
-  height: 260px;
-}
-.about__img-wrap-decor::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 123%;
-  height: 100%;
-  background-color: transparent;
-  box-sizing: border-box;
-  left: 50%;
-  top: 30px;
-  border: 2px solid #fafafa;
-  transform: translate(-50%, 0);
 }
 
 .about__content {
@@ -1258,7 +1246,10 @@ img {
   width: calc(100% - 2rem);
   color: #080808;
   font-size: 18px;
+  background-image: url("../img/form-background.png");
+  background-repeat: no-repeat;
   background-color: #fafafa;
+  background-size: cover;
 }
 .contacts__content h4 {
   margin-top: 0;
