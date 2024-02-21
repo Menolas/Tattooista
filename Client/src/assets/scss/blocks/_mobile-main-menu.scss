@@ -1,32 +1,34 @@
 .mobile-main-menu {
   position: fixed;
-  top: 90px;
+  top: 0;
   left: auto;
-  right: 0;
-  padding: 3rem 1rem;
+  right: -20px;
+  padding: 5rem 1rem 3rem;
   width: 100%;
   background-color: $dark;
   background-image: url("../img/body-bg.jpg");
-  overflow: hidden;
   transform: translate(100%, 0);
   transition: all 0.3s ease;
+  box-shadow: 0 3px 5px 5px rgba(0, 0, 0, 0.9);
+  overflow: visible;
 
   &::before {
-    @include element-style(100%, 100%, $dark);
+    @include element-style(100vw, 100svh, rgba(8, 8, 8, 0.7));
     right: 0;
     left: 0;
     top: 0;
     bottom: 0;
-    margin: -20px;
-    box-shadow: inset 0 0 2000px rgba(48, 48, 48, 0.7);
-    filter: blur(20px);
-    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
   }
 
   .mobile-main-menu__list {
+    position: relative;
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
+    z-index: 10;
   }
 
   .mobile-main-menu__item {
