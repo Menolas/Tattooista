@@ -1,26 +1,40 @@
 .main-footer {
-  padding: 60px 90px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   row-gap: 20px;
   font-weight: 500;
-  font-size: 12px;
-  background-image: none;
-}
-
-.main-footer__middle-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 16px;
+  font-size: 18px;
+  background-image: url("../img/mainOfferBG.png");
+  background-repeat: no-repeat;
 
   .logo {
-    width: 60px;
+    height: 88px;
+    width: 55px;
 
-    img {
-      width: 60px;
+    .logo__link {
+      width: 100%;
+      height: 100%;
+    }
+
+    .logo__img {
+      width: 100%;
+      height: 100%;
+      background-size: contain;
+    }
+
+    .logo__text {
+      display: none;
+    }
+  }
+
+  .social-nav {
+    margin-bottom: 25px;
+    .social-nav__link svg {
+      width: 40px;
+      height: 40px;
     }
   }
 }

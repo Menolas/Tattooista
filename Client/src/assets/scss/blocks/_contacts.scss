@@ -1,29 +1,49 @@
-.contacts.container {
-  padding-left: 0;
-  padding-right: 0;
-  padding-bottom: 0;
+.contacts {
 
   &::after {
     display: none;
+  }
+
+  .page-block__title {
+    margin-bottom: 132px;
   }
 }
 
 .contacts__map-wrap {
   position: relative;
   display: flex;
-  padding: 40px 0;
   width: 100%;
-  background-image: url("../img/map.png");
+  height: 370px;
+  background-image: url("../img/mapRedesign.png");
   background-size: cover;
-  background-position: center;
+  background-position: top -30px center;
+  overflow: visible;
 }
 
 .contacts__content {
-  padding: 32px 26px;
+  position: absolute;
+  top: -92px;
+  padding: 36px 18px;
+  width: calc(100% - 2rem);
   color: $dark-text;
-  font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   background-color: $light;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 23px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .contacts__address {
+    font-weight: 500;
+  }
+
+  .contacts__phone {
+    font-weight: 600;
+  }
 }
 
 @media (min-width: 990px) {

@@ -14,7 +14,9 @@
   }
 
   .hamburger {
-    position: relative;
+    position: fixed;
+    top: 22px;
+    right: 1rem;
 
     &::before {
       display: none;

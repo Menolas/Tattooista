@@ -3,6 +3,7 @@
   width: 44px;
   height: 28px;
   cursor: pointer;
+  z-index: 20;
 
   &::before,
   &::after {

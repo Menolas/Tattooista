@@ -343,6 +343,7 @@ img {
   width: 44px;
   height: 28px;
   cursor: pointer;
+  z-index: 20;
 }
 .hamburger::before, .hamburger::after {
   content: "";
@@ -530,7 +531,9 @@ img {
   transform: translate(0, 0);
 }
 .main-nav.shown .hamburger {
-  position: relative;
+  position: fixed;
+  top: 22px;
+  right: 1rem;
 }
 .main-nav.shown .hamburger::before {
   display: none;
@@ -890,8 +893,6 @@ img {
   margin-bottom: 40px;
   text-align: left;
   line-height: 1.7;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 10;
 }
 
 .about__add-block .social-nav {
@@ -1232,31 +1233,45 @@ img {
     width: 615px;
   }
 }
-.contacts.container {
-  padding-left: 0;
-  padding-right: 0;
-  padding-bottom: 0;
-}
-.contacts.container::after {
+.contacts::after {
   display: none;
+}
+.contacts .page-block__title {
+  margin-bottom: 132px;
 }
 
 .contacts__map-wrap {
   position: relative;
   display: flex;
-  padding: 40px 0;
   width: 100%;
-  background-image: url("../img/map.png");
+  height: 370px;
+  background-image: url("../img/mapRedesign.png");
   background-size: cover;
-  background-position: center;
+  background-position: top -30px center;
+  overflow: visible;
 }
 
 .contacts__content {
-  padding: 32px 26px;
+  position: absolute;
+  top: -92px;
+  padding: 36px 18px;
+  width: calc(100% - 2rem);
   color: #080808;
-  font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   background-color: #fafafa;
+}
+.contacts__content h4 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 23px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.contacts__content .contacts__address {
+  font-weight: 500;
+}
+.contacts__content .contacts__phone {
+  font-weight: 600;
 }
 
 @media (min-width: 990px) {
@@ -1281,28 +1296,39 @@ img {
   }
 }
 .main-footer {
-  padding: 60px 90px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   row-gap: 20px;
   font-weight: 500;
-  font-size: 12px;
-  background-image: none;
+  font-size: 18px;
+  background-image: url("../img/mainOfferBG.png");
+  background-repeat: no-repeat;
 }
-
-.main-footer__middle-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 16px;
+.main-footer .logo {
+  height: 88px;
+  width: 55px;
 }
-.main-footer__middle-section .logo {
-  width: 60px;
+.main-footer .logo .logo__link {
+  width: 100%;
+  height: 100%;
 }
-.main-footer__middle-section .logo img {
-  width: 60px;
+.main-footer .logo .logo__img {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+}
+.main-footer .logo .logo__text {
+  display: none;
+}
+.main-footer .social-nav {
+  margin-bottom: 25px;
+}
+.main-footer .social-nav .social-nav__link svg {
+  width: 40px;
+  height: 40px;
 }
 
 .main-footer__link {
@@ -3018,6 +3044,7 @@ input[type=checkbox]:checked + label .checkbox::after {
 .scrollToTop__btn {
   width: 50px;
   height: 50px;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
 }
 .scrollToTop__btn svg {
   width: 30px;
@@ -3087,38 +3114,40 @@ input[type=checkbox]:checked + label .checkbox::after {
 }
 .mobile-main-menu {
   position: fixed;
-  top: 90px;
+  top: 0;
   left: auto;
-  right: 0;
-  padding: 3rem 1rem;
+  right: -20px;
+  padding: 5rem 1rem 3rem;
   width: 100%;
   background-color: #080808;
   background-image: url("../img/body-bg.jpg");
-  overflow: hidden;
   transform: translate(100%, 0);
   transition: all 0.3s ease;
+  box-shadow: 0 3px 5px 5px rgba(0, 0, 0, 0.9);
+  overflow: visible;
 }
 .mobile-main-menu::before {
   content: "";
   display: block;
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #080808;
+  width: 100vw;
+  height: 100svh;
+  background-color: rgba(8, 8, 8, 0.7);
   box-sizing: border-box;
   right: 0;
   left: 0;
   top: 0;
   bottom: 0;
-  margin: -20px;
-  box-shadow: inset 0 0 2000px rgba(48, 48, 48, 0.7);
-  filter: blur(20px);
-  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
 }
 .mobile-main-menu .mobile-main-menu__list {
+  position: relative;
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
+  z-index: 10;
 }
 .mobile-main-menu .mobile-main-menu__item a {
   display: flex;
