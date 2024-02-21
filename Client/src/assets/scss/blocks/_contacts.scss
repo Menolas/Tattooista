@@ -27,7 +27,10 @@
   width: calc(100% - 2rem);
   color: $dark-text;
   font-size: 18px;
+  background-image: url("../img/form-background.png");
+  background-repeat: no-repeat;
   background-color: $light;
+  background-size: cover;
 
   h4 {
     margin-top: 0;
