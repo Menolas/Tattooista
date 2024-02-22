@@ -418,55 +418,12 @@ img {
   width: 100%;
   height: 100%;
 }
-.main-header .logo__text {
-  font-size: 0;
-  width: 0;
-}
 .main-header .main-nav {
   margin-left: auto;
 }
-.main-header .social-nav {
-  display: none;
-  margin-left: 0;
-}
+.main-header .social-nav,
 .main-header .admin-nav {
   display: none;
-}
-.main-header .main-header__admin-link {
-  margin-left: 8px;
-  height: 20px;
-}
-.main-header .main-header__admin-link svg {
-  width: 20px;
-  height: 20px;
-}
-.main-header.main-header--inner {
-  position: relative;
-  justify-content: space-between;
-}
-.main-header.main-header--inner .logo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  column-gap: 12px;
-}
-.main-header.main-header--inner .logo__img {
-  position: static;
-  top: unset;
-  left: unset;
-  width: 40px;
-  height: 63px;
-  transform: none;
-}
-.main-header.main-header--inner .logo__text {
-  display: none;
-  width: auto;
-  font-size: 24px;
-  font-weight: 700;
-}
-.main-header.main-header--inner .social-nav {
-  margin-left: auto;
 }
 
 .main-header__btn {
@@ -479,39 +436,43 @@ img {
     padding-top: 42px;
   }
   .main-header .logo {
-    width: 88px;
+    width: 55px;
     height: 88px;
   }
   .main-header .logo__link {
     gap: 12px;
   }
   .main-header .main-nav {
-    margin-left: 52px;
-    margin-right: 82px;
-  }
-  .main-header .main-header__admin-link {
-    margin-left: 16px;
-    height: 28px;
-  }
-  .main-header .main-header__admin-link svg {
-    width: 28px;
-    height: 28px;
-  }
-  .main-header .mobile-main-menu {
-    display: none;
+    margin: 0 80px;
   }
   .main-header .social-nav {
     display: block;
   }
-  .main-header.main-header--inner .logo__text {
-    display: block;
+  .main-header .social-nav .social-nav__list {
+    column-gap: 20px;
   }
-  .main-header.main-header--inner .social-nav {
-    display: block;
-    margin-left: auto;
+  .main-header .social-nav svg {
+    width: 40px;
+    height: 40px;
   }
   .main-header .admin-nav {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-left: auto;
+  }
+  .main-header .admin-nav a {
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+    font-size: inherit;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .main-header .admin-nav svg {
+    width: 40px;
+    height: 40px;
   }
   .main-header__btn {
     height: 60px;
@@ -553,6 +514,9 @@ img {
 }
 
 @media (min-width: 990px) {
+  .main-nav.shown .mobile-main-menu {
+    display: none;
+  }
   .main-nav.shown .main-nav__list.main-nav--ls {
     position: absolute;
     display: flex;
@@ -573,6 +537,9 @@ img {
     font-size: 14px;
     text-transform: uppercase;
     white-space: nowrap;
+  }
+  .main-nav.shown .hamburger {
+    position: static;
   }
   .main-nav.shown .hamburger::after {
     top: 18px;
@@ -1602,7 +1569,7 @@ img {
 }
 @media (min-width: 990px) {
   .tattoo-style {
-    padding-top: 30px;
+    padding-top: 160px;
     padding-bottom: 112px;
   }
   .tattoo-style .tattoo-style__list {

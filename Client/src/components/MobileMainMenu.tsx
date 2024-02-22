@@ -40,7 +40,7 @@ export const MobileMainMenu = ({
     return (
         <nav className={'mobile-main-menu'}>
             <ul className={'list mobile-main-menu__list'}>
-                <li className="mobile-main-menu__item">
+                <li className={'mobile-main-menu__item'}>
                     <NavLink
                         to={`portfolio`}
                         className="main-nav__link"
@@ -51,12 +51,17 @@ export const MobileMainMenu = ({
                 </li>
                 { hashMobileMenuItems }
                 { socialMobileMenuItems }
+                <li className={'mobile-main-menu__item'}>
+                    <NavLink to={'tel:+4745519015'}>
+                        <svg>
+                            <use href={`${Sprite}#phone`}/>
+                        </svg>
+                        Call me
+                    </NavLink>
+                </li>
                 { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                     <li className={'mobile-main-menu__item'}>
-                        <NavLink
-                            to="/admin/bookedConsultations"
-                            className="main-header__admin-link"
-                        >
+                        <NavLink to={'/admin/bookedConsultations'}>
                             <svg>
                                 <use href={`${Sprite}#admin`}/>
                             </svg>
@@ -67,10 +72,7 @@ export const MobileMainMenu = ({
                 { isAuth
                     ? (
                         <li className={'mobile-main-menu__item'}>
-                            <NavLink
-                                to="/" className="main-header__admin-link"
-                                onClick={logout}
-                            >
+                            <NavLink to="/" onClick={logout}>
                                 <svg>
                                     <use href={`${Sprite}#logout`}/>
                                 </svg>
@@ -80,9 +82,7 @@ export const MobileMainMenu = ({
                     )
                     : (
                         <li className={'mobile-main-menu__item'}>
-                            <NavLink
-                                to="/login"
-                                className="main-header__admin-link">
+                            <NavLink to="/login">
                                 <svg><use href={`${Sprite}#login`}/></svg>
                                 Log in
                             </NavLink>

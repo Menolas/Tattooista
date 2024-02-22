@@ -43,6 +43,10 @@
 
   .main-nav.shown {
 
+    .mobile-main-menu {
+      display: none;
+    }
+
     .main-nav__list.main-nav--ls {
       position: absolute;
       display: flex;
@@ -64,6 +68,7 @@
     }
 
     .hamburger {
+      position: static;
       &::after {
         top: 18px;
         right: -5px;
@@ -80,5 +85,4 @@
       }
     }
   }
-
 }

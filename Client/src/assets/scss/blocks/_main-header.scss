@@ -29,63 +29,13 @@
     height: 100%;
   }
 
-  .logo__text {
-    font-size: 0;
-    width: 0;
-  }
-
   .main-nav {
     margin-left: auto;
   }
 
-  .social-nav {
-    display: none;
-    margin-left: 0;
-  }
-
+  .social-nav,
   .admin-nav {
     display: none;
-  }
-
-  .main-header__admin-link {
-    margin-left: 8px;
-    height: 20px;
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  &.main-header--inner {
-    position: relative;
-    justify-content: space-between;
-
-    .logo {
-      position: absolute;
-      @include center;
-      column-gap: 12px;
-    }
-
-    .logo__img {
-      position: static;
-      top: unset;
-      left: unset;
-      width: 40px;
-      height: 63px;
-      transform: none;
-    }
-
-    .logo__text {
-      display: none;
-      width: auto;
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .social-nav {
-      margin-left: auto;
-    }
   }
 }
 
@@ -95,10 +45,11 @@
 }
 
 @media (min-width: 990px) {
+
   .main-header {
     padding-top: 42px;
     .logo {
-      width: 88px;
+      width: 55px;
       height: 88px;
     }
 
@@ -107,41 +58,39 @@
     }
 
     .main-nav {
-      margin-left: 52px;
-      margin-right: 82px;
-    }
-
-    .main-header__admin-link {
-      margin-left: 16px;
-      height: 28px;
-
-      svg {
-        width: 28px;
-        height: 28px;
-      }
-    }
-
-    .mobile-main-menu {
-      display: none;
+      margin: 0 80px;
     }
 
     .social-nav {
       display: block;
+      .social-nav__list {
+        column-gap: 20px;
+      }
+      svg {
+        width: 40px;
+        height: 40px;
+      }
     }
 
     &.main-header--inner {
 
-      .logo__text {
-        display: block;
-      }
-
-      .social-nav {
-        display: block;
-        margin-left: auto;
-      }
     }
     .admin-nav {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin-left: auto;
+      a {
+        @include link-style;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      svg {
+        width: 40px;
+        height: 40px;
+      }
     }
   }
 
