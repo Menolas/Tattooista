@@ -21,7 +21,7 @@ export const Header: React.FC<PropsType> = ({
 }) => {
 
   return (
-    <header className = { 'main-header container ' + headerClasses }>
+    <header className = { 'main-header ' + headerClasses }>
       <Logo />
       <MainNav
           isAuth={isAuth}

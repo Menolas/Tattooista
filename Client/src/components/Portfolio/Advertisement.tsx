@@ -10,6 +10,7 @@ import {SuccessPopUp} from "../common/SuccessPopUp"
 import {useDispatch, useSelector} from "react-redux"
 import {getIsSuccessBookingSelector} from "../../redux/General/general-selectors"
 import {setIsSuccessBookingAC} from "../../redux/General/general-reducer"
+import {BookingButton} from "../common/BookingButton";
 
 type PropsType = {
   bookConsultation: (values: BookConsultationFormValues) => void
@@ -21,7 +22,6 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
 
   const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
 
-  let [bookingModal, setBookingModal] = useState(false)
   const successPopUpContent = "You've booked a consultation! We will contact you soon))"
 
   const dispatch = useDispatch()
@@ -38,22 +38,9 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
     }
   }, [isSuccessBooking])
 
-  const showBookConsultationModal = () => {
-    setBookingModal(true);
-  }
-
-  const closeBookingModal = () => {
-    setBookingModal(false)
-  }
-
   return (
     <section className="advertisement">
-        <button
-          className="btn btn--bg advertisement__btn"
-          onClick={ showBookConsultationModal }>
-          BOOK A CONSULTATION
-        </button>
-        <div className="social-share">
+      <div className="social-share">
           <span>Share this page</span>
           <ul className="social-share__list list">
             <li className="social-share__item">
@@ -72,19 +59,8 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
               </NavLink>
             </li>
           </ul>
-        </div>
-        { bookingModal &&
-          <ModalPopUp
-            modalTitle={"Book your consultation"}
-            closeModal={closeBookingModal}
-          >
-            <BookingForm
-              consentId="consent"
-              bookConsultation={bookConsultation}
-              closeBookingModal={closeBookingModal}
-            />
-          </ModalPopUp>
-        }
+      </div>
+      <BookingButton bookConsultation={bookConsultation} />
       { isSuccessBooking &&
           <SuccessPopUp closeModal={setIsSuccessBookingCallBack} content={successPopUpContent} />
       }

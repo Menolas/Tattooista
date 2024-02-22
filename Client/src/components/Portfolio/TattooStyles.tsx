@@ -2,7 +2,7 @@ import * as React from "react"
 import {useState} from "react"
 import * as classNames from "classnames"
 import "react-alice-carousel/lib/alice-carousel.css"
-import {TattooStyleType} from "../../types/Types"
+import {BookConsultationFormValues, TattooStyleType} from "../../types/Types"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import {UpdateTattooStyleFormFormik} from "../Forms/UpdateTattooStyleFormFormik"
@@ -12,6 +12,7 @@ import AliceCarousel from "react-alice-carousel"
 import {Tooltip} from "react-tooltip"
 import {Confirmation} from "../common/Confirmation";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {Advertisement} from "./Advertisement";
 
 const responsive = {
   0: {items: 3},
@@ -30,6 +31,7 @@ type PropsType = {
   editTattooStyle: (id: string, values: FormData) => void
   deleteTattooStyle: (id: string) => void
   setIsSuccess: (bol: boolean) => void
+  bookConsultation: (values: BookConsultationFormValues) => void
 }
 
 export const TattooStyles: React.FC<PropsType> = React.memo(({
@@ -41,7 +43,8 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
   addTattooStyle,
   editTattooStyle,
   deleteTattooStyle,
-  setIsSuccess
+  setIsSuccess,
+  bookConsultation
 }) => {
   const [addTattooStyleMode, setAddTattooStyleMode] = useState(false)
   const [editTattooStyleMode, setEditTattooStyleMode] = useState(false)
@@ -67,14 +70,9 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
 
   const tattooStylesAliceArray = tattooStyles
     ?.map((item) => {
-      let itemClasses = "tattoo-style__item"
-      if (activeStyle) {
-        itemClasses = classNames('tattoo-style__item', {'active': activeStyle._id === item._id})
-      }
-
       return (
         <div
-          className={itemClasses}
+          className={`tattoo-style__item btn btn--sm ${activeStyle?._id === item._id ? 'btn--light-bg' : 'btn--transparent'}`}
           onClick={() => {resetActiveStyle(item)}}
         >
           {item.value}
@@ -83,7 +81,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
     })
 
   return (
-    <section className="tattoo-style page-block">
+    <section className="tattoo-style page-block container">
       { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
         <button
             className={"btn btn--sm btn--light-bg"}
@@ -92,26 +90,6 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
             Add a Tattoo Style
         </button>
       }
-      {
-        addTattooStyleMode &&
-          <ModalPopUp
-              modalTitle={modalTitle}
-              closeModal={closeModal}
-          >
-              <UpdateTattooStyleFormFormik
-                  addTattooStyle={addTattooStyle}
-                  closeModal={closeModal}
-              />
-          </ModalPopUp>
-      }
-      <div className="tattoo-style__list">
-        <AliceCarousel
-          items={tattooStylesAliceArray}
-          responsive={responsive}
-          controlsStrategy="alternate"
-          mouseTracking={true}
-        />
-      </div>
       <div className="tattoo-style__item-content">
         { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
           <div className={"tattoo-style__item-actions"}>
@@ -139,42 +117,65 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
             }
           </div>
         }
-        {
+        <div>
+          <h1 className={'tattoo-style__title page-block__title'}>{activeStyle?.value}</h1>
+          <div className={'tattoo-style__text'}>
+            {activeStyle ? activeStyle.description : "---"}
+          </div>
+        </div>
+      </div>
+      <Advertisement bookConsultation={bookConsultation}/>
+      <div className={'tattoo-style__list'}>
+        <AliceCarousel
+            items={tattooStylesAliceArray}
+            responsive={responsive}
+            controlsStrategy="alternate"
+            mouseTracking={true}
+        />
+      </div>
+      {
+          addTattooStyleMode &&
+          <ModalPopUp
+              modalTitle={modalTitle}
+              closeModal={closeModal}
+          >
+            <UpdateTattooStyleFormFormik
+                addTattooStyle={addTattooStyle}
+                closeModal={closeModal}
+            />
+          </ModalPopUp>
+      }
+
+      {
           editTattooStyleMode &&
           <ModalPopUp
               modalTitle={'Update tattoo style'}
               closeModal={closeEditModal}
           >
-              <UpdateTattooStyleFormFormik
-                  style={activeStyle}
-                  editTattooStyle={editTattooStyle}
-                  closeModal={closeEditModal}
-              />
+            <UpdateTattooStyleFormFormik
+                style={activeStyle}
+                editTattooStyle={editTattooStyle}
+                closeModal={closeEditModal}
+            />
           </ModalPopUp>
-        }
-        {
-            needConfirmation &&
-            <ModalPopUp
-                modalTitle={''}
-                closeModal={closeModal}
-            >
-              <Confirmation
-                  content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
-                  confirm={deleteTattooStyleCallBack}
-                  cancel={closeConfirmationModal}
-              />
-            </ModalPopUp>
-        }
-        {
-            isSuccess &&
-            <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
-        }
-        <div>
-          <div className="tattoo-style__text">
-            {activeStyle ? activeStyle.description : "---"}
-          </div>
-        </div>
-      </div>
+      }
+      {
+          needConfirmation &&
+          <ModalPopUp
+              modalTitle={''}
+              closeModal={closeModal}
+          >
+            <Confirmation
+                content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
+                confirm={deleteTattooStyleCallBack}
+                cancel={closeConfirmationModal}
+            />
+          </ModalPopUp>
+      }
+      {
+          isSuccess &&
+          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
+      }
       <Tooltip id="my-tooltip" />
     </section>
   )

@@ -1,6 +1,6 @@
 .main-offer {
   position: relative;
-  padding-top: 95px;
+  padding: 107px 16px 0;
   height: 432px;
   background-image:
     url("../img/offerIllustration.png"),
@@ -41,7 +41,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-top: 12px;
   padding-left: 28px;
   text-transform: uppercase;
   line-height: 1;
@@ -50,7 +49,7 @@
 .main-offer__decorative-text {
   position: absolute;
   left: -40px;
-  top: 55px;
+  top: 42px;
   font-size: 10px;
   font-weight: 500;
   color: #c7c7c7;
@@ -67,7 +66,7 @@
 
 .main-offer__title {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   margin: 0;
   text-align: left;
   font-size: 46px;
@@ -93,56 +92,55 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-top: 297px;
-    padding-bottom: 93px;
+    padding: 270px 70px 93px;
     height: 100vh;
-      background-image:
-        url("../img/main-screen-bw.png"),
-        url("../img/body-bg.jpg");
-      background-repeat: no-repeat,
-        no-repeat;
+      //background-image:
+      //  url("../img/main-screen-bw.png"),
+      //  url("../img/body-bg.jpg");
+    background-repeat:
+      no-repeat,
+      no-repeat;
       /*background-size: 880px 880px,
           100% 100%;
           background-position: top -140px right 0,
           top center;*/
 
-      background-size:
-        contain,
-        100% 100%;
-      background-position:
-        top -30px right 0,
-        top center;
+    background-size:
+      contain,
+      100% 100%;
+    background-position:
+      bottom 0 right 0,
+      top center;
 
-      &::after {
-        @include element-style(100%, 60px, $dark);
-        bottom: 0;
-        right: 0;
-      }
+    &::before {
+      height: 187px;
+    }
 
     .main-header__btn {
       position: static;
-      margin-top: 42px;
+      margin-top: 82px;
+      padding: 0 89px;
       width: 550px;
-      height: 70px;
-      font-size: 24px;
-      font-weight: 800;
+      height: 114px;
+      font-size: 35px;
+      transform: none;
     }
   }
 
   .main-offer__content-wrap {
-    padding-left: 37px;
+    padding-left: 66px;
   }
 
   .main-offer__decorative-text {
     display: block;
-    left: -58px;
-    top: 62px;
+    left: -68px;
+    top: 74px;
     font-size: 18px;
     font-weight: 600;
     transform: rotate(-90deg);
 
     &::before {
-      @include element-style(45px, 2px, white);
+      @include element-style(45px, 2px, #c7c7c7);
       top: 50%;
       left: -10px;
       transform: translate(-100%, -50%);
@@ -150,18 +148,16 @@
   }
 
   .main-offer__title {
-    flex-direction: column;
-    row-gap: 0;
-    text-align: right;
-    font-size: 100px;
+    font-size: 130px;
   }
 
   .main-offer__motto {
     position: static;
-    margin-top: 10px;
+    margin-top: 14px;
     padding: 0;
+    width: unset;
     text-align: right;
-    font-size: 28px;
+    font-size: 30px;
     letter-spacing: 1px;
     background-color: transparent;
     transform: none;

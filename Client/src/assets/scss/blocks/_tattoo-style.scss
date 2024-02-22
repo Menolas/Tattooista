@@ -1,8 +1,15 @@
 .tattoo-style {
-  //padding-top: 152px;
-
   &.page-block {
+    padding-top: 118px;
     padding-bottom: 30px;
+    background-image: url("../img/mainOfferBG.png");
+  }
+
+  .tattoo-style__title {
+    margin-bottom: 1rem;
+    font-size: 40px;
+    text-align: center;
+    text-transform: uppercase;
   }
 
   &::after {
@@ -16,15 +23,17 @@
   }
 
   .alice-carousel {
-    padding-top: 50px;
+    margin-top: 50px;
 
+    .alice-carousel__dots,
     .alice-carousel__prev-btn,
     .alice-carousel__next-btn {
-      position: absolute;
-      top: 0;
-      padding: 0;
-      width: 45px;
-      height: 30px;
+      display: none;
+      //position: absolute;
+      //top: 0;
+      //padding: 0;
+      //width: 45px;
+      //height: 30px;
     }
     .alice-carousel__prev-btn-item,
     .alice-carousel__next-btn-item,
@@ -106,27 +115,25 @@
     width: unset !important;
   }
 
-  .alice-carousel__stage-item.__active {
-    //width: unset !important;
-  }
-
   .tattoo-style__item {
-    font-size: 16px;
+    padding: 0.5rem 1.5rem;
+    font-size: 18px;
     font-weight: 600;
     text-transform: capitalize;
+    color: $light-text;
+    border-color: $light;
     cursor: pointer;
-
-    &.active {
-      position: relative;
-
-      &::before {
-        @include element-style(100%, 2px, $light-text);
-        left: 0;
-        right: 0;
-        bottom: 0;
-      }
+    &.btn--light-bg {
+      color: $dark-text;
     }
   }
+
+  //.alice-carousel__stage-item.__active {
+  //  .tattoo-style__item {
+  //    background-color: $light;
+  //    color: $dark-text;
+  //  }
+  //}
 
   .tattoo-style__item-content {
     display: flex;
@@ -140,13 +147,10 @@
       gap: 8px;
     }
   }
-}
 
-.tattoo-style__title {
-  text-align: left;
-  margin-bottom: 18px;
-  text-transform: capitalize;
-  line-height: 1;
+  .advertisement {
+    margin-top: 25px;
+  }
 }
 
 @media (min-width: 600px) {
