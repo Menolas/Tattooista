@@ -5,7 +5,6 @@
   align-items: center;
   font-weight: 800;
   color: $dark-text;
-  //text-transform: uppercase;
   border: 2px solid $dark;
   cursor: pointer;
   white-space: nowrap;
@@ -13,21 +12,12 @@
 
 .btn--transparent {
   background-color: transparent;
-
-  &::before {
-    @include element-style(2px, 50%, black);
-    left: 0;
-    bottom: 0;
-  }
 }
 
 .btn--light-bg {
   background-color: $light;
-  border: none;
-
-  &::before {
-    display: none;
-  }
+  color: $dark-text;
+  border-color: $light;
 
   svg {
     fill: $dark;
@@ -38,13 +28,6 @@
   color: $light-text;
   background-color: $dark;
   border: $light-border;
-  //border-left: none;
-
-  //&::before {
-  //  @include element-style(2px, 50%, $light);
-  //  left: 0;
-  //  bottom: 0;
-  //}
 }
 
 .btn--sm {

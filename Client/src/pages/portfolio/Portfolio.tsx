@@ -82,13 +82,8 @@ export const Portfolio: React.FC<PropsType> = ({
         editTattooStyle={editTattooStyle}
         deleteTattooStyle={deleteTattooStyle}
         setIsSuccess={setIsSuccess}
+        bookConsultation={bookConsultation}
       />
-
-      { (isAuth !== ADMIN && isAuth !== SUPER_ADMIN) &&
-          <Advertisement
-              bookConsultation={bookConsultation}
-          />
-      }
 
       <Gallery
         fakeApi={fakeApi}

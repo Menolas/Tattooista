@@ -196,24 +196,11 @@ img {
 .btn--transparent {
   background-color: transparent;
 }
-.btn--transparent::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 2px;
-  height: 50%;
-  background-color: black;
-  box-sizing: border-box;
-  left: 0;
-  bottom: 0;
-}
 
 .btn--light-bg {
   background-color: #fafafa;
-  border: none;
-}
-.btn--light-bg::before {
-  display: none;
+  color: #080808;
+  border-color: #fafafa;
 }
 .btn--light-bg svg {
   fill: #080808;
@@ -399,7 +386,7 @@ img {
   width: 100%;
   display: flex;
   align-items: center;
-  padding-top: 22px;
+  padding: 22px 16px 0;
   z-index: 10;
 }
 .main-header.container {
@@ -433,7 +420,7 @@ img {
 
 @media (min-width: 990px) {
   .main-header {
-    padding-top: 42px;
+    padding: 42px 70px 0;
   }
   .main-header .logo {
     width: 55px;
@@ -616,7 +603,7 @@ img {
 
 .main-offer {
   position: relative;
-  padding-top: 95px;
+  padding: 107px 16px 0;
   height: 432px;
   background-image: url("../img/offerIllustration.png"), url("../img/mainOfferBG.png");
   background-repeat: no-repeat, no-repeat;
@@ -654,7 +641,6 @@ img {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-top: 12px;
   padding-left: 28px;
   text-transform: uppercase;
   line-height: 1;
@@ -663,7 +649,7 @@ img {
 .main-offer__decorative-text {
   position: absolute;
   left: -40px;
-  top: 55px;
+  top: 42px;
   font-size: 10px;
   font-weight: 500;
   color: #c7c7c7;
@@ -685,7 +671,7 @@ img {
 
 .main-offer__title {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   margin: 0;
   text-align: left;
   font-size: 46px;
@@ -710,44 +696,35 @@ img {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-top: 297px;
-    padding-bottom: 93px;
+    padding: 270px 70px 93px;
     height: 100vh;
-    background-image: url("../img/main-screen-bw.png"), url("../img/body-bg.jpg");
     background-repeat: no-repeat, no-repeat;
     /*background-size: 880px 880px,
         100% 100%;
         background-position: top -140px right 0,
         top center;*/
     background-size: contain, 100% 100%;
-    background-position: top -30px right 0, top center;
+    background-position: bottom 0 right 0, top center;
   }
-  .main-offer::after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 60px;
-    background-color: #080808;
-    box-sizing: border-box;
-    bottom: 0;
-    right: 0;
+  .main-offer::before {
+    height: 187px;
   }
   .main-offer .main-header__btn {
     position: static;
-    margin-top: 42px;
+    margin-top: 82px;
+    padding: 0 89px;
     width: 550px;
-    height: 70px;
-    font-size: 24px;
-    font-weight: 800;
+    height: 114px;
+    font-size: 35px;
+    transform: none;
   }
   .main-offer__content-wrap {
-    padding-left: 37px;
+    padding-left: 66px;
   }
   .main-offer__decorative-text {
     display: block;
-    left: -58px;
-    top: 62px;
+    left: -68px;
+    top: 74px;
     font-size: 18px;
     font-weight: 600;
     transform: rotate(-90deg);
@@ -758,24 +735,22 @@ img {
     position: absolute;
     width: 45px;
     height: 2px;
-    background-color: white;
+    background-color: #c7c7c7;
     box-sizing: border-box;
     top: 50%;
     left: -10px;
     transform: translate(-100%, -50%);
   }
   .main-offer__title {
-    flex-direction: column;
-    row-gap: 0;
-    text-align: right;
-    font-size: 100px;
+    font-size: 130px;
   }
   .main-offer__motto {
     position: static;
-    margin-top: 10px;
+    margin-top: 14px;
     padding: 0;
+    width: unset;
     text-align: right;
-    font-size: 28px;
+    font-size: 30px;
     letter-spacing: 1px;
     background-color: transparent;
     transform: none;
@@ -1404,31 +1379,18 @@ img {
 }
 
 .advertisement {
-  margin: 0 -16px;
-  padding: 16px;
-  background-color: #fafafa;
   display: flex;
   flex-direction: column;
   row-gap: 20px;
   background-image: none;
-  color: #080808;
 }
 .advertisement .social-share {
-  margin-left: auto;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 1rem;
 }
 .advertisement .advertisement__btn {
   position: relative;
-}
-.advertisement .advertisement__btn::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 2px;
-  height: 50%;
-  background-color: #080808;
-  box-sizing: border-box;
-  left: 0;
-  bottom: 0;
 }
 
 @media (min-width: 990px) {
@@ -1439,7 +1401,15 @@ img {
   }
 }
 .tattoo-style.page-block {
+  padding-top: 118px;
   padding-bottom: 30px;
+  background-image: url("../img/mainOfferBG.png");
+}
+.tattoo-style .tattoo-style__title {
+  margin-bottom: 1rem;
+  font-size: 40px;
+  text-align: center;
+  text-transform: uppercase;
 }
 .tattoo-style::after {
   display: none;
@@ -1450,15 +1420,12 @@ img {
   margin-bottom: 30px;
 }
 .tattoo-style .alice-carousel {
-  padding-top: 50px;
+  margin-top: 50px;
 }
+.tattoo-style .alice-carousel .alice-carousel__dots,
 .tattoo-style .alice-carousel .alice-carousel__prev-btn,
 .tattoo-style .alice-carousel .alice-carousel__next-btn {
-  position: absolute;
-  top: 0;
-  padding: 0;
-  width: 45px;
-  height: 30px;
+  display: none;
 }
 .tattoo-style .alice-carousel .alice-carousel__prev-btn-item,
 .tattoo-style .alice-carousel .alice-carousel__next-btn-item,
@@ -1523,25 +1490,16 @@ img {
   width: unset !important;
 }
 .tattoo-style .tattoo-style__item {
-  font-size: 16px;
+  padding: 0.5rem 1.5rem;
+  font-size: 18px;
   font-weight: 600;
   text-transform: capitalize;
+  color: #fafafa;
+  border-color: #fafafa;
   cursor: pointer;
 }
-.tattoo-style .tattoo-style__item.active {
-  position: relative;
-}
-.tattoo-style .tattoo-style__item.active::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background-color: #fafafa;
-  box-sizing: border-box;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.tattoo-style .tattoo-style__item.btn--light-bg {
+  color: #080808;
 }
 .tattoo-style .tattoo-style__item-content {
   display: flex;
@@ -1554,12 +1512,8 @@ img {
   align-items: center;
   gap: 8px;
 }
-
-.tattoo-style__title {
-  text-align: left;
-  margin-bottom: 18px;
-  text-transform: capitalize;
-  line-height: 1;
+.tattoo-style .advertisement {
+  margin-top: 25px;
 }
 
 @media (min-width: 600px) {
