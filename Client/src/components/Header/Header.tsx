@@ -29,14 +29,22 @@ export const Header: React.FC<PropsType> = ({
       />
       <SocialNav />
       <nav className={'admin-nav'}>
+        <NavLink
+          data-tooltip-id="my-tooltip"
+          data-tooltip-content="Call me"
+          to={'tel:+4745519015'}
+        >
+          <svg>
+              <use href={`${Sprite}#phone`}/>
+          </svg>
+            Call me
+        </NavLink>
         { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
 
             <NavLink
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content="Admin page"
-                //to="/admin/bookedConsultations"
-                to="/admin"
-                className="main-header__admin-link"
+                to={'/admin'}
             >
                 <svg>
                     <use href={`${Sprite}#admin`}/>
@@ -48,21 +56,23 @@ export const Header: React.FC<PropsType> = ({
                 <NavLink
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Log out"
-                    to="/" className="main-header__admin-link"
+                    to={'/'}
                     onClick={logout}
                 >
                     <svg>
                         <use href={`${Sprite}#logout`}/>
                     </svg>
+                    Log Out
                 </NavLink>
               )
             : (
                 <NavLink
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Log in"
-                    to="/login"
-                    className="main-header__admin-link">
+                    to={'/login'}
+                >
                     <svg><use href={`${Sprite}#login`}/></svg>
+                    Log In
                 </NavLink>
             )
         }

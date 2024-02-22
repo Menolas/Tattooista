@@ -35,12 +35,6 @@ export const socialLinksData = [
         url: "https://www.facebook.com/a.hobf",
         icon: "facebook"
     },
-    {
-        text: "Call me",
-        tooltipText: "My Instagram",
-        url: "tel:+4745519015",
-        icon: "phone"
-    },
 ]
 
 export const ADMIN_BUTTONS_DATA = [
