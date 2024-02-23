@@ -102,20 +102,27 @@
 
 @media(min-width: 990px) {
 
+  .services {
+    padding-bottom: 180px;
+  }
+
   .services__list {
     @include list-style;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    column-gap: 4%;
-    row-gap: 60px;
+    column-gap: 8%;
+    row-gap: 88px;
     margin: 0 auto;
     max-width: 1102px;
   }
 
   .services__item {
-    width: 430px;
+    width: 469px;
     min-width: 430px;
+    &:nth-child(even) {
+      transform: translate(0, 110px);
+    }
   }
 
   .services__link {

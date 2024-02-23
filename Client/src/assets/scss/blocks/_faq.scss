@@ -1,8 +1,9 @@
 .faq {
   padding-bottom: 70px;
-  background-image: url("../img/mainOfferBG.png");
+  background-image: url("../img/body-bg.jpg");
   background-repeat: no-repeat;
   background-position: top 26px center;
+  background-size: cover;
   overflow: visible;
 
   &::before,
