@@ -9,7 +9,7 @@
   background-repeat: no-repeat, no-repeat;
   background-size:
           360px 337px,
-          875px 432px;
+          cover;
   background-position:
     top 95px right -25px,
     top 0 right 0;
@@ -94,20 +94,15 @@
     align-items: flex-start;
     padding: 270px 70px 93px;
     height: 100vh;
-      //background-image:
-      //  url("../img/main-screen-bw.png"),
-      //  url("../img/body-bg.jpg");
+    background-image:
+      url("../img/offerIllustration.png"), //url("../img/main-screen-bw.png"),
+      url("../img/body-bg.jpg");
     background-repeat:
       no-repeat,
       no-repeat;
-      /*background-size: 880px 880px,
-          100% 100%;
-          background-position: top -140px right 0,
-          top center;*/
-
     background-size:
       contain,
-      100% 100%;
+      cover;
     background-position:
       bottom 0 right 0,
       top center;
@@ -163,4 +158,3 @@
     transform: none;
   }
 }
-

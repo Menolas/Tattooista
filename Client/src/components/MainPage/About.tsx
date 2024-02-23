@@ -74,18 +74,22 @@ export const About: React.FC<PropsType> = React.memo(({
                 </div>
             }
             <h2 className="page-block__title">{pageAbout?.title ? pageAbout.title : 'Tattoo Artist'}</h2>
-            <div className="about__img-wrap-decor">
-                <div
-                    className="about__img-wrap"
-                    style={{backgroundImage: imgUrl}}
-                >{''}</div>
-            </div>
-            <h3 className={'page-block__title-secondary'}>Facts about me</h3>
-            <div className={"about__content"}>{pageAbout?.content}</div>
-            <div className={'about__add-block'}>
-                <h3 className={'page-block__title-secondary'}>Follow me</h3>
-                <SocialNav />
-                <BookingButton bookConsultation={bookConsultation} />
+            <div className={'about__layout-wrap'}>
+                <div className="about__img-wrap-decor">
+                    <div
+                        className="about__img-wrap"
+                        style={{backgroundImage: imgUrl}}
+                    >{''}</div>
+                </div>
+                <div className={'about__content-wrap'}>
+                    <h3 className={'page-block__title-secondary'}>Facts about me</h3>
+                    <div className={"about__content"}>{pageAbout?.content}</div>
+                    <div className={'about__add-block'}>
+                        <h3 className={'page-block__title-secondary'}>Follow me</h3>
+                        <SocialNav />
+                        <BookingButton bookConsultation={bookConsultation} />
+                    </div>
+                </div>
             </div>
             { isEditMode &&
                 <ModalPopUp

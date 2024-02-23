@@ -1,6 +1,10 @@
 .about {
   position: relative;
   text-align: center;
+
+  .page-block__title {
+    margin-bottom: 62px;
+  }
 }
 
 .about__img-wrap-decor {
@@ -63,17 +67,26 @@
     padding-bottom: 70px;
   }
 
-  .about__img-wrap {
-    width: 400px;
-    height: 400px;
+  .about__layout-wrap {
+    display: flex;
+    gap: 4%;
   }
 
   .about__img-wrap-decor {
-    width: 400px;
+    width: 40%;
     height: 400px;
+
+    .about__img-wrap {
+      width: 100%;
+      height: 100%;
+    }
 
     &::before {
       top: 50px;
     }
+  }
+
+  .about__content-wrap {
+    width: 56%;
   }
 }

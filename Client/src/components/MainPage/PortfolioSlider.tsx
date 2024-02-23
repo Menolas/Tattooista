@@ -52,7 +52,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   })
 
     return (
-      <section className="page-block portfolio-slider">
+      <section className="page-block portfolio-slider container">
           <h2 className="page-block__title">Portfolio</h2>
           <AliceCarousel
               items={sliders}
