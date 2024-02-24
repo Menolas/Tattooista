@@ -16,11 +16,12 @@
 
   .about__img-wrap {
     position: relative;
-    margin: -22px auto 0;
+    margin: 0 auto;
     width: calc(100vw - (2rem + 22px*2));
     height: calc(100vw - 2rem);
     background-size: cover;
     filter: grayscale(100%);
+    transform: translate(0, -22px);
     z-index: 1;
 
     &:hover {
@@ -38,13 +39,23 @@
 }
 
 .about__content {
-  position: relative;
-  margin-bottom: 40px;
-  text-align: left;
-  line-height: 1.7;
+  span {
+    @include trimEllipses(5);
+    margin-bottom: 1rem;
+    text-align: left;
+    line-height: 1.7;
+    font-size: 18px;
+  }
+
+  a {
+    //display: block;
+    margin-left: auto;
+  }
+
 }
 
 .about__add-block {
+  margin-top: 40px;
   .social-nav {
     margin-bottom: 40px;
 
@@ -72,13 +83,19 @@
     gap: 4%;
   }
 
+  .about__content {
+    font-size: 26px;
+  }
+
   .about__img-wrap-decor {
+    margin-top: 42px;
     width: 40%;
     height: 400px;
 
     .about__img-wrap {
-      width: 100%;
-      height: 100%;
+      width: calc(100% - 84px);
+      height: calc(100%);
+      transform: translate(0, -42px);
     }
 
     &::before {

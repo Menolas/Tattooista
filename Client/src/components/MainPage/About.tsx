@@ -7,10 +7,10 @@ import {API_URL} from "../../http"
 import {ModalPopUp} from "../common/ModalPopUp"
 import { UpdateAboutPageFormFormik } from "../Forms/UpdateAboutPageFormFormik"
 import {Tooltip} from "react-tooltip"
-import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {ADMIN, SUPER_ADMIN} from "../../utils/constants"
 import {SocialNav} from "../SocialNav";
-import {BookingForm} from "../Forms/BookingFormFormik";
-import {BookingButton} from "../common/BookingButton";
+import {BookingButton} from "../common/BookingButton"
+import {NavLink} from "react-router-dom"
 
 type PropsType = {
     fakeApi: boolean
@@ -73,17 +73,20 @@ export const About: React.FC<PropsType> = React.memo(({
                     </button>
                 </div>
             }
-            <h2 className="page-block__title">{pageAbout?.title ? pageAbout.title : 'Tattoo Artist'}</h2>
+            <h2 className={'page-block__title'}>{pageAbout?.title ? pageAbout.title : 'Tattoo Artist'}</h2>
             <div className={'about__layout-wrap'}>
-                <div className="about__img-wrap-decor">
+                <div className={'about__img-wrap-decor'}>
                     <div
-                        className="about__img-wrap"
+                        className={'about__img-wrap'}
                         style={{backgroundImage: imgUrl}}
                     >{''}</div>
                 </div>
                 <div className={'about__content-wrap'}>
                     <h3 className={'page-block__title-secondary'}>Facts about me</h3>
-                    <div className={"about__content"}>{pageAbout?.content}</div>
+                    <div className={'about__content'}>
+                        <span>{pageAbout?.content}</span>
+                        <NavLink to={'/about'}>Read more</NavLink>
+                    </div>
                     <div className={'about__add-block'}>
                         <h3 className={'page-block__title-secondary'}>Follow me</h3>
                         <SocialNav />
