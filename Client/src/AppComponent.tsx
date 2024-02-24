@@ -22,13 +22,14 @@ import { Preloader } from "./components/common/Preloader"
 import { ArchiveContainer } from "./components/Admin/Archive/ArchiveContainer"
 import { ArchivedClients } from "./components/Admin/Archive/ArchivedClients"
 import { ArchivedConsultations } from "./components/Admin/Archive/ArchivedConsultations"
-import {ArchivedGallery} from "./components/Admin/Archive/ArchivedGallery"
-import {RegistrationContainer} from "./pages/registration/RegistrationContainer"
-import {checkAuth} from "./redux/Auth/auth-reducer"
-import {ScrollToTopButton} from "./components/common/ScrollToTopButton"
-import {UsersContainer} from "./components/Admin/Users/UsersContainer"
-import {NotFound} from "./components/404-page"
-import {NoAccess} from "./components/NoAccess"
+import { ArchivedGallery } from "./components/Admin/Archive/ArchivedGallery"
+import { RegistrationContainer } from "./pages/registration/RegistrationContainer"
+import { checkAuth } from "./redux/Auth/auth-reducer"
+import { ScrollToTopButton } from "./components/common/ScrollToTopButton"
+import { UsersContainer } from "./components/Admin/Users/UsersContainer"
+import { NotFound } from "./components/404-page"
+import { NoAccess } from "./components/NoAccess"
+import { About } from "./pages/about/About"
 
 const App = () => {
 
@@ -64,6 +65,8 @@ const App = () => {
                         <Routes>
                             <Route path='/'
                                    element={<MainPageContainer />} />
+                            <Route path={'about'}
+                                   element={<About />} />
                             <Route path={`registration`}
                                    element={<RegistrationContainer />} />
                             <Route path={`login`}
@@ -83,11 +86,11 @@ const App = () => {
                                 <Route path={`archive`}
                                        element={<ArchiveContainer />}>
                                     <Route path={`archivedClients`}
-                                           element={<ArchivedClients />}/>
+                                           element={<ArchivedClients />} />
                                     <Route path={`archivedConsultations`}
-                                           element={<ArchivedConsultations />}/>
+                                           element={<ArchivedConsultations />} />
                                     <Route path={`archivedGallery`}
-                                           element={<ArchivedGallery />}/>
+                                           element={<ArchivedGallery />} />
                                 </Route>
                                 <Route path={`users`}
                                        element={<UsersContainer/>} />

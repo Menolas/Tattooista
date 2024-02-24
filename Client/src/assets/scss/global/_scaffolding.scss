@@ -36,10 +36,10 @@ svg {
   fill: $light-text;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #aaa #eee;
-}
+//* {
+//  scrollbar-width: thin;
+//  scrollbar-color: #3d3d3d $dark;
+//}
 
 .hidden {
   margin: 0;
@@ -58,21 +58,24 @@ img {
   filter: grayscale(100%);
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+* {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    width: 6px;
+    height: 6px;
+    background-color: #3d3d3d;
+    border-radius: 6px;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  width: 6px;
-  height: 6px;
-  background-color: #aaaa;
-  border-radius: 6px;
-}
 
 .app {
   position: relative;
