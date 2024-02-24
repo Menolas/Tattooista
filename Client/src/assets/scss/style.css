@@ -815,11 +815,8 @@ img {
   filter: none;
 }
 
+.about__content p,
 .about__content span {
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   margin-bottom: 1rem;
   text-align: left;
   line-height: 1.7;
@@ -999,8 +996,9 @@ img {
     max-width: 1102px;
   }
   .services__item {
-    width: 469px;
-    min-width: 430px;
+    width: 46%;
+    min-width: 46%;
+    max-width: 46%;
   }
   .services__item:nth-child(even) {
     transform: translate(0, 110px);
@@ -3083,6 +3081,20 @@ input[type=checkbox]:checked + label .checkbox::after {
 .mobile-main-menu .mobile-main-menu__item svg {
   width: 30px;
   height: 30px;
+}
+
+.read-more .hidden {
+  display: none;
+}
+.read-more .read-more__button {
+  display: inline-block;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.read-more .read-more__button.expanded {
+  margin-left: auto;
+  transform: translate(0, 200%);
 }
 
 /*# sourceMappingURL=style.css.map */

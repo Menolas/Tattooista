@@ -11,6 +11,7 @@ import {ADMIN, SUPER_ADMIN} from "../../utils/constants"
 import {SocialNav} from "../SocialNav";
 import {BookingButton} from "../common/BookingButton"
 import {NavLink} from "react-router-dom"
+import {ReadMore} from "../common/ReadMore";
 
 type PropsType = {
     fakeApi: boolean
@@ -84,8 +85,7 @@ export const About: React.FC<PropsType> = React.memo(({
                 <div className={'about__content-wrap'}>
                     <h3 className={'page-block__title-secondary'}>Facts about me</h3>
                     <div className={'about__content'}>
-                        <span>{pageAbout?.content}</span>
-                        <NavLink to={'/about'}>Read more</NavLink>
+                        <ReadMore id={'text-about'} text={pageAbout?.content} amountOfWords={36} />
                     </div>
                     <div className={'about__add-block'}>
                         <h3 className={'page-block__title-secondary'}>Follow me</h3>

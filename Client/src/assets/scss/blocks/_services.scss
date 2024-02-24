@@ -118,8 +118,9 @@
   }
 
   .services__item {
-    width: 469px;
-    min-width: 430px;
+    width: 46%;
+    min-width: 46%;
+    max-width: 46%;
     &:nth-child(even) {
       transform: translate(0, 110px);
     }
