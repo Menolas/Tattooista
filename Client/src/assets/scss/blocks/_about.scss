@@ -39,8 +39,8 @@
 }
 
 .about__content {
+  p,
   span {
-    @include trimEllipses(5);
     margin-bottom: 1rem;
     text-align: left;
     line-height: 1.7;
