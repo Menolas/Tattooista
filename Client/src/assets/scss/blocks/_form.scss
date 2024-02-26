@@ -50,6 +50,9 @@ label[for="concent"] {
     padding: 0.5rem;
     min-height: 105px;
     border: $form-input-border;
+    &:hover {
+      border: $form-input-border;
+    }
   }
 
   .select-block {
@@ -77,27 +80,24 @@ label[for="concent"] {
     }
   }
 
-  .css-1xc3v61-indicatorContainer {
-    svg {
-      transform: rotate(0deg);
-    }
-  }
-
-  .css-15lsz6c-indicatorContainer {
-    svg {
-      transform: rotate(180deg);
-    }
-  }
+  //.css-1xc3v61-indicatorContainer {
+  //  svg {
+  //    transform: rotate(0deg);
+  //  }
+  //}
+  //
+  //.css-15lsz6c-indicatorContainer {
+  //  svg {
+  //    transform: rotate(180deg);
+  //  }
+  //}
   .css-qbdosj-Input {
     padding: 0;
     //height: 32px;
   }
-
-  //.css-13cymwt-control,
-  //.css-t3ipsp-control,
-  //input {
-  //  height: 32px;
-  //}
+  div[class$="MenuList"] > div[class$="ni-option"] {
+    background-color: #f6f6f6;
+  }
 }
 
 .form__wrap {
@@ -166,6 +166,7 @@ label[for="concent"] {
 .form__input-wrap--checkbox {
   display: flex;
   flex-direction: column;
+  margin: 18px 0 0;
 
   label {
     display: inline-block;
@@ -195,7 +196,7 @@ label.form__input-label {
   transform: translate(0, -50%);
 }
 
-input[type="checkbox"]:checked+label .checkbox::after {
+input[type="checkbox"][value="true"] +label .checkbox::after {
   @include element-style(9px, 16px, transparent);
   bottom: 3px;
   left: 4px;
@@ -313,6 +314,18 @@ input[type="checkbox"]:checked+label .checkbox::after {
   }
 }
 
+.select-block {
+  div[class$="-indicatorContainer"] svg {
+    transform: rotate(0) !important;
+  }
+
+  &.menuOpen {
+    div[class$="-indicatorContainer"] svg {
+      transform: rotate(180deg) !important;
+    }
+  }
+}
+
 @media (min-width: 990px) {
 
   input::placeholder,
@@ -323,7 +336,7 @@ input[type="checkbox"]:checked+label .checkbox::after {
 
   .form__title {
     margin-bottom: 47px;
-    font-size: 24px;
+    font-size: 33px;
   }
 
   .form__input-wrap {
@@ -335,6 +348,8 @@ input[type="checkbox"]:checked+label .checkbox::after {
   }
 
   .form__input-wrap--checkbox {
+    margin-bottom: 0;
+    margin-top: 24px;
 
     label {
       padding-left: 36px;
@@ -347,17 +362,22 @@ input[type="checkbox"]:checked+label .checkbox::after {
     font-size: 14px;
     font-weight: 700;
   }
+
+  .form__submit-btn {
+    height: 103px;
+    font-size: 30px;
+  }
 }
 
 .form__input-wrap {
-  .css-1nmdiq5-menu {
+  div[class$="menu"] {
     margin: 0;
     font-family: "Monseratt", sans-serif;
     border: $form-input-border;
     border-radius: 0;
     border-top: none;
 
-    .css-1n6sfyn-MenuList > div {
+    div[class$="MenuList"] > div {
       color: $medium;
       font-weight: 600;
     }

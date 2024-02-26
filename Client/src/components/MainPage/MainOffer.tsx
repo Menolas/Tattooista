@@ -1,26 +1,12 @@
 import * as React from "react"
-import { useState } from "react"
-import { ModalPopUp } from "../common/ModalPopUp"
-import { BookingForm } from "../Forms/BookingFormFormik"
 import {BookConsultationFormValues} from "../../types/Types"
+import {BookingButton} from "../common/BookingButton";
 
 type PropsType = {
   bookConsultation: (values: BookConsultationFormValues) => void
 }
 
 export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) => {
-
-  const [bookingModal, setBookingModal] = useState(false)
-
-  const modalTitle = 'FILL THE FORM AND WE WILL CONTACT YOU SOON'
-
-  const showBookConsultationModal = () => {
-    setBookingModal(true)
-  }
-
-  const closeBookingModal = () => {
-    setBookingModal(false)
-  }
 
   return (
     <div className = "main-offer">
@@ -32,23 +18,7 @@ export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) =>
         </h1>
         <span className = "main-offer__motto">Your philosophy on your skin</span>
       </div>
-      <button
-        className = "btn btn--transparent main-header__btn"
-        onClick = { showBookConsultationModal }>
-        Book a consultation
-      </button>
-      { bookingModal &&
-        <ModalPopUp
-          modalTitle={modalTitle}
-          closeModal={closeBookingModal}
-        >
-          <BookingForm
-            consentId="consent"
-            bookConsultation={bookConsultation}
-            closeBookingModal={closeBookingModal}
-          />
-        </ModalPopUp>
-      }
+      <BookingButton bookConsultation={bookConsultation} />
     </div>
   )
 })

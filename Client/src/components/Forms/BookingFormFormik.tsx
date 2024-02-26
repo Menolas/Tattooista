@@ -13,7 +13,7 @@ const options = [
   { value: "phone", label: "phone" },
   { value: "whatsapp", label: "whatsapp" },
   { value: "messenger", label: "messenger" },
-  { value: "insta", label: "inst" }
+  { value: "insta", label: "instagram" }
 ]
 
 // @ts-ignore
@@ -131,7 +131,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 <FieldComponent
                     name={contactInput}
                     type={'text'}
-                    placeholder={'Your contact'}
+                    placeholder={`Your ${contactInput}`}
                     value={propsF.values.contactInput}
                     onChange={propsF.handleChange}
                 />
@@ -167,7 +167,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   type="checkbox"
                   name="consent"
                   id={consentId}
-                  value={propsF.values.consent}
+                  checked={propsF.values.consent}
                   onChange={propsF.handleChange}
               />
               <label htmlFor={consentId}>

@@ -7,6 +7,7 @@ export const FormSelect = ({ name, options, handleChange, placeholder }) => {
     const [field, meta, helpers] = useField(name)
     const { setValue, setTouched, setError } = helpers
     const [selectedOption, setSelectedOption] = useState("none")
+    let [menuIsOpen, setMenuIsOpen] = useState(false)
     const setFieldProps = (selectedOption) => {
         setTouched(true)
         handleChange(selectedOption.value)
@@ -17,7 +18,7 @@ export const FormSelect = ({ name, options, handleChange, placeholder }) => {
 
     return (
         <Select
-            className={"select-block"}
+            className={ !menuIsOpen ? "select-block" : "select-block menuOpen" }
             name={name}
             onChange={setFieldProps}
             options={options}
@@ -26,7 +27,12 @@ export const FormSelect = ({ name, options, handleChange, placeholder }) => {
                 return option.value === selectedOption;
             })}
             placeholder={placeholder}
-            //isMulti
+            onMenuOpen={() => {
+                setMenuIsOpen(true)
+            }}
+            onMenuClose={() => {
+                setMenuIsOpen(false)
+            }}
         />
     )
 }
