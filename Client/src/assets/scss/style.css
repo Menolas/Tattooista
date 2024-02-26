@@ -617,17 +617,19 @@ img {
   right: 0;
   background-image: linear-gradient(0deg, rgb(8, 8, 8) 0%, rgba(8, 8, 8, 0) 100%);
 }
-.main-offer .main-header__btn {
+.main-offer .booking-btn {
   position: absolute;
   bottom: 0;
   left: 50%;
   padding: 0 38px;
   height: 60px;
+  max-width: calc(100% - 2rem);
   font-size: 20px;
   font-weight: 600;
   color: #fafafa;
   border-color: #fafafa;
   transform: translate(-50%, 70%);
+  z-index: 9;
 }
 
 .main-offer__content-wrap {
@@ -699,9 +701,9 @@ img {
   .main-offer::before {
     height: 187px;
   }
-  .main-offer .main-header__btn {
+  .main-offer .booking-btn {
     position: static;
-    margin-top: 82px;
+    margin: 82px 0 0;
     padding: 0 89px;
     width: 550px;
     height: 114px;
@@ -1833,6 +1835,7 @@ img {
   width: 100vw;
   height: 100vh;
   max-height: 100vh;
+  text-align: left;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: 10;
 }
@@ -1851,6 +1854,7 @@ img {
   display: flex;
   align-items: flex-start;
   margin-bottom: 24px;
+  min-height: 30px;
 }
 
 .modal__title {
@@ -2373,6 +2377,9 @@ label[for=concent] {
   min-height: 105px;
   border: 2px solid rgba(0, 0, 0, 0.7);
 }
+.form textarea:hover {
+  border: 2px solid rgba(0, 0, 0, 0.7);
+}
 .form .select-block div[class$=-control] {
   height: unset;
   min-height: unset;
@@ -2390,14 +2397,11 @@ label[for=concent] {
   height: 25px;
   fill: #080808;
 }
-.form .css-1xc3v61-indicatorContainer svg {
-  transform: rotate(0deg);
-}
-.form .css-15lsz6c-indicatorContainer svg {
-  transform: rotate(180deg);
-}
 .form .css-qbdosj-Input {
   padding: 0;
+}
+.form div[class$=MenuList] > div[class$=ni-option] {
+  background-color: #f6f6f6;
 }
 
 .form__wrap {
@@ -2464,6 +2468,7 @@ label[for=concent] {
 .form__input-wrap--checkbox {
   display: flex;
   flex-direction: column;
+  margin: 18px 0 0;
 }
 .form__input-wrap--checkbox label {
   display: inline-block;
@@ -2492,7 +2497,7 @@ label.form__input-label {
   transform: translate(0, -50%);
 }
 
-input[type=checkbox]:checked + label .checkbox::after {
+input[type=checkbox][value=true] + label .checkbox::after {
   content: "";
   display: block;
   position: absolute;
@@ -2599,6 +2604,13 @@ input[type=checkbox]:checked + label .checkbox::after {
   display: none;
 }
 
+.select-block div[class$=-indicatorContainer] svg {
+  transform: rotate(0) !important;
+}
+.select-block.menuOpen div[class$=-indicatorContainer] svg {
+  transform: rotate(180deg) !important;
+}
+
 @media (min-width: 990px) {
   input::placeholder,
   textarea::placeholder {
@@ -2607,13 +2619,17 @@ input[type=checkbox]:checked + label .checkbox::after {
   }
   .form__title {
     margin-bottom: 47px;
-    font-size: 24px;
+    font-size: 33px;
   }
   .form__input-wrap {
     margin-bottom: 46px;
   }
   .form__input-wrap.form__input-wrap--uploadFile {
     margin-bottom: 20px;
+  }
+  .form__input-wrap--checkbox {
+    margin-bottom: 0;
+    margin-top: 24px;
   }
   .form__input-wrap--checkbox label {
     padding-left: 36px;
@@ -2623,15 +2639,19 @@ input[type=checkbox]:checked + label .checkbox::after {
     font-size: 14px;
     font-weight: 700;
   }
+  .form__submit-btn {
+    height: 103px;
+    font-size: 30px;
+  }
 }
-.form__input-wrap .css-1nmdiq5-menu {
+.form__input-wrap div[class$=menu] {
   margin: 0;
   font-family: "Monseratt", sans-serif;
   border: 2px solid rgba(0, 0, 0, 0.7);
   border-radius: 0;
   border-top: none;
 }
-.form__input-wrap .css-1nmdiq5-menu .css-1n6sfyn-MenuList > div {
+.form__input-wrap div[class$=menu] div[class$=MenuList] > div {
   color: #373737;
   font-weight: 600;
 }
