@@ -5,6 +5,8 @@ import {logout} from "../../redux/Auth/auth-reducer"
 import { Header } from "./Header"
 import {getAuthSelector} from "../../redux/Auth/auth-selectors"
 import {useLocation} from "react-router-dom"
+import {BookConsultationFormValues} from "../../types/Types";
+import {bookConsultation} from "../../redux/General/general-reducer";
 
 export const HeaderContainer: React.FC = () => {
 
@@ -33,9 +35,14 @@ export const HeaderContainer: React.FC = () => {
     dispatch(logout())
   }
 
+  const bookConsultationCallBack = (values: BookConsultationFormValues) => {
+    dispatch(bookConsultation(values))
+  }
+
   return <Header
       isAuth={isAuth}
       headerClasses={headerClasses}
       logout={logoutCallBack}
+      bookConsultation={bookConsultationCallBack}
   />
 }

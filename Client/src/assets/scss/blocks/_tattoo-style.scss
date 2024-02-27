@@ -1,8 +1,18 @@
 .tattoo-style {
   &.page-block {
     padding-top: 118px;
-    padding-bottom: 30px;
+    margin-bottom: 88px;
     background-image: url("../img/mainOfferBG.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  &::before {
+    @include element-style(100%, 111px, transparent);
+    bottom: -32px;
+    left: 0;
+    right: 0;
+    background-image: linear-gradient(0deg, rgba(8,8,8,1) 0%, rgba(8,8,8,0) 100%);
   }
 
   .tattoo-style__title {
@@ -12,28 +22,16 @@
     text-transform: uppercase;
   }
 
-  &::after {
-    display: none;
-  }
-
-  .tattoo-style__list {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
-  }
-
   .alice-carousel {
-    margin-top: 50px;
+    position: absolute;
+    bottom: -42px;
+    left: 1rem;
+    transform: translate(0, 100%);
 
     .alice-carousel__dots,
     .alice-carousel__prev-btn,
     .alice-carousel__next-btn {
       display: none;
-      //position: absolute;
-      //top: 0;
-      //padding: 0;
-      //width: 45px;
-      //height: 30px;
     }
     .alice-carousel__prev-btn-item,
     .alice-carousel__next-btn-item,
@@ -104,8 +102,7 @@
   }
 
   .alice-carousel__stage {
-    //display: flex;
-    //justify-content: space-between;
+    margin-left: -8px;
   }
 
   .alice-carousel__stage-item {
@@ -127,13 +124,6 @@
       color: $dark-text;
     }
   }
-
-  //.alice-carousel__stage-item.__active {
-  //  .tattoo-style__item {
-  //    background-color: $light;
-  //    color: $dark-text;
-  //  }
-  //}
 
   .tattoo-style__item-content {
     display: flex;
@@ -164,18 +154,21 @@
 
 @media (min-width: 990px) {
 
-  .tattoo-style {
-    padding-top: 160px;
-    padding-bottom: 112px;
+  .tattoo-style.page-block {
+    margin-bottom: 0;
+    padding-top: 220px;
+    padding-bottom: 28px;
+    background-image: url("../img/body-bg.jpg");
 
-    .tattoo-style__list {
-      column-gap: 28px;
-      margin-bottom: 70px;
+    ::before {
+      bottom: 0;
     }
 
     .tattoo-style__item-content {
       display: flex;
       column-gap: 60px;
+      margin: 0 auto;
+      max-width: 1317px;
     }
 
     .tattoo-style__item {
@@ -183,8 +176,21 @@
     }
 
     .tattoo-style__title {
-      display: block;
-      margin-top: -8px;
+      margin-bottom: 1.5rem;
+      font-size: 80px;
+    }
+
+    .advertisement {
+      margin-top: 69px;
+
+      .bookingBtnBlock {
+        display: none;
+      }
+    }
+
+    .alice-carousel {
+      position: static;
+      transform: none;
     }
   }
 }

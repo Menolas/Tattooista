@@ -81,102 +81,102 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
     })
 
   return (
-    <section className="tattoo-style page-block container">
-      { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-        <button
-            className={"btn btn--sm btn--light-bg"}
-            onClick={() => {setAddTattooStyleMode(true)}}
-        >
-            Add a Tattoo Style
-        </button>
-      }
-      <div className="tattoo-style__item-content">
+    <section className="tattoo-style page-block">
+      <div className={'container'}>
         { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-          <div className={"tattoo-style__item-actions"}>
-            <button
-                data-tooltip-id="my-tooltip"
-                data-tooltip-content="Edit tattoo style"
-                className={"btn btn--icon"}
-                onClick={() => {setEditTattooStyleMode(true)}}
-            >
-                <svg><use href={`${Sprite}#edit`}/></svg>
-            </button>
-            { !activeStyle?.nonStyle &&
+          <button
+              className={"btn btn--sm btn--light-bg"}
+              onClick={() => {setAddTattooStyleMode(true)}}
+          >
+              Add a Tattoo Style
+          </button>
+        }
+        <div className="tattoo-style__item-content">
+          { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+            <div className={"tattoo-style__item-actions"}>
               <button
                   data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Delete tattoo style"
+                  data-tooltip-content="Edit tattoo style"
                   className={"btn btn--icon"}
-                  onClick={() => {
-                    setNeedConfirmation(true)
-                  }}
+                  onClick={() => {setEditTattooStyleMode(true)}}
               >
-                <svg>
-                  <use href={`${Sprite}#trash`}/>
-                </svg>
+                  <svg><use href={`${Sprite}#edit`}/></svg>
               </button>
-            }
-          </div>
-        }
-        <div>
-          <h1 className={'tattoo-style__title page-block__title'}>{activeStyle?.value}</h1>
-          <div className={'tattoo-style__text'}>
-            {activeStyle ? activeStyle.description : "---"}
+              { !activeStyle?.nonStyle &&
+                <button
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Delete tattoo style"
+                    className={"btn btn--icon"}
+                    onClick={() => {
+                      setNeedConfirmation(true)
+                    }}
+                >
+                  <svg>
+                    <use href={`${Sprite}#trash`}/>
+                  </svg>
+                </button>
+              }
+            </div>
+          }
+          <div>
+            <h1 className={'tattoo-style__title page-block__title'}>{activeStyle?.value}</h1>
+            <div className={'tattoo-style__text'}>
+              {activeStyle ? activeStyle.description : "---"}
+            </div>
           </div>
         </div>
-      </div>
-      <Advertisement bookConsultation={bookConsultation}/>
-      <div className={'tattoo-style__list'}>
+        <Advertisement bookConsultation={bookConsultation}/>
         <AliceCarousel
             items={tattooStylesAliceArray}
             responsive={responsive}
             controlsStrategy="alternate"
             mouseTracking={true}
         />
-      </div>
-      {
-          addTattooStyleMode &&
-          <ModalPopUp
-              modalTitle={modalTitle}
-              closeModal={closeModal}
-          >
-            <UpdateTattooStyleFormFormik
-                addTattooStyle={addTattooStyle}
+        {
+            addTattooStyleMode &&
+            <ModalPopUp
+                modalTitle={modalTitle}
                 closeModal={closeModal}
-            />
-          </ModalPopUp>
-      }
+            >
+              <UpdateTattooStyleFormFormik
+                  addTattooStyle={addTattooStyle}
+                  closeModal={closeModal}
+              />
+            </ModalPopUp>
+        }
 
-      {
-          editTattooStyleMode &&
-          <ModalPopUp
-              modalTitle={'Update tattoo style'}
-              closeModal={closeEditModal}
-          >
-            <UpdateTattooStyleFormFormik
-                style={activeStyle}
-                editTattooStyle={editTattooStyle}
+        {
+            editTattooStyleMode &&
+            <ModalPopUp
+                modalTitle={'Update tattoo style'}
                 closeModal={closeEditModal}
-            />
-          </ModalPopUp>
-      }
-      {
-          needConfirmation &&
-          <ModalPopUp
-              modalTitle={''}
-              closeModal={closeModal}
-          >
-            <Confirmation
-                content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
-                confirm={deleteTattooStyleCallBack}
-                cancel={closeConfirmationModal}
-            />
-          </ModalPopUp>
-      }
-      {
-          isSuccess &&
-          <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
-      }
-      <Tooltip id="my-tooltip" />
+            >
+              <UpdateTattooStyleFormFormik
+                  style={activeStyle}
+                  editTattooStyle={editTattooStyle}
+                  closeModal={closeEditModal}
+              />
+            </ModalPopUp>
+        }
+        {
+            needConfirmation &&
+            <ModalPopUp
+                modalTitle={''}
+                closeModal={closeModal}
+            >
+              <Confirmation
+                  content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
+                  confirm={deleteTattooStyleCallBack}
+                  cancel={closeConfirmationModal}
+              />
+            </ModalPopUp>
+        }
+        {
+            isSuccess &&
+            <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
+        }
+        <Tooltip id="my-tooltip" />
+      </div>
     </section>
   )
 })
