@@ -1315,12 +1315,15 @@ img {
 
 @media (min-width: 990px) {
   .main-footer {
+    padding: 60px 0;
+    font-weight: 600;
+    font-size: 30px;
+  }
+  .main-footer .container {
+    display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 60px 90px;
-    font-weight: 600;
-    font-size: 18px;
   }
   .main-footer__copyrights {
     order: 0;
