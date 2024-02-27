@@ -52,12 +52,17 @@
 
 @media (min-width: 990px) {
   .main-footer {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 60px 90px;
+    padding: 60px 0;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 30px;
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
   }
 
   .main-footer__copyrights {
