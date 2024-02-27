@@ -1,8 +1,5 @@
 .gallery {
-
-  &.page-block {
-    background-image: none;
-  }
+  padding-top: 30px;
 
   .gallery__header {
     display: flex;
@@ -20,8 +17,8 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 1%;
-  row-gap: 10px;
+  //column-gap: 1%;
+  row-gap: 1rem;
 }
 
 .gallery__item {
@@ -31,7 +28,7 @@
   height: 320px;
 
   .gallery__img-wrap {
-    height: 82%;
+    height: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -141,7 +138,7 @@
 @media (min-width: 768px) {
 
   .gallery__list {
-    row-gap: 12px;
+    column-gap: 2%;
   }
 
   .gallery__item {
@@ -155,13 +152,14 @@
     padding-top: 60px;
   }
   .gallery__list {
-    row-gap: 16px;
+    row-gap: 2rem;
+    //column-gap: 2%;
   }
 
   .gallery__item {
-    width: 24%;
+    width: 23%;
     .gallery__img-wrap {
-      height: 85%;
+      height: 100%;
     }
   }
 }
