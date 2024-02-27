@@ -23,7 +23,7 @@ export const BookingButton: React.FC<PropsType> = ({bookConsultation}) => {
     }
 
     return (
-        <>
+        <div className={'bookingBtnBlock'}>
             <button
                 className = "btn btn--bg btn--transparent booking-btn"
                 onClick = { () => {
@@ -44,6 +44,6 @@ export const BookingButton: React.FC<PropsType> = ({bookConsultation}) => {
                     />
                 </ModalPopUp>
             }
-        </>
+        </div>
     )
 }

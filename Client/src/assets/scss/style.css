@@ -435,6 +435,12 @@ img {
     width: 40px;
     height: 40px;
   }
+  .main-header .main-header__right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+  }
   .main-header .admin-nav {
     display: flex;
     align-items: center;
@@ -570,28 +576,26 @@ img {
 .social-share {
   display: flex;
   align-items: center;
-  column-gap: 16px;
+  column-gap: 1rem;
 }
 
 .social-share__list {
   display: flex;
   align-items: center;
-  column-gap: 12px;
+  column-gap: 1rem;
 }
 
 .social-share__link {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #fafafa;
+  width: 45px;
+  height: 45px;
 }
 .social-share__link svg {
-  width: 24px;
-  height: 24px;
-  fill: #080808;
+  width: 100%;
+  height: 100%;
+  fill: #fafafa;
 }
 
 .main-offer {
@@ -694,7 +698,6 @@ img {
     padding: 270px 70px 93px;
     height: 100vh;
     background-image: url("../img/offerIllustration.png"), url("../img/body-bg.jpg");
-    background-repeat: no-repeat, no-repeat;
     background-size: contain, cover;
     background-position: bottom 0 right 0, top center;
   }
@@ -1433,21 +1436,41 @@ img {
   align-items: flex-start;
   row-gap: 1rem;
 }
+.advertisement .social-share .page-block__title-secondary {
+  margin-bottom: 0;
+}
 .advertisement .advertisement__btn {
   position: relative;
 }
 
 @media (min-width: 990px) {
-  .advertisement {
+  .advertisement .social-share {
     flex-direction: row;
-    margin: 0 -70px;
-    padding: 16px 70px;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 119px;
   }
 }
 .tattoo-style.page-block {
   padding-top: 118px;
-  padding-bottom: 30px;
+  margin-bottom: 88px;
   background-image: url("../img/mainOfferBG.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.tattoo-style::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 111px;
+  background-color: transparent;
+  box-sizing: border-box;
+  bottom: -32px;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(0deg, rgb(8, 8, 8) 0%, rgba(8, 8, 8, 0) 100%);
 }
 .tattoo-style .tattoo-style__title {
   margin-bottom: 1rem;
@@ -1455,16 +1478,11 @@ img {
   text-align: center;
   text-transform: uppercase;
 }
-.tattoo-style::after {
-  display: none;
-}
-.tattoo-style .tattoo-style__list {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-}
 .tattoo-style .alice-carousel {
-  margin-top: 50px;
+  position: absolute;
+  bottom: -42px;
+  left: 1rem;
+  transform: translate(0, 100%);
 }
 .tattoo-style .alice-carousel .alice-carousel__dots,
 .tattoo-style .alice-carousel .alice-carousel__prev-btn,
@@ -1527,6 +1545,9 @@ img {
   border-right: none;
   border-top: none;
 }
+.tattoo-style .alice-carousel__stage {
+  margin-left: -8px;
+}
 .tattoo-style .alice-carousel__stage-item {
   display: inline-flex;
   justify-content: center;
@@ -1566,24 +1587,37 @@ img {
   }
 }
 @media (min-width: 990px) {
-  .tattoo-style {
-    padding-top: 160px;
-    padding-bottom: 112px;
+  .tattoo-style.page-block {
+    margin-bottom: 0;
+    padding-top: 220px;
+    padding-bottom: 28px;
+    background-image: url("../img/body-bg.jpg");
   }
-  .tattoo-style .tattoo-style__list {
-    column-gap: 28px;
-    margin-bottom: 70px;
+  .tattoo-style.page-block ::before {
+    bottom: 0;
   }
-  .tattoo-style .tattoo-style__item-content {
+  .tattoo-style.page-block .tattoo-style__item-content {
     display: flex;
     column-gap: 60px;
+    margin: 0 auto;
+    max-width: 1317px;
   }
-  .tattoo-style .tattoo-style__item {
+  .tattoo-style.page-block .tattoo-style__item {
     font-size: 28px;
   }
-  .tattoo-style .tattoo-style__title {
-    display: block;
-    margin-top: -8px;
+  .tattoo-style.page-block .tattoo-style__title {
+    margin-bottom: 1.5rem;
+    font-size: 80px;
+  }
+  .tattoo-style.page-block .advertisement {
+    margin-top: 69px;
+  }
+  .tattoo-style.page-block .advertisement .bookingBtnBlock {
+    display: none;
+  }
+  .tattoo-style.page-block .alice-carousel {
+    position: static;
+    transform: none;
   }
 }
 @media (min-width: 1400px) {

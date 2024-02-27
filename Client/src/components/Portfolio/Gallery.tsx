@@ -153,7 +153,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   })
 
   return (
-      <section className="gallery page-block">
+      <section className="gallery page-block container">
         <div className={"gallery__header"}>
           <Paginator
             totalCount={totalCount}

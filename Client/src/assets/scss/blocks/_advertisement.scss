@@ -16,6 +16,10 @@
     flex-direction: column;
     align-items: flex-start;
     row-gap: 1rem;
+
+    .page-block__title-secondary {
+      margin-bottom: 0;
+    }
   }
 
   .advertisement__btn {
@@ -25,9 +29,13 @@
 
 @media (min-width: 990px) {
   .advertisement {
-    flex-direction: row;
-    margin: 0 -70px;
-    padding: 16px 70px;
+    .social-share {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 119px;
+    }
   }
 }
 

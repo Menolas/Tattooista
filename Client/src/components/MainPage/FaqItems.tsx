@@ -43,32 +43,34 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   })
 
   return (
-    <section className="page-block faq container" id="faq">
-      {
-        (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-        <button
-            className={"btn btn--bg btn--light-bg"}
-            onClick={() => {setAddFaqItemMode(true)}}
-        >
-            Add Faq
-        </button>
-      }
-      {
-        addFaqItemMode &&
-        <ModalPopUp
-            modalTitle={addFaqItemModalTitle}
-            closeModal={closeAddFaqItemModal}
-        >
-            <UpdateFaqItemFormFormik
-                addFaqItem={addFaqItem}
-                closeModal={closeAddFaqItemModal}
-            />
-        </ModalPopUp>
-      }
-      <h2 className="page-block__title">F.A.Q</h2>
-      <ul className="faq__list list">
-        {faqItemsArray}
-      </ul>
+    <section className="page-block faq" id="faq">
+      <div className={'container'}>
+        {
+          (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+          <button
+              className={"btn btn--bg btn--light-bg"}
+              onClick={() => {setAddFaqItemMode(true)}}
+          >
+              Add Faq
+          </button>
+        }
+        {
+          addFaqItemMode &&
+          <ModalPopUp
+              modalTitle={addFaqItemModalTitle}
+              closeModal={closeAddFaqItemModal}
+          >
+              <UpdateFaqItemFormFormik
+                  addFaqItem={addFaqItem}
+                  closeModal={closeAddFaqItemModal}
+              />
+          </ModalPopUp>
+        }
+        <h2 className="page-block__title">F.A.Q</h2>
+        <ul className="faq__list list">
+          {faqItemsArray}
+        </ul>
+      </div>
     </section>
   )
 })

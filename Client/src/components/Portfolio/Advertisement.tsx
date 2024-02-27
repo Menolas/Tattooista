@@ -41,7 +41,7 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
   return (
     <section className="advertisement">
       <div className="social-share">
-          <span>Share this page</span>
+          <h3 className={'page-block__title-secondary'}>Share this page:</h3>
           <ul className="social-share__list list">
             <li className="social-share__item">
               <NavLink to="#" className="social-share__link">
@@ -51,11 +51,6 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
             <li className="social-share__item">
               <NavLink to="#" className="social-share__link">
                 <svg><use href={`${Sprite}#facebook`}/></svg>
-              </NavLink>
-            </li>
-            <li className="social-share__item">
-              <NavLink to="#" className="social-share__link">
-                <svg><use href={`${Sprite}#phone`}/></svg>
               </NavLink>
             </li>
           </ul>

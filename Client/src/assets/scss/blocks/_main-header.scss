@@ -73,9 +73,13 @@
       }
     }
 
-    &.main-header--inner {
-
+    .main-header__right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 50px;
     }
+
     .admin-nav {
       display: flex;
       align-items: center;
