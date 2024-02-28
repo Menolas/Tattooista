@@ -85,7 +85,7 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                 onChange={propsF.handleChange}
             />
             <button
-              className="btn btn--bg btn--transparent form__submit-btn"
+              className="btn btn--bg btn--dark-bg form__submit-btn"
               type="submit"
               disabled={isSubmitting}
             >

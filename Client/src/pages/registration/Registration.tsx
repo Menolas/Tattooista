@@ -24,7 +24,7 @@ export const Registration: React.FC<PropsType> = React.memo(({
 
     const successPopUpContent = 'You registered as admin now!'
     return (
-        <div className="registration">
+        <div className="registration page-block page-block--top">
             { !isAuth &&
                 <div className = "registration__form-wrap form__wrap">
                     <RegistrationForm

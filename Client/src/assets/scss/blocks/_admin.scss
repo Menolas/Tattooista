@@ -1,22 +1,26 @@
 .admin {
-  padding-top: 40px;
+  display: flex;
+  gap: 50px;
 
-  .admin__header {
+  .admin__left-panel {
     display: flex;
-    align-items: center;
-    column-gap: 30px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: $light-border;
+    padding-right: 66px;
+    max-width: 544px;
+    border-right: $light-border;
   }
 
   .admin__back-link {
     @include link-style;
   }
 
-  .admin__view-btns {
-    display: none;
-    column-gap: 10px;
+  .admin__nav-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin__content {
+    display: flex;
+    flex-direction: column;
   }
 
   .admin__cards-header {
@@ -34,14 +38,16 @@
   .admin__cards-list {
     display: flex;
     flex-direction: column;
-    row-gap: 12px;
+    row-gap: 40px;
+    padding-top: 50px;
+    border-top: $light-border;
   }
 
   .admin__card {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
-    border: $light-border;
+    padding: 13px 13px 29px 0;
+    border-bottom: $light-border;
     &.admin__card--client,
     &.admin__card--user {
       flex-direction: column;
@@ -113,7 +119,6 @@
 }
 
 .admin__card {
-  flex-direction: column;
   .client-profile__header {
     display: flex;
     align-items: flex-start;
@@ -131,11 +136,10 @@
   }
 
   .admin__card-action-btns {
-    order: 0;
     display: flex;
     align-items: center;
     align-self: self-start;
-    margin: -20px -20px 20px auto;
+    margin-top: -8px;
   }
 
   .client-profile__gallery {
@@ -147,7 +151,6 @@
   }
 
   .admin__card-details {
-    order: 1;
     display: flex;
     flex-direction: column;
     row-gap: 8px;
@@ -164,30 +167,5 @@
 }
 
 @media (min-width: 900px) {
-  .admin {
-    padding-top: 100px;
 
-    .admin__view-btns {
-      display: flex;
-    }
-
-    .admin__card-avatar {
-      width: 80px;
-      height: 80px;
-    }
-  }
-
-  .admin__card {
-    flex-direction: row;
-    align-items: center;
-
-    .admin__card-details {
-      order: 0;
-    }
-
-    .admin__card-action-btns {
-      order: 1;
-      margin: 0 0 0 auto;
-    }
-  }
 }

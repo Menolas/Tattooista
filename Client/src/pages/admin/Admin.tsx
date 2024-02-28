@@ -31,7 +31,7 @@ const Admin: React.FC = React.memo(() => {
         <li key={btn.btnText}>
             <NavLink
                 to={btn.btnUrl}
-                className={ (isActive) => isActive ? 'btn btn--bg btn--light-bg' : 'btn btn--bg btn--dark-bg' }
+                className={ (isActive) => isActive ? '' : '' }
             >
                 {btn.btnText}
             </NavLink>
@@ -85,8 +85,8 @@ const Admin: React.FC = React.memo(() => {
   })
 
   return (
-    <div className="admin">
-      <div className="admin__header">
+    <div className="admin page-block page-block--top container">
+      <aside className="admin__left-panel">
         <div
           className={isMobileMenuOpen ? "admin-panel-mobile show" : "admin-panel-mobile"}
         >
@@ -107,11 +107,15 @@ const Admin: React.FC = React.memo(() => {
               </ul>
           </div>
         </div>
-        <ul className="list admin__view-btns">
-            {adminButtons}
-        </ul>
-      </div>
-      <Outlet />
+        <nav className={'admin__nav'}>
+            <ul className="list admin__view-btns admin__nav-list">
+                {adminButtons}
+            </ul>
+        </nav>
+      </aside>
+      <section className={'admin__content'}>
+          <Outlet />
+      </section>
     </div>
   )
 })

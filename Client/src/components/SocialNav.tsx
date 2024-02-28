@@ -5,7 +5,7 @@ import { socialLinksData } from "../utils/constants"
 
 const socialLinks = socialLinksData.map(item => {
   return (
-      <li className="social-nav__item">
+      <li className="social-nav__item" key={item.tooltipText}>
         <a
             data-tooltip-id="my-tooltip"
             data-tooltip-content={item.tooltipText}

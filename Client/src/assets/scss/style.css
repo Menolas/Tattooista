@@ -202,7 +202,7 @@ img {
 .btn--dark-bg {
   color: #fafafa;
   background-color: #080808;
-  border: 2px solid #fafafa;
+  border: 2px solid #080808;
 }
 
 .btn--sm {
@@ -402,7 +402,7 @@ img {
   margin-left: auto;
 }
 .main-header .social-nav,
-.main-header .admin-nav {
+.main-header .main-header__right {
   display: none;
 }
 
@@ -755,6 +755,9 @@ img {
   position: relative;
   padding-top: 70px;
 }
+.page-block.page-block--top {
+  padding-top: 118px;
+}
 
 .page-block__title {
   position: relative;
@@ -778,13 +781,13 @@ img {
 
 @media (min-width: 990px) {
   .page-block {
-    position: relative;
     padding-top: 112px;
   }
+  .page-block.page-block--top {
+    padding-top: 220px;
+  }
   .page-block__title {
-    margin-top: 0;
     margin-bottom: 100px;
-    text-align: center;
     font-size: 55px;
   }
   .page-block__title-secondary {
@@ -1869,8 +1872,8 @@ img {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
-  max-height: 100vh;
+  height: 100svh;
+  max-height: 100svh;
   text-align: left;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: 10;
@@ -1880,6 +1883,7 @@ img {
   position: relative;
   padding: 60px 36px;
   width: 100%;
+  max-width: 615px;
   background-image: url("../img/form-background.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -1958,15 +1962,14 @@ img {
   }
 }
 .admin {
-  padding-top: 40px;
-}
-.admin .admin__header {
   display: flex;
-  align-items: center;
-  column-gap: 30px;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid #fafafa;
+  gap: 50px;
+}
+.admin .admin__left-panel {
+  display: flex;
+  padding-right: 66px;
+  max-width: 544px;
+  border-right: 2px solid #fafafa;
 }
 .admin .admin__back-link {
   display: inline-block;
@@ -1974,9 +1977,13 @@ img {
   text-decoration: none;
   font-size: inherit;
 }
-.admin .admin__view-btns {
-  display: none;
-  column-gap: 10px;
+.admin .admin__nav-list {
+  display: flex;
+  flex-direction: column;
+}
+.admin .admin__content {
+  display: flex;
+  flex-direction: column;
 }
 .admin .admin__cards-header {
   display: flex;
@@ -1991,13 +1998,15 @@ img {
 .admin .admin__cards-list {
   display: flex;
   flex-direction: column;
-  row-gap: 12px;
+  row-gap: 40px;
+  padding-top: 50px;
+  border-top: 2px solid #fafafa;
 }
 .admin .admin__card {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
-  border: 2px solid #fafafa;
+  padding: 13px 13px 29px 0;
+  border-bottom: 2px solid #fafafa;
 }
 .admin .admin__card.admin__card--client, .admin .admin__card.admin__card--user {
   flex-direction: column;
@@ -2060,9 +2069,6 @@ img {
   cursor: pointer;
 }
 
-.admin__card {
-  flex-direction: column;
-}
 .admin__card .client-profile__header {
   display: flex;
   align-items: flex-start;
@@ -2078,18 +2084,16 @@ img {
   margin-left: auto;
 }
 .admin__card .admin__card-action-btns {
-  order: 0;
   display: flex;
   align-items: center;
   align-self: self-start;
-  margin: -20px -20px 20px auto;
+  margin-top: -8px;
 }
 .admin__card .client-profile__gallery .client-profile__gallery-list {
   display: flex;
   gap: 12px;
 }
 .admin__card .admin__card-details {
-  order: 1;
   display: flex;
   flex-direction: column;
   row-gap: 8px;
@@ -2103,29 +2107,6 @@ img {
   white-space: nowrap;
 }
 
-@media (min-width: 900px) {
-  .admin {
-    padding-top: 100px;
-  }
-  .admin .admin__view-btns {
-    display: flex;
-  }
-  .admin .admin__card-avatar {
-    width: 80px;
-    height: 80px;
-  }
-  .admin__card {
-    flex-direction: row;
-    align-items: center;
-  }
-  .admin__card .admin__card-details {
-    order: 0;
-  }
-  .admin__card .admin__card-action-btns {
-    order: 1;
-    margin: 0 0 0 auto;
-  }
-}
 .pagination {
   display: flex;
   align-items: center;
@@ -2326,10 +2307,6 @@ img {
     height: 150px;
   }
 }
-.login {
-  padding-top: 30px;
-  color: #080808;
-}
 .login h2 {
   margin-top: 0;
   margin-bottom: 30px;
@@ -2350,7 +2327,7 @@ img {
 
 @media (min-width: 990px) {
   .login {
-    padding-top: 100px;
+    padding-top: 220px;
   }
   .login__form-wrap {
     width: 615px;
@@ -2466,7 +2443,6 @@ label[for=concent] {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
 }
 
 .form--updateTattooStyle .form__input-wrap--uploadFile {
@@ -2575,6 +2551,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 .form__error {
   display: inline-block;
   margin-top: 10px;
+  padding-left: 8px;
   color: rgb(150, 16, 16);
   font-weight: 600;
 }
@@ -2659,9 +2636,6 @@ input[type=checkbox][value=true] + label .checkbox::after {
   }
   .form__input-wrap {
     margin-bottom: 46px;
-  }
-  .form__input-wrap.form__input-wrap--uploadFile {
-    margin-bottom: 20px;
   }
   .form__input-wrap--checkbox {
     margin-bottom: 0;
@@ -3015,6 +2989,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
   position: fixed;
   bottom: 20px;
   right: 0;
+  z-index: 10;
 }
 
 .scrollToTop__btn {
@@ -3095,6 +3070,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
   right: -20px;
   padding: 5rem 1rem 3rem;
   width: 100%;
+  height: 100svh;
   background-color: #080808;
   background-image: url("../img/body-bg.jpg");
   transform: translate(100%, 0);

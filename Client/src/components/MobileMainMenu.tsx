@@ -8,16 +8,21 @@ import Sprite from "../assets/svg/sprite.svg"
 
 export const MobileMainMenu = ({
     isAuth,
-    logout
+    logout,
+    closeMenu
 }: {
     isAuth: string
     logout: () => void
+    closeMenu: () => void
 }) => {
 
     const hashMobileMenuItems = mainNavHashLinksData.map(item => {
         return (
             <li className={'mobile-main-menu__item'}>
-                <HashLink to={item.url}>
+                <HashLink
+                    to={item.url}
+                    onClick={ closeMenu }
+                >
                     {item.text}
                 </HashLink>
             </li>
@@ -29,7 +34,9 @@ export const MobileMainMenu = ({
             <li className={'mobile-main-menu__item'}>
                 <NavLink
                     to={item.url}
-                    target={"_blank"}>
+                    target={"_blank"}
+                    onClick={ closeMenu }
+                >
                     <span><svg><use href={`${Sprite}#${item.icon}`}/></svg></span>
                     {item.text}
                 </NavLink>
@@ -44,7 +51,7 @@ export const MobileMainMenu = ({
                     <NavLink
                         to={`portfolio`}
                         className="main-nav__link"
-                        //onClick={ closeMenu }
+                        onClick={ closeMenu }
                     >
                         Portfolio
                     </NavLink>
@@ -52,7 +59,10 @@ export const MobileMainMenu = ({
                 { hashMobileMenuItems }
                 { socialMobileMenuItems }
                 <li className={'mobile-main-menu__item'}>
-                    <NavLink to={'tel:+4745519015'}>
+                    <NavLink
+                        to={'tel:+4745519015'}
+                        onClick={ closeMenu }
+                    >
                         <svg>
                             <use href={`${Sprite}#phone`}/>
                         </svg>
@@ -61,7 +71,10 @@ export const MobileMainMenu = ({
                 </li>
                 { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                     <li className={'mobile-main-menu__item'}>
-                        <NavLink to={'/admin/bookedConsultations'}>
+                        <NavLink
+                            to={'/admin/bookedConsultations'}
+                            onClick={ closeMenu }
+                        >
                             <svg>
                                 <use href={`${Sprite}#admin`}/>
                             </svg>
@@ -72,7 +85,13 @@ export const MobileMainMenu = ({
                 { isAuth
                     ? (
                         <li className={'mobile-main-menu__item'}>
-                            <NavLink to="/" onClick={logout}>
+                            <NavLink
+                                to="/"
+                                onClick={() => {
+                                    closeMenu()
+                                    logout()
+                                }}
+                            >
                                 <svg>
                                     <use href={`${Sprite}#logout`}/>
                                 </svg>
@@ -82,7 +101,10 @@ export const MobileMainMenu = ({
                     )
                     : (
                         <li className={'mobile-main-menu__item'}>
-                            <NavLink to="/login">
+                            <NavLink
+                                to="/login"
+                                onClick={ closeMenu }
+                            >
                                 <svg><use href={`${Sprite}#login`}/></svg>
                                 Log in
                             </NavLink>

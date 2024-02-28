@@ -83,7 +83,7 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
           onClick={() => {changeStatus(consultation._id, consultation.status)}}
         >
           { !consultation.status
-              ? <svg><use href={`${Sprite}#phone-arrow-right`}/></svg>
+              ? <svg><use href={`${Sprite}#phone`}/></svg>
               : <svg><use href={`${Sprite}#phone-missed`}/></svg>
           }
         </button>
