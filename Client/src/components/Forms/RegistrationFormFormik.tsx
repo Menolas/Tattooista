@@ -97,15 +97,18 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
             { registrationError  !== '' &&
                 <ApiErrorMessage message={registrationError}/>
             }
-            <div className="form__input-wrap form__input-wrap--uploadFile">
-              <div className="form__avatar">
-                <img
-                    src={ imageURL ? imageURL :  avatar }
-                    alt="preview"
-                />
-              </div>
-              <label className="btn btn--sm" htmlFor={"avatar"}>Pick File</label>
-              <FieldWrapper name={'avatar'}>
+            <FieldWrapper
+                name={'avatar'}
+                wrapperClass={'form__input-wrap--uploadFile'}
+            >
+                <div className="form__avatar">
+                  <img
+                      src={ imageURL ? imageURL :  avatar }
+                      alt="preview"
+                  />
+                </div>
+                <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>Pick File</label>
+
                 <Field
                     className="hidden"
                     id="avatar"
@@ -117,29 +120,25 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                       handleOnChange(e)
                     }}
                 />
-              </FieldWrapper>
-            </div>
+            </FieldWrapper>
             <FieldComponent
                 name={'displayName'}
                 type={'text'}
-                placeholder={'Display Name'}
-                label={'Your display name'}
+                placeholder={'Your display name'}
                 value={propsF.values.displayName}
                 onChange={propsF.handleChange}
             />
             <FieldComponent
                 name={'email'}
                 type={'text'}
-                placeholder={'Email'}
-                label={'Your email'}
+                placeholder={'Your email'}
                 value={propsF.values.email}
                 onChange={propsF.handleChange}
             />
             <FieldComponent
                 name={'password'}
                 type={'password'}
-                placeholder={'xxxxxxxx'}
-                label={'Password'}
+                placeholder={'Password'}
                 value={propsF.values.password}
                 onChange={propsF.handleChange}
             />
@@ -158,7 +157,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
               </label>
             </FieldWrapper>
             <button
-              className="btn btn--bg btn--transparent form__submit-btn"
+              className="btn btn--bg btn--dark-bg form__submit-btn"
               type="submit"
               disabled={propsF.isSubmitting}
             >

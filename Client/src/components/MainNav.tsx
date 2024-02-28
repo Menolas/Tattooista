@@ -55,7 +55,7 @@ export const MainNav: React.FC<PropsType> = React.memo(({
         onClick={ openMenu }>
         <span>{''}</span>
       </div>
-      <MobileMainMenu isAuth={isAuth} logout={logout}/>
+      <MobileMainMenu isAuth={isAuth} logout={logout} closeMenu={closeMenu} />
       <ul className="list main-nav__list main-nav--ls">
         <li className="main-nav__item">
           <NavLink

@@ -126,7 +126,6 @@ label[for="concent"] {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
   }
 }
 
@@ -239,6 +238,7 @@ input[type="checkbox"][value="true"] +label .checkbox::after {
 .form__error {
   display: inline-block;
   margin-top: 10px;
+  padding-left: 8px;
   color: rgb(150, 16, 16);
   font-weight: 600;
   &.form__error--api {
@@ -341,10 +341,6 @@ input[type="checkbox"][value="true"] +label .checkbox::after {
 
   .form__input-wrap {
     margin-bottom: 46px;
-
-    &.form__input-wrap--uploadFile {
-      margin-bottom: 20px;
-    }
   }
 
   .form__input-wrap--checkbox {

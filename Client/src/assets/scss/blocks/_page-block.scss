@@ -2,11 +2,9 @@
   position: relative;
   padding-top: 70px;
 
-  //&::after {
-  //  @include element-style(100%, 16px, $dark);
-  //  bottom: 0;
-  //  right: 0;
-  //}
+  &.page-block--top {
+    padding-top: 118px;
+  }
 }
 
 .page-block__title {
@@ -32,14 +30,15 @@
 @media(min-width: 990px) {
 
   .page-block {
-    position: relative;
     padding-top: 112px;
+
+    &.page-block--top {
+      padding-top: 220px;
+    }
   }
 
   .page-block__title {
-    margin-top: 0;
     margin-bottom: 100px;
-    text-align: center;
     font-size: 55px;
   }
 

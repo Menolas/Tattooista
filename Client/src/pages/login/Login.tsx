@@ -15,7 +15,7 @@ export const Login: React.FC<PropsType> = React.memo(({
 }) => {
 
   return (
-    <div className="login">
+    <div className="login page-block page-block--top">
       <div className = "login__form-wrap">
         <LoginForm
           isAuth={isAuth}
