@@ -290,30 +290,6 @@ input[type="checkbox"][value="true"] +label .checkbox::after {
   font-weight: 500;
 }
 
-.search-form .select-block {
-  min-width: 200px;
-  background-color: $light;
-
-  div[class*="-control"] {
-    height: 100%;
-    border: none;
-  }
-
-  div[class*="-ValueContainer"] {
-    padding-left: 10px;
-    height: 100%;
-    border: none;
-
-    div[class*="-placeholder"] {
-      color: $dark;
-    }
-  }
-
-  div[class*="-Input"] {
-    display: none;
-  }
-}
-
 .select-block {
   div[class$="-indicatorContainer"] svg {
     transform: rotate(0) !important;

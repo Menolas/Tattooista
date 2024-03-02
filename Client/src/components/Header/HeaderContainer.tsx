@@ -20,8 +20,10 @@ export const HeaderContainer: React.FC = () => {
 
     const pathArray = pageLocation.split('/')
 
-    if (pathArray[1]) {
-      setHeaderClasses('main-header--inner')
+    if (pathArray[1] === 'portfolio') {
+      setHeaderClasses('main-header--portfolio')
+    } else if (pathArray[1] === 'admin') {
+      setHeaderClasses('main-header--admin')
     } else if (!pathArray[1]) {
       setHeaderClasses('')
     }
