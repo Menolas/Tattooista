@@ -49,17 +49,6 @@ export const bookedConsultationsAPI = {
     ).then(response => response.data)
   },
 
-  // getBookedConsultationsWithoutToken(
-  //     currentPage: number,
-  //     pageSize: number,
-  //     filter: BookedConsultationsFilterType
-  // ) {
-  //   return $api.get<GetBookedConsultationsResponseType>(
-  //       `${API_URL}/bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
-  //       {withCredentials: true}
-  //   ).then(response => response.data)
-  // },
-
   getArchivedConsultations(
       token: string,
       currentPage: number,

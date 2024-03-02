@@ -33,7 +33,10 @@ export const Header: React.FC<PropsType> = ({
       />
       <SocialNav />
       <div className={'main-header__right'}>
-          <BookingButton bookConsultation={bookConsultation} />
+          {
+              (headerClasses === 'main-header--portfolio') &&
+                  <BookingButton bookConsultation={bookConsultation} />
+          }
           <nav className={'admin-nav'}>
             <NavLink
               data-tooltip-id="my-tooltip"

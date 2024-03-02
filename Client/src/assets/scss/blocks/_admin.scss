@@ -1,12 +1,20 @@
 .admin {
-  display: flex;
-  gap: 50px;
+
 
   .admin__left-panel {
     display: flex;
-    padding-right: 66px;
-    max-width: 544px;
-    border-right: $light-border;
+    flex-direction: column;
+  }
+
+  .admin__left-panel-btn {
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .admin__nav {
+    display: none;
   }
 
   .admin__back-link {
@@ -167,5 +175,40 @@
 }
 
 @media (min-width: 900px) {
+  .admin {
+    display: flex;
+    gap: 50px;
+    .admin__left-panel-btn {
+      display: none;
+    }
 
+    .admin__left-panel {
+      flex: 0 0 auto;
+      padding-right: 66px;
+      max-width: 544px;
+      border-right: $light-border;
+    }
+
+    .admin__nav {
+      display: block;
+    }
+
+    .admin__nav-list {
+      row-gap: 3rem;
+      a {
+        @include link-style();
+        font-size: 35px;
+        white-space: nowrap;
+        font-weight: 500;
+
+        &.active {
+          font-weight: 700;
+        }
+      }
+    }
+
+    .admin__content {
+      flex: 1 1 auto;
+    }
+  }
 }

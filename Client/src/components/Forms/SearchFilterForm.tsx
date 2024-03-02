@@ -51,24 +51,26 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
             <Form
               className={"form search-form"}
             >
-              <Field
-                className={"search-input"}
-                type="text"
-                name="term"
-                placeholder={"Search..."}
-              />
+              <div className={'search-form__search-wrap'}>
+                <Field
+                    className={"search-input"}
+                    type="text"
+                    name="term"
+                    placeholder={"Search..."}
+                />
+                <button
+                    className={"btn btn--sm btn--transparent search-submit"}
+                    type="submit" disabled={isSubmitting}
+                >
+                  <svg><use href={`${Sprite}#search`}/></svg>
+                </button>
+              </div>
               <FormSelect
                   name="condition"
                   options={options}
                   handleChange={handleChange}
                   placeholder={'All'}
               />
-              <button
-                className={"btn btn--sm btn--light-bg search-submit"}
-                type="submit" disabled={isSubmitting}
-              >
-                <svg><use href={`${Sprite}#search`}/></svg>
-              </button>
             </Form>
           )
         }
