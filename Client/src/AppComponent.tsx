@@ -81,8 +81,8 @@ const App = () => {
                                        element={<ClientsContainer />} />
                                 <Route path={`profile`}
                                        element={<ProfileContainer />} />
-                                <Route path={`portfolio`}
-                                       element={<PortfolioContainer />} />
+                                {/*<Route path={`portfolio`}*/}
+                                {/*       element={<PortfolioContainer />} />*/}
                                 <Route path={`archive`}
                                        element={<ArchiveContainer />}>
                                     <Route path={`archivedClients`}

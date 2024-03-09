@@ -9,7 +9,7 @@ interface ReadMoreProps {
 
 export const ReadMore = ({ id, text, amountOfWords = 32 }: ReadMoreProps) => {
     const [isExpanded, setIsExpanded] = useState(false)
-    const splittedText = text.split(' ')
+    const splittedText = text?.split(' ')
     const itCanOverflow = splittedText.length > amountOfWords
     const beginText = itCanOverflow
         ? splittedText.slice(0, amountOfWords - 1).join(' ')

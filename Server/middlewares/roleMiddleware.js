@@ -29,7 +29,6 @@ module.exports = function (roles) {
           if (roleId.toString() === role) {
             hasRole = true
             console.log(JSON.stringify(roleId) + "  roleId type !!!!!!!!!!!!!!!!!!!!!")
-            console.log(typeof role + "  role type !!!!!!!!!!!!!!!!!!!!!")
           }
         })
         // if (roleIds.includes(role)) {

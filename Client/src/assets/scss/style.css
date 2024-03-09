@@ -1993,19 +1993,17 @@ img {
   flex-wrap: wrap;
   gap: 20px;
 }
-.admin .admin__cards-header .add-btn {
-  margin-left: auto;
-}
 .admin .admin__cards-list {
   display: flex;
   flex-direction: column;
-  row-gap: 40px;
-  padding-top: 50px;
+  row-gap: 1.5rem;
+  padding-top: 1.5rem;
   border-top: 2px solid #fafafa;
 }
 .admin .admin__card {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  row-gap: 1rem;
   padding: 13px 13px 29px 0;
   border-bottom: 2px solid #fafafa;
 }
@@ -2025,7 +2023,26 @@ img {
 .admin .admin__card-details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
+  max-width: 100%;
+  overflow: hidden;
+}
+.admin .admin__card-detail-item {
+  display: flex;
+  align-items: center;
+}
+.admin .admin__card-detail-item.admin__card-detail-item--message {
+  align-items: flex-start;
+}
+.admin .admin__card-detail-item.admin__card-detail-item--message p {
+  margin: 0;
+}
+.admin .admin__card-data {
+  margin: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .admin .admin__card-roles {
   display: flex;
@@ -2037,21 +2054,14 @@ img {
   height: 50px;
   overflow: hidden;
 }
-.admin .admin__card-message {
-  display: flex;
-  align-items: flex-start;
-}
-.admin .admin__card-message p {
-  margin: 0;
-}
 .admin .admin__card-btns {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
 }
 .admin .admin__card-avatar {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
 }
 
 .admin__card-link {
@@ -2059,13 +2069,17 @@ img {
   color: inherit;
   text-decoration: none;
   font-size: inherit;
+  display: flex;
+  gap: 1rem;
   width: 100%;
   height: 100%;
 }
 
 .admin__card .client-profile__gallery li {
+  flex: 0 0 auto;
   width: 80px;
   min-width: 80px;
+  max-width: 80px;
   height: 80px;
   cursor: pointer;
 }
@@ -2080,11 +2094,11 @@ img {
   flex-direction: row;
   padding: 0;
 }
-.admin__card .admin__card-action-btns,
+.admin__card .admin__card-actions,
 .admin__card .client-profile__action-btns {
   margin-left: auto;
 }
-.admin__card .admin__card-action-btns {
+.admin__card .admin__card-actions {
   display: flex;
   align-items: center;
   align-self: self-start;
@@ -2093,19 +2107,6 @@ img {
 .admin__card .client-profile__gallery .client-profile__gallery-list {
   display: flex;
   gap: 12px;
-}
-.admin__card .admin__card-details {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  max-width: 100%;
-  overflow: hidden;
-}
-.admin__card .admin__card-details span:not(.admin__card__data-type),
-.admin__card .admin__card-details p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 @media (min-width: 900px) {
@@ -2142,6 +2143,13 @@ img {
   }
   .admin .admin__content {
     flex: 1 1 auto;
+  }
+  .admin .admin__card-detail-item {
+    font-size: 1.5rem;
+  }
+  .admin .admin__card-actions svg {
+    width: 30px;
+    height: 30px;
   }
 }
 .pagination {
@@ -2190,31 +2198,26 @@ img {
   border: none;
   border-radius: 0;
 }
-.pagination input.pagination__pageLimit:focus {
+.pagination input.pagination__pageLimit:focus-visible, .pagination input.pagination__pageLimit:focus {
   border-radius: 0;
+  border: none;
+  outline: none;
 }
 .pagination .pagination__list {
   display: flex;
+  align-items: center;
+  gap: 11px;
 }
 .pagination .pagination__item {
-  padding: 6px;
+  padding: 5px 10px;
+  font-size: 20px;
+  border: 2px solid #fafafa;
   cursor: pointer;
 }
 .pagination .pagination__item.currentPage {
   position: relative;
-  font-weight: 700;
-}
-.pagination .pagination__item.currentPage::after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  background-color: #fafafa;
-  box-sizing: border-box;
-  left: 0;
-  right: 0;
-  bottom: -2px;
+  padding: 9px 17px;
+  background-color: #888888;
 }
 .pagination .paginator__total {
   width: 100%;
@@ -2222,7 +2225,11 @@ img {
 
 @media (min-width: 900px) {
   .pagination {
+    gap: 2rem;
     width: auto;
+  }
+  .pagination .page-limit label {
+    font-size: 23px;
   }
   .pagination .paginator__total {
     width: auto;

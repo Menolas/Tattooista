@@ -70,10 +70,10 @@ export const Client: React.FC<PropsType> = React.memo(({
 
   const contacts = Object.keys(clientContacts).map(contact => {
     return clientContacts[contact] ?
-      <li key={contact}>
-        <span>{contact}:&nbsp;</span>
-        <span>{clientContacts[contact]}</span>
-      </li> : null
+      <div key={contact} className={"admin__card-detail-item"}>
+        <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
+        <span className={"admin__card-data"}>{clientContacts[contact]}</span>
+      </div> : null
   })
 
   const clientAvatar = client.avatar ? `${API_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar
@@ -83,68 +83,63 @@ export const Client: React.FC<PropsType> = React.memo(({
   }
 
   return (
-    <li className="admin__card admin__card--client">
-      <div className="client-profile__header">
-        <NavLink
+    <li className="admin__card admin__card--avatar admin__card--client">
+      <div className="admin__card-actions">
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Edit client"
+            className={"btn btn--icon"}
+            onClick={() => {setEditClientMode(true)}}
+        >
+          <svg><use href={`${Sprite}#edit`}/></svg>
+        </button>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Edit client's gallery"
+            className={"btn btn--icon"}
+            onClick={() => {setEditGalleryMode(true)}}
+        >
+          <svg><use href={`${Sprite}#images-user`}/></svg>
+        </button>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Move client to archive"
+            className={"btn btn--icon"}
+            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            onClick={() => {
+
+              archiveClient(client._id)
+            }}
+        >
+          <svg><use href={`${Sprite}#archive`}/></svg>
+        </button>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Delete client"
+            className={"btn btn--icon"}
+            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            onClick={() => {
+              setNeedConfirmation(true)
+            }}
+        >
+          <svg><use href={`${Sprite}#trash`}/></svg>
+        </button>
+      </div>
+      <NavLink
             to={`/admin/profile?clientId=${client._id}`}
-            className="admin__card-link client-profile">
+            className="admin__card-link"
+      >
           <div className="admin__card-avatar">
             <img src={clientAvatar} alt={""}/>
           </div>
-          <div className="client-profile__details">
-            <div className="client-profile__name">
-              <span>Name:&nbsp;</span>
-              <span>{client.fullName}</span>
+          <div className="admin__card-details">
+            <div className={"admin__card-detail-item"}>
+              <span className={"admin__card-data-type"}>Name:&nbsp;</span>
+              <span className={"admin__card-data"}>{client.fullName}</span>
             </div>
+            { contacts }
           </div>
-        </NavLink>
-        <div className="client-profile__action-btns admin__card-action-btns">
-          <button
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Edit client"
-              className={"btn btn--icon"}
-              onClick={() => {setEditClientMode(true)}}
-          >
-            <svg><use href={`${Sprite}#edit`}/></svg>
-          </button>
-          <button
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Edit client's gallery"
-              className={"btn btn--icon"}
-              onClick={() => {setEditGalleryMode(true)}}
-          >
-            <svg><use href={`${Sprite}#images-user`}/></svg>
-          </button>
-          <button
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Move client to archive"
-              className={"btn btn--icon"}
-              disabled={isDeletingInProcess?.some(id => id === client._id)}
-              onClick={() => {
-
-                archiveClient(client._id)
-              }}
-          >
-            <svg><use href={`${Sprite}#archive`}/></svg>
-          </button>
-          <button
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Delete client"
-              className={"btn btn--icon"}
-              disabled={isDeletingInProcess?.some(id => id === client._id)}
-              onClick={() => {
-                setNeedConfirmation(true)
-              }}
-          >
-            <svg><use href={`${Sprite}#trash`}/></svg>
-          </button>
-        </div>
-      </div>
-      <div>
-        <ul className="list admin__card-contacts-list">
-          { contacts }
-        </ul>
-      </div>
+      </NavLink>
       {
         client.gallery && client.gallery.length > 0 &&
         <div className="client-profile__gallery">
