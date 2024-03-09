@@ -85,13 +85,6 @@ export const Users: React.FC<PropsType> = ({
                             filter={filter}
                             onFilterChanged={setClientsFilter}
                         />
-                        <Paginator
-                            totalCount={total}
-                            pageSize={pageLimit}
-                            currentPage={currentPage}
-                            onPageChanged={setUsersCurrentPage}
-                            setPageLimit={setUsersPageLimit}
-                        />
                         <button
                             className="btn btn--bg btn--light-bg add-btn"
                             onClick={() => {
@@ -100,6 +93,13 @@ export const Users: React.FC<PropsType> = ({
                         >
                             Add User
                         </button>
+                        <Paginator
+                            totalCount={total}
+                            pageSize={pageLimit}
+                            currentPage={currentPage}
+                            onPageChanged={setUsersCurrentPage}
+                            setPageLimit={setUsersPageLimit}
+                        />
                     </div>
                     {
                         isFetching

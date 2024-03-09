@@ -46,10 +46,10 @@ export const ADMIN_BUTTONS_DATA = [
         btnText: "Clients",
         btnUrl: "clients"
     },
-    {
-        btnText: "Portfolio",
-        btnUrl: "portfolio"
-    },
+    // {
+    //     btnText: "Portfolio",
+    //     btnUrl: "portfolio"
+    // },
     {
         btnText: "Archive",
         btnUrl: "archive/archivedConsultations"

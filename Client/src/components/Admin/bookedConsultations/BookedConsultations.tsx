@@ -110,6 +110,12 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
                           filter={bookedConsultationsFilter}
                           onFilterChanged={onFilterChanged}
                       />
+                      <button
+                          className="btn btn--bg btn--light-bg add-btn"
+                          onClick={() => {setAddConsultationMode(true)}}
+                      >
+                          Add a consultation
+                      </button>
                       <Paginator
                           totalCount={totalCount}
                           pageSize={pageSize}
@@ -117,12 +123,6 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
                           onPageChanged={setCurrentPage}
                           setPageLimit={setPageLimit}
                       />
-                      <button
-                          className="btn btn--bg btn--light-bg add-btn"
-                          onClick={() => {setAddConsultationMode(true)}}
-                      >
-                          Add a consultation
-                      </button>
                   </div>
                   {
                       isFetching

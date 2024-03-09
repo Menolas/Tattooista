@@ -47,7 +47,7 @@ export const Paginator: React.FC<PropsType> = React.memo(({
   return (
       <div className="pagination">
           <div className={"page-limit"}>
-              <label htmlFor={"pageLimit"}>Page limit</label>
+              <label htmlFor={"pageLimit"}>Page limit:</label>
               {
                   !isPageLimitEditable &&
                       <button

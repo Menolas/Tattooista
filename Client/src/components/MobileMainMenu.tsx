@@ -18,7 +18,7 @@ export const MobileMainMenu = ({
 
     const hashMobileMenuItems = mainNavHashLinksData.map(item => {
         return (
-            <li className={'mobile-main-menu__item'}>
+            <li className={'mobile-main-menu__item'} key={item.url}>
                 <HashLink
                     to={item.url}
                     onClick={ closeMenu }
@@ -31,7 +31,7 @@ export const MobileMainMenu = ({
 
     const socialMobileMenuItems = socialLinksData.map(item => {
         return (
-            <li className={'mobile-main-menu__item'}>
+            <li className={'mobile-main-menu__item'} key={item.text}>
                 <NavLink
                     to={item.url}
                     target={"_blank"}
@@ -47,7 +47,7 @@ export const MobileMainMenu = ({
     return (
         <nav className={'mobile-main-menu'}>
             <ul className={'list mobile-main-menu__list'}>
-                <li className={'mobile-main-menu__item'}>
+                <li className={'mobile-main-menu__item'} key={'Portfolio'}>
                     <NavLink
                         to={`portfolio`}
                         className="main-nav__link"
@@ -58,7 +58,7 @@ export const MobileMainMenu = ({
                 </li>
                 { hashMobileMenuItems }
                 { socialMobileMenuItems }
-                <li className={'mobile-main-menu__item'}>
+                <li className={'mobile-main-menu__item'} key={'Call me'}>
                     <NavLink
                         to={'tel:+4745519015'}
                         onClick={ closeMenu }
@@ -70,7 +70,7 @@ export const MobileMainMenu = ({
                     </NavLink>
                 </li>
                 { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-                    <li className={'mobile-main-menu__item'}>
+                    <li className={'mobile-main-menu__item'} key={'/admin/bookedConsultations'}>
                         <NavLink
                             to={'/admin/bookedConsultations'}
                             onClick={ closeMenu }
@@ -84,7 +84,7 @@ export const MobileMainMenu = ({
                 }
                 { isAuth
                     ? (
-                        <li className={'mobile-main-menu__item'}>
+                        <li className={'mobile-main-menu__item'} key={'Log out'}>
                             <NavLink
                                 to="/"
                                 onClick={() => {
@@ -100,7 +100,7 @@ export const MobileMainMenu = ({
                         </li>
                     )
                     : (
-                        <li className={'mobile-main-menu__item'}>
+                        <li className={'mobile-main-menu__item'} key={'Log in'}>
                             <NavLink
                                 to="/login"
                                 onClick={ closeMenu }

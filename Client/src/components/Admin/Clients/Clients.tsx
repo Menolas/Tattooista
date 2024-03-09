@@ -117,13 +117,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
                           filter={clientsFilter}
                           onFilterChanged={onFilterChanged}
                       />
-                      <Paginator
-                          totalCount={totalCount}
-                          pageSize={pageSize}
-                          currentPage={currentPage}
-                          onPageChanged={onPageChanged}
-                          setPageLimit={setPageLimit}
-                      />
                       <button
                           className="btn btn--bg btn--light-bg add-btn"
                           onClick={() => {
@@ -132,6 +125,13 @@ export const Clients: React.FC<PropsType> = React.memo(({
                       >
                           Add Client
                       </button>
+                      <Paginator
+                          totalCount={totalCount}
+                          pageSize={pageSize}
+                          currentPage={currentPage}
+                          onPageChanged={onPageChanged}
+                          setPageLimit={setPageLimit}
+                      />
                   </div>
                   {
                       isFetching

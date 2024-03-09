@@ -31,7 +31,6 @@ const Admin: React.FC = React.memo(() => {
         <li key={btn.btnText}>
             <NavLink
                 to={btn.btnUrl}
-                //className={ (isActive) => isActive ? 'active' : '' }
             >
                 {btn.btnText}
             </NavLink>
