@@ -502,7 +502,8 @@ img {
 }
 
 .main-nav--ls {
-  display: none;
+  height: 0;
+  overflow: hidden;
 }
 
 .main-nav.shown .mobile-main-menu {
@@ -539,12 +540,30 @@ img {
     position: absolute;
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
     bottom: -10px;
-    padding: 18px;
-    background-color: #080808;
-    border: 2px solid #fafafa;
+    padding: 1.5rem 3.5rem 1.5rem 2rem;
+    height: auto;
     transform: translate(0, 100%);
     z-index: 1;
+  }
+  .main-nav.shown .main-nav__list.main-nav--ls::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(8, 8, 8, 0.5);
+    box-sizing: border-box;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    border: 2px solid rgba(250, 250, 250, 0.6);
+    z-index: -1;
   }
   .main-nav.shown .main-nav__list.main-nav--ls .main-nav__link {
     display: inline-block;
@@ -552,8 +571,9 @@ img {
     text-decoration: none;
     font-size: inherit;
     padding: 8px 0;
-    font-size: 14px;
-    text-transform: uppercase;
+    font-size: 30px;
+    text-transform: capitalize;
+    letter-spacing: 1.9px;
     white-space: nowrap;
   }
   .main-nav.shown .hamburger {
@@ -634,10 +654,10 @@ img {
   position: relative;
   padding: 107px 16px 0;
   height: 432px;
-  background-image: url("../img/offerIllustration.png"), url("../img/mainOfferBG.png");
+  background-image: url("../img/offerIllustration.png"), url("../img/body-bg.jpg");
   background-repeat: no-repeat, no-repeat;
   background-size: 360px 337px, cover;
-  background-position: top 95px right -25px, top 0 right 0;
+  background-position: top 95px right -25px, center;
   overflow: visible;
 }
 .main-offer::before {
@@ -1715,6 +1735,14 @@ img {
   background-color: #080808;
 }
 
+.gallery__list--archive {
+  column-gap: 2%;
+}
+.gallery__list--archive .gallery__item {
+  width: 49%;
+  height: 220px;
+}
+
 .gallery__item:hover {
   filter: none;
 }
@@ -1819,6 +1847,13 @@ img {
 @media (min-width: 1400px) {
   .gallery__item {
     height: 440px;
+  }
+  .gallery__list--archive {
+    column-gap: 1.5%;
+  }
+  .gallery__list--archive .gallery__item {
+    width: 30%;
+    height: 320px;
   }
 }
 .portfolio-slider {
@@ -2178,6 +2213,9 @@ img {
   .admin .admin__left-panel-btn {
     display: none;
   }
+  .admin .admin__cards-header .pagination {
+    margin-left: auto;
+  }
   .admin .admin__left-panel {
     flex: 0 0 auto;
     padding-right: 66px;
@@ -2243,8 +2281,8 @@ img {
 .pagination .pagination__pageLimitButton {
   padding: 0 9px;
   height: 32px;
-  max-width: 70px;
-  min-width: 70px;
+  max-width: 60px;
+  min-width: 60px;
   font-size: 20px;
   font-weight: 600;
   color: #080808;
@@ -2257,7 +2295,7 @@ img {
   align-items: center;
   justify-content: center;
   padding: 0 9px;
-  max-width: 70px;
+  max-width: 60px;
   height: 32px;
   font-size: 20px;
   font-weight: 600;
@@ -2302,6 +2340,7 @@ img {
   }
   .pagination .paginator__total {
     width: auto;
+    font-size: 23px;
   }
 }
 .preloader {
@@ -3185,7 +3224,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
   top: 0;
   left: auto;
   right: -20px;
-  padding: 5rem 1rem 3rem;
+  padding: 5rem 2rem;
   width: 100%;
   height: 100svh;
   background-color: #080808;
@@ -3221,10 +3260,9 @@ input[type=checkbox][value=true] + label .checkbox::after {
 .mobile-main-menu .mobile-main-menu__item a {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem 0;
-  font-size: 18px;
+  font-size: 20px;
   text-decoration: none;
 }
 .mobile-main-menu .mobile-main-menu__item svg {

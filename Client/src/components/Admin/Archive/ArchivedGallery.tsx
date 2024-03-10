@@ -90,7 +90,6 @@ export const ArchivedGallery = () => {
                 <div
                     onClick={() => { showBigImg(item.fileName) }}
                     className={"gallery__img-wrap"}
-                    //onClick={() => { showBigImg(item.fileName) }}
                     style={{ backgroundImage: `url(${API_URL}/archivedGallery/${item.fileName})` }}
                 >
                     {''}
@@ -128,7 +127,7 @@ export const ArchivedGallery = () => {
     })
 
     return (
-        <div>
+        <>
             <div className="admin__cards-header">
 
                 <Paginator
@@ -141,9 +140,11 @@ export const ArchivedGallery = () => {
 
             </div>
             { archivedGallery.length > 0
-                ? <ul className="gallery__list list">
-                    { galleryItems }
-                </ul>
+                ? (
+                    <ul className="gallery__list gallery__list--archive list">
+                        { galleryItems }
+                    </ul>
+                  )
                 : <NothingToShow/>
             }
             {
@@ -175,6 +176,6 @@ export const ArchivedGallery = () => {
                 </ModalPopUp>
             }
             <Tooltip id="my-tooltip" />
-        </div>
+        </>
     )
 }

@@ -4,7 +4,7 @@
   height: 432px;
   background-image:
     url("../img/offerIllustration.png"),
-    url("../img/mainOfferBG.png");
+    url("../img/body-bg.jpg");
 
   background-repeat: no-repeat, no-repeat;
   background-size:
@@ -12,7 +12,7 @@
           cover;
   background-position:
     top 95px right -25px,
-    top 0 right 0;
+    center;
   overflow: visible;
 
   &::before {

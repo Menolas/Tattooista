@@ -55,6 +55,14 @@
   }
 }
 
+.gallery__list--archive {
+  column-gap: 2%;
+  .gallery__item {
+    width: 49%;
+    height: 220px;
+  }
+}
+
 .gallery__item:hover {
   filter: none;
 }
@@ -168,5 +176,13 @@
 
   .gallery__item {
     height: 440px;
+  }
+
+  .gallery__list--archive {
+    column-gap: 1.5%;
+    .gallery__item {
+      width: 30%;
+      height: 320px;
+    }
   }
 }

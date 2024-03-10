@@ -23,8 +23,8 @@
   .pagination__pageLimitButton {
     padding: 0 9px;
     height: 32px;
-    max-width: 70px;
-    min-width: 70px;
+    max-width: 60px;
+    min-width: 60px;
     font-size: 20px;
     font-weight: 600;
     color: $dark;
@@ -38,7 +38,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 9px;
-    max-width: 70px;
+    max-width: 60px;
     height: 32px;
     font-size: 20px;
     font-weight: 600;
@@ -72,13 +72,6 @@
     position: relative;
     padding: 9px 17px;
     background-color: #888888;
-
-    //&::after {
-    //  @include element-style(100%, 1px, $light-text);
-    //  left: 0;
-    //  right: 0;
-    //  bottom: -2px;
-    //}
   }
 
   .paginator__total {
@@ -99,6 +92,7 @@
 
     .paginator__total {
       width: auto;
+      font-size: 23px;
     }
   }
 }

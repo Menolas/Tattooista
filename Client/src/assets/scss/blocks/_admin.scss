@@ -209,6 +209,12 @@
       display: none;
     }
 
+    .admin__cards-header {
+      .pagination {
+        margin-left: auto;
+      }
+    }
+
     .admin__left-panel {
       flex: 0 0 auto;
       padding-right: 66px;
@@ -258,6 +264,4 @@
       }
     }
   }
-
-
 }
