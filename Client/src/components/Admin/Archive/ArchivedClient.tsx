@@ -38,63 +38,60 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   const clientContacts: ContactType = client.contacts
 
   const contactsArray = Object.keys(clientContacts).map(contact => {
-    return clientContacts[contact] ?
-      <li key={contact}>
-        <span>{contact}:&nbsp;</span>
-        <span>{clientContacts[contact]}</span>
-      </li> : null
+    return clientContacts[contact]
+        ? (
+            <div key={contact} className={"admin__card-detail-item"}>
+              <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
+              <span className={"admin__card-data"}>{clientContacts[contact]}</span>
+            </div>
+        )
+        : null
   })
 
   const clientAvatar = client.avatar ? `${API_URL}/archivedClients/${client._id}/avatar/${client.avatar}` : avatar
 
   return (
-    <li className="admin__card admin__card--client">
-      <div className="client-profile__header">
-        <NavLink
-            to={`/admin/profile?clientId=${client._id}`}
-            className="admin__card-link client-profile">
-          <div className="client-profile__avatar">
-            <img src={clientAvatar} alt={""}/>
-          </div>
-          <div className="client-profile__details">
-            <div className="client-profile__name">
-              <span>Name:&nbsp;</span>
-              <span>{client.fullName}</span>
-            </div>
-          </div>
-        </NavLink>
-        <div className="admin__card-action-btns client-profile__action-btns">
-          <button
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Restore client"
-              className={"btn btn--icon"}
-              disabled={isDeletingInProcess?.some(id => id === client._id)}
-              onClick={() => reactivateClient(client._id)}
-          >
-            <svg><use href={`${Sprite}#smile`}/></svg>
-          </button>
-          <button
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Delete client"
-              className={"btn btn--icon"}
-              disabled={isDeletingInProcess?.some(id => id === client._id)}
-              onClick={() => {
-                setNeedConfirmation(true)
-              }}
-          >
-            <svg><use href={`${Sprite}#trash`}/></svg>
-          </button>
+    <li className="admin__card admin__card--avatar">
+      <div className="admin__card-actions">
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Restore client"
+            className={"btn btn--icon"}
+            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            onClick={() => reactivateClient(client._id)}
+        >
+          <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
+        </button>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Delete client"
+            className={"btn btn--icon"}
+            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            onClick={() => {
+              setNeedConfirmation(true)
+            }}
+        >
+          <svg><use href={`${Sprite}#trash`}/></svg>
+        </button>
+      </div>
+      <NavLink
+        to={`/admin/profile?clientId=${client._id}`}
+        className="admin__card-link">
+        <div className={"admin__card-avatar"}>
+          <img src={clientAvatar} alt={""}/>
         </div>
-      </div>
-      <div>
-        <ul className="list admin__card-contacts-list">
+        <div className={"admin__card-details"}>
+          <div className={"admin__card-detail-item"}>
+            <span className={"admin__card-data-type"}>Name:&nbsp;</span>
+            <span className={"admin__card-data"}>{client.fullName}</span>
+          </div>
           { contactsArray }
-        </ul>
-      </div>
+        </div>
+      </NavLink>
       {
           client.gallery && client.gallery.length > 0 &&
-        <div className="client-profile__gallery">
-          <ul className="client-profile__gallery-list list">
+        <div className={"client-profile__gallery"}>
+          <ul className={"client-profile__gallery-list list"}>
             {
               client.gallery?.map((item, i) => <li key={i}>
                 <img src={`${API_URL}/archivedClients/${client._id}/doneTattooGallery/${item}`} alt={''}/>

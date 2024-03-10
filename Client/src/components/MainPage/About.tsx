@@ -85,7 +85,10 @@ export const About: React.FC<PropsType> = React.memo(({
                 <div className={'about__content-wrap'}>
                     <h3 className={'page-block__title-secondary'}>Facts about me</h3>
                     <div className={'about__content'}>
-                        <ReadMore id={'text-about'} text={pageAbout?.content} amountOfWords={36} />
+                        {
+                            pageAbout?.content &&
+                            <ReadMore id={'text-about'} text={pageAbout?.content} amountOfWords={36} />
+                        }
                     </div>
                     <div className={'about__add-block'}>
                         <h3 className={'page-block__title-secondary'}>Follow me</h3>

@@ -69,11 +69,14 @@ export const Client: React.FC<PropsType> = React.memo(({
   const clientContacts: ContactType = client.contacts
 
   const contacts = Object.keys(clientContacts).map(contact => {
-    return clientContacts[contact] ?
-      <div key={contact} className={"admin__card-detail-item"}>
-        <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
-        <span className={"admin__card-data"}>{clientContacts[contact]}</span>
-      </div> : null
+    return clientContacts[contact]
+      ? (
+            <div key={contact} className={"admin__card-detail-item"}>
+              <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
+              <span className={"admin__card-data"}>{clientContacts[contact]}</span>
+            </div>
+        )
+       : null
   })
 
   const clientAvatar = client.avatar ? `${API_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar
@@ -83,7 +86,7 @@ export const Client: React.FC<PropsType> = React.memo(({
   }
 
   return (
-    <li className="admin__card admin__card--avatar admin__card--client">
+    <li className="admin__card admin__card--avatar">
       <div className="admin__card-actions">
         <button
             data-tooltip-id="my-tooltip"
@@ -126,13 +129,13 @@ export const Client: React.FC<PropsType> = React.memo(({
         </button>
       </div>
       <NavLink
-            to={`/admin/profile?clientId=${client._id}`}
-            className="admin__card-link"
+          to={`/admin/profile?clientId=${client._id}`}
+          className={"admin__card-link"}
       >
-          <div className="admin__card-avatar">
+          <div className={"admin__card-avatar"}>
             <img src={clientAvatar} alt={""}/>
           </div>
-          <div className="admin__card-details">
+          <div className={"admin__card-details"}>
             <div className={"admin__card-detail-item"}>
               <span className={"admin__card-data-type"}>Name:&nbsp;</span>
               <span className={"admin__card-data"}>{client.fullName}</span>
@@ -142,8 +145,8 @@ export const Client: React.FC<PropsType> = React.memo(({
       </NavLink>
       {
         client.gallery && client.gallery.length > 0 &&
-        <div className="client-profile__gallery">
-          <ul className="client-profile__gallery-list list">
+        <div className={"client-profile__gallery"}>
+          <ul className={"client-profile__gallery-list list"}>
             {
               client.gallery.map(item => {
                 return (

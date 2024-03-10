@@ -7,6 +7,7 @@ import {ADMIN, ADMIN_BUTTONS_DATA, SUPER_ADMIN} from "../../utils/constants"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import { useState} from "react"
+import {array} from "yup";
 
 const Admin: React.FC = React.memo(() => {
 
@@ -25,15 +26,36 @@ const Admin: React.FC = React.memo(() => {
       btn: {
           btnText: string
           btnUrl: string
+          subMenu?: any
       }
   }) => {
       return (
         <li key={btn.btnText}>
             <NavLink
                 to={btn.btnUrl}
+                onClick={() => {
+                   setIsMobileMenuOpen(false)
+                }}
             >
                 {btn.btnText}
             </NavLink>
+            {
+                btn.subMenu &&
+                <ul className={"subMenu list"}>
+                    {
+                        btn.subMenu.map(subMenuItem => {
+                            return (
+                                <li>
+                                    <NavLink to={subMenuItem.btnUrl}>
+                                        {subMenuItem.btnText}
+                                    </NavLink>
+                                </li>
+                            )
+
+                        })
+                    }
+                </ul>
+            }
         </li>
       )
   }
@@ -55,13 +77,21 @@ const Admin: React.FC = React.memo(() => {
       <button
         className={"btn btn--bg btn--light-bg btn--icon--light admin__left-panel-btn"}
         onClick={() => {
-            setIsMobileMenuOpen(!isMobileMenuOpen)
+            setIsMobileMenuOpen(true)
         }}
       >
         <svg><use href={`${Sprite}#admin`} /></svg>
       </button>
       <aside className={ isMobileMenuOpen ? "admin__left-panel show" : "admin__left-panel"}>
         <nav className={'admin__nav'}>
+            <button
+                className={"btn btn--transparent closing-btn"}
+               onClick={() => {
+                   setIsMobileMenuOpen(false)
+               }}
+            >
+                <span>{''}</span>
+            </button>
             <ul className="list admin__view-btns admin__nav-list">
                 {adminButtons}
             </ul>

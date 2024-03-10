@@ -52,7 +52,21 @@ export const ADMIN_BUTTONS_DATA = [
     // },
     {
         btnText: "Archive",
-        btnUrl: "archive/archivedConsultations"
+        btnUrl: "archivedConsultations",
+        subMenu: [
+            {
+                btnText: "Archived Consultations",
+                btnUrl: "archivedConsultations",
+            },
+            {
+                btnText: "Archived Clients",
+                btnUrl: "archivedClients",
+            },
+            {
+                btnText: "Archived Gallery Items",
+                btnUrl: "archivedGallery",
+            }
+        ]
     },
     {
         btnText: "Users",
