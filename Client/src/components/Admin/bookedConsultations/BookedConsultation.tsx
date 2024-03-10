@@ -61,56 +61,56 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
 
   return (
     <li className={"admin__card"}>
-        <div className={"admin__card-actions"}>
-            <button
-                data-tooltip-id="my-tooltip"
-                data-tooltip-content={ !consultation.status
-                    ? "Mark consultation as contacted"
-                    : "Mark consultation as not contacted"
-                }
-                className={"btn btn--icon"}
-                disabled={ isStatusChanging?.some(id => id === consultation._id) }
-                onClick={() => {changeStatus(consultation._id, consultation.status)}}
-            >
-                { !consultation.status
-                    ? <svg><use href={`${Sprite}#phone`}/></svg>
-                    : <svg><use href={`${Sprite}#phone-missed`}/></svg>
-                }
-            </button>
-            <button
-                data-tooltip-id="my-tooltip"
-                data-tooltip-content="Create client from consultation"
-                className={"btn btn--icon"}
-                disabled={isDeletingInProcess?.some(id => id === consultation._id)}
-                onClick={() => {
-                    turnConsultationToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage)
-                }}
-            >
-                <svg><use href={`${Sprite}#users-medical`}/></svg>
-            </button>
-            <button
-                data-tooltip-id="my-tooltip"
-                data-tooltip-content="Move consultation to archive"
-                className={"btn btn--icon"}
-                disabled={isDeletingInProcess?.some(id => id === consultation._id)}
-                onClick={() => {
-                    archiveConsultation(consultation._id)
-                }}
-            >
-                <svg><use href={`${Sprite}#archive`}/></svg>
-            </button>
-            <button
-                data-tooltip-id="my-tooltip"
-                data-tooltip-content="Delete consultation"
-                className={"btn btn--icon"}
-                disabled={isDeletingInProcess?.some(id => id === consultation._id)}
-                onClick={() => {
-                    setNeedConfirmation(true)
-                }}
-            >
-                <svg><use href={`${Sprite}#trash`}/></svg>
-            </button>
-        </div>
+      <div className={"admin__card-actions"}>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content={ !consultation.status
+                ? "Mark consultation as contacted"
+                : "Mark consultation as not contacted"
+            }
+            className={"btn btn--icon"}
+            disabled={ isStatusChanging?.some(id => id === consultation._id) }
+            onClick={() => {changeStatus(consultation._id, consultation.status)}}
+        >
+            { !consultation.status
+                ? <svg><use href={`${Sprite}#phone`}/></svg>
+                : <svg><use href={`${Sprite}#phone-missed`}/></svg>
+            }
+        </button>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Create client from consultation"
+            className={"btn btn--icon"}
+            disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+            onClick={() => {
+                turnConsultationToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage)
+            }}
+        >
+            <svg><use href={`${Sprite}#users-medical`}/></svg>
+        </button>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Move consultation to archive"
+            className={"btn btn--icon"}
+            disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+            onClick={() => {
+                archiveConsultation(consultation._id)
+            }}
+        >
+            <svg><use href={`${Sprite}#archive`}/></svg>
+        </button>
+        <button
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Delete consultation"
+            className={"btn btn--icon"}
+            disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+            onClick={() => {
+                setNeedConfirmation(true)
+            }}
+        >
+            <svg><use href={`${Sprite}#trash`}/></svg>
+        </button>
+      </div>
       <div className={"admin__card-details"}>
         <div className={"admin__card-detail-item"}>
           <span className={"admin__card-data-type"}>Name:&nbsp;</span>

@@ -83,11 +83,14 @@ export const Profile: React.FC<PropsType> = React.memo(({
 
   const contactsArray = profileContacts
       ? Object.keys(profileContacts).map(contact => {
-          return profileContacts[contact] ?
-            <li key={contact}>
-              <span>{contact}:&nbsp;</span>
-              <span>{profileContacts[contact]}</span>
-            </li> : null
+          return profileContacts[contact]
+              ? (
+                  <div key={contact} className={"admin__card-detail-item"}>
+                    <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
+                    <span className={"admin__card-data"}>{profileContacts[contact]}</span>
+                  </div>
+              )
+             : null
         }) : <></>
 
 
@@ -106,56 +109,53 @@ export const Profile: React.FC<PropsType> = React.memo(({
   }
 
   return (
-    <div className="client-profile">
-      <div className="client-profile__header">
-        <div className="client-profile__avatar">
+    <div className="admin__card admin__card--avatar profile">
+      <div className="admin__card-actions">
+        <button
+            data-tooltip-id="profile-tooltip"
+            data-tooltip-content="Edit client info"
+            className="btn btn--icon"
+            onClick={() => { setEditClientMode(true) }}
+        >
+          <svg><use href={`${Sprite}#edit`}/></svg>
+        </button>
+        <button
+            data-tooltip-id="profile-tooltip"
+            data-tooltip-content="Edit client's tattoos gallery"
+            className="btn btn--icon"
+            onClick={() => { setEditGalleryMode(true) }}
+        >
+          <svg><use href={`${Sprite}#images-user`}/></svg>
+        </button>
+        <NavLink
+            data-tooltip-id="profile-tooltip"
+            data-tooltip-content="Move client to archive client"
+            className={"btn btn--icon"}
+            to={'/admin/clients'}
+            onClick={() => {archiveClient(profile._id)}}
+        >
+          <svg><use href={`${Sprite}#archive`}/></svg>
+        </NavLink>
+        <NavLink
+            data-tooltip-id="profile-tooltip"
+            data-tooltip-content="Delete client"
+            className="btn btn--icon"
+            to={'/admin/clients'}
+            onClick={() => { deleteClient(profile._id) }}
+        >
+          <svg><use href={`${Sprite}#trash`}/></svg>
+        </NavLink>
+      </div>
+      <div className="admin__card-link">
+        <div className="admin__card-avatar">
           <img src={`${Avatar}`} alt={profile.fullName} />
         </div>
-        <div className="client-profile__details">
-          <span className="client-profile__name">
-            {profile.fullName}
-          </span>
-          <div className="client-profile__contacts">
-            <ul className="list admin__card-contacts-list">
-              { contactsArray }
-            </ul>
+        <div className="admin__card-details">
+          <div className={"admin__card-detail-item"}>
+            <span className={"admin__card-data-type"}>Name:&nbsp;</span>
+            <span className={"admin__card-data"}>{profile.fullName}</span>
           </div>
-        </div>
-        <div className="client-profile__action-btns">
-          <button
-              data-tooltip-id="profile-tooltip"
-              data-tooltip-content="Edit client info"
-              className="btn btn--icon"
-              onClick={() => { setEditClientMode(true) }}
-          >
-            <svg><use href={`${Sprite}#edit`}/></svg>
-          </button>
-          <button
-              data-tooltip-id="profile-tooltip"
-              data-tooltip-content="Edit client's tattoos gallery"
-              className="btn btn--icon"
-              onClick={() => { setEditGalleryMode(true) }}
-          >
-            <svg><use href={`${Sprite}#images-user`}/></svg>
-          </button>
-          <NavLink
-              data-tooltip-id="profile-tooltip"
-              data-tooltip-content="Move client to archive client"
-              className={"btn btn--icon"}
-              to={'/admin/clients'}
-              onClick={() => {archiveClient(profile._id)}}
-          >
-            <svg><use href={`${Sprite}#archive`}/></svg>
-          </NavLink>
-          <NavLink
-              data-tooltip-id="profile-tooltip"
-              data-tooltip-content="Delete client"
-              className="btn btn--icon"
-              to={'/admin/clients'}
-              onClick={() => { deleteClient(profile._id) }}
-          >
-            <svg><use href={`${Sprite}#trash`}/></svg>
-          </NavLink>
+          { contactsArray }
         </div>
       </div>
       { profile.gallery && profile.gallery.length

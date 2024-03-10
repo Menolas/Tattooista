@@ -111,7 +111,7 @@ export const ArchivedGallery = () => {
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
                         onClick={() => {reactivateArchivedGalleryItemCallBack(item._id)}}
                     >
-                        <svg><use href={`${Sprite}#smile`}/></svg>
+                        <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
                     </button>
                     <button
                         data-tooltip-id="my-tooltip"

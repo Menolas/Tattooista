@@ -1,6 +1,6 @@
 import * as React from "react"
 import {useEffect, useState} from "react"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import {useDispatch, Provider} from 'react-redux'
 import { compose } from 'redux'
 import { Route, Routes, HashRouter, BrowserRouter } from "react-router-dom"
@@ -19,7 +19,6 @@ import { ProfileContainer } from "./components/Admin/ClientProfile/ProfileContai
 import { LoginContainer } from "./pages/login/LoginContainer"
 import { PortfolioContainer } from "./pages/portfolio/PortfolioContainer"
 import { Preloader } from "./components/common/Preloader"
-import { ArchiveContainer } from "./components/Admin/Archive/ArchiveContainer"
 import { ArchivedClients } from "./components/Admin/Archive/ArchivedClients"
 import { ArchivedConsultations } from "./components/Admin/Archive/ArchivedConsultations"
 import { ArchivedGallery } from "./components/Admin/Archive/ArchivedGallery"
@@ -81,17 +80,12 @@ const App = () => {
                                        element={<ClientsContainer />} />
                                 <Route path={`profile`}
                                        element={<ProfileContainer />} />
-                                {/*<Route path={`portfolio`}*/}
-                                {/*       element={<PortfolioContainer />} />*/}
-                                <Route path={`archive`}
-                                       element={<ArchiveContainer />}>
-                                    <Route path={`archivedClients`}
-                                           element={<ArchivedClients />} />
-                                    <Route path={`archivedConsultations`}
-                                           element={<ArchivedConsultations />} />
-                                    <Route path={`archivedGallery`}
-                                           element={<ArchivedGallery />} />
-                                </Route>
+                                <Route path={`archivedClients`}
+                                       element={<ArchivedClients />} />
+                                <Route path={`archivedConsultations`}
+                                       element={<ArchivedConsultations />} />
+                                <Route path={`archivedGallery`}
+                                       element={<ArchivedGallery />} />
                                 <Route path={`users`}
                                        element={<UsersContainer/>} />
                             </Route>

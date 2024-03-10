@@ -48,54 +48,52 @@ export const User: React.FC<PropsType> = ({
     }
 
     return (
-        <li key={user._id} className="admin__card admin__card--user">
-            <div className="client-profile__header">
-                <NavLink
-                    to={`/admin/profile?clientId=${user._id}`}
-                    className="admin__card-link">
-                    <div className="admin__card-avatar">
-                        <img src={userAvatar} alt={""}/>
-                    </div>
-                    <div className="admin__card-details">
-                        <div className="client-profile__name">
-                            <span>Display Name:&nbsp;</span>
-                            <span>{user.displayName}</span>
-                        </div>
-                        <div className="client-profile__email">
-                            <span>Email:&nbsp;</span>
-                            <span>{user.email}</span>
-                        </div>
-                        <div className="admin__card-roles">
-                            <span>roles:&nbsp;</span>
-                            { user.roles.length > 0
-                                ? user.roles.map(role => <span key={role._id}>{role.value}</span>)
-                                : <span>{''}</span>
-                            }
-                        </div>
-                    </div>
-                </NavLink>
-                <div className="client-profile__action-btns admin__card-action-btns">
-                    <button
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Edit user"
-                        className={"btn btn--icon"}
-                        onClick={() => {setEditUserMode(true)}}
-                    >
-                        <svg><use href={`${Sprite}#edit`}/></svg>
-                    </button>
-                    <button
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Delete client"
-                        className={"btn btn--icon"}
-                        disabled={isDeletingInProcess?.some(id => id === user._id)}
-                        onClick={() => {
-                            setNeedConfirmation(true)
-                        }}
-                    >
-                        <svg><use href={`${Sprite}#trash`}/></svg>
-                    </button>
-                </div>
+        <li key={user._id} className="admin__card admin__card--avatar admin__card--user">
+            <div className="admin__card-actions">
+                <button
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Edit user"
+                    className={"btn btn--icon"}
+                    onClick={() => {setEditUserMode(true)}}
+                >
+                    <svg><use href={`${Sprite}#edit`}/></svg>
+                </button>
+                <button
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Delete client"
+                    className={"btn btn--icon"}
+                    disabled={isDeletingInProcess?.some(id => id === user._id)}
+                    onClick={() => {
+                        setNeedConfirmation(true)
+                    }}
+                >
+                    <svg><use href={`${Sprite}#trash`}/></svg>
+                </button>
             </div>
+            <NavLink
+                to={`/admin/profile?clientId=${user._id}`}
+                className="admin__card-link">
+                <div className={"admin__card-avatar"}>
+                    <img src={userAvatar} alt={""}/>
+                </div>
+                <div className={"admin__card-details"}>
+                    <div className={"admin__card-detail-item"}>
+                        <span className={"admin__card-data-type"}>Display Name:&nbsp;</span>
+                        <span className={"admin__card-data"}>{user.displayName}</span>
+                    </div>
+                    <div className={"admin__card-detail-item"}>
+                        <span className={"admin__card-data-type"}>Email:&nbsp;</span>
+                        <span className={"admin__card-data"}>{user.email}</span>
+                    </div>
+                    <div className="admin__card-detail-item admin__card-roles">
+                        <span className={"admin__card-data-type"}>Roles:&nbsp;</span>
+                        { user.roles.length > 0
+                            ? user.roles.map(role => <span key={role._id}>{role.value}</span>)
+                            : <span className={"admin__card-data"}>{''}</span>
+                        }
+                    </div>
+                </div>
+            </NavLink>
             {
                 needConfirmation &&
                 <ModalPopUp

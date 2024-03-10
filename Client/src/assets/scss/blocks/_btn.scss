@@ -76,6 +76,34 @@
   border-color: $light;
 }
 
+.closing-btn {
+  position: relative;
+  width: 44px;
+  height: 28px;
+  border: none;
+
+  span {
+    display: block;
+    height: 2px;
+    background-color: $light;
+    transition: all 0.3s ease;
+    position: absolute;
+    bottom: 13px;
+    left: -3px;
+    width: 50px;
+    transform: rotate(-32deg);
+  }
+
+  &::after {
+    @include element-style(100%, 2px, $light);
+    position: absolute;
+    top: 13px;
+    right: -3px;
+    width: 50px;
+    transform: rotate(32deg);
+  }
+}
+
 @media (min-width: 990px) {
 
   .btn--bg {

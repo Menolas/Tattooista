@@ -37,52 +37,42 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
 
     const contacts = Object.keys(archivedBookingContacts).map(contact => {
         return archivedBookingContacts[contact] ?
-            <li key={contact}>
-                <span>{contact}:&nbsp;</span>
-                <span>{archivedBookingContacts[contact]}</span>
-            </li> : null
+            <div key={contact} className={"admin__card-detail-item"}>
+                <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
+                <span className={"admin__card-data"}>{archivedBookingContacts[contact]}</span>
+            </div> : null
     })
 
     return (
-        <li className="admin__card admin__card--client">
-            <div className="client-profile__header">
-                <NavLink
-                    to={`/admin/profile?clientId=${consultation._id}`}
-                    className="admin__card-link client-profile">
-                    <div className="client-profile__details">
-                        <div className="client-profile__name">
-                            <span>Name:&nbsp;</span>
-                            <span>{consultation.fullName}</span>
-                        </div>
-                    </div>
-                </NavLink>
-                <div className="admin__card-action-btns client-profile__action-btns">
-                    <button
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Restore consultation"
-                        className={"btn btn--icon"}
-                        disabled={isDeletingInProcess?.some(id => id === consultation._id)}
-                        onClick={() => reactivateConsultation(consultation._id)}
-                    >
-                        <svg><use href={`${Sprite}#smile`}/></svg>
-                    </button>
-                    <button
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Delete consultation"
-                        className={"btn btn--icon"}
-                        disabled={isDeletingInProcess?.some(id => id === consultation._id)}
-                        onClick={() => {
-                            setNeedConfirmation(true)
-                        }}
-                    >
-                        <svg><use href={`${Sprite}#trash`}/></svg>
-                    </button>
-                </div>
+        <li className="admin__card">
+            <div className="admin__card-actions">
+                <button
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Restore consultation"
+                    className={"btn btn--icon"}
+                    disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+                    onClick={() => reactivateConsultation(consultation._id)}
+                >
+                    <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
+                </button>
+                <button
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Delete consultation"
+                    className={"btn btn--icon"}
+                    disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+                    onClick={() => {
+                        setNeedConfirmation(true)
+                    }}
+                >
+                    <svg><use href={`${Sprite}#trash`}/></svg>
+                </button>
             </div>
-            <div>
-                <ul className="list admin__card-contacts-list">
-                    { contacts }
-                </ul>
+            <div className="admin__card-details">
+                <div className={"admin__card-detail-item"}>
+                    <span className={"admin__card-data-type"}>Name:&nbsp;</span>
+                    <span className={"admin__card-data"}>{consultation.fullName}</span>
+                </div>
+                { contacts }
             </div>
             {
                 needConfirmation &&
