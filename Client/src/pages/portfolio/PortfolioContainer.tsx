@@ -62,12 +62,13 @@ export const PortfolioContainer: React.FC = () =>  {
   const dispatch = useDispatch()
 
   useEffect( () => {
-    if (currentPage === 0) {
-      currentPage = 1
-    }
+    // if (currentPage === 0) {
+    //   currentPage = 1
+    // }
 
     dispatch(getTattooStyles()).then(r => {
       if (!activeStyle?._id) {
+        console.log(tattooStyles + " no tattoostyle it is a hit!!!!!!!!!!!!!")
         activeStyle = tattooStyles[0]
         dispatch(setActiveStyleAC(tattooStyles[0]))
       }

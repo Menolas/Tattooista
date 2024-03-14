@@ -1,3 +1,5 @@
+export const ACTIVE_TATTOO_STYLE_FALLBACK = "650349d7f56daad5f49df4e9"
+
 export const mainNavHashLinksData = [
 
     {

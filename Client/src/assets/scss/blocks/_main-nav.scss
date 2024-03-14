@@ -3,8 +3,7 @@
 }
 
 .main-nav--ls {
-  height: 0;
-  overflow: hidden;
+  display: none;
 }
 
 .main-nav.shown {
@@ -43,7 +42,20 @@
 @media(min-width: 990px) {
 
   .main-nav__list.main-nav--ls {
-    //padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: absolute;
+    bottom: -10px;
+    height: 0;
+    overflow: hidden;
+    transform: translate(0, 100%);
+    transition: all .25s ease-in-out;
+    z-index: 1;
+
+    .main-nav__link {
+      font-size: 0;
+    }
   }
 
   .main-nav.shown {
@@ -53,17 +65,8 @@
     }
 
     .main-nav__list.main-nav--ls {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      bottom: -10px;
       padding: 1.5rem 3.5rem 1.5rem 2rem;
       height: auto;
-      //background-color: $dark;
-      //border: $light-border;
-      transform: translate(0, 100%);
-      z-index: 1;
 
       &::before {
         @include element-style(100%, 100%, rgba(8, 8, 8, 0.5));

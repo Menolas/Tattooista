@@ -5,6 +5,7 @@ import {GalleryItemType, TattooStyleType} from "../../types/Types"
 import { ModalPopUp } from '../common/ModalPopUp'
 import {API_URL} from "../../http"
 import { Tooltip } from "react-tooltip"
+import { LightGallery as ILightGallery } from "lightgallery/lightgallery"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import {Paginator} from "../common/Paginator"
@@ -15,6 +16,7 @@ import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm"
 import {NothingToShow} from "../common/NothingToShow"
 import {GalleryUploadForm} from "../Forms/GalleryUploadForm";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {ImageFullView} from "../common/ImageFullView";
 
 type PropsType = {
   fakeApi: boolean
@@ -60,6 +62,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   //debugger
 
   const [bigImg, setBigImg] = useState('')
+  const [activeIndex, setActiveIndex] = useState(0)
   const [ editGalleryMode, setEditGalleryMode] = useState(false)
   const [ editGalleryItem, setEditGalleryItem ] = useState(null)
   const successPopUpContent = `You successfully added images to ${activeStyle?.value} style gallery`
@@ -99,7 +102,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 
   const modalTitle = `Update you gallery for ${activeStyle?.value}`
 
-  const GalleryItemsArray = gallery?.map(item => {
+  const GalleryItemsArray = gallery?.map((item, index) => {
 
     const GalleryImgUrl = fakeApi
         ? `./uploads/gallery/${item.fileName}`
@@ -112,7 +115,10 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         >
           <div
             className={"gallery__img-wrap"}
-            onClick={() => { showBigImg(item.fileName) }}
+            onClick={() => {
+              showBigImg(item.fileName)
+              setActiveIndex(index)
+            }}
             style={{ backgroundImage: `url(${GalleryImgUrl})` }}
           >
             {''}
@@ -184,19 +190,14 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         }
         {
           bigImg &&
-          <div className="gallery__large-wrap modal-wrap">
-            <div className="gallery__large">
-                <button
-                    className="close-btn gallery__item-close-btn"
-                    onClick={() => { closeBigImg() }}>
-                  {''}
-                </button>
-                <img
-                    src={ fakeApi ? `./uploads/gallery/${bigImg}` : `${API_URL}/gallery/${bigImg}`} alt={activeStyle.value}
-                    contextMenu='alert("Вы не можете сохранить это изображение.");return false;'
-                />
-            </div>
-          </div>
+          <ImageFullView
+              gallery={gallery}
+              activeIndex={activeIndex}
+              fakeApi={fakeApi}
+              imgUrl={bigImg}
+              imgAlt={activeStyle.value}
+              closeImg={closeBigImg}
+          />
         }
         {
             editGalleryItem &&
@@ -230,6 +231,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
         }
         <Tooltip id="my-tooltip" />
+      <LightGallery />
       </section>
   )
 })

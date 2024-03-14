@@ -45,8 +45,13 @@ const Admin: React.FC = React.memo(() => {
                     {
                         btn.subMenu.map(subMenuItem => {
                             return (
-                                <li>
-                                    <NavLink to={subMenuItem.btnUrl}>
+                                <li key={subMenuItem.btnUrl}>
+                                    <NavLink
+                                        to={subMenuItem.btnUrl}
+                                        onClick={() => {
+                                            setIsMobileMenuOpen(false)
+                                        }}
+                                    >
                                         {subMenuItem.btnText}
                                     </NavLink>
                                 </li>
@@ -85,7 +90,7 @@ const Admin: React.FC = React.memo(() => {
       <aside className={ isMobileMenuOpen ? "admin__left-panel show" : "admin__left-panel"}>
         <nav className={'admin__nav'}>
             <button
-                className={"btn btn--transparent closing-btn"}
+               className={"btn btn--transparent closing-btn"}
                onClick={() => {
                    setIsMobileMenuOpen(false)
                }}
