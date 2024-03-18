@@ -144,7 +144,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                   alt="preview"
                 />
               </div>
-              <label className="btn btn--sm" htmlFor={"avatar"}>Pick File</label>
+              <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>Pick File</label>
               <FieldWrapper name={'avatar'}>
                 <Field
                   className="hidden"
@@ -185,7 +185,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
             <button
               type="submit"
               disabled={propsF.isSubmitting}
-              className="btn btn--bg btn--transparent form__submit-btn">
+              className="btn btn--bg btn--dark-bg form__submit-btn">
               {propsF.isSubmitting
                 ? 'Please wait...'
                 : 'SUBMIT'

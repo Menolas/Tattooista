@@ -115,7 +115,7 @@ export const AddConsultationForm: React.FC<PropsType> = React.memo(({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn btn--bg btn--transparent form__submit-btn booking__submit-btn"
+              className="btn btn--bg btn--dark-bg form__submit-btn booking__submit-btn"
             >
                 {isSubmitting
                     ? 'Please wait...'

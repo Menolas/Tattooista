@@ -1,11 +1,10 @@
 import * as React from "react"
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { Preloader } from "../common/Preloader"
 import {GalleryItemType, TattooStyleType} from "../../types/Types"
 import { ModalPopUp } from '../common/ModalPopUp'
 import {API_URL} from "../../http"
-import { Tooltip } from "react-tooltip"
-import { LightGallery as ILightGallery } from "lightgallery/lightgallery"
+import {Tooltip} from "react-tooltip"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import {Paginator} from "../common/Paginator"
@@ -231,7 +230,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
         }
         <Tooltip id="my-tooltip" />
-      <LightGallery />
       </section>
   )
 })

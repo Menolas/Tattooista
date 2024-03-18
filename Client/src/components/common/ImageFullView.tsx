@@ -43,12 +43,13 @@ export const ImageFullView: React.FC<PropsType> = ({
     })
     return (
         <div className="image-full-view gallery__large-wrap modal-wrap">
+            <button
+                className="closing-btn image-full-view__closing-btn gallery__item-close-btn"
+                onClick={() => { closeImg() }}
+            >
+                <span>{''}</span>
+            </button>
             <div className="image-full-view__inner-wrap gallery__large">
-                <button
-                    className="closing-btn image-full-view__closing-btn gallery__item-close-btn"
-                    onClick={() => { closeImg() }}>
-                    <span>{''}</span>
-                </button>
                 <AliceCarousel
                     items={sliders}
                     activeIndex={activeIndex}

@@ -95,7 +95,7 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                     alt="preview"
                                 />
                             </div>
-                            <label className="btn btn--sm" htmlFor={"wallPaper"}>Pick File</label>
+                            <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
                             <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                                 <Field
                                     className="hidden"
@@ -135,7 +135,7 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}
-                            className="btn btn--bg btn--transparent form__submit-btn">
+                            className="btn btn--bg btn--dark-bg form__submit-btn">
                             {propsF.isSubmitting
                                 ? 'Please wait...'
                                 : 'SUBMIT'

@@ -79,7 +79,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="btn btn--bg btn--transparent form__submit-btn"
+                            className="btn btn--bg btn--dark-bg form__submit-btn"
                         >
                             {isSubmitting
                                 ? 'Please wait...'
