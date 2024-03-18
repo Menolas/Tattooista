@@ -411,7 +411,7 @@ img {
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 22px 16px 0;
+  padding: 22px 1rem 0;
   z-index: 10;
 }
 .main-header.container {
@@ -502,8 +502,7 @@ img {
 }
 
 .main-nav--ls {
-  height: 0;
-  overflow: hidden;
+  display: none;
 }
 
 .main-nav.shown .mobile-main-menu {
@@ -533,19 +532,27 @@ img {
 }
 
 @media (min-width: 990px) {
+  .main-nav__list.main-nav--ls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: absolute;
+    bottom: -10px;
+    height: 0;
+    overflow: hidden;
+    transform: translate(0, 100%);
+    transition: all 0.25s ease-in-out;
+    z-index: 1;
+  }
+  .main-nav__list.main-nav--ls .main-nav__link {
+    font-size: 0;
+  }
   .main-nav.shown .mobile-main-menu {
     display: none;
   }
   .main-nav.shown .main-nav__list.main-nav--ls {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    bottom: -10px;
     padding: 1.5rem 3.5rem 1.5rem 2rem;
     height: auto;
-    transform: translate(0, 100%);
-    z-index: 1;
   }
   .main-nav.shown .main-nav__list.main-nav--ls::before {
     content: "";
@@ -1780,27 +1787,7 @@ img {
   right: -4px;
   top: -34px;
   padding: 0;
-  width: 30px;
-  height: 30px;
   background-color: transparent;
-  border: none;
-}
-.gallery__item-close-btn::before, .gallery__item-close-btn::after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 3px;
-  height: 32px;
-  background-color: #fafafa;
-  box-sizing: border-box;
-  top: -1px;
-  left: 14px;
-}
-.gallery__item-close-btn::before {
-  transform: rotate(45deg);
-}
-.gallery__item-close-btn::after {
-  transform: rotate(-45deg);
 }
 
 .gallery__uploadedImgPreviews {
@@ -1841,7 +1828,14 @@ img {
     width: 23%;
   }
   .gallery__item .gallery__img-wrap {
+    position: relative;
     height: 100%;
+    transition: all 0.3s ease-in-out;
+  }
+  .gallery__item .gallery__img-wrap:hover {
+    transform: scale(1.4);
+    box-shadow: 0 0 10px 7px rgba(0, 0, 0, 0.8);
+    z-index: 10;
   }
 }
 @media (min-width: 1400px) {
@@ -1942,8 +1936,11 @@ img {
   height: 100svh;
   max-height: 100svh;
   text-align: left;
-  background-color: rgba(0, 0, 0, 0.75);
-  z-index: 10;
+  background-color: rgba(8, 8, 8, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  z-index: 20;
 }
 
 .modal-wrap__inner-block {
@@ -2049,10 +2046,11 @@ img {
   background-color: #080808;
   transform: translate(-100%, 0);
   z-index: 10;
+  transition: all 0.3s ease;
 }
 .admin .admin__nav .closing-btn {
   position: absolute;
-  top: 1rem;
+  top: 22px;
   right: 1rem;
 }
 .admin .admin__nav .admin__nav-list {
@@ -3282,6 +3280,166 @@ input[type=checkbox][value=true] + label .checkbox::after {
 .read-more .read-more__button.expanded {
   margin-left: auto;
   transform: translate(0, 200%);
+}
+
+.image-full-view .image-full-view__inner-wrap {
+  position: relative;
+  height: 80vh;
+  width: 80vw;
+  border: 4px solid rgba(7, 7, 7, 0.5);
+}
+.image-full-view .image-full-view__inner-wrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 10;
+}
+.image-full-view .image-full-view__inner-wrap img {
+  height: 100%;
+  width: auto;
+  max-width: 90vw;
+}
+.image-full-view .image-full-view__inner-wrap:hover img {
+  filter: none;
+}
+.image-full-view .image-full-view__closing-btn {
+  position: absolute;
+  display: block;
+  right: 1rem;
+  top: 20px;
+  padding: 0;
+  background-color: transparent;
+}
+.image-full-view .alice-carousel {
+  height: 100%;
+}
+.image-full-view .alice-carousel > div {
+  height: 100%;
+}
+.image-full-view .alice-carousel .alice-carousel__wrapper {
+  height: 100%;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn,
+.image-full-view .alice-carousel .alice-carousel__next-btn {
+  position: absolute;
+  bottom: -50px;
+  padding: 0;
+  width: 45px;
+  height: 30px;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__next-btn-wrapper,
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-wrapper,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-wrapper,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__prev-btn-wrapper {
+  width: 100%;
+  height: 100%;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__next-btn-item,
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-item,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-item,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__prev-btn-item {
+  position: relative;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__next-btn-item span,
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-item span,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-item span,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__prev-btn-item span {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__next-btn-item span::before,
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-item span::before,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-item span::before,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__prev-btn-item span::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  width: 45px;
+  height: 2px;
+  background-color: white;
+  transform: translate(0, -50%);
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__next-btn-item span::after,
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-item span::after,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-item span::after,
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__prev-btn-item span::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 18px;
+  height: 22px;
+  background-color: transparent;
+  box-sizing: border-box;
+  border: 1px solid white;
+  border-right: none;
+  border-top: none;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn {
+  left: 0;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-item span {
+  left: 0;
+}
+.image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-item span::after {
+  left: 0;
+  bottom: 1px;
+  transform: skew(-30deg, -10deg) rotate(-210deg);
+}
+.image-full-view .alice-carousel .alice-carousel__next-btn {
+  right: 0;
+}
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-item span {
+  right: 0;
+}
+.image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-item span::after {
+  right: 0;
+  bottom: 7px;
+  transform: skew(-30deg, -10deg) rotate(-30deg);
+}
+
+.image-full-view__img.slider {
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 900px) {
+  .image-full-view .alice-carousel .alice-carousel__prev-btn,
+  .image-full-view .alice-carousel .alice-carousel__next-btn {
+    width: 70px;
+    bottom: 50%;
+  }
+  .image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__next-btn-item span::before,
+  .image-full-view .alice-carousel .alice-carousel__prev-btn .alice-carousel__prev-btn-item span::before,
+  .image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__next-btn-item span::before,
+  .image-full-view .alice-carousel .alice-carousel__next-btn .alice-carousel__prev-btn-item span::before {
+    width: 70px;
+  }
+  .image-full-view .alice-carousel .alice-carousel__prev-btn {
+    left: -10px;
+    transform: translate(-100%, 0);
+  }
+  .image-full-view .alice-carousel .alice-carousel__next-btn {
+    right: -10px;
+    transform: translate(100%, 0);
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -131,7 +131,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 name={'gallery'}
                 wrapperClass={''}
             >
-              <label className="btn btn--sm" htmlFor={"gallery"}>Pick File</label>
+              <label className="btn btn--sm btn--dark-bg" htmlFor={"gallery"}>Pick File</label>
               <Field
                 className="hidden"
                 id="gallery"
@@ -149,7 +149,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
             <button
               type="submit"
               disabled={propsF.isSubmitting}
-              className="btn btn--bg btn--transparent form__submit-btn"
+              className="btn btn--bg btn--dark-bg form__submit-btn"
             >
               {propsF.isSubmitting
                 ? 'Please wait...'

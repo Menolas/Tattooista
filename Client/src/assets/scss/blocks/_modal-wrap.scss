@@ -8,8 +8,11 @@
   height: 100svh;
   max-height: 100svh;
   text-align: left;
-  background-color: rgba(0, 0, 0, 0.75);
-  z-index: 10;
+  background-color: rgba(8, 8, 8, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  z-index: 20;
 }
 
 .modal-wrap__inner-block {

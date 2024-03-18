@@ -32,8 +32,6 @@ export const BookedConsultation: React.FC<PropsType> = React.memo(({
     archiveConsultation
 }) => {
 
-    console.log(consultation?.message + " message!!!!!!!!!!!!!!!!!!!!!!!")
-
     const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
 
     const closeModal = () => {

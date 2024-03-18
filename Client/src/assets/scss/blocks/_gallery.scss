@@ -103,23 +103,7 @@
   right: -4px;
   top: -34px;
   padding: 0;
-  width: 30px;
-  height: 30px;
   background-color: transparent;
-  border: none;
-
-  &::before,
-  &::after {
-    @include element-style(3px, 32px, $light);
-    top: -1px;
-    left: 14px;
-  }
-  &::before {
-    transform: rotate(45deg);
-  }
-  &::after {
-    transform: rotate(-45deg);
-  }
 }
 
 .gallery__uploadedImgPreviews {
@@ -161,13 +145,19 @@
   }
   .gallery__list {
     row-gap: 2rem;
-    //column-gap: 2%;
   }
 
   .gallery__item {
     width: 23%;
     .gallery__img-wrap {
+      position: relative;
       height: 100%;
+      transition: all .3s ease-in-out;
+      &:hover {
+        transform: scale(1.4);
+        box-shadow: 0 0 10px 7px rgba(0, 0, 0, 0.8);
+        z-index: 10;
+      }
     }
   }
 }

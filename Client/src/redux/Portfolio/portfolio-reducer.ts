@@ -62,7 +62,6 @@ export type InitialStateType = typeof initialState
 export const portfolioReducer = (
   state = initialState,
   action: ActionsTypes): InitialStateType => {
-  console.log(state.gallery + " state for gallery!!!!!!!!!!!!!!!!")
 
   switch (action.type) {
     case SET_GALLERY_PAGE_SIZE:

@@ -149,10 +149,10 @@ export const ArchivedGallery = () => {
             }
             {
                 bigImg &&
-                <div className="gallery__large-wrap modal-wrap">
-                    <div className="gallery__large">
+                <div className={"gallery__large-wrap modal-wrap"}>
+                    <div className={"gallery__large"}>
                         <button
-                            className="close-btn gallery__item-close-btn"
+                            className={"closing-btn gallery__item-close-btn"}
                             onClick={() => { closeBigImg() }}>
                             {''}
                         </button>

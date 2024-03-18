@@ -1,6 +1,7 @@
 import axios, { CreateAxiosDefaults } from "axios"
 import { GalleryItemType, TattooStyleType } from "../../types/Types"
 import {API_URL} from "../../http"
+import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";
 
 const instance = axios.create({
     baseURL: API_URL
@@ -76,7 +77,7 @@ export const portfolioApi = {
     },
 
     getGalleryItems(
-      style: string,
+      style = ACTIVE_TATTOO_STYLE_FALLBACK as string,
       currentPage: number,
       pageSize: number
     ) {
