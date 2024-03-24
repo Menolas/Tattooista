@@ -198,33 +198,31 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               closeImg={closeBigImg}
           />
         }
-        {
-            editGalleryItem &&
-            <ModalPopUp
-                closeModal={closeGalleryItemEditModal}
-                modalTitle={'Update tattoo styles for this image'}
-            >
-              <UpdateGalleryItemForm
-                  folder={'gallery'}
-                  galleryItem={editGalleryItem}
-                  styles={tattooStyles}
-                  updateGalleryItem={updateGalleryItem}
-                  closeModal={closeGalleryItemEditModal}
-              />
-            </ModalPopUp>
-        }
-        { editGalleryMode &&
-            <ModalPopUp
-                closeModal={closeEditGalleryForm}
-                modalTitle={modalTitle}
-            >
-              <GalleryUploadForm
-                  updateId={activeStyle._id}
-                  updateGallery={updateGallery}
-                  closeModal={closeEditGalleryForm}
-              />
-            </ModalPopUp>
-        }
+        <ModalPopUp
+            isOpen={editGalleryItem}
+            closeModal={closeGalleryItemEditModal}
+            modalTitle={'Update tattoo styles for this image'}
+        >
+          <UpdateGalleryItemForm
+              folder={'gallery'}
+              galleryItem={editGalleryItem}
+              styles={tattooStyles}
+              updateGalleryItem={updateGalleryItem}
+              closeModal={closeGalleryItemEditModal}
+          />
+        </ModalPopUp>
+
+        <ModalPopUp
+            isOpen={editGalleryMode}
+            closeModal={closeEditGalleryForm}
+            modalTitle={modalTitle}
+        >
+          <GalleryUploadForm
+              updateId={activeStyle?._id}
+              updateGallery={updateGallery}
+              closeModal={closeEditGalleryForm}
+          />
+        </ModalPopUp>
         {
             isSuccess &&
             <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>

@@ -25,6 +25,7 @@ type PropsType = {
   galleryPageSize: number
   tattooStyles: Array<TattooStyleType>
   services: Array<ServiceType>
+  service: ServiceType
   faq: Array<FaqType>
   pageAbout: PageType
   isGeneralFetching: boolean
@@ -39,6 +40,7 @@ type PropsType = {
   changeAboutPageVisibility: (isActive: boolean) => void
   editService: (id: string, values: FormData) => void
   addService: (values: FormData) => void
+  setService: (service: ServiceType) => void
   deleteService: (id: string) => void
   updateFaqItem: (id: string, values: any) => void
   addFaqItem: (values: FaqType) => void
@@ -58,6 +60,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   galleryPageSize,
   tattooStyles,
   services,
+  service,
   faq,
   pageAbout,
   isGeneralFetching,
@@ -73,6 +76,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   editService,
   addService,
   deleteService,
+  setService,
   updateFaqItem,
   addFaqItem,
   deleteFaqItem,
@@ -107,7 +111,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
             dispatch(setIsSuccessAC(false))
         }, 1500)
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
   useEffect(() => {
         if (isSuccessBooking) {
@@ -115,7 +119,15 @@ export const MainPage: React.FC<PropsType> = React.memo(({
                 setIsSuccessBooking(false)
             }, 1500)
         }
-  }, [isSuccessBooking])
+  }, [isSuccessBooking]);
+
+  const closeIsSuccessCallBack = () => {
+    setIsSuccessAC(false);
+  };
+
+  const closeIsBookingSuccessCallBack = () => {
+    setIsSuccessBooking(false);
+  };
 
   return (
     <>
@@ -136,6 +148,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
                       pageAbout={pageAbout}
                       editAboutPage={editAboutPage}
                       changeAboutPageVisibility={changeAboutPageVisibility}
+                      bookConsultation={bookConsultation}
                   />
               }
 
@@ -143,9 +156,11 @@ export const MainPage: React.FC<PropsType> = React.memo(({
                   fakeApi={fakeApi}
                   isAuth={isAuth}
                   services={services}
+                  service={service}
                   editService={editService}
                   addService={addService}
                   deleteService={deleteService}
+                  setService={setService}
               />
               <FaqItems
                   isAuth={isAuth}
@@ -154,15 +169,20 @@ export const MainPage: React.FC<PropsType> = React.memo(({
                   addFaqItem={addFaqItem}
                   deleteFaqItem={deleteFaqItem}
               />
-              <Booking consentId="consent" bookConsultation={bookConsultation} />
+              <Booking consentId="consent3" bookConsultation={bookConsultation} />
           </>
       }
-      { isSuccessBooking &&
-        <SuccessPopUp closeModal={setIsSuccess} content={successBookingPopUpContent}/>
-      }
-      { isSuccess &&
-        <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
-      }
+      <SuccessPopUp
+          isOpen={isSuccessBooking}
+          closeModal={closeIsBookingSuccessCallBack}
+          content={successBookingPopUpContent}
+      />
+      <SuccessPopUp
+          isOpen={isSuccess}
+          closeModal={closeIsSuccessCallBack}
+          content={successPopUpContent}
+      />
+
       { bookingConsultationApiError && bookingConsultationApiError !== '' &&
         <ApiErrorMessage
             error={bookingConsultationApiError}

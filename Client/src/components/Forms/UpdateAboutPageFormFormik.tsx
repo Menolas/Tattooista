@@ -1,39 +1,40 @@
-import * as React from "react"
-import { useState } from "react"
-import { Field, Form, Formik} from "formik"
-import {API_URL} from "../../http"
-// @ts-ignore
-import tattooMachine from "../../assets/img/tattoo-machine.webp"
-import {PageType} from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
-import {FieldWrapper} from "./FieldWrapper"
-import * as Yup from "yup"
-import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators"
+import * as React from "react";
+import { useState } from "react";
+import { Field, Form, Formik} from "formik";
+import {API_URL} from "../../http";
+import {PageType} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
+import * as Yup from "yup";
+import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
 
-const validationSchema = Yup.object().shape({
-    wallPaper: Yup.mixed()
-        .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-            if (!value) return true
-            return isFileSizeValid([value], MAX_FILE_SIZE)
-        })
-        .test('fileType', 'Invalid file type', (value: File) => {
-            if (!value) return true
-            return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
-        }),
-    title: Yup.string(),
-    content: Yup.string(),
-})
+const tattooMachine = require("../../assets/img/tattoo-machine.webp") as string;
 
 type PropsType = {
     pageAbout?: PageType
     editAboutPage: (values: FormData) => void
     closeModal: () => void
-}
+};
+
 export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
     pageAbout,
     editAboutPage,
     closeModal
 }) => {
+
+    const validationSchema = Yup.object().shape({
+        aboutPageWallPaper: Yup.mixed()
+            .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
+                if (!value) return true;
+                return isFileSizeValid([value], MAX_FILE_SIZE);
+            })
+            .test('fileType', 'Invalid file type', (value: File) => {
+                if (!value) return true;
+                return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+            }),
+        aboutPageTitle: Yup.string(),
+        aboutPageContent: Yup.string(),
+    });
 
     const [imageURL, setImageURL] = useState('')
 
@@ -44,6 +45,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
     }
 
     const handleOnChange = (event) => {
+        console.log("handleOnChange !!!!!!!!!!!!!!!!!")
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
             const file = event.target.files[0]
@@ -52,9 +54,9 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
     }
 
     const initialValues = {
-        wallPaper: pageAbout && pageAbout.wallPaper ? pageAbout.wallPaper : '',
-        title: pageAbout && pageAbout.title ? pageAbout.title : '',
-        content: pageAbout && pageAbout.content ? pageAbout.content : '',
+        aboutPageWallPaper: pageAbout && pageAbout.wallPaper ? pageAbout.wallPaper : '',
+        aboutPageTitle: pageAbout && pageAbout.title ? pageAbout.title : '',
+        aboutPageContent: pageAbout && pageAbout.content ? pageAbout.content : '',
     }
 
     const submit = (values) => {
@@ -89,17 +91,17 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                     alt="preview"
                                 />
                             </div>
-                            <label className="btn btn--sm" htmlFor={"wallPaper"}>Pick File</label>
-                            <FieldWrapper name={'wallPaper'}>
+                            <label className="btn btn--sm" htmlFor={"aboutPageWallPaper"}>Pick File</label>
+                            <FieldWrapper name={'aboutPageWallPaper'}>
                                 <Field
                                     className="hidden"
-                                    id="wallPaper"
-                                    name={'wallPaper'}
+                                    id="aboutPageWallPaper"
+                                    name={'aboutPageWallPaper'}
                                     type={'file'}
                                     accept='image/*,.png,.jpg,.web,.jpeg'
                                     value={undefined}
                                     onChange={(e) => {
-                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
+                                        propsF.setFieldValue('aboutPageWallPaper', e.currentTarget.files[0])
                                         handleOnChange(e)
                                     }}
                                 />
@@ -107,23 +109,23 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                         </div>
 
                         <FieldComponent
-                            name={'title'}
+                            name={'aboutPageTitle'}
                             type={'text'}
                             placeholder={"Block Title"}
-                            value={propsF.values.title}
+                            value={propsF.values.aboutPageTitle}
                             onChange={propsF.handleChange}
                         />
 
                         <FieldWrapper
-                            name={"content"}
+                            name={"aboutPageContent"}
                         >
                             <Field
-                                name={'content'}
+                                name={'aboutPageContent'}
                                 component="textarea"
                                 rows={6}
                                 placeholder={'Describe this Tattoo style'}
                                 onChange={propsF.handleChange}
-                                value={propsF.values.content}/>
+                                value={propsF.values.aboutPageContent}/>
                         </FieldWrapper>
 
                         <button
@@ -140,4 +142,4 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
             }}
         </Formik>
     )
-})
+});

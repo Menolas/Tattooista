@@ -112,25 +112,21 @@ export const Users: React.FC<PropsType> = ({
                                 )
                                 : <NothingToShow/>
                     }
-
-                    {
-                        addUserMode &&
-                        <ModalPopUp
-                            modalTitle={modalTitle}
+                    <ModalPopUp
+                        isOpen={addUserMode}
+                        modalTitle={modalTitle}
+                        closeModal={closeModal}
+                    >
+                        <UpdateUserForm
+                            roles={roles}
+                            addUser={addUser}
                             closeModal={closeModal}
-                        >
-                            <UpdateUserForm
-                                roles={roles}
-                                addUser={addUser}
-                                closeModal={closeModal}
-                            />
-                        </ModalPopUp>
-                    }
-
-                    {
-                        isSuccess &&
-                        <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
-                    }
+                        />
+                    </ModalPopUp>
+                    {/*{*/}
+                    {/*    isSuccess &&*/}
+                    {/*    <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>*/}
+                    {/*}*/}
 
                 </>
             }

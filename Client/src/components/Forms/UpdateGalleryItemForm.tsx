@@ -28,7 +28,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
     let initialValues = {}
     styles.forEach((style) => {
         if (!style.nonStyle) {
-            initialValues[style._id] = galleryItem.tattooStyles.includes(style._id)
+            initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id)
         }
     })
 
@@ -71,7 +71,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                         >
                         <div
                             className={'galleryItem-illustration'}
-                            style={{ backgroundImage: `url(${API_URL}/${folder}/${galleryItem.fileName})` }}
+                            style={{ backgroundImage: `url(${API_URL}/${folder}/${galleryItem?.fileName})` }}
                         >
 
                         </div>

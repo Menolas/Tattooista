@@ -1,12 +1,12 @@
-import * as React from "react"
-import {Field, Form, Formik, FormikHelpers, FormikValues } from "formik"
-import {phoneRegex} from "../../utils/validators"
-import * as Yup from "yup"
-import {BookConsultationFormValues} from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
-import {useState} from "react"
-import {FieldWrapper} from "./FieldWrapper"
-import {FormSelect} from "./FormSelect"
+import * as React from "react";
+import {Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
+import {phoneRegex} from "../../utils/validators";
+import * as Yup from "yup";
+import {BookConsultationFormValues} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import {useState} from "react";
+import {FieldWrapper} from "./FieldWrapper";
+import {FormSelect} from "./FormSelect";
 
 const options = [
   { value: "mail", label: "email" },
@@ -14,7 +14,7 @@ const options = [
   { value: "whatsapp", label: "whatsapp" },
   { value: "messenger", label: "messenger" },
   { value: "insta", label: "instagram" }
-]
+];
 
 // @ts-ignore
 const validationSchema = Yup.object().shape({
@@ -50,13 +50,13 @@ const validationSchema = Yup.object().shape({
       .max(200, "Must be shorter than 200 character")
       .required("Required Field"),
   consent: Yup.boolean().oneOf([true],"Required Field")
-})
+});
 
 type PropsType = {
   consentId: string
   bookConsultation: (values: BookConsultationFormValues) => void
   closeBookingModal?: () => void
-}
+};
 
 export const BookingForm: React.FC<PropsType> = React.memo(({
   consentId,
@@ -168,7 +168,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   name="consent"
                   id={consentId}
                   checked={propsF.values.consent}
-                  onChange={propsF.handleChange}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    propsF.setFieldValue('consent', e.target.checked);
+                  }}
               />
               <label htmlFor={consentId}>
                 <span className="checkbox">{''}</span>

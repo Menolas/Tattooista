@@ -10,7 +10,6 @@ import {Tooltip} from "react-tooltip"
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants"
 import {SocialNav} from "../SocialNav";
 import {BookingButton} from "../common/BookingButton"
-import {NavLink} from "react-router-dom"
 import {ReadMore} from "../common/ReadMore";
 
 type PropsType = {
@@ -93,22 +92,24 @@ export const About: React.FC<PropsType> = React.memo(({
                     <div className={'about__add-block'}>
                         <h3 className={'page-block__title-secondary'}>Follow me</h3>
                         <SocialNav />
-                        <BookingButton bookConsultation={bookConsultation} />
+                        <BookingButton
+                            consentId={"consent2"}
+                            bookConsultation={bookConsultation}
+                        />
                     </div>
                 </div>
             </div>
-            { isEditMode &&
-                <ModalPopUp
-                    modalTitle={editModalTitle}
+            <ModalPopUp
+                isOpen={isEditMode}
+                modalTitle={editModalTitle}
+                closeModal={closeEditModal}
+            >
+                <UpdateAboutPageFormFormik
+                    pageAbout={pageAbout}
+                    editAboutPage={editAboutPage}
                     closeModal={closeEditModal}
-                >
-                    <UpdateAboutPageFormFormik
-                        pageAbout={pageAbout}
-                        editAboutPage={editAboutPage}
-                        closeModal={closeEditModal}
-                    />
-                </ModalPopUp>
-            }
+                />
+            </ModalPopUp>
             <Tooltip id="about-tooltip" />
         </section>
     )

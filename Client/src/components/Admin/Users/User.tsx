@@ -94,33 +94,29 @@ export const User: React.FC<PropsType> = ({
                     </div>
                 </div>
             </NavLink>
-            {
-                needConfirmation &&
-                <ModalPopUp
-                    modalTitle={''}
-                    closeModal={closeModal}
-                >
-                    <Confirmation
-                        content={'Are you sure? You about to delete this user FOREVER along with  all the data...'}
-                        confirm={deleteUserCallBack}
-                        cancel={closeModal}
-                    />
-                </ModalPopUp>
-            }
-
-            { editUserMode &&
-                <ModalPopUp
-                    modalTitle={modalTitle}
+            <ModalPopUp
+                isOpen={needConfirmation}
+                modalTitle={''}
+                closeModal={closeModal}
+            >
+                <Confirmation
+                    content={'Are you sure? You about to delete this user FOREVER along with  all the data...'}
+                    confirm={deleteUserCallBack}
+                    cancel={closeModal}
+                />
+            </ModalPopUp>
+            <ModalPopUp
+                isOpen={editUserMode}
+                modalTitle={modalTitle}
+                closeModal={closeEditModal}
+            >
+                <UpdateUserForm
+                    roles={roles}
+                    profile={user}
+                    updateUser={updateUser}
                     closeModal={closeEditModal}
-                >
-                    <UpdateUserForm
-                        roles={roles}
-                        profile={user}
-                        updateUser={updateUser}
-                        closeModal={closeEditModal}
-                    />
-                </ModalPopUp>
-            }
+                />
+            </ModalPopUp>
         </li>
     )
 }

@@ -3,8 +3,6 @@ import {useEffect, useState} from "react"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import { NavLink } from "react-router-dom"
-import { ModalPopUp } from "../common/ModalPopUp"
-import { BookingForm } from "../Forms/BookingFormFormik"
 import {BookConsultationFormValues} from "../../types/Types"
 import {SuccessPopUp} from "../common/SuccessPopUp"
 import {useDispatch, useSelector} from "react-redux"

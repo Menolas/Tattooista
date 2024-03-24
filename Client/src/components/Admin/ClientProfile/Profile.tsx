@@ -168,33 +168,32 @@ export const Profile: React.FC<PropsType> = React.memo(({
           )
           : null
       }
-      { editClientMode &&
-          <ModalPopUp
-              modalTitle={modalTitle}
-              closeModal={closeModal}
-          >
-            <UpdateClientForm
-                profile={profile}
-                editClient={editClient}
-                closeModal={closeModal}
-            />
-          </ModalPopUp>
-      }
-      { editGalleryMode &&
-          <ModalPopUp
-              modalTitle="Edit Gallery"
-              closeModal={closeModal}
-          >
-            <GalleryUploadForm
-                updateId={profile._id}
-                gallery={profile.gallery}
-                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                updateGallery={updateClientGallery}
-                deleteClientGalleryPicture={deleteClientGalleryPicture}
-                closeModal={closeModal}
-            />
-          </ModalPopUp>
-      }
+      <ModalPopUp
+          isOpen={editClientMode}
+          modalTitle={modalTitle}
+          closeModal={closeModal}
+      >
+        <UpdateClientForm
+            profile={profile}
+            editClient={editClient}
+            closeModal={closeModal}
+        />
+      </ModalPopUp>
+      <ModalPopUp
+          isOpen={editGalleryMode}
+          modalTitle="Edit Gallery"
+          closeModal={closeModal}
+      >
+        <GalleryUploadForm
+            updateId={profile._id}
+            gallery={profile.gallery}
+            isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+            updateGallery={updateClientGallery}
+            deleteClientGalleryPicture={deleteClientGalleryPicture}
+            closeModal={closeModal}
+        />
+      </ModalPopUp>
+
       {
           isSuccess &&
           <SuccessPopUp closeModal={setIsSuccessAC} content={successPopUpContent} />

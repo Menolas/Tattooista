@@ -1,14 +1,14 @@
-import * as React from "react"
-import {useState} from "react"
-import {Field, Form, Formik} from "formik"
-import * as Yup from "yup"
-import {API_URL} from "../../http"
-// @ts-ignore
-import tattooMachine from "../../assets/img/tattoo-machine.webp"
-import {ServiceType} from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
-import {FieldWrapper} from "./FieldWrapper"
+import * as React from "react";
+import {useState} from "react";
+import {Field, Form, Formik} from "formik";
+import * as Yup from "yup";
+import {API_URL} from "../../http";
+import {ServiceType} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
 import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
+
+const tattooMachine = require("../../assets/img/tattoo-machine.webp") as string;
 
 const validationSchema = Yup.object().shape({
     wallPaper: Yup.mixed()
@@ -28,34 +28,38 @@ const validationSchema = Yup.object().shape({
     condition_3: Yup.string(),
     condition_4: Yup.string(),
     condition_5: Yup.string(),
-})
+});
 
 type PropsType = {
     service?: ServiceType
     editService?: (id: string, values: FormData) => void
     addService?: (values: FormData) => void
+    setService?: (service: ServiceType | null) => void
     closeModal: () => void
 }
 export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
     service,
     editService,
     addService,
+    setService,
     closeModal,
 }) => {
 
-    const [imageURL, setImageURL] = useState('')
+    console.log(service?.title + " serviceTitle!!!!!!!!!!");
 
-    const fileReader = new FileReader()
+    const [imageURL, setImageURL] = useState('');
+
+    const fileReader = new FileReader();
     fileReader.onloadend = () => {
         // @ts-ignore
-        setImageURL(fileReader.result)
+        setImageURL(fileReader.result);
     }
 
     const handleOnChange = (event) => {
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
-            const file = event.target.files[0]
-            fileReader.readAsDataURL(file)
+            const file = event.target.files[0];
+            fileReader.readAsDataURL(file);
         }
     }
 
@@ -71,14 +75,15 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
     }
 
     const submit = (values) => {
-        const formData = new FormData()
+        const formData = new FormData();
         for (let value in values) {
-            formData.append(value, values[value])
+            formData.append(value, values[value]);
         }
         if (service) {
-            editService(service._id, formData)
+            editService(service._id, formData);
+            setService(null);
         } else {
-            addService(formData)
+            addService(formData);
         }
         closeModal()
     }
@@ -105,7 +110,7 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                                     alt="preview"
                                 />
                             </div>
-                            <label className="btn btn--sm" htmlFor={"wallPaper"}>Pick File</label>
+                            <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
                             <FieldWrapper name={'wallPaper'}>
                                 <Field
                                     className="hidden"
@@ -181,7 +186,7 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}
-                            className="btn btn--bg btn--transparent form__submit-btn">
+                            className="btn btn--bg btn--dark-bg form__submit-btn">
                             {propsF.isSubmitting
                                 ? 'Please wait...'
                                 : 'SUBMIT'

@@ -5,10 +5,14 @@ import {BookingForm} from "../Forms/BookingFormFormik";
 import * as React from "react";
 
 type PropsType = {
+    consentId: string
     bookConsultation: (values: BookConsultationFormValues) => void
-}
+};
 
-export const BookingButton: React.FC<PropsType> = ({bookConsultation}) => {
+export const BookingButton: React.FC<PropsType> = ({
+    consentId,
+    bookConsultation,
+}) => {
 
     const [bookingModal, setBookingModal] = useState(false)
 
@@ -27,23 +31,23 @@ export const BookingButton: React.FC<PropsType> = ({bookConsultation}) => {
             <button
                 className = "btn btn--bg btn--transparent booking-btn"
                 onClick = { () => {
-                    console.log("bookinghit!!!!!!!!!!!!!!")
                     showBookConsultationModal()
                 } }>
                 Book a consultation
             </button>
-            { bookingModal &&
-                <ModalPopUp
-                    modalTitle={modalTitle}
-                    closeModal={closeBookingModal}
-                >
-                    <BookingForm
-                        consentId="consent"
-                        bookConsultation={bookConsultation}
-                        closeBookingModal={closeBookingModal}
-                    />
-                </ModalPopUp>
-            }
+
+            <ModalPopUp
+                isOpen={bookingModal}
+                modalTitle={modalTitle}
+                closeModal={closeBookingModal}
+            >
+                <BookingForm
+                    consentId={consentId}
+                    bookConsultation={bookConsultation}
+                    closeBookingModal={closeBookingModal}
+                />
+            </ModalPopUp>
+
         </div>
     )
 }

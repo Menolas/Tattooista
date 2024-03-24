@@ -8,6 +8,10 @@ export const getServicesSelector = (state: AppStateType) => {
   return state.general.services
 }
 
+export const getServiceSelector = (state: AppStateType) => {
+  return state.general.service
+}
+
 export const getPageAboutSelector = (state: AppStateType) => {
   return state.general.pageAbout
 }

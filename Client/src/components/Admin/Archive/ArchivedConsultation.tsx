@@ -74,19 +74,17 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                 </div>
                 { contacts }
             </div>
-            {
-                needConfirmation &&
-                <ModalPopUp
-                    modalTitle={''}
-                    closeModal={closeModal}
-                >
-                    <Confirmation
-                        content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-                        confirm={deleteConsultationCallBack}
-                        cancel={closeModal}
-                    />
-                </ModalPopUp>
-            }
+            <ModalPopUp
+                isOpen={needConfirmation}
+                modalTitle={''}
+                closeModal={closeModal}
+            >
+                <Confirmation
+                    content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                    confirm={deleteConsultationCallBack}
+                    cancel={closeModal}
+                />
+            </ModalPopUp>
             <Tooltip id="my-tooltip" />
         </li>
     )
