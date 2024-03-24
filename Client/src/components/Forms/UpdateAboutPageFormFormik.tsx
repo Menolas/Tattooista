@@ -23,18 +23,26 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
 }) => {
 
     const validationSchema = Yup.object().shape({
-        aboutPageWallPaper: Yup.mixed()
-            .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-                if (!value) return true;
-                return isFileSizeValid([value], MAX_FILE_SIZE);
-            })
-            .test('fileType', 'Invalid file type', (value: File) => {
-                if (!value) return true;
-                return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
-            }),
+        // aboutPageWallPaper: Yup.mixed()
+        //     .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
+        //         if (!value) return true;
+        //         return isFileSizeValid([value], MAX_FILE_SIZE);
+        //     })
+        //     .test('fileType', 'Invalid file type', (value: File) => {
+        //         if (!value) return true;
+        //         return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+        //     }),
         aboutPageTitle: Yup.string(),
         aboutPageContent: Yup.string(),
     });
+
+    const validateFile = (file: File): boolean => {
+        // Perform your file validation logic here
+        // For example, check file size and file type
+        const isValidSize = file.size <= MAX_FILE_SIZE;
+        const isValidType = VALID_FILE_EXTENSIONS.includes(file.type);
+        return isValidSize && isValidType;
+    };
 
     const [imageURL, setImageURL] = useState('')
 
@@ -45,11 +53,10 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
     }
 
     const handleOnChange = (event) => {
-        console.log("handleOnChange !!!!!!!!!!!!!!!!!")
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
-            const file = event.target.files[0]
-            fileReader.readAsDataURL(file)
+            const file = event.target.files[0];
+            fileReader.readAsDataURL(file);
         }
     }
 
@@ -59,13 +66,22 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
         aboutPageContent: pageAbout && pageAbout.content ? pageAbout.content : '',
     }
 
-    const submit = (values) => {
-        const formData = new FormData()
-        for (let value in values) {
-            formData.append(value, values[value])
+    const submit = (values, actions) => {
+        // Check if aboutPageWallPaper is a File object
+        if (values.aboutPageWallPaper instanceof File) {
+            const isValidFile = validateFile(values.aboutPageWallPaper);
+            if (!isValidFile) {
+                actions.setFieldError('aboutPageWallPaper', 'Invalid file');
+                return;
+            }
         }
-        editAboutPage(formData)
-        closeModal()
+
+        const formData = new FormData();
+        for (let value in values) {
+            formData.append(value, values[value]);
+        }
+        editAboutPage(formData);
+        closeModal();
     }
 
     console.log(`${API_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`)
