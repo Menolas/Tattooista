@@ -104,11 +104,15 @@ export const About: React.FC<PropsType> = React.memo(({
                 modalTitle={editModalTitle}
                 closeModal={closeEditModal}
             >
-                <UpdateAboutPageFormFormik
-                    pageAbout={pageAbout}
-                    editAboutPage={editAboutPage}
-                    closeModal={closeEditModal}
-                />
+                {
+                    isEditMode &&
+                    <UpdateAboutPageFormFormik
+                        pageAbout={pageAbout}
+                        editAboutPage={editAboutPage}
+                        closeModal={closeEditModal}
+                    />
+                }
+
             </ModalPopUp>
             <Tooltip id="about-tooltip" />
         </section>
