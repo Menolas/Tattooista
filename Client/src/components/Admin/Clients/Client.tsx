@@ -162,21 +162,19 @@ export const Client: React.FC<PropsType> = React.memo(({
           </ul>
         </div>
       }
-      {
-        needConfirmation &&
-          <ModalPopUp
-              modalTitle={''}
-              closeModal={closeModal}
-          >
-            <Confirmation
-                content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-                confirm={deleteClientCallBack}
-                cancel={closeModal}
-            />
-          </ModalPopUp>
-      }
-      { editClientMode &&
+      <ModalPopUp
+          isOpen={needConfirmation}
+          modalTitle={''}
+          closeModal={closeModal}
+      >
+        <Confirmation
+            content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+            confirm={deleteClientCallBack}
+            cancel={closeModal}
+        />
+      </ModalPopUp>
         <ModalPopUp
+            isOpen={editClientMode}
             modalTitle={modalTitle}
             closeModal={closeEditModal}
         >
@@ -186,9 +184,8 @@ export const Client: React.FC<PropsType> = React.memo(({
               closeModal={closeEditModal}
           />
         </ModalPopUp>
-      }
-      { editGalleryMode &&
           <ModalPopUp
+              isOpen={editGalleryMode}
               modalTitle="Edit Gallery"
               closeModal={closeEditModal}
           >
@@ -201,7 +198,6 @@ export const Client: React.FC<PropsType> = React.memo(({
                 closeModal={closeEditModal}
             />
           </ModalPopUp>
-      }
       {
           bigImg &&
           <div className="gallery__large-wrap modal-wrap">

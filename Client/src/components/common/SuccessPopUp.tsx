@@ -1,32 +1,25 @@
-import * as React from "react"
-import {ConfettiContainer} from "./Confetti"
+import * as React from "react";
+import {ConfettiContainer} from "./Confetti";
+import {ModalPopUp} from "./ModalPopUp";
 
 type PropsType = {
-    closeModal: (bol: boolean) => void
+    isOpen: boolean
     content?: string
-}
+    closeModal: () => void
+};
 
 export const SuccessPopUp: React.FC<PropsType> = ({
-   closeModal,
-   content
+   isOpen,
+   content,
+   closeModal
 }) => {
     return (
-        <div
-            className="modal-wrap successPopUp"
-            onClick={() => {closeModal(false)}}
-        >
-            <div className="modal-wrap__inner-block">
+        <ModalPopUp isOpen={isOpen} closeModal={closeModal}>
+            <div className="success">
                 <ConfettiContainer />
-                <div className="modal__header">
-                    <button
-                        className="close-button modal-wrap__close-btn"
-                        onClick={() => {closeModal(false)}}
-                    >{''}</button>
-                </div>
-                <div className="success">
-                    <h1 className={"title--first"}>This is Success!!</h1>
-                    <p >{content ? content : 'See you soon!!!'}</p>
-                </div>
+                <h1 className={"title--first"}>This is Success!!</h1>
+                <p >{content ? content : 'See you soon!!!'}</p>
             </div>
-        </div>
-)}
+        </ModalPopUp>
+    )
+};

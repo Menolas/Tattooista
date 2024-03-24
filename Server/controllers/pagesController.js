@@ -22,10 +22,10 @@ class PagesController {
 
     try {
       const page = await Page.findOne({name: 'about'})
-      page.title = req.body.title
-      page.content = req.body.content
-      if(req.files && req.files.wallPaper) {
-        const file = req.files.wallPaper
+      page.title = req.body.aboutPageTitle
+      page.content = req.body.aboutPageContent
+      if(req.files && req.files.aboutPageWallPaper) {
+        const file = req.files.aboutPageWallPaper
         if(!file)  return res.json({error: 'Incorrect input name'})
         const newFileName = generateFileRandomName(file.name)
         await fs.unlink(`./uploads/pageWallpapers/${page._id}/${page.wallPaper}`, e => {

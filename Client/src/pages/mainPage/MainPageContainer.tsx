@@ -1,19 +1,19 @@
-import * as React from "react"
-import {useEffect} from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { MainPage } from "./MainPage"
-import { BookConsultationFormValues, FaqType, TattooStyleType} from "../../types/Types"
+import * as React from "react";
+import {useEffect} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { MainPage } from "./MainPage";
+import {BookConsultationFormValues, FaqType, ServiceType, TattooStyleType} from "../../types/Types";
 import {
   getBookingConsultationApiErrorSelector,
   getFaqItemsSelector,
   getIsGeneralFetchingSelector,
   getIsSuccessBookingSelector,
-  getPageAboutSelector,
+  getPageAboutSelector, getServiceSelector,
   getServicesSelector,
   getUpdateFaqItemApiErrorSelector,
   getUpdatePageApiErrorSelector,
   getUpdateServiceApiErrorSelector
-} from '../../redux/General/general-selectors'
+} from "../../redux/General/general-selectors";
 import {
   getFaqItems,
   getAboutPage,
@@ -32,43 +32,45 @@ import {
   setBookingConsultationApiErrorAC,
   setUpdateFaqItemApiErrorAC,
   setUpdateServiceApiErrorAC,
-  setUpdatePageApiErrorAC
-} from "../../redux/General/general-reducer"
-import { getTattooStyles, setActiveStyleAC } from "../../redux/Portfolio/portfolio-reducer"
+  setUpdatePageApiErrorAC,
+  setServiceAC,
+} from "../../redux/General/general-reducer";
+import { getTattooStyles, setActiveStyleAC } from "../../redux/Portfolio/portfolio-reducer";
 import {
   getFakeApiSelector,
   getGalleryPageSize,
   getTattooStylesSelector
-} from "../../redux/Portfolio/portfolio-selectors"
-import {getAuthSelector, getRolesSelector} from "../../redux/Auth/auth-selectors"
-import {getIsSuccessSelector} from "../../redux/General/general-selectors"
+} from "../../redux/Portfolio/portfolio-selectors";
+import {getAuthSelector, getRolesSelector} from "../../redux/Auth/auth-selectors";
+import {getIsSuccessSelector} from "../../redux/General/general-selectors";
 
 export const MainPageContainer: React.FC = () =>  {
 
-  const roles = useSelector(getRolesSelector)
-  const isAuth = useSelector(getAuthSelector)
-  const galleryPageSize = useSelector(getGalleryPageSize)
-  const tattooStyles = useSelector(getTattooStylesSelector)
-  const services = useSelector(getServicesSelector)
-  const faq = useSelector(getFaqItemsSelector)
-  const pageAbout = useSelector(getPageAboutSelector)
-  const isGeneralFetching = useSelector(getIsGeneralFetchingSelector)
-  const isSuccess = useSelector(getIsSuccessSelector)
-  const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
-  const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector)
-  const updateFaqItemApiError = useSelector(getUpdateFaqItemApiErrorSelector)
-  const updateServiceApiError = useSelector(getUpdateServiceApiErrorSelector)
-  const updatePageApiError = useSelector(getUpdatePageApiErrorSelector)
-  const fakeApi = useSelector(getFakeApiSelector)
+  const roles = useSelector(getRolesSelector);
+  const isAuth = useSelector(getAuthSelector);
+  const galleryPageSize = useSelector(getGalleryPageSize);
+  const tattooStyles = useSelector(getTattooStylesSelector);
+  const services = useSelector(getServicesSelector);
+  const service = useSelector(getServiceSelector);
+  const faq = useSelector(getFaqItemsSelector);
+  const pageAbout = useSelector(getPageAboutSelector);
+  const isGeneralFetching = useSelector(getIsGeneralFetchingSelector);
+  const isSuccess = useSelector(getIsSuccessSelector);
+  const isSuccessBooking = useSelector(getIsSuccessBookingSelector);
+  const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector);
+  const updateFaqItemApiError = useSelector(getUpdateFaqItemApiErrorSelector);
+  const updateServiceApiError = useSelector(getUpdateServiceApiErrorSelector);
+  const updatePageApiError = useSelector(getUpdatePageApiErrorSelector);
+  const fakeApi = useSelector(getFakeApiSelector);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getTattooStyles())
     dispatch(getServices())
     dispatch(getFaqItems())
     dispatch(getAboutPage())
-  }, [])
+  }, []);
 
   const setActiveStyleCallBack = (style: TattooStyleType) => {
     dispatch(setActiveStyleAC(style))
@@ -92,6 +94,10 @@ export const MainPageContainer: React.FC = () =>  {
 
   const deleteServiceCallBack = (id: string) => {
     dispatch(deleteService(id))
+  }
+
+  const setServiceCallBack = (service: ServiceType) => {
+    dispatch(setServiceAC(service));
   }
 
   const addFaqItemCallBack = (values: FaqType) => {
@@ -141,6 +147,7 @@ export const MainPageContainer: React.FC = () =>  {
           galleryPageSize={galleryPageSize}
           tattooStyles={tattooStyles}
           services={services}
+          service={service}
           faq={faq}
           pageAbout={pageAbout}
           isGeneralFetching={isGeneralFetching}
@@ -155,6 +162,7 @@ export const MainPageContainer: React.FC = () =>  {
           editService={editServiceCallBack}
           addService={addServiceCallBack}
           deleteService={deleteServiceCallBack}
+          setService={setServiceCallBack}
           addFaqItem={addFaqItemCallBack}
           updateFaqItem={updateFaqItemCallBack}
           deleteFaqItem={deleteFaqItemCallBack}

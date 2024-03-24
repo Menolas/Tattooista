@@ -1,34 +1,40 @@
-import * as React from "react"
-import {useState} from "react"
-import {ServiceType} from "../../types/Types"
-import {ServiceItem} from "./ServiceItem"
-import {ModalPopUp} from "../common/ModalPopUp"
-import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik"
+import * as React from "react";
+import {useEffect, useState} from "react";
+import {ServiceType} from "../../types/Types";
+import {ServiceItem} from "./ServiceItem";
+import {ModalPopUp} from "../common/ModalPopUp";
+import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik";
 
 type PropsType = {
   fakeApi: boolean
   isAuth: string
   services: Array<ServiceType>
+  service: ServiceType
   editService: (id: string, values: FormData) => void
   addService: (values: FormData) => void
   deleteService: (id: string) => void
-}
+  setService: (service: ServiceType) => void
+};
 
 export const Services: React.FC<PropsType> = React.memo(({
   fakeApi,
   isAuth,
   services,
+  service,
   editService,
   addService,
-  deleteService
+  deleteService,
+  setService,
 }) => {
 
-  const [addServiceMode, setAddServiceMode] = useState(false)
-  const closeAddServiceModal = () => {
-    setAddServiceMode(false)
-  }
+  const [updateServiceMode, setUpdateServiceMode] = useState(false);
 
-  const addServiceModalTitle = 'Add New Service'
+  const closeUpdateServiceModal = () => {
+      setUpdateServiceMode(false);
+      setService(null);
+  };
+
+  const updateServiceModalTitle = 'Update "Services" block';
 
   const servicesArray = services.map((item, i) => {
     return (
@@ -38,11 +44,14 @@ export const Services: React.FC<PropsType> = React.memo(({
         isAuth={isAuth}
         serviceIndex={i + 1}
         service={item}
-        editService={editService}
         deleteService={deleteService}
+        setService={setService}
+        setUpdateServiceMode={setUpdateServiceMode}
       />
     )
-  })
+  });
+
+  console.log(service + " Service !!!!!!!!!!!!!!!!!!!!!!!")
 
   return (
     <section className="page-block services container" id="services">
@@ -50,27 +59,28 @@ export const Services: React.FC<PropsType> = React.memo(({
          isAuth &&
          <button
              className={"btn btn--bg btn--light-bg"}
-             onClick={() => {setAddServiceMode(true)}}
+             onClick={() => {setUpdateServiceMode(true)}}
          >
              Add Service
          </button>
       }
-      {
-          addServiceMode &&
-          <ModalPopUp
-              modalTitle={addServiceModalTitle}
-              closeModal={closeAddServiceModal}
-          >
-              <UpdateServiceItemFormFormik
-                  addService={addService}
-                  closeModal={closeAddServiceModal}
-              />
-          </ModalPopUp>
-      }
+      <ModalPopUp
+            isOpen={updateServiceMode}
+            modalTitle={updateServiceModalTitle}
+            closeModal={closeUpdateServiceModal}
+      >
+        <UpdateServiceItemFormFormik
+            service={service}
+            addService={addService}
+            editService={editService}
+            closeModal={closeUpdateServiceModal}
+        />
+      </ModalPopUp>
+
       <h2 className="page-block__title">Studio services</h2>
       <ul className="services__list list">
         { servicesArray }
       </ul>
     </section>
   )
-})
+});

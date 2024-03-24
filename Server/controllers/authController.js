@@ -81,7 +81,11 @@ class AuthController {
         return res.json(results)
       }
     } catch(e) {
-      next(e)
+      results.resultCode = 1
+      results.message = e.message
+      console.log(e)
+      res.status(400).json(results)
+      //next(e)
     }
   }
 }

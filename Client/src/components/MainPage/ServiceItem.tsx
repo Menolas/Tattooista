@@ -1,55 +1,39 @@
-import * as React from "react"
-import { useState } from "react"
-import {ServiceType} from "../../types/Types"
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import {ModalPopUp} from "../common/ModalPopUp"
-import {SuccessModal} from "../SuccessModal"
-import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik"
-import {API_URL} from "../../http"
-import {Tooltip} from "react-tooltip"
+import * as React from "react";
+import {ServiceType} from "../../types/Types";
+import {API_URL} from "../../http";
+import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+// @ts-ignore
+import Sprite from "../../assets/svg/sprite.svg";
 
 type PropsType = {
-    fakeApi: boolean
-    isAuth: string
-    serviceIndex: number
-    service: ServiceType
-    editService: (id: string, values: FormData) => void
-    deleteService: (id: string) => void
-}
+    fakeApi: boolean;
+    isAuth: string;
+    serviceIndex: number;
+    service: ServiceType;
+    deleteService: (id: string) => void;
+    setService: (service: ServiceType) => void;
+    setUpdateServiceMode: (mode: boolean) => void;
+};
 
 export const ServiceItem: React.FC<PropsType> = React.memo(({
     fakeApi,
     isAuth,
     serviceIndex,
     service,
-    editService,
-    deleteService
+    deleteService,
+    setService,
+    setUpdateServiceMode,
 }) => {
-
-    const [isEditMode, setIsEditMode] = useState(false)
-    const [isSuccess, setSuccess] = useState(false)
-
-    const closeSuccessModal = () => {
-        setSuccess(false)
-    }
-    const closeEditModal = () => {
-        setIsEditMode(false)
-    }
-
-    const modalTitle = ''
-    const editModalTitle = 'Update "Services" block'
-
     const conditions = service.conditions.map((item, i) => {
-      return <li key = { i }>{item}</li>
-    })
+        return item ? <li key = { i }>{item}</li> : null
+    });
 
     const wallPaperUrl = fakeApi
         ? './uploads/ServicesWallpapers/service.jpg'
         : service.wallPaper
             ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
-            : './uploads/ServicesWallpapers/service.jpg'
+            : './uploads/ServicesWallpapers/service.jpg';
 
     return (
         <li className="services__item">
@@ -61,7 +45,11 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                             data-tooltip-id="service-tooltip"
                             data-tooltip-content="Edit service item"
                             className={"btn btn--icon"}
-                            onClick={() => {setIsEditMode(true)}}
+                            onClick={() => {
+                                console.log("hit onclick!!!!!!!!!!!!")
+                                setService(service);
+                                setUpdateServiceMode(true);
+                            }}
                         >
                             <svg><use href={`${Sprite}#edit`}/></svg>
                         </button>
@@ -86,30 +74,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                     </ul>
                 </div>
             </article>
-            {
-                isEditMode &&
-                <ModalPopUp
-                    modalTitle={editModalTitle}
-                    closeModal={closeEditModal}
-                >
-                    <UpdateServiceItemFormFormik
-                        service={service}
-                        editService={editService}
-                        //showSuccessModal={showSuccessModal}
-                        closeModal={closeEditModal}
-                    />
-                </ModalPopUp>
-            }
-            {
-                isSuccess &&
-                <ModalPopUp
-                    modalTitle={modalTitle}
-                    closeModal={closeSuccessModal}
-                >
-                    <SuccessModal />
-                </ModalPopUp>
-            }
             <Tooltip id="service-tooltip" />
         </li>
     )
-})
+});

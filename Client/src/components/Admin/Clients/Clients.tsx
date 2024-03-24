@@ -82,6 +82,10 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setAddClientMode(false)
   }
 
+  const closeSuccessCallBack = () => {
+        setIsSuccess(false);
+  }
+
   const modalTitle = 'ADD CLIENT'
   const successPopUpContent = "You successfully added changes to your clients list"
 
@@ -144,20 +148,23 @@ export const Clients: React.FC<PropsType> = React.memo(({
                               )
                               : <NothingToShow/>
                   }
-                  {addClientMode &&
-                      <ModalPopUp
-                          modalTitle={modalTitle}
+                  <ModalPopUp
+                      isOpen={addClientMode}
+                      modalTitle={modalTitle}
+                      closeModal={closeModal}
+                  >
+                      <UpdateClientForm
+                          addClient={addClient}
                           closeModal={closeModal}
-                      >
-                          <UpdateClientForm
-                              addClient={addClient}
-                              closeModal={closeModal}
-                          />
-                      </ModalPopUp>
-                  }
+                      />
+                  </ModalPopUp>
                   {
                       isSuccess &&
-                      <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+                      <SuccessPopUp
+                          isOpen={isSuccess}
+                          closeModal={closeSuccessCallBack}
+                          content={successPopUpContent}
+                      />
                   }
 
                   {addClientApiError && addClientApiError !== '' &&

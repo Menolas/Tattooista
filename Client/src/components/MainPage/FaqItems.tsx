@@ -54,9 +54,8 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
               Add Faq
           </button>
         }
-        {
-          addFaqItemMode &&
           <ModalPopUp
+              isOpen={addFaqItemMode}
               modalTitle={addFaqItemModalTitle}
               closeModal={closeAddFaqItemModal}
           >
@@ -65,7 +64,6 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
                   closeModal={closeAddFaqItemModal}
               />
           </ModalPopUp>
-        }
         <h2 className="page-block__title">F.A.Q</h2>
         <ul className="faq__list list">
           {faqItemsArray}

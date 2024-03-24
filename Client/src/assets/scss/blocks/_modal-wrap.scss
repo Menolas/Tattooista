@@ -1,6 +1,9 @@
 .modal-wrap {
   position: fixed;
-  @include center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,11 +11,13 @@
   height: 100svh;
   max-height: 100svh;
   text-align: left;
-  background-color: rgba(8, 8, 8, 0.5);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
+  background-color: transparent;
   z-index: 20;
+  transform: translateY(-100%);
+
+  &.open {
+    animation: popUp 0.5s ease forwards;
+  }
 }
 
 .modal-wrap__inner-block {

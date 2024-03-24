@@ -1,0 +1,22 @@
+@keyframes popUp {
+  0% {
+    background-color: transparent;
+    opacity: 0;
+  }
+  70% {
+    background-color: transparent;
+    transform: translateY(200px);
+  }
+  90% {
+    background-color: transparent;
+    transform: translateY(0);
+  }
+  100% {
+    background-color: rgba(8, 8, 8, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

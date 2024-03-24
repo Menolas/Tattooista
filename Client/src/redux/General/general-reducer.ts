@@ -1,27 +1,29 @@
-import { generalSourcesApi } from "./generalSourcesApi"
-import { BookConsultationFormValues, FaqType, PageType, ServiceType } from "../../types/Types"
-import { ThunkAction } from "redux-thunk"
-import { AppStateType } from "../redux-store"
-import { ResultCodesEnum } from "../../utils/constants"
-import { faqItems } from "../../data/FaqData"
-import { services } from "../../data/ServicesData"
-import { pages } from "../../data/PagesData"
+import { generalSourcesApi } from "./generalSourcesApi";
+import { BookConsultationFormValues, FaqType, PageType, ServiceType } from "../../types/Types";
+import { ThunkAction } from "redux-thunk";
+import { AppStateType } from "../redux-store";
+import { ResultCodesEnum } from "../../utils/constants";
+import { faqItems } from "../../data/FaqData";
+import { services } from "../../data/ServicesData";
+import { pages } from "../../data/PagesData";
 
-const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS'
-const SET_SERVICES = 'SET_SERVICES'
-const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE'
-const SET_IS_GENERAL_FETCHING = 'SET_IS_GENERAL_FETCHING'
-const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
-const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING'
-const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR'
-const SET_UPDATE_FAQ_ITEM_API_ERROR = 'SET_UPDATE_FAQ_ITEM_API_ERROR'
-const SET_UPDATE_SERVICE_API_ERROR = 'SET_UPDATE_SERVICE_API_ERROR'
-const SET_UPDATE_PAGE_API_ERROR = 'SET_UPDATE_PAGE_API_ERROR'
-const SET_IS_BOOKING_MODAL_OPEN = 'SET_IS_BOOKING_MODAL_OPEN'
+const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS';
+const SET_SERVICES = 'SET_SERVICES';
+const SET_SERVICE = 'SET_SERVICE';
+const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
+const SET_IS_GENERAL_FETCHING = 'SET_IS_GENERAL_FETCHING';
+const SET_IS_SUCCESS = 'SET_IS_SUCCESS';
+const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING';
+const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR';
+const SET_UPDATE_FAQ_ITEM_API_ERROR = 'SET_UPDATE_FAQ_ITEM_API_ERROR';
+const SET_UPDATE_SERVICE_API_ERROR = 'SET_UPDATE_SERVICE_API_ERROR';
+const SET_UPDATE_PAGE_API_ERROR = 'SET_UPDATE_PAGE_API_ERROR';
+const SET_IS_BOOKING_MODAL_OPEN = 'SET_IS_BOOKING_MODAL_OPEN';
 
 let initialState = {
   faq: [] as Array<FaqType>,
   services: [] as Array<ServiceType>,
+  service: null as null | ServiceType,
   pageAbout: {} as PageType,
   isGeneralFetching: false as boolean,
   isSuccess: false as boolean,
@@ -52,6 +54,12 @@ export const generalReducer = (
       return {
         ...state,
         services: action.services
+      }
+
+    case SET_SERVICE:
+      return {
+        ...state,
+        service: action.service
       }
 
     case SET_ABOUT_PAGE:
@@ -116,7 +124,7 @@ export const generalReducer = (
 
 type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
     SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetAboutPageAT |
-    SetFaqItemsAT | SetServicesAT
+    SetFaqItemsAT | SetServicesAT | SetServiceAT
 
 // action creators
 
@@ -207,22 +215,27 @@ type SetFaqItemsAT = {
   faqItems: Array<FaqType>
 }
 
-const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => (
-  {
+const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => ({
     type: SET_FAQ_ITEMS, faqItems
-  }
-)
+});
 
 type SetServicesAT = {
   type: typeof SET_SERVICES,
   services: Array<ServiceType>
 }
 
-const setServices = (services: Array<ServiceType>): SetServicesAT => (
-  {
+const setServicesAC = (services: Array<ServiceType>): SetServicesAT => ({
     type: SET_SERVICES, services
-  }
-)
+});
+
+type SetServiceAT = {
+  type: typeof SET_SERVICE,
+  service: ServiceType
+}
+
+export const setServiceAC = (service: ServiceType): SetServiceAT => ({
+  type: SET_SERVICE, service
+});
 
 // thunks
 
@@ -287,11 +300,11 @@ export const getServices = (): ThunkType => async (dispatch) => {
     dispatch(setIsGeneralFetchingAC(true))
     let response = await generalSourcesApi.getServices()
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServices(response.services))
+      dispatch(setServicesAC(response.services))
     }
   } catch (e) {
     console.log(e)
-    dispatch(setServices(services))
+    dispatch(setServicesAC(services))
   } finally {
     dispatch(setIsGeneralFetchingAC(false))
   }
@@ -346,7 +359,7 @@ export const editService = (
   try {
     const response = await generalSourcesApi.editService(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServices(response.services))
+      dispatch(setServicesAC(response.services))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e: any) {
@@ -361,7 +374,7 @@ export const addService = (
   try {
     const response = await generalSourcesApi.addService(values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServices(response.services))
+      dispatch(setServicesAC(response.services))
       dispatch(setIsSuccessAC(true))
     }
   } catch (e: any) {
@@ -376,7 +389,7 @@ export const deleteService = (
   try {
     const response = await generalSourcesApi.deleteService(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServices(response.services))
+      dispatch(setServicesAC(response.services))
     }
   } catch (e) {
     console.log(e)

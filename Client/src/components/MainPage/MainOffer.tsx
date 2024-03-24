@@ -18,7 +18,10 @@ export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) =>
         </h1>
         <span className = "main-offer__motto">Your philosophy on your skin</span>
       </div>
-      <BookingButton bookConsultation={bookConsultation} />
+      <BookingButton
+          consentId={"consent1"}
+          bookConsultation={bookConsultation}
+      />
     </div>
   )
 })

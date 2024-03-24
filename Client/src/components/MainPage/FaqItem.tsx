@@ -68,9 +68,8 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                 </button>
             </div>
           }
-          {
-            isEditMode &&
             <ModalPopUp
+                isOpen={isEditMode}
                 modalTitle={editModalTitle}
                 closeModal={closeEditModal}
             >
@@ -80,7 +79,6 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                     closeModal={closeEditModal}
                 />
             </ModalPopUp>
-          }
 
           <span className="faq__item-handle">{''}</span>
           <h5 className="faq__item-title">

@@ -211,14 +211,13 @@ export const registration = (values: RegistrationFormValues): ThunkType => async
 export const checkAuth = ():ThunkType => async (dispatch) => {
 
   try {
-    let response = await authAPI.checkAuth()
+    let response = await authAPI.checkAuth();
     if (response.resultCode === ResultCodesEnum.Success) {
       if (response.userData.isAuth === true) {
-        dispatch(setAccessTokenAC(response.userData.accessToken))
-        dispatch(setUserDataAC(response.userData.user))
-        dispatch(setRolesAC(response.userData.roles))
-        dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)))
-        //console.log("getUserRole in checkAuth")
+        dispatch(setAccessTokenAC(response.userData.accessToken));
+        dispatch(setUserDataAC(response.userData.user));
+        dispatch(setRolesAC(response.userData.roles));
+        dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
       }
     }
   } catch (e) {
