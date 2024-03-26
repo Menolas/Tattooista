@@ -1,15 +1,16 @@
-import * as React from "react"
-import {Form, Formik} from "formik"
-import * as yup from "yup"
-import {FaqType} from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
+import * as React from "react";
+import {Field, Form, Formik} from "formik";
+import * as Yup from "yup";
+import {FaqType} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
 
-const validationSchema = yup.object().shape({
-    question: yup.string()
+const validationSchema = Yup.object().shape({
+    question: Yup.string()
         .required("Faq question is a required field"),
-    answer: yup.string()
+    answer: Yup.string()
         .required("Answer is a required field"),
-})
+});
 
 type PropsType = {
     faqItem?: FaqType
@@ -55,18 +56,23 @@ export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
                             onChange={propsF.handleChange}
                         />
 
-                        <FieldComponent
+                        <FieldWrapper
                             name={'answer'}
-                            type={'text'}
-                            placeholder={"FAQ Answer"}
-                            value={propsF.values.answer}
-                            onChange={propsF.handleChange}
-                        />
+                        >
+                            <Field
+                                name={'answer'}
+                                component="textarea"
+                                rows={6}
+                                placeholder={"FAQ Answer"}
+                                value={propsF.values.answer}
+                                onChange={propsF.handleChange}
+                            />
+                        </FieldWrapper>
 
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}
-                            className="btn btn--bg btn--transparent form__submit-btn">
+                            className="btn btn--bg btn--dark-bg form__submit-btn">
                             {propsF.isSubmitting
                                 ? 'Please wait...'
                                 : 'SUBMIT'

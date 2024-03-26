@@ -6,9 +6,7 @@ import {PageType} from "../../types/Types";
 import {FieldComponent} from "./FieldComponent";
 import {FieldWrapper} from "./FieldWrapper";
 import * as Yup from "yup";
-import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
-
-const tattooMachine = require("../../assets/img/tattoo-machine.webp") as string;
+import {validateFile} from "../../utils/validators";
 
 type PropsType = {
     pageAbout?: PageType
@@ -23,26 +21,9 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
 }) => {
 
     const validationSchema = Yup.object().shape({
-        // aboutPageWallPaper: Yup.mixed()
-        //     .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-        //         if (!value) return true;
-        //         return isFileSizeValid([value], MAX_FILE_SIZE);
-        //     })
-        //     .test('fileType', 'Invalid file type', (value: File) => {
-        //         if (!value) return true;
-        //         return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
-        //     }),
         aboutPageTitle: Yup.string(),
         aboutPageContent: Yup.string(),
     });
-
-    const validateFile = (file: File): boolean => {
-        // Perform your file validation logic here
-        // For example, check file size and file type
-        const isValidSize = file.size <= MAX_FILE_SIZE;
-        const isValidType = VALID_FILE_EXTENSIONS.includes(file.type);
-        return isValidSize && isValidType;
-    };
 
     const [imageURL, setImageURL] = useState('')
 
@@ -66,25 +47,32 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
         aboutPageContent: pageAbout && pageAbout.content ? pageAbout.content : '',
     }
 
-    const submit = (values, actions) => {
+    const submit = async (values, actions) => {
         // Check if aboutPageWallPaper is a File object
         if (values.aboutPageWallPaper instanceof File) {
             const isValidFile = validateFile(values.aboutPageWallPaper);
             if (!isValidFile) {
                 actions.setFieldError('aboutPageWallPaper', 'Invalid file');
                 return;
+            } else {
+                // Clear any existing field error
+                actions.setFieldError('aboutPageWallPaper', '');
             }
         }
 
         const formData = new FormData();
+
         for (let value in values) {
             formData.append(value, values[value]);
         }
-        editAboutPage(formData);
-        closeModal();
-    }
 
-    console.log(`${API_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`)
+        try {
+            await editAboutPage(formData);
+            closeModal();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
+    }
 
     return (
         <Formik
@@ -102,7 +90,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                         imageURL ? imageURL
                                             : pageAbout?.wallPaper
                                             ? `${API_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`
-                                            : tattooMachine
+                                            : "./uploads/ServicesWallpapers/service.jpg"
                                     }
                                     alt="preview"
                                 />
@@ -147,7 +135,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}
-                            className="btn btn--bg btn--transparent form__submit-btn">
+                            className="btn btn--bg btn--dark-bg form__submit-btn">
                             {propsF.isSubmitting
                                 ? 'Please wait...'
                                 : 'SUBMIT'

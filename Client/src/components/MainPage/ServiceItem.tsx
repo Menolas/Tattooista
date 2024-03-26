@@ -29,11 +29,9 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
         return item ? <li key = { i }>{item}</li> : null
     });
 
-    const wallPaperUrl = fakeApi
-        ? './uploads/ServicesWallpapers/service.jpg'
-        : service.wallPaper
-            ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
-            : './uploads/ServicesWallpapers/service.jpg';
+    const wallPaperUrl = !fakeApi && service.wallPaper
+        ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
+        : 'url("./uploads/ServicesWallpapers/service.jpg")';
 
     return (
         <li className="services__item">
@@ -46,7 +44,6 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                             data-tooltip-content="Edit service item"
                             className={"btn btn--icon"}
                             onClick={() => {
-                                console.log("hit onclick!!!!!!!!!!!!")
                                 setService(service);
                                 setUpdateServiceMode(true);
                             }}
@@ -65,7 +62,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                 }
                 <div
                     className="services__article-img-wrap"
-                    style={{ backgroundImage: `url(${wallPaperUrl})`}}
+                    style={{backgroundImage: wallPaperUrl}}
                 >{''}</div>
                 <div className="services__article-text-block">
                     <h4>{service.title}:</h4>

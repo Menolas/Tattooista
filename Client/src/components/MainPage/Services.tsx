@@ -51,8 +51,6 @@ export const Services: React.FC<PropsType> = React.memo(({
     )
   });
 
-  console.log(service + " Service !!!!!!!!!!!!!!!!!!!!!!!")
-
   return (
     <section className="page-block services container" id="services">
       {
@@ -69,12 +67,17 @@ export const Services: React.FC<PropsType> = React.memo(({
             modalTitle={updateServiceModalTitle}
             closeModal={closeUpdateServiceModal}
       >
-        <UpdateServiceItemFormFormik
-            service={service}
-            addService={addService}
-            editService={editService}
-            closeModal={closeUpdateServiceModal}
-        />
+          {
+              updateServiceMode &&
+              <UpdateServiceItemFormFormik
+                  service={service}
+                  addService={addService}
+                  editService={editService}
+                  closeModal={closeUpdateServiceModal}
+              />
+
+          }
+
       </ModalPopUp>
 
       <h2 className="page-block__title">Studio services</h2>

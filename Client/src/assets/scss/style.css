@@ -849,7 +849,6 @@ img {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  z-index: 1;
 }
 
 .page-block__title-secondary {
@@ -1226,10 +1225,6 @@ img {
     font-size: 24px;
   }
 }
-.booking {
-  padding-top: 0;
-}
-
 .booking__content {
   display: flex;
   margin-left: -16px;
