@@ -87,13 +87,10 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                 actions.setFieldValue('wallpaper', '');
             }
         }
-
         const formData = new FormData();
-
         for (let value in values) {
             formData.append(value, values[value]);
         }
-
         try {
             if (service) {
                 editService(service._id, formData);
@@ -104,7 +101,6 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
         } catch (error) {
             console.error('Error submitting form:', error);
         }
-
         closeModal();
     }
 

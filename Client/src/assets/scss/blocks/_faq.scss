@@ -70,23 +70,26 @@
 }
 
 .faq__item-handle {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: 25px;
-  height: 11px;
-  transform: translate(0, -50%);
+  position: relative;
+  padding: 1rem;
+  border: none;
+  //background-color: pink;
 
-  &::before {
-    @include element-style(16px, 16px, transparent);
-    border: $light-border;
-    border-radius: 2px;
-    border-left: none;
-    border-top: none;
-    transform: rotate(45deg) skew(-4deg, -4deg);
-    bottom: 2px;
-    left: 4px;
-    transition: all 0.3s ease-in-out;
+  span {
+    width: 25px;
+    height: 11px;
+    //background-color: gray;
+    &::before {
+      @include element-style(16px, 16px, transparent);
+      border: $light-border;
+      border-radius: 2px;
+      border-left: none;
+      border-top: none;
+      transform: rotate(45deg) skew(-4deg, -4deg);
+      bottom: 18px;
+      left: 20px;
+      transition: all 0.3s ease-in-out;
+    }
   }
 }
 
@@ -98,8 +101,8 @@
     transition: all 0.3s ease-in-out;
   }
 
-  .faq__item-handle::before {
-    bottom: -6px;
+  .faq__item-handle span::before {
+    bottom: 9px;
     transform: rotate(225deg) skew(-4deg, -4deg);
   }
 }

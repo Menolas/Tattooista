@@ -33,7 +33,7 @@ import {
 } from "../../redux/Portfolio/portfolio-reducer"
 import { Portfolio } from "./Portfolio"
 import {getAuthSelector} from "../../redux/Auth/auth-selectors"
-import {getIsSuccessSelector} from "../../redux/bookedConsultations/bookedConsultations-selectors"
+import {getIsSuccessSelector} from "../../redux/Bookings/bookings-selectors"
 import {
   bookConsultation,
   setBookingConsultationApiErrorAC,

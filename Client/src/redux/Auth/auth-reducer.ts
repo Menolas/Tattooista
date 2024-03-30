@@ -157,18 +157,18 @@ export const login = (values: LoginFormValues): ThunkType => async (
     dispatch
 ) => {
   try {
-    let response = await authAPI.login(values)
+    let response = await authAPI.login(values);
     if(response.resultCode === 0) {
-      dispatch(setLoginErrorAC(''))
-      dispatch(setUserDataAC(response.userData.user))
-      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)))
-      //console.log("getUserRole in login")
-      dispatch(setAccessTokenAC(response.userData.accessToken))
-      dispatch(setRolesAC(response.userData.roles))
+      dispatch(setLoginErrorAC(''));
+      dispatch(setUserDataAC(response.userData.user));
+      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
+      //console.log("getUserRole in login");
+      dispatch(setAccessTokenAC(response.userData.accessToken));
+      dispatch(setRolesAC(response.userData.roles));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setLoginErrorAC(e.response.data.message))
+    dispatch(setLoginErrorAC(e.response.data.message));
   }
 }
 
@@ -177,14 +177,14 @@ export const logout = (): ThunkType => async (
 ) => {
   //console.log("hit logout!!!")
   try {
-    const response = await authAPI.logout()
+    const response = await authAPI.logout();
      if(response.resultCode === 0) {
-       dispatch(setAccessTokenAC(null))
-       dispatch(setUserDataAC(null))
-       dispatch(setAuth(null))
+       dispatch(setAccessTokenAC(null));
+       dispatch(setUserDataAC(null));
+       dispatch(setAuth(null));
      }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 }
 

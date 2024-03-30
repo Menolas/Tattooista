@@ -1,28 +1,28 @@
-import { bookedConsultationsAPI } from "./bookedConsultationsApi"
-import { ResultCodesEnum } from "../../utils/constants"
-import {AddConsultationFormValues, BookedConsultationType} from "../../types/Types"
-import { AppStateType } from "../redux-store"
-import { ThunkAction } from "redux-thunk"
-import type {} from "redux-thunk/extend-redux"
-import {getNewPage} from "../../utils/functions"
+import { bookingsApi } from "./bookingsApi";
+import { ResultCodesEnum } from "../../utils/constants";
+import {AddConsultationFormValues, BookedConsultationType} from "../../types/Types";
+import { AppStateType } from "../redux-store";
+import { ThunkAction } from "redux-thunk";
+import type {} from "redux-thunk/extend-redux";
+import {getNewPage} from "../../utils/functions";
 
-const SET_BOOKED_CONSULTATIONS_PAGE_SIZE = 'SET_BOOKED_CONSULTATIONS_PAGE_SIZE'
-const SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE = 'SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE'
-const SET_BOOKED_CONSULTATIONS_FILTER = 'SET_BOOKED_CONSULTATIONS_FILTER'
-const SET_ARCHIVED_CONSULTATIONS_FILTER = 'SET_ARCHIVED_CONSULTATIONS_FILTER'
-const SET_CONSULTATION_STATUS = 'SET_CONSULTATION_STATUS'
-const SET_BOOKED_CONSULTATIONS = 'SET_BOOKED_CONSULTATIONS'
-const SET_ARCHIVED_CONSULTATIONS = 'SET_ARCHIVED_CONSULTATIONS'
-const SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS = 'SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS'
-const SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS = 'SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS'
-const SET_TOTAL_BOOKED_CONSULTATIONS_COUNT = 'SET_TOTAL_BOOKED_CONSULTATIONS_COUNT'
-const SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT = 'SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT'
-const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
-const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS'
-const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS'
-const DELETE_CONSULTATION = 'DELETE_CONSULTATION'
-const DELETE_ARCHIVED_CONSULTATION = 'DELETE_ARCHIVED_CONSULTATION'
-const ADD_CONSULTATION = 'ADD_CONSULTATION'
+const SET_BOOKINGS_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
+const SET_ARCHIVED_BOOKINGS_PAGE_SIZE = 'SET_ARCHIVED_BOOKINGS_PAGE_SIZE';
+const SET_BOOKINGS_FILTER = 'SET_BOOKINGS_FILTER';
+const SET_ARCHIVED_BOOKINGS_FILTER = 'SET_ARCHIVED_BOOKINGS_FILTER';
+const SET_BOOKINGS_STATUS = 'SET_BOOKINGS_STATUS';
+const SET_BOOKINGS = 'SET_BOOKINGS';
+const SET_ARCHIVED_BOOKINGS = 'SET_ARCHIVED_BOOKINGS';
+const SET_CURRENT_PAGE_FOR_BOOKINGS = 'SET_CURRENT_PAGE_FOR_BOOKINGS';
+const SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS = 'SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS';
+const SET_TOTAL_BOOKINGS_COUNT = 'SET_TOTAL_BOOKINGS_COUNT';
+const SET_TOTAL_ARCHIVED_BOOKINGS_COUNT = 'SET_TOTAL_ARCHIVED_BOOKINGS_COUNT';
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS';
+const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS'
+const DELETE_BOOKING = 'DELETE_BOOKING'
+const DELETE_ARCHIVED_BOOKING = 'DELETE_ARCHIVED_BOOKING';
+const ADD_BOOKING = 'ADD_BOOKING'
 const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
 const SET_ADD_BOOKING_API_ERROR = 'SET_ADD_BOOKING_API_ERROR'
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR'
@@ -55,73 +55,73 @@ let initialState = {
 export type InitialStateType = typeof initialState
 export type BookedConsultationsFilterType = typeof initialState.bookedConsultationsFilter
 
-export const bookedConsultationsReducer = (
+export const bookingsReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
 
   switch (action.type) {
-    case SET_BOOKED_CONSULTATIONS_PAGE_SIZE:
+    case SET_BOOKINGS_PAGE_SIZE:
       return {
         ...state,
         bookedConsultationsPageSize: action.pageSize,
         currentBookedConsultationsPage: 1
       }
 
-    case SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE:
+    case SET_ARCHIVED_BOOKINGS_PAGE_SIZE:
       return {
         ...state,
         archivedConsultationsPageSize: action.pageSize,
         currentArchivedConsultationsPage: 1
       }
 
-    case SET_BOOKED_CONSULTATIONS_FILTER:
+    case SET_BOOKINGS_FILTER:
       return {
         ...state,
         bookedConsultationsFilter: action.filter
       }
 
-    case SET_ARCHIVED_CONSULTATIONS_FILTER:
+    case SET_ARCHIVED_BOOKINGS_FILTER:
       return {
         ...state,
         archivedConsultationsFilter: action.filter
       }
 
-    case SET_BOOKED_CONSULTATIONS:
+    case SET_BOOKINGS:
       return {
         ...state,
         bookedConsultations: action.bookedConsultations,
       }
 
-    case SET_ARCHIVED_CONSULTATIONS:
+    case SET_ARCHIVED_BOOKINGS:
       return {
         ...state,
         archivedConsultations: action.archivedConsultations
       }
-    case SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS:
+    case SET_CURRENT_PAGE_FOR_BOOKINGS:
       return {
         ...state,
         currentBookedConsultationsPage: action.page,
       }
 
-    case SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS:
+    case SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS:
       return {
         ...state,
         currentArchivedConsultationsPage: action.currentPage
       }
 
-    case SET_TOTAL_BOOKED_CONSULTATIONS_COUNT:
+    case SET_TOTAL_BOOKINGS_COUNT:
       return {
         ...state,
         totalBookedConsultationsCount: action.count,
       }
 
-    case SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT:
+    case SET_TOTAL_ARCHIVED_BOOKINGS_COUNT:
       return {
         ...state,
         totalArchivedConsultationsCount: action.count
       }
-    case SET_CONSULTATION_STATUS:
+    case SET_BOOKINGS_STATUS:
       return {
         ...state,
         bookedConsultations: state.bookedConsultations.map(consultation => {
@@ -151,14 +151,14 @@ export const bookedConsultationsReducer = (
           : state.isDeletingInProcess.filter(id => id !== action.id)
       }
 
-    case DELETE_CONSULTATION:
+    case DELETE_BOOKING:
       return {
         ...state,
         bookedConsultations: state.bookedConsultations.filter(consultation => consultation._id !== action.id),
         totalBookedConsultationsCount: state.totalBookedConsultationsCount - 1
       }
 
-    case DELETE_ARCHIVED_CONSULTATION:
+    case DELETE_ARCHIVED_BOOKING:
       if (state.archivedConsultations.length > 1) {
         return {
           ...state,
@@ -172,7 +172,7 @@ export const bookedConsultationsReducer = (
         }
       }
 
-    case ADD_CONSULTATION:
+    case ADD_BOOKING:
       return {
         ...state,
         bookedConsultations: [{...action.consultation}, ...state.bookedConsultations]
@@ -217,7 +217,7 @@ type SetAccessErrorAT = {
 
 export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
-})
+});
 
 type SetAddBookingApiErrorAT = {
   type: typeof SET_ADD_BOOKING_API_ERROR
@@ -226,7 +226,7 @@ type SetAddBookingApiErrorAT = {
 
 export const setAddBookingApiErrorAC = (error: string | undefined): SetAddBookingApiErrorAT => ({
   type: SET_ADD_BOOKING_API_ERROR, error
-})
+});
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
@@ -235,122 +235,116 @@ type SetIsSuccessAT = {
 
 export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
   type: SET_IS_SUCCESS, isSuccess
-})
+});
 
 type SetBookedConsultationsPageSizeAT = {
-  type: typeof  SET_BOOKED_CONSULTATIONS_PAGE_SIZE
+  type: typeof  SET_BOOKINGS_PAGE_SIZE
   pageSize: number
 }
 
 export const setBookedConsultationsPageSizeAC = (pageSize: number): SetBookedConsultationsPageSizeAT => ({
-    type: SET_BOOKED_CONSULTATIONS_PAGE_SIZE, pageSize
-})
+    type: SET_BOOKINGS_PAGE_SIZE, pageSize
+});
 
 type SetArchivedConsultationsPageSizeAT = {
-  type: typeof SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE
+  type: typeof SET_ARCHIVED_BOOKINGS_PAGE_SIZE
   pageSize: number
 }
 
 export const setArchivedConsultationsPageSizeAC = (pageSize: number): SetArchivedConsultationsPageSizeAT => ({
-  type: SET_ARCHIVED_CONSULTATIONS_PAGE_SIZE, pageSize
-})
+  type: SET_ARCHIVED_BOOKINGS_PAGE_SIZE, pageSize
+});
 
 type SetBookedConsultationsFilterAT = {
-  type: typeof  SET_BOOKED_CONSULTATIONS_FILTER
+  type: typeof  SET_BOOKINGS_FILTER
   filter: BookedConsultationsFilterType
 }
 
 export const setBookedConsultationsFilterAC = (filter: BookedConsultationsFilterType): SetBookedConsultationsFilterAT => ({
-    type: SET_BOOKED_CONSULTATIONS_FILTER, filter
-  })
+    type: SET_BOOKINGS_FILTER, filter
+  });
 
 type SetArchivedConsultationsFilterAT = {
-  type: typeof SET_ARCHIVED_CONSULTATIONS_FILTER
+  type: typeof SET_ARCHIVED_BOOKINGS_FILTER
   filter: BookedConsultationsFilterType
 }
 
 export const setArchivedConsultationsFilterAC = (filter: BookedConsultationsFilterType): SetArchivedConsultationsFilterAT => ({
-  type: SET_ARCHIVED_CONSULTATIONS_FILTER, filter
-})
+  type: SET_ARCHIVED_BOOKINGS_FILTER, filter
+});
 
 type SetBookedConsultationsAT = {
-  type: typeof SET_BOOKED_CONSULTATIONS,
+  type: typeof SET_BOOKINGS,
   bookedConsultations: Array<BookedConsultationType>
 }
 
 const setBookedConsultationsAC = (bookedConsultations: Array<BookedConsultationType>): SetBookedConsultationsAT => ({
-      type: SET_BOOKED_CONSULTATIONS, bookedConsultations
-})
+      type: SET_BOOKINGS, bookedConsultations
+});
 
 type SetArchivedConsultationsAT = {
-  type: typeof SET_ARCHIVED_CONSULTATIONS,
+  type: typeof SET_ARCHIVED_BOOKINGS,
   archivedConsultations: Array<BookedConsultationType>
 }
 
 const setArchivedConsultationsAC = (archivedConsultations: Array<BookedConsultationType>): SetArchivedConsultationsAT => ({
-  type: SET_ARCHIVED_CONSULTATIONS, archivedConsultations
-})
+  type: SET_ARCHIVED_BOOKINGS, archivedConsultations
+});
 
 type SetCurrentPageForBookedConsultationsAT = {
-  type: typeof SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS,
+  type: typeof SET_CURRENT_PAGE_FOR_BOOKINGS,
   page: number
 }
 
 export const setCurrentPageForBookedConsultationsAC = (page: number): SetCurrentPageForBookedConsultationsAT => ({
-      type: SET_CURRENT_PAGE_FOR_BOOKED_CONSULTATIONS, page
-})
+      type: SET_CURRENT_PAGE_FOR_BOOKINGS, page
+});
 
 type SetCurrentPageForArchivedConsultationsAT = {
-  type: typeof SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS,
+  type: typeof SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS,
   currentPage: number
 }
 
 export const setCurrentPageForArchivedConsultationsAC = (currentPage: number): SetCurrentPageForArchivedConsultationsAT => ({
-  type: SET_CURRENT_PAGE_FOR_ARCHIVED_CONSULTATIONS,currentPage
-})
+  type: SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS, currentPage
+});
 
 type SetBookedConsultationsTotalCountAT = {
-  type: typeof SET_TOTAL_BOOKED_CONSULTATIONS_COUNT,
+  type: typeof SET_TOTAL_BOOKINGS_COUNT,
   count: number
 }
 
-const setBookedConsultationsTotalCountAC = (count: number): SetBookedConsultationsTotalCountAT => (
-    {
-      type: SET_TOTAL_BOOKED_CONSULTATIONS_COUNT, count
-    }
-)
+const setBookedConsultationsTotalCountAC = (count: number): SetBookedConsultationsTotalCountAT => ({
+      type: SET_TOTAL_BOOKINGS_COUNT, count
+    });
 
 type SetArchivedConsultationsTotalCountAT = {
-  type: typeof SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT,
+  type: typeof SET_TOTAL_ARCHIVED_BOOKINGS_COUNT,
   count: number
 }
 
 const setArchivedConsultationsTotalCountAC = (count: number): SetArchivedConsultationsTotalCountAT => ({
-  type: SET_TOTAL_ARCHIVED_CONSULTATIONS_COUNT, count
-})
+  type: SET_TOTAL_ARCHIVED_BOOKINGS_COUNT, count
+});
 
 type ChangeBookedConsultationStatusAT = {
-  type: typeof SET_CONSULTATION_STATUS,
+  type: typeof SET_BOOKINGS_STATUS,
   id: string,
   status: boolean
 }
 
-const changeBookedConsultationStatusAC = (id: string, status: boolean): ChangeBookedConsultationStatusAT => (
-  {
-    type: SET_CONSULTATION_STATUS, id, status
-  }
-)
+const changeBookedConsultationStatusAC = (id: string, status: boolean): ChangeBookedConsultationStatusAT => ({
+    type: SET_BOOKINGS_STATUS, id, status
+  });
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
   isFetching: boolean
 }
 
-const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => (
-  {
+const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
-  }
-)
+  });
 
 type ToggleIsStatusChangingAT = {
   type: typeof TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS,
@@ -358,11 +352,9 @@ type ToggleIsStatusChangingAT = {
   id: string
 }
 
-const toggleIsStatusChangingAC = (isFetching: boolean, id: string): ToggleIsStatusChangingAT => (
-  {
+const toggleIsStatusChangingAC = (isFetching: boolean, id: string): ToggleIsStatusChangingAT => ({
     type: TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS, isFetching, id
-  }
-)
+  });
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
@@ -370,42 +362,36 @@ type ToggleIsDeletingInProcessAT = {
   id: string
 }
 
-const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
-  {
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
-  }
-)
+  });
 
 type DeleteBookedConsultationAT = {
-  type: typeof DELETE_CONSULTATION,
+  type: typeof DELETE_BOOKING,
   id: string
 }
 
-const deleteBookedConsultationAC = (id: string): DeleteBookedConsultationAT => (
-  {
-    type: DELETE_CONSULTATION, id
-  }
-)
+const deleteBookedConsultationAC = (id: string): DeleteBookedConsultationAT => ({
+    type: DELETE_BOOKING, id
+  });
 
 type DeleteArchivedConsultationAT = {
-  type: typeof DELETE_ARCHIVED_CONSULTATION
+  type: typeof DELETE_ARCHIVED_BOOKING
   id: string
 }
 
 export const deleteArchivedConsultationAC = (id: string): DeleteArchivedConsultationAT => ({
-  type: DELETE_ARCHIVED_CONSULTATION, id
-})
+  type: DELETE_ARCHIVED_BOOKING, id
+});
 
 type AddBookedConsultationAT = {
-  type: typeof ADD_CONSULTATION,
+  type: typeof ADD_BOOKING,
   consultation: BookedConsultationType
 }
 
-const addBookedConsultationAC = (consultation: BookedConsultationType): AddBookedConsultationAT => (
-  {
-    type: ADD_CONSULTATION, consultation
-  }
-)
+const addBookedConsultationAC = (consultation: BookedConsultationType): AddBookedConsultationAT => ({
+    type: ADD_BOOKING, consultation
+  });
 
 // thunks
 
@@ -421,15 +407,15 @@ const deleteBookingThunk = (
     filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
-    dispatch(deleteBookedConsultationAC(id))
-    dispatch(setBookedConsultationsTotalCountAC(total - 1))
+    dispatch(deleteBookedConsultationAC(id));
+    dispatch(setBookedConsultationsTotalCountAC(total - 1));
   } else {
-    const newPage = getNewPage(currentPage)
+    const newPage = getNewPage(currentPage);
     if (currentPage === newPage) {
-      await dispatch(getBookedConsultations(token, newPage, pageLimit, filter))
+      await dispatch(getBookedConsultations(token, newPage, pageLimit, filter));
     }
-    dispatch(deleteBookedConsultationAC(id))
-    dispatch(setCurrentPageForBookedConsultationsAC(newPage))
+    dispatch(deleteBookedConsultationAC(id));
+    dispatch(setCurrentPageForBookedConsultationsAC(newPage));
   }
 }
 
@@ -443,15 +429,15 @@ const deleteArchivedBookingThunk = (
     filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
-    dispatch(deleteArchivedConsultationAC(id))
-    dispatch(setArchivedConsultationsTotalCountAC(total - 1))
+    dispatch(deleteArchivedConsultationAC(id));
+    dispatch(setArchivedConsultationsTotalCountAC(total - 1));
   } else {
     const newPage = getNewPage(currentPage)
     if (currentPage === newPage) {
-      await dispatch(getArchivedConsultations(token, newPage, pageLimit, filter))
+      await dispatch(getArchivedConsultations(token, newPage, pageLimit, filter));
     }
-    dispatch(deleteArchivedConsultationAC(id))
-    dispatch(setCurrentPageForArchivedConsultationsAC(newPage))
+    dispatch(deleteArchivedConsultationAC(id));
+    dispatch(setCurrentPageForArchivedConsultationsAC(newPage));
   }
 }
 
@@ -465,24 +451,24 @@ export const getBookedConsultations = (
     getState
 ) => {
   try {
-    dispatch(setIsFetchingAC(true))
-    let response = await bookedConsultationsAPI.getBookedConsultations(
+    dispatch(setIsFetchingAC(true));
+    let response = await bookingsApi.getBookedConsultations(
       token,
       currentPage,
       pageSize,
       filter
-    )
+    );
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setAccessErrorAC(''))
-      dispatch(setBookedConsultationsAC(response.bookings))
-      dispatch(setBookedConsultationsTotalCountAC(response.totalCount))
+      dispatch(setAccessErrorAC(''));
+      dispatch(setBookedConsultationsAC(response.bookings));
+      dispatch(setBookedConsultationsTotalCountAC(response.totalCount));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAccessErrorAC(e.response.data.message))
-    console.log(e)
+    dispatch(setAccessErrorAC(e.response.data.message));
+    console.log(e);
   } finally {
-    dispatch(setIsFetchingAC(false))
+    dispatch(setIsFetchingAC(false));
   }
 }
 
@@ -494,23 +480,23 @@ export const getArchivedConsultations = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))
-    let response = await bookedConsultationsAPI.getArchivedConsultations(
+    let response = await bookingsApi.getArchivedConsultations(
         token,
         currentPage,
         pageSize,
         filter
     )
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setAccessErrorAC(''))
-      dispatch(setArchivedConsultationsTotalCountAC(response.totalCount))
-      dispatch(setArchivedConsultationsAC(response.bookings))
+      dispatch(setAccessErrorAC(''));
+      dispatch(setArchivedConsultationsTotalCountAC(response.totalCount));
+      dispatch(setArchivedConsultationsAC(response.bookings));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAccessErrorAC(e.response.data.message))
-    console.log(e)
+    dispatch(setAccessErrorAC(e.response.data.message));
+    console.log(e);
   } finally {
-    dispatch(setIsFetchingAC(false))
+    dispatch(setIsFetchingAC(false));
   }
 }
 
@@ -520,15 +506,15 @@ export const changeBookedConsultationStatus = (
 ): ThunkType => async (dispatch) => {
 
   try {
-    dispatch(toggleIsStatusChangingAC(true, id))
-    let response = await bookedConsultationsAPI.changeConsultationStatus(id, status)
+    dispatch(toggleIsStatusChangingAC(true, id));
+    let response = await bookingsApi.changeConsultationStatus(id, status);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(changeBookedConsultationStatusAC(id, response.status))
+      dispatch(changeBookedConsultationStatusAC(id, response.status));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsStatusChangingAC(false, id))
+    dispatch(toggleIsStatusChangingAC(false, id));
   }
 }
 
@@ -542,15 +528,15 @@ export const deleteBookedConsultation = (
     filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await bookedConsultationsAPI.deleteConsultation(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await bookingsApi.deleteConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
@@ -564,15 +550,15 @@ export const deleteArchivedConsultation = (
     filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await bookedConsultationsAPI.deleteArchivedConsultation(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await bookingsApi.deleteArchivedConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
@@ -581,16 +567,16 @@ export const addBookedConsultation = (
   total: number
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await bookedConsultationsAPI.addConsultation(values)
+    let response = await bookingsApi.addConsultation(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(addBookedConsultationAC(response.booking))
-      dispatch(setBookedConsultationsTotalCountAC(total + 1))
-      dispatch(setIsSuccessAC(true))
+      dispatch(addBookedConsultationAC(response.booking));
+      dispatch(setBookedConsultationsTotalCountAC(total + 1));
+      dispatch(setIsSuccessAC(true));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAddBookingApiErrorAC(e.response.data.message))
-    console.log(e)
+    dispatch(setAddBookingApiErrorAC(e.response.data.message));
+    console.log(e);
   }
 }
 
@@ -606,22 +592,22 @@ export const turnConsultationToClient = (
     filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await bookedConsultationsAPI.turnConsultationToClient(
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await bookingsApi.turnConsultationToClient(
       id,
       fullName,
       contacts
     )
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
-      dispatch(setIsSuccessAC(true))
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
+      dispatch(setIsSuccessAC(true));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAddBookingApiErrorAC(e.response.data.message))
+    dispatch(setAddBookingApiErrorAC(e.response.data.message));
     console.log(e)
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
@@ -635,15 +621,15 @@ export const archiveConsultation = (
     filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await bookedConsultationsAPI.archiveConsultation(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await bookingsApi.archiveConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
@@ -657,16 +643,16 @@ export const reactivateConsultation = (
     filter: BookedConsultationsFilterType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await bookedConsultationsAPI.reactivateConsultation(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await bookingsApi.reactivateConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter))
+      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAddBookingApiErrorAC(e.response.data.message))
-    console.log(e)
+    dispatch(setAddBookingApiErrorAC(e.response.data.message));
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }

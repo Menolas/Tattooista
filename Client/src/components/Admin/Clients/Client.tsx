@@ -1,29 +1,28 @@
-import * as React from "react"
-import {useState} from "react"
+import * as React from "react";
+import {useState} from "react";
 // @ts-ignore
-import avatar from "../../../assets/img/fox.webp"
+import avatar from "../../../assets/img/fox.webp";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg"
-import { NavLink } from "react-router-dom"
-import { ClientType, ContactType } from "../../../types/Types"
-import { API_URL } from "../../../http"
-import { ModalPopUp } from "../../common/ModalPopUp"
-import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
-import { GalleryUploadForm } from "../../Forms/GalleryUploadForm"
-import { Tooltip } from "react-tooltip"
-import { Confirmation } from "../../common/Confirmation"
+import Sprite from "../../../assets/svg/sprite.svg";
+import { NavLink } from "react-router-dom";
+import { ClientType, ContactType } from "../../../types/Types";
+import { API_URL } from "../../../http";
+import { ModalPopUp } from "../../common/ModalPopUp";
+import { Tooltip } from "react-tooltip";
+import { Confirmation } from "../../common/Confirmation";
 
 type PropsType = {
   client: ClientType
-  pageSize: number
-  currentPage: number
   isDeletingInProcess: Array<string>
   isDeletingPicturesInProcess: Array<string>
   deleteClient: (clientId: string) => void
-  editClient: (clientId: string, values: FormData) => void
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (clientId: string) => void
+  setClient: (client: ClientType) => void
+  setEditClientMode: (mode: boolean) => void
+  setEditGalleryMode: (mode: boolean) => void
+  setClientGallery: (clientGallery: Array<string>) => void
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
@@ -31,42 +30,34 @@ export const Client: React.FC<PropsType> = React.memo(({
   isDeletingInProcess,
   isDeletingPicturesInProcess,
   deleteClient,
-  editClient,
-  pageSize,
-  currentPage,
   updateClientGallery,
   deleteClientGalleryPicture,
   archiveClient,
+  setClient,
+  setEditClientMode,
+  setEditGalleryMode,
+  setClientGallery,
 }) => {
 
-  const [editClientMode, setEditClientMode] = useState<boolean>(false)
-  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false)
-  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
+  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
 
-  const [bigImg, setBigImg] = useState('')
+  const [bigImg, setBigImg] = useState('');
 
   const showBigImg = (fileName) => {
     if (!bigImg) {
-      setBigImg(fileName)
+      setBigImg(fileName);
     }
   }
 
   const closeBigImg = () => {
-    setBigImg('')
-  }
-
-  const closeEditModal = () => {
-    setEditClientMode(false)
-    setEditGalleryMode(false)
+    setBigImg('');
   }
 
   const closeModal = () => {
-    setNeedConfirmation(false)
+    setNeedConfirmation(false);
   }
 
-  const modalTitle = 'EDIT CLIENT'
-
-  const clientContacts: ContactType = client.contacts
+  const clientContacts: ContactType = client.contacts;
 
   const contacts = Object.keys(clientContacts).map(contact => {
     return clientContacts[contact]
@@ -77,12 +68,12 @@ export const Client: React.FC<PropsType> = React.memo(({
             </div>
         )
        : null
-  })
+  });
 
-  const clientAvatar = client.avatar ? `${API_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar
+  const clientAvatar = client.avatar ? `${API_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar;
 
   const deleteClientCallBack = () => {
-    deleteClient(client._id)
+    deleteClient(client._id);
   }
 
   return (
@@ -92,7 +83,10 @@ export const Client: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Edit client"
             className={"btn btn--icon"}
-            onClick={() => {setEditClientMode(true)}}
+            onClick={() => {
+                setEditClientMode(true);
+                setClient(client);
+            }}
         >
           <svg><use href={`${Sprite}#edit`}/></svg>
         </button>
@@ -100,7 +94,10 @@ export const Client: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Edit client's gallery"
             className={"btn btn--icon"}
-            onClick={() => {setEditGalleryMode(true)}}
+            onClick={() => {
+                setEditGalleryMode(true);
+                setClient(client);
+            }}
         >
           <svg><use href={`${Sprite}#images-user`}/></svg>
         </button>
@@ -110,8 +107,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === client._id)}
             onClick={() => {
-
-              archiveClient(client._id)
+              archiveClient(client._id);
             }}
         >
           <svg><use href={`${Sprite}#archive`}/></svg>
@@ -122,7 +118,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === client._id)}
             onClick={() => {
-              setNeedConfirmation(true)
+              setNeedConfirmation(true);
             }}
         >
           <svg><use href={`${Sprite}#trash`}/></svg>
@@ -152,7 +148,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                 return (
                     <li
                         key={item}
-                        onClick={() => { showBigImg(item) }}
+                        onClick={() => { showBigImg(item); }}
                     >
                       <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
                     </li>
@@ -173,31 +169,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             cancel={closeModal}
         />
       </ModalPopUp>
-        <ModalPopUp
-            isOpen={editClientMode}
-            modalTitle={modalTitle}
-            closeModal={closeEditModal}
-        >
-          <UpdateClientForm
-              profile={client}
-              editClient={editClient}
-              closeModal={closeEditModal}
-          />
-        </ModalPopUp>
-          <ModalPopUp
-              isOpen={editGalleryMode}
-              modalTitle="Edit Gallery"
-              closeModal={closeEditModal}
-          >
-            <GalleryUploadForm
-                updateId={client._id}
-                gallery={client.gallery}
-                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                updateGallery={updateClientGallery}
-                deleteClientGalleryPicture={deleteClientGalleryPicture}
-                closeModal={closeEditModal}
-            />
-          </ModalPopUp>
+
       {
           bigImg &&
           <div className="gallery__large-wrap modal-wrap">

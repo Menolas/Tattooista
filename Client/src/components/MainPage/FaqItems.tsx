@@ -1,17 +1,17 @@
-import * as React from "react"
-import {useState} from "react"
-import { FaqType } from "../../types/Types"
-import { FaqItem } from "./FaqItem"
-import {ModalPopUp} from "../common/ModalPopUp"
-import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik"
+import * as React from "react";
+import {useState} from "react";
+import { FaqType } from "../../types/Types";
+import { FaqItem } from "./FaqItem";
+import {ModalPopUp} from "../common/ModalPopUp";
+import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 
 type PropsType = {
-  isAuth: string
-  faq: Array<FaqType>
-  updateFaqItem: (id: string, values: any) => void
-  addFaqItem: (values: FaqType) => void
-  deleteFaqItem: (id: string) => void
+  isAuth: string;
+  faq: Array<FaqType>;
+  updateFaqItem: (id: string, values: any) => void;
+  addFaqItem: (values: FaqType) => void;
+  deleteFaqItem: (id: string) => void;
 }
 
 export const FaqItems: React.FC<PropsType> = React.memo(({
@@ -22,13 +22,16 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   deleteFaqItem
 }) => {
 
-  const [addFaqItemMode, setAddFaqItemMode] = useState(false)
+  //const [addFaqItemMode, setAddFaqItemMode] = useState(false);
+  const [updateFaqItemMode, setUpdateFaqItemMode] = useState(false);
+  const [faqItem, setFaqItem] = useState(null);
 
-  const closeAddFaqItemModal = () => {
-      setAddFaqItemMode(false)
+  const closeUpdateFaqItemModal = () => {
+      setUpdateFaqItemMode(false);
+      setFaqItem(null);
   }
 
-  const addFaqItemModalTitle = 'Add New Faq Item'
+  const updateFaqItemModalTitle = 'Update FAQ';
 
   const faqItemsArray = faq?.map(item => {
     return (
@@ -38,9 +41,11 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
         faqItem={item}
         updateFaqItem={updateFaqItem}
         deleteFaqItem={deleteFaqItem}
+        setFaqItem={setFaqItem}
+        setUpdateFaqItemMode={setUpdateFaqItemMode}
       />
     )
-  })
+  });
 
   return (
     <section className="page-block faq" id="faq">
@@ -49,20 +54,24 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
           (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
           <button
               className={"btn btn--bg btn--light-bg"}
-              onClick={() => {setAddFaqItemMode(true)}}
-          >
-              Add Faq
-          </button>
+              onClick={() => {setUpdateFaqItemMode(true)}}
+          >Add Faq</button>
         }
           <ModalPopUp
-              isOpen={addFaqItemMode}
-              modalTitle={addFaqItemModalTitle}
-              closeModal={closeAddFaqItemModal}
+              isOpen={updateFaqItemMode}
+              modalTitle={updateFaqItemModalTitle}
+              closeModal={closeUpdateFaqItemModal}
           >
-              <UpdateFaqItemFormFormik
-                  addFaqItem={addFaqItem}
-                  closeModal={closeAddFaqItemModal}
-              />
+              {
+                  updateFaqItemMode &&
+                  <UpdateFaqItemFormFormik
+                      faqItem={faqItem}
+                      updateFaqItem={updateFaqItem}
+                      addFaqItem={addFaqItem}
+                      closeModal={closeUpdateFaqItemModal}
+                  />
+              }
+
           </ModalPopUp>
         <h2 className="page-block__title">F.A.Q</h2>
         <ul className="faq__list list">
@@ -71,4 +80,4 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
       </div>
     </section>
   )
-})
+});

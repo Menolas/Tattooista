@@ -24,34 +24,34 @@ class AuthController {
   async login(req, res) {
     const results = {}
     try {
-      const {email, password} = req.body
-      const userData = await userService.login(email, password)
-      res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
-      results.resultCode = 0
-      results.userData = userData
-      return res.json(results)
+      const {email, password} = req.body;
+      const userData = await userService.login(email, password);
+      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30*24*60*60*1000, httpOnly: true });
+      results.resultCode = 0;
+      results.userData = userData;
+      return res.json(results);
     } catch(e) {
-      results.resultCode = 1
-      results.message = e.message
-      console.log(e)
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      console.log(e);
+      res.status(400).json(results);
     }
   }
 
   async logout(req, res) {
-    const results = {}
+    const results = {};
     try {
-      const {refreshToken} = req.cookies
-      console.log(req.cookies + " coocies!!!!!!!!!!!!!!!!!")
-      await userService.logout(refreshToken)
-      res.clearCookie('refreshToken')
-      results.resultCode = 0
-      return res.json(results)
+      const {refreshToken} = req.cookies;
+      console.log(req.cookies + " coocies!!!!!!!!!!!!!!!!!");
+      await userService.logout(refreshToken);
+      res.clearCookie('refreshToken');
+      results.resultCode = 0;
+      return res.json(results);
     } catch(e) {
-      results.resultCode = 1
-      results.message = e.message
-      console.log(e)
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      console.log(e);
+      res.status(400).json(results);
     }
   }
 
@@ -70,24 +70,24 @@ class AuthController {
   }
 
   async refresh(req, res, next) {
-    const results = {}
+    const results = {};
     try {
-      const {refreshToken} = req.cookies
-      const userData = await userService.refresh(refreshToken)
+      const {refreshToken} = req.cookies;
+      const userData = await userService.refresh(refreshToken);
       if (userData) {
-        res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
-        results.resultCode = 0
-        results.userData = userData
-        return res.json(results)
+        res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
+        results.resultCode = 0;
+        results.userData = userData;
+        return res.json(results);
       }
     } catch(e) {
-      results.resultCode = 1
-      results.message = e.message
-      console.log(e)
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      console.log(e);
+      res.status(400).json(results);
       //next(e)
     }
   }
 }
 
-module.exports = new AuthController()
+module.exports = new AuthController();

@@ -1,6 +1,6 @@
-import * as React from "react"
-import {useEffect} from "react"
-import {useDispatch, useSelector} from "react-redux"
+import * as React from "react";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {
   getClients,
   setCurrentClientsPageAC,
@@ -16,7 +16,7 @@ import {
   setClientsFilterAC,
   setAddClientApiErrorAC,
   setUpdateClientGalleryApiErrorAC
-} from "../../../redux/Clients/clients-reducer"
+} from "../../../redux/Clients/clients-reducer";
 import {
   getClientsIsFetching,
   getTotalClientsCount,
@@ -28,10 +28,10 @@ import {
   getUpdateClientGalleryApiErrorSelector,
   getClientsFilterSelector,
   getClientsPageSizeSelector, getIsDeletingPicturesInProcessSelector
-} from "../../../redux/Clients/clients-selectors"
-import { Clients } from "./Clients"
+} from "../../../redux/Clients/clients-selectors";
+import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
-import {getAccessErrorSelector} from "../../../redux/bookedConsultations/bookedConsultations-selectors";
+import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
 
 export const ClientsContainer: React.FC = () => {
 

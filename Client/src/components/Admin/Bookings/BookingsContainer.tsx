@@ -1,6 +1,6 @@
-import * as React from "react"
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import * as React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getBookedConsultations,
   changeBookedConsultationStatus,
@@ -14,7 +14,7 @@ import {
   setIsSuccessAC,
   setBookedConsultationsFilterAC,
   setAddBookingApiErrorAC,
-} from "../../../redux/bookedConsultations/bookedConsultations-reducer"
+} from "../../../redux/Bookings/bookings-reducer";
 import {
   getBookedConsultationsSelector,
   getBookedConsultationsPageSizeSelector,
@@ -26,59 +26,59 @@ import {
   getIsDeletingInProcessSelector,
   getIsSuccessSelector,
   getAddBookingApiErrorSelector, getAccessErrorSelector
-} from "../../../redux/bookedConsultations/bookedConsultations-selectors"
-import { BookedConsultations } from "./BookedConsultations"
-import {AddConsultationFormValues, BookedConsultationType, ContactsType} from '../../../types/Types'
+} from "../../../redux/Bookings/bookings-selectors";
+import { Bookings } from "./Bookings";
+import {AddConsultationFormValues, BookedConsultationType, ContactsType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
-export const BookedConsultationsContainer: React.FC = () => {
+export const BookingsContainer: React.FC = () => {
 
-  const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
-  const totalCount = useSelector(getTotalBookedConsultationsCountSelector)
-  const currentPage = useSelector(getCurrentBookedConsultationsPageSelector)
-  const pageSize = useSelector(getBookedConsultationsPageSizeSelector)
-  const bookedConsultations = useSelector(getBookedConsultationsSelector)
-  const filter = useSelector(getBookedConsultationsFilterSelector)
-  const isStatusChanging = useSelector(getIsStatusChangingSelector)
-  const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector)
-  const isSuccess = useSelector(getIsSuccessSelector)
-  const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
-  const token = useSelector(getTokenSelector)
-  const accessError = useSelector(getAccessErrorSelector)
+  const isFetching = useSelector(getBookedConsultationsIsFetchingSelector);
+  const totalCount = useSelector(getTotalBookedConsultationsCountSelector);
+  const currentPage = useSelector(getCurrentBookedConsultationsPageSelector);
+  const pageSize = useSelector(getBookedConsultationsPageSizeSelector);
+  const bookedConsultations = useSelector(getBookedConsultationsSelector);
+  const filter = useSelector(getBookedConsultationsFilterSelector);
+  const isStatusChanging = useSelector(getIsStatusChangingSelector);
+  const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
+  const isSuccess = useSelector(getIsSuccessSelector);
+  const addBookingApiError = useSelector(getAddBookingApiErrorSelector);
+  const token = useSelector(getTokenSelector);
+  const accessError = useSelector(getAccessErrorSelector);
 
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(getBookedConsultations(token, currentPage, pageSize, filter))
-  }, [token, currentPage, pageSize, filter])
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setCurrentPageForBookedConsultationsAC(1))
-  }, [filter])
+    dispatch(getBookedConsultations(token, currentPage, pageSize, filter));
+  }, [token, currentPage, pageSize, filter]);
+
+  useEffect(() => {
+    dispatch(setCurrentPageForBookedConsultationsAC(1));
+  }, [filter]);
 
   const setCurrentPageCallBack = (
     page: number
   ) => {
-    dispatch(setCurrentPageForBookedConsultationsAC(page))
+    dispatch(setCurrentPageForBookedConsultationsAC(page));
   }
 
   const onFilterChangedCallBack = (
     filter: BookedConsultationsFilterType
   ) => {
-    dispatch(setBookedConsultationsFilterAC(filter))
+    dispatch(setBookedConsultationsFilterAC(filter));
   }
 
   const changeBookedConsultationStatusCallBack = (
     id: string,
     status: boolean
   ) => {
-    dispatch(changeBookedConsultationStatus(id, status))
+    dispatch(changeBookedConsultationStatus(id, status));
   }
 
   const deleteConsultationCallBack = (
       id: string,
   ) => {
-    dispatch(deleteBookedConsultation(token, id, bookedConsultations, currentPage, totalCount, pageSize, filter))
+    dispatch(deleteBookedConsultation(token, id, bookedConsultations, currentPage, totalCount, pageSize, filter));
   }
 
   const turnConsultationToClientCallBack = (
@@ -86,17 +86,17 @@ export const BookedConsultationsContainer: React.FC = () => {
     fullName: string,
     contacts?: ContactsType | {}
   ) => {
-    dispatch(turnConsultationToClient(token, id, fullName, contacts, bookedConsultations, currentPage, totalCount, pageSize, filter))
+    dispatch(turnConsultationToClient(token, id, fullName, contacts, bookedConsultations, currentPage, totalCount, pageSize, filter));
   }
 
   const setBookedConsultationsPageSizeCallBack = (
     pageSize: number
   ) => {
-    dispatch(setBookedConsultationsPageSizeAC(pageSize))
+    dispatch(setBookedConsultationsPageSizeAC(pageSize));
   }
 
   const addBookedConsultationCallBack = (values: AddConsultationFormValues) => {
-    dispatch(addBookedConsultation(values, totalCount))
+    dispatch(addBookedConsultation(values, totalCount));
   }
 
   const archiveConsultationCallBack = (id: string) => {
@@ -104,15 +104,15 @@ export const BookedConsultationsContainer: React.FC = () => {
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessAC(bol))
+    dispatch(setIsSuccessAC(bol));
   }
 
   const setAddBookingApiErrorCallBack = (error: string) => {
-    dispatch(setAddBookingApiErrorAC(error))
+    dispatch(setAddBookingApiErrorAC(error));
   }
 
   return (
-      <BookedConsultations
+      <Bookings
         isFetching={isFetching}
         isSuccess={isSuccess}
         totalCount={totalCount}

@@ -4,12 +4,13 @@ const Role = require("../models/Role");
 module.exports = function (roles) {
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
-      next()
+      console.log("OPTIONS!!!!!!!!!!!!!!!!!!!!")
+      next();
     }
 
     try {
       const roleObjectPromises = roles.map(async role => {
-        const roleObject = await Role.findOne({ value: role })
+        const roleObject = await Role.findOne({ value: role });
         return roleObject._id;
       })
 
@@ -23,12 +24,12 @@ module.exports = function (roles) {
 
       const { roles: userRoles } = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
 
-      let hasRole = false
+      let hasRole = false;
       userRoles.forEach(role => {
         roleIds.forEach(roleId => {
           if (roleId.toString() === role) {
-            hasRole = true
-            console.log(JSON.stringify(roleId) + "  roleId type !!!!!!!!!!!!!!!!!!!!!")
+            hasRole = true;
+            console.log(JSON.stringify(roleId) + "  roleId type !!!!!!!!!!!!!!!!!!!!!");
           }
         })
         // if (roleIds.includes(role)) {
@@ -36,12 +37,12 @@ module.exports = function (roles) {
         // }
       })
       if (!hasRole) {
-        return res.status(403).json({ message: "No access for you" })
+        return res.status(403).json({ message: "No access for you" });
       }
-      next()
+      next();
     } catch (e) {
-      console.log(e)
-      return res.status(4403).json({ message: "User is not authorized" })
+      console.log(e);
+      return res.status(4403).json({ message: "User is not authorized" });
     }
   }
 }

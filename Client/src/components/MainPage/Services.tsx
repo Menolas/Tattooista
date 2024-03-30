@@ -6,14 +6,14 @@ import {ModalPopUp} from "../common/ModalPopUp";
 import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik";
 
 type PropsType = {
-  fakeApi: boolean
-  isAuth: string
-  services: Array<ServiceType>
-  service: ServiceType
-  editService: (id: string, values: FormData) => void
-  addService: (values: FormData) => void
-  deleteService: (id: string) => void
-  setService: (service: ServiceType) => void
+  fakeApi: boolean;
+  isAuth: string;
+  services: Array<ServiceType>;
+  service: ServiceType;
+  editService: (id: string, values: FormData) => void;
+  addService: (values: FormData) => void;
+  deleteService: (id: string) => void;
+  setService: (service: ServiceType) => void;
 };
 
 export const Services: React.FC<PropsType> = React.memo(({

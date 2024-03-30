@@ -22,8 +22,8 @@ label[for="concent"] {
   textarea,
   select,
   div[class$="-control"] {
-    padding: 0 8px 12px;
-    width: 100%;
+    padding: 0 0.5rem 0.25rem 0;
+    width: 90%;
     font-size: 18px;
     font-weight: 600;
     color: $dark-text;
@@ -43,6 +43,10 @@ label[for="concent"] {
       border: none;
       border-bottom: $form-input-border;
       outline: none;
+    }
+
+    textarea {
+      padding: 0 0.5rem 0.25rem;
     }
   }
 
@@ -80,17 +84,6 @@ label[for="concent"] {
     }
   }
 
-  //.css-1xc3v61-indicatorContainer {
-  //  svg {
-  //    transform: rotate(0deg);
-  //  }
-  //}
-  //
-  //.css-15lsz6c-indicatorContainer {
-  //  svg {
-  //    transform: rotate(180deg);
-  //  }
-  //}
   .css-qbdosj-Input {
     padding: 0;
     //height: 32px;
@@ -119,7 +112,7 @@ label[for="concent"] {
 }
 
 .form__input-wrap {
-  margin-bottom: 32px;
+  margin-bottom: 1.5rem;
   width: 100%;
 
   &.form__input-wrap--uploadFile {
@@ -176,9 +169,10 @@ label[for="concent"] {
 
 .form__input-wrap--checkbox label,
 label.form__input-label {
+  display: block;
   margin-bottom: 8px;
   text-transform: uppercase;
-  color: $placeholder;
+  color: $dark-text;
   font-weight: 600;
   font-size: 12px;
 }
@@ -316,7 +310,7 @@ input[type="checkbox"][value="true"] +label .checkbox::after {
   }
 
   .form__input-wrap {
-    margin-bottom: 46px;
+    margin-bottom: 2rem;
   }
 
   .form__input-wrap--checkbox {
