@@ -50,10 +50,10 @@ const validationSchema = Yup.object().shape({
 })
 
 type PropsType = {
-  profile?: ClientType
+  profile: ClientType
   closeModal: () => void
-  editClient?: (clientId: string, values: FormData) => void
-  addClient?: (values: FormData) => void
+  editClient: (clientId: string, values: FormData) => void
+  addClient: (values: FormData) => void
 }
 
 export const UpdateClientForm: React.FC<PropsType> = React.memo(({
@@ -94,11 +94,11 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
       formData.append(value, values[value]);
     }
     if (profile) {
-      editClient(profile._id, formData)
+      editClient(profile._id, formData);
     } else {
-      addClient(formData)
+      addClient(formData);
     }
-    closeModal()
+    closeModal();
   }
 
   return (
@@ -141,42 +141,48 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
             <FieldComponent
                 name={'clientName'}
                 type={'text'}
-                placeholder={'Full Name'}
+                placeholder={'Monica Bellucci'}
+                label={'Full Name'}
                 onChange={propsF.handleChange}
                 value={propsF.values.clientName}
             />
             <FieldComponent
                 name={'email'}
                 type={'text'}
-                placeholder={'Email'}
+                placeholder={'monica_bellucci@gmail.com'}
+                label={'Email'}
                 onChange={propsF.handleChange}
                 value={propsF.values.email}
             />
             <FieldComponent
                 name={'phone'}
                 type={'tel'}
-                placeholder={'Phone'}
+                placeholder={'+47(222)-23-34'}
+                label={'Phone'}
                 onChange={propsF.handleChange}
                 value={propsF.values.phone}
             />
             <FieldComponent
                 name={'insta'}
                 type={'text'}
-                placeholder={'Instagram'}
+                placeholder={'@Monica'}
+                label={'Instagram'}
                 onChange={propsF.handleChange}
                 value={propsF.values.insta}
             />
             <FieldComponent
                 name={'messenger'}
                 type={'text'}
-                placeholder={'Messenger'}
+                placeholder={'@Monica'}
+                label={'Messenger'}
                 onChange={propsF.handleChange}
                 value={propsF.values.messenger}
             />
             <FieldComponent
                 name={'whatsapp'}
                 type={'text'}
-                placeholder={'Whatsapp'}
+                placeholder={'+47(222)-23-34'}
+                label={'Whatsapp'}
                 onChange={propsF.handleChange}
                 value={propsF.values.whatsapp}
             />

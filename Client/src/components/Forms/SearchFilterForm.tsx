@@ -1,6 +1,6 @@
 import * as React from "react"
 import {Field, Form, Formik} from "formik"
-import {BookedConsultationsFilterType} from "../../redux/bookedConsultations/bookedConsultations-reducer"
+import {BookedConsultationsFilterType} from "../../redux/Bookings/bookedConsultations-reducer"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import {FormSelect} from "./FormSelect"

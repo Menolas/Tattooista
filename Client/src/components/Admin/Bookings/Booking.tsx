@@ -20,7 +20,7 @@ type PropsType = {
   archiveConsultation: (id: string) => void
 }
 
-export const BookedConsultation: React.FC<PropsType> = React.memo(({
+export const Booking: React.FC<PropsType> = React.memo(({
     consultation,
     pageSize,
     currentPage,

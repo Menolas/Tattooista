@@ -1,18 +1,19 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
-import { Client } from "./Client"
-import { Paginator } from "../../common/Paginator"
-import { ModalPopUp } from "../../common/ModalPopUp"
-import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik"
-import { ClientType } from "../../../types/Types"
-import { ClientsFilterType} from "../../../redux/Clients/clients-reducer"
-import {NothingToShow} from "../../common/NothingToShow"
-import {SuccessPopUp} from "../../common/SuccessPopUp"
-import {Preloader} from "../../common/Preloader"
-import {ApiErrorMessage} from "../../common/ApiErrorMessage"
-import {SearchFilterForm} from "../../Forms/SearchFilterForm"
-import {clientFilterSelectOptions} from "../../../utils/constants"
+import * as React from "react";
+import {useEffect, useState} from "react";
+import { Client } from "./Client";
+import { Paginator } from "../../common/Paginator";
+import { ModalPopUp } from "../../common/ModalPopUp";
+import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik";
+import { ClientType } from "../../../types/Types";
+import { ClientsFilterType} from "../../../redux/Clients/clients-reducer";
+import {NothingToShow} from "../../common/NothingToShow";
+import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {Preloader} from "../../common/Preloader";
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
+import {SearchFilterForm} from "../../Forms/SearchFilterForm";
+import {clientFilterSelectOptions} from "../../../utils/constants";
 import {Navigate} from "react-router";
+import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 
 type PropsType = {
   isFetching: boolean
@@ -71,23 +72,32 @@ export const Clients: React.FC<PropsType> = React.memo(({
     useEffect(() => {
         if (isSuccess) {
             setTimeout( () => {
-                setIsSuccess(false)
+                setIsSuccess(false);
             }, 1500)
         }
-    }, [isSuccess])
+    }, [isSuccess]);
 
-  const [addClientMode, setAddClientMode] = useState<boolean>(false)
+  const [addClientMode, setAddClientMode] = useState<boolean>(false);
+  const [editClientMode, setEditClientMode] = useState<boolean>(false);
+  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
+  const [client, setClient] = useState(null);
+  const [clientGallery, setClientGallery] = useState(null);
 
   const closeModal = () => {
-    setAddClientMode(false)
+    setAddClientMode(false);
+    setEditClientMode(false);
+    setEditGalleryMode(false);
+    setClient(null);
+    setClientGallery(null);
   }
 
   const closeSuccessCallBack = () => {
         setIsSuccess(false);
   }
 
-  const modalTitle = 'ADD CLIENT'
-  const successPopUpContent = "You successfully added changes to your clients list"
+  const modalTitleAddClient = 'ADD CLIENT';
+  const modalTitleUpdateClient = 'EDIT CLIENT';
+  const successPopUpContent = "You successfully added changes to your clients list";
 
   const clientsElements = clients
       .map(client => {
@@ -98,17 +108,18 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 isDeletingInProcess={isDeletingInProcess}
                 isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 deleteClient={deleteClient}
-                editClient={editClient}
-                pageSize={pageSize}
-                currentPage={currentPage}
                 updateClientGallery={updateClientGallery}
                 deleteClientGalleryPicture={deleteClientGalleryPicture}
                 archiveClient={archiveClient}
+                setClient={setClient}
+                setEditClientMode={setEditClientMode}
+                setEditGalleryMode={setEditGalleryMode}
+                setClientGallery={setClientGallery}
             />
         )
-      })
+      });
 
-  console.log(accessError + " accessError !!!!!!!!!!!!!!!!!!!")
+  console.log(accessError + " accessError !!!!!!!!!!!!!!!!!!!");
 
   return (
       <>
@@ -149,31 +160,46 @@ export const Clients: React.FC<PropsType> = React.memo(({
                               : <NothingToShow/>
                   }
                   <ModalPopUp
-                      isOpen={addClientMode}
-                      modalTitle={modalTitle}
+                      isOpen={addClientMode || editClientMode || editGalleryMode}
+                      modalTitle={addClientMode ? modalTitleAddClient : editClientMode ? modalTitleUpdateClient : ''}
                       closeModal={closeModal}
                   >
-                      <UpdateClientForm
+                      { (editClientMode || addClientMode) &&
+                          < UpdateClientForm
+                          profile={client}
+                          editClient={editClient}
                           addClient={addClient}
                           closeModal={closeModal}
-                      />
+                          />
+                      }
                   </ModalPopUp>
-                  {
-                      isSuccess &&
-                      <SuccessPopUp
-                          isOpen={isSuccess}
-                          closeModal={closeSuccessCallBack}
-                          content={successPopUpContent}
-                      />
-                  }
-
+                  <ModalPopUp
+                      isOpen={editGalleryMode}
+                      modalTitle="Edit Gallery"
+                      closeModal={closeModal}
+                  >
+                      {editGalleryMode &&
+                          <GalleryUploadForm
+                              updateId={client._id}
+                              gallery={client.gallery}
+                              isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+                              updateGallery={updateClientGallery}
+                              deleteClientGalleryPicture={deleteClientGalleryPicture}
+                              closeModal={closeModal}
+                          />
+                      }
+                  </ModalPopUp>
+                  <SuccessPopUp
+                      isOpen={isSuccess}
+                      closeModal={closeSuccessCallBack}
+                      content={successPopUpContent}
+                  />
                   {addClientApiError && addClientApiError !== '' &&
                       <ApiErrorMessage
                           error={addClientApiError}
                           closeModal={setAddClientApiError}
                       />
                   }
-
                   {updateClientGalleryApiError && updateClientGalleryApiError !== '' &&
                       <ApiErrorMessage
                           error={updateClientGalleryApiError}

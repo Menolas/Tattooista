@@ -849,7 +849,6 @@ img {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  z-index: 1;
 }
 
 .page-block__title-secondary {
@@ -1180,14 +1179,15 @@ img {
 }
 
 .faq__item-handle {
-  position: absolute;
-  right: 0;
-  top: 50%;
+  position: relative;
+  padding: 1rem;
+  border: none;
+}
+.faq__item-handle span {
   width: 25px;
   height: 11px;
-  transform: translate(0, -50%);
 }
-.faq__item-handle::before {
+.faq__item-handle span::before {
   content: "";
   display: block;
   position: absolute;
@@ -1200,8 +1200,8 @@ img {
   border-left: none;
   border-top: none;
   transform: rotate(45deg) skew(-4deg, -4deg);
-  bottom: 2px;
-  left: 4px;
+  bottom: 18px;
+  left: 20px;
   transition: all 0.3s ease-in-out;
 }
 
@@ -1210,8 +1210,8 @@ img {
   height: auto;
   transition: all 0.3s ease-in-out;
 }
-.faq__item.shown .faq__item-handle::before {
-  bottom: -6px;
+.faq__item.shown .faq__item-handle span::before {
+  bottom: 9px;
   transform: rotate(225deg) skew(-4deg, -4deg);
 }
 
@@ -1226,10 +1226,6 @@ img {
     font-size: 24px;
   }
 }
-.booking {
-  padding-top: 0;
-}
-
 .booking__content {
   display: flex;
   margin-left: -16px;
@@ -1979,7 +1975,7 @@ img {
 }
 
 .modal__title {
-  margin-top: 0;
+  margin: 0;
   color: #080808;
   font-size: 24px;
 }
@@ -1988,6 +1984,7 @@ img {
   margin-left: auto;
   width: 30px;
   height: 30px;
+  transform: translate(50%, -100%);
 }
 .modal-wrap__close-btn::before, .modal-wrap__close-btn::after {
   bottom: 14px;
@@ -1996,7 +1993,7 @@ img {
 
 @media (min-width: 990px) {
   .modal-wrap__inner-block {
-    padding: 60px;
+    padding: 80px 60px 60px;
     width: 615px;
     max-height: calc(100vh - 60px);
   }
@@ -2525,8 +2522,8 @@ label[for=concent] {
 .form textarea,
 .form select,
 .form div[class$=-control] {
-  padding: 0 8px 12px;
-  width: 100%;
+  padding: 0 0.5rem 0.25rem 0;
+  width: 90%;
   font-size: 18px;
   font-weight: 600;
   color: #080808;
@@ -2551,6 +2548,12 @@ label[for=concent] {
   border: none;
   border-bottom: 2px solid rgba(0, 0, 0, 0.7);
   outline: none;
+}
+.form input textarea,
+.form textarea textarea,
+.form select textarea,
+.form div[class$=-control] textarea {
+  padding: 0 0.5rem 0.25rem;
 }
 .form textarea {
   padding: 0.5rem;
@@ -2603,7 +2606,7 @@ label[for=concent] {
 }
 
 .form__input-wrap {
-  margin-bottom: 32px;
+  margin-bottom: 1.5rem;
   width: 100%;
 }
 .form__input-wrap.form__input-wrap--uploadFile {
@@ -2657,9 +2660,10 @@ label[for=concent] {
 
 .form__input-wrap--checkbox label,
 label.form__input-label {
+  display: block;
   margin-bottom: 8px;
   text-transform: uppercase;
-  color: #6F6D6D;
+  color: #080808;
   font-weight: 600;
   font-size: 12px;
 }
@@ -2782,7 +2786,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
     font-size: 33px;
   }
   .form__input-wrap {
-    margin-bottom: 46px;
+    margin-bottom: 2rem;
   }
   .form__input-wrap--checkbox {
     margin-bottom: 0;

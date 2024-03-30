@@ -39,7 +39,7 @@
 }
 
 .modal__title {
-  margin-top: 0;
+  margin: 0;
   color: $dark-text;
   font-size: 24px;
 }
@@ -48,6 +48,7 @@
   margin-left: auto;
   width: 30px;
   height: 30px;
+  transform: translate(50%, -100%);
 
   &::before,
   &::after {
@@ -59,7 +60,7 @@
 @media (min-width: 990px) {
 
   .modal-wrap__inner-block {
-    padding: 60px;
+    padding: 80px 60px 60px;
     width: 615px;
     max-height: calc(100vh - 60px);
 

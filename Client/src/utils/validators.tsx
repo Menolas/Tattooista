@@ -33,6 +33,12 @@ export function isFileTypesValid(files: Array<File>, authorizedExtensions: Array
     return valid
 }
 
+export const validateFile = (file: File): boolean => {
+    const isValidSize = file.size <= MAX_FILE_SIZE;
+    const isValidType = VALID_FILE_EXTENSIONS.includes(file.type);
+    return isValidSize && isValidType;
+};
+
 export const ErrorMessageWrapper = (msg: any) => {
   return (
       <div className="form__error">

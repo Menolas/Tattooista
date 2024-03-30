@@ -48,10 +48,10 @@ export const AddConsultationForm: React.FC<PropsType> = React.memo(({
   closeBookingModal,
 }) => {
 
-  const submit = (values: AddConsultationFormValues) => {
+  const submit = (values: AddConsultationFormValues, actions) => {
     addBookedConsultation(values)
     //actions.setSubmitting(false)
-    //actions.resetForm()
+    actions.resetForm()
     closeBookingModal()
   }
 

@@ -6,20 +6,24 @@ import {API_URL} from "../../http";
 import {ServiceType} from "../../types/Types";
 import {FieldComponent} from "./FieldComponent";
 import {FieldWrapper} from "./FieldWrapper";
-import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
-
-const tattooMachine = require("../../assets/img/tattoo-machine.webp") as string;
+import {
+    isFileSizeValid,
+    isFileTypesValid,
+    MAX_FILE_SIZE,
+    VALID_FILE_EXTENSIONS,
+    validateFile
+} from "../../utils/validators";
 
 const validationSchema = Yup.object().shape({
-    wallPaper: Yup.mixed()
-        .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-            if (!value) return true
-            return isFileSizeValid([value], MAX_FILE_SIZE)
-        })
-        .test('fileType', 'Invalid file type', (value: File) => {
-            if (!value) return true
-            return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
-        }),
+    // wallPaper: Yup.mixed()
+    //     .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
+    //         if (!value) return true
+    //         return isFileSizeValid([value], MAX_FILE_SIZE)
+    //     })
+    //     .test('fileType', 'Invalid file type', (value: File) => {
+    //         if (!value) return true
+    //         return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
+    //     }),
     title: Yup.string()
         .required("Name is a required field"),
     condition_0: Yup.string(),
@@ -44,8 +48,6 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
     setService,
     closeModal,
 }) => {
-
-    console.log(service?.title + " serviceTitle!!!!!!!!!!");
 
     const [imageURL, setImageURL] = useState('');
 
@@ -74,18 +76,32 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
         condition_5: service && service.conditions ? service.conditions[5] : '',
     }
 
-    const submit = (values) => {
+    const submit = async (values, actions) => {
+        // Check if aboutPageWallPaper is a File object
+        if (values.wallPaper instanceof File) {
+            const isValidFile = validateFile(values.wallPaper);
+            if (!isValidFile) {
+                actions.setFieldError('wallPaper', 'Invalid file');
+                return;
+            } else {
+                actions.setFieldValue('wallpaper', '');
+            }
+        }
         const formData = new FormData();
         for (let value in values) {
             formData.append(value, values[value]);
         }
-        if (service) {
-            editService(service._id, formData);
-            setService(null);
-        } else {
-            addService(formData);
+        try {
+            if (service) {
+                editService(service._id, formData);
+                setService(null);
+            } else {
+                addService(formData);
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
         }
-        closeModal()
+        closeModal();
     }
 
     return (
@@ -105,7 +121,7 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                                         imageURL ? imageURL
                                             : service?.wallPaper
                                             ? `${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper}`
-                                            : tattooMachine
+                                            : "./uploads/ServicesWallpapers/service.jpg"
                                     }
                                     alt="preview"
                                 />

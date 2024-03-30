@@ -2,9 +2,9 @@ import * as React from "react"
 import {useEffect, useState} from "react"
 import { Navigate } from "react-router"
 import { Paginator } from "../../common/Paginator"
-import { BookedConsultation } from "./BookedConsultation"
+import { Booking } from "./Booking"
 import {AddConsultationFormValues, BookedConsultationType} from "../../../types/Types"
-import { BookedConsultationsFilterType } from "../../../redux/bookedConsultations/bookedConsultations-reducer"
+import { BookedConsultationsFilterType } from "../../../redux/Bookings/bookedConsultations-reducer"
 import {ModalPopUp} from "../../common/ModalPopUp"
 import {AddConsultationForm} from "../../Forms/AddConsultationForm"
 import {SuccessPopUp} from "../../common/SuccessPopUp"
@@ -40,7 +40,7 @@ type PropsType = {
   setAddBookingApiError: (error: string) => void
 }
 
-export const BookedConsultations: React.FC<PropsType> = React.memo(({
+export const Bookings: React.FC<PropsType> = React.memo(({
   isFetching,
   isSuccess,
   totalCount,
@@ -79,12 +79,16 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
         setAddConsultationMode(false)
     }
 
+    const closeSuccessModal = () => {
+        setIsSuccess(false);
+    }
+
     const modalTitle = 'Add a Consultation'
     const successPopUpContent = "You successfully changed your consultations list"
 
     const bookedConsultationsArray = bookedConsultations?.map(consultation => {
       return (
-        <BookedConsultation
+        <Booking
           key={consultation._id}
           consultation={consultation}
           pageSize={pageSize}
@@ -135,25 +139,22 @@ export const BookedConsultations: React.FC<PropsType> = React.memo(({
                               )
                               : <NothingToShow/>
                   }
-
-                  { addConsultationMode &&
-                      <ModalPopUp
-                          modalTitle={modalTitle}
-                          closeModal={closeModal}
-                      >
-                          <AddConsultationForm
-                              addBookedConsultation={addBookedConsultation}
-                              closeBookingModal={closeModal}
-                          />
-                      </ModalPopUp>
-                  }
-                  {
-                      isSuccess &&
-                      <SuccessPopUp
-                          closeModal={setIsSuccess}
-                          content={successPopUpContent}
+                  <ModalPopUp
+                      isOpen={addConsultationMode}
+                      modalTitle={modalTitle}
+                      closeModal={closeModal}
+                  >
+                      <AddConsultationForm
+                          addBookedConsultation={addBookedConsultation}
+                          closeBookingModal={closeModal}
                       />
-                  }
+                  </ModalPopUp>
+                  <SuccessPopUp
+                      isOpen={isSuccess}
+                      closeModal={closeSuccessModal}
+                      content={successPopUpContent}
+                  />
+
                   { addBookingApiError && addBookingApiError !== '' &&
                       <ApiErrorMessage
                           error={addBookingApiError}
