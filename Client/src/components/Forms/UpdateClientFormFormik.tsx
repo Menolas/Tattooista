@@ -1,20 +1,20 @@
-import * as React from "react"
-import { useState } from "react"
-import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik"
+import * as React from "react";
+import { useState } from "react";
+import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
 import {
   isFileSizeValid,
   isFileTypesValid,
   MAX_FILE_SIZE,
   phoneRegex,
   VALID_FILE_EXTENSIONS
-} from "../../utils/validators"
-import {AddClientFormValues, ClientType} from "../../types/Types"
-import {API_URL} from "../../http"
+} from "../../utils/validators";
+import {AddClientFormValues, ClientType} from "../../types/Types";
+import {API_URL} from "../../http";
 // @ts-ignore
-import avatar from "../../assets/img/fox.webp"
-import {FieldComponent} from "./FieldComponent"
-import * as Yup from "yup"
-import {FieldWrapper} from "./FieldWrapper"
+import avatar from "../../assets/img/fox.webp";
+import {FieldComponent} from "./FieldComponent";
+import * as Yup from "yup";
+import {FieldWrapper} from "./FieldWrapper";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
@@ -47,13 +47,13 @@ const validationSchema = Yup.object().shape({
   whatsapp: Yup.string()
       .min(8, 'Whatsapp number is too short - should be 8 chars minimum.')
       .matches(phoneRegex, 'That does not look like whatsapp number'),
-})
+});
 
 type PropsType = {
   profile: ClientType
   closeModal: () => void
   editClient: (clientId: string, values: FormData) => void
-  addClient: (values: FormData) => void
+  addClient?: (values: FormData) => void
 }
 
 export const UpdateClientForm: React.FC<PropsType> = React.memo(({
@@ -62,30 +62,31 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
   editClient,
   addClient,
 }) => {
+  console.log(JSON.stringify(profile) + " profile !!!!!!!!!!!!!!!!!!");
 
-  const [imageURL, setImageURL] = useState('')
+  const [imageURL, setImageURL] = useState('');
 
   const handleOnChange = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if (event.target.files && event.target.files.length) {
-      const file = event.target.files[0]
-      const fileReader = new FileReader()
+      const file = event.target.files[0];
+      const fileReader = new FileReader();
       fileReader.onloadend = () => {
         // @ts-ignore
-        setImageURL(fileReader.result)
+        setImageURL(fileReader.result);
       }
-      fileReader.readAsDataURL(file)
+      fileReader.readAsDataURL(file);
     }
   }
 
   const initialValues: AddClientFormValues = {
     avatar: profile && profile.avatar ? profile.avatar : '',
     clientName: profile && profile.fullName ? profile.fullName : '',
-    email: profile && profile.contacts.email ? profile.contacts.email : '',
-    insta: profile && profile.contacts.insta ? profile.contacts.insta : '',
-    messenger: profile && profile.contacts.messenger ? profile.contacts.messenger : '',
-    phone: profile && profile.contacts.phone ? profile.contacts.phone : '',
-    whatsapp: profile && profile.contacts.whatsapp ? profile.contacts.whatsapp : ''
+    email: profile && profile.contacts?.email ? profile.contacts.email : '',
+    insta: profile && profile.contacts?.insta ? profile.contacts.insta : '',
+    messenger: profile && profile.contacts?.messenger ? profile.contacts.messenger : '',
+    phone: profile && profile.contacts?.phone ? profile.contacts.phone : '',
+    whatsapp: profile && profile.contacts?.whatsapp ? profile.contacts.whatsapp : ''
   }
 
   const submit = (values: AddClientFormValues, actions: FormikHelpers<FormikValues>) => {
