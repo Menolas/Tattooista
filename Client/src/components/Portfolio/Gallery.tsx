@@ -1,18 +1,18 @@
-import * as React from "react"
-import { useEffect, useState } from "react"
-import { Preloader } from "../common/Preloader"
-import {GalleryItemType, TattooStyleType} from "../../types/Types"
-import { ModalPopUp } from '../common/ModalPopUp'
-import {API_URL} from "../../http"
-import {Tooltip} from "react-tooltip"
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { Preloader } from "../common/Preloader";
+import {GalleryItemType, TattooStyleType} from "../../types/Types";
+import { ModalPopUp } from "../common/ModalPopUp";
+import {API_URL} from "../../http";
+import {Tooltip} from "react-tooltip";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import {Paginator} from "../common/Paginator"
-import {SuccessPopUp} from "../common/SuccessPopUp"
-import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer"
-import {useDispatch} from "react-redux"
-import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm"
-import {NothingToShow} from "../common/NothingToShow"
+import Sprite from "../../assets/svg/sprite.svg";
+import {Paginator} from "../common/Paginator";
+import {SuccessPopUp} from "../common/SuccessPopUp";
+import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer";
+import {useDispatch} from "react-redux";
+import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm";
+import {NothingToShow} from "../common/NothingToShow";
 import {GalleryUploadForm} from "../Forms/GalleryUploadForm";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {ImageFullView} from "../common/ImageFullView";
@@ -60,52 +60,53 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 }) => {
   //debugger
 
-  const [bigImg, setBigImg] = useState('')
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [ editGalleryMode, setEditGalleryMode] = useState(false)
-  const [ editGalleryItem, setEditGalleryItem ] = useState(null)
-  const successPopUpContent = `You successfully added images to ${activeStyle?.value} style gallery`
+  const [bigImg, setBigImg] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [ editGalleryMode, setEditGalleryMode] = useState(false);
+  const [ editGalleryItem, setEditGalleryItem ] = useState(null);
+  const successPopUpContent = `You successfully added images to ${activeStyle?.value} style gallery`;
 
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const showBigImg = (fileName) => {
-    if (!bigImg) {
-      setBigImg(fileName)
-    }
+      setBigImg(fileName);
   }
 
   const closeBigImg = () => {
-    setBigImg('')
+    setBigImg('');
   }
 
   const openEditGalleryForm = () => {
-    setEditGalleryMode(true)
+    setEditGalleryMode(true);
   }
 
   const closeEditGalleryForm = () => {
-    setEditGalleryMode(false)
+    setEditGalleryMode(false);
   }
 
   const closeGalleryItemEditModal = () => {
-    setEditGalleryItem(null)
+    setEditGalleryItem(null);
+  }
+
+  const closeSuccessModalCallBack = () => {
+    setIsSuccess(false);
   }
 
   useEffect(() => {
     if (isSuccess) {
       setTimeout( () => {
-        dispatch(setIsSuccessAC(false))
-      }, 2000)
+        dispatch(setIsSuccessAC(false));
+      }, 2000);
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
-  const modalTitle = `Update you gallery for ${activeStyle?.value}`
+  const modalTitle = `Update you gallery for ${activeStyle?.value}`;
 
   const GalleryItemsArray = gallery?.map((item, index) => {
-
     const GalleryImgUrl = fakeApi
         ? `./uploads/gallery/${item.fileName}`
-        : `${API_URL}/gallery/${item.fileName}`
+        : `${API_URL}/gallery/${item.fileName}`;
 
     return (
         <li
@@ -115,8 +116,9 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           <div
             className={"gallery__img-wrap"}
             onClick={() => {
-              showBigImg(item.fileName)
-              setActiveIndex(index)
+              console.log("click on gallery element!!!!!!!!!")
+              showBigImg(item.fileName);
+              setActiveIndex(index);
             }}
             style={{ backgroundImage: `url(${GalleryImgUrl})` }}
           >
@@ -128,7 +130,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Edit gallery item"
                   className={"btn btn--icon"}
-                  onClick={() => {setEditGalleryItem(item)}}
+                  onClick={() => { setEditGalleryItem(item); }}
               >
                   <svg><use href={`${Sprite}#edit`}/></svg>
               </button>
@@ -137,7 +139,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   data-tooltip-content="Move gallery item to archive"
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}
-                  onClick={() => {archiveGalleryItem(item._id)}}
+                  onClick={() => { archiveGalleryItem(item._id); }}
               >
                   <svg><use href={`${Sprite}#archive`}/></svg>
               </button>
@@ -154,8 +156,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           }
 
         </li>
-    )
-  })
+    );
+  });
 
   return (
       <section className="gallery page-block container">
@@ -176,8 +178,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               </button>
           }
         </div>
-        {
-          isFetching
+        {  isFetching
             ? <Preloader />
             : totalCount && totalCount > 0
               ? (
@@ -187,16 +188,16 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                 )
               : <NothingToShow/>
         }
-        {
-          bigImg &&
-          <ImageFullView
+        {  bigImg &&
+           <ImageFullView
+              isOpen={bigImg}
               gallery={gallery}
               activeIndex={activeIndex}
               fakeApi={fakeApi}
               imgUrl={bigImg}
               imgAlt={activeStyle.value}
               closeImg={closeBigImg}
-          />
+           />
         }
         <ModalPopUp
             isOpen={editGalleryItem}
@@ -211,7 +212,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               closeModal={closeGalleryItemEditModal}
           />
         </ModalPopUp>
-
         <ModalPopUp
             isOpen={editGalleryMode}
             closeModal={closeEditGalleryForm}
@@ -223,9 +223,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               closeModal={closeEditGalleryForm}
           />
         </ModalPopUp>
-        {
-            isSuccess &&
-            <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
+        {  isSuccess &&
+            <SuccessPopUp
+                isOpen={isSuccess}
+                closeModal={closeSuccessModalCallBack}
+                content={successPopUpContent}
+            />
         }
         <Tooltip id="my-tooltip" />
       </section>

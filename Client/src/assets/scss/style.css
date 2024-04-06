@@ -1669,7 +1669,7 @@ img {
     padding-bottom: 28px;
     background-image: url("../img/body-bg.jpg");
   }
-  .tattoo-style.page-block ::before {
+  .tattoo-style.page-block::before {
     bottom: 0;
   }
   .tattoo-style.page-block .tattoo-style__item-content {
@@ -2569,7 +2569,7 @@ label[for=concent] {
   padding: 0;
 }
 .form div[class$=-ValueContainer] {
-  padding: 0 8px;
+  padding: 0;
 }
 .form .css-1u9des2-indicatorSeparator {
   display: none;

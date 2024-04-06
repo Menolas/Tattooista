@@ -1,11 +1,11 @@
-import * as React from "react"
-import { NavLink } from "react-router-dom"
-import { SocialNav } from "../SocialNav"
-import { MainNav } from "../MainNav"
-import { Logo } from "../Logo"
+import * as React from "react";
+import { NavLink } from "react-router-dom";
+import { SocialNav } from "../SocialNav";
+import { MainNav } from "../MainNav";
+import { Logo } from "../Logo";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import {Tooltip} from "react-tooltip"
+import Sprite from "../../assets/svg/sprite.svg";
+import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
 import {BookConsultationFormValues} from "../../types/Types";
@@ -35,7 +35,10 @@ export const Header: React.FC<PropsType> = ({
       <div className={'main-header__right'}>
           {
               (headerClasses === 'main-header--portfolio') &&
-                  <BookingButton bookConsultation={bookConsultation} />
+                  <BookingButton
+                      consentId={"consentAdvertismentHeader"}
+                      bookConsultation={bookConsultation}
+                  />
           }
           <nav className={'admin-nav'}>
             <NavLink

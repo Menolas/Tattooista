@@ -46,7 +46,7 @@ const validationSchema = Yup.object().shape({
         then: () => Yup.string().required("Please, provide you whatsapp number.")
       }),
   message: Yup.string()
-      .min(20, "Must be minimum longer twenty characters")
+      .min(20, "Must be at least twenty characters long")
       .max(200, "Must be shorter than 200 character")
       .required("Required Field"),
   consent: Yup.boolean().oneOf([true],"Required Field")
@@ -55,7 +55,7 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
   consentId: string
   bookConsultation: (values: BookConsultationFormValues) => void
-  closeBookingModal?: () => void
+  closeBookingModal: () => void
 };
 
 export const BookingForm: React.FC<PropsType> = React.memo(({
@@ -149,16 +149,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   onChange={propsF.handleChange}
               />
             </FieldWrapper>
-            <button
-              type="submit"
-              disabled={propsF.isSubmitting}
-              className="btn btn--bg btn--dark-bg form__submit-btn booking__submit-btn"
-            >
-                {propsF.isSubmitting
-                    ? 'Please wait...'
-                    : 'Book a consultation'
-                }
-            </button>
             <FieldWrapper
                 wrapperClass={'form__input-wrap--checkbox'}
                 name={"consent"}
@@ -177,6 +167,16 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 CONSENT WITH PROCESSING OF MY PERSONAL DATA
               </label>
             </FieldWrapper>
+            <button
+              type="submit"
+              disabled={propsF.isSubmitting}
+              className="btn btn--bg btn--dark-bg form__submit-btn booking__submit-btn"
+            >
+                {propsF.isSubmitting
+                    ? 'Please wait...'
+                    : 'Book a consultation'
+                }
+            </button>
           </Form>
         )
       }}

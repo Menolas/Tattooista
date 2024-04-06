@@ -1,9 +1,10 @@
-import {API_URL} from "../../http"
-import * as React from "react"
+import {API_URL} from "../../http";
+import * as React from "react";
 import AliceCarousel from "react-alice-carousel";
 import {GalleryItemType} from "../../types/Types";
 
 type PropsType = {
+    isOpen: string
     gallery: Array<GalleryItemType>
     activeIndex: number
     fakeApi?: boolean
@@ -20,6 +21,7 @@ const responsive = {
 }
 
 export const ImageFullView: React.FC<PropsType> = ({
+    isOpen,
     gallery,
     activeIndex,
     fakeApi,
@@ -31,7 +33,8 @@ export const ImageFullView: React.FC<PropsType> = ({
     const sliders = gallery.map(item => {
         const GalleryImgUrl = fakeApi
             ? `./uploads/gallery/${item.fileName}`
-            : `${API_URL}/gallery/${item.fileName}`
+            : `${API_URL}/gallery/${item.fileName}`;
+
         return (
             <div
                 className={"image-full-view__img slider"}
@@ -42,7 +45,8 @@ export const ImageFullView: React.FC<PropsType> = ({
         )
     })
     return (
-        <div className="image-full-view gallery__large-wrap modal-wrap">
+        <div className={ !isOpen ? "image-full-view gallery__large-wrap modal-wrap" : "image-full-view gallery__large-wrap modal-wrap open" }
+        >
             <button
                 className="closing-btn image-full-view__closing-btn gallery__item-close-btn"
                 onClick={() => { closeImg() }}
@@ -58,11 +62,6 @@ export const ImageFullView: React.FC<PropsType> = ({
                     mouseTracking
                     disableDotsControls={true}
                 />
-                {/*<img*/}
-                {/*    className={"image-full-view__img"}*/}
-                {/*    src={ fakeApi ? `./uploads/gallery/${imgUrl}` : `${API_URL}/gallery/${imgUrl}`} alt={imgAlt}*/}
-                {/*    contextMenu={`alert("You can't download this picture.");return false;`}*/}
-                {/*/>*/}
             </div>
         </div>
     )

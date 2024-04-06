@@ -1,68 +1,70 @@
-import * as React from "react"
-import {useEffect} from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import * as React from "react";
+import {useEffect} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   getClientProfile,
   updateClientGallery,
   editClient,
   deleteClient,
-  deleteClientGalleryPicture, deleteClientFromProfile, archiveClientFromProfile
-} from "../../../redux/Clients/clients-reducer"
-import { Profile } from "./Profile"
+  deleteClientGalleryPicture,
+  deleteClientFromProfile,
+  archiveClientFromProfile
+} from "../../../redux/Clients/clients-reducer";
+import { Profile } from "./Profile";
 import {
   getClientProfileSelector,
   getIsClientDeletingInProcessSelector,
   getIsDeletingPicturesInProcess,
   getIsSuccessSelector
-} from "../../../redux/Clients/clients-selectors"
-import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer"
+} from "../../../redux/Clients/clients-selectors";
+import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer";
 
 export const ProfileContainer: React.FC = () => {
 
-  const profile = useSelector(getClientProfileSelector)
-  const isSuccess = useSelector(getIsSuccessSelector)
-  const isDeletingInProcess =useSelector(getIsClientDeletingInProcessSelector)
-  const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess)
+  const profile = useSelector(getClientProfileSelector);
+  const isSuccess = useSelector(getIsSuccessSelector);
+  const isDeletingInProcess =useSelector(getIsClientDeletingInProcessSelector);
+  const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    let actualId = profile._id
-    if(!!profile) actualId = profile._id
-    if (!!urlParams.get('clientId')) actualId = urlParams.get('clientId')
-    dispatch(getClientProfile(actualId))
+    const urlParams = new URLSearchParams(window.location.search);
+    let actualId = profile._id;
+    if(!!profile) actualId = profile._id;
+    if (!!urlParams.get('clientId')) actualId = urlParams.get('clientId');
+    dispatch(getClientProfile(actualId));
 
-  }, [])
+  }, []);
 
   useEffect(() => {
     if(!!profile) navigate(`?clientId=${profile._id}`)
-  }, [profile])
+  }, [profile]);
 
   const deleteClientCallBack = (clientId: string) => {
-    dispatch(deleteClientFromProfile(clientId))
+    dispatch(deleteClientFromProfile(clientId));
   }
 
   const editClientCallBack = (clientId: string, values: FormData) => {
-    dispatch(editClient(clientId, values))
+    dispatch(editClient(clientId, values));
   }
 
   const updateClientGalleryCallBack = (clientId: string, values: FormData) => {
-    dispatch(updateClientGallery(clientId, values))
+    dispatch(updateClientGallery(clientId, values));
   }
 
   const archiveClientCallBack = (id: string) => {
-    dispatch(archiveClientFromProfile(id))
+    dispatch(archiveClientFromProfile(id));
   }
 
   const deleteClientGalleryPictureCallBack = (clientId: string, picture: string) => {
-    dispatch(deleteClientGalleryPicture(clientId, picture))
+    dispatch(deleteClientGalleryPicture(clientId, picture));
   }
 
   const setIsSuccessCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessAC(bol))
+    dispatch(setIsSuccessAC(bol));
   }
 
   return (

@@ -1,10 +1,8 @@
-import * as React from "react"
-import { Advertisement } from "../../components/Portfolio/Advertisement"
-import { Gallery } from "../../components/Portfolio/Gallery"
-import { TattooStyles } from "../../components/Portfolio/TattooStyles"
-import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types"
-import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
-import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import * as React from "react";
+import { Gallery } from "../../components/Portfolio/Gallery";
+import { TattooStyles } from "../../components/Portfolio/TattooStyles";
+import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
+import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
 
 type PropsType = {
   fakeApi: boolean
