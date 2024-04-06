@@ -52,7 +52,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
         dispatch(setIsSuccessAC(false));
       }, 1500)
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
   //debugger
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
@@ -62,7 +62,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
 
   const showBigImg = (fileName) => {
     if (!bigImg) {
-      setBigImg(fileName)
+      setBigImg(fileName);
     }
   }
 

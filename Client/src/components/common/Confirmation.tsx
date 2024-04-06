@@ -1,7 +1,7 @@
-import * as React from "react"
+import * as React from "react";
 
 type PropsType = {
-    content: string,
+    content: string
     confirm: () => void
     cancel: () => void
 }
@@ -17,11 +17,14 @@ export const Confirmation: React.FC<PropsType> = ({
             <div className={'confirmation__actions'}>
                 <button
                     className={"btn"}
-                    onClick={() => {confirm()}}
+                    onClick={() => {
+                        confirm();
+                        cancel();
+                    }}
                 >Yep</button>
                 <button
                     className={"btn"}
-                    onClick={() => {cancel()}}
+                    onClick={() => {cancel();}}
                 >Nope</button>
             </div>
         </div>

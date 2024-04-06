@@ -160,7 +160,7 @@
     padding-bottom: 28px;
     background-image: url("../img/body-bg.jpg");
 
-    ::before {
+    &::before {
       bottom: 0;
     }
 

@@ -56,6 +56,10 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
     setAddTattooStyleMode(false)
   }
 
+  const closeSuccessModalCallBack = () => {
+    setIsSuccess(false)
+  }
+
   const closeEditModal = () => {
       setEditTattooStyleMode(false)
   }
@@ -132,49 +136,48 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
             controlsStrategy="alternate"
             mouseTracking={true}
         />
-        {
-            addTattooStyleMode &&
-            <ModalPopUp
-                modalTitle={modalTitle}
-                closeModal={closeModal}
-            >
+        <ModalPopUp
+            isOpen={addTattooStyleMode}
+            modalTitle={modalTitle}
+            closeModal={closeModal}
+        >
+          {
+              addTattooStyleMode &&
               <UpdateTattooStyleFormFormik
                   addTattooStyle={addTattooStyle}
                   closeModal={closeModal}
               />
-            </ModalPopUp>
-        }
-
-        {
-            editTattooStyleMode &&
-            <ModalPopUp
-                modalTitle={'Update tattoo style'}
-                closeModal={closeEditModal}
-            >
+          }
+        </ModalPopUp>
+        <ModalPopUp
+            isOpen={editTattooStyleMode}
+            modalTitle={'Update tattoo style'}
+            closeModal={closeEditModal}
+        >
+          {  editTattooStyleMode &&
               <UpdateTattooStyleFormFormik
                   style={activeStyle}
                   editTattooStyle={editTattooStyle}
                   closeModal={closeEditModal}
               />
-            </ModalPopUp>
-        }
-        {
-            needConfirmation &&
-            <ModalPopUp
-                modalTitle={''}
-                closeModal={closeModal}
-            >
-              <Confirmation
-                  content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
-                  confirm={deleteTattooStyleCallBack}
-                  cancel={closeConfirmationModal}
-              />
-            </ModalPopUp>
-        }
-        {
-            isSuccess &&
-            <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent} />
-        }
+          }
+        </ModalPopUp>
+        <ModalPopUp
+            isOpen={needConfirmation}
+            modalTitle={''}
+            closeModal={closeConfirmationModal}
+        >
+          <Confirmation
+              content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
+              confirm={deleteTattooStyleCallBack}
+              cancel={closeConfirmationModal}
+          />
+        </ModalPopUp>
+        <SuccessPopUp
+            isOpen={isSuccess}
+            closeModal={closeSuccessModalCallBack}
+            content={successPopUpContent}
+        />
         <Tooltip id="my-tooltip" />
       </div>
     </section>

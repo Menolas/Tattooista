@@ -1,14 +1,14 @@
-import * as React from "react"
-import {useState} from "react"
-import {Field, Form, Formik} from "formik"
-import * as Yup from "yup"
-import {API_URL} from "../../http"
+import * as React from "react";
+import {useState} from "react";
+import {Field, Form, Formik} from "formik";
+import * as Yup from "yup";
+import {API_URL} from "../../http";
 // @ts-ignore
-import tattooMachine from "../../assets/img/tattoo-machine.webp"
-import {TattooStyleType} from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
-import {FieldWrapper} from "./FieldWrapper"
-import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators"
+import tattooMachine from "../../assets/img/tattoo-machine.webp";
+import {TattooStyleType} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
+import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
 
 const validationSchema = Yup.object().shape({
     wallPaper: Yup.mixed()
@@ -40,19 +40,19 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
     closeModal,
 }) => {
 
-    const [imageURL, setImageURL] = useState('')
+    const [imageURL, setImageURL] = useState('');
 
-    const fileReader = new FileReader()
+    const fileReader = new FileReader();
     fileReader.onloadend = () => {
         // @ts-ignore
-        setImageURL(fileReader.result)
+        setImageURL(fileReader.result);
     }
 
     const handleOnChange = (event) => {
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
-            const file = event.target.files[0]
-            fileReader.readAsDataURL(file)
+            const file = event.target.files[0];
+            fileReader.readAsDataURL(file);
         }
     }
 
@@ -63,16 +63,16 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
     }
 
     const submit = (values) => {
-        const formData = new FormData()
+        const formData = new FormData();
         for (let value in values) {
-            formData.append(value, values[value])
+            formData.append(value, values[value]);
         }
         if (style) {
-            editTattooStyle(style._id, formData)
+            editTattooStyle(style._id, formData);
         } else {
-            addTattooStyle(formData)
+            addTattooStyle(formData);
         }
-        closeModal()
+        closeModal();
     }
 
     return (
@@ -89,7 +89,7 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                 <img
                                     src={imageURL ? imageURL
                                             : style && style.wallPaper
-                                            ? `${API_URL}styleWallpapers/${style._id}/${style.wallPaper}`
+                                            ? `${API_URL}/styleWallpapers/${style._id}/${style.wallPaper}`
                                             : tattooMachine
                                     }
                                     alt="preview"
@@ -104,13 +104,12 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                     type={'file'}
                                     value={undefined}
                                     onChange={(e) => {
-                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
-                                        handleOnChange(e)
+                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
+                                        handleOnChange(e);
                                     }}
                                 />
                             </FieldWrapper>
                         </div>
-
                         <FieldComponent
                             name={'value'}
                             type={'text'}
@@ -118,7 +117,6 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                             value={propsF.values.value}
                             onChange={propsF.handleChange}
                         />
-
                         <FieldWrapper
                             name={"description"}
                         >
@@ -131,7 +129,6 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                 value={propsF.values.description}/>
 
                         </FieldWrapper>
-
                         <button
                             type="submit"
                             disabled={propsF.isSubmitting}
@@ -141,7 +138,6 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                 : 'SUBMIT'
                             }
                         </button>
-
                     </Form>
                 )
             }}

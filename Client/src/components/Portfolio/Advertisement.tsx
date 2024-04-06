@@ -24,8 +24,8 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
 
   const dispatch = useDispatch()
 
-  const setIsSuccessBookingCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessBookingAC(bol))
+  const setIsSuccessBookingCallBack = () => {
+    dispatch(setIsSuccessBookingAC(false))
   }
 
   useEffect(() => {
@@ -53,10 +53,14 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
             </li>
           </ul>
       </div>
-      <BookingButton bookConsultation={bookConsultation} />
-      { isSuccessBooking &&
-          <SuccessPopUp closeModal={setIsSuccessBookingCallBack} content={successPopUpContent} />
-      }
+      <BookingButton
+          consentId={"consentAdvertisement"}
+          bookConsultation={bookConsultation}
+      />
+      <SuccessPopUp
+          isOpen={isSuccessBooking}
+          closeModal={setIsSuccessBookingCallBack}
+          content={successPopUpContent} />
     </section>
   )
 })

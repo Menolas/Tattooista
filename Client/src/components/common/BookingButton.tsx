@@ -10,7 +10,7 @@ type PropsType = {
 };
 
 export const BookingButton: React.FC<PropsType> = ({
-    consentId,
+    consentId = 'consent',
     bookConsultation,
 }) => {
 
@@ -41,13 +41,14 @@ export const BookingButton: React.FC<PropsType> = ({
                 modalTitle={modalTitle}
                 closeModal={closeBookingModal}
             >
-                <BookingForm
-                    consentId={consentId}
-                    bookConsultation={bookConsultation}
-                    closeBookingModal={closeBookingModal}
-                />
+                { bookingModal &&
+                    <BookingForm
+                        consentId={consentId}
+                        bookConsultation={bookConsultation}
+                        closeBookingModal={closeBookingModal}
+                    />
+                }
             </ModalPopUp>
-
         </div>
     )
 }
