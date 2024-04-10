@@ -2169,6 +2169,7 @@ img {
 .admin .admin__card-avatar {
   width: 100px;
   height: 100px;
+  overflow: hidden;
 }
 
 .admin__card-link {
@@ -2523,7 +2524,7 @@ label[for=concent] {
 .form select,
 .form div[class$=-control] {
   padding: 0 0.5rem 0.25rem 0;
-  width: 90%;
+  width: 95%;
   font-size: 18px;
   font-weight: 600;
   color: #080808;

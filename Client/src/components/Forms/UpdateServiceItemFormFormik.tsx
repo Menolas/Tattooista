@@ -7,10 +7,6 @@ import {ServiceType} from "../../types/Types";
 import {FieldComponent} from "./FieldComponent";
 import {FieldWrapper} from "./FieldWrapper";
 import {
-    isFileSizeValid,
-    isFileTypesValid,
-    MAX_FILE_SIZE,
-    VALID_FILE_EXTENSIONS,
     validateFile
 } from "../../utils/validators";
 
@@ -77,7 +73,7 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
     }
 
     const submit = async (values, actions) => {
-        // Check if aboutPageWallPaper is a File object
+        // Check if picture is a File object
         if (values.wallPaper instanceof File) {
             const isValidFile = validateFile(values.wallPaper);
             if (!isValidFile) {

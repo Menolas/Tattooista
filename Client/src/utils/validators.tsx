@@ -24,7 +24,6 @@ export function isFileTypesValid(files: Array<File>, authorizedExtensions: Array
     let valid = true
     if (files) {
         files.map(file => {
-            console.log(file.type)
             if (!authorizedExtensions.includes(file.type)) {
                 valid = false
             }
