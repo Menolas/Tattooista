@@ -1,6 +1,6 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
-import {useDispatch, useSelector} from "react-redux"
+import * as React from "react";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {
     getArchivedGalleryPageSizeSelector,
     getArchivedGallerySelector,
@@ -8,8 +8,8 @@ import {
     getIsGalleryItemDeletingInProcessSelector,
     getTattooStylesSelector,
     getTotalArchivedGalleryItemsCountSelector
-} from "../../../redux/Portfolio/portfolio-selectors"
-import {Paginator} from "../../common/Paginator"
+} from "../../../redux/Portfolio/portfolio-selectors";
+import {Paginator} from "../../common/Paginator";
 import {
     deleteArchivedGalleryItem,
     getArchivedGallery, getTattooStyles,
@@ -17,8 +17,8 @@ import {
     setArchivedGalleryPageSizeAC,
     setCurrentArchivedGalleryPageAC,
     updateArchivedGalleryItem
-} from "../../../redux/Portfolio/portfolio-reducer"
-import { API_URL } from "../../../http"
+} from "../../../redux/Portfolio/portfolio-reducer";
+import { API_URL } from "../../../http";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg"
 import {NothingToShow} from "../../common/NothingToShow"
@@ -28,57 +28,57 @@ import {Tooltip} from "react-tooltip"
 
 export const ArchivedGallery = () => {
 
-    const totalCount = useSelector(getTotalArchivedGalleryItemsCountSelector)
-    const pageSize = useSelector(getArchivedGalleryPageSizeSelector)
-    const currentPage = useSelector(getCurrentArchivedGalleryPageSelector)
-    const archivedGallery = useSelector(getArchivedGallerySelector)
-    const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector)
-    const tattooStyles = useSelector(getTattooStylesSelector)
+    const totalCount = useSelector(getTotalArchivedGalleryItemsCountSelector);
+    const pageSize = useSelector(getArchivedGalleryPageSizeSelector);
+    const currentPage = useSelector(getCurrentArchivedGalleryPageSelector);
+    const archivedGallery = useSelector(getArchivedGallerySelector);
+    const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector);
+    const tattooStyles = useSelector(getTattooStylesSelector);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (tattooStyles.length === 0) {
-            dispatch(getTattooStyles())
+            dispatch(getTattooStyles());
         }
-        dispatch(getArchivedGallery(currentPage, pageSize))
-    }, [currentPage, pageSize])
+        dispatch(getArchivedGallery(currentPage, pageSize));
+    }, [currentPage, pageSize]);
 
-    const [bigImg, setBigImg] = useState('')
+    const [bigImg, setBigImg] = useState('');
 
     const showBigImg = (fileName) => {
         if (!bigImg) {
-            setBigImg(fileName)
+            setBigImg(fileName);
         }
     }
 
     const closeBigImg = () => {
-        setBigImg('')
+        setBigImg('');
     }
 
     const onPageChangedCallBack = (page: number) => {
-        dispatch(setCurrentArchivedGalleryPageAC(page))
+        dispatch(setCurrentArchivedGalleryPageAC(page));
     }
 
     const setArchivedGalleryPageSizeACCallBack = (archivedGalleryPageSize: number) => {
-        dispatch(setArchivedGalleryPageSizeAC(archivedGalleryPageSize))
+        dispatch(setArchivedGalleryPageSizeAC(archivedGalleryPageSize));
     }
 
     const deleteArchivedGalleryItemCallBack = (itemId: string) => {
-        dispatch(deleteArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize))
+        dispatch(deleteArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize));
     }
 
     const reactivateArchivedGalleryItemCallBack = (itemId: string) => {
-        dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize))
+        dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize));
     }
 
     const updateArchivedGalleryItemCallBack = (id: string, values: object) => {
-        dispatch(updateArchivedGalleryItem(id, values))
+        dispatch(updateArchivedGalleryItem(id, values));
     }
 
-    const [ editGalleryItem, setEditGalleryItem ] = useState(null)
+    const [ editGalleryItem, setEditGalleryItem ] = useState(null);
     const closeGalleryItemEditModal = () => {
-        setEditGalleryItem(null)
+        setEditGalleryItem(null);
     }
 
     const galleryItems = archivedGallery.map(item => {
@@ -160,12 +160,13 @@ export const ArchivedGallery = () => {
                     </div>
                 </div>
             }
-            {
-                editGalleryItem &&
-                <ModalPopUp
-                    closeModal={closeGalleryItemEditModal}
-                    modalTitle={'Update tattoo styles for this image'}
-                >
+            <ModalPopUp
+                isOpen={editGalleryItem}
+                closeModal={closeGalleryItemEditModal}
+                modalTitle={'Update tattoo styles for this image'}
+            >
+                {
+                    editGalleryItem &&
                     <UpdateGalleryItemForm
                         folder={'archivedGallery'}
                         galleryItem={editGalleryItem}
@@ -173,8 +174,8 @@ export const ArchivedGallery = () => {
                         updateGalleryItem={updateArchivedGalleryItemCallBack}
                         closeModal={closeGalleryItemEditModal}
                     />
-                </ModalPopUp>
-            }
+                }
+            </ModalPopUp>
             <Tooltip id="my-tooltip" />
         </>
     )

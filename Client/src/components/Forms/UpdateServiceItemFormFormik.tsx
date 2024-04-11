@@ -11,15 +11,6 @@ import {
 } from "../../utils/validators";
 
 const validationSchema = Yup.object().shape({
-    // wallPaper: Yup.mixed()
-    //     .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-    //         if (!value) return true
-    //         return isFileSizeValid([value], MAX_FILE_SIZE)
-    //     })
-    //     .test('fileType', 'Invalid file type', (value: File) => {
-    //         if (!value) return true
-    //         return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
-    //     }),
     title: Yup.string()
         .required("Name is a required field"),
     condition_0: Yup.string(),
@@ -62,14 +53,14 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
     }
 
     const initialValues = {
-        wallPaper: service && service.wallPaper ? service.wallPaper : '',
-        title: service && service.title ? service.title : '',
-        condition_0: service && service.conditions ? service.conditions[0] : '',
-        condition_1: service && service.conditions ? service.conditions[1] : '',
-        condition_2: service && service.conditions ? service.conditions[2] : '',
-        condition_3: service && service.conditions ? service.conditions[3] : '',
-        condition_4: service && service.conditions ? service.conditions[4] : '',
-        condition_5: service && service.conditions ? service.conditions[5] : '',
+        wallPaper: service?.wallPaper ?? '',
+        title: service?.title ?? '',
+        condition_0: service?.conditions[0] ?? '',
+        condition_1: service?.conditions[1] ?? '',
+        condition_2: service?.conditions[2] ?? '',
+        condition_3: service?.conditions[3] ?? '',
+        condition_4: service?.conditions[4] ?? '',
+        condition_5: service?.conditions[5] ?? '',
     }
 
     const submit = async (values, actions) => {
@@ -109,8 +100,8 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
             {propsF => {
 
                 return (
-                    <Form className="form form--updateTattooStyle" encType={"multipart/form-data"}>
-                        <div className="form__input-wrap form__input-wrap--uploadFile">
+                    <Form className="form form--updateService" encType={"multipart/form-data"}>
+                        <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img
                                     src={
@@ -121,24 +112,23 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
                                     }
                                     alt="preview"
                                 />
+                                <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>
+                                    Pick File
+                                </label>
                             </div>
-                            <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
-                            <FieldWrapper name={'wallPaper'}>
-                                <Field
-                                    className="hidden"
-                                    id="wallPaper"
-                                    name={'wallPaper'}
-                                    type={'file'}
-                                    accept='image/*,.png,.jpg,.web,.jpeg'
-                                    value={undefined}
-                                    onChange={(e) => {
-                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
-                                        handleOnChange(e)
-                                    }}
-                                />
-                            </FieldWrapper>
-                        </div>
-
+                            <Field
+                                className="hidden"
+                                id="wallPaper"
+                                name={'wallPaper'}
+                                type={'file'}
+                                accept='image/*,.png,.jpg,.web,.jpeg'
+                                value={undefined}
+                                onChange={(e) => {
+                                    propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
+                                    handleOnChange(e)
+                                }}
+                            />
+                        </FieldWrapper>
                         <FieldComponent
                             name={'title'}
                             type={'text'}

@@ -98,9 +98,6 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
     });
 
     const submit = async (values, actions) => {
-       try {
-           await getValidationSchema(isEditing);
-
            const formData = new FormData();
            for (let value in values) {
                formData.append(value, values[value]);
@@ -112,12 +109,6 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
            }
            actions.resetForm();
            closeModal();
-       } catch (error) {
-           actions.setErrors(error.inner.reduce((errors, innerError) => {
-               errors[innerError.path] = innerError.message;
-               return errors;
-           }, {}));
-       }
     }
 
     return (
@@ -129,10 +120,9 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
             enableReinitialize={true}
         >
             {propsF => {
-                console.log(initialValues + "initial values parced!!!!!!!!!!!!!!!")
                 return (
                     <Form className="form form--updateTattooStyle" encType={"multipart/form-data"}>
-                        <div className="form__input-wrap form__input-wrap--uploadFile">
+                        <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img
                                     src={imageURL ? imageURL
@@ -142,22 +132,21 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                                     }
                                     alt="preview"
                                 />
+                                <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
                             </div>
-                            <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
-                            <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
-                                <Field
-                                    className="hidden"
-                                    id="wallPaper"
-                                    name={'wallPaper'}
-                                    type={'file'}
-                                    value={undefined}
-                                    onChange={(e) => {
-                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
-                                        handleOnChange(e);
-                                    }}
-                                />
-                            </FieldWrapper>
-                        </div>
+
+                            <Field
+                                className="hidden"
+                                id="wallPaper"
+                                name={'wallPaper'}
+                                type={'file'}
+                                value={undefined}
+                                onChange={(e) => {
+                                    propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
+                                    handleOnChange(e);
+                                }}
+                            />
+                        </FieldWrapper>
                         <FieldComponent
                             name={'value'}
                             type={'text'}
