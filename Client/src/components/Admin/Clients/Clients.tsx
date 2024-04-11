@@ -119,8 +119,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
         )
       });
 
-  console.log(accessError + " accessError !!!!!!!!!!!!!!!!!!!");
-
   return (
       <>
           {(accessError && accessError !== '')
@@ -166,10 +164,11 @@ export const Clients: React.FC<PropsType> = React.memo(({
                   >
                       { (editClientMode || addClientMode) &&
                           < UpdateClientForm
-                          profile={client}
-                          editClient={editClient}
-                          addClient={addClient}
-                          closeModal={closeModal}
+                              isEditing={editClientMode}
+                              profile={client}
+                              editClient={editClient}
+                              addClient={addClient}
+                              closeModal={closeModal}
                           />
                       }
                   </ModalPopUp>

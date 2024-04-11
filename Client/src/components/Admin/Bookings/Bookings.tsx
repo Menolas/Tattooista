@@ -63,17 +63,17 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   setIsSuccess,
   setAddBookingApiError
 }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isSuccess) {
             setTimeout( () => {
-                dispatch(setIsSuccessAC(false))
-            }, 1500)
+                dispatch(setIsSuccessAC(false));
+            }, 1500);
         }
-    }, [isSuccess])
+    }, [isSuccess]);
 
-    let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false)
+    let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
 
     const closeModal = () => {
         setAddConsultationMode(false)

@@ -58,11 +58,10 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   setIsSuccess,
   updateGalleryItem
 }) => {
-  //debugger
 
-  const [bigImg, setBigImg] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [ editGalleryMode, setEditGalleryMode] = useState(false);
+  const [ bigImg, setBigImg ] = useState(null);
+  const [ activeIndex, setActiveIndex ] = useState(0);
+  const [ editGalleryMode, setEditGalleryMode ] = useState(false);
   const [ editGalleryItem, setEditGalleryItem ] = useState(null);
   const successPopUpContent = `You successfully added images to ${activeStyle?.value} style gallery`;
 
@@ -87,6 +86,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 
   const closeGalleryItemEditModal = () => {
     setEditGalleryItem(null);
+    setEditGalleryMode(false);
   }
 
   const closeSuccessModalCallBack = () => {
@@ -116,7 +116,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           <div
             className={"gallery__img-wrap"}
             onClick={() => {
-              console.log("click on gallery element!!!!!!!!!")
               showBigImg(item.fileName);
               setActiveIndex(index);
             }}
@@ -154,7 +153,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               </button>
             </div>
           }
-
         </li>
     );
   });
@@ -200,28 +198,26 @@ export const Gallery: React.FC<PropsType> = React.memo(({
            />
         }
         <ModalPopUp
-            isOpen={editGalleryItem}
+            isOpen={editGalleryItem || editGalleryMode}
             closeModal={closeGalleryItemEditModal}
             modalTitle={'Update tattoo styles for this image'}
         >
-          <UpdateGalleryItemForm
-              folder={'gallery'}
-              galleryItem={editGalleryItem}
-              styles={tattooStyles}
-              updateGalleryItem={updateGalleryItem}
-              closeModal={closeGalleryItemEditModal}
-          />
-        </ModalPopUp>
-        <ModalPopUp
-            isOpen={editGalleryMode}
-            closeModal={closeEditGalleryForm}
-            modalTitle={modalTitle}
-        >
-          <GalleryUploadForm
-              updateId={activeStyle?._id}
-              updateGallery={updateGallery}
-              closeModal={closeEditGalleryForm}
-          />
+          {  editGalleryItem &&
+              <UpdateGalleryItemForm
+                  folder={'gallery'}
+                  galleryItem={editGalleryItem}
+                  styles={tattooStyles}
+                  updateGalleryItem={updateGalleryItem}
+                  closeModal={closeGalleryItemEditModal}
+              />
+          }
+          {  editGalleryMode &&
+              <GalleryUploadForm
+                  updateId={activeStyle?._id}
+                  updateGallery={updateGallery}
+                  closeModal={closeEditGalleryForm}
+              />
+          }
         </ModalPopUp>
         {  isSuccess &&
             <SuccessPopUp

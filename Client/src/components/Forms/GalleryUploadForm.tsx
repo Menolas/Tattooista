@@ -108,29 +108,29 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 </ul>
             }
 
-            {
-              imageURLS &&
-                <ul className={"list gallery__uploadedImgPreviews"}>
-                  {
-                    imageURLS?.map((item, index) => {
-                      return (
-                          <li className={"gallery__uploadedImgPreviews-item"} key={index}>
-                            <img
-                                className="client-profile__gallery-image"
-                                src={item}
-                                alt="preview"
-                                height="50"
-                            />
-                          </li>
-                      )
-                    })
-                  }
-                </ul>
-            }
             <FieldWrapper
                 name={'gallery'}
-                wrapperClass={''}
+                wrapperClass={'form__input-wrap--uploadFile'}
             >
+              {
+                imageURLS &&
+                  <ul className={"list gallery__uploadedImgPreviews"}>
+                    {
+                      imageURLS?.map((item, index) => {
+                        return (
+                            <li className={"gallery__uploadedImgPreviews-item"} key={index}>
+                              <img
+                                  className="client-profile__gallery-image"
+                                  src={item}
+                                  alt="preview"
+                                  height="50"
+                              />
+                            </li>
+                        )
+                      })
+                    }
+                  </ul>
+              }
               <label className="btn btn--sm btn--dark-bg" htmlFor={"gallery"}>Pick File</label>
               <Field
                 className="hidden"

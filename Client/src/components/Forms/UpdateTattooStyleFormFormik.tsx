@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {API_URL} from "../../http";
@@ -8,37 +8,53 @@ import tattooMachine from "../../assets/img/tattoo-machine.webp";
 import {TattooStyleType} from "../../types/Types";
 import {FieldComponent} from "./FieldComponent";
 import {FieldWrapper} from "./FieldWrapper";
-import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
+import {
+    isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS,
+    validateFile
+} from "../../utils/validators";
 
-const validationSchema = Yup.object().shape({
-    wallPaper: Yup.mixed()
-        .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-            if (!value) return true
-            return isFileSizeValid([value], MAX_FILE_SIZE)
-        })
-        .test('fileType', "Invalid file type", (value: File) => {
-            if (!value) return true
-            return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
-        }),
-    value: Yup.string()
-        .matches(/^([^0-9]*)$/, "Name should not contain numbers")
-        .required("Name is a required field"),
-    description: Yup.string()
-        .required("Description is a required field")
-})
+const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
+    let schema = Yup.object().shape({
+        value: Yup.string()
+            .matches(/^([^0-9]*)$/, "Name should not contain numbers")
+            .required("Name is a required field"),
+        description: Yup.string()
+            .required("Description is a required field")
+    });
+
+    if (!isEditing || hasNewFile) {
+        schema = schema.concat(Yup.object().shape({
+            wallPaper: Yup.mixed()
+                .test('fileType', 'Invalid file type', (value: File) => {
+                    if (!value) return true
+                    return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
+                })
+                .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
+                    if (!value) return true
+                    return isFileSizeValid([value], MAX_FILE_SIZE)
+                })
+        }));
+    }
+    return schema;
+}
 
 type PropsType = {
+    isEditing: boolean
     style?: TattooStyleType
     addTattooStyle?: (values: FormData) => void
     editTattooStyle?: (id: string, values: FormData) => void
     closeModal: () => void
 }
 export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
+    isEditing,
     style,
     addTattooStyle,
     editTattooStyle,
     closeModal,
 }) => {
+
+    const [hasNewFile, setHasNewFile] = useState(false);
+    const validationSchema = getValidationSchema(isEditing, hasNewFile);
 
     const [imageURL, setImageURL] = useState('');
 
@@ -52,27 +68,47 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
             const file = event.target.files[0];
+            setHasNewFile(true);
             fileReader.readAsDataURL(file);
         }
     }
 
-    const initialValues = {
-        wallPaper: style && style.wallPaper ? style.wallPaper : '',
-        value: style && style.value ? style.value : '',
-        description: style && style.description ? style.description : ''
-    }
-
-    const submit = (values) => {
-        const formData = new FormData();
-        for (let value in values) {
-            formData.append(value, values[value]);
-        }
-        if (style) {
-            editTattooStyle(style._id, formData);
+    useEffect(() => {
+        if (isEditing) {
+            // Set initial values based on style
+            setInitialValues({
+                wallPaper: style.wallPaper || '',
+                value: style.value || '',
+                description: style.description || ''
+            });
         } else {
-            addTattooStyle(formData);
+            setInitialValues({
+                wallPaper: '',
+                value: '',
+                description: ''
+            });
+            setImageURL('');
         }
-        closeModal();
+    }, [style, isEditing]);
+
+    const [initialValues, setInitialValues] = useState({
+        wallPaper: '',
+        value: '',
+        description: ''
+    });
+
+    const submit = async (values, actions) => {
+           const formData = new FormData();
+           for (let value in values) {
+               formData.append(value, values[value]);
+           }
+           if (isEditing) {
+               editTattooStyle(style._id, formData);
+           } else {
+               addTattooStyle(formData);
+           }
+           actions.resetForm();
+           closeModal();
     }
 
     return (
@@ -80,36 +116,37 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={submit}
+            context={{ isEditing: isEditing }}
+            enableReinitialize={true}
         >
             {propsF => {
                 return (
                     <Form className="form form--updateTattooStyle" encType={"multipart/form-data"}>
-                        <div className="form__input-wrap form__input-wrap--uploadFile">
+                        <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img
                                     src={imageURL ? imageURL
-                                            : style && style.wallPaper
+                                            : isEditing && style.wallPaper
                                             ? `${API_URL}/styleWallpapers/${style._id}/${style.wallPaper}`
                                             : tattooMachine
                                     }
                                     alt="preview"
                                 />
+                                <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
                             </div>
-                            <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
-                            <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
-                                <Field
-                                    className="hidden"
-                                    id="wallPaper"
-                                    name={'wallPaper'}
-                                    type={'file'}
-                                    value={undefined}
-                                    onChange={(e) => {
-                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
-                                        handleOnChange(e);
-                                    }}
-                                />
-                            </FieldWrapper>
-                        </div>
+
+                            <Field
+                                className="hidden"
+                                id="wallPaper"
+                                name={'wallPaper'}
+                                type={'file'}
+                                value={undefined}
+                                onChange={(e) => {
+                                    propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
+                                    handleOnChange(e);
+                                }}
+                            />
+                        </FieldWrapper>
                         <FieldComponent
                             name={'value'}
                             type={'text'}

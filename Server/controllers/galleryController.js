@@ -61,7 +61,7 @@ class galleryController {
 
   async updateArchivedGalleryItem(req, res) {
     const results = {}
-    const styles = req.body
+    const styles = req.body.values
     console.log(req.body + 'req body !!!!!!!!!!!!!!!!!!!!!!!!')
     res.archivedGalleryItem.tattooStyles = []
     for (let key in styles) {

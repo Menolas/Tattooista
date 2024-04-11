@@ -1,15 +1,14 @@
-import * as React from "react"
-import {useState} from "react"
-import * as classNames from "classnames"
-import "react-alice-carousel/lib/alice-carousel.css"
-import {BookConsultationFormValues, TattooStyleType} from "../../types/Types"
+import * as React from "react";
+import {useEffect, useState} from "react";
+import "react-alice-carousel/lib/alice-carousel.css";
+import {BookConsultationFormValues, TattooStyleType} from "../../types/Types";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import {UpdateTattooStyleFormFormik} from "../Forms/UpdateTattooStyleFormFormik"
-import {ModalPopUp} from "../common/ModalPopUp"
-import {SuccessPopUp} from "../common/SuccessPopUp"
-import AliceCarousel from "react-alice-carousel"
-import {Tooltip} from "react-tooltip"
+import Sprite from "../../assets/svg/sprite.svg";
+import {UpdateTattooStyleFormFormik} from "../Forms/UpdateTattooStyleFormFormik";
+import {ModalPopUp} from "../common/ModalPopUp";
+import {SuccessPopUp} from "../common/SuccessPopUp";
+import AliceCarousel from "react-alice-carousel";
+import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../common/Confirmation";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {Advertisement} from "./Advertisement";
@@ -46,30 +45,28 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
   setIsSuccess,
   bookConsultation
 }) => {
-  const [addTattooStyleMode, setAddTattooStyleMode] = useState(false)
-  const [editTattooStyleMode, setEditTattooStyleMode] = useState(false)
-  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
-  const modalTitle = 'Add a Tattoo Style'
-  const successPopUpContent = "You successfully added a new style for your gallery"
+  const [addTattooStyleMode, setAddTattooStyleMode] = useState(false);
+  const [editTattooStyleMode, setEditTattooStyleMode] = useState(false);
+  const [style, setStyle] = useState(null);
+  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+  const successPopUpContent = "You successfully added a new style for your gallery";
 
   const closeModal = () => {
-    setAddTattooStyleMode(false)
+    setAddTattooStyleMode(false);
+    setEditTattooStyleMode(false);
+    setStyle(null);
   }
 
   const closeSuccessModalCallBack = () => {
-    setIsSuccess(false)
-  }
-
-  const closeEditModal = () => {
-      setEditTattooStyleMode(false)
+    setIsSuccess(false);
   }
 
   const closeConfirmationModal = () => {
-    setNeedConfirmation(false)
+    setNeedConfirmation(false);
   }
 
   const deleteTattooStyleCallBack = () => {
-    deleteTattooStyle(activeStyle._id)
+    deleteTattooStyle(activeStyle._id);
   }
 
   const tattooStylesAliceArray = tattooStyles
@@ -82,7 +79,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
           {item.value}
         </div>
       )
-    })
+    });
 
   return (
     <section className="tattoo-style page-block">
@@ -102,7 +99,10 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Edit tattoo style"
                   className={"btn btn--icon"}
-                  onClick={() => {setEditTattooStyleMode(true)}}
+                  onClick={() => {
+                    setEditTattooStyleMode(true);
+                    setStyle(activeStyle);
+                  }}
               >
                   <svg><use href={`${Sprite}#edit`}/></svg>
               </button>
@@ -137,28 +137,17 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
             mouseTracking={true}
         />
         <ModalPopUp
-            isOpen={addTattooStyleMode}
-            modalTitle={modalTitle}
+            isOpen={addTattooStyleMode || editTattooStyleMode}
+            modalTitle={'Update tattoo styles'}
             closeModal={closeModal}
         >
           {
-              addTattooStyleMode &&
               <UpdateTattooStyleFormFormik
+                  isEditing={editTattooStyleMode}
+                  style={style}
+                  editTattooStyle={editTattooStyle}
                   addTattooStyle={addTattooStyle}
                   closeModal={closeModal}
-              />
-          }
-        </ModalPopUp>
-        <ModalPopUp
-            isOpen={editTattooStyleMode}
-            modalTitle={'Update tattoo style'}
-            closeModal={closeEditModal}
-        >
-          {  editTattooStyleMode &&
-              <UpdateTattooStyleFormFormik
-                  style={activeStyle}
-                  editTattooStyle={editTattooStyle}
-                  closeModal={closeEditModal}
               />
           }
         </ModalPopUp>
@@ -182,4 +171,4 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
       </div>
     </section>
   )
-})
+});

@@ -124,96 +124,96 @@ export const generalReducer = (
 
 type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
     SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetAboutPageAT |
-    SetFaqItemsAT | SetServicesAT | SetServiceAT
+    SetFaqItemsAT | SetServicesAT | SetServiceAT;
 
 // action creators
 
 type SetIsBookingModalOpenAT = {
   type: typeof SET_IS_BOOKING_MODAL_OPEN
   bol: boolean
-}
+};
 
 export const setIsBookingModalOpenAC = (bol: boolean): SetIsBookingModalOpenAT => ({
   type: SET_IS_BOOKING_MODAL_OPEN, bol
-})
+});
 
 type SetUpdatePageApiErrorAT = {
   type: typeof SET_UPDATE_PAGE_API_ERROR
   error: string | undefined
-}
+};
 
 export const setUpdatePageApiErrorAC = (error: string | undefined): SetUpdatePageApiErrorAT => ({
   type: SET_UPDATE_PAGE_API_ERROR, error
-})
+});
 
 type SetUpdateServiceApiErrorAT = {
   type: typeof SET_UPDATE_SERVICE_API_ERROR
   error: string | undefined
-}
+};
 
 export const setUpdateServiceApiErrorAC = (error: string | undefined): SetUpdateServiceApiErrorAT => ({
   type: SET_UPDATE_SERVICE_API_ERROR, error
-})
+});
 
 type SetUpdateFaqItemApiErrorAT = {
   type: typeof SET_UPDATE_FAQ_ITEM_API_ERROR
   error: string | undefined
-}
+};
 
 export const setUpdateFaqItemApiErrorAC = (error: string | undefined): SetUpdateFaqItemApiErrorAT => ({
   type: SET_UPDATE_FAQ_ITEM_API_ERROR, error
-})
+});
 
 type SetBookingConsultationApiErrorAT = {
   type: typeof  SET_BOOKING_CONSULTATION_API_ERROR
   error: string | undefined
-}
+};
 
 export const setBookingConsultationApiErrorAC = (error: string | undefined): SetBookingConsultationApiErrorAT  => ({
   type: SET_BOOKING_CONSULTATION_API_ERROR, error
-})
+});
 
 type SetIsSuccessBookingAT = {
   type: typeof SET_IS_SUCCESS_BOOKING
   bol: boolean
-}
+};
 
 export const setIsSuccessBookingAC = (bol: boolean): SetIsSuccessBookingAT => ({
   type: SET_IS_SUCCESS_BOOKING, bol
-})
+});
 
 type SetIsGeneralFetchingAT = {
   type: typeof SET_IS_GENERAL_FETCHING
   bol: boolean
-}
+};
 
 export const setIsGeneralFetchingAC = (bol: boolean): SetIsGeneralFetchingAT => ({
   type: SET_IS_GENERAL_FETCHING, bol
-})
+});
 
 
 type SetIsSuccessAT = {
   type: typeof SET_IS_SUCCESS
   bol: boolean
-}
+};
 
 export const setIsSuccessAC = (bol: boolean): SetIsSuccessAT => ({
   type: SET_IS_SUCCESS, bol
-})
+});
 
 type SetAboutPageAT = {
   type: typeof SET_ABOUT_PAGE,
   page: PageType
-}
+};
 
 const setAboutPageAC = (page: PageType): SetAboutPageAT => ({
       type: SET_ABOUT_PAGE, page
-})
+});
 
 type SetFaqItemsAT = {
   type: typeof SET_FAQ_ITEMS,
   faqItems: Array<FaqType>
-}
+};
 
 const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => ({
     type: SET_FAQ_ITEMS, faqItems
@@ -222,7 +222,7 @@ const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => ({
 type SetServicesAT = {
   type: typeof SET_SERVICES,
   services: Array<ServiceType>
-}
+};
 
 const setServicesAC = (services: Array<ServiceType>): SetServicesAT => ({
     type: SET_SERVICES, services
@@ -231,7 +231,7 @@ const setServicesAC = (services: Array<ServiceType>): SetServicesAT => ({
 type SetServiceAT = {
   type: typeof SET_SERVICE,
   service: ServiceType
-}
+};
 
 export const setServiceAC = (service: ServiceType): SetServiceAT => ({
   type: SET_SERVICE, service
@@ -245,84 +245,83 @@ export const getFaqItems = (): ThunkType => async (
     dispatch
 ) => {
   try {
-    dispatch(setIsGeneralFetchingAC(true))
-    let response = await generalSourcesApi.getFaqItems()
+    dispatch(setIsGeneralFetchingAC(true));
+    let response = await generalSourcesApi.getFaqItems();
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFaqItems(response.faqItems))
+      dispatch(setFaqItems(response.faqItems));
     }
   } catch (e) {
-    console.log(e)
-    dispatch(setFaqItems(faqItems))
+    console.log(e);
+    dispatch(setFaqItems(faqItems));
   } finally {
-    dispatch(setIsGeneralFetchingAC(false))
+    dispatch(setIsGeneralFetchingAC(false));
   }
 }
 
 export const addFaqItem = (values: FaqType): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.addFaqItem(values)
+    let response = await generalSourcesApi.addFaqItem(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFaqItems(response.faqItems))
-      dispatch(setIsSuccessAC(true))
+      dispatch(setFaqItems(response.faqItems));
+      dispatch(setIsSuccessAC(true));
     }
   } catch (e: any) {
-    dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e)
+    dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    console.log(e);
   }
 }
 
 export const updateFaqItem = (id: string, values: any): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.updateFaqItem(id, values)
+    let response = await generalSourcesApi.updateFaqItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFaqItems(response.faqItems))
-      dispatch(setIsSuccessAC(true))
+      dispatch(setFaqItems(response.faqItems));
+      dispatch(setIsSuccessAC(true));
     }
   } catch (e: any) {
-    dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e)
+    dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    console.log(e);
   }
 }
 
 export const deleteFaqItem = (id: string): ThunkType => async (dispatch) => {
   try {
-    let response = await generalSourcesApi.deleteFaqItem(id)
+    let response = await generalSourcesApi.deleteFaqItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFaqItems(response.faqItems))
+      dispatch(setFaqItems(response.faqItems));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 }
 
 export const getServices = (): ThunkType => async (dispatch) => {
   try {
-    dispatch(setIsGeneralFetchingAC(true))
-    let response = await generalSourcesApi.getServices()
+    dispatch(setIsGeneralFetchingAC(true));
+    let response = await generalSourcesApi.getServices();
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServicesAC(response.services))
+      dispatch(setServicesAC(response.services));
     }
   } catch (e) {
-    console.log(e)
-    dispatch(setServicesAC(services))
+    console.log(e);
+    dispatch(setServicesAC(services));
   } finally {
-    dispatch(setIsGeneralFetchingAC(false))
+    dispatch(setIsGeneralFetchingAC(false));
   }
 }
 
 export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {
-    dispatch(setIsGeneralFetchingAC(true))
-    const response = await generalSourcesApi.getAboutPage()
+    dispatch(setIsGeneralFetchingAC(true));
+    const response = await generalSourcesApi.getAboutPage();
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setAboutPageAC(response.page))
-      console.log(response.page + " page !!!!!!!!!!!!!!!!!!!!!!")
+      dispatch(setAboutPageAC(response.page));
     }
   } catch (e) {
-    console.log(e)
-    dispatch(setAboutPageAC(pages))
+    console.log(e);
+    dispatch(setAboutPageAC(pages));
   } finally {
-    dispatch(setIsGeneralFetchingAC(false))
+    dispatch(setIsGeneralFetchingAC(false));
   }
 }
 

@@ -83,7 +83,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
             {propsF => {
                 return (
                     <Form className="form form--updateAboutForm" encType={"multipart/form-data"}>
-                        <div className="form__input-wrap form__input-wrap--uploadFile">
+                        <FieldWrapper name={'aboutPageWallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img
                                     src={
@@ -94,24 +94,23 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                     }
                                     alt="preview"
                                 />
+                                <label className="btn btn--sm btn--dark-bg" htmlFor={"aboutPageWallPaper"}>
+                                    Pick File
+                                </label>
                             </div>
-                            <label className="btn btn--sm" htmlFor={"aboutPageWallPaper"}>Pick File</label>
-                            <FieldWrapper name={'aboutPageWallPaper'}>
-                                <Field
-                                    className="hidden"
-                                    id="aboutPageWallPaper"
-                                    name={'aboutPageWallPaper'}
-                                    type={'file'}
-                                    accept='image/*,.png,.jpg,.web,.jpeg'
-                                    value={undefined}
-                                    onChange={(e) => {
-                                        propsF.setFieldValue('aboutPageWallPaper', e.currentTarget.files[0])
-                                        handleOnChange(e)
-                                    }}
-                                />
-                            </FieldWrapper>
-                        </div>
-
+                            <Field
+                                className="hidden"
+                                id="aboutPageWallPaper"
+                                name={'aboutPageWallPaper'}
+                                type={'file'}
+                                accept='image/*,.png,.jpg,.web,.jpeg'
+                                value={undefined}
+                                onChange={(e) => {
+                                    propsF.setFieldValue('aboutPageWallPaper', e.currentTarget.files[0])
+                                    handleOnChange(e)
+                                }}
+                            />
+                        </FieldWrapper>
                         <FieldComponent
                             name={'aboutPageTitle'}
                             type={'text'}
