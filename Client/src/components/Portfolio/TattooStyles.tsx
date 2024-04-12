@@ -61,7 +61,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
     setIsSuccess(false);
   }
 
-  const closeConfirmationModal = () => {
+  const closeConfirmationModalCallBack = () => {
     setNeedConfirmation(false);
   }
 
@@ -154,12 +154,12 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
         <ModalPopUp
             isOpen={needConfirmation}
             modalTitle={''}
-            closeModal={closeConfirmationModal}
+            closeModal={closeConfirmationModalCallBack}
         >
           <Confirmation
               content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
               confirm={deleteTattooStyleCallBack}
-              cancel={closeConfirmationModal}
+              cancel={closeConfirmationModalCallBack}
           />
         </ModalPopUp>
         <SuccessPopUp
