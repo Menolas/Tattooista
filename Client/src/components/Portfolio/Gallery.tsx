@@ -16,6 +16,7 @@ import {NothingToShow} from "../common/NothingToShow";
 import {GalleryUploadForm} from "../Forms/GalleryUploadForm";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {ImageFullView} from "../common/ImageFullView";
+import {Confirmation} from "../common/Confirmation";
 
 type PropsType = {
   fakeApi: boolean
@@ -63,6 +64,9 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const [ activeIndex, setActiveIndex ] = useState(0);
   const [ editGalleryMode, setEditGalleryMode ] = useState(false);
   const [ editGalleryItem, setEditGalleryItem ] = useState(null);
+  const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
+    needConfirmation: false,
+  });
   const successPopUpContent = `You successfully added images to ${activeStyle?.value} style gallery`;
 
 
@@ -93,15 +97,17 @@ export const Gallery: React.FC<PropsType> = React.memo(({
     setIsSuccess(false);
   }
 
+  const closeConfirmationModalCallBack = () => {
+    setConfirmationData({ needConfirmation: false });
+  }
+
   useEffect(() => {
     if (isSuccess) {
       setTimeout( () => {
         dispatch(setIsSuccessAC(false));
-      }, 2000);
+      }, 5000);
     }
   }, [isSuccess]);
-
-  const modalTitle = `Update you gallery for ${activeStyle?.value}`;
 
   const GalleryItemsArray = gallery?.map((item, index) => {
     const GalleryImgUrl = fakeApi
@@ -147,7 +153,9 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   data-tooltip-content="Delete gallery item"
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}
-                  onClick={() => {deleteGalleryItem(item._id)}}
+                  onClick={() => {
+                    setConfirmationData({ needConfirmation: true, itemId: item._id });
+                  }}
               >
                   <svg><use href={`${Sprite}#trash`}/></svg>
               </button>
@@ -200,7 +208,10 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         <ModalPopUp
             isOpen={editGalleryItem || editGalleryMode}
             closeModal={closeGalleryItemEditModal}
-            modalTitle={'Update tattoo styles for this image'}
+            modalTitle={ editGalleryItem
+                         ? 'Update tattoo styles for this image'
+                         : `Update you gallery for ${activeStyle?.value}`
+            }
         >
           {  editGalleryItem &&
               <UpdateGalleryItemForm
@@ -219,13 +230,22 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               />
           }
         </ModalPopUp>
-        {  isSuccess &&
-            <SuccessPopUp
-                isOpen={isSuccess}
-                closeModal={closeSuccessModalCallBack}
-                content={successPopUpContent}
-            />
-        }
+        <ModalPopUp
+            isOpen={confirmationData.needConfirmation}
+            modalTitle={''}
+            closeModal={closeConfirmationModalCallBack}
+        >
+          <Confirmation
+              content={'Are you sure? You about to delete this gallery image FOREVER'}
+              confirm={() => {deleteGalleryItem(confirmationData.itemId)}}
+              cancel={closeConfirmationModalCallBack}
+          />
+        </ModalPopUp>
+        <SuccessPopUp
+            isOpen={isSuccess}
+            closeModal={closeSuccessModalCallBack}
+            content={successPopUpContent}
+        />
         <Tooltip id="my-tooltip" />
       </section>
   )
