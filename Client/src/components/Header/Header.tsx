@@ -21,7 +21,6 @@ export const Header: React.FC<PropsType> = ({
   isAuth,
   headerClasses,
   logout,
-  bookConsultation
 }) => {
 
   return (
@@ -37,7 +36,6 @@ export const Header: React.FC<PropsType> = ({
               (headerClasses === 'main-header--portfolio') &&
                   <BookingButton
                       consentId={"consentAdvertismentHeader"}
-                      bookConsultation={bookConsultation}
                   />
           }
           <nav className={'admin-nav'}>
