@@ -31,6 +31,7 @@ const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const ADD_CLIENT_SUCCESS = "Congratulation! You\'ve just created a new client.";
 const UPDATE_CLIENT_SUCCESS = "Congratulation! You\'ve just updated a client's info.";
 const UPDATE_CLIENT_GALLERY_SUCCESS = "You successfully updated client's gallery.";
+const RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS = "You successfully restored this client!";
 
 let initialState = {
   clients: [] as Array<ClientType>,
@@ -750,6 +751,7 @@ export const reactivateClient = (
     let response = await clientsAPI.reactivateClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, total, pageLimit, filter));
+      dispatch(setSuccessModalAC(true, RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS));
     }
   } catch (e) {
     // @ts-ignore

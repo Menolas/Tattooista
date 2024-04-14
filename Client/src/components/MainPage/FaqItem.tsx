@@ -5,6 +5,8 @@ import {FaqType} from "../../types/Types";
 import Sprite from "../../assets/svg/sprite.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {Confirmation} from "../common/Confirmation";
+import {ModalPopUp} from "../common/ModalPopUp";
 
 type PropsType = {
   isAuth: string;
@@ -24,6 +26,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
 }) => {
 
     let [faqItemClasses, setFaqItemClasses] = useState('faq__item');
+    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
 
     const showFaqItemText = () => {
       setFaqItemClasses('faq__item shown');
@@ -31,6 +34,14 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
 
     const hideFaqItemText = () => {
       setFaqItemClasses('faq__item');
+    }
+
+    const closeModal = () => {
+        setNeedConfirmation(false);
+    }
+
+    const deleteFaqItemCallBack = () => {
+        deleteFaqItem(faqItem._id);
     }
 
     return (
@@ -55,7 +66,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                     data-tooltip-id="faq-tooltip"
                     data-tooltip-content="Delete FAQ item"
                     className={"btn btn--icon"}
-                    onClick={() => {deleteFaqItem(faqItem._id);}}
+                    onClick={() => {setNeedConfirmation(true);}}
                 >
                     <svg><use href={`${Sprite}#trash`}/></svg>
                 </button>
@@ -75,6 +86,17 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
         <p className="faq__item-text">
           {faqItem.answer}
         </p>
+        <ModalPopUp
+              isOpen={needConfirmation}
+              modalTitle={''}
+              closeModal={closeModal}
+          >
+          <Confirmation
+              content={'Are you sure? You about to delete this FAQ item FOREVER...'}
+              confirm={deleteFaqItemCallBack}
+              cancel={closeModal}
+          />
+        </ModalPopUp>
         <Tooltip id="faq-tooltip" />
       </li>
     )

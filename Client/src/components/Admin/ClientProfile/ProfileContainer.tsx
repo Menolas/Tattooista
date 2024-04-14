@@ -6,7 +6,6 @@ import {
   getClientProfile,
   updateClientGallery,
   editClient,
-  deleteClient,
   deleteClientGalleryPicture,
   deleteClientFromProfile,
   archiveClientFromProfile, setSuccessModalAC
@@ -18,9 +17,8 @@ import {
   getIsDeletingPicturesInProcess,
   getSuccessModalSelector,
 } from "../../../redux/Clients/clients-selectors";
-import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer";
 
-export const ProfileContainer: React.FC = () => {
+export const ProfileContainer: React.FC = React.memo(() => {
 
   const profile = useSelector(getClientProfileSelector);
   const successModal = useSelector(getSuccessModalSelector);
@@ -80,4 +78,4 @@ export const ProfileContainer: React.FC = () => {
       setSuccessModal={setSuccessModalCallBack}
     />
   )
-}
+});

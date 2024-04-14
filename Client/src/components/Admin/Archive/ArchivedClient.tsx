@@ -1,15 +1,15 @@
-import * as React from "react"
+import * as React from "react";
 // @ts-ignore
-import avatar from "../../../assets/img/fox.webp"
+import avatar from "../../../assets/img/fox.webp";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg"
-import { NavLink } from "react-router-dom"
-import {ClientType, ContactType} from "../../../types/Types"
-import { API_URL } from "../../../http"
-import {Tooltip} from "react-tooltip"
-import {Confirmation} from "../../common/Confirmation"
-import {useState} from "react"
-import {ModalPopUp} from "../../common/ModalPopUp"
+import Sprite from "../../../assets/svg/sprite.svg";
+import { NavLink } from "react-router-dom";
+import {ClientType, ContactType} from "../../../types/Types";
+import { API_URL } from "../../../http";
+import {Tooltip} from "react-tooltip";
+import {Confirmation} from "../../common/Confirmation";
+import {useState} from "react";
+import {ModalPopUp} from "../../common/ModalPopUp";
 
 type PropsType = {
   client: ClientType
@@ -25,17 +25,22 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   reactivateClient
 }) => {
 
-  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
+  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+  const [needRestoreConfirmation, setNeedRestoreConfirmation] = useState<boolean>(false);
 
   const closeModal = () => {
-    setNeedConfirmation(false)
+    setNeedConfirmation(false);
   }
 
   const deleteClientCallBack = () => {
-    deleteClient(client._id)
+    deleteClient(client._id);
   }
 
-  const clientContacts: ContactType = client.contacts
+  const reactivateClientCallBack = () => {
+      reactivateClient(client._id);
+  }
+
+  const clientContacts: ContactType = client.contacts;
 
   const contactsArray = Object.keys(clientContacts).map(contact => {
     return clientContacts[contact]
@@ -48,7 +53,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         : null
   })
 
-  const clientAvatar = client.avatar ? `${API_URL}/archivedClients/${client._id}/avatar/${client.avatar}` : avatar
+  const clientAvatar = client.avatar ? `${API_URL}/archivedClients/${client._id}/avatar/${client.avatar}` : avatar;
 
   return (
     <li className="admin__card admin__card--avatar">
@@ -58,7 +63,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             data-tooltip-content="Restore client"
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === client._id)}
-            onClick={() => reactivateClient(client._id)}
+            onClick={() => setNeedRestoreConfirmation(true)}
         >
           <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
         </button>
@@ -101,15 +106,24 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         </div>
       }
       <ModalPopUp
-          isOpen={needConfirmation}
+          isOpen={needConfirmation || needRestoreConfirmation}
           modalTitle={''}
           closeModal={closeModal}
       >
-        <Confirmation
-            content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-            confirm={deleteClientCallBack}
-            cancel={closeModal}
-        />
+          { needConfirmation &&
+              <Confirmation
+                  content={'Are you sure? You about to delete this client from archive FOREVER along with all the data and images...'}
+                  confirm={deleteClientCallBack}
+                  cancel={closeModal}
+              />
+          }
+          { needRestoreConfirmation &&
+              <Confirmation
+                  content={'Are you sure? You about to restore this client from archive along with all the data and images...'}
+                  confirm={reactivateClientCallBack}
+                  cancel={closeModal}
+              />
+          }
       </ModalPopUp>
       <Tooltip id="my-tooltip" />
     </li>

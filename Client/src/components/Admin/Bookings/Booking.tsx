@@ -1,11 +1,11 @@
-import * as React from "react"
-import {ContactType, BookedConsultationType} from "../../../types/Types"
+import * as React from "react";
+import {ContactType, BookedConsultationType} from "../../../types/Types";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg"
-import {Tooltip} from "react-tooltip"
-import {useState} from "react"
-import {ModalPopUp} from "../../common/ModalPopUp"
-import {Confirmation} from "../../common/Confirmation"
+import Sprite from "../../../assets/svg/sprite.svg";
+import {Tooltip} from "react-tooltip";
+import {useState} from "react";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {Confirmation} from "../../common/Confirmation";
 import {ReadMore} from "../../common/ReadMore";
 
 type PropsType = {
@@ -32,18 +32,30 @@ export const Booking: React.FC<PropsType> = React.memo(({
     archiveConsultation
 }) => {
 
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
+    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+    const [needConfirmationBeforeTurnToClient, setNeedConfirmationBeforeTurnToClient] = useState<boolean>(false);
+    const [needConfirmationBeforeArchiving, setNeedConfirmationBeforeArchiving] = useState<boolean>(false);
 
     const closeModal = () => {
-        setNeedConfirmation(false)
+        setNeedConfirmation(false);
+        setNeedConfirmationBeforeTurnToClient(false);
+        setNeedConfirmationBeforeArchiving(false);
     }
 
     const deleteConsultationCallBack = () => {
-        deleteConsultation(consultation._id)
-        setNeedConfirmation(false)
+        deleteConsultation(consultation._id);
+        setNeedConfirmation(false);
     }
 
-    const bookingContacts: ContactType = consultation.contacts
+    const turnConsultationToClientCallBack = () => {
+        turnConsultationToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage);
+    }
+
+    const archiveConsultationCallBack = () => {
+        archiveConsultation(consultation._id);
+    }
+
+    const bookingContacts: ContactType = consultation.contacts;
 
     const contacts = Object.keys(bookingContacts).map(contact => {
 
@@ -54,7 +66,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
                     <span className={"admin__card-data"}>{bookingContacts[contact]}</span>
                 </div>
                )
-            : null
+            : null;
     })
 
   return (
@@ -81,7 +93,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === consultation._id)}
             onClick={() => {
-                turnConsultationToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage)
+                setNeedConfirmationBeforeTurnToClient(true);
             }}
         >
             <svg><use href={`${Sprite}#users-medical`}/></svg>
@@ -92,7 +104,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === consultation._id)}
             onClick={() => {
-                archiveConsultation(consultation._id)
+                setNeedConfirmationBeforeArchiving(true);
             }}
         >
             <svg><use href={`${Sprite}#archive`}/></svg>
@@ -103,7 +115,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === consultation._id)}
             onClick={() => {
-                setNeedConfirmation(true)
+                setNeedConfirmation(true);
             }}
         >
             <svg><use href={`${Sprite}#trash`}/></svg>
@@ -130,15 +142,32 @@ export const Booking: React.FC<PropsType> = React.memo(({
             </div>
         }
         <ModalPopUp
-            isOpen={needConfirmation}
+            isOpen={needConfirmation || needConfirmationBeforeTurnToClient || needConfirmationBeforeArchiving}
             modalTitle={''}
             closeModal={closeModal}
         >
-            <Confirmation
-                content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-                confirm={deleteConsultationCallBack}
-                cancel={closeModal}
-            />
+            { needConfirmation &&
+                <Confirmation
+                    content={'Are you sure? You about to delete this consultation FOREVER along with  all the data...'}
+                    confirm={deleteConsultationCallBack}
+                    cancel={closeModal}
+                />
+            }
+            { needConfirmationBeforeTurnToClient &&
+                <Confirmation
+                    content={'Are you sure? You about to turn this consultation into client.'}
+                    confirm={turnConsultationToClientCallBack}
+                    cancel={closeModal}
+                />
+            }
+            { needConfirmationBeforeArchiving &&
+                <Confirmation
+                    content={'Are you sure? You about to archive this consultation.'}
+                    confirm={archiveConsultationCallBack}
+                    cancel={closeModal}
+                />
+            }
+
         </ModalPopUp>
       <Tooltip id="my-tooltip" />
     </li>

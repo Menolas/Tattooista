@@ -67,7 +67,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
   const closeBigImg = () => {
     setBigImg('');
   }
-  const successPopUpContent = 'You successfully added changes to your clients list';
+
   const modalTitle = 'EDIT CLIENT';
 
   const closeModal = () => {
