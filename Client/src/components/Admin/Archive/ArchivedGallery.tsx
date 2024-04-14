@@ -25,6 +25,7 @@ import {NothingToShow} from "../../common/NothingToShow"
 import {ModalPopUp} from "../../common/ModalPopUp"
 import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm"
 import {Tooltip} from "react-tooltip"
+import {Confirmation} from "../../common/Confirmation";
 
 export const ArchivedGallery = () => {
 
@@ -45,6 +46,17 @@ export const ArchivedGallery = () => {
     }, [currentPage, pageSize]);
 
     const [bigImg, setBigImg] = useState('');
+    const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
+        needConfirmation: false,
+    });
+    const [confirmationForRestoreData, setConfirmationForRestoreData] = useState<{needConfirmation: boolean, itemId?: string}>({
+        needConfirmation: false,
+    });
+
+    const closeConfirmationModalCallBack = () => {
+        setConfirmationData({needConfirmation: false});
+        setConfirmationForRestoreData({needConfirmation: false});
+    }
 
     const showBigImg = (fileName) => {
         if (!bigImg) {
@@ -108,7 +120,7 @@ export const ArchivedGallery = () => {
                         data-tooltip-content="Restore archived gallery item"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
-                        onClick={() => {reactivateArchivedGalleryItemCallBack(item._id)}}
+                        onClick={() => {setConfirmationForRestoreData({ needConfirmation: true, itemId: item._id })}}
                     >
                         <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
                     </button>
@@ -117,7 +129,7 @@ export const ArchivedGallery = () => {
                         data-tooltip-content="Delete archived gallery item"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
-                        onClick={() => {deleteArchivedGalleryItemCallBack(item._id)}}
+                        onClick={() => {setConfirmationData({ needConfirmation: true, itemId: item._id });}}
                     >
                         <svg><use href={`${Sprite}#trash`}/></svg>
                     </button>
@@ -173,6 +185,26 @@ export const ArchivedGallery = () => {
                         styles={tattooStyles}
                         updateGalleryItem={updateArchivedGalleryItemCallBack}
                         closeModal={closeGalleryItemEditModal}
+                    />
+                }
+            </ModalPopUp>
+            <ModalPopUp
+                isOpen={confirmationData.needConfirmation || confirmationForRestoreData.needConfirmation}
+                modalTitle={''}
+                closeModal={closeConfirmationModalCallBack}
+            >
+                { confirmationData.needConfirmation &&
+                    <Confirmation
+                        content={'Are you sure? You about to delete this gallery image from archive FOREVER...'}
+                        confirm={() => {deleteArchivedGalleryItemCallBack(confirmationData.itemId)}}
+                        cancel={closeConfirmationModalCallBack}
+                    />
+                }
+                { confirmationForRestoreData.needConfirmation &&
+                    <Confirmation
+                        content={'Are you sure? You about to restore this gallery image.'}
+                        confirm={() => {reactivateArchivedGalleryItemCallBack(confirmationForRestoreData.itemId)}}
+                        cancel={closeConfirmationModalCallBack}
                     />
                 }
             </ModalPopUp>

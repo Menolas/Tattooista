@@ -61,8 +61,9 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
     needConfirmation: false,
   });
-
-  const dispatch = useDispatch();
+  const [confirmationForArchivingData, setConfirmationForArchivingData] = useState<{needConfirmation: boolean, itemId?: string}>({
+    needConfirmation: false,
+  });
 
   const showBigImg = (fileName) => {
       setBigImg(fileName);
@@ -87,6 +88,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 
   const closeConfirmationModalCallBack = () => {
     setConfirmationData({ needConfirmation: false });
+    setConfirmationForArchivingData({needConfirmation: false});
   }
 
   const GalleryItemsArray = gallery?.map((item, index) => {
@@ -124,7 +126,9 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   data-tooltip-content="Move gallery item to archive"
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}
-                  onClick={() => { archiveGalleryItem(item._id); }}
+                  onClick={() => {
+                    setConfirmationForArchivingData({needConfirmation: true, itemId: item._id});
+                  }}
               >
                   <svg><use href={`${Sprite}#archive`}/></svg>
               </button>
@@ -211,15 +215,24 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           }
         </ModalPopUp>
         <ModalPopUp
-            isOpen={confirmationData.needConfirmation}
+            isOpen={confirmationData.needConfirmation || confirmationForArchivingData.needConfirmation}
             modalTitle={''}
             closeModal={closeConfirmationModalCallBack}
         >
-          <Confirmation
-              content={'Are you sure? You about to delete this gallery image FOREVER'}
-              confirm={() => {deleteGalleryItem(confirmationData.itemId)}}
-              cancel={closeConfirmationModalCallBack}
-          />
+          { confirmationData.needConfirmation &&
+              <Confirmation
+                  content={'Are you sure? You about to delete this gallery image FOREVER...'}
+                  confirm={() => {deleteGalleryItem(confirmationData.itemId)}}
+                  cancel={closeConfirmationModalCallBack}
+              />
+          }
+          { confirmationForArchivingData.needConfirmation &&
+              <Confirmation
+                  content={'Are you sure? You about to move this gallery image to archive.'}
+                  confirm={() => {archiveGalleryItem(confirmationForArchivingData.itemId)}}
+                  cancel={closeConfirmationModalCallBack}
+              />
+          }
         </ModalPopUp>
         <Tooltip id="my-tooltip" />
       </section>
