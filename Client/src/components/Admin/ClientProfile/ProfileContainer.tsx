@@ -9,21 +9,21 @@ import {
   deleteClient,
   deleteClientGalleryPicture,
   deleteClientFromProfile,
-  archiveClientFromProfile
+  archiveClientFromProfile, setSuccessModalAC
 } from "../../../redux/Clients/clients-reducer";
 import { Profile } from "./Profile";
 import {
   getClientProfileSelector,
   getIsClientDeletingInProcessSelector,
   getIsDeletingPicturesInProcess,
-  getIsSuccessSelector
+  getSuccessModalSelector,
 } from "../../../redux/Clients/clients-selectors";
 import {setIsSuccessAC} from "../../../redux/Auth/auth-reducer";
 
 export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector);
-  const isSuccess = useSelector(getIsSuccessSelector);
+  const successModal = useSelector(getSuccessModalSelector);
   const isDeletingInProcess =useSelector(getIsClientDeletingInProcessSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
 
@@ -63,13 +63,13 @@ export const ProfileContainer: React.FC = () => {
     dispatch(deleteClientGalleryPicture(clientId, picture));
   }
 
-  const setIsSuccessCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessAC(bol));
+  const setSuccessModalCallBack = () => {
+    dispatch(setSuccessModalAC(false, ''));
   }
 
   return (
     <Profile
-      isSuccess={isSuccess}
+      successModal={successModal}
       profile={profile}
       isDeletingPicturesInProcess={isDeletingPicturesInProcess}
       deleteClient={deleteClientCallBack}
@@ -77,7 +77,7 @@ export const ProfileContainer: React.FC = () => {
       updateClientGallery={updateClientGalleryCallBack}
       deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
       archiveClient={archiveClientCallBack}
-      setIsSuccess={setIsSuccessCallBack}
+      setSuccessModal={setSuccessModalCallBack}
     />
   )
 }

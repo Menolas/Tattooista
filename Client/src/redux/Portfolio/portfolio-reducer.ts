@@ -55,7 +55,7 @@ let initialState = {
   },
 }
 
-export type SuccessModalType = typeof initialState.successModal
+export type SuccessModalType = typeof initialState.successModal;
 
 export type InitialStateType = typeof initialState;
 

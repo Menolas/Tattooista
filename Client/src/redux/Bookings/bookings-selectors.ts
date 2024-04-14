@@ -1,68 +1,68 @@
-import {AppStateType} from "../redux-store"
+import {AppStateType} from "../redux-store";
 
 //primitive selector
-export const getBookedConsultationsSelector = (state: AppStateType) => {
-  return state.bookedConsultations.bookedConsultations
+export const getBookingsSelector = (state: AppStateType) => {
+  return state.bookings.bookings
 }
 
-export const getArchivedConsultationsSelector = (state: AppStateType) => {
-  return state.bookedConsultations.archivedConsultations
+export const getArchivedBookingsSelector = (state: AppStateType) => {
+  return state.bookings.archivedBookings
 }
 
 //reselect library selector
 
 export const getBookedConsultationsPageSizeSelector = (state: AppStateType) => {
-  return state.bookedConsultations.bookedConsultationsPageSize
+  return state.bookings.bookedConsultationsPageSize
 }
 
 export const getArchivedConsultationsPageSizeSelector = (state: AppStateType) => {
-  return state.bookedConsultations.archivedConsultationsPageSize
+  return state.bookings.archivedConsultationsPageSize
 }
 
-export const getTotalBookedConsultationsCountSelector = (state: AppStateType) => {
-  return state.bookedConsultations.totalBookedConsultationsCount
+export const getTotalBookingsCountSelector = (state: AppStateType) => {
+  return state.bookings.totalBookingsCount
 }
 
 export const getTotalArchivedConsultationsCountSelector = (state: AppStateType) => {
-  return state.bookedConsultations.totalArchivedConsultationsCount
+  return state.bookings.totalArchivedConsultationsCount
 }
 
 export const getCurrentBookedConsultationsPageSelector = (state: AppStateType) => {
-  return state.bookedConsultations.currentBookedConsultationsPage
+  return state.bookings.currentBookedConsultationsPage
 }
 
 export const getCurrentArchivedConsultationsPageSelector = (state: AppStateType) => {
-  return state.bookedConsultations.currentArchivedConsultationsPage
+  return state.bookings.currentArchivedConsultationsPage
 }
 
 export const getIsStatusChangingSelector = (state: AppStateType) => {
-  return state.bookedConsultations.isStatusChanging
+  return state.bookings.isStatusChanging
 }
 
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {
-  return state.bookedConsultations.isDeletingInProcess
+  return state.bookings.isDeletingInProcess
 }
 
 export const getBookedConsultationsIsFetchingSelector = (state: AppStateType) => {
-  return state.bookedConsultations.bookedConsultationsIsFetching
+  return state.bookings.bookedConsultationsIsFetching
 }
 
 export const getBookedConsultationsFilterSelector = (state: AppStateType) => {
-  return state.bookedConsultations.bookedConsultationsFilter
+  return state.bookings.bookedConsultationsFilter
 }
 
 export const getArchivedConsultationsFilterSelector = (state: AppStateType) => {
-  return state.bookedConsultations.archivedConsultationsFilter
+  return state.bookings.archivedConsultationsFilter
 }
 
-export const getIsSuccessSelector = (state: AppStateType) => {
-  return state.bookedConsultations.isSuccess
+export const getSuccessModalSelector = (state: AppStateType) => {
+  return state.bookings.successModal;
 }
 
 export const getAddBookingApiErrorSelector = (state: AppStateType) => {
-  return state.bookedConsultations.addBookingApiError
+  return state.bookings.addBookingApiError
 }
 
 export const getAccessErrorSelector = (state: AppStateType) => {
-  return state.bookedConsultations.accessError
+  return state.bookings.accessError
 }

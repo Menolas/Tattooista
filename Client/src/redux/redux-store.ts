@@ -10,7 +10,7 @@ import { usersReducer} from "./Users/users-reducer";
 let rootReducer = combineReducers({
   portfolio: portfolioReducer,
   general: generalReducer,
-  bookedConsultations: bookingsReducer,
+  bookings: bookingsReducer,
   clients: clientsReducer,
   auth: authReducer,
   users: usersReducer,

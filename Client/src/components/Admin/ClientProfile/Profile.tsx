@@ -10,14 +10,13 @@ import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg";
 import { GalleryUploadForm } from "../../Forms/GalleryUploadForm";
-import {useDispatch} from "react-redux";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
-import {setIsSuccessAC} from "../../../redux/Clients/clients-reducer";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
+import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 
 type PropsType = {
-  isSuccess: boolean
+  successModal: SuccessModalType
   profile: ClientType
   isDeletingPicturesInProcess: Array<string>
   deleteClient: (clientId: string) => void
@@ -25,7 +24,7 @@ type PropsType = {
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (id: string) => void
-  setIsSuccess: (bol: boolean) => void
+  setSuccessModal: () => void
 }
 
 type GalleryItemPropsType = {
@@ -34,25 +33,24 @@ type GalleryItemPropsType = {
 }
 
 export const Profile: React.FC<PropsType> = React.memo(({
-    isSuccess,
+    successModal,
     profile,
     isDeletingPicturesInProcess,
     deleteClient,
     editClient,
     updateClientGallery,
     deleteClientGalleryPicture,
-    archiveClient
+    archiveClient,
+    setSuccessModal,
 }) => {
 
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout( () => {
-        dispatch(setIsSuccessAC(false));
-      }, 1500)
-    }
-  }, [isSuccess]);
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                setSuccessModal();
+            }, 3000);
+        }
+    }, [successModal]);
 
   //debugger
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
@@ -76,10 +74,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
     setEditClientMode(false);
     setEditGalleryMode(false);
     setNeedConfirmation(false);
-  }
-
-  const closeSuccessModal = () => {
-      setIsSuccessAC(false);
   }
 
   const deleteClientCallBack = () => {
@@ -186,6 +180,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
       >
           {editClientMode &&
               <UpdateClientForm
+                  isEditing={editClientMode}
                   profile={profile}
                   editClient={editClient}
                   closeModal={closeModal}
@@ -219,11 +214,11 @@ export const Profile: React.FC<PropsType> = React.memo(({
             cancel={closeModal}
         />
       </ModalPopUp>
-      <SuccessPopUp
-          isOpen={isSuccess}
-          closeModal={closeSuccessModal}
-          content={successPopUpContent}
-      />
+        <SuccessPopUp
+            isOpen={successModal.isSuccess}
+            closeModal={setSuccessModal}
+            content={successModal.successText}
+        />
       {
           bigImg &&
           <div className="gallery__large-wrap modal-wrap">
@@ -240,4 +235,4 @@ export const Profile: React.FC<PropsType> = React.memo(({
       <Tooltip id="profile-tooltip" />
     </div>
   )
-})
+});

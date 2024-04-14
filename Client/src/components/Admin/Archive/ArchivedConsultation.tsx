@@ -1,12 +1,11 @@
-import * as React from "react"
-import { NavLink } from "react-router-dom"
+import * as React from "react";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg"
-import {ContactType, BookedConsultationType} from "../../../types/Types"
-import {Tooltip} from "react-tooltip"
-import {useState} from "react"
-import {ModalPopUp} from "../../common/ModalPopUp"
-import {Confirmation} from "../../common/Confirmation"
+import Sprite from "../../../assets/svg/sprite.svg";
+import {ContactType, BookedConsultationType} from "../../../types/Types";
+import {Tooltip} from "react-tooltip";
+import {useState} from "react";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {Confirmation} from "../../common/Confirmation";
 
 type PropsType = {
     consultation: BookedConsultationType
