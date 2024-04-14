@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Preloader } from "../common/Preloader";
 import {GalleryItemType, TattooStyleType} from "../../types/Types";
 import { ModalPopUp } from "../common/ModalPopUp";
@@ -8,8 +8,6 @@ import {Tooltip} from "react-tooltip";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
 import {Paginator} from "../common/Paginator";
-import {SuccessPopUp} from "../common/SuccessPopUp";
-import {setIsSuccessAC} from "../../redux/Portfolio/portfolio-reducer";
 import {useDispatch} from "react-redux";
 import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm";
 import {NothingToShow} from "../common/NothingToShow";
@@ -20,7 +18,6 @@ import {Confirmation} from "../common/Confirmation";
 
 type PropsType = {
   fakeApi: boolean
-  isSuccess: boolean
   isAuth: string
   isFetching: boolean
   totalCount: number
@@ -35,13 +32,11 @@ type PropsType = {
   setCurrentPage: (page: number) => void
   setPageSize: (limit: number) => void
   archiveGalleryItem: (id: string) => void
-  setIsSuccess: (bol: boolean) => void
   updateGalleryItem: (id: string, values: object) => void
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
   fakeApi,
-  isSuccess,
   isAuth,
   isFetching,
   activeStyle,
@@ -56,7 +51,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   updateGallery,
   deleteGalleryItem,
   archiveGalleryItem,
-  setIsSuccess,
   updateGalleryItem
 }) => {
 
@@ -67,8 +61,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
     needConfirmation: false,
   });
-  const successPopUpContent = `You successfully added images to ${activeStyle?.value} style gallery`;
-
 
   const dispatch = useDispatch();
 
@@ -93,21 +85,9 @@ export const Gallery: React.FC<PropsType> = React.memo(({
     setEditGalleryMode(false);
   }
 
-  const closeSuccessModalCallBack = () => {
-    setIsSuccess(false);
-  }
-
   const closeConfirmationModalCallBack = () => {
     setConfirmationData({ needConfirmation: false });
   }
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout( () => {
-        dispatch(setIsSuccessAC(false));
-      }, 5000);
-    }
-  }, [isSuccess]);
 
   const GalleryItemsArray = gallery?.map((item, index) => {
     const GalleryImgUrl = fakeApi
@@ -241,11 +221,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               cancel={closeConfirmationModalCallBack}
           />
         </ModalPopUp>
-        <SuccessPopUp
-            isOpen={isSuccess}
-            closeModal={closeSuccessModalCallBack}
-            content={successPopUpContent}
-        />
         <Tooltip id="my-tooltip" />
       </section>
   )

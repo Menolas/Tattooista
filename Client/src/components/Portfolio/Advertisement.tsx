@@ -1,40 +1,10 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
+import * as React from "react";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import { NavLink } from "react-router-dom"
-import {BookConsultationFormValues} from "../../types/Types"
-import {SuccessPopUp} from "../common/SuccessPopUp"
-import {useDispatch, useSelector} from "react-redux"
-import {getIsSuccessBookingSelector} from "../../redux/General/general-selectors"
-import {setIsSuccessBookingAC} from "../../redux/General/general-reducer"
+import Sprite from "../../assets/svg/sprite.svg";
+import { NavLink } from "react-router-dom";
 import {BookingButton} from "../common/BookingButton";
 
-type PropsType = {
-  bookConsultation: (values: BookConsultationFormValues) => void
-}
-
-export const Advertisement: React.FC<PropsType> = React.memo(({
-  bookConsultation
-}) => {
-
-  const isSuccessBooking = useSelector(getIsSuccessBookingSelector)
-
-  const successPopUpContent = "You've booked a consultation! We will contact you soon))"
-
-  const dispatch = useDispatch()
-
-  const setIsSuccessBookingCallBack = () => {
-    dispatch(setIsSuccessBookingAC(false))
-  }
-
-  useEffect(() => {
-    if (isSuccessBooking) {
-      setTimeout( () => {
-        dispatch(setIsSuccessBookingAC(false))
-      }, 1500)
-    }
-  }, [isSuccessBooking])
+export const Advertisement: React.FC = React.memo(() => {
 
   return (
     <section className="advertisement">
@@ -55,12 +25,7 @@ export const Advertisement: React.FC<PropsType> = React.memo(({
       </div>
       <BookingButton
           consentId={"consentAdvertisement"}
-          bookConsultation={bookConsultation}
       />
-      <SuccessPopUp
-          isOpen={isSuccessBooking}
-          closeModal={setIsSuccessBookingCallBack}
-          content={successPopUpContent} />
     </section>
   )
 })

@@ -1,20 +1,19 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
-import { Navigate } from "react-router"
-import { Paginator } from "../../common/Paginator"
-import { Booking } from "./Booking"
-import {AddConsultationFormValues, BookedConsultationType} from "../../../types/Types"
-import { BookedConsultationsFilterType } from "../../../redux/Bookings/bookedConsultations-reducer"
-import {ModalPopUp} from "../../common/ModalPopUp"
-import {AddConsultationForm} from "../../Forms/AddConsultationForm"
-import {SuccessPopUp} from "../../common/SuccessPopUp"
-import {setIsSuccessAC} from "../../../redux/Portfolio/portfolio-reducer"
-import {useDispatch} from "react-redux"
-import {Preloader} from "../../common/Preloader"
-import {NothingToShow} from "../../common/NothingToShow"
-import {ApiErrorMessage} from "../../common/ApiErrorMessage"
-import {SearchFilterForm} from "../../Forms/SearchFilterForm"
-import { bookingFilterSelectOptions } from "../../../utils/constants"
+import * as React from "react";
+import {useEffect, useState} from "react";
+import { Navigate } from "react-router";
+import { Paginator } from "../../common/Paginator";
+import { Booking } from "./Booking";
+import {AddConsultationFormValues, BookedConsultationType} from "../../../types/Types";
+import { BookedConsultationsFilterType } from "../../../redux/Bookings/bookings-reducer";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {AddConsultationForm} from "../../Forms/AddConsultationForm";
+import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {useDispatch} from "react-redux";
+import {Preloader} from "../../common/Preloader";
+import {NothingToShow} from "../../common/NothingToShow";
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
+import {SearchFilterForm} from "../../Forms/SearchFilterForm";
+import { bookingFilterSelectOptions } from "../../../utils/constants";
 
 type PropsType = {
   isFetching: boolean
@@ -68,7 +67,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
     useEffect(() => {
         if (isSuccess) {
             setTimeout( () => {
-                dispatch(setIsSuccessAC(false));
+                //dispatch(setIsSuccessAC(false));
             }, 1500);
         }
     }, [isSuccess]);

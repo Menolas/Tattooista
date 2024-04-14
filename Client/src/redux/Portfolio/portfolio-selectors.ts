@@ -59,3 +59,8 @@ export const getUpdateGalleryApiErrorSelector = (state: AppStateType) => {
 export const getFakeApiSelector = (state: AppStateType) => {
   return state.portfolio.fakeApi
 }
+
+export const getSuccessModalSelector = (state: AppStateType) => {
+  return state.portfolio.successModal;
+}
+

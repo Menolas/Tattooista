@@ -12,13 +12,18 @@ const SET_SERVICES = 'SET_SERVICES';
 const SET_SERVICE = 'SET_SERVICE';
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
 const SET_IS_GENERAL_FETCHING = 'SET_IS_GENERAL_FETCHING';
-const SET_IS_SUCCESS = 'SET_IS_SUCCESS';
-const SET_IS_SUCCESS_BOOKING = 'SET_IS_SUCCESS_BOOKING';
 const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR';
 const SET_UPDATE_FAQ_ITEM_API_ERROR = 'SET_UPDATE_FAQ_ITEM_API_ERROR';
 const SET_UPDATE_SERVICE_API_ERROR = 'SET_UPDATE_SERVICE_API_ERROR';
 const SET_UPDATE_PAGE_API_ERROR = 'SET_UPDATE_PAGE_API_ERROR';
-const SET_IS_BOOKING_MODAL_OPEN = 'SET_IS_BOOKING_MODAL_OPEN';
+const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
+const BOOKING_SUCCESS = "Congratulation! You\'ve just submitted your booking request.";
+const ABOUT_PAGE_SUCCESS = "You successfully updated your 'about' block";
+const FAQ_ADD_SUCCESS = "You successfully added a new FAQ item";
+const FAQ_UPDATE_SUCCESS = "You successfully updated a FAQ item";
+const SERVICE_ADD_SUCCESS = "You successfully added a new SERVICE item";
+const SERVICE_UPDATE_SUCCESS = "You successfully updated a SERVICE item";
+
 
 let initialState = {
   faq: [] as Array<FaqType>,
@@ -26,14 +31,17 @@ let initialState = {
   service: null as null | ServiceType,
   pageAbout: {} as PageType,
   isGeneralFetching: false as boolean,
-  isSuccess: false as boolean,
-  isSuccessBooking: false as boolean,
   bookingConsultationApiError: '' as string | undefined,
   updateFaqItemApiError: '' as string | undefined,
   updateServiceApiError: '' as string | undefined,
   updatePageApiError: '' as string | undefined,
-  isBookingModalOpen: false as boolean,
+  successModal: {
+    isSuccess: false as boolean,
+    successText: '' as string,
+  }
 }
+
+export type SuccessModalType = typeof initialState.successModal
 
 export type InitialStateType = typeof initialState
 
@@ -74,16 +82,13 @@ export const generalReducer = (
         isGeneralFetching: action.bol
       }
 
-    case SET_IS_SUCCESS:
+    case SET_SUCCESS_MODAL:
       return {
         ...state,
-        isSuccess: action.bol
-      }
-
-    case SET_IS_SUCCESS_BOOKING:
-      return {
-        ...state,
-        isSuccessBooking: action.bol
+        successModal: {
+          isSuccess: action.isSuccess,
+          successText: action.text
+        }
       }
 
     case SET_BOOKING_CONSULTATION_API_ERROR:
@@ -110,32 +115,27 @@ export const generalReducer = (
         updatePageApiError: action.error
       }
 
-    case SET_IS_BOOKING_MODAL_OPEN:
-      return {
-        ...state,
-        isBookingModalOpen: action.bol
-      }
-
     default: return {
       ...state
     }
   }
 }
 
-type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT | SetIsBookingModalOpenAT |
-    SetBookingConsultationApiErrorAT | SetIsSuccessBookingAT | SetIsSuccessAT | SetAboutPageAT |
-    SetFaqItemsAT | SetServicesAT | SetServiceAT;
+type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT |
+    SetBookingConsultationApiErrorAT | SetAboutPageAT |
+    SetFaqItemsAT | SetServicesAT | SetServiceAT | SetSuccessModalAT;
 
 // action creators
 
-type SetIsBookingModalOpenAT = {
-  type: typeof SET_IS_BOOKING_MODAL_OPEN
-  bol: boolean
-};
+type SetSuccessModalAT = {
+  type: typeof SET_SUCCESS_MODAL
+  isSuccess: boolean
+  text: string
+}
 
-export const setIsBookingModalOpenAC = (bol: boolean): SetIsBookingModalOpenAT => ({
-  type: SET_IS_BOOKING_MODAL_OPEN, bol
-});
+export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
+  type: SET_SUCCESS_MODAL, isSuccess, text
+})
 
 type SetUpdatePageApiErrorAT = {
   type: typeof SET_UPDATE_PAGE_API_ERROR
@@ -173,15 +173,6 @@ export const setBookingConsultationApiErrorAC = (error: string | undefined): Set
   type: SET_BOOKING_CONSULTATION_API_ERROR, error
 });
 
-type SetIsSuccessBookingAT = {
-  type: typeof SET_IS_SUCCESS_BOOKING
-  bol: boolean
-};
-
-export const setIsSuccessBookingAC = (bol: boolean): SetIsSuccessBookingAT => ({
-  type: SET_IS_SUCCESS_BOOKING, bol
-});
-
 type SetIsGeneralFetchingAT = {
   type: typeof SET_IS_GENERAL_FETCHING
   bol: boolean
@@ -189,16 +180,6 @@ type SetIsGeneralFetchingAT = {
 
 export const setIsGeneralFetchingAC = (bol: boolean): SetIsGeneralFetchingAT => ({
   type: SET_IS_GENERAL_FETCHING, bol
-});
-
-
-type SetIsSuccessAT = {
-  type: typeof SET_IS_SUCCESS
-  bol: boolean
-};
-
-export const setIsSuccessAC = (bol: boolean): SetIsSuccessAT => ({
-  type: SET_IS_SUCCESS, bol
 });
 
 type SetAboutPageAT = {
@@ -263,7 +244,7 @@ export const addFaqItem = (values: FaqType): ThunkType => async (dispatch) => {
     let response = await generalSourcesApi.addFaqItem(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFaqItems(response.faqItems));
-      dispatch(setIsSuccessAC(true));
+      dispatch(setSuccessModalAC(true, FAQ_ADD_SUCCESS));
     }
   } catch (e: any) {
     dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'));
@@ -276,7 +257,7 @@ export const updateFaqItem = (id: string, values: any): ThunkType => async (disp
     let response = await generalSourcesApi.updateFaqItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFaqItems(response.faqItems));
-      dispatch(setIsSuccessAC(true));
+      dispatch(setSuccessModalAC(true, FAQ_UPDATE_SUCCESS));
     }
   } catch (e: any) {
     dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'));
@@ -327,14 +308,14 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
 
 export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.editAboutPage(FormData)
+    const response = await generalSourcesApi.editAboutPage(FormData);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setAboutPageAC(response.page))
-      dispatch(setIsSuccessAC(true))
+      dispatch(setAboutPageAC(response.page));
+      dispatch(setSuccessModalAC(true, ABOUT_PAGE_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdatePageApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e)
+    dispatch(setUpdatePageApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    console.log(e);
   }
 }
 
@@ -342,12 +323,12 @@ export const changeAboutPageVisibility = (
     isActive: boolean
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.changeAboutPageVisibility(isActive)
+    const response = await generalSourcesApi.changeAboutPageVisibility(isActive);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setAboutPageAC(response.page))
+      dispatch(setAboutPageAC(response.page));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 }
 
@@ -356,14 +337,14 @@ export const editService = (
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.editService(id, values)
+    const response = await generalSourcesApi.editService(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServicesAC(response.services))
-      dispatch(setIsSuccessAC(true))
+      dispatch(setServicesAC(response.services));
+      dispatch(setSuccessModalAC(true, SERVICE_UPDATE_SUCCESS));
     }
   } catch (e: any) {
     dispatch(setUpdateServiceApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e)
+    console.log(e);
   }
 }
 
@@ -371,14 +352,14 @@ export const addService = (
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.addService(values)
+    const response = await generalSourcesApi.addService(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServicesAC(response.services))
-      dispatch(setIsSuccessAC(true))
+      dispatch(setServicesAC(response.services));
+      dispatch(setSuccessModalAC(true, SERVICE_ADD_SUCCESS));
     }
   } catch (e: any) {
     dispatch(setUpdateServiceApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e)
+    console.log(e);
   }
 }
 
@@ -386,12 +367,12 @@ export const deleteService = (
     id: string
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await generalSourcesApi.deleteService(id)
+    const response = await generalSourcesApi.deleteService(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServicesAC(response.services))
+      dispatch(setServicesAC(response.services));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 }
 
@@ -401,13 +382,11 @@ export const bookConsultation = (
   try {
     const response = await generalSourcesApi.bookConsultation(values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setBookingConsultationApiErrorAC(''))
-      dispatch(setIsBookingModalOpenAC(false))
-      dispatch(setIsSuccessBookingAC(true))
-      console.log(response.message)
+      dispatch(setBookingConsultationApiErrorAC(''));
+      dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setBookingConsultationApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e)
+    dispatch(setBookingConsultationApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    console.log(e);
   }
 }

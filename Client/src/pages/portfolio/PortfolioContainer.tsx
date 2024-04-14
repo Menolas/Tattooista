@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import { BookConsultationFormValues, TattooStyleType} from "../../types/Types";
+import { TattooStyleType } from "../../types/Types";
 import {
   getIsFetching,
   getTattooStylesSelector,
@@ -12,7 +12,7 @@ import {
   getIsGalleryItemDeletingInProcessSelector,
   getActiveStyleSelector,
   getUpdateTattooStyleApiErrorSelector,
-  getUpdateGalleryApiErrorSelector, getFakeApiSelector
+  getUpdateGalleryApiErrorSelector, getFakeApiSelector, getSuccessModalSelector
 } from "../../redux/Portfolio/portfolio-selectors";
 import {
   getGallery,
@@ -29,19 +29,10 @@ import {
   setUpdateTattooStyleApiErrorAC,
   setUpdateGalleryApiErrorAC,
   updateGalleryItem,
-  setActiveStyleAC
+  setActiveStyleAC, setSuccessModalAC
 } from "../../redux/Portfolio/portfolio-reducer";
 import { Portfolio } from "./Portfolio";
 import {getAuthSelector} from "../../redux/Auth/auth-selectors";
-import {getIsSuccessSelector} from "../../redux/Bookings/bookings-selectors";
-import {
-  bookConsultation,
-  setBookingConsultationApiErrorAC,
-  setIsSuccessAC
-} from "../../redux/General/general-reducer";
-import {
-  getBookingConsultationApiErrorSelector
-} from "../../redux/General/general-selectors";
 
 export const PortfolioContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector);
@@ -53,8 +44,7 @@ export const PortfolioContainer: React.FC = () =>  {
   const tattooStyles = useSelector(getTattooStylesSelector);
   let activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);
-  const isSuccess = useSelector(getIsSuccessSelector);
-  const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector);
+  const successModal = useSelector(getSuccessModalSelector);
   const updateTattooStyleApiError = useSelector(getUpdateTattooStyleApiErrorSelector);
   const updateGalleryApiError = useSelector(getUpdateGalleryApiErrorSelector);
   const fakeApi = useSelector(getFakeApiSelector);
@@ -79,10 +69,6 @@ export const PortfolioContainer: React.FC = () =>  {
 
   const setGalleryPageSizeCallBack = (pageSize: number) => {
     dispatch(setGalleryPageSizeAC(pageSize));
-  }
-
-  const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-    dispatch(bookConsultation(values));
   }
 
   const adminUpdateGalleryCallBack = (style: string, values: any) => {
@@ -113,12 +99,8 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(archiveGalleryItem(itemId, gallery, currentPage, totalCount, pageSize, activeStyle));
   }
 
-  const setIsSuccessCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessAC(bol));
-  }
-
-  const setBookingConsultationApiErrorCallBack = (error: string) => {
-    dispatch(setBookingConsultationApiErrorAC(error));
+  const setSuccessModalCallBack = () => {
+    dispatch(setSuccessModalAC(false, ''));
   }
 
   const setUpdateTattooStyleApiErrorCallBack = (error: string) => {
@@ -145,12 +127,10 @@ export const PortfolioContainer: React.FC = () =>  {
       tattooStyles={tattooStyles}
       activeStyle={activeStyle}
       gallery={gallery}
-      isSuccess={isSuccess}
-      bookingConsultationApiError={bookingConsultationApiError}
+      successModal={successModal}
       updateTattooStyleApiError={updateTattooStyleApiError}
       updateGalleryApiError={updateGalleryApiError}
       setPageSize={setGalleryPageSizeCallBack}
-      bookConsultation={bookConsultationCallBack}
       updateGallery={adminUpdateGalleryCallBack}
       deleteGalleryItem={deleteGalleryItemCallBack}
       setCurrentPage={setCurrentPageCallBack}
@@ -159,8 +139,7 @@ export const PortfolioContainer: React.FC = () =>  {
       editTattooStyle={editTattooStyleCallBack}
       deleteTattooStyle={deleteTattooStyleCallBack}
       archiveGalleryItem={archiveGalleryItemCallBack}
-      setIsSuccess={setIsSuccessCallBack}
-      setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
+      setSuccessModal={setSuccessModalCallBack}
       setUpdateTattooStyleApiError={setUpdateTattooStyleApiErrorCallBack}
       setUpdateGalleryApiError={setUpdateGalleryApiErrorCallBack}
       updateGalleryItem={updateGalleryItemCallBack}
