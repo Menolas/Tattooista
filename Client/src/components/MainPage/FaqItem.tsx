@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {FaqType} from "../../types/Types";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
@@ -27,14 +27,40 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
 
     let [faqItemClasses, setFaqItemClasses] = useState('faq__item');
     const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Define your mobile breakpoint here
+        };
+
+        window.addEventListener("resize", handleResize);
+        handleResize(); // Call the handler once to set the initial state
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const showFaqItemText = () => {
-      setFaqItemClasses('faq__item shown');
+      if (!isMobile) {
+          setFaqItemClasses('faq__item shown');
+      }
     }
 
     const hideFaqItemText = () => {
-      setFaqItemClasses('faq__item');
+      if (!isMobile) {
+          setFaqItemClasses('faq__item');
+      }
     }
+
+    const toggleFaqItemText = () => {
+        if (isMobile) {
+            setFaqItemClasses(
+                faqItemClasses === "faq__item" ? "faq__item shown" : "faq__item"
+            );
+        }
+    };
 
     const closeModal = () => {
         setNeedConfirmation(false);
@@ -77,8 +103,9 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
           </h5>
           <button
               className="btn btn--icon faq__item-handle"
-              onMouseOver={() => {showFaqItemText(); }}
+              onMouseOver={() => { showFaqItemText(); }}
               onMouseOut={() => { hideFaqItemText(); }}
+              onClick={() => { toggleFaqItemText(); }}
           >
               <span>{''}</span>
           </button>
@@ -91,11 +118,14 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
               modalTitle={''}
               closeModal={closeModal}
           >
-          <Confirmation
-              content={'Are you sure? You about to delete this FAQ item FOREVER...'}
-              confirm={deleteFaqItemCallBack}
-              cancel={closeModal}
-          />
+            { needConfirmation &&
+                <Confirmation
+                    content={'Are you sure? You about to delete this FAQ item FOREVER...'}
+                    confirm={deleteFaqItemCallBack}
+                    cancel={closeModal}
+                />
+            }
+
         </ModalPopUp>
         <Tooltip id="faq-tooltip" />
       </li>

@@ -5,7 +5,6 @@ import { FaqItem } from "./FaqItem";
 import {ModalPopUp} from "../common/ModalPopUp";
 import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
-import {Confirmation} from "../common/Confirmation";
 
 type PropsType = {
   isAuth: string;
