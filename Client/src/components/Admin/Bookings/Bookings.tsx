@@ -4,24 +4,23 @@ import { Navigate } from "react-router";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
 import {AddConsultationFormValues, BookedConsultationType} from "../../../types/Types";
-import { BookedConsultationsFilterType } from "../../../redux/Bookings/bookings-reducer";
+import {BookedConsultationsFilterType, SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {AddConsultationForm} from "../../Forms/AddConsultationForm";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
-import {useDispatch} from "react-redux";
 import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
 import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
-import { bookingFilterSelectOptions } from "../../../utils/constants";
+import {bookingFilterSelectOptions} from "../../../utils/constants";
 
 type PropsType = {
   isFetching: boolean
-  isSuccess: boolean
+  successModal: SuccessModalType
   totalCount: number
   currentBookedConsultationsPage: number
   pageSize: number
-  bookedConsultations?: Array<BookedConsultationType>
+  bookings?: Array<BookedConsultationType>
   bookedConsultationsFilter: BookedConsultationsFilterType
   isStatusChanging?: Array<string>
   isDeletingInProcess?: Array<string>
@@ -35,17 +34,17 @@ type PropsType = {
   setPageLimit: (pageSize: number) => void
   addBookedConsultation: (values: AddConsultationFormValues) => void
   archiveConsultation: (id: string) => void
-  setIsSuccess: (bol: boolean) => void
+  setSuccessModal: () => void
   setAddBookingApiError: (error: string) => void
 }
 
 export const Bookings: React.FC<PropsType> = React.memo(({
   isFetching,
-  isSuccess,
+  successModal,
   totalCount,
   currentBookedConsultationsPage,
   pageSize,
-  bookedConsultations,
+  bookings,
   bookedConsultationsFilter,
   isStatusChanging,
   isDeletingInProcess,
@@ -59,33 +58,27 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   setPageLimit,
   addBookedConsultation,
   archiveConsultation,
-  setIsSuccess,
+  setSuccessModal,
   setAddBookingApiError
 }) => {
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isSuccess) {
+        if (successModal.isSuccess) {
             setTimeout( () => {
-                //dispatch(setIsSuccessAC(false));
-            }, 1500);
+                setSuccessModal();
+            }, 3000);
         }
-    }, [isSuccess]);
+    }, [successModal]);
 
     let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
 
     const closeModal = () => {
-        setAddConsultationMode(false)
+        setAddConsultationMode(false);
     }
 
-    const closeSuccessModal = () => {
-        setIsSuccess(false);
-    }
+    const modalTitle = 'Add a Consultation';
 
-    const modalTitle = 'Add a Consultation'
-    const successPopUpContent = "You successfully changed your consultations list"
-
-    const bookedConsultationsArray = bookedConsultations?.map(consultation => {
+    const bookedConsultationsArray = bookings?.map(consultation => {
       return (
         <Booking
           key={consultation._id}
@@ -100,7 +93,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
           archiveConsultation={archiveConsultation}
         />
       )
-    })
+    });
 
     return (
       <>
@@ -149,9 +142,9 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                       />
                   </ModalPopUp>
                   <SuccessPopUp
-                      isOpen={isSuccess}
-                      closeModal={closeSuccessModal}
-                      content={successPopUpContent}
+                      isOpen={successModal.isSuccess}
+                      closeModal={setSuccessModal}
+                      content={successModal.successText}
                   />
 
                   { addBookingApiError && addBookingApiError !== '' &&

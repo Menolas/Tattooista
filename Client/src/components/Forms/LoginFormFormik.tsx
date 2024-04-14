@@ -1,11 +1,11 @@
-import * as React from "react"
-import { Form, Formik, FormikHelpers, FormikValues} from "formik"
-import { ApiErrorMessage } from "../../utils/validators"
-import * as Yup from "yup"
-import { Navigate } from "react-router"
-import { LoginFormValues } from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
-import { NavLink } from "react-router-dom"
+import * as React from "react";
+import { Form, Formik, FormikHelpers, FormikValues} from "formik";
+import { ApiErrorMessage } from "../../utils/validators";
+import * as Yup from "yup";
+import { Navigate } from "react-router";
+import { LoginFormValues } from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import { NavLink } from "react-router-dom";
 import {ADMIN, SUPER_ADMIN, USER} from "../../utils/constants";
 
 const validationSchema = Yup.object().shape({
@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
   password: Yup
       .string()
       .required('Required field')
-})
+});
 
 type PropsType = {
   isAuth: null | string
@@ -30,20 +30,17 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
   login
 }) => {
 
-  console.log(isAuth + "is Auth!!!!!!!!!!!!")
-
   if (isAuth === ADMIN || isAuth === SUPER_ADMIN) {
     return <Navigate to="/admin/bookedConsultations" />
   }
 
   if (isAuth === USER) {
-    console.log(isAuth + " isAuth in login form!!!!!!!!!!!!!!!")
     return <Navigate to="/" />
   }
 
   const submit = (values: LoginFormValues, actions: FormikHelpers<FormikValues>) => {
-    login(values)
-    actions.setSubmitting(false)
+    login(values);
+    actions.setSubmitting(false);
   }
 
   const initialValues: LoginFormValues = {
@@ -102,4 +99,4 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
       }}
     </Formik>
   )
-})
+});

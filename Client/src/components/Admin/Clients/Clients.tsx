@@ -14,10 +14,11 @@ import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {clientFilterSelectOptions} from "../../../utils/constants";
 import {Navigate} from "react-router";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
+import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 
 type PropsType = {
   isFetching: boolean
-  isSuccess: boolean
+  successModal: SuccessModalType
   totalCount: number
   currentPage: number
   pageSize: number
@@ -37,14 +38,14 @@ type PropsType = {
   updateClientGallery: (clientId: string, values: FormData) => void
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (clientId: string) => void
-  setIsSuccess: (bol: boolean) => void
+  setSuccessModal: () => void
   setAddClientApiError: (error: string) => void
   setUpdateClientGalleryApiError: (error: string) => void
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
     isFetching,
-    isSuccess,
+    successModal,
     totalCount,
     currentPage,
     pageSize,
@@ -64,18 +65,18 @@ export const Clients: React.FC<PropsType> = React.memo(({
     updateClientGallery,
     deleteClientGalleryPicture,
     archiveClient,
-    setIsSuccess,
+    setSuccessModal,
     setAddClientApiError,
     setUpdateClientGalleryApiError
 }) => {
 
     useEffect(() => {
-        if (isSuccess) {
+        if (successModal.isSuccess) {
             setTimeout( () => {
-                setIsSuccess(false);
-            }, 1500)
+                setSuccessModal();
+            }, 3000);
         }
-    }, [isSuccess]);
+    }, [successModal]);
 
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
@@ -91,13 +92,8 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setClientGallery(null);
   }
 
-  const closeSuccessCallBack = () => {
-        setIsSuccess(false);
-  }
-
   const modalTitleAddClient = 'ADD CLIENT';
   const modalTitleUpdateClient = 'EDIT CLIENT';
-  const successPopUpContent = "You successfully added changes to your clients list";
 
   const clientsElements = clients
       .map(client => {
@@ -189,9 +185,9 @@ export const Clients: React.FC<PropsType> = React.memo(({
                       }
                   </ModalPopUp>
                   <SuccessPopUp
-                      isOpen={isSuccess}
-                      closeModal={closeSuccessCallBack}
-                      content={successPopUpContent}
+                      isOpen={successModal.isSuccess}
+                      closeModal={setSuccessModal}
+                      content={successModal.successText}
                   />
                   {addClientApiError && addClientApiError !== '' &&
                       <ApiErrorMessage
@@ -209,4 +205,4 @@ export const Clients: React.FC<PropsType> = React.memo(({
           }
       </>
   )
-})
+});

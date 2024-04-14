@@ -19,18 +19,20 @@ const SET_TOTAL_BOOKINGS_COUNT = 'SET_TOTAL_BOOKINGS_COUNT';
 const SET_TOTAL_ARCHIVED_BOOKINGS_COUNT = 'SET_TOTAL_ARCHIVED_BOOKINGS_COUNT';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS';
-const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS'
-const DELETE_BOOKING = 'DELETE_BOOKING'
+const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
+const DELETE_BOOKING = 'DELETE_BOOKING';
 const DELETE_ARCHIVED_BOOKING = 'DELETE_ARCHIVED_BOOKING';
-const ADD_BOOKING = 'ADD_BOOKING'
-const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
-const SET_ADD_BOOKING_API_ERROR = 'SET_ADD_BOOKING_API_ERROR'
-const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR'
+const ADD_BOOKING = 'ADD_BOOKING';
+const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
+const SET_ADD_BOOKING_API_ERROR = 'SET_ADD_BOOKING_API_ERROR';
+const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+const BOOKING_SUCCESS = "Congratulation! You\'ve just created a booking request.";
+const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You\'ve just created a client from a booking request.";
 
 let initialState = {
-  bookedConsultations: [] as Array<BookedConsultationType>,
-  archivedConsultations: [] as Array<BookedConsultationType>,
-  totalBookedConsultationsCount: 0 as number,
+  bookings: [] as Array<BookedConsultationType>,
+  archivedBookings: [] as Array<BookedConsultationType>,
+  totalBookingsCount: 0 as number,
   totalArchivedConsultationsCount: 0 as number,
   bookedConsultationsPageSize: 5 as number,
   archivedConsultationsPageSize: 5 as number,
@@ -47,13 +49,17 @@ let initialState = {
     term: '' as string | null,
     condition: 'any' as string | null
   },
-  isSuccess: false as boolean,
   addBookingApiError: '' as string | undefined,
-  accessError: '' as string | undefined
+  accessError: '' as string | undefined,
+  successModal: {
+    isSuccess: false as boolean,
+    successText: '' as string,
+  },
 }
 
-export type InitialStateType = typeof initialState
-export type BookedConsultationsFilterType = typeof initialState.bookedConsultationsFilter
+export type SuccessModalType = typeof initialState.successModal;
+export type InitialStateType = typeof initialState;
+export type BookedConsultationsFilterType = typeof initialState.bookedConsultationsFilter;
 
 export const bookingsReducer = (
     state = initialState,
@@ -90,13 +96,13 @@ export const bookingsReducer = (
     case SET_BOOKINGS:
       return {
         ...state,
-        bookedConsultations: action.bookedConsultations,
+        bookings: action.bookings,
       }
 
     case SET_ARCHIVED_BOOKINGS:
       return {
         ...state,
-        archivedConsultations: action.archivedConsultations
+        archivedBookings: action.archivedBookings
       }
     case SET_CURRENT_PAGE_FOR_BOOKINGS:
       return {
@@ -113,7 +119,7 @@ export const bookingsReducer = (
     case SET_TOTAL_BOOKINGS_COUNT:
       return {
         ...state,
-        totalBookedConsultationsCount: action.count,
+        totalBookingsCount: action.count,
       }
 
     case SET_TOTAL_ARCHIVED_BOOKINGS_COUNT:
@@ -124,11 +130,11 @@ export const bookingsReducer = (
     case SET_BOOKINGS_STATUS:
       return {
         ...state,
-        bookedConsultations: state.bookedConsultations.map(consultation => {
-          if (consultation._id === action.id) {
-            return { ...consultation, status: action.status }
+        bookings: state.bookings.map(booking => {
+          if (booking._id === action.id) {
+            return { ...booking, status: action.status }
           }
-          return consultation
+          return booking
         })
       }
     case TOGGLE_IS_FETCHING:
@@ -154,15 +160,15 @@ export const bookingsReducer = (
     case DELETE_BOOKING:
       return {
         ...state,
-        bookedConsultations: state.bookedConsultations.filter(consultation => consultation._id !== action.id),
-        totalBookedConsultationsCount: state.totalBookedConsultationsCount - 1
+        bookings: state.bookings.filter(booking => booking._id !== action.id),
+        totalBookingsCount: state.totalBookingsCount - 1
       }
 
     case DELETE_ARCHIVED_BOOKING:
-      if (state.archivedConsultations.length > 1) {
+      if (state.archivedBookings.length > 1) {
         return {
           ...state,
-          archivedConsultations: state.archivedConsultations.filter(consultation => consultation._id !== action.id),
+          archivedBookings: state.archivedBookings.filter(archivedBooking => archivedBooking._id !== action.id),
           totalArchivedConsultationsCount: state.totalArchivedConsultationsCount - 1
         }
       } else {
@@ -175,13 +181,16 @@ export const bookingsReducer = (
     case ADD_BOOKING:
       return {
         ...state,
-        bookedConsultations: [{...action.consultation}, ...state.bookedConsultations]
+        bookings: [{...action.consultation}, ...state.bookings]
       }
 
-    case SET_IS_SUCCESS:
+    case SET_SUCCESS_MODAL:
       return {
         ...state,
-        isSuccess: action.isSuccess
+        successModal: {
+          isSuccess: action.isSuccess,
+          successText: action.text
+        }
       }
 
     case SET_ADD_BOOKING_API_ERROR:
@@ -200,15 +209,24 @@ export const bookingsReducer = (
   }
 }
 
-type ActionsTypes = SetAddBookingApiErrorAT | SetIsSuccessAT | SetBookedConsultationsPageSizeAT | SetArchivedConsultationsPageSizeAT |
-    SetBookedConsultationsFilterAT | SetArchivedConsultationsFilterAT
-    | SetBookedConsultationsAT | SetArchivedConsultationsAT | SetCurrentPageForBookedConsultationsAT |
+type ActionsTypes = SetAddBookingApiErrorAT | SetSuccessModalAT | SetBookedConsultationsPageSizeAT |
+    SetArchivedConsultationsPageSizeAT | SetBookedConsultationsFilterAT | SetArchivedConsultationsFilterAT |
+    SetBookedConsultationsAT | SetArchivedConsultationsAT | SetCurrentPageForBookedConsultationsAT |
     SetCurrentPageForArchivedConsultationsAT | SetBookedConsultationsTotalCountAT | SetArchivedConsultationsTotalCountAT |
-    ChangeBookedConsultationStatusAT | SetIsFetchingAT | ToggleIsStatusChangingAT |
-    ToggleIsDeletingInProcessAT | DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT |
-    SetAccessErrorAT
+    ChangeBookedConsultationStatusAT | SetIsFetchingAT | ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT |
+    DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT | SetAccessErrorAT
 
 // actions creators
+
+type SetSuccessModalAT = {
+  type: typeof SET_SUCCESS_MODAL
+  isSuccess: boolean
+  text: string
+}
+
+export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
+  type: SET_SUCCESS_MODAL, isSuccess, text
+});
 
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR
@@ -226,15 +244,6 @@ type SetAddBookingApiErrorAT = {
 
 export const setAddBookingApiErrorAC = (error: string | undefined): SetAddBookingApiErrorAT => ({
   type: SET_ADD_BOOKING_API_ERROR, error
-});
-
-type SetIsSuccessAT = {
-  type: typeof SET_IS_SUCCESS
-  isSuccess: boolean
-}
-
-export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
-  type: SET_IS_SUCCESS, isSuccess
 });
 
 type SetBookedConsultationsPageSizeAT = {
@@ -275,20 +284,20 @@ export const setArchivedConsultationsFilterAC = (filter: BookedConsultationsFilt
 
 type SetBookedConsultationsAT = {
   type: typeof SET_BOOKINGS,
-  bookedConsultations: Array<BookedConsultationType>
+  bookings: Array<BookedConsultationType>
 }
 
-const setBookedConsultationsAC = (bookedConsultations: Array<BookedConsultationType>): SetBookedConsultationsAT => ({
-      type: SET_BOOKINGS, bookedConsultations
+const setBookedConsultationsAC = (bookings: Array<BookedConsultationType>): SetBookedConsultationsAT => ({
+      type: SET_BOOKINGS, bookings
 });
 
 type SetArchivedConsultationsAT = {
   type: typeof SET_ARCHIVED_BOOKINGS,
-  archivedConsultations: Array<BookedConsultationType>
+  archivedBookings: Array<BookedConsultationType>
 }
 
-const setArchivedConsultationsAC = (archivedConsultations: Array<BookedConsultationType>): SetArchivedConsultationsAT => ({
-  type: SET_ARCHIVED_BOOKINGS, archivedConsultations
+const setArchivedConsultationsAC = (archivedBookings: Array<BookedConsultationType>): SetArchivedConsultationsAT => ({
+  type: SET_ARCHIVED_BOOKINGS, archivedBookings
 });
 
 type SetCurrentPageForBookedConsultationsAT = {
@@ -571,7 +580,7 @@ export const addBookedConsultation = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookedConsultationAC(response.booking));
       dispatch(setBookedConsultationsTotalCountAC(total + 1));
-      dispatch(setIsSuccessAC(true));
+      dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
     }
   } catch (e) {
     // @ts-ignore
@@ -600,7 +609,7 @@ export const turnConsultationToClient = (
     )
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
-      dispatch(setIsSuccessAC(true));
+      dispatch(setSuccessModalAC(true, BOOKING_INTO_CLIENT_SUCCESS));
     }
   } catch (e) {
     // @ts-ignore

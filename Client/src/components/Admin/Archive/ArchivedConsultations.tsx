@@ -1,9 +1,9 @@
-import * as React from "react"
-import { useEffect } from "react"
-import {useDispatch, useSelector} from "react-redux"
-import {Paginator} from "../../common/Paginator"
-import {NothingToShow} from "../../common/NothingToShow"
-import {Preloader} from "../../common/Preloader"
+import * as React from "react";
+import { useEffect } from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Paginator} from "../../common/Paginator";
+import {NothingToShow} from "../../common/NothingToShow";
+import {Preloader} from "../../common/Preloader";
 import {
     BookedConsultationsFilterType,
     deleteArchivedConsultation,
@@ -12,59 +12,59 @@ import {
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
     setCurrentPageForArchivedConsultationsAC
-} from "../../../redux/Bookings/bookings-reducer"
+} from "../../../redux/Bookings/bookings-reducer";
 import {
     getArchivedConsultationsFilterSelector,
     getArchivedConsultationsPageSizeSelector,
-    getArchivedConsultationsSelector,
+    getArchivedBookingsSelector,
     getCurrentArchivedConsultationsPageSelector,
     getBookedConsultationsIsFetchingSelector,
     getTotalArchivedConsultationsCountSelector,
     getIsDeletingInProcessSelector,
     getAddBookingApiErrorSelector,
     getAccessErrorSelector,
-} from "../../../redux/Bookings/bookings-selectors"
-import {ArchivedConsultation} from "./ArchivedConsultation"
-import {ApiErrorMessage} from "../../common/ApiErrorMessage"
-import {SearchFilterForm} from "../../Forms/SearchFilterForm"
-import {bookingFilterSelectOptions} from "../../../utils/constants"
+} from "../../../redux/Bookings/bookings-selectors";
+import {ArchivedConsultation} from "./ArchivedConsultation";
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
+import {SearchFilterForm} from "../../Forms/SearchFilterForm";
+import {bookingFilterSelectOptions} from "../../../utils/constants";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {Navigate} from "react-router";
 
 export const ArchivedConsultations: React.FC = () => {
-    const isFetching = useSelector(getBookedConsultationsIsFetchingSelector)
-    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector)
-    const archivedConsultations = useSelector(getArchivedConsultationsSelector)
-    const totalCount = useSelector(getTotalArchivedConsultationsCountSelector)
-    const pageSize = useSelector(getArchivedConsultationsPageSizeSelector)
-    const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector)
-    const filter = useSelector(getArchivedConsultationsFilterSelector)
-    const addBookingApiError = useSelector(getAddBookingApiErrorSelector)
-    const token = useSelector(getTokenSelector)
-    const accessError = useSelector(getAccessErrorSelector)
+    const isFetching = useSelector(getBookedConsultationsIsFetchingSelector);
+    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
+    const archivedBookings = useSelector(getArchivedBookingsSelector);
+    const totalCount = useSelector(getTotalArchivedConsultationsCountSelector);
+    const pageSize = useSelector(getArchivedConsultationsPageSizeSelector);
+    const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector);
+    const filter = useSelector(getArchivedConsultationsFilterSelector);
+    const addBookingApiError = useSelector(getAddBookingApiErrorSelector);
+    const token = useSelector(getTokenSelector);
+    const accessError = useSelector(getAccessErrorSelector);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getArchivedConsultations(token, currentPage, pageSize, filter))
-    }, [token, currentPage, pageSize, filter])
+        dispatch(getArchivedConsultations(token, currentPage, pageSize, filter));
+    }, [token, currentPage, pageSize, filter]);
 
     const onPageChangedCallBack = (
         page: number
     ) => {
-        dispatch(setCurrentPageForArchivedConsultationsAC(page))
+        dispatch(setCurrentPageForArchivedConsultationsAC(page));
     }
 
     const setArchivedConsultationsPageSizeCallBack = (
         pageSize: number
     ) => {
-        dispatch(setArchivedConsultationsPageSizeAC(pageSize))
+        dispatch(setArchivedConsultationsPageSizeAC(pageSize));
     }
 
     const onFilterChangeCallBack = (
         filter: BookedConsultationsFilterType
     ) => {
-        dispatch(setArchivedConsultationsFilterAC(filter))
+        dispatch(setArchivedConsultationsFilterAC(filter));
     }
 
     const deleteArchivedConsultationCallBack = (
@@ -73,12 +73,12 @@ export const ArchivedConsultations: React.FC = () => {
         dispatch(deleteArchivedConsultation(
             token,
             clientId,
-            archivedConsultations,
+            archivedBookings,
             currentPage,
             totalCount,
             pageSize,
             filter
-        ))
+        ));
     }
 
     const reactivateConsultationCallBack = (
@@ -87,19 +87,19 @@ export const ArchivedConsultations: React.FC = () => {
         dispatch(reactivateConsultation(
             token,
             id,
-            archivedConsultations,
+            archivedBookings,
             currentPage,
             totalCount,
             pageSize,
             filter
-        ))
+        ));
     }
 
     const setAddBookingApiErrorCallBack = (error: string) => {
-        dispatch(setAddBookingApiErrorAC(error))
+        dispatch(setAddBookingApiErrorAC(error));
     }
 
-    const archivedConsultationsArray = archivedConsultations
+    const archivedConsultationsArray = archivedBookings
         .map(consultation => {
             return (
                 <ArchivedConsultation

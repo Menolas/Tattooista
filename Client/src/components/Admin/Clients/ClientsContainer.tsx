@@ -12,7 +12,7 @@ import {
   deleteClientGalleryPicture,
   archiveClient,
   setClientsPageSize,
-  setIsSuccessAC,
+  setSuccessModalAC,
   setClientsFilterAC,
   setAddClientApiErrorAC,
   setUpdateClientGalleryApiErrorAC
@@ -23,7 +23,7 @@ import {
   getCurrentClientsPage,
   getClientsSelector,
   getIsClientDeletingInProcessSelector,
-  getIsSuccessSelector,
+  getSuccessModalSelector,
   getAddClientApiErrorSelector,
   getUpdateClientGalleryApiErrorSelector,
   getClientsFilterSelector,
@@ -32,7 +32,6 @@ import {
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
-import {checkAuth} from "../../../redux/Auth/auth-reducer";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -44,19 +43,16 @@ export const ClientsContainer: React.FC = () => {
   const filter = useSelector(getClientsFilterSelector);
   const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector);
-  const isSuccess = useSelector(getIsSuccessSelector);
+  const successModal = useSelector(getSuccessModalSelector);
   const addClientApiError = useSelector(getAddClientApiErrorSelector);
   const updateClientGalleryApiError = useSelector(getUpdateClientGalleryApiErrorSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
 
-  console.log(token + " state token !!!!!!!!!!!!!!!!!");
-
   const dispatch = useDispatch();
 
   // @ts-ignore
   useEffect(() => {
-    console.log(token + " token from dispatch!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     dispatch(getClients(token, currentPage, pageSize, filter));
 
   }, [currentPage, pageSize, filter]);
@@ -114,8 +110,8 @@ export const ClientsContainer: React.FC = () => {
     dispatch(archiveClient(token, clientId, clients, currentPage, totalCount, pageSize, filter));
   }
 
-  const setIsSuccessCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessAC(bol));
+  const setSuccessModalCallBack = () => {
+    dispatch(setSuccessModalAC(false, ''));
   }
 
   const setAddClientApiErrorCallBack = (error: string) => {
@@ -129,7 +125,7 @@ export const ClientsContainer: React.FC = () => {
   return (
       <Clients
           isFetching={isFetching}
-          isSuccess={isSuccess}
+          successModal={successModal}
           totalCount={totalCount}
           currentPage={currentPage}
           pageSize={pageSize}
@@ -149,7 +145,7 @@ export const ClientsContainer: React.FC = () => {
           updateClientGallery={updateClientGalleryCallBack}
           deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
           archiveClient={archiveClientCallBack}
-          setIsSuccess={setIsSuccessCallBack}
+          setSuccessModal={setSuccessModalCallBack}
           setAddClientApiError={setAddClientApiErrorCallBack}
           setUpdateClientGalleryApiError={setUpdateClientGalleryApiErrorCallBack}
       />
