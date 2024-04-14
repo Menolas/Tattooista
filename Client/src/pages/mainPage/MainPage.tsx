@@ -1,23 +1,22 @@
-import * as React from "react"
-import { MainOffer } from "../../components/MainPage/MainOffer"
-import { PortfolioSlider } from "../../components/MainPage/PortfolioSlider"
-import { About } from "../../components/MainPage/About"
-import { Services } from "../../components/MainPage/Services"
-import { FaqItems } from "../../components/MainPage/FaqItems"
-import { Booking } from "../../components/MainPage/Booking"
+import * as React from "react";
+import { MainOffer } from "../../components/MainPage/MainOffer";
+import { PortfolioSlider } from "../../components/MainPage/PortfolioSlider";
+import { About } from "../../components/MainPage/About";
+import { Services } from "../../components/MainPage/Services";
+import { FaqItems } from "../../components/MainPage/FaqItems";
+import { Booking } from "../../components/MainPage/Booking";
 import {
     BookConsultationFormValues,
     FaqType,
     PageType,
     ServiceType,
     TattooStyleType
-} from "../../types/Types"
-import {SuccessPopUp} from "../../components/common/SuccessPopUp"
+} from "../../types/Types";
+import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useEffect} from "react";
-import {setIsSuccessAC} from "../../redux/Clients/clients-reducer"
-import {useDispatch} from "react-redux"
-import {ApiErrorMessage} from "../../components/common/ApiErrorMessage"
-import {Preloader} from "../../components/common/Preloader"
+import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
+import {Preloader} from "../../components/common/Preloader";
+import {SuccessModalType} from "../../redux/General/general-reducer";
 
 type PropsType = {
   fakeApi: boolean
@@ -29,8 +28,7 @@ type PropsType = {
   faq: Array<FaqType>
   pageAbout: PageType
   isGeneralFetching: boolean
-  isSuccess: boolean
-  isSuccessBooking: boolean
+  successModal: SuccessModalType
   bookingConsultationApiError: string
   updateFaqItemApiError: string
   updateServiceApiError: string
@@ -46,8 +44,7 @@ type PropsType = {
   addFaqItem: (values: FaqType) => void
   deleteFaqItem: (id: string) => void
   bookConsultation: (values: BookConsultationFormValues) => void
-  setIsSuccess: (bol: boolean) => void
-  setIsSuccessBooking: (bol: boolean) => void
+  setSuccessModal: () => void
   setBookingConsultationApiError: (error: string) => void
   setUpdateFaqItemApiError: (error: string) => void
   setUpdateServiceApiError: (error: string) => void
@@ -64,8 +61,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   faq,
   pageAbout,
   isGeneralFetching,
-  isSuccess,
-  isSuccessBooking,
+  successModal,
   bookingConsultationApiError,
   updateFaqItemApiError,
   updateServiceApiError,
@@ -81,53 +77,32 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   addFaqItem,
   deleteFaqItem,
   bookConsultation,
-  setIsSuccess,
-  setIsSuccessBooking,
+  setSuccessModal,
   setBookingConsultationApiError,
   setUpdateFaqItemApiError,
   setUpdateServiceApiError,
-  setUpdatePageApiError
+  setUpdatePageApiError,
 }) => {
-
-  const successBookingPopUpContent = "You've booked a consultation! We will contact you soon))"
-  const successPopUpContent = "You successfully added a new item"
-  const dispatch = useDispatch()
 
   useEffect(() => {
     // Check if the URL contains a hash
     if (window.location.hash) {
       // Get the target element using the hash
-      const targetElement = document.querySelector(window.location.hash)
+      const targetElement = document.querySelector(window.location.hash);
       // Scroll to the target element
       if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' })
+        targetElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
   }, [])
 
   useEffect(() => {
-    if (isSuccess) {
+    if (successModal.isSuccess) {
         setTimeout( () => {
-            dispatch(setIsSuccessAC(false))
-        }, 1500)
+          setSuccessModal();
+        }, 3000);
     }
-  }, [isSuccess]);
-
-  useEffect(() => {
-        if (isSuccessBooking) {
-            setTimeout( () => {
-                setIsSuccessBooking(false)
-            }, 1500)
-        }
-  }, [isSuccessBooking]);
-
-  const closeIsSuccessCallBack = () => {
-    setIsSuccessAC(false);
-  };
-
-  const closeIsBookingSuccessCallBack = () => {
-    setIsSuccessBooking(false);
-  };
+  }, [successModal]);
 
   return (
     <>
@@ -173,14 +148,9 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           </>
       }
       <SuccessPopUp
-          isOpen={isSuccessBooking}
-          closeModal={closeIsBookingSuccessCallBack}
-          content={successBookingPopUpContent}
-      />
-      <SuccessPopUp
-          isOpen={isSuccess}
-          closeModal={closeIsSuccessCallBack}
-          content={successPopUpContent}
+          isOpen={successModal.isSuccess}
+          closeModal={setSuccessModal}
+          content={successModal.successText}
       />
 
       { bookingConsultationApiError && bookingConsultationApiError !== '' &&

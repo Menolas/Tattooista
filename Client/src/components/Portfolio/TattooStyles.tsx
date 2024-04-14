@@ -22,28 +22,22 @@ const responsive = {
 
 type PropsType = {
   isAuth: string
-  isSuccess: boolean
   tattooStyles: Array<TattooStyleType>,
   activeStyle: TattooStyleType,
   resetActiveStyle: (style: TattooStyleType) => void
   addTattooStyle: (values: FormData) => void
   editTattooStyle: (id: string, values: FormData) => void
   deleteTattooStyle: (id: string) => void
-  setIsSuccess: (bol: boolean) => void
-  bookConsultation: (values: BookConsultationFormValues) => void
 }
 
 export const TattooStyles: React.FC<PropsType> = React.memo(({
   isAuth,
-  isSuccess,
   tattooStyles,
   activeStyle,
   resetActiveStyle,
   addTattooStyle,
   editTattooStyle,
   deleteTattooStyle,
-  setIsSuccess,
-  bookConsultation
 }) => {
   const [addTattooStyleMode, setAddTattooStyleMode] = useState(false);
   const [editTattooStyleMode, setEditTattooStyleMode] = useState(false);
@@ -55,10 +49,6 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
     setAddTattooStyleMode(false);
     setEditTattooStyleMode(false);
     setStyle(null);
-  }
-
-  const closeSuccessModalCallBack = () => {
-    setIsSuccess(false);
   }
 
   const closeConfirmationModalCallBack = () => {
@@ -129,7 +119,7 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
             </div>
           </div>
         </div>
-        <Advertisement bookConsultation={bookConsultation}/>
+        <Advertisement />
         <AliceCarousel
             items={tattooStylesAliceArray}
             responsive={responsive}
@@ -162,11 +152,6 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
               cancel={closeConfirmationModalCallBack}
           />
         </ModalPopUp>
-        <SuccessPopUp
-            isOpen={isSuccess}
-            closeModal={closeSuccessModalCallBack}
-            content={successPopUpContent}
-        />
         <Tooltip id="my-tooltip" />
       </div>
     </section>

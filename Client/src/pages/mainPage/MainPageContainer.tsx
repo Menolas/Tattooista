@@ -7,7 +7,7 @@ import {
   getBookingConsultationApiErrorSelector,
   getFaqItemsSelector,
   getIsGeneralFetchingSelector,
-  getIsSuccessBookingSelector,
+  getSuccessModalSelector,
   getPageAboutSelector, getServiceSelector,
   getServicesSelector,
   getUpdateFaqItemApiErrorSelector,
@@ -27,8 +27,7 @@ import {
   addFaqItem,
   deleteFaqItem,
   bookConsultation,
-  setIsSuccessAC,
-  setIsSuccessBookingAC,
+  setSuccessModalAC,
   setBookingConsultationApiErrorAC,
   setUpdateFaqItemApiErrorAC,
   setUpdateServiceApiErrorAC,
@@ -41,12 +40,10 @@ import {
   getGalleryPageSize,
   getTattooStylesSelector
 } from "../../redux/Portfolio/portfolio-selectors";
-import {getAuthSelector, getRolesSelector} from "../../redux/Auth/auth-selectors";
-import {getIsSuccessSelector} from "../../redux/General/general-selectors";
+import {getAuthSelector} from "../../redux/Auth/auth-selectors";
 
 export const MainPageContainer: React.FC = () =>  {
 
-  const roles = useSelector(getRolesSelector);
   const isAuth = useSelector(getAuthSelector);
   const galleryPageSize = useSelector(getGalleryPageSize);
   const tattooStyles = useSelector(getTattooStylesSelector);
@@ -55,8 +52,7 @@ export const MainPageContainer: React.FC = () =>  {
   const faq = useSelector(getFaqItemsSelector);
   const pageAbout = useSelector(getPageAboutSelector);
   const isGeneralFetching = useSelector(getIsGeneralFetchingSelector);
-  const isSuccess = useSelector(getIsSuccessSelector);
-  const isSuccessBooking = useSelector(getIsSuccessBookingSelector);
+  const successModal = useSelector(getSuccessModalSelector);
   const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector);
   const updateFaqItemApiError = useSelector(getUpdateFaqItemApiErrorSelector);
   const updateServiceApiError = useSelector(getUpdateServiceApiErrorSelector);
@@ -66,34 +62,34 @@ export const MainPageContainer: React.FC = () =>  {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTattooStyles())
-    dispatch(getServices())
-    dispatch(getFaqItems())
-    dispatch(getAboutPage())
+    dispatch(getTattooStyles());
+    dispatch(getServices());
+    dispatch(getFaqItems());
+    dispatch(getAboutPage());
   }, []);
 
   const setActiveStyleCallBack = (style: TattooStyleType) => {
-    dispatch(setActiveStyleAC(style))
+    dispatch(setActiveStyleAC(style));
   }
 
   const editAboutPageCallBack = (values: FormData) => {
-    dispatch(editAboutPage(values))
+    dispatch(editAboutPage(values));
   }
 
   const changeAboutPageVisibilityCallBack = (isActive: boolean) => {
-    dispatch(changeAboutPageVisibility(isActive))
+    dispatch(changeAboutPageVisibility(isActive));
   }
 
   const editServiceCallBack = (id: string, values: FormData) => {
-    dispatch(editService(id, values))
+    dispatch(editService(id, values));
   }
 
   const addServiceCallBack = (values: FormData) => {
-    dispatch(addService(values))
+    dispatch(addService(values));
   }
 
   const deleteServiceCallBack = (id: string) => {
-    dispatch(deleteService(id))
+    dispatch(deleteService(id));
   }
 
   const setServiceCallBack = (service: ServiceType) => {
@@ -101,43 +97,39 @@ export const MainPageContainer: React.FC = () =>  {
   }
 
   const addFaqItemCallBack = (values: FaqType) => {
-    dispatch(addFaqItem(values))
+    dispatch(addFaqItem(values));
   }
 
   const updateFaqItemCallBack = (id: string, values: any) => {
-    dispatch(updateFaqItem(id, values))
+    dispatch(updateFaqItem(id, values));
   }
 
   const deleteFaqItemCallBack = (id: string) => {
-    dispatch(deleteFaqItem(id))
+    dispatch(deleteFaqItem(id));
   }
 
   const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-    dispatch(bookConsultation(values))
+    dispatch(bookConsultation(values));
   }
 
-  const setIsSuccessCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessAC(bol))
-  }
-
-  const setIsSuccessBookingCallBack = (bol: boolean) => {
-    dispatch(setIsSuccessBookingAC(bol))
+  const setSuccessModalCallBack = () => {
+    dispatch(setSuccessModalAC(false, ''));
   }
 
   const setBookingConsultationApiErrorCallBack = (error: string) => {
-    dispatch(setBookingConsultationApiErrorAC(error))
+    dispatch(setBookingConsultationApiErrorAC(error));
   }
 
   const setUpdateFaqItemApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateFaqItemApiErrorAC(error))
+    dispatch(setUpdateFaqItemApiErrorAC(error));
   }
 
   const setUpdateServiceApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateServiceApiErrorAC(error))
+    dispatch(setUpdateServiceApiErrorAC(error));
   }
 
   const setUpdatePageApiErrorCallBack = (error: string) => {
-    dispatch(setUpdatePageApiErrorAC(error))
+    dispatch(setUpdatePageApiErrorAC(error));
   }
 
   return (
@@ -151,8 +143,7 @@ export const MainPageContainer: React.FC = () =>  {
           faq={faq}
           pageAbout={pageAbout}
           isGeneralFetching={isGeneralFetching}
-          isSuccess={isSuccess}
-          isSuccessBooking={isSuccessBooking}
+          successModal={successModal}
           updateFaqItemApiError={updateFaqItemApiError}
           updateServiceApiError={updateServiceApiError}
           updatePageApiError={updatePageApiError}
@@ -167,8 +158,7 @@ export const MainPageContainer: React.FC = () =>  {
           updateFaqItem={updateFaqItemCallBack}
           deleteFaqItem={deleteFaqItemCallBack}
           bookConsultation={bookConsultationCallBack}
-          setIsSuccess={setIsSuccessCallBack}
-          setIsSuccessBooking={setIsSuccessBookingCallBack}
+          setSuccessModal={setSuccessModalCallBack}
           bookingConsultationApiError={bookingConsultationApiError}
           setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
           setUpdateFaqItemApiError={setUpdateFaqItemApiErrorCallBack}
