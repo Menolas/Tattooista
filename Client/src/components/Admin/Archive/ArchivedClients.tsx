@@ -1,6 +1,6 @@
-import * as React from "react"
-import { useEffect} from "react"
-import {Paginator} from "../../common/Paginator"
+import * as React from "react";
+import { useEffect} from "react";
+import {Paginator} from "../../common/Paginator";
 import {
     ClientsFilterType,
     setArchivedClientsPageSize,
@@ -8,10 +8,12 @@ import {
     getArchivedClients,
     deleteArchivedClient,
     reactivateClient,
-    setArchivedClientsFilterAC, setAddClientApiErrorAC
-} from "../../../redux/Clients/clients-reducer"
-import {NothingToShow} from "../../common/NothingToShow"
-import {useDispatch, useSelector} from "react-redux"
+    setArchivedClientsFilterAC,
+    setAddClientApiErrorAC,
+    setSuccessModalAC
+} from "../../../redux/Clients/clients-reducer";
+import {NothingToShow} from "../../common/NothingToShow";
+import {useDispatch, useSelector} from "react-redux";
 import {
     getAddClientApiErrorSelector,
     getArchivedClientsFilter,
@@ -20,29 +22,44 @@ import {
     getClientsIsFetching,
     getCurrentArchivedClientsPageSelector,
     getIsClientDeletingInProcessSelector,
-    getTotalArchivedClientsCount
-} from "../../../redux/Clients/clients-selectors"
-import {Preloader} from "../../common/Preloader"
-import {ArchivedClient} from "./ArchivedClient"
-import {ApiErrorMessage} from "../../common/ApiErrorMessage"
+    getTotalArchivedClientsCount,
+    getSuccessModalSelector,
+} from "../../../redux/Clients/clients-selectors";
+import {Preloader} from "../../common/Preloader";
+import {ArchivedClient} from "./ArchivedClient";
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 import {clientFilterSelectOptions} from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
+import {SuccessPopUp} from "../../common/SuccessPopUp";
 
 export const ArchivedClients: React.FC = () => {
-    const isFetching = useSelector(getClientsIsFetching)
-    const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector)
-    const archivedClients = useSelector(getArchivedClientsSelector)
-    const totalCount = useSelector(getTotalArchivedClientsCount)
-    const pageSize = useSelector(getArchivedClientsPageSize)
-    const currentPage = useSelector(getCurrentArchivedClientsPageSelector)
-    const filter = useSelector(getArchivedClientsFilter)
-    const addClientApiError = useSelector(getAddClientApiErrorSelector)
+    const isFetching = useSelector(getClientsIsFetching);
+    const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector);
+    const archivedClients = useSelector(getArchivedClientsSelector);
+    const totalCount = useSelector(getTotalArchivedClientsCount);
+    const pageSize = useSelector(getArchivedClientsPageSize);
+    const currentPage = useSelector(getCurrentArchivedClientsPageSelector);
+    const filter = useSelector(getArchivedClientsFilter);
+    const addClientApiError = useSelector(getAddClientApiErrorSelector);
+    const successModal = useSelector(getSuccessModalSelector);
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getArchivedClients(currentPage, pageSize, filter))
-    }, [currentPage, pageSize, filter])
+        dispatch(getArchivedClients(currentPage, pageSize, filter));
+    }, [currentPage, pageSize, filter]);
+
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                setSuccessModalCallBack();
+            }, 3000);
+        }
+    }, [successModal]);
+
+    const setSuccessModalCallBack = () => {
+        dispatch(setSuccessModalAC(false, ''));
+    }
 
     const onPageChangedCallBack = (
         page: number
@@ -125,6 +142,11 @@ export const ArchivedClients: React.FC = () => {
                     closeModal={setAddClientApiErrorCallBack}
                 />
             }
+            <SuccessPopUp
+                isOpen={successModal.isSuccess}
+                closeModal={setSuccessModalCallBack}
+                content={successModal.successText}
+            />
         </>
     )
 }

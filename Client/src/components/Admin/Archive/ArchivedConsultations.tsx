@@ -11,7 +11,7 @@ import {
     reactivateConsultation, setAddBookingApiErrorAC,
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
-    setCurrentPageForArchivedConsultationsAC
+    setCurrentPageForArchivedConsultationsAC, setSuccessModalAC
 } from "../../../redux/Bookings/bookings-reducer";
 import {
     getArchivedConsultationsFilterSelector,
@@ -22,7 +22,7 @@ import {
     getTotalArchivedConsultationsCountSelector,
     getIsDeletingInProcessSelector,
     getAddBookingApiErrorSelector,
-    getAccessErrorSelector,
+    getAccessErrorSelector, getSuccessModalSelector,
 } from "../../../redux/Bookings/bookings-selectors";
 import {ArchivedConsultation} from "./ArchivedConsultation";
 import {ApiErrorMessage} from "../../common/ApiErrorMessage";
@@ -30,6 +30,7 @@ import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {bookingFilterSelectOptions} from "../../../utils/constants";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {Navigate} from "react-router";
+import {SuccessPopUp} from "../../common/SuccessPopUp";
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector);
@@ -42,12 +43,21 @@ export const ArchivedConsultations: React.FC = () => {
     const addBookingApiError = useSelector(getAddBookingApiErrorSelector);
     const token = useSelector(getTokenSelector);
     const accessError = useSelector(getAccessErrorSelector);
+    const successModal = useSelector(getSuccessModalSelector);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getArchivedConsultations(token, currentPage, pageSize, filter));
     }, [token, currentPage, pageSize, filter]);
+
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                setSuccessModalCallBack();
+            }, 3000);
+        }
+    }, [successModal]);
 
     const onPageChangedCallBack = (
         page: number
@@ -99,6 +109,10 @@ export const ArchivedConsultations: React.FC = () => {
         dispatch(setAddBookingApiErrorAC(error));
     }
 
+    const setSuccessModalCallBack = () => {
+        dispatch(setSuccessModalAC(false, ''));
+    }
+
     const archivedConsultationsArray = archivedBookings
         .map(consultation => {
             return (
@@ -147,6 +161,11 @@ export const ArchivedConsultations: React.FC = () => {
                             closeModal={setAddBookingApiErrorCallBack}
                         />
                     }
+                    <SuccessPopUp
+                        isOpen={successModal.isSuccess}
+                        closeModal={setSuccessModalCallBack}
+                        content={successModal.successText}
+                    />
                 </>
             }
         </>

@@ -21,15 +21,22 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
    isDeletingInProcess
 }) => {
 
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
+    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+    const [needRestoreConfirmation, setNeedRestoreConfirmation] = useState<boolean>(false);
 
     const closeModal = () => {
-        setNeedConfirmation(false)
+        setNeedConfirmation(false);
+        setNeedRestoreConfirmation(false);
     }
 
     const deleteConsultationCallBack = () => {
-        deleteArchivedConsultation(consultation._id)
-        setNeedConfirmation(false)
+        deleteArchivedConsultation(consultation._id);
+        setNeedConfirmation(false);
+    }
+
+    const reactivateConsultationCallBack = () => {
+        reactivateConsultation(consultation._id);
+        setNeedRestoreConfirmation(false);
     }
 
     const archivedBookingContacts: ContactType = consultation.contacts
@@ -40,7 +47,7 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                 <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
                 <span className={"admin__card-data"}>{archivedBookingContacts[contact]}</span>
             </div> : null
-    })
+    });
 
     return (
         <li className="admin__card">
@@ -50,10 +57,13 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                     data-tooltip-content="Restore consultation"
                     className={"btn btn--icon"}
                     disabled={isDeletingInProcess?.some(id => id === consultation._id)}
-                    onClick={() => reactivateConsultation(consultation._id)}
+                    onClick={() => {
+                        setNeedRestoreConfirmation(true);
+                    }}
                 >
                     <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
                 </button>
+
                 <button
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Delete consultation"
@@ -74,17 +84,27 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                 { contacts }
             </div>
             <ModalPopUp
-                isOpen={needConfirmation}
+                isOpen={needConfirmation || needRestoreConfirmation}
                 modalTitle={''}
                 closeModal={closeModal}
             >
-                <Confirmation
-                    content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-                    confirm={deleteConsultationCallBack}
-                    cancel={closeModal}
-                />
+                {  needConfirmation &&
+                    <Confirmation
+                        content={'Are you sure? You about to delete this consultation FOREVER along with  all the data...'}
+                        confirm={deleteConsultationCallBack}
+                        cancel={closeModal}
+                    />
+                }
+                {  needRestoreConfirmation &&
+                    <Confirmation
+                        content={'Are you sure? You about to restore this consultation.'}
+                        confirm={reactivateConsultationCallBack}
+                        cancel={closeModal}
+                    />
+                }
+
             </ModalPopUp>
             <Tooltip id="my-tooltip" />
         </li>
     )
-})
+});

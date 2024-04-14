@@ -5,6 +5,7 @@ import { FaqItem } from "./FaqItem";
 import {ModalPopUp} from "../common/ModalPopUp";
 import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {Confirmation} from "../common/Confirmation";
 
 type PropsType = {
   isAuth: string;
@@ -57,22 +58,22 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
               onClick={() => {setUpdateFaqItemMode(true)}}
           >Add Faq</button>
         }
-          <ModalPopUp
-              isOpen={updateFaqItemMode}
-              modalTitle={updateFaqItemModalTitle}
-              closeModal={closeUpdateFaqItemModal}
-          >
-              {
-                  updateFaqItemMode &&
-                  <UpdateFaqItemFormFormik
-                      faqItem={faqItem}
-                      updateFaqItem={updateFaqItem}
-                      addFaqItem={addFaqItem}
-                      closeModal={closeUpdateFaqItemModal}
-                  />
-              }
+        <ModalPopUp
+          isOpen={updateFaqItemMode}
+          modalTitle={updateFaqItemModalTitle}
+          closeModal={closeUpdateFaqItemModal}
+        >
+          {
+              updateFaqItemMode &&
+              <UpdateFaqItemFormFormik
+                  faqItem={faqItem}
+                  updateFaqItem={updateFaqItem}
+                  addFaqItem={addFaqItem}
+                  closeModal={closeUpdateFaqItemModal}
+              />
+          }
 
-          </ModalPopUp>
+        </ModalPopUp>
         <h2 className="page-block__title">F.A.Q</h2>
         <ul className="faq__list list">
           {faqItemsArray}
