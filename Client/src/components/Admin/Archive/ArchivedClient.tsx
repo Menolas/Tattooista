@@ -10,6 +10,7 @@ import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
 import {useState} from "react";
 import {ModalPopUp} from "../../common/ModalPopUp";
+import {ImageFullView} from "../../common/ImageFullView";
 
 type PropsType = {
   client: ClientType
@@ -25,6 +26,8 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   reactivateClient
 }) => {
 
+  const [carouselData, setCarouselData] = useState<{
+        isOpen: boolean, activeIndex?: number}>({isOpen: false});
   const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
   const [needRestoreConfirmation, setNeedRestoreConfirmation] = useState<boolean>(false);
 
@@ -98,9 +101,18 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         <div className={"client-profile__gallery"}>
           <ul className={"client-profile__gallery-list list"}>
             {
-              client.gallery?.map((item, i) => <li key={i}>
-                <img src={`${API_URL}/archivedClients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
-              </li>)
+              client.gallery?.map((item, i) => {
+                  return (
+                      <li
+                          key={i}
+                          onClick={() => {
+                              setCarouselData({isOpen: true, activeIndex: i})
+                          }}
+                      >
+                          <img src={`${API_URL}/archivedClients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
+                      </li>
+                  )
+              })
             }
           </ul>
         </div>
@@ -125,6 +137,16 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
               />
           }
       </ModalPopUp>
+      { carouselData.isOpen &&
+        <ImageFullView
+            isOpen={carouselData.isOpen}
+            clientId={client._id}
+            archive={true}
+            gallery={client.gallery}
+            activeIndex={carouselData.activeIndex}
+            closeImg={()=> {setCarouselData({isOpen: false});}}
+        />
+      }
       <Tooltip id="my-tooltip" />
     </li>
   )

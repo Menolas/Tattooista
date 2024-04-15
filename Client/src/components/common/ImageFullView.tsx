@@ -6,6 +6,7 @@ import {GalleryItemType} from "../../types/Types";
 type PropsType = {
     isOpen: boolean
     clientId?: string
+    archive?: boolean
     gallery: Array<GalleryItemType> | Array<string>
     activeIndex?: number
     fakeApi?: boolean
@@ -22,6 +23,7 @@ const responsive = {
 export const ImageFullView: React.FC<PropsType> = ({
     isOpen,
     clientId,
+    archive,
     gallery,
     activeIndex= 0,
     fakeApi,
@@ -31,7 +33,9 @@ export const ImageFullView: React.FC<PropsType> = ({
     const sliders = gallery.map(item => {
         let GalleryImgUrl;
         if (clientId) {
-            GalleryImgUrl = `${API_URL}/clients/${clientId}/doneTattooGallery/${item}`;
+            GalleryImgUrl = !archive
+                ? `${API_URL}/clients/${clientId}/doneTattooGallery/${item}`
+                : `${API_URL}/archivedClients/${clientId}/doneTattooGallery/${item}`;
         } else {
             GalleryImgUrl = fakeApi
                 ? `./uploads/gallery/${item.fileName}`
