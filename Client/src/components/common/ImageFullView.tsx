@@ -4,12 +4,11 @@ import AliceCarousel from "react-alice-carousel";
 import {GalleryItemType} from "../../types/Types";
 
 type PropsType = {
-    isOpen: string
-    gallery: Array<GalleryItemType>
-    activeIndex: number
+    isOpen: boolean
+    clientId?: string
+    gallery: Array<GalleryItemType> | Array<string>
+    activeIndex?: number
     fakeApi?: boolean
-    imgUrl: string
-    imgAlt: string
     closeImg: () => void
 }
 
@@ -22,26 +21,29 @@ const responsive = {
 
 export const ImageFullView: React.FC<PropsType> = ({
     isOpen,
+    clientId,
     gallery,
-    activeIndex,
+    activeIndex= 0,
     fakeApi,
-    imgUrl,
-    imgAlt,
     closeImg
 }) => {
 
     const sliders = gallery.map(item => {
-        const GalleryImgUrl = fakeApi
-            ? `./uploads/gallery/${item.fileName}`
-            : `${API_URL}/gallery/${item.fileName}`;
+        let GalleryImgUrl;
+        if (clientId) {
+            GalleryImgUrl = `${API_URL}/clients/${clientId}/doneTattooGallery/${item}`;
+        } else {
+            GalleryImgUrl = fakeApi
+                ? `./uploads/gallery/${item.fileName}`
+                : `${API_URL}/gallery/${item.fileName}`;
+        }
+
 
         return (
             <div
                 className={"image-full-view__img slider"}
                 style={{backgroundImage: `url(${GalleryImgUrl})`}}
-            >
-
-            </div>
+            >{''}</div>
         )
     })
     return (
