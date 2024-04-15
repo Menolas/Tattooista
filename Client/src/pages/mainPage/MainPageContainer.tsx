@@ -2,13 +2,13 @@ import * as React from "react";
 import {useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MainPage } from "./MainPage";
-import {BookConsultationFormValues, FaqType, ServiceType, TattooStyleType} from "../../types/Types";
+import {BookConsultationFormValues, FaqType, TattooStyleType} from "../../types/Types";
 import {
   getBookingConsultationApiErrorSelector,
   getFaqItemsSelector,
   getIsGeneralFetchingSelector,
   getSuccessModalSelector,
-  getPageAboutSelector, getServiceSelector,
+  getPageAboutSelector,
   getServicesSelector,
   getUpdateFaqItemApiErrorSelector,
   getUpdatePageApiErrorSelector,
@@ -32,7 +32,6 @@ import {
   setUpdateFaqItemApiErrorAC,
   setUpdateServiceApiErrorAC,
   setUpdatePageApiErrorAC,
-  setServiceAC,
 } from "../../redux/General/general-reducer";
 import { getTattooStyles, setActiveStyleAC } from "../../redux/Portfolio/portfolio-reducer";
 import {
@@ -48,7 +47,6 @@ export const MainPageContainer: React.FC = () =>  {
   const galleryPageSize = useSelector(getGalleryPageSize);
   const tattooStyles = useSelector(getTattooStylesSelector);
   const services = useSelector(getServicesSelector);
-  const service = useSelector(getServiceSelector);
   const faq = useSelector(getFaqItemsSelector);
   const pageAbout = useSelector(getPageAboutSelector);
   const isGeneralFetching = useSelector(getIsGeneralFetchingSelector);
@@ -90,10 +88,6 @@ export const MainPageContainer: React.FC = () =>  {
 
   const deleteServiceCallBack = (id: string) => {
     dispatch(deleteService(id));
-  }
-
-  const setServiceCallBack = (service: ServiceType) => {
-    dispatch(setServiceAC(service));
   }
 
   const addFaqItemCallBack = (values: FaqType) => {
@@ -139,7 +133,6 @@ export const MainPageContainer: React.FC = () =>  {
           galleryPageSize={galleryPageSize}
           tattooStyles={tattooStyles}
           services={services}
-          service={service}
           faq={faq}
           pageAbout={pageAbout}
           isGeneralFetching={isGeneralFetching}
@@ -153,7 +146,6 @@ export const MainPageContainer: React.FC = () =>  {
           editService={editServiceCallBack}
           addService={addServiceCallBack}
           deleteService={deleteServiceCallBack}
-          setService={setServiceCallBack}
           addFaqItem={addFaqItemCallBack}
           updateFaqItem={updateFaqItemCallBack}
           deleteFaqItem={deleteFaqItemCallBack}

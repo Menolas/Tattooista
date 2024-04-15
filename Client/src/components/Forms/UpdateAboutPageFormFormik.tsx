@@ -133,7 +133,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
 
                         <button
                             type="submit"
-                            disabled={propsF.isSubmitting}
+                            disabled={!propsF.dirty || propsF.isSubmitting}
                             className="btn btn--bg btn--dark-bg form__submit-btn">
                             {propsF.isSubmitting
                                 ? 'Please wait...'

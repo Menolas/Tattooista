@@ -8,21 +8,24 @@ import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {Confirmation} from "../common/Confirmation";
 import {ModalPopUp} from "../common/ModalPopUp";
 
+type SetUpdateFaqItemDataType = React.Dispatch<React.SetStateAction<{
+    isUpdateMode: boolean;
+    faqItem?: FaqType;
+}>>;
+
 type PropsType = {
   isAuth: string;
   faqItem: FaqType;
   updateFaqItem: (id: string, values: any) => void;
   deleteFaqItem: (id: string) => void;
-  setFaqItem: (faqItem: FaqType) => void;
-  setUpdateFaqItemMode: (mode: boolean) => void;
+  setUpdateFaqItemData: SetUpdateFaqItemDataType;
 }
 
 export const FaqItem: React.FC<PropsType> = React.memo(({
     isAuth,
     faqItem,
     deleteFaqItem,
-    setFaqItem,
-    setUpdateFaqItemMode,
+    setUpdateFaqItemData,
 }) => {
 
     let [faqItemClasses, setFaqItemClasses] = useState('faq__item');
@@ -82,8 +85,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                     data-tooltip-content="Edit FAQ item"
                     className={"btn btn--icon"}
                     onClick={() => {
-                        setUpdateFaqItemMode(true);
-                        setFaqItem(faqItem);
+                        setUpdateFaqItemData({isUpdateMode: true, faqItem: faqItem});
                     }}
                 >
                     <svg><use href={`${Sprite}#edit`}/></svg>

@@ -66,10 +66,19 @@
       border-top: none;
       transform: translate(0, 100%);
 
+      div[class$="-option"] {
+        color: $light-text;
+        background-color: $dark;
+      }
+
       div[class$="ni-option"] {
         background-color: $light;
         color: $dark-text;
       }
+    }
+
+    div[class$="singleValue"] {
+      color: $light-text;
     }
   }
 

@@ -84,7 +84,7 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
             <button
               className="btn btn--bg btn--dark-bg form__submit-btn"
               type="submit"
-              disabled={isSubmitting}
+              disabled={!propsF.dirty || isSubmitting}
             >
               {isSubmitting
                   ? 'Please wait...'

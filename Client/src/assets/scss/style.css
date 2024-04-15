@@ -299,6 +299,20 @@ img {
   transform: rotate(32deg);
 }
 
+.btn[type=submit]:disabled {
+  position: relative;
+}
+.btn[type=submit]:disabled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: gray;
+  opacity: 0.8;
+}
+
 @media (min-width: 990px) {
   .btn--bg {
     padding: 0 32px;
@@ -1152,6 +1166,7 @@ img {
 .faq__item .actionBar {
   position: static;
   display: inline-flex;
+  margin: 0;
 }
 .faq__item:last-child {
   border-bottom: 1px solid rgba(255, 255, 255, 0.65);
@@ -3107,9 +3122,16 @@ input[type=checkbox][value=true] + label .checkbox::after {
   border-top: none;
   transform: translate(0, 100%);
 }
+.search-form .select-block div[class*=menu] div[class$=-option] {
+  color: #fafafa;
+  background-color: #080808;
+}
 .search-form .select-block div[class*=menu] div[class$=ni-option] {
   background-color: #fafafa;
   color: #080808;
+}
+.search-form .select-block div[class$=singleValue] {
+  color: #fafafa;
 }
 .search-form select {
   max-width: 240px;
@@ -3157,19 +3179,16 @@ input[type=checkbox][value=true] + label .checkbox::after {
 }
 
 .actionBar {
-  position: absolute;
-  top: 0;
-  right: 8px;
   display: flex;
+  justify-content: flex-end;
   gap: 0.5rem;
+  margin: 2rem 0;
 }
 
-@media (min-width: 768px) {
-  .actionBar {
-    top: 70px;
-    right: 62px;
-  }
+.admin-action-btn {
+  margin: 2rem 0;
 }
+
 .nothingToShow {
   padding: 50px;
   text-align: center;

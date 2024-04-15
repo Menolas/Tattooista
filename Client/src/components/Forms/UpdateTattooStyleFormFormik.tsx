@@ -9,8 +9,8 @@ import {TattooStyleType} from "../../types/Types";
 import {FieldComponent} from "./FieldComponent";
 import {FieldWrapper} from "./FieldWrapper";
 import {
-    isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS,
-    validateFile
+    isFileSizeValid, isFileTypesValid,
+    MAX_FILE_SIZE, VALID_FILE_EXTENSIONS,
 } from "../../utils/validators";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
@@ -168,7 +168,7 @@ export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
                         </FieldWrapper>
                         <button
                             type="submit"
-                            disabled={propsF.isSubmitting}
+                            disabled={!propsF.dirty || propsF.isSubmitting}
                             className="btn btn--bg btn--dark-bg form__submit-btn">
                             {propsF.isSubmitting
                                 ? 'Please wait...'

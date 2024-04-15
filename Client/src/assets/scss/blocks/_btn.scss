@@ -104,6 +104,20 @@
   }
 }
 
+.btn[type="submit"]:disabled {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: gray;
+    opacity: 0.8;
+  }
+}
+
 @media (min-width: 990px) {
 
   .btn--bg {

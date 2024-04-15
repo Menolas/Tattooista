@@ -24,7 +24,6 @@ type PropsType = {
   galleryPageSize: number
   tattooStyles: Array<TattooStyleType>
   services: Array<ServiceType>
-  service: ServiceType
   faq: Array<FaqType>
   pageAbout: PageType
   isGeneralFetching: boolean
@@ -38,7 +37,6 @@ type PropsType = {
   changeAboutPageVisibility: (isActive: boolean) => void
   editService: (id: string, values: FormData) => void
   addService: (values: FormData) => void
-  setService: (service: ServiceType) => void
   deleteService: (id: string) => void
   updateFaqItem: (id: string, values: any) => void
   addFaqItem: (values: FaqType) => void
@@ -57,7 +55,6 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   galleryPageSize,
   tattooStyles,
   services,
-  service,
   faq,
   pageAbout,
   isGeneralFetching,
@@ -72,7 +69,6 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   editService,
   addService,
   deleteService,
-  setService,
   updateFaqItem,
   addFaqItem,
   deleteFaqItem,
@@ -131,11 +127,9 @@ export const MainPage: React.FC<PropsType> = React.memo(({
                   fakeApi={fakeApi}
                   isAuth={isAuth}
                   services={services}
-                  service={service}
                   editService={editService}
                   addService={addService}
                   deleteService={deleteService}
-                  setService={setService}
               />
               <FaqItems
                   isAuth={isAuth}

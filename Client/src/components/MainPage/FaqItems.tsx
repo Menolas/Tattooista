@@ -22,16 +22,13 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   deleteFaqItem
 }) => {
 
-  //const [addFaqItemMode, setAddFaqItemMode] = useState(false);
-  const [updateFaqItemMode, setUpdateFaqItemMode] = useState(false);
-  const [faqItem, setFaqItem] = useState(null);
-
-  const closeUpdateFaqItemModal = () => {
-      setUpdateFaqItemMode(false);
-      setFaqItem(null);
-  }
+  const [addFaqItemMode, setAddFaqItemMode] = useState(false);
+  const [updateFaqItemData, setUpdateFaqItemData] = useState<{
+    isUpdateMode: boolean, faqItem?: FaqType
+  }>({isUpdateMode: false});
 
   const updateFaqItemModalTitle = 'Update FAQ';
+  const addFaqItemTitle = 'Add FAQ';
 
   const faqItemsArray = faq?.map(item => {
     return (
@@ -41,8 +38,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
         faqItem={item}
         updateFaqItem={updateFaqItem}
         deleteFaqItem={deleteFaqItem}
-        setFaqItem={setFaqItem}
-        setUpdateFaqItemMode={setUpdateFaqItemMode}
+        setUpdateFaqItemData={setUpdateFaqItemData}
       />
     )
   });
@@ -54,21 +50,27 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
           (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
           <button
               className={"btn btn--bg btn--light-bg"}
-              onClick={() => {setUpdateFaqItemMode(true)}}
+              onClick={() => {setAddFaqItemMode(true);}}
           >Add Faq</button>
         }
         <ModalPopUp
-          isOpen={updateFaqItemMode}
-          modalTitle={updateFaqItemModalTitle}
-          closeModal={closeUpdateFaqItemModal}
+          isOpen={updateFaqItemData.isUpdateMode || addFaqItemMode}
+          modalTitle={ updateFaqItemData.isUpdateMode ?
+              updateFaqItemModalTitle : addFaqItemTitle }
+          closeModal={() => {
+            setUpdateFaqItemData({isUpdateMode: false});
+            setAddFaqItemMode(false);
+          }}
         >
-          {
-              updateFaqItemMode &&
+          { (updateFaqItemData.isUpdateMode || addFaqItemMode) &&
               <UpdateFaqItemFormFormik
-                  faqItem={faqItem}
+                  faqItem={updateFaqItemData.faqItem}
                   updateFaqItem={updateFaqItem}
                   addFaqItem={addFaqItem}
-                  closeModal={closeUpdateFaqItemModal}
+                  closeModal={() => {
+                    setUpdateFaqItemData({isUpdateMode: false});
+                    setAddFaqItemMode(false);
+                  }}
               />
           }
 

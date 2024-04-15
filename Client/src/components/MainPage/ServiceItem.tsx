@@ -1,10 +1,17 @@
 import * as React from "react";
-import {ServiceType} from "../../types/Types";
+import {FaqType, ServiceType} from "../../types/Types";
 import {API_URL} from "../../http";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
+
+type SetUpdateServiceDataType = React.Dispatch<React.SetStateAction<{
+    isUpdateMode: boolean,
+    isAdd?: boolean,
+    isEdit?: boolean,
+    service?: ServiceType
+}>>;
 
 type PropsType = {
     fakeApi: boolean;
@@ -12,8 +19,7 @@ type PropsType = {
     serviceIndex: number;
     service: ServiceType;
     deleteService: (id: string) => void;
-    setService: (service: ServiceType) => void;
-    setUpdateServiceMode: (mode: boolean) => void;
+    setUpdateServiceData: SetUpdateServiceDataType
 };
 
 export const ServiceItem: React.FC<PropsType> = React.memo(({
@@ -22,8 +28,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
     serviceIndex,
     service,
     deleteService,
-    setService,
-    setUpdateServiceMode,
+    setUpdateServiceData,
 }) => {
     const conditions = service.conditions.map((item, i) => {
         return item ? <li key = { i }>{item}</li> : null
@@ -44,8 +49,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                             data-tooltip-content="Edit service item"
                             className={"btn btn--icon"}
                             onClick={() => {
-                                setService(service);
-                                setUpdateServiceMode(true);
+                                setUpdateServiceData({isUpdateMode: true, isEdit: true, service: service});
                             }}
                         >
                             <svg><use href={`${Sprite}#edit`}/></svg>

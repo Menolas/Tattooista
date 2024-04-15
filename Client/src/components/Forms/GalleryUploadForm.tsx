@@ -1,14 +1,12 @@
-import * as React from "react"
-import { useState } from "react"
-import {Field, Form, Formik} from "formik"
-import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid } from "../../utils/validators"
+import * as React from "react";
+import { useState } from "react";
+import {Field, Form, Formik} from "formik";
+import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid } from "../../utils/validators";
 // @ts-ignore
-//import tattooMachine from "../../assets/img/tattoo-machine.webp"
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import {API_URL} from "../../http"
-import {FieldWrapper} from "./FieldWrapper"
-import * as Yup from "yup"
+import Sprite from "../../assets/svg/sprite.svg";
+import {API_URL} from "../../http";
+import {FieldWrapper} from "./FieldWrapper";
+import * as Yup from "yup";
 
 const filesUploadingValidationSchema = Yup.object().shape({
   gallery: Yup.array()
@@ -24,7 +22,7 @@ const filesUploadingValidationSchema = Yup.object().shape({
                 return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
               })
       ),
-})
+});
 
 type PropsType = {
   updateId: string
@@ -44,30 +42,30 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   closeModal
 }) => {
 
-  const [imageURLS, setImageURLS] = useState([])
+  const [imageURLS, setImageURLS] = useState([]);
 
   const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>, setImageURLS) => {
-    event.preventDefault()
+    event.preventDefault();
     if (event.target.files && event.target.files.length) {
-      setImageURLS([])
+      setImageURLS([]);
       // @ts-ignore
-      let files = [...event.target.files] || []
+      let files = [...event.target.files] || [];
       files.forEach((item, index) => {
-        let reader = new FileReader()
+        let reader = new FileReader();
         reader.onloadend = () => {
-          setImageURLS(_=>[..._,reader.result])
+          setImageURLS(_=>[..._,reader.result]);
         }
-        reader.readAsDataURL(item)
+        reader.readAsDataURL(item);
       })
     }
   }
 
   const submit = (values) => {
-    const formData = new FormData()
-    values['gallery'].forEach((file: File) => formData.append(file.name, file))
-    formData.append('gallery', values['gallery'])
-    updateGallery(updateId, formData)
-    closeModal()
+    const formData = new FormData();
+    values['gallery'].forEach((file: File) => formData.append(file.name, file));
+    formData.append('gallery', values['gallery']);
+    updateGallery(updateId, formData);
+    closeModal();
   }
 
   const initialValues = {
@@ -148,7 +146,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
             </FieldWrapper>
             <button
               type="submit"
-              disabled={propsF.isSubmitting}
+              disabled={!propsF.dirty || propsF.isSubmitting}
               className="btn btn--bg btn--dark-bg form__submit-btn"
             >
               {propsF.isSubmitting

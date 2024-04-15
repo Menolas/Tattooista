@@ -26,17 +26,17 @@ export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
 }) => {
 
     const initialValues = {
-        question: faqItem && faqItem.question ? faqItem.question : '',
-        answer: faqItem && faqItem.answer ? faqItem.answer : '',
+        question: faqItem?.question ?? '',
+        answer: faqItem?.answer ?? '',
     }
 
     const submit = (values) => {
         if (faqItem) {
-            updateFaqItem(faqItem._id, values)
+            updateFaqItem(faqItem._id, values);
         } else {
-            addFaqItem(values)
+            addFaqItem(values);
         }
-        closeModal()
+        closeModal();
     }
 
     return (
@@ -71,7 +71,7 @@ export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
 
                         <button
                             type="submit"
-                            disabled={propsF.isSubmitting}
+                            disabled={!propsF.dirty || propsF.isSubmitting}
                             className="btn btn--bg btn--dark-bg form__submit-btn">
                             {propsF.isSubmitting
                                 ? 'Please wait...'

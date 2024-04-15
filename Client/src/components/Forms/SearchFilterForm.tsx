@@ -1,13 +1,13 @@
-import * as React from "react"
-import {Field, Form, Formik} from "formik"
-import {BookedConsultationsFilterType} from "../../redux/Bookings/bookedConsultations-reducer"
+import * as React from "react";
+import {Field, Form, Formik} from "formik";
+import {BookedConsultationsFilterType} from "../../redux/Bookings/bookings-reducer";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import {FormSelect} from "./FormSelect"
-import {SelectOptionType} from "../../types/Types"
+import Sprite from "../../assets/svg/sprite.svg";
+import {FormSelect} from "./FormSelect";
+import {SelectOptionType} from "../../types/Types";
 
 const handleChange = () => {
-  console.log("HandleChange!!!")
+  console.log("HandleChange!!!");
 }
 
 type FormType = {
@@ -31,13 +31,15 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
       term: values.term,
       condition: values.condition
     }
-    onFilterChanged(filter)
-    setSubmitting(false)
+    onFilterChanged(filter);
+    setSubmitting(false);
   }
+
   const initialValues = {
     term: filter.term,
     condition: filter.condition
   }
+
   return (
     <Formik
       enableReinitialize
