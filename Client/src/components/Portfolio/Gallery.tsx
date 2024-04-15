@@ -54,8 +54,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   updateGalleryItem
 }) => {
 
-  const [ bigImg, setBigImg ] = useState(null);
-  const [ activeIndex, setActiveIndex ] = useState(0);
+  const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
   const [ editGalleryMode, setEditGalleryMode ] = useState(false);
   const [ editGalleryItem, setEditGalleryItem ] = useState(null);
   const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
@@ -64,14 +63,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const [confirmationForArchivingData, setConfirmationForArchivingData] = useState<{needConfirmation: boolean, itemId?: string}>({
     needConfirmation: false,
   });
-
-  const showBigImg = (fileName) => {
-      setBigImg(fileName);
-  }
-
-  const closeBigImg = () => {
-    setBigImg('');
-  }
 
   const openEditGalleryForm = () => {
     setEditGalleryMode(true);
@@ -104,8 +95,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           <div
             className={"gallery__img-wrap"}
             onClick={() => {
-              showBigImg(item.fileName);
-              setActiveIndex(index);
+              setCarouselData({isOpen: true, activeIndex: index});
             }}
             style={{ backgroundImage: `url(${GalleryImgUrl})` }}
           >
@@ -178,15 +168,13 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                 )
               : <NothingToShow/>
         }
-        {  bigImg &&
+        {  carouselData.isOpen &&
            <ImageFullView
-              isOpen={bigImg}
+              isOpen={carouselData.isOpen}
               gallery={gallery}
-              activeIndex={activeIndex}
+              activeIndex={carouselData.activeIndex}
               fakeApi={fakeApi}
-              imgUrl={bigImg}
-              imgAlt={activeStyle.value}
-              closeImg={closeBigImg}
+              closeImg={()=>{setCarouselData({isOpen: false});}}
            />
         }
         <ModalPopUp

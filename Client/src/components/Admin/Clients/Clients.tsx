@@ -70,13 +70,13 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setUpdateClientGalleryApiError
 }) => {
 
-    useEffect(() => {
-        if (successModal.isSuccess) {
-            setTimeout( () => {
-                setSuccessModal();
-            }, 3000);
-        }
-    }, [successModal]);
+    // useEffect(() => {
+    //     if (successModal.isSuccess) {
+    //         setTimeout( () => {
+    //             setSuccessModal();
+    //         }, 3000);
+    //     }
+    // }, [successModal]);
 
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);

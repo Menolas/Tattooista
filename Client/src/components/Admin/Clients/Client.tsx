@@ -10,6 +10,7 @@ import { API_URL } from "../../../http";
 import { ModalPopUp } from "../../common/ModalPopUp";
 import { Tooltip } from "react-tooltip";
 import { Confirmation } from "../../common/Confirmation";
+import {ImageFullView} from "../../common/ImageFullView";
 
 type PropsType = {
   client: ClientType
@@ -39,7 +40,13 @@ export const Client: React.FC<PropsType> = React.memo(({
   setClientGallery,
 }) => {
 
-  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+  const [carouselData, setCarouselData] = useState<{
+      isOpen: boolean, activeIndex?: number}>({isOpen: false});
+
+  const [confirmationData, setConfirmationData] = useState<{
+      needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
+  const [confirmationForArchivingData, setConfirmationForArchivingData] = useState<{
+      needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
 
   const [bigImg, setBigImg] = useState('');
 
@@ -51,10 +58,6 @@ export const Client: React.FC<PropsType> = React.memo(({
 
   const closeBigImg = () => {
     setBigImg('');
-  }
-
-  const closeModal = () => {
-    setNeedConfirmation(false);
   }
 
   const clientContacts: ContactType = client.contacts;
@@ -71,10 +74,6 @@ export const Client: React.FC<PropsType> = React.memo(({
   });
 
   const clientAvatar = client.avatar ? `${API_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar;
-
-  const deleteClientCallBack = () => {
-    deleteClient(client._id);
-  }
 
   return (
     <li className="admin__card admin__card--avatar">
@@ -107,7 +106,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === client._id)}
             onClick={() => {
-              archiveClient(client._id);
+                setConfirmationForArchivingData({needConfirmation: true, itemId: client._id});
             }}
         >
           <svg><use href={`${Sprite}#archive`}/></svg>
@@ -118,7 +117,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === client._id)}
             onClick={() => {
-              setNeedConfirmation(true);
+              setConfirmationData({ needConfirmation: true, itemId: client._id });
             }}
         >
           <svg><use href={`${Sprite}#trash`}/></svg>
@@ -144,11 +143,14 @@ export const Client: React.FC<PropsType> = React.memo(({
         <div className={"client-profile__gallery"}>
           <ul className={"client-profile__gallery-list list"}>
             {
-              client.gallery.map(item => {
+              client.gallery.map((item, index) => {
                 return (
                     <li
                         key={item}
-                        onClick={() => { showBigImg(item); }}
+                        onClick={() => {
+                            console.log("it is a click !!!!!!!!!!!!!!")
+                            setCarouselData({isOpen: true, activeIndex: index});
+                        }}
                     >
                       <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
                     </li>
@@ -159,16 +161,38 @@ export const Client: React.FC<PropsType> = React.memo(({
         </div>
       }
       <ModalPopUp
-          isOpen={needConfirmation}
+          isOpen={confirmationData.needConfirmation || confirmationForArchivingData.needConfirmation}
           modalTitle={''}
-          closeModal={closeModal}
+          closeModal={()=> {
+              setConfirmationForArchivingData({needConfirmation: false});
+              setConfirmationData({ needConfirmation: false });
+          }}
       >
-        <Confirmation
-            content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-            confirm={deleteClientCallBack}
-            cancel={closeModal}
-        />
+          { confirmationForArchivingData.needConfirmation &&
+              <Confirmation
+                  content={'Are you sure? You about to move this client to archive along with  all the data and images...'}
+                  confirm={() => {archiveClient(confirmationForArchivingData.itemId);}}
+                  cancel={() => {setConfirmationForArchivingData({needConfirmation: false});}}
+              />
+          }
+          { confirmationData.needConfirmation &&
+              <Confirmation
+                  content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
+                  confirm={() => {deleteClient(confirmationData.itemId)}}
+                  cancel={() => {setConfirmationData({ needConfirmation: false });}}
+              />
+          }
+
       </ModalPopUp>
+      {  carouselData.isOpen &&
+        <ImageFullView
+            isOpen={carouselData.isOpen}
+            clientId={client._id}
+            gallery={client.gallery}
+            activeIndex={carouselData.activeIndex}
+            closeImg={()=> {setCarouselData({isOpen: false});}}
+        />
+      }
 
       {
           bigImg &&

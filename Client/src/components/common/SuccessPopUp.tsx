@@ -15,9 +15,9 @@ export const SuccessPopUp: React.FC<PropsType> = ({
 }) => {
     return (
         <ModalPopUp isOpen={isOpen} closeModal={closeModal}>
+            <ConfettiContainer />
             { isOpen &&
                 <div className="success">
-                    <ConfettiContainer />
                     <h1 className={"title--first"}>This is Success!!</h1>
                     <p >{content ? content : 'See you soon!!!'}</p>
                 </div>
