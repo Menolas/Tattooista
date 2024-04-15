@@ -48,18 +48,6 @@ export const Client: React.FC<PropsType> = React.memo(({
   const [confirmationForArchivingData, setConfirmationForArchivingData] = useState<{
       needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
 
-  const [bigImg, setBigImg] = useState('');
-
-  const showBigImg = (fileName) => {
-    if (!bigImg) {
-      setBigImg(fileName);
-    }
-  }
-
-  const closeBigImg = () => {
-    setBigImg('');
-  }
-
   const clientContacts: ContactType = client.contacts;
 
   const contacts = Object.keys(clientContacts).map(contact => {
@@ -148,7 +136,6 @@ export const Client: React.FC<PropsType> = React.memo(({
                     <li
                         key={item}
                         onClick={() => {
-                            console.log("it is a click !!!!!!!!!!!!!!")
                             setCarouselData({isOpen: true, activeIndex: index});
                         }}
                     >
@@ -192,20 +179,6 @@ export const Client: React.FC<PropsType> = React.memo(({
             activeIndex={carouselData.activeIndex}
             closeImg={()=> {setCarouselData({isOpen: false});}}
         />
-      }
-
-      {
-          bigImg &&
-          <div className="gallery__large-wrap modal-wrap">
-            <div className="gallery__large">
-              <button
-                  className="close-btn gallery__item-close-btn"
-                  onClick={() => { closeBigImg() }}>
-                {''}
-              </button>
-              <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${bigImg}`} alt={''} />
-            </div>
-          </div>
       }
       <Tooltip id="my-tooltip" />
     </li>
