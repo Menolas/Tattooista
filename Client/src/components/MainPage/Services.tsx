@@ -9,32 +9,38 @@ type PropsType = {
   fakeApi: boolean;
   isAuth: string;
   services: Array<ServiceType>;
-  service: ServiceType;
   editService: (id: string, values: FormData) => void;
   addService: (values: FormData) => void;
   deleteService: (id: string) => void;
-  setService: (service: ServiceType) => void;
 };
 
 export const Services: React.FC<PropsType> = React.memo(({
   fakeApi,
   isAuth,
   services,
-  service,
   editService,
   addService,
   deleteService,
-  setService,
 }) => {
 
-  const [updateServiceMode, setUpdateServiceMode] = useState(false);
+  const [updateServiceData, setUpdateServiceData] = useState<{
+      isUpdateMode: boolean,
+      isAdd?: boolean,
+      isEdit?: boolean,
+      service?: ServiceType | null
+  }>({isUpdateMode: false})
 
   const closeUpdateServiceModal = () => {
-      setUpdateServiceMode(false);
-      setService(null);
+      setUpdateServiceData({
+          isUpdateMode: false,
+          service: null,
+          isAdd: false,
+          isEdit: false
+      });
   };
 
   const updateServiceModalTitle = 'Update "Services" block';
+  const addServiceModalTitle = 'Add a new Service';
 
   const servicesArray = services.map((item, i) => {
     return (
@@ -45,8 +51,7 @@ export const Services: React.FC<PropsType> = React.memo(({
         serviceIndex={i + 1}
         service={item}
         deleteService={deleteService}
-        setService={setService}
-        setUpdateServiceMode={setUpdateServiceMode}
+        setUpdateServiceData={setUpdateServiceData}
       />
     )
   });
@@ -56,28 +61,32 @@ export const Services: React.FC<PropsType> = React.memo(({
       {
          isAuth &&
          <button
-             className={"btn btn--bg btn--light-bg"}
-             onClick={() => {setUpdateServiceMode(true)}}
+             className={"btn btn--bg btn--light-bg admin-action-btn"}
+             onClick={() => {setUpdateServiceData({
+                 isUpdateMode: true,
+                 isAdd: true,
+                 isEdit: false,
+             })}}
          >
              Add Service
          </button>
       }
       <ModalPopUp
-            isOpen={updateServiceMode}
-            modalTitle={updateServiceModalTitle}
+            isOpen={updateServiceData.isUpdateMode}
+            modalTitle={updateServiceData.isEdit ?
+                updateServiceModalTitle : addServiceModalTitle}
             closeModal={closeUpdateServiceModal}
       >
           {
-              updateServiceMode &&
+              updateServiceData.isUpdateMode &&
               <UpdateServiceItemFormFormik
-                  service={service}
+                  service={updateServiceData.service}
                   addService={addService}
                   editService={editService}
                   closeModal={closeUpdateServiceModal}
               />
 
           }
-
       </ModalPopUp>
 
       <h2 className="page-block__title">Studio services</h2>

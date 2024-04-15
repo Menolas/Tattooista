@@ -184,7 +184,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
             { rolesFields }
             <button
               type="submit"
-              disabled={propsF.isSubmitting}
+              disabled={!propsF.dirty || propsF.isSubmitting}
               className="btn btn--bg btn--dark-bg form__submit-btn">
               {propsF.isSubmitting
                 ? 'Please wait...'

@@ -159,7 +159,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
             <button
               className="btn btn--bg btn--dark-bg form__submit-btn"
               type="submit"
-              disabled={propsF.isSubmitting}
+              disabled={!propsF.dirty || propsF.isSubmitting}
             >
               {propsF.isSubmitting
                   ? 'Please wait...'

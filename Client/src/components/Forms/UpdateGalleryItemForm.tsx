@@ -78,7 +78,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                         {tattooStyles}
                         <button
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={!propsF.dirty || isSubmitting}
                             className="btn btn--bg btn--dark-bg form__submit-btn"
                         >
                             {isSubmitting

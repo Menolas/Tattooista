@@ -1,6 +1,6 @@
-import * as React from "react"
-import {ErrorMessage} from "formik"
-import {ErrorMessageWrapper} from "../../utils/validators"
+import * as React from "react";
+import {ErrorMessage} from "formik";
+import {ErrorMessageWrapper} from "../../utils/validators";
 
 type PropsType = {
     wrapperClass?: string

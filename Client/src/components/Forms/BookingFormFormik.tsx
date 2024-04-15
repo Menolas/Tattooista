@@ -64,15 +64,15 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   closeBookingModal,
 }) => {
 
-  const [contactInput, setContactInput] = useState('')
+  const [contactInput, setContactInput] = useState('');
 
   const handleChange = (input: string) => {
-    setContactInput(input)
+    setContactInput(input);
   }
 
 
   const submit = (values: BookConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
-    bookConsultation(values)
+    bookConsultation(values);
     if (closeBookingModal) {
       closeBookingModal();
     }
@@ -169,7 +169,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
             </FieldWrapper>
             <button
               type="submit"
-              disabled={propsF.isSubmitting}
+              disabled={!propsF.dirty || propsF.isSubmitting}
               className="btn btn--bg btn--dark-bg form__submit-btn booking__submit-btn"
             >
                 {propsF.isSubmitting

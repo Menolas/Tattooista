@@ -9,7 +9,6 @@ import { pages } from "../../data/PagesData";
 
 const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS';
 const SET_SERVICES = 'SET_SERVICES';
-const SET_SERVICE = 'SET_SERVICE';
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
 const SET_IS_GENERAL_FETCHING = 'SET_IS_GENERAL_FETCHING';
 const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR';
@@ -28,7 +27,6 @@ const SERVICE_UPDATE_SUCCESS = "You successfully updated a SERVICE item";
 let initialState = {
   faq: [] as Array<FaqType>,
   services: [] as Array<ServiceType>,
-  service: null as null | ServiceType,
   pageAbout: {} as PageType,
   isGeneralFetching: false as boolean,
   bookingConsultationApiError: '' as string | undefined,
@@ -62,12 +60,6 @@ export const generalReducer = (
       return {
         ...state,
         services: action.services
-      }
-
-    case SET_SERVICE:
-      return {
-        ...state,
-        service: action.service
       }
 
     case SET_ABOUT_PAGE:
@@ -121,9 +113,9 @@ export const generalReducer = (
   }
 }
 
-type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT | SetUpdateFaqItemApiErrorAT |
-    SetBookingConsultationApiErrorAT | SetAboutPageAT |
-    SetFaqItemsAT | SetServicesAT | SetServiceAT | SetSuccessModalAT;
+type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT |
+    SetUpdateFaqItemApiErrorAT | SetBookingConsultationApiErrorAT | SetAboutPageAT |
+    SetFaqItemsAT | SetServicesAT | SetSuccessModalAT;
 
 // action creators
 
@@ -207,15 +199,6 @@ type SetServicesAT = {
 
 const setServicesAC = (services: Array<ServiceType>): SetServicesAT => ({
     type: SET_SERVICES, services
-});
-
-type SetServiceAT = {
-  type: typeof SET_SERVICE,
-  service: ServiceType
-};
-
-export const setServiceAC = (service: ServiceType): SetServiceAT => ({
-  type: SET_SERVICE, service
 });
 
 // thunks

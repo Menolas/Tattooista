@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import { NavLink } from "react-router-dom";
+import {NavLink, useParams} from "react-router-dom";
 // @ts-ignore
 import avatar from "../../../assets/img/fox.webp";
 import {ClientType, ContactType} from "../../../types/Types";
@@ -39,6 +39,13 @@ export const Profile: React.FC<PropsType> = React.memo(({
     archiveClient,
     setSuccessModal,
 }) => {
+
+    const { clientId } = useParams(); // Assuming you are using React Router for navigation
+
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [clientId]); // This effect will run whenever clientId changes
 
     useEffect(() => {
         if (successModal.isSuccess) {

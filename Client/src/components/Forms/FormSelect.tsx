@@ -1,13 +1,15 @@
-import {useField} from "formik"
-import Select from "react-select"
-import * as React from "react"
-import {useState} from "react"
+import {useField} from "formik";
+import Select from "react-select";
+import * as React from "react";
+import {useState} from "react";
 
 export const FormSelect = ({ name, options, handleChange, placeholder }) => {
-    const [field, meta, helpers] = useField(name)
-    const { setValue, setTouched, setError } = helpers
-    const [selectedOption, setSelectedOption] = useState("none")
-    let [menuIsOpen, setMenuIsOpen] = useState(false)
+
+    const [field, meta, helpers] = useField(name);
+    const { setValue, setTouched, setError } = helpers;
+    const [selectedOption, setSelectedOption] = useState("none");
+    let [menuIsOpen, setMenuIsOpen] = useState(false);
+
     const setFieldProps = (selectedOption) => {
         setTouched(true)
         handleChange(selectedOption.value)

@@ -1,9 +1,9 @@
-import * as React from "react"
-import { Form, Formik} from "formik"
-import * as Yup from 'yup'
-import {phoneRegex} from "../../utils/validators"
-import {AddConsultationFormValues} from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
+import * as React from "react";
+import { Form, Formik} from "formik";
+import * as Yup from 'yup';
+import {phoneRegex} from "../../utils/validators";
+import {AddConsultationFormValues} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
 
 const validationSchema = Yup.object().shape({
   bookingName: Yup.string()
@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   whatsapp: Yup.string()
       .min(7, 'Whatsapp number is too short - should be 7 chars minimum.')
       .matches(phoneRegex, "That does not look like whatsapp number"),
-})
+});
 
 const initialValues: AddConsultationFormValues = {
   bookingName: '',
@@ -49,10 +49,10 @@ export const AddConsultationForm: React.FC<PropsType> = React.memo(({
 }) => {
 
   const submit = (values: AddConsultationFormValues, actions) => {
-    addBookedConsultation(values)
-    //actions.setSubmitting(false)
-    actions.resetForm()
-    closeBookingModal()
+    addBookedConsultation(values);
+    //actions.setSubmitting(false);
+    actions.resetForm();
+    closeBookingModal();
   }
 
   return (
@@ -114,7 +114,7 @@ export const AddConsultationForm: React.FC<PropsType> = React.memo(({
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={!propsF.dirty || isSubmitting}
               className="btn btn--bg btn--dark-bg form__submit-btn booking__submit-btn"
             >
                 {isSubmitting

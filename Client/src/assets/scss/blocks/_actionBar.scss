@@ -1,14 +1,10 @@
 .actionBar {
-  position: absolute;
-  top: 0;
-  right: 8px;
   display: flex;
+  justify-content: flex-end;
   gap: 0.5rem;
+  margin: 2rem 0;
 }
 
-@media (min-width: 768px) {
-  .actionBar {
-    top: 70px;
-    right: 62px;
-  }
+.admin-action-btn {
+  margin: 2rem 0;
 }
