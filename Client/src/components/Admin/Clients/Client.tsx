@@ -148,7 +148,6 @@ export const Client: React.FC<PropsType> = React.memo(({
                     <li
                         key={item}
                         onClick={() => {
-                            console.log("it is a click !!!!!!!!!!!!!!")
                             setCarouselData({isOpen: true, activeIndex: index});
                         }}
                     >

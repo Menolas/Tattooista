@@ -14,6 +14,7 @@ import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
 import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
+import {ImageFullView} from "../../common/ImageFullView";
 
 type PropsType = {
   successModal: SuccessModalType
@@ -25,11 +26,6 @@ type PropsType = {
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (id: string) => void
   setSuccessModal: () => void
-}
-
-type GalleryItemPropsType = {
-  profileId: string
-  item: string
 }
 
 export const Profile: React.FC<PropsType> = React.memo(({
@@ -56,17 +52,8 @@ export const Profile: React.FC<PropsType> = React.memo(({
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
   const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-  const [bigImg, setBigImg] = useState('');
-
-  const showBigImg = (fileName) => {
-    if (!bigImg) {
-      setBigImg(fileName);
-    }
-  }
-
-  const closeBigImg = () => {
-    setBigImg('');
-  }
+  const [carouselData, setCarouselData] = useState<{
+        isOpen: boolean, activeIndex?: number}>({isOpen: false});
 
   const modalTitle = 'EDIT CLIENT';
 
@@ -101,17 +88,25 @@ export const Profile: React.FC<PropsType> = React.memo(({
 
   const Avatar = profile.avatar
       ? `${API_URL}/clients/${profile._id}/avatar/${profile.avatar}`
-      : avatar
+      : avatar;
 
-  const GalleryItem: React.FC<GalleryItemPropsType> = ({item,profileId}) => {
-    return (
-        <li
-            onClick={() => { showBigImg(item) }}
-        >
-          <img src={`${API_URL}/clients/${profileId}/doneTattooGallery/${item}`} alt={''}/>
-        </li>
-    )
+  let profileGallery = [];
+
+  if (profile.gallery?.length) {
+      profileGallery = profile.gallery
+          .map((item, index) => {
+              return (
+                  <li
+                      onClick={() => {
+                          setCarouselData({isOpen: true, activeIndex: index});
+                      }}
+                  >
+                      <img src={`${API_URL}/clients/${profile._id}/doneTattooGallery/${item}`} alt={''}/>
+                  </li>
+              )
+          });
   }
+
 
   return (
     <div className="admin__card admin__card--avatar profile">
@@ -167,7 +162,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
           ? (
             <div className="client-profile__gallery">
               <ul className="client-profile__gallery-list list">
-                {profile.gallery.map((item, i) => <GalleryItem key={i} item={item} profileId={profile._id}/>)}
+                {profileGallery}
               </ul>
             </div>
           )
@@ -219,19 +214,15 @@ export const Profile: React.FC<PropsType> = React.memo(({
             closeModal={setSuccessModal}
             content={successModal.successText}
         />
-      {
-          bigImg &&
-          <div className="gallery__large-wrap modal-wrap">
-            <div className="gallery__large">
-              <button
-                  className="close-btn gallery__item-close-btn"
-                  onClick={() => { closeBigImg() }}>
-                {''}
-              </button>
-              <img src={`${API_URL}/clients/${profile._id}/doneTattooGallery/${bigImg}`} alt={''} />
-            </div>
-          </div>
-      }
+        {  carouselData.isOpen &&
+            <ImageFullView
+                isOpen={carouselData.isOpen}
+                clientId={profile._id}
+                gallery={profile.gallery}
+                activeIndex={carouselData.activeIndex}
+                closeImg={()=> {setCarouselData({isOpen: false});}}
+            />
+        }
       <Tooltip id="profile-tooltip" />
     </div>
   )
