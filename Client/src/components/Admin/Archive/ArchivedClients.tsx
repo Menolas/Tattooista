@@ -43,16 +43,16 @@ export const ArchivedClients: React.FC = () => {
     const addClientApiError = useSelector(getAddClientApiErrorSelector);
     const successModal = useSelector(getSuccessModalSelector);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getArchivedClients(currentPage, pageSize, filter));
-    }, [currentPage, pageSize, filter]);
+    }, [dispatch, currentPage, pageSize, filter]);
 
     useEffect(() => {
         if (successModal.isSuccess) {
             setTimeout( () => {
-                setSuccessModalCallBack();
+                dispatch(setSuccessModalAC(false, ''));
             }, 3000);
         }
     }, [successModal]);

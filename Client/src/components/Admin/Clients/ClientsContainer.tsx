@@ -27,7 +27,8 @@ import {
   getAddClientApiErrorSelector,
   getUpdateClientGalleryApiErrorSelector,
   getClientsFilterSelector,
-  getClientsPageSizeSelector, getIsDeletingPicturesInProcessSelector
+  getClientsPageSizeSelector,
+  getIsDeletingPicturesInProcessSelector
 } from "../../../redux/Clients/clients-selectors";
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
@@ -55,11 +56,11 @@ export const ClientsContainer: React.FC = () => {
   useEffect(() => {
     dispatch(getClients(token, currentPage, pageSize, filter));
 
-  }, [currentPage, pageSize, filter]);
+  }, [dispatch, token, currentPage, pageSize, filter]);
 
   useEffect(() => {
     dispatch(setCurrentClientsPageAC(1));
-  }, [filter]);
+  }, [dispatch, filter]);
 
   const setCurrentPageCallBack = (
     page: number

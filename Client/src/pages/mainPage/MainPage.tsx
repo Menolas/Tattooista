@@ -98,7 +98,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           setSuccessModal();
         }, 3000);
     }
-  }, [successModal]);
+  }, [setSuccessModal, successModal]);
 
   return (
     <>

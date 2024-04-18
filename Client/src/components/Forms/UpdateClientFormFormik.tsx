@@ -58,11 +58,11 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 };
 
 type PropsType = {
-  isEditing: boolean
-  profile: ClientType
-  closeModal: () => void
-  editClient: (clientId: string, values: FormData) => void
-  addClient?: (values: FormData) => void
+  isEditing: boolean;
+  profile: ClientType;
+  closeModal: () => void;
+  editClient: (clientId: string, values: FormData) => void;
+  addClient?: (values: FormData) => void;
 }
 
 export const UpdateClientForm: React.FC<PropsType> = React.memo(({
@@ -150,8 +150,8 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 type={'file'}
                 value={undefined}
                 onChange={(e) => {
-                  propsF.setFieldValue('avatar', e.currentTarget.files[0])
-                  handleOnChange(e)
+                  propsF.setFieldValue('avatar', e.currentTarget.files[0]);
+                  handleOnChange(e);
                 }}
               />
             </FieldWrapper>
@@ -217,5 +217,4 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
       }}
     </Formik>
   )
-})
-
+});

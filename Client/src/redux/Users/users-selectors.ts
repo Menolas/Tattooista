@@ -28,8 +28,8 @@ export const getRolesSelector = (state: AppStateType) => {
     return state.users.roles
 }
 
-export const getIsSuccessSelector = (state: AppStateType) => {
-    return state.users.isSuccess
+export const getSuccessModalSelector = (state: AppStateType) => {
+    return state.users.successModal
 }
 
 export const getAccessErrorSelector = (state: AppStateType) => {

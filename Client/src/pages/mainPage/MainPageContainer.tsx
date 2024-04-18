@@ -64,7 +64,7 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(getServices());
     dispatch(getFaqItems());
     dispatch(getAboutPage());
-  }, []);
+  }, [dispatch]);
 
   const setActiveStyleCallBack = (style: TattooStyleType) => {
     dispatch(setActiveStyleAC(style));

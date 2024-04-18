@@ -26,8 +26,8 @@ const ADD_BOOKING = 'ADD_BOOKING';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const SET_ADD_BOOKING_API_ERROR = 'SET_ADD_BOOKING_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
-const BOOKING_SUCCESS = "Congratulation! You\'ve just created a consultation request.";
-const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You\'ve just created a client from a consultation request.";
+const BOOKING_SUCCESS = "Congratulation! You've just created a consultation request.";
+const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You've just created a client from a consultation request.";
 const RESTORE_BOOKING_FROM_ARCHIVE = "Congratulations! You just restored this consultation!";
 
 let initialState = {

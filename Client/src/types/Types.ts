@@ -126,9 +126,10 @@ export interface AddClientFormValues {
 }
 
 export interface UpdateUserFormValues {
-    avatar: File | string | null
+    avatar?: File | string | null
     displayName: string
     email: string
+    password?: string
     roles: Array<string>
 }
 

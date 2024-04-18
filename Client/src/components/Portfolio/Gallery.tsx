@@ -8,7 +8,6 @@ import {Tooltip} from "react-tooltip";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
 import {Paginator} from "../common/Paginator";
-import {useDispatch} from "react-redux";
 import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm";
 import {NothingToShow} from "../common/NothingToShow";
 import {GalleryUploadForm} from "../Forms/GalleryUploadForm";

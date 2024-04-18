@@ -1,47 +1,37 @@
-import * as React from "react"
+import * as React from "react";
 // @ts-ignore
-import avatar from "../../../assets/img/fox.webp"
+import avatar from "../../../assets/img/fox.webp";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg"
-import {RoleType, UserType} from "../../../types/Types"
-import { NavLink } from "react-router-dom"
-import { API_URL } from "../../../http"
-import { Confirmation } from "../../common/Confirmation"
+import Sprite from "../../../assets/svg/sprite.svg";
+import { UserType } from "../../../types/Types";
+import { NavLink } from "react-router-dom";
+import { API_URL } from "../../../http";
+import { Confirmation } from "../../common/Confirmation";
 import {useState} from "react";
-import {ModalPopUp} from "../../common/ModalPopUp";
-import {UpdateUserForm} from "../../Forms/UpdateUserFormFormik";
+import { ModalPopUp } from "../../common/ModalPopUp";
 
 type PropsType = {
-    roles: Array<RoleType>
-    user: UserType,
-    pageLimit?: number,
-    currentPage?: number,
-    isDeletingInProcess?: Array<string>
-    deleteUser: (userId: string) => void
-    updateUser: (id: string, values: FormData) => void
+    user: UserType;
+    isDeletingInProcess?: Array<string>;
+    deleteUser: (userId: string) => void;
+    setEditUserMode: (mode: boolean) => void;
+    setUser: (user: UserType) => void;
 }
 
 export const User: React.FC<PropsType> = ({
-  roles,
   user,
   isDeletingInProcess,
   deleteUser,
-  updateUser
+  setEditUserMode,
+  setUser,
 }) => {
 
-    const [editUserMode, setEditUserMode] = useState<boolean>(false)
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false)
-    const userAvatar = user.avatar ? `${API_URL}/users/${user._id}/avatar/${user.avatar}` : avatar
+    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+    const userAvatar = user.avatar ? `${API_URL}/users/${user._id}/avatar/${user.avatar}` : avatar;
 
     const closeModal = () => {
         setNeedConfirmation(false)
     }
-
-    const closeEditModal = () => {
-        setEditUserMode(false)
-    }
-
-    const modalTitle = 'Edit User'
 
     const deleteUserCallBack = () => {
         deleteUser(user._id)
@@ -54,7 +44,10 @@ export const User: React.FC<PropsType> = ({
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Edit user"
                     className={"btn btn--icon"}
-                    onClick={() => {setEditUserMode(true)}}
+                    onClick={() => {
+                        setEditUserMode(true);
+                        setUser(user);
+                    }}
                 >
                     <svg><use href={`${Sprite}#edit`}/></svg>
                 </button>
@@ -103,18 +96,6 @@ export const User: React.FC<PropsType> = ({
                     content={'Are you sure? You about to delete this user FOREVER along with  all the data...'}
                     confirm={deleteUserCallBack}
                     cancel={closeModal}
-                />
-            </ModalPopUp>
-            <ModalPopUp
-                isOpen={editUserMode}
-                modalTitle={modalTitle}
-                closeModal={closeEditModal}
-            >
-                <UpdateUserForm
-                    roles={roles}
-                    profile={user}
-                    updateUser={updateUser}
-                    closeModal={closeEditModal}
                 />
             </ModalPopUp>
         </li>

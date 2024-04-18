@@ -6,16 +6,15 @@ import {useState} from "react";
 export const FormSelect = ({ name, options, handleChange, placeholder }) => {
 
     const [field, meta, helpers] = useField(name);
-    const { setValue, setTouched, setError } = helpers;
+    const { setValue, setTouched} = helpers;
     const [selectedOption, setSelectedOption] = useState("none");
     let [menuIsOpen, setMenuIsOpen] = useState(false);
 
-    const setFieldProps = (selectedOption) => {
-        setTouched(true)
-        handleChange(selectedOption.value)
-        setSelectedOption(selectedOption.value)
-        setValue(selectedOption.value)
-        //setError(undefined)
+    const setFieldProps = async (selectedOption) => {
+        await setTouched(true);
+        handleChange(selectedOption.value);
+        setSelectedOption(selectedOption.value);
+        await setValue(selectedOption.value);
     }
 
     return (

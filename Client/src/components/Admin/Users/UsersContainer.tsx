@@ -1,7 +1,7 @@
-import * as React from "react"
-import {useEffect} from "react"
-import {useDispatch, useSelector} from "react-redux"
-import { Users } from "./Users"
+import * as React from "react";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import { Users } from "./Users";
 import {
     deleteUser,
     getRoles,
@@ -10,11 +10,11 @@ import {
     setUsersFilterAC,
     setUsersPageLimitAC,
     updateUser,
-    setIsSuccessAC,
+    setSuccessModalAC,
     UsersFilterType, addUser
-} from "../../../redux/Users/users-reducer"
+} from "../../../redux/Users/users-reducer";
 import {
-    getIsSuccessSelector,
+    getSuccessModalSelector,
     getRolesSelector,
     getUsersCurrentPageSelector,
     getUsersFiletSelector,
@@ -23,58 +23,58 @@ import {
     getUsersSelector,
     getUsersTotalCountSelector,
     getAccessErrorSelector
-} from "../../../redux/Users/users-selectors"
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors"
+} from "../../../redux/Users/users-selectors";
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const UsersContainer: React.FC = () => {
 
-    const token = useSelector(getTokenSelector)
-    const roles = useSelector(getRolesSelector)
-    const users = useSelector(getUsersSelector)
-    const isFetching = useSelector(getUsersIsFetching)
-    const total = useSelector(getUsersTotalCountSelector)
-    const currentPage = useSelector(getUsersCurrentPageSelector)
-    const pageLimit = useSelector(getUsersPageLimitSelector)
-    const filter = useSelector(getUsersFiletSelector)
-    const isSuccess = useSelector(getIsSuccessSelector)
-    const accessError = useSelector(getAccessErrorSelector)
+    const token = useSelector(getTokenSelector);
+    const roles = useSelector(getRolesSelector);
+    const users = useSelector(getUsersSelector);
+    const isFetching = useSelector(getUsersIsFetching);
+    const total = useSelector(getUsersTotalCountSelector);
+    const currentPage = useSelector(getUsersCurrentPageSelector);
+    const pageLimit = useSelector(getUsersPageLimitSelector);
+    const filter = useSelector(getUsersFiletSelector);
+    const successModal = useSelector(getSuccessModalSelector);
+    const accessError = useSelector(getAccessErrorSelector);
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getRoles())
-        dispatch(getUsers(token, currentPage, pageLimit, filter))
-    }, [token, currentPage, pageLimit, filter])
+        dispatch(getUsers(token, currentPage, pageLimit, filter));
+    }, [dispatch, token, currentPage, pageLimit, filter]);
 
     const setUsersPageLimitCallBack = (limit: number) => {
-        dispatch(setUsersPageLimitAC(limit))
+        dispatch(setUsersPageLimitAC(limit));
     }
 
     const setUsersCurrentPageCallBack = (page: number) => {
-        dispatch(setUsersCurrentPageAC(page))
+        dispatch(setUsersCurrentPageAC(page));
     }
 
     const setClientsFilterCallBack = (filter: UsersFilterType) => {
-        dispatch(setUsersFilterAC(filter))
+        dispatch(setUsersFilterAC(filter));
     }
 
     const deleteUserCallBack = (userId: string) => {
         dispatch(deleteUser(token, userId, users, currentPage, total, pageLimit, filter))
     }
 
-    const setIsSuccessCallBack = (bol: boolean) => {
-        dispatch(setIsSuccessAC(bol))
+    const setSuccessModalCallBack = () => {
+        dispatch(setSuccessModalAC(false, ''));
     }
 
     const updateUserCallBack = (
         id: string,
         values: FormData
     ) => {
-        dispatch(updateUser(id, values))
+        dispatch(updateUser(id, values));
     }
 
     const addUserCallBack = (values: FormData) => {
-        dispatch(addUser(values, total))
+        dispatch(addUser(values, total));
     }
 
     return (
@@ -86,7 +86,7 @@ export const UsersContainer: React.FC = () => {
             total={total}
             currentPage={currentPage}
             pageLimit={pageLimit}
-            isSuccess={isSuccess}
+            successModal={successModal}
             accessError={accessError}
             setUsersPageLimit={setUsersPageLimitCallBack}
             setUsersCurrentPage={setUsersCurrentPageCallBack}
@@ -94,7 +94,7 @@ export const UsersContainer: React.FC = () => {
             deleteUser={deleteUserCallBack}
             updateUser={updateUserCallBack}
             addUser={addUserCallBack}
-            setIsSuccess={setIsSuccessCallBack}
+            setSuccessModal={setSuccessModalCallBack}
         />
     )
 }

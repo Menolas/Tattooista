@@ -15,29 +15,21 @@ import {ImageFullView} from "../../common/ImageFullView";
 type PropsType = {
   client: ClientType
   isDeletingInProcess: Array<string>
-  isDeletingPicturesInProcess: Array<string>
   deleteClient: (clientId: string) => void
-  updateClientGallery: (clientId: string, values: FormData) => void
-  deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (clientId: string) => void
   setClient: (client: ClientType) => void
   setEditClientMode: (mode: boolean) => void
   setEditGalleryMode: (mode: boolean) => void
-  setClientGallery: (clientGallery: Array<string>) => void
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
   client,
   isDeletingInProcess,
-  isDeletingPicturesInProcess,
   deleteClient,
-  updateClientGallery,
-  deleteClientGalleryPicture,
   archiveClient,
   setClient,
   setEditClientMode,
   setEditGalleryMode,
-  setClientGallery,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{
