@@ -7,11 +7,12 @@ import {Preloader} from "../../common/Preloader"
 import {NothingToShow} from "../../common/NothingToShow"
 import { usersFilterSelectOptions } from "../../../utils/constants"
 import {SearchFilterForm} from "../../Forms/SearchFilterForm"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {UpdateUserForm} from "../../Forms/UpdateUserFormFormik";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Navigate} from "react-router";
+import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 
 type PropsType = {
     roles: Array<RoleType>
@@ -21,7 +22,7 @@ type PropsType = {
     total: number
     currentPage: number
     pageLimit: number
-    isSuccess: boolean
+    successModal: SuccessModalType
     accessError: string
     setUsersPageLimit: (limit:number) => void
     setUsersCurrentPage: (page: number) => void
@@ -29,7 +30,7 @@ type PropsType = {
     deleteUser: (userId: string) => void
     updateUser: (id: string, values: FormData) => void
     addUser: (values: FormData) => void
-    setIsSuccess: (bol: boolean) => void
+    setSuccessModal: () => void
 }
 
 export const Users: React.FC<PropsType> = ({
@@ -40,7 +41,7 @@ export const Users: React.FC<PropsType> = ({
    total,
    currentPage,
    pageLimit,
-   isSuccess,
+   successModal,
    accessError,
    setUsersPageLimit,
    setUsersCurrentPage,
@@ -48,31 +49,45 @@ export const Users: React.FC<PropsType> = ({
    deleteUser,
    updateUser,
    addUser,
-   setIsSuccess
+   setSuccessModal,
 }) => {
 
-    const [addUserMode, setAddUserMode] = useState<boolean>(false)
-
-    const closeModal = () => {
-        setAddUserMode(false)
+    const setSuccessModalCallBack = () => {
+        setSuccessModal();
     }
 
-    const modalTitle = 'ADD USER'
-    const successPopUpContent = "You successfully updated user"
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                setSuccessModal();
+            }, 3000);
+        }
+    }, [successModal]);
+
+    const [addUserMode, setAddUserMode] = useState<boolean>(false);
+    const [editUserMode, setEditUserMode] = useState<boolean>(false);
+    const [user, setUser] = useState<UserType>(null)
+
+    const closeModal = () => {
+        setAddUserMode(false);
+        setEditUserMode(false);
+        setUser(null);
+    }
+
+    const addUserModalTitle = 'ADD USER';
+    const editUserModalTitle = 'Edit USER';
 
     const usersElements = users.map(user => {
         return (
             <User
                 key={user._id}
-                roles={roles}
                 user={user}
                 deleteUser={deleteUser}
-                updateUser={updateUser}
+                setEditUserMode={setEditUserMode}
+                setUser={setUser}
             />
         )
     })
-
-    console.log(accessError + " accessError !!!!!!!!!!!!!!!!!!!")
 
     return (
         <>
@@ -113,21 +128,26 @@ export const Users: React.FC<PropsType> = ({
                                 : <NothingToShow/>
                     }
                     <ModalPopUp
-                        isOpen={addUserMode}
-                        modalTitle={modalTitle}
+                        isOpen={addUserMode || editUserMode}
+                        modalTitle={addUserMode ? addUserModalTitle : editUserModalTitle}
                         closeModal={closeModal}
                     >
-                        <UpdateUserForm
-                            roles={roles}
-                            addUser={addUser}
-                            closeModal={closeModal}
-                        />
+                        {(addUserMode || editUserMode) &&
+                            <UpdateUserForm
+                                isEditing={editUserMode}
+                                profile={user}
+                                roles={roles}
+                                addUser={addUser}
+                                updateUser={updateUser}
+                                closeModal={closeModal}
+                            />
+                        }
                     </ModalPopUp>
-                    {/*{*/}
-                    {/*    isSuccess &&*/}
-                    {/*    <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>*/}
-                    {/*}*/}
-
+                    <SuccessPopUp
+                        isOpen={successModal.isSuccess}
+                        closeModal={setSuccessModalCallBack}
+                        content={successModal.successText}
+                    />
                 </>
             }
         </>

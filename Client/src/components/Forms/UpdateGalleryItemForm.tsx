@@ -1,15 +1,15 @@
-import * as React from "react"
-import {Field, Form, Formik} from "formik"
-import { GalleryItemType, TattooStyleType} from "../../types/Types"
-import {FieldWrapper} from "./FieldWrapper"
-import {API_URL} from "../../http"
+import * as React from "react";
+import {Field, Form, Formik} from "formik";
+import { GalleryItemType, TattooStyleType} from "../../types/Types";
+import {FieldWrapper} from "./FieldWrapper";
+import {API_URL} from "../../http";
 
 type PropsType = {
-    folder: string
-    galleryItem: GalleryItemType
-    styles: Array<TattooStyleType>
-    updateGalleryItem: (id: string, values: object) => void
-    closeModal?: () => void
+    folder: string;
+    galleryItem: GalleryItemType;
+    styles: Array<TattooStyleType>;
+    updateGalleryItem: (id: string, values: object) => void;
+    closeModal?: () => void;
 }
 
 export const UpdateGalleryItemForm: React.FC<PropsType> = ({
@@ -21,16 +21,16 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
 }) => {
 
     const submit = (values: any) => {
-        updateGalleryItem(galleryItem._id, values)
-        closeModal()
+        updateGalleryItem(galleryItem._id, values);
+        closeModal();
     }
 
-    let initialValues = {}
+    let initialValues = {};
     styles.forEach((style) => {
         if (!style.nonStyle) {
-            initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id)
+            initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id);
         }
-    })
+    });
 
     return (
         <Formik
@@ -38,10 +38,9 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
             onSubmit={submit}
         >
             {(propsF) => {
-                let {isSubmitting} = propsF
+                let {isSubmitting} = propsF;
 
                 const tattooStyles = styles.map((style) => {
-                    if (!style.nonStyle) {
                         return (
                             <FieldWrapper
                                 key={style._id}
@@ -58,11 +57,9 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
                                     <span className="checkbox">{''}</span>
                                     {style.value}
                                 </label>
-
                             </FieldWrapper>
                         )
-                    }
-                })
+                });
 
                 return (
                     <Form

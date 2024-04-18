@@ -1,5 +1,5 @@
-import * as React from "react"
-import { Field, Form, Formik, FormikHelpers, FormikValues } from "formik"
+import * as React from "react";
+import { Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
 // @ts-ignore
 import {
   ErrorMessageWrapper,
@@ -7,15 +7,14 @@ import {
   isFileSizeValid,
   MAX_FILE_SIZE,
   isFileTypesValid, VALID_FILE_EXTENSIONS
-} from "../../utils/validators"
-import * as Yup from "yup"
-import {RegistrationFormValues} from "../../types/Types"
-import {FieldComponent} from "./FieldComponent"
-import {FieldWrapper} from "./FieldWrapper"
-import {useState} from "react"
-import {API_URL} from "../../http"
+} from "../../utils/validators";
+import * as Yup from "yup";
+import {RegistrationFormValues} from "../../types/Types";
+import {FieldComponent} from "./FieldComponent";
+import {FieldWrapper} from "./FieldWrapper";
+import {useState} from "react";
 // @ts-ignore
-import avatar from "../../assets/img/fox.webp"
+import avatar from "../../assets/img/fox.webp";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
@@ -43,7 +42,7 @@ const validationSchema = Yup.object().shape({
       .boolean()
       .oneOf([true],'If you want to be registered as an admin you need to check this and agree to sare your email with us')
       .required('Required field')
-})
+});
 
 type PropsType = {
   registrationError: string | null

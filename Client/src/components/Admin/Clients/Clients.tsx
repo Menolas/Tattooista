@@ -70,26 +70,24 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setUpdateClientGalleryApiError
 }) => {
 
-    // useEffect(() => {
-    //     if (successModal.isSuccess) {
-    //         setTimeout( () => {
-    //             setSuccessModal();
-    //         }, 3000);
-    //     }
-    // }, [successModal]);
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                setSuccessModal();
+            }, 3000);
+        }
+    }, [setSuccessModal, successModal]);
 
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
-  const [client, setClient] = useState(null);
-  const [clientGallery, setClientGallery] = useState(null);
+  const [client, setClient] = useState<ClientType>(null);
 
   const closeModal = () => {
     setAddClientMode(false);
     setEditClientMode(false);
     setEditGalleryMode(false);
     setClient(null);
-    setClientGallery(null);
   }
 
   const modalTitleAddClient = 'ADD CLIENT';
@@ -102,15 +100,11 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 key={client._id}
                 client={client}
                 isDeletingInProcess={isDeletingInProcess}
-                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 deleteClient={deleteClient}
-                updateClientGallery={updateClientGallery}
-                deleteClientGalleryPicture={deleteClientGalleryPicture}
                 archiveClient={archiveClient}
                 setClient={setClient}
                 setEditClientMode={setEditClientMode}
                 setEditGalleryMode={setEditGalleryMode}
-                setClientGallery={setClientGallery}
             />
         )
       });

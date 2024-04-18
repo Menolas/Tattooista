@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FaqType, ServiceType} from "../../types/Types";
+import {ServiceType} from "../../types/Types";
 import {API_URL} from "../../http";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";

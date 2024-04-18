@@ -28,8 +28,8 @@ const SET_ADD_CLIENT_API_ERROR = 'SET_ADD_CLIENT_API_ERROR';
 const SET_UPDATE_CLIENT_GALLERY_API_ERROR = 'SET_UPDATE_CLIENT_GALLERY_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const ADD_CLIENT_SUCCESS = "Congratulation! You\'ve just created a new client.";
-const UPDATE_CLIENT_SUCCESS = "Congratulation! You\'ve just updated a client's info.";
+const ADD_CLIENT_SUCCESS = "Congratulation! You've just created a new client.";
+const UPDATE_CLIENT_SUCCESS = "Congratulation! You've just updated a client's info.";
 const UPDATE_CLIENT_GALLERY_SUCCESS = "You successfully updated client's gallery.";
 const RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS = "You successfully restored this client!";
 

@@ -1,167 +1,169 @@
-const User = require("../models/User")
-const Role = require("../models/Role")
+const User = require("../models/User");
+const Role = require("../models/Role");
 const fs = require("fs");
-const generateFileRandomName = require("../utils/functions")
-const userService = require('../services/userService')
+const generateFileRandomName = require("../utils/functions");
+const userService = require('../services/userService');
 
 class usersController {
 
     async getRoles(req, res) {
 
-        const results = {}
+        const results = {};
 
         try {
-            results.resultCode = 0
-            results.roles = await Role.find()
-            res.json(results)
+            results.resultCode = 0;
+            results.roles = await Role.find();
+            res.json(results);
         } catch (e) {
-            results.resultCode = 1
-            results.message = e.message
-            res.status(400).json(results)
+            results.resultCode = 1;
+            results.message = e.message;
+            res.status(400).json(results);
         }
     }
 
     async getUsers(req, res, next) {
-        const page = parseInt(req.query.page)
-        const limit = parseInt(req.query.limit)
-        const startIndex = (page - 1) * limit
-        const endIndex = page * limit
-        const role = req.query.role
-        const term = req.query.term
-        let users = []
-        const results = {}
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        const role = req.query.role;
+        const term = req.query.term;
+        let users = [];
+        const results = {};
 
         try {
             if (role === 'any' && !term) {
-                users = await User.find().sort({createdAt: -1}).populate('roles')
-                console.log(users[0].roles + " user roles !!!!!")
+                users = await User.find().sort({createdAt: -1}).populate('roles');
+                //console.log(users[0].roles + " user roles !!!!!")
             } else if (role === 'true' && !term) {
                 users = await User.find({roles: "ADMIN"}).sort({createdAt: -1}).populate('roles')
             } else if (role === 'false' && !term) {
-                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}}).sort({createdAt: -1}).populate('roles')
+                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}}).sort({createdAt: -1}).populate('roles');
             } else if (role === 'any' && term) {
-                users = await User.find({displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles')
+                users = await User.find({displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
             } else if (role === 'true' && term) {
-                users = await User.find({roles: "ADMIN", displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles')
+                users = await User.find({roles: "ADMIN", displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
             } else if (role === 'false' && term) {
-                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles')
+                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
             }
 
-            results.resultCode = 0
-            results.totalCount = users.length
-            results.users = users.slice(startIndex, endIndex)
-            res.json(results)
+            results.resultCode = 0;
+            results.totalCount = users.length;
+            results.users = users.slice(startIndex, endIndex);
+            res.json(results);
         } catch(e) {
-            results.resultCode = 1
-            results.message = e.message
-            res.status(400).json(results)
-            next(e)
+            results.resultCode = 1;
+            results.message = e.message;
+            res.status(400).json(results);
+            next(e);
         }
     }
 
     async deleteUser(req, res) {
-        const results = {}
+        const results = {};
 
         try {
             if (res.user.avatar) {
                 await fs.unlink(`./uploads/users/${res.user._id}/avatar/${res.user.avatar}`, e => {
-                    if (e) console.log(e)
+                    if (e) console.log(e);
                 })
                 await fs.rm(`./uploads/users/${res.user._id}/avatar`, { recursive:true }, e => {
-                    if (e) console.log(e)
+                    if (e) console.log(e);
                 })
             }
 
-            await res.user.remove()
-            results.resultCode = 0
-            res.json(results)
+            await res.user.remove();
+            results.resultCode = 0;
+            res.json(results);
         } catch (e) {
-            results.resultCode = 1
-            results.message = e.message
-            res.status(500).json(results)
+            results.resultCode = 1;
+            results.message = e.message;
+            res.status(500).json(results);
         }
     }
 
     async updateUser(req, res) {
-        res.user.displayName = req.body.displayName
-        res.user.email = req.body.email
-        const roles = req.body.roles
-        if (roles === "" || roles === null) {
-            const userRole = await Role.findOne({value: "USER"})
-            res.user.roles = [userRole._id]
+        res.user.displayName = req.body.displayName;
+        res.user.email = req.body.email;
+
+        const roleIds = req.body.roles.match(/[a-f\d]{24}/g);
+
+        if (roleIds === "" || roleIds === null) {
+            const userRole = await Role.findOne({value: "USER"});
+            res.user.roles = [userRole._id];
         } else {
-            res.user.roles = roles.split(',')
+            res.user.roles = roleIds;
         }
+
+        await res.user.populate('roles');
 
         if (req.files && req.files.avatar) {
             if (res.user.avatar) {
                 await fs.unlink(`./uploads/users/${res.user._id}/avatar/${res.user.avatar}`, e => {
-                    if (e) console.log(e)
+                    if (e) console.log(e);
                 })
             }
 
-            const file = req.files.avatar
-            const newFileName = generateFileRandomName(file.name)
+            const file = req.files.avatar;
+            const newFileName = generateFileRandomName(file.name);
             await file.mv(`./uploads/users/${res.user._id}/avatar/${newFileName}`, e => {
-                if (e) console.log(e)
+                if (e) console.log(e);
             })
-            res.user.avatar = newFileName
+            res.user.avatar = newFileName;
         }
 
-        await res.user.populate('roles')
-
-        const results = {}
+        const results = {};
 
         try {
-            results.user = await res.user.save()
-            results.resultCode = 0
-            res.json(results)
+            results.user = await res.user.save();
+            results.resultCode = 0;
+            res.json(results);
         } catch (e) {
-            results.resultCode = 1
-            results.message = e.message
-            res.status(400).json(results)
+            results.resultCode = 1;
+            results.message = e.message;
+            res.status(400).json(results);
         }
     }
 
     async addUser (req, res) {
 
-        const results = {}
+        const results = {};
         try {
-            const displayName = req.body.displayName
-            const email = req.body.email
-            const password = req.body.password
-            const roles = req.body.roles
-            await userService.registration(displayName, email, password)
-            const user = await User.findOne({displayName})
+            const displayName = req.body.displayName;
+            const email = req.body.email;
+            const password = req.body.password;
+            const roleIds = req.body.roles.match(/[a-f\d]{24}/g);
+            await userService.registration(displayName, email, password);
+            const user = await User.findOne({displayName});
 
-            if (roles === "" || roles === null) {
-                const userRole = await Role.findOne({value: "USER"})
-                user.roles = [userRole._id]
+            if (roleIds === "" || roleIds === null) {
+                const userRole = await Role.findOne({value: "USER"});
+                user.roles = [userRole._id];
             } else {
-                user.roles = roles.split(',')
+                user.roles = roleIds;
             }
-            await user.populate('roles')
+            await user.populate('roles');
 
             if (req.files && req.files.avatar) {
-                const file = req.files.avatar
-                if (!file) return res.json({error: 'Incorrect input name'})
-                const newFileName = generateFileRandomName(file.name)
+                const file = req.files.avatar;
+                if (!file) return res.json({error: 'Incorrect input name'});
+                const newFileName = generateFileRandomName(file.name);
                 await file.mv(`./uploads/users/${user._id}/avatar/${newFileName}`, e => {
-                    if (e) console.log(e)
+                    if (e) console.log(e);
                 })
-                user.avatar = newFileName
-                await user.save()
+                user.avatar = newFileName;
+                await user.save();
             }
 
-            results.resultCode = 0
-            results.user = user
-            return res.json(results)
+            results.resultCode = 0;
+            results.user = user;
+            return res.json(results);
         } catch (e) {
-            results.resultCode = 1
-            results.message = e.message
-            res.status(400).json(results)
+            results.resultCode = 1;
+            results.message = e.message;
+            res.status(400).json(results);
         }
     }
 }
 
-module.exports = new usersController()
+module.exports = new usersController();
