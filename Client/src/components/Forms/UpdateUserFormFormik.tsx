@@ -127,10 +127,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     }
 
     // Log formData for debugging
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
 
     if (isEditing) {
       updateUser(profile._id, formData);

@@ -19,8 +19,11 @@ const EDIT_USER = 'EDIT_USER';
 const ADD_USER = 'ADD_USER';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+const SET_API_ERROR = 'SET_API_ERROR';
+
 const UPDATE_USER_SUCCESS = 'You successfully updated user info!';
 const ADD_USER_SUCCESS = 'You successfully added new user!';
+
 
 let initialState = {
     users: [] as Array<UserType>,
@@ -39,10 +42,11 @@ let initialState = {
         isSuccess: false as boolean,
         successText: '' as string,
     },
+    apiError: '' as string
 }
 
-export type InitialStateType = typeof initialState
-export type UsersFilterType = typeof initialState.usersFilter
+export type InitialStateType = typeof initialState;
+export type UsersFilterType = typeof initialState.usersFilter;
 
 export const usersReducer = (
     state = initialState,
@@ -139,6 +143,12 @@ export const usersReducer = (
                 accessError: action.error
             }
 
+        case SET_API_ERROR:
+            return {
+                ...state,
+                apiError: action.apiError
+            }
+
         default: return state
     }
 }
@@ -146,9 +156,18 @@ export const usersReducer = (
 type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
     SetUsersTotalCountAT | SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
     ToggleIsDeletingInProcessAT | SetRolesAT | EditUserAT | AddUserAT
-    | SetAccessErrorAT | SetSuccessModalAT
+    | SetAccessErrorAT | SetSuccessModalAT | SetApiErrorAT;
 
 //actions creators
+
+type SetApiErrorAT = {
+    type: typeof SET_API_ERROR
+    apiError: string
+}
+
+export const setApiErrorAC = (apiError: string): SetApiErrorAT => ({
+    type: SET_API_ERROR, apiError
+});
 
 type SetSuccessModalAT = {
     type: typeof SET_SUCCESS_MODAL
@@ -332,7 +351,6 @@ const deleteUserThunk = (
         }
         dispatch(deleteUserAC(id));
         dispatch(setUsersCurrentPageAC(newPage));
-
     }
 }
 
@@ -372,7 +390,9 @@ export const updateUser = (
             dispatch(setSuccessModalAC(true, UPDATE_USER_SUCCESS));
         }
     } catch (e) {
-        console.log(e)
+        console.log(e);
+        // @ts-ignore
+        dispatch(setApiErrorAC(e.response.message));
     } finally {
         dispatch(toggleIsFetchingAC(false));
     }
@@ -392,5 +412,9 @@ export const addUser = (
         }
     } catch (e) {
         console.log(e);
+        // @ts-ignore
+        dispatch(setApiErrorAC(e.response.data.message));
+        // @ts-ignore
+        console.log(e.response.data.message + " error text!!!!!!!!!!!!!!!!!");
     }
 }

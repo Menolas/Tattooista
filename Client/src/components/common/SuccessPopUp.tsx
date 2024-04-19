@@ -3,9 +3,9 @@ import {ConfettiContainer} from "./Confetti";
 import {ModalPopUp} from "./ModalPopUp";
 
 type PropsType = {
-    isOpen: boolean
-    content?: string
-    closeModal: () => void
+    isOpen: boolean;
+    content?: string;
+    closeModal: () => void;
 };
 
 export const SuccessPopUp: React.FC<PropsType> = ({
