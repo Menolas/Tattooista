@@ -13,24 +13,27 @@ import {UpdateUserForm} from "../../Forms/UpdateUserFormFormik";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Navigate} from "react-router";
 import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
+import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 
 type PropsType = {
-    roles: Array<RoleType>
-    users: Array<UserType>
-    filter: UsersFilterType
-    isFetching: boolean
-    total: number
-    currentPage: number
-    pageLimit: number
-    successModal: SuccessModalType
-    accessError: string
-    setUsersPageLimit: (limit:number) => void
-    setUsersCurrentPage: (page: number) => void
-    setClientsFilter: (filter: UsersFilterType) => void
-    deleteUser: (userId: string) => void
-    updateUser: (id: string, values: FormData) => void
-    addUser: (values: FormData) => void
-    setSuccessModal: () => void
+    roles: Array<RoleType>;
+    users: Array<UserType>;
+    filter: UsersFilterType;
+    isFetching: boolean;
+    total: number;
+    currentPage: number;
+    pageLimit: number;
+    successModal: SuccessModalType;
+    accessError: string;
+    apiError: string;
+    setUsersPageLimit: (limit:number) => void;
+    setUsersCurrentPage: (page: number) => void;
+    setClientsFilter: (filter: UsersFilterType) => void;
+    deleteUser: (userId: string) => void;
+    updateUser: (id: string, values: FormData) => void;
+    addUser: (values: FormData) => void;
+    setSuccessModal: () => void;
+    setApiError: () => void;
 }
 
 export const Users: React.FC<PropsType> = ({
@@ -43,6 +46,7 @@ export const Users: React.FC<PropsType> = ({
    pageLimit,
    successModal,
    accessError,
+   apiError,
    setUsersPageLimit,
    setUsersCurrentPage,
    setClientsFilter,
@@ -50,6 +54,7 @@ export const Users: React.FC<PropsType> = ({
    updateUser,
    addUser,
    setSuccessModal,
+   setApiError,
 }) => {
 
     const setSuccessModalCallBack = () => {
@@ -148,6 +153,13 @@ export const Users: React.FC<PropsType> = ({
                         closeModal={setSuccessModalCallBack}
                         content={successModal.successText}
                     />
+                    { apiError && apiError !== '' &&
+                        <ApiErrorMessage
+                            isOpen={!!apiError}
+                            error={apiError}
+                            closeModal={setApiError}
+                        />
+                    }
                 </>
             }
         </>

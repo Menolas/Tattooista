@@ -11,7 +11,7 @@ import {
     setUsersPageLimitAC,
     updateUser,
     setSuccessModalAC,
-    UsersFilterType, addUser
+    UsersFilterType, addUser, setApiErrorAC
 } from "../../../redux/Users/users-reducer";
 import {
     getSuccessModalSelector,
@@ -22,7 +22,7 @@ import {
     getUsersPageLimitSelector,
     getUsersSelector,
     getUsersTotalCountSelector,
-    getAccessErrorSelector
+    getAccessErrorSelector, getUsersApiErrorSelector
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
@@ -38,6 +38,7 @@ export const UsersContainer: React.FC = () => {
     const filter = useSelector(getUsersFiletSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const accessError = useSelector(getAccessErrorSelector);
+    const apiError = useSelector(getUsersApiErrorSelector);
 
     const dispatch = useDispatch()
 
@@ -66,6 +67,10 @@ export const UsersContainer: React.FC = () => {
         dispatch(setSuccessModalAC(false, ''));
     }
 
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(''));
+    }
+
     const updateUserCallBack = (
         id: string,
         values: FormData
@@ -88,6 +93,7 @@ export const UsersContainer: React.FC = () => {
             pageLimit={pageLimit}
             successModal={successModal}
             accessError={accessError}
+            apiError={apiError}
             setUsersPageLimit={setUsersPageLimitCallBack}
             setUsersCurrentPage={setUsersCurrentPageCallBack}
             setClientsFilter={setClientsFilterCallBack}
@@ -95,6 +101,7 @@ export const UsersContainer: React.FC = () => {
             updateUser={updateUserCallBack}
             addUser={addUserCallBack}
             setSuccessModal={setSuccessModalCallBack}
+            setApiError={setApiErrorCallBack}
         />
     )
 }

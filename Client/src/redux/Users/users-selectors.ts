@@ -1,37 +1,41 @@
-import {AppStateType} from "../redux-store"
+import {AppStateType} from "../redux-store";
 
 export const getUsersSelector = (state: AppStateType) => {
-    return state.users.users
+    return state.users.users;
 }
 
 export const getUsersTotalCountSelector = (state: AppStateType) => {
-    return state.users.totalUsersCount
+    return state.users.totalUsersCount;
 }
 
 export const getUsersCurrentPageSelector = (state: AppStateType) => {
-    return state.users.currentPage
+    return state.users.currentPage;
 }
 
 export const getUsersPageLimitSelector = (state: AppStateType) => {
-    return state.users.pageLimit
+    return state.users.pageLimit;
 }
 
 export const getUsersIsFetching = (state: AppStateType) => {
-    return state.users.usersIsFetching
+    return state.users.usersIsFetching;
 }
 
 export const getUsersFiletSelector = (state: AppStateType) => {
-    return state.users.usersFilter
+    return state.users.usersFilter;
 }
 
 export const getRolesSelector = (state: AppStateType) => {
-    return state.users.roles
+    return state.users.roles;
 }
 
 export const getSuccessModalSelector = (state: AppStateType) => {
-    return state.users.successModal
+    return state.users.successModal;
 }
 
 export const getAccessErrorSelector = (state: AppStateType) => {
-    return state.users.accessError
+    return state.users.accessError;
+}
+
+export const getUsersApiErrorSelector = (state: AppStateType) => {
+    return state.users.apiError;
 }

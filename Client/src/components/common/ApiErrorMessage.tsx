@@ -1,23 +1,21 @@
-import * as React from "react"
+import * as React from "react";
+import {ModalPopUp} from "./ModalPopUp";
 
 type PropsType = {
-    error: string
-    closeModal: (value: string) => void
+    isOpen: boolean;
+    error: string;
+    closeModal: () => void;
 }
 
-export const ApiErrorMessage: React.FC<PropsType> = ({error, closeModal}) => {
+export const ApiErrorMessage: React.FC<PropsType> = ({
+  isOpen,
+  error,
+  closeModal,
+}) => {
     return (
-        <div className="modal-wrap apiErrorMessage">
-            <div className="modal-wrap__inner-block">
-                <div className="modal__header">
-                    <button
-                        className="close-button modal-wrap__close-btn"
-                        onClick={() => {closeModal('')}}
-                    >{''}</button>
-                </div>
-                <p>Sorry, but something went wrong on the server side, please try a bit later</p>
-                <p>{error}</p>
-            </div>
-        </div>
+        <ModalPopUp isOpen={isOpen} closeModal={closeModal} modalClasses={"apiErrorMessage"}>
+            <p>Sorry, but something went wrong on the server side, please try a bit later</p>
+            <p>{error}</p>
+        </ModalPopUp>
     )
 }
