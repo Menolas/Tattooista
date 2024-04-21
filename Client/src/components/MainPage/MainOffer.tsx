@@ -20,7 +20,6 @@ export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) =>
       </div>
       <BookingButton
           consentId={"consent1"}
-          bookConsultation={bookConsultation}
       />
     </div>
   )

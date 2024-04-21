@@ -4,15 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { MainPage } from "./MainPage";
 import {BookConsultationFormValues, FaqType, TattooStyleType} from "../../types/Types";
 import {
-  getBookingConsultationApiErrorSelector,
+  getApiErrorSelector,
   getFaqItemsSelector,
   getIsGeneralFetchingSelector,
   getSuccessModalSelector,
   getPageAboutSelector,
   getServicesSelector,
-  getUpdateFaqItemApiErrorSelector,
-  getUpdatePageApiErrorSelector,
-  getUpdateServiceApiErrorSelector
 } from "../../redux/General/general-selectors";
 import {
   getFaqItems,
@@ -28,10 +25,7 @@ import {
   deleteFaqItem,
   bookConsultation,
   setSuccessModalAC,
-  setBookingConsultationApiErrorAC,
-  setUpdateFaqItemApiErrorAC,
-  setUpdateServiceApiErrorAC,
-  setUpdatePageApiErrorAC,
+  setApiErrorAC,
 } from "../../redux/General/general-reducer";
 import { getTattooStyles, setActiveStyleAC } from "../../redux/Portfolio/portfolio-reducer";
 import {
@@ -51,10 +45,7 @@ export const MainPageContainer: React.FC = () =>  {
   const pageAbout = useSelector(getPageAboutSelector);
   const isGeneralFetching = useSelector(getIsGeneralFetchingSelector);
   const successModal = useSelector(getSuccessModalSelector);
-  const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector);
-  const updateFaqItemApiError = useSelector(getUpdateFaqItemApiErrorSelector);
-  const updateServiceApiError = useSelector(getUpdateServiceApiErrorSelector);
-  const updatePageApiError = useSelector(getUpdatePageApiErrorSelector);
+  const apiError = useSelector(getApiErrorSelector);
   const fakeApi = useSelector(getFakeApiSelector);
 
   const dispatch = useDispatch();
@@ -110,20 +101,8 @@ export const MainPageContainer: React.FC = () =>  {
     dispatch(setSuccessModalAC(false, ''));
   }
 
-  const setBookingConsultationApiErrorCallBack = (error: string) => {
-    dispatch(setBookingConsultationApiErrorAC(error));
-  }
-
-  const setUpdateFaqItemApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateFaqItemApiErrorAC(error));
-  }
-
-  const setUpdateServiceApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateServiceApiErrorAC(error));
-  }
-
-  const setUpdatePageApiErrorCallBack = (error: string) => {
-    dispatch(setUpdatePageApiErrorAC(error));
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(''));
   }
 
   return (
@@ -137,9 +116,6 @@ export const MainPageContainer: React.FC = () =>  {
           pageAbout={pageAbout}
           isGeneralFetching={isGeneralFetching}
           successModal={successModal}
-          updateFaqItemApiError={updateFaqItemApiError}
-          updateServiceApiError={updateServiceApiError}
-          updatePageApiError={updatePageApiError}
           setActiveStyle={setActiveStyleCallBack}
           editAboutPage={editAboutPageCallBack}
           changeAboutPageVisibility={changeAboutPageVisibilityCallBack}
@@ -151,11 +127,8 @@ export const MainPageContainer: React.FC = () =>  {
           deleteFaqItem={deleteFaqItemCallBack}
           bookConsultation={bookConsultationCallBack}
           setSuccessModal={setSuccessModalCallBack}
-          bookingConsultationApiError={bookingConsultationApiError}
-          setBookingConsultationApiError={setBookingConsultationApiErrorCallBack}
-          setUpdateFaqItemApiError={setUpdateFaqItemApiErrorCallBack}
-          setUpdateServiceApiError={setUpdateServiceApiErrorCallBack}
-          setUpdatePageApiError={setUpdatePageApiErrorCallBack}
+          apiError={apiError}
+          setApiError={setApiErrorCallBack}
       />
   )
 }

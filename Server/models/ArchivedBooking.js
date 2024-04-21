@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const ArchivedBookingSchema = new mongoose.Schema({
   fullName: {
@@ -11,7 +11,7 @@ const ArchivedBookingSchema = new mongoose.Schema({
   },
   message: {
     type: String,
-    default: null
+    default: null,
   },
   status: {
     type: Boolean,
@@ -21,25 +21,25 @@ const ArchivedBookingSchema = new mongoose.Schema({
   contacts: {
     email: {
       type: String,
-      default: null
+      default: null,
     },
     insta: {
       type: String,
-      default: null
+      default: null,
     },
     phone: {
       type: String,
-      default: null
+      default: null,
     },
     whatsapp: {
       type: String,
-      default: null
+      default: null,
     },
     messenger: {
       type: String,
-      default: null
+      default: null,
     }
   }
 });
 
-module.exports = mongoose.model('ArchivedBooking', ArchivedBookingSchema)
+module.exports = mongoose.model('ArchivedBooking', ArchivedBookingSchema);

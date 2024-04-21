@@ -183,18 +183,16 @@ export const Clients: React.FC<PropsType> = React.memo(({
                       closeModal={setSuccessModal}
                       content={successModal.successText}
                   />
-                  {addClientApiError && addClientApiError !== '' &&
-                      <ApiErrorMessage
-                          error={addClientApiError}
-                          closeModal={setAddClientApiError}
-                      />
-                  }
-                  {updateClientGalleryApiError && updateClientGalleryApiError !== '' &&
-                      <ApiErrorMessage
-                          error={updateClientGalleryApiError}
-                          closeModal={setUpdateClientGalleryApiError}
-                      />
-                  }
+                  <ApiErrorMessage
+                      isOpen={!!addClientApiError}
+                      error={addClientApiError}
+                      closeModal={() => {setAddClientApiError('');}}
+                  />
+                  <ApiErrorMessage
+                      isOpen={!!updateClientGalleryApiError}
+                      error={updateClientGalleryApiError}
+                      closeModal={() => {setUpdateClientGalleryApiError('');}}
+                  />
               </>
           }
       </>

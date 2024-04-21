@@ -97,7 +97,7 @@ export interface LoginFormValues {
 export interface BookConsultationFormValues  {
     bookingName: string
     contact: string
-    mail: string
+    email: string
     phone: string
     insta: string
     whatsapp: string

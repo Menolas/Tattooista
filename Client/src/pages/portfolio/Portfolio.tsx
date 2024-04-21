@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Gallery } from "../../components/Portfolio/Gallery";
 import { TattooStyles } from "../../components/Portfolio/TattooStyles";
-import { BookConsultationFormValues, GalleryItemType, TattooStyleType} from "../../types/Types";
+import { GalleryItemType, TattooStyleType} from "../../types/Types";
 import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
 import {SuccessModalType} from "../../redux/Portfolio/portfolio-reducer";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
@@ -19,8 +19,7 @@ type PropsType = {
   activeStyle: TattooStyleType
   gallery: Array<GalleryItemType>
   successModal: SuccessModalType
-  updateTattooStyleApiError: string
-  updateGalleryApiError: string
+  apiError: string
   setPageSize: (pageSize: number) => void
   updateGallery: (style: string, values: any) => void
   deleteGalleryItem: (itemId: string) => void
@@ -31,8 +30,7 @@ type PropsType = {
   deleteTattooStyle: (id: string) => void
   archiveGalleryItem: (id: string) => void
   setSuccessModal: () => void
-  setUpdateTattooStyleApiError: (error: string) => void
-  setUpdateGalleryApiError: (error:string) => void
+  setApiError: () => void
   updateGalleryItem: (id: string, values: object) => void
 }
 
@@ -48,8 +46,7 @@ export const Portfolio: React.FC<PropsType> = ({
   activeStyle,
   gallery,
   successModal,
-  updateTattooStyleApiError,
-  updateGalleryApiError,
+  apiError,
   setPageSize,
   updateGallery,
   deleteGalleryItem,
@@ -60,8 +57,7 @@ export const Portfolio: React.FC<PropsType> = ({
   deleteTattooStyle,
   archiveGalleryItem,
   setSuccessModal,
-  setUpdateTattooStyleApiError,
-  setUpdateGalleryApiError,
+  setApiError,
   updateGalleryItem
 }) => {
 
@@ -108,20 +104,11 @@ export const Portfolio: React.FC<PropsType> = ({
           closeModal={setSuccessModal}
           content={successModal.successText}
       />
-
-      { updateTattooStyleApiError && updateTattooStyleApiError !== '' &&
-          <ApiErrorMessage
-              error={updateTattooStyleApiError}
-              closeModal={setUpdateTattooStyleApiError}
-          />
-      }
-
-      { updateGalleryApiError && updateGalleryApiError !== '' &&
-          <ApiErrorMessage
-              error={updateGalleryApiError}
-              closeModal={setUpdateGalleryApiError}
-          />
-      }
+      <ApiErrorMessage
+          isOpen={!!apiError}
+          error={apiError}
+          closeModal={setApiError}
+      />
     </div>
   );
 }

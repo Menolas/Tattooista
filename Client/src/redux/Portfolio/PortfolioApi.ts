@@ -1,6 +1,6 @@
-import axios, { CreateAxiosDefaults } from "axios"
-import { GalleryItemType, TattooStyleType } from "../../types/Types"
-import {API_URL} from "../../http"
+import axios, { CreateAxiosDefaults } from "axios";
+import { GalleryItemType, TattooStyleType } from "../../types/Types";
+import {API_URL} from "../../http";
 import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";
 
 const instance = axios.create({
@@ -51,14 +51,14 @@ export const portfolioApi = {
 
     getTattooStyles() {
         return instance.get<GetTattooStylesResponseType>('tattooStyle/')
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     addTattooStyle(
         values: FormData
     ) {
         return instance.post<AddTattooStylesResponseType>('tattooStyle/', values)
-            .then(response => response.data)
+            .then(response => response.data);
 
     },
 
@@ -67,13 +67,13 @@ export const portfolioApi = {
         values: FormData
     ) {
         return instance.post<EditTattooStyleResponseType>(`tattooStyle/${id}`, values)
-            .then(response => response.data)
+            .then(response => response.data);
 
     },
 
     deleteTattooStyle(id: string) {
         return instance.delete<DeleteTattooStyleResponseType>(`tattooStyle/${id}`)
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     getGalleryItems(
@@ -82,7 +82,7 @@ export const portfolioApi = {
       pageSize: number
     ) {
         return instance.get<GetGalleryItemsResponseType>(`gallery?&style=${style}&page=${currentPage}&limit=${pageSize}`)
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     getArchivedGalleryItems(
@@ -90,46 +90,46 @@ export const portfolioApi = {
         pageSize: number
     ) {
         return instance.get<GetGalleryItemsResponseType>(`gallery/archive?&page=${currentPage}&limit=${pageSize}`)
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     deleteGalleryItem(
       itemId: string
     ) {
         return instance.delete<DeleteGalleryItemResponseType>(`gallery/${itemId}`)
-          .then(response => response.data)
+          .then(response => response.data);
     },
 
     deleteArchivedGalleryItem(
         itemId: string
     ) {
         return instance.delete<DeleteGalleryItemResponseType>(`gallery/archive/${itemId}`)
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     adminUpdateGallery(style: string, gallery: FormData) {
         return instance.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
           gallery
-        ).then(response => response.data)
+        ).then(response => response.data);
     },
 
     archiveGalleryItem(id: string) {
         return instance.post<ArchiveGalleryItemResponseType>(`gallery/archive/${id}`)
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     updateGalleryItem(id: string, values: object) {
         return instance.patch<UpdateGalleryItemResponseType>(`gallery/updateGalleryItem/${id}`, {values})
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     updateArchiveGalleryItem(id: string, values: object) {
         return instance.patch<UpdateArchiveGalleryItemResponseType>(`gallery/updateArchivedGalleryItem/${id}`, {values})
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     reactivateArchivedGalleryItem(id: string) {
         return instance.get<ReactivateArchivedGalleryItemResponseType>(`gallery/reactivate/${id}`)
-            .then(response => response.data)
+            .then(response => response.data);
     }
 }

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const ClientSchema = new mongoose.Schema({
   fullName: {
@@ -6,7 +6,7 @@ const ClientSchema = new mongoose.Schema({
     required: true,
   },
   avatar: {
-    type: String
+    type: String,
   },
   createdAt: {
     type: Date,
@@ -37,7 +37,7 @@ const ClientSchema = new mongoose.Schema({
       trim: true
     },
   },
-  gallery: [{type: String}]
+  gallery: [{type: String}],
 })
 
 ClientSchema.index(
@@ -57,13 +57,13 @@ ClientSchema.index(
 
 ClientSchema.pre('save', function(next) {
   if (this.contacts.email === null || this.contacts.email === "") {
-    this.contacts.email = undefined
+    this.contacts.email = undefined;
   }
   if (this.contacts.phone === null || this.contacts.phone === "") {
-    this.contacts.phone = undefined
+    this.contacts.phone = undefined;
   }
   if (this.contacts.whatsapp === null || this.contacts.whatsapp === "") {
-    this.contacts.whatsapp = undefined
+    this.contacts.whatsapp = undefined;
   }
   next()
 })

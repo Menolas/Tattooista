@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const PageSchema = new mongoose.Schema({
   name: {
@@ -9,15 +9,19 @@ const PageSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     required: true,
-    default: true
+    default: true,
   },
   title: {
     type: String,
+    required: true,
   },
   wallPaper: {
-    type: String
+    type: String,
   },
-  content: String
-})
+  content: {
+    type: String,
+    required: true,
+  },
+});
 
-module.exports = mongoose.model('Page', PageSchema)
+module.exports = mongoose.model('Page', PageSchema);

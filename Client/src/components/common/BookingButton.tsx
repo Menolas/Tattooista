@@ -5,11 +5,11 @@ import {BookingForm} from "../Forms/BookingFormFormik";
 import * as React from "react";
 import {
     bookConsultation,
-    setBookingConsultationApiErrorAC,
+    setApiErrorAC,
     setSuccessModalAC
 } from "../../redux/General/general-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {getBookingConsultationApiErrorSelector, getSuccessModalSelector} from "../../redux/General/general-selectors";
+import {getApiErrorSelector, getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {SuccessPopUp} from "./SuccessPopUp";
 import {ApiErrorMessage} from "./ApiErrorMessage";
 
@@ -21,7 +21,7 @@ export const BookingButton: React.FC<PropsType> = ({
     consentId = 'consent',
 }) => {
 
-    const bookingConsultationApiError = useSelector(getBookingConsultationApiErrorSelector);
+    const apiError = useSelector(getApiErrorSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const dispatch = useDispatch();
 
@@ -41,8 +41,8 @@ export const BookingButton: React.FC<PropsType> = ({
         dispatch(bookConsultation(values));
     }
 
-    const setBookingConsultationApiErrorCallBack = (error: string) => {
-        dispatch(setBookingConsultationApiErrorAC(error));
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(''));
     }
 
     const [bookingModal, setBookingModal] = useState(false)
@@ -85,12 +85,11 @@ export const BookingButton: React.FC<PropsType> = ({
                 closeModal={setSuccessModalCallBack}
                 content={successModal.successText}
             />
-            { bookingConsultationApiError && bookingConsultationApiError !== '' &&
-                <ApiErrorMessage
-                    error={bookingConsultationApiError}
-                    closeModal={setBookingConsultationApiErrorCallBack}
-                />
-            }
+            <ApiErrorMessage
+                isOpen={!!apiError}
+                error={apiError}
+                closeModal={setApiErrorCallBack}
+            />
         </div>
     )
 }

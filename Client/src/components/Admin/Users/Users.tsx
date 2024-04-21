@@ -153,13 +153,11 @@ export const Users: React.FC<PropsType> = ({
                         closeModal={setSuccessModalCallBack}
                         content={successModal.successText}
                     />
-                    { apiError && apiError !== '' &&
-                        <ApiErrorMessage
-                            isOpen={!!apiError}
-                            error={apiError}
-                            closeModal={setApiError}
-                        />
-                    }
+                    <ApiErrorMessage
+                        isOpen={!!apiError}
+                        error={apiError}
+                        closeModal={setApiError}
+                    />
                 </>
             }
         </>

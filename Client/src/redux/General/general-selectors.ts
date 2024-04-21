@@ -16,20 +16,8 @@ export const getIsGeneralFetchingSelector = (state: AppStateType) => {
   return state.general.isGeneralFetching;
 }
 
-export const getBookingConsultationApiErrorSelector = (state: AppStateType) => {
-  return state.general.bookingConsultationApiError;
-}
-
-export const getUpdateFaqItemApiErrorSelector = (state: AppStateType) => {
-  return state.general.updateFaqItemApiError;
-}
-
-export const getUpdateServiceApiErrorSelector = (state: AppStateType) => {
-  return state.general.updateServiceApiError;
-}
-
-export const getUpdatePageApiErrorSelector = (state: AppStateType) => {
-  return state.general.updatePageApiError;
+export const getApiErrorSelector = (state: AppStateType) => {
+  return state.general.apiError;
 }
 
 export const getSuccessModalSelector = (state: AppStateType) => {

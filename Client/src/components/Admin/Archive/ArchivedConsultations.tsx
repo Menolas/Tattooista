@@ -8,7 +8,8 @@ import {
     BookedConsultationsFilterType,
     deleteArchivedConsultation,
     getArchivedConsultations,
-    reactivateConsultation, setAddBookingApiErrorAC,
+    reactivateConsultation,
+    setApiErrorAC,
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
     setCurrentPageForArchivedConsultationsAC, setSuccessModalAC
@@ -21,7 +22,7 @@ import {
     getBookedConsultationsIsFetchingSelector,
     getTotalArchivedConsultationsCountSelector,
     getIsDeletingInProcessSelector,
-    getAddBookingApiErrorSelector,
+    getApiErrorSelector,
     getAccessErrorSelector, getSuccessModalSelector,
 } from "../../../redux/Bookings/bookings-selectors";
 import {ArchivedConsultation} from "./ArchivedConsultation";
@@ -40,7 +41,7 @@ export const ArchivedConsultations: React.FC = () => {
     const pageSize = useSelector(getArchivedConsultationsPageSizeSelector);
     const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector);
     const filter = useSelector(getArchivedConsultationsFilterSelector);
-    const addBookingApiError = useSelector(getAddBookingApiErrorSelector);
+    const apiError = useSelector(getApiErrorSelector);
     const token = useSelector(getTokenSelector);
     const accessError = useSelector(getAccessErrorSelector);
     const successModal = useSelector(getSuccessModalSelector);
@@ -105,8 +106,8 @@ export const ArchivedConsultations: React.FC = () => {
         ));
     }
 
-    const setAddBookingApiErrorCallBack = (error: string) => {
-        dispatch(setAddBookingApiErrorAC(error));
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(''));
     }
 
     const setSuccessModalCallBack = () => {
@@ -154,13 +155,11 @@ export const ArchivedConsultations: React.FC = () => {
                                 </ul>
                             ) : <NothingToShow/>
                     }
-
-                    {addBookingApiError && addBookingApiError !== '' &&
-                        <ApiErrorMessage
-                            error={addBookingApiError}
-                            closeModal={setAddBookingApiErrorCallBack}
-                        />
-                    }
+                    <ApiErrorMessage
+                        isOpen={!!apiError}
+                        error={apiError}
+                        closeModal={setApiErrorCallBack}
+                    />
                     <SuccessPopUp
                         isOpen={successModal.isSuccess}
                         closeModal={setSuccessModalCallBack}

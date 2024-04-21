@@ -1,63 +1,59 @@
-import { AppStateType } from "../redux-store"
+import { AppStateType } from "../redux-store";
 
 export const getIsFetching = (state: AppStateType) => {
-  return state.portfolio.isFetching
+  return state.portfolio.isFetching;
 }
 
 export const getTattooStylesSelector = (state: AppStateType) => {
-  return state.portfolio.tattooStyles
+  return state.portfolio.tattooStyles;
 }
 
 export const getActiveStyleSelector = (state: AppStateType) => {
-  return state.portfolio.activeStyle
+  return state.portfolio.activeStyle;
 }
 
 export const getGallerySelector = (state: AppStateType) => {
-  return state.portfolio.gallery
+  return state.portfolio.gallery;
 }
 
 export const getArchivedGallerySelector = (state: AppStateType) => {
-  return state.portfolio.archivedGallery
+  return state.portfolio.archivedGallery;
 }
 
 export const getGalleryPageSize = (state: AppStateType) => {
-  return state.portfolio.galleryPageSize
+  return state.portfolio.galleryPageSize;
 }
 
 export const getArchivedGalleryPageSizeSelector = (state: AppStateType) => {
-  return state.portfolio.archivedGalleryPageSize
+  return state.portfolio.archivedGalleryPageSize;
 }
 
 export const getCurrentGalleryPage = (state: AppStateType) => {
-  return state.portfolio.currentGalleryPage
+  return state.portfolio.currentGalleryPage;
 }
 
 export const getCurrentArchivedGalleryPageSelector = (state: AppStateType) => {
-  return state.portfolio.currentArchivedGalleryPage
+  return state.portfolio.currentArchivedGalleryPage;
 }
 
 export const getTotalGalleryItemsCount = (state: AppStateType) => {
-  return state.portfolio.totalGalleryItemsCount
+  return state.portfolio.totalGalleryItemsCount;
 }
 
 export const getTotalArchivedGalleryItemsCountSelector = (state: AppStateType) => {
-  return state.portfolio.totalArchivedGalleryItemsCount
+  return state.portfolio.totalArchivedGalleryItemsCount;
 }
 
 export const getIsGalleryItemDeletingInProcessSelector = (state: AppStateType) => {
-  return state.portfolio.isDeletingInProcess
+  return state.portfolio.isDeletingInProcess;
 }
 
-export const getUpdateTattooStyleApiErrorSelector = (state: AppStateType) => {
-  return state.portfolio.updateTattooStyleError
-}
-
-export const getUpdateGalleryApiErrorSelector = (state: AppStateType) => {
-  return state.portfolio.updateGalleryApiError
+export const getApiErrorSelector = (state: AppStateType) => {
+  return state.portfolio.apiError;
 }
 
 export const getFakeApiSelector = (state: AppStateType) => {
-  return state.portfolio.fakeApi
+  return state.portfolio.fakeApi;
 }
 
 export const getSuccessModalSelector = (state: AppStateType) => {

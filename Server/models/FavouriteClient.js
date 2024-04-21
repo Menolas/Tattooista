@@ -6,7 +6,7 @@ const ClientSchema = new mongoose.Schema({
     required: true,
   },
   avatar: {
-    type: String
+    type: String,
   },
   createdAt: {
     type: Date,
@@ -15,26 +15,26 @@ const ClientSchema = new mongoose.Schema({
   contacts: {
     email: {
       type: String,
-      default: null
+      default: null,
     },
     insta: {
       type: String,
-      default: null
+      default: null,
     },
     phone: {
       type: String,
-      default: null
+      default: null,
     },
     whatsapp: {
       type: String,
-      default: null
+      default: null,
     },
     messenger: {
       type: String,
-      default: null
+      default: null,
     }
   },
-  gallery: [{type: String}]
+  gallery: [{type: String}],
 })
 
-module.exports = mongoose.model('Client', ClientSchema)
+module.exports = mongoose.model('Client', ClientSchema);

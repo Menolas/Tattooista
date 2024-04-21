@@ -1,39 +1,39 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
 const UserSchema = new Schema({
   avatar: {
-    type: String
+    type: String,
   },
 
   displayName: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
 
   email: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
 
   password: {
     type: String,
-    required: true
+    required: true,
   },
 
   roles: [{
     type: Schema.Types.ObjectId,
-    ref: 'Role'
+    ref: 'Role',
   }],
 
   isActivated: {
     type: Boolean,
-    default: false
+    default: false,
   },
 
   activationLink: {
-    type: String
+    type: String,
   },
   createdAt: {
     type: Date,
@@ -41,4 +41,4 @@ const UserSchema = new Schema({
   },
 })
 
-module.exports = model('User', UserSchema)
+module.exports = model('User', UserSchema);

@@ -49,7 +49,7 @@ export const About: React.FC<PropsType> = React.memo(({
                     <button
                         data-tooltip-id="about-tooltip"
                         data-tooltip-content={
-                            pageAbout.isActive
+                            pageAbout?.isActive
                             ? 'Hide "about me" block'
                             : 'Show "about me" block'
                         }
@@ -58,7 +58,7 @@ export const About: React.FC<PropsType> = React.memo(({
                             changeAboutPageVisibility(pageAbout.isActive)
                         }}
                     >
-                        {pageAbout.isActive
+                        {pageAbout?.isActive
                                 ? <svg><use href={`${Sprite}#hide`}/></svg>
                                 : <svg><use href={`${Sprite}#eye`}/></svg>
                         }
@@ -94,7 +94,6 @@ export const About: React.FC<PropsType> = React.memo(({
                         <SocialNav />
                         <BookingButton
                             consentId={"consent2"}
-                            bookConsultation={bookConsultation}
                         />
                     </div>
                 </div>

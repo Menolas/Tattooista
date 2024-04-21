@@ -28,10 +28,7 @@ type PropsType = {
   pageAbout: PageType
   isGeneralFetching: boolean
   successModal: SuccessModalType
-  bookingConsultationApiError: string
-  updateFaqItemApiError: string
-  updateServiceApiError: string
-  updatePageApiError: string
+  apiError: string
   setActiveStyle: (style: TattooStyleType) => void
   editAboutPage: (values: FormData) => void
   changeAboutPageVisibility: (isActive: boolean) => void
@@ -43,10 +40,7 @@ type PropsType = {
   deleteFaqItem: (id: string) => void
   bookConsultation: (values: BookConsultationFormValues) => void
   setSuccessModal: () => void
-  setBookingConsultationApiError: (error: string) => void
-  setUpdateFaqItemApiError: (error: string) => void
-  setUpdateServiceApiError: (error: string) => void
-  setUpdatePageApiError: (error: string) => void
+  setApiError: () => void
 }
 
 export const MainPage: React.FC<PropsType> = React.memo(({
@@ -59,10 +53,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   pageAbout,
   isGeneralFetching,
   successModal,
-  bookingConsultationApiError,
-  updateFaqItemApiError,
-  updateServiceApiError,
-  updatePageApiError,
+  apiError,
   setActiveStyle,
   editAboutPage,
   changeAboutPageVisibility,
@@ -74,10 +65,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
   deleteFaqItem,
   bookConsultation,
   setSuccessModal,
-  setBookingConsultationApiError,
-  setUpdateFaqItemApiError,
-  setUpdateServiceApiError,
-  setUpdatePageApiError,
+  setApiError,
 }) => {
 
   useEffect(() => {
@@ -112,7 +100,7 @@ export const MainPage: React.FC<PropsType> = React.memo(({
                   setActiveStyle={setActiveStyle}
                   tattooStyles={tattooStyles}
               />
-              { (isAuth || pageAbout.isActive) &&
+              { (isAuth || pageAbout?.isActive) &&
                   <About
                       fakeApi={fakeApi}
                       isAuth={isAuth}
@@ -146,33 +134,11 @@ export const MainPage: React.FC<PropsType> = React.memo(({
           closeModal={setSuccessModal}
           content={successModal.successText}
       />
-
-      { bookingConsultationApiError && bookingConsultationApiError !== '' &&
-        <ApiErrorMessage
-            error={bookingConsultationApiError}
-            closeModal={setBookingConsultationApiError}
-        />
-      }
-      { updateFaqItemApiError && updateFaqItemApiError !== '' &&
-        <ApiErrorMessage
-            error={updateFaqItemApiError}
-            closeModal={setUpdateFaqItemApiError}
-        />
-      }
-      {
-        updateServiceApiError && updateServiceApiError !== '' &&
-            <ApiErrorMessage
-                error={updateServiceApiError}
-                closeModal={setUpdateServiceApiError}
-            />
-      }
-      {
-          updatePageApiError && updatePageApiError !== '' &&
-        <ApiErrorMessage
-            error={updatePageApiError}
-            closeModal={setUpdatePageApiError}
-        />
-      }
+      <ApiErrorMessage
+          isOpen={!!apiError}
+          error={apiError}
+          closeModal={setApiError}
+      />
     </>
   )
 })

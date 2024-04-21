@@ -1,13 +1,13 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
 const FaqItem = new Schema({
   question: {
     type: String,
-    unique: true
+    unique: true,
   },
   answer: {
-    type: String
-  }
+    type: String,
+  },
 });
 
-module.exports = model('FaqItem', FaqItem)
+module.exports = model('FaqItem', FaqItem);
