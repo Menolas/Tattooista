@@ -13,7 +13,7 @@ import {
   setCurrentPageForBookedConsultationsAC,
   setSuccessModalAC,
   setBookedConsultationsFilterAC,
-  setAddBookingApiErrorAC,
+  setApiErrorAC,
 } from "../../../redux/Bookings/bookings-reducer";
 import {
   getBookingsSelector,
@@ -25,7 +25,7 @@ import {
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
   getSuccessModalSelector,
-  getAddBookingApiErrorSelector, getAccessErrorSelector
+  getApiErrorSelector, getAccessErrorSelector
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
 import {AddConsultationFormValues, ContactsType} from "../../../types/Types";
@@ -42,7 +42,7 @@ export const BookingsContainer: React.FC = () => {
   const isStatusChanging = useSelector(getIsStatusChangingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const successModal = useSelector(getSuccessModalSelector);
-  const addBookingApiError = useSelector(getAddBookingApiErrorSelector);
+  const apiError = useSelector(getApiErrorSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
 
@@ -107,8 +107,8 @@ export const BookingsContainer: React.FC = () => {
     dispatch(setSuccessModalAC(false, ''));
   }
 
-  const setAddBookingApiErrorCallBack = (error: string) => {
-    dispatch(setAddBookingApiErrorAC(error));
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(''));
   }
 
   return (
@@ -122,7 +122,7 @@ export const BookingsContainer: React.FC = () => {
         bookedConsultationsFilter={filter}
         isStatusChanging={isStatusChanging}
         isDeletingInProcess={isDeletingInProcess}
-        addBookingApiError={addBookingApiError}
+        apiError={apiError}
         accessError={accessError}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
@@ -133,7 +133,7 @@ export const BookingsContainer: React.FC = () => {
         addBookedConsultation={addBookedConsultationCallBack}
         archiveConsultation={archiveConsultationCallBack}
         setSuccessModal={setSuccessModalCallBack}
-        setAddBookingApiError={setAddBookingApiErrorCallBack}
+        setApiError={setApiErrorCallBack}
       />
   )
 }

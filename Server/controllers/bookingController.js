@@ -1,77 +1,77 @@
-const Booking = require('../models/Booking')
+const Booking = require('../models/Booking');
 const Client = require("../models/Client");
 const ArchivedBooking = require("../models/ArchivedBooking");
 
 class bookingController {
 
   async getBookings (req, res) {
-    let page = parseInt(req.query.page)
-    const limit = parseInt(req.query.limit)
-    const status = req.query.status
-    const term = req.query.term
-    let bookings = []
-    const results = {}
+    let page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const status = req.query.status;
+    const term = req.query.term;
+    let bookings = [];
+    const results = {};
 
     try {
       if (status === 'any' && !term) {
-        bookings = await Booking.find().sort({createdAt: -1})
+        bookings = await Booking.find().sort({createdAt: -1});
       } else if (status !== 'any' && !term) {
-        bookings = await Booking.find({status: status}).sort({createdAt: -1})
+        bookings = await Booking.find({status: status}).sort({createdAt: -1});
       } else if (status !== 'any' && term) {
-        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
+        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1});
       } else if (status === 'any' && term) {
-        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1});
       }
 
-      const startIndex = (page - 1) * limit
-      const endIndex = page * limit
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
 
-      results.resultCode = 0
-      results.totalCount = bookings.length
-      results.bookings = bookings.slice(startIndex, endIndex)
-      res.json(results)
+      results.resultCode = 0;
+      results.totalCount = bookings.length;
+      results.bookings = bookings.slice(startIndex, endIndex);
+      res.json(results);
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      console.log(e)
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      console.log(e);
+      res.status(400).json(results);
     }
   }
 
   async getArchivedBookings (req, res) {
-    let page = parseInt(req.query.page)
-    const limit = parseInt(req.query.limit)
-    const startIndex = (page - 1) * limit
-    const endIndex = page * limit
-    const status = req.query.status
-    const term = req.query.term
-    let archivedBookings = []
-    const results = {}
+    let page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const status = req.query.status;
+    const term = req.query.term;
+    let archivedBookings = [];
+    const results = {};
 
     try {
       if (status === 'any' && !term) {
-        archivedBookings = await ArchivedBooking.find().sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find().sort({createdAt: -1});
       } else if (status !== 'any' && !term) {
-        archivedBookings = await ArchivedBooking.find({status: status}).sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find({status: status}).sort({createdAt: -1});
       } else if (status !== 'any' && term) {
-        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1});
       } else if (status === 'any' && term) {
-        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1})
+        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1});
       }
-      results.resultCode = 0
-      results.totalCount = archivedBookings.length
-      results.bookings = archivedBookings.slice(startIndex, endIndex)
-      res.json(results)
+      results.resultCode = 0;
+      results.totalCount = archivedBookings.length;
+      results.bookings = archivedBookings.slice(startIndex, endIndex);
+      res.json(results);
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      console.log(e)
-      res.status(400).json({ results })
+      results.resultCode = 1;
+      results.message = e.message;
+      console.log(e);
+      res.status(400).json({ results });
     }
   }
 
   async createBooking(req, res) {
-    const results = {}
+    const results = {};
     try {
       const booking = new Booking({
         fullName: req.body.bookingName,
@@ -83,44 +83,44 @@ class bookingController {
           insta: req.body.insta
         },
         message: req.body.message
-      })
-      await booking.save()
-      results.resultCode = 0
-      results.booking = booking
-      res.status(201).json(results)
+      });
+      await booking.save();
+      results.resultCode = 0;
+      results.booking = booking;
+      res.status(201).json(results);
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      console.log(e)
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      console.log(e);
+      res.status(400).json(results);
     }
   }
 
   async deleteBooking(req, res) {
-    const results = {}
+    const results = {};
     try {
-      await res.booking.remove()
-      results.resultCode = 0
-      res.json(results)
+      await res.booking.remove();
+      results.resultCode = 0;
+      res.json(results);
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      res.status(500).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(500).json(results);
     }
   }
 
   async changeBookingStatus(req, res) {
-    res.booking.status = !req.body.status
-    const results = {}
+    res.booking.status = !req.body.status;
+    const results = {};
     try {
-      await res.booking.save()
-      results.status = res.booking.status
-      results.resultCode = 0
-      res.json(results)
+      await res.booking.save();
+      results.status = res.booking.status;
+      results.resultCode = 0;
+      res.json(results);
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
     }
   }
 
@@ -129,17 +129,17 @@ class bookingController {
       fullName: req.body.fullName,
       contacts: req.body.contacts
     })
-    const results = {}
+    const results = {};
 
     try {
-      await client.save()
-      await res.booking.remove()
-      results.resultCode = 0
-      res.status(201).json(results)
+      await client.save();
+      await res.booking.remove();
+      results.resultCode = 0;
+      res.status(201).json(results);
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
     }
   }
 
@@ -155,19 +155,19 @@ class bookingController {
       }
     })
 
-    const results = {}
+    const results = {};
 
     try {
-      await archivedBooking.save()
-      await res.booking.remove()
-      results.resultCode = 0
-      results.booking = archivedBooking
-      res.status(201).json(results)
+      await archivedBooking.save();
+      await res.booking.remove();
+      results.resultCode = 0;
+      results.booking = archivedBooking;
+      res.status(201).json(results);
 
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
     }
   }
 
@@ -183,20 +183,20 @@ class bookingController {
       }
     })
 
-    const results = {}
+    const results = {};
 
     try {
-      await booking.save()
-      await res.booking.remove()
-      results.resultCode = 0
-      results.booking = booking
-      res.status(201).json(results)
+      await booking.save();
+      await res.booking.remove();
+      results.resultCode = 0;
+      results.booking = booking;
+      res.status(201).json(results);
     } catch (e) {
-      results.resultCode = 1
-      results.message = e.message
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
     }
   }
 }
 
-module.exports = new bookingController()
+module.exports = new bookingController();

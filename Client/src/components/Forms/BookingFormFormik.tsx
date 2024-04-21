@@ -9,7 +9,7 @@ import {FieldWrapper} from "./FieldWrapper";
 import {FormSelect} from "./FormSelect";
 
 const options = [
-  { value: "mail", label: "email" },
+  { value: "email", label: "email" },
   { value: "phone", label: "phone" },
   { value: "whatsapp", label: "whatsapp" },
   { value: "messenger", label: "messenger" },
@@ -24,9 +24,9 @@ const validationSchema = Yup.object().shape({
       .required("Required Field"),
   contact: Yup.string()
       .required("Please select a way to contact you"),
-  mail: Yup.string().when('contact', {
+  email: Yup.string().when('contact', {
         is: (contact) => contact === 'mail',
-        then: () => Yup.string().required("Please, provide you email.").email("Email should have correct format")
+        then: () => Yup.string().required("Please, provide your email.").email("Email should have correct format")
       }),
   phone: Yup.string().when('contact', {
         is: (contact) => contact === 'phone',
@@ -83,7 +83,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   const initialValues: BookConsultationFormValues = {
     bookingName: '',
     contact: '',
-    mail: '',
+    email: '',
     phone: '',
     insta: '',
     whatsapp: '',

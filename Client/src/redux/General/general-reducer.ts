@@ -11,10 +11,7 @@ const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS';
 const SET_SERVICES = 'SET_SERVICES';
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
 const SET_IS_GENERAL_FETCHING = 'SET_IS_GENERAL_FETCHING';
-const SET_BOOKING_CONSULTATION_API_ERROR = 'SET_BOOKING_CONSULTATION_API_ERROR';
-const SET_UPDATE_FAQ_ITEM_API_ERROR = 'SET_UPDATE_FAQ_ITEM_API_ERROR';
-const SET_UPDATE_SERVICE_API_ERROR = 'SET_UPDATE_SERVICE_API_ERROR';
-const SET_UPDATE_PAGE_API_ERROR = 'SET_UPDATE_PAGE_API_ERROR';
+const SET_API_ERROR = 'SET_API_ERROR';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const BOOKING_SUCCESS = "Congratulation! You've just submitted your booking request.";
 const ABOUT_PAGE_SUCCESS = "You successfully updated your 'about' block";
@@ -23,16 +20,12 @@ const FAQ_UPDATE_SUCCESS = "You successfully updated a FAQ item";
 const SERVICE_ADD_SUCCESS = "You successfully added a new SERVICE item";
 const SERVICE_UPDATE_SUCCESS = "You successfully updated a SERVICE item";
 
-
 let initialState = {
   faq: [] as Array<FaqType>,
   services: [] as Array<ServiceType>,
   pageAbout: {} as PageType,
   isGeneralFetching: false as boolean,
-  bookingConsultationApiError: '' as string | undefined,
-  updateFaqItemApiError: '' as string | undefined,
-  updateServiceApiError: '' as string | undefined,
-  updatePageApiError: '' as string | undefined,
+  apiError: '' as string,
   successModal: {
     isSuccess: false as boolean,
     successText: '' as string,
@@ -83,28 +76,10 @@ export const generalReducer = (
         }
       }
 
-    case SET_BOOKING_CONSULTATION_API_ERROR:
+    case SET_API_ERROR:
       return {
         ...state,
-        bookingConsultationApiError: action.error
-      }
-
-    case SET_UPDATE_FAQ_ITEM_API_ERROR:
-      return {
-        ...state,
-        updateFaqItemApiError: action.error
-      }
-
-    case SET_UPDATE_SERVICE_API_ERROR:
-      return {
-        ...state,
-        updateFaqItemApiError: action.error
-      }
-
-    case SET_UPDATE_PAGE_API_ERROR:
-      return {
-        ...state,
-        updatePageApiError: action.error
+        apiError: action.error
       }
 
     default: return {
@@ -113,8 +88,7 @@ export const generalReducer = (
   }
 }
 
-type ActionsTypes = SetIsGeneralFetchingAT | SetUpdatePageApiErrorAT | SetUpdateServiceApiErrorAT |
-    SetUpdateFaqItemApiErrorAT | SetBookingConsultationApiErrorAT | SetAboutPageAT |
+type ActionsTypes = SetIsGeneralFetchingAT | SetApiErrorAT | SetAboutPageAT |
     SetFaqItemsAT | SetServicesAT | SetSuccessModalAT;
 
 // action creators
@@ -127,42 +101,15 @@ type SetSuccessModalAT = {
 
 export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
   type: SET_SUCCESS_MODAL, isSuccess, text
-})
-
-type SetUpdatePageApiErrorAT = {
-  type: typeof SET_UPDATE_PAGE_API_ERROR
-  error: string | undefined
-};
-
-export const setUpdatePageApiErrorAC = (error: string | undefined): SetUpdatePageApiErrorAT => ({
-  type: SET_UPDATE_PAGE_API_ERROR, error
 });
 
-type SetUpdateServiceApiErrorAT = {
-  type: typeof SET_UPDATE_SERVICE_API_ERROR
-  error: string | undefined
+type SetApiErrorAT = {
+  type: typeof  SET_API_ERROR
+  error: string
 };
 
-export const setUpdateServiceApiErrorAC = (error: string | undefined): SetUpdateServiceApiErrorAT => ({
-  type: SET_UPDATE_SERVICE_API_ERROR, error
-});
-
-type SetUpdateFaqItemApiErrorAT = {
-  type: typeof SET_UPDATE_FAQ_ITEM_API_ERROR
-  error: string | undefined
-};
-
-export const setUpdateFaqItemApiErrorAC = (error: string | undefined): SetUpdateFaqItemApiErrorAT => ({
-  type: SET_UPDATE_FAQ_ITEM_API_ERROR, error
-});
-
-type SetBookingConsultationApiErrorAT = {
-  type: typeof  SET_BOOKING_CONSULTATION_API_ERROR
-  error: string | undefined
-};
-
-export const setBookingConsultationApiErrorAC = (error: string | undefined): SetBookingConsultationApiErrorAT  => ({
-  type: SET_BOOKING_CONSULTATION_API_ERROR, error
+export const setApiErrorAC = (error: string): SetApiErrorAT  => ({
+  type: SET_API_ERROR, error
 });
 
 type SetIsGeneralFetchingAT = {
@@ -226,11 +173,12 @@ export const addFaqItem = (values: FaqType): ThunkType => async (dispatch) => {
   try {
     let response = await generalSourcesApi.addFaqItem(values);
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setApiErrorAC(''));
       dispatch(setFaqItems(response.faqItems));
       dispatch(setSuccessModalAC(true, FAQ_ADD_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
   }
 }
@@ -239,11 +187,12 @@ export const updateFaqItem = (id: string, values: any): ThunkType => async (disp
   try {
     let response = await generalSourcesApi.updateFaqItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setApiErrorAC(''));
       dispatch(setFaqItems(response.faqItems));
       dispatch(setSuccessModalAC(true, FAQ_UPDATE_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateFaqItemApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
   }
 }
@@ -293,11 +242,12 @@ export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch)
   try {
     const response = await generalSourcesApi.editAboutPage(FormData);
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setApiErrorAC(''));
       dispatch(setAboutPageAC(response.page));
       dispatch(setSuccessModalAC(true, ABOUT_PAGE_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdatePageApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
   }
 }
@@ -322,11 +272,12 @@ export const editService = (
   try {
     const response = await generalSourcesApi.editService(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setApiErrorAC(''));
       dispatch(setServicesAC(response.services));
       dispatch(setSuccessModalAC(true, SERVICE_UPDATE_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateServiceApiErrorAC(e.response?.data?.message || 'An error occurred'))
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'))
     console.log(e);
   }
 }
@@ -337,11 +288,12 @@ export const addService = (
   try {
     const response = await generalSourcesApi.addService(values);
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setApiErrorAC(''));
       dispatch(setServicesAC(response.services));
       dispatch(setSuccessModalAC(true, SERVICE_ADD_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateServiceApiErrorAC(e.response?.data?.message || 'An error occurred'))
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'))
     console.log(e);
   }
 }
@@ -365,11 +317,10 @@ export const bookConsultation = (
   try {
     const response = await generalSourcesApi.bookConsultation(values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setBookingConsultationApiErrorAC(''));
+      dispatch(setApiErrorAC(''));
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setBookingConsultationApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
   }
 }

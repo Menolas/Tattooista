@@ -15,27 +15,27 @@ import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {bookingFilterSelectOptions} from "../../../utils/constants";
 
 type PropsType = {
-  isFetching: boolean
-  successModal: SuccessModalType
-  totalCount: number
-  currentBookedConsultationsPage: number
-  pageSize: number
-  bookings?: Array<BookedConsultationType>
-  bookedConsultationsFilter: BookedConsultationsFilterType
-  isStatusChanging?: Array<string>
-  isDeletingInProcess?: Array<string>
-  addBookingApiError: string
-  accessError: string
-  setCurrentPage: (page: number) => void
-  onFilterChanged: (filter: BookedConsultationsFilterType) => void
-  changeStatus: (id: string, status: boolean) => void
-  deleteConsultation: (id: string) => void
-  turnConsultationToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
-  setPageLimit: (pageSize: number) => void
-  addBookedConsultation: (values: AddConsultationFormValues) => void
-  archiveConsultation: (id: string) => void
-  setSuccessModal: () => void
-  setAddBookingApiError: (error: string) => void
+  isFetching: boolean;
+  successModal: SuccessModalType;
+  totalCount: number;
+  currentBookedConsultationsPage: number;
+  pageSize: number;
+  bookings?: Array<BookedConsultationType>;
+  bookedConsultationsFilter: BookedConsultationsFilterType;
+  isStatusChanging?: Array<string>;
+  isDeletingInProcess?: Array<string>;
+  apiError: string;
+  accessError: string;
+  setCurrentPage: (page: number) => void;
+  onFilterChanged: (filter: BookedConsultationsFilterType) => void;
+  changeStatus: (id: string, status: boolean) => void;
+  deleteConsultation: (id: string) => void;
+  turnConsultationToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void;
+  setPageLimit: (pageSize: number) => void;
+  addBookedConsultation: (values: AddConsultationFormValues) => void;
+  archiveConsultation: (id: string) => void;
+  setSuccessModal: () => void;
+  setApiError: () => void;
 }
 
 export const Bookings: React.FC<PropsType> = React.memo(({
@@ -48,7 +48,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   bookedConsultationsFilter,
   isStatusChanging,
   isDeletingInProcess,
-  addBookingApiError,
+  apiError,
   accessError,
   setCurrentPage,
   onFilterChanged,
@@ -59,7 +59,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   addBookedConsultation,
   archiveConsultation,
   setSuccessModal,
-  setAddBookingApiError
+  setApiError
 }) => {
 
     useEffect(() => {
@@ -146,13 +146,11 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                       closeModal={setSuccessModal}
                       content={successModal.successText}
                   />
-
-                  { addBookingApiError && addBookingApiError !== '' &&
-                      <ApiErrorMessage
-                          error={addBookingApiError}
-                          closeModal={setAddBookingApiError}
-                      />
-                  }
+                  <ApiErrorMessage
+                      isOpen={!!apiError}
+                      error={apiError}
+                      closeModal={setApiError}
+                  />
                 </>
           }
       </>

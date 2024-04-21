@@ -1,28 +1,21 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
 const GalleryItem = new Schema({
   fileName: {
     type: String,
     unique: false,
-    required: true
+    required: true,
   },
 
   tattooStyles: [{
     type: String,
-    ref: 'TattooStyle'
+    ref: 'TattooStyle',
   }],
 
   createdAt: {
     type: Date,
     default: Date.now,
   },
-})
+});
 
-//Black@Gray
-//FineLine
-//BlackWork
-//NeoTraditional
-//Realistic
-//Designs
-//OldSchool
-module.exports = model('GalleryItem', GalleryItem)
+module.exports = model('GalleryItem', GalleryItem);

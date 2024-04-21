@@ -24,7 +24,7 @@ const DELETE_BOOKING = 'DELETE_BOOKING';
 const DELETE_ARCHIVED_BOOKING = 'DELETE_ARCHIVED_BOOKING';
 const ADD_BOOKING = 'ADD_BOOKING';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const SET_ADD_BOOKING_API_ERROR = 'SET_ADD_BOOKING_API_ERROR';
+const SET_API_ERROR = 'SET_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const BOOKING_SUCCESS = "Congratulation! You've just created a consultation request.";
 const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You've just created a client from a consultation request.";
@@ -50,7 +50,7 @@ let initialState = {
     term: '' as string | null,
     condition: 'any' as string | null
   },
-  addBookingApiError: '' as string | undefined,
+  apiError: '' as string,
   accessError: '' as string | undefined,
   successModal: {
     isSuccess: false as boolean,
@@ -194,10 +194,10 @@ export const bookingsReducer = (
         }
       }
 
-    case SET_ADD_BOOKING_API_ERROR:
+    case SET_API_ERROR:
       return {
         ...state,
-        addBookingApiError: action.error
+        apiError: action.error
       }
 
     case SET_ACCESS_ERROR:
@@ -210,12 +210,14 @@ export const bookingsReducer = (
   }
 }
 
-type ActionsTypes = SetAddBookingApiErrorAT | SetSuccessModalAT | SetBookedConsultationsPageSizeAT |
-    SetArchivedConsultationsPageSizeAT | SetBookedConsultationsFilterAT | SetArchivedConsultationsFilterAT |
-    SetBookedConsultationsAT | SetArchivedConsultationsAT | SetCurrentPageForBookedConsultationsAT |
-    SetCurrentPageForArchivedConsultationsAT | SetBookedConsultationsTotalCountAT | SetArchivedConsultationsTotalCountAT |
-    ChangeBookedConsultationStatusAT | SetIsFetchingAT | ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT |
-    DeleteBookedConsultationAT | DeleteArchivedConsultationAT | AddBookedConsultationAT | SetAccessErrorAT
+type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetBookedConsultationsPageSizeAT |
+    SetArchivedConsultationsPageSizeAT | SetBookedConsultationsFilterAT |
+    SetArchivedConsultationsFilterAT | SetBookedConsultationsAT | SetArchivedConsultationsAT |
+    SetCurrentPageForBookedConsultationsAT | SetCurrentPageForArchivedConsultationsAT |
+    SetBookedConsultationsTotalCountAT | SetArchivedConsultationsTotalCountAT |
+    ChangeBookedConsultationStatusAT | SetIsFetchingAT | ToggleIsStatusChangingAT |
+    ToggleIsDeletingInProcessAT | DeleteBookedConsultationAT | DeleteArchivedConsultationAT |
+    AddBookedConsultationAT | SetAccessErrorAT
 
 // actions creators
 
@@ -238,13 +240,13 @@ export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT =>
   type: SET_ACCESS_ERROR, error
 });
 
-type SetAddBookingApiErrorAT = {
-  type: typeof SET_ADD_BOOKING_API_ERROR
-  error: string | undefined
+type SetApiErrorAT = {
+  type: typeof SET_API_ERROR
+  error: string
 }
 
-export const setAddBookingApiErrorAC = (error: string | undefined): SetAddBookingApiErrorAT => ({
-  type: SET_ADD_BOOKING_API_ERROR, error
+export const setApiErrorAC = (error: string): SetApiErrorAT => ({
+  type: SET_API_ERROR, error
 });
 
 type SetBookedConsultationsPageSizeAT = {
@@ -583,10 +585,8 @@ export const addBookedConsultation = (
       dispatch(setBookedConsultationsTotalCountAC(total + 1));
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
     }
-  } catch (e) {
-    // @ts-ignore
-    dispatch(setAddBookingApiErrorAC(e.response.data.message));
-    console.log(e);
+  } catch (e: any) {
+    dispatch(setApiErrorAC(e.response.data.message));
   }
 }
 
@@ -612,10 +612,8 @@ export const turnConsultationToClient = (
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
       dispatch(setSuccessModalAC(true, BOOKING_INTO_CLIENT_SUCCESS));
     }
-  } catch (e) {
-    // @ts-ignore
-    dispatch(setAddBookingApiErrorAC(e.response.data.message));
-    console.log(e)
+  } catch (e: any) {
+    dispatch(setApiErrorAC(e.response.data.message));
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -659,10 +657,8 @@ export const reactivateConsultation = (
       await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
       dispatch(setSuccessModalAC(true, RESTORE_BOOKING_FROM_ARCHIVE));
     }
-  } catch (e) {
-    // @ts-ignore
-    dispatch(setAddBookingApiErrorAC(e.response.data.message));
-    console.log(e);
+  } catch (e: any) {
+    dispatch(setApiErrorAC(e.response.data.message));
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

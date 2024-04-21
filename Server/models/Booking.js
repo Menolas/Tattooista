@@ -1,21 +1,21 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const BookingSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: true
+    required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   message: {
-    type: String
+    type: String,
   },
   status: {
     type: Boolean,
     required: true,
-    default: false
+    default: false,
   },
   contacts: {
     email: {
@@ -35,11 +35,11 @@ const BookingSchema = new mongoose.Schema({
     },
     messenger: {
       type: String,
-      trim: true
+      trim: true,
     },
     insta: {
       type: String,
-      trim: true
+      trim: true,
     },
   }
 })
@@ -60,16 +60,16 @@ BookingSchema.index(
 )
 
 BookingSchema.pre('save', function(next) {
-  if (this.contacts.email === null || this.contacts.email === "") {
-    this.contacts.email = undefined
+  if (!this.contacts.email) {
+    this.contacts.email = undefined;
   }
-  if (this.contacts.phone === null || this.contacts.phone === "") {
-    this.contacts.phone = undefined
+  if (!this.contacts.phone) {
+    this.contacts.phone = undefined;
   }
-  if (this.contacts.whatsapp === null || this.contacts.whatsapp === "") {
-    this.contacts.whatsapp = undefined
+  if (!this.contacts.whatsapp) {
+    this.contacts.whatsapp = undefined;
   }
-  next()
-})
+  next();
+});
 
-module.exports = mongoose.model('Booking', BookingSchema)
+module.exports = mongoose.model('Booking', BookingSchema);

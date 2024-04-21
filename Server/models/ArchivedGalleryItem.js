@@ -1,14 +1,14 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
 const ArchivedGalleryItem = new Schema({
   fileName: {
     type: String,
     unique: false,
-    required: true
+    required: true,
   },
   tattooStyles: [{
     type: String,
-    ref: 'TattooStyle'
+    ref: 'TattooStyle',
   }],
   createdAt: {
     type: Date,
@@ -23,4 +23,4 @@ const ArchivedGalleryItem = new Schema({
 //Realistic
 //Designs
 //OldSchool
-module.exports = model('ArchivedGalleryItem', ArchivedGalleryItem)
+module.exports = model('ArchivedGalleryItem', ArchivedGalleryItem);

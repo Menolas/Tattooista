@@ -25,13 +25,12 @@ const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY';
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM';
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const SET_UPDATE_TATTOO_STYLE_API_ERROR = 'SET_UPDATE_TATTOO_STYLE_API_ERROR';
-const SET_UPDATE_GALLERY_API_ERROR = 'SET_UPDATE_GALLERY_API_ERROR';
 const SET_FAKE_API = 'SET_FAKE_API';
 const ADD_TATTOO_STYLE_SUCCESS = 'You successfully added a new Tattoo style to your gallery.';
 const UPDATE_TATTOO_STYLE_SUCCESS = 'You successfully updated Tattoo style in your gallery.';
 const ADD_GALLERY_ITEMS_SUCCESS = 'You successfully added gallery images';
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
+const SET_API_ERROR = 'SET_API_ERROR';
 
 let initialState = {
   totalGalleryItemsCount: 0 as number,
@@ -46,13 +45,12 @@ let initialState = {
   activeStyle: {} as TattooStyleType | null,
   gallery: [] as Array<GalleryItemType>,
   archivedGallery: [] as Array<GalleryItemType>,
-  updateTattooStyleError: '' as string | undefined,
-  updateGalleryApiError: '' as string | undefined,
   fakeApi: false as boolean,
   successModal: {
     isSuccess: false as boolean,
     successText: '' as string,
   },
+  apiError: '' as string
 }
 
 export type SuccessModalType = typeof initialState.successModal;
@@ -204,22 +202,16 @@ export const portfolioReducer = (
         }
       }
 
-    case SET_UPDATE_TATTOO_STYLE_API_ERROR:
-      return {
-        ...state,
-        updateTattooStyleError: action.error
-      }
-
-    case SET_UPDATE_GALLERY_API_ERROR:
-      return {
-        ...state,
-        updateGalleryApiError: action.error
-      }
-
     case SET_FAKE_API:
       return {
         ...state,
         fakeApi: action.fakeApi
+      }
+
+    case SET_API_ERROR:
+      return {
+        ...state,
+        apiError: action.error
       }
 
     default: return {
@@ -228,13 +220,23 @@ export const portfolioReducer = (
   }
 }
 
-type ActionsTypes = SetUpdateGalleryApiErrorAT | SetUpdateTattooStyleApiErrorAT | ToggleIsDeletingInProcessAT |
-    SetSuccessModalAT | SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT | SetCurrentGalleryPageAT |
-    SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT | SetIsFetchingAT |
-    SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT | UpdateGalleryAT | DeleteGalleryItemAT |
-    DeleteArchivedGalleryItemAT | UpdateGalleryItemAT | UpdateArchivedGalleryItemAT | SetFakeApiAT
+type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
+    SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT | SetCurrentGalleryPageAT |
+    SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT |
+    SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT |
+    UpdateGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT | UpdateGalleryItemAT |
+    UpdateArchivedGalleryItemAT | SetFakeApiAT
 
 // actions creators
+
+type SetApiErrorAT = {
+  type: typeof  SET_API_ERROR
+  error: string
+};
+
+export const setApiErrorAC = (error: string): SetApiErrorAT  => ({
+  type: SET_API_ERROR, error
+});
 
 type SetSuccessModalAT = {
   type: typeof SET_SUCCESS_MODAL
@@ -253,24 +255,6 @@ type SetFakeApiAT = {
 
 const setFakeApiAC = (fakeApi: boolean): SetFakeApiAT => ({
   type: SET_FAKE_API, fakeApi
-});
-
-type SetUpdateGalleryApiErrorAT = {
-  type: typeof SET_UPDATE_GALLERY_API_ERROR
-  error: string | undefined
-}
-
-export const setUpdateGalleryApiErrorAC = (error: string | undefined): SetUpdateGalleryApiErrorAT => ({
-  type: SET_UPDATE_GALLERY_API_ERROR, error
-});
-
-type SetUpdateTattooStyleApiErrorAT = {
-  type: typeof SET_UPDATE_TATTOO_STYLE_API_ERROR
-  error: string | undefined
-}
-
-export const setUpdateTattooStyleApiErrorAC = (error: string | undefined): SetUpdateTattooStyleApiErrorAT => ({
-  type: SET_UPDATE_TATTOO_STYLE_API_ERROR, error
 });
 
 type ToggleIsDeletingInProcessAT = {
@@ -527,7 +511,7 @@ export const addTattooStyle = (values: FormData): ThunkType => async (
       dispatch(setSuccessModalAC(true, ADD_TATTOO_STYLE_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateTattooStyleApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
   }
 }
@@ -540,7 +524,7 @@ export const editTattooStyle = (id: string, values: FormData): ThunkType => asyn
       dispatch(setSuccessModalAC(true, UPDATE_TATTOO_STYLE_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateTattooStyleApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
   }
 }
@@ -596,7 +580,7 @@ export const adminUpdateGallery = (
       dispatch(setSuccessModalAC(true, ADD_GALLERY_ITEMS_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateGalleryApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -692,7 +676,8 @@ export const updateGalleryItem = (id: string, values: object): ThunkType => asyn
       dispatch(updateGalleryItemAC(response.galleryItem));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
     }
-  } catch (e) {
+  } catch (e: any) {
+    dispatch(setApiErrorAC(e.response.data.message));
     console.log(e);
   }
 }

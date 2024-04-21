@@ -311,13 +311,13 @@ export const getUsers = (
     filter: UsersFilterType
 ): ThunkType => async (dispatch) => {
     try {
-        dispatch(toggleIsFetchingAC(true))
+        dispatch(toggleIsFetchingAC(true));
         let response = await usersAPI.getUsers(
             token,
             currentPage,
             pageLimit,
             filter
-        )
+        );
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(setAccessErrorAC(''));
             dispatch(setUsersAC(response.users));
@@ -369,7 +369,7 @@ export const deleteUser = (
         dispatch(toggleIsDeletingInProcessAC(true, id));
         let response = await usersAPI.deleteUser(id);
         if (response.resultCode === ResultCodesEnum.Success) {
-            await dispatch(deleteUserThunk(token, id, users, currentPage, total, pageLimit, filter))
+            await dispatch(deleteUserThunk(token, id, users, currentPage, total, pageLimit, filter));
         }
     } catch (e) {
         console.log(e);
@@ -386,12 +386,11 @@ export const updateUser = (
         dispatch(toggleIsFetchingAC(true));
         let response = await usersAPI.updateUser(id, values);
         if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(setApiErrorAC(''));
             dispatch(editUserAC(response.user));
             dispatch(setSuccessModalAC(true, UPDATE_USER_SUCCESS));
         }
-    } catch (e) {
-        console.log(e);
-        // @ts-ignore
+    } catch (e: any) {
         dispatch(setApiErrorAC(e.response.message));
     } finally {
         dispatch(toggleIsFetchingAC(false));
@@ -410,11 +409,7 @@ export const addUser = (
             dispatch(setSuccessModalAC(true, ADD_USER_SUCCESS));
             dispatch(setUsersTotalCountAC(total + 1));
         }
-    } catch (e) {
-        console.log(e);
-        // @ts-ignore
+    } catch (e: any) {
         dispatch(setApiErrorAC(e.response.data.message));
-        // @ts-ignore
-        console.log(e.response.data.message + " error text!!!!!!!!!!!!!!!!!");
     }
 }

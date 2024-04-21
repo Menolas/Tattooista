@@ -11,8 +11,9 @@ import {
   getCurrentGalleryPage,
   getIsGalleryItemDeletingInProcessSelector,
   getActiveStyleSelector,
-  getUpdateTattooStyleApiErrorSelector,
-  getUpdateGalleryApiErrorSelector, getFakeApiSelector, getSuccessModalSelector
+  getApiErrorSelector,
+  getFakeApiSelector,
+  getSuccessModalSelector
 } from "../../redux/Portfolio/portfolio-selectors";
 import {
   getGallery,
@@ -26,8 +27,7 @@ import {
   deleteTattooStyle,
   archiveGalleryItem,
   getTattooStyles,
-  setUpdateTattooStyleApiErrorAC,
-  setUpdateGalleryApiErrorAC,
+  setApiErrorAC,
   updateGalleryItem,
   setActiveStyleAC, setSuccessModalAC
 } from "../../redux/Portfolio/portfolio-reducer";
@@ -45,8 +45,7 @@ export const PortfolioContainer: React.FC = () =>  {
   let activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);
   const successModal = useSelector(getSuccessModalSelector);
-  const updateTattooStyleApiError = useSelector(getUpdateTattooStyleApiErrorSelector);
-  const updateGalleryApiError = useSelector(getUpdateGalleryApiErrorSelector);
+  const apiError = useSelector(getApiErrorSelector);
   const fakeApi = useSelector(getFakeApiSelector);
 
   const dispatch = useDispatch();
@@ -103,12 +102,8 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(setSuccessModalAC(false, ''));
   }
 
-  const setUpdateTattooStyleApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateTattooStyleApiErrorAC(error));
-  }
-
-  const setUpdateGalleryApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateGalleryApiErrorAC(error));
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(''));
   }
 
   const updateGalleryItemCallBack = (id: string, values: object) => {
@@ -128,8 +123,7 @@ export const PortfolioContainer: React.FC = () =>  {
       activeStyle={activeStyle}
       gallery={gallery}
       successModal={successModal}
-      updateTattooStyleApiError={updateTattooStyleApiError}
-      updateGalleryApiError={updateGalleryApiError}
+      apiError={apiError}
       setPageSize={setGalleryPageSizeCallBack}
       updateGallery={adminUpdateGalleryCallBack}
       deleteGalleryItem={deleteGalleryItemCallBack}
@@ -140,8 +134,7 @@ export const PortfolioContainer: React.FC = () =>  {
       deleteTattooStyle={deleteTattooStyleCallBack}
       archiveGalleryItem={archiveGalleryItemCallBack}
       setSuccessModal={setSuccessModalCallBack}
-      setUpdateTattooStyleApiError={setUpdateTattooStyleApiErrorCallBack}
-      setUpdateGalleryApiError={setUpdateGalleryApiErrorCallBack}
+      setApiError={setApiErrorCallBack}
       updateGalleryItem={updateGalleryItemCallBack}
     />
   )
