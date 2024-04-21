@@ -24,8 +24,7 @@ const EDIT_CLIENT = 'EDIT_CLIENT';
 const ADD_CLIENT = 'ADD_CLIENT';
 const SET_CLIENT_PROFILE = 'SET_CLIENT_PROFILE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const SET_ADD_CLIENT_API_ERROR = 'SET_ADD_CLIENT_API_ERROR';
-const SET_UPDATE_CLIENT_GALLERY_API_ERROR = 'SET_UPDATE_CLIENT_GALLERY_API_ERROR';
+const SET_API_ERROR = 'SET_ADD_CLIENT_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const ADD_CLIENT_SUCCESS = "Congratulation! You've just created a new client.";
@@ -54,8 +53,7 @@ let initialState = {
     condition: "any" as string | null
   },
   profile: {} as ClientType,
-  addClientApiError: '' as string | undefined,
-  updateClientGalleryApiError: '' as string | undefined,
+  apiError: '' as string,
   accessError: '' as string | undefined,
   successModal: {
     isSuccess: false as boolean,
@@ -206,16 +204,10 @@ export const clientsReducer = (
         }
       }
 
-    case SET_ADD_CLIENT_API_ERROR:
+    case SET_API_ERROR:
       return {
         ...state,
-        addClientApiError: action.error
-      }
-
-    case SET_UPDATE_CLIENT_GALLERY_API_ERROR:
-      return {
-        ...state,
-        updateClientGalleryApiError: action.error
+        apiError: action.error
       }
 
     case SET_ACCESS_ERROR:
@@ -229,13 +221,12 @@ export const clientsReducer = (
   }
 }
 
-type ActionsTypes = SetUpdateClientGalleryApiErrorAT | SetAddClientApiErrorAT |
-    SetClientsPageSizeAT | SetArchivedClientsPageSizeAT | SetClientsFilterAT |
-    SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT | SetArchivedClientsAT |
-    SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT | SetArchivedClientsTotalCountAT |
-    ToggleIsDeletingInProcessAT | ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT |
-    DeleteClientAT | DeleteArchivedClientAT | EditClientAT | AddClientAT | SetClientProfileAT |
-    SetAccessErrorAT | SetSuccessModalAT;
+type ActionsTypes = SetApiErrorAT | SetClientsPageSizeAT | SetArchivedClientsPageSizeAT |
+    SetClientsFilterAT | SetArchivedClientsFilterAT | SetClientsAT | SetCurrentPageAT |
+    SetArchivedClientsAT | SetCurrentPageForArchivedClientsAT | SetClientsTotalCountAT |
+    SetArchivedClientsTotalCountAT | ToggleIsDeletingInProcessAT | ToggleIsDeletingPicturesInProcessAT |
+    SetIsFetchingAT | DeleteClientAT | DeleteArchivedClientAT | EditClientAT | AddClientAT |
+    SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT;
 
 // actions creators
 
@@ -258,22 +249,13 @@ export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT =>
   type: SET_ACCESS_ERROR, error
 });
 
-type SetUpdateClientGalleryApiErrorAT = {
-  type: typeof SET_UPDATE_CLIENT_GALLERY_API_ERROR
+type SetApiErrorAT = {
+  type: typeof SET_API_ERROR
   error: string
 }
 
-export const setUpdateClientGalleryApiErrorAC = (error: string): SetUpdateClientGalleryApiErrorAT => ({
-  type: SET_UPDATE_CLIENT_GALLERY_API_ERROR, error
-});
-
-type SetAddClientApiErrorAT = {
-  type: typeof SET_ADD_CLIENT_API_ERROR
-  error: string
-}
-
-export const setAddClientApiErrorAC = (error: string): SetAddClientApiErrorAT => ({
-  type: SET_ADD_CLIENT_API_ERROR, error
+export const setApiErrorAC = (error: string): SetApiErrorAT => ({
+  type: SET_API_ERROR, error
 });
 
 type SetArchivedClientsFilterAT = {
@@ -623,7 +605,7 @@ export const addClient = (
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAddClientApiErrorAC(e.response.data.message));
+    dispatch(setApiErrorAC(e.response.data.message));
     console.log(e)
   }
 }
@@ -642,7 +624,7 @@ export const editClient = (
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAddClientApiErrorAC(e.response.data.message));
+    dispatch(setApiErrorAC(e.response.data.message));
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -678,7 +660,7 @@ export const updateClientGallery = (
       dispatch(setSuccessModalAC(true, UPDATE_CLIENT_GALLERY_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setUpdateClientGalleryApiErrorAC(e.response?.data?.message));
+    dispatch(setApiErrorAC(e.response?.data?.message));
     console.log(e);
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -756,7 +738,7 @@ export const reactivateClient = (
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setAddClientApiErrorAC(e.response.data.message));
+    dispatch(setApiErrorAC(e.response.data.message));
     console.log(e);
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));

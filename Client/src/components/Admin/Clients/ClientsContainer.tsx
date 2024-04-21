@@ -14,8 +14,7 @@ import {
   setClientsPageSize,
   setSuccessModalAC,
   setClientsFilterAC,
-  setAddClientApiErrorAC,
-  setUpdateClientGalleryApiErrorAC
+  setApiErrorAC,
 } from "../../../redux/Clients/clients-reducer";
 import {
   getClientsIsFetching,
@@ -24,8 +23,7 @@ import {
   getClientsSelector,
   getIsClientDeletingInProcessSelector,
   getSuccessModalSelector,
-  getAddClientApiErrorSelector,
-  getUpdateClientGalleryApiErrorSelector,
+  getApiErrorSelector,
   getClientsFilterSelector,
   getClientsPageSizeSelector,
   getIsDeletingPicturesInProcessSelector
@@ -45,8 +43,7 @@ export const ClientsContainer: React.FC = () => {
   const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector);
   const successModal = useSelector(getSuccessModalSelector);
-  const addClientApiError = useSelector(getAddClientApiErrorSelector);
-  const updateClientGalleryApiError = useSelector(getUpdateClientGalleryApiErrorSelector);
+  const apiError = useSelector(getApiErrorSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
 
@@ -115,12 +112,8 @@ export const ClientsContainer: React.FC = () => {
     dispatch(setSuccessModalAC(false, ''));
   }
 
-  const setAddClientApiErrorCallBack = (error: string) => {
-    dispatch(setAddClientApiErrorAC(error));
-  }
-
-  const setUpdateClientGalleryApiErrorCallBack = (error: string) => {
-    dispatch(setUpdateClientGalleryApiErrorAC(error));
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(''));
   }
 
   return (
@@ -134,8 +127,7 @@ export const ClientsContainer: React.FC = () => {
           clientsFilter={filter}
           isDeletingInProcess={isDeletingInProcess}
           isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-          addClientApiError={addClientApiError}
-          updateClientGalleryApiError={updateClientGalleryApiError}
+          apiError={apiError}
           accessError={accessError}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChangedCallBack}
@@ -147,8 +139,7 @@ export const ClientsContainer: React.FC = () => {
           deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
           archiveClient={archiveClientCallBack}
           setSuccessModal={setSuccessModalCallBack}
-          setAddClientApiError={setAddClientApiErrorCallBack}
-          setUpdateClientGalleryApiError={setUpdateClientGalleryApiErrorCallBack}
+          setApiError={setApiErrorCallBack}
       />
   )
 }

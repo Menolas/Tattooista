@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
 class MailService {
 
     constructor() {
@@ -11,7 +11,7 @@ class MailService {
                 pass: process.env.SMTP_PASSWORD
             }
 
-        })
+        });
     }
     async sendActivationMail(to, link) {
         await this.transporter.sendMail({
@@ -26,8 +26,8 @@ class MailService {
                          <a href=${link}>${link}</a>
                      </div>
                  `
-        })
+        });
     }
 }
 
-module.exports = new MailService()
+module.exports = new MailService();

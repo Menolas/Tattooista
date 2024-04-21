@@ -22,8 +22,7 @@ type PropsType = {
   totalCount: number
   currentPage: number
   pageSize: number
-  addClientApiError: string
-  updateClientGalleryApiError: string
+  apiError: string
   accessError: string
   clients: Array<ClientType>
   clientsFilter: ClientsFilterType
@@ -39,8 +38,7 @@ type PropsType = {
   deleteClientGalleryPicture: (clientId: string, picture: string) => void
   archiveClient: (clientId: string) => void
   setSuccessModal: () => void
-  setAddClientApiError: (error: string) => void
-  setUpdateClientGalleryApiError: (error: string) => void
+  setApiError: () => void
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
@@ -49,8 +47,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     totalCount,
     currentPage,
     pageSize,
-    addClientApiError,
-    updateClientGalleryApiError,
+    apiError,
     accessError,
     clients,
     clientsFilter,
@@ -66,8 +63,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     deleteClientGalleryPicture,
     archiveClient,
     setSuccessModal,
-    setAddClientApiError,
-    setUpdateClientGalleryApiError
+    setApiError,
 }) => {
 
     useEffect(() => {
@@ -184,14 +180,9 @@ export const Clients: React.FC<PropsType> = React.memo(({
                       content={successModal.successText}
                   />
                   <ApiErrorMessage
-                      isOpen={!!addClientApiError}
-                      error={addClientApiError}
-                      closeModal={() => {setAddClientApiError('');}}
-                  />
-                  <ApiErrorMessage
-                      isOpen={!!updateClientGalleryApiError}
-                      error={updateClientGalleryApiError}
-                      closeModal={() => {setUpdateClientGalleryApiError('');}}
+                      isOpen={!!apiError}
+                      error={apiError}
+                      closeModal={setApiError}
                   />
               </>
           }

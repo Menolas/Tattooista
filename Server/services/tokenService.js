@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken')
-const tokenModel = require('../models/Token')
+const jwt = require('jsonwebtoken');
+const tokenModel = require('../models/Token');
 
 class TokenService {
 
     generateTokens(payload) {
-        const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '3m'})
-        const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: '30d'})
+        const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '3m'});
+        const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: '30d'});
         return {
             accessToken,
             refreshToken
@@ -13,38 +13,37 @@ class TokenService {
     }
 
     async saveToken(userId, refreshToken) {
-        const tokenData = await tokenModel.findOne({user: userId})
+        const tokenData = await tokenModel.findOne({user: userId});
         if (tokenData) {
-            tokenData.refreshToken = refreshToken
-            return tokenData.save()
+            tokenData.refreshToken = refreshToken;
+            return tokenData.save();
         }
-        return await tokenModel.create({user: userId, refreshToken})
+        return await tokenModel.create({user: userId, refreshToken});
     }
 
     async removeToken(refreshToken) {
-        console.log("removeToken!!!!!!!!!!!!!")
-        return tokenModel.deleteOne({refreshToken})
+        return tokenModel.deleteOne({refreshToken});
     }
 
     async findToken(refreshToken) {
-        return tokenModel.findOne({refreshToken})
+        return tokenModel.findOne({refreshToken});
     }
 
     validateAccessToken(token) {
         try {
-            return jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+            return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
         } catch (e) {
-            return null
+            return null;
         }
     }
     validateRefreshToken(token) {
         try {
-            return jwt.verify(token, process.env.JWT_REFRESH_SECRET)
+            return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
         } catch (e) {
-            return null
+            return null;
         }
     }
 
 }
 
-module.exports = new TokenService()
+module.exports = new TokenService();

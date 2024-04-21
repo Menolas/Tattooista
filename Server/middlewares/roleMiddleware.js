@@ -4,7 +4,6 @@ const Role = require("../models/Role");
 module.exports = function (roles) {
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
-      console.log("OPTIONS!!!!!!!!!!!!!!!!!!!!");
       next();
     }
 
@@ -39,9 +38,9 @@ module.exports = function (roles) {
       // }
       // next();
 
-      const token = req.headers.authorization.split(' ')[1]
+      const token = req.headers.authorization.split(' ')[1];
       if (!token) {
-        return res.status(403).json({ message: "User is not authorized" })
+        return res.status(403).json({ message: "User is not authorized" });
       }
 
       jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {

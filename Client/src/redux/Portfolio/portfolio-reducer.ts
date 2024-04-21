@@ -512,7 +512,7 @@ export const addTattooStyle = (values: FormData): ThunkType => async (
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+    console.log(e.response?.data?.message);
   }
 }
 
@@ -573,8 +573,8 @@ export const adminUpdateGallery = (
 ): ThunkType => async (dispatch) => {
 
   try {
-    dispatch(setIsFetchingAC(true))
-    let response = await portfolioApi.adminUpdateGallery(tattooStyle, values)
+    dispatch(setIsFetchingAC(true));
+    let response = await portfolioApi.adminUpdateGallery(tattooStyle, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryAC(response.gallery));
       dispatch(setSuccessModalAC(true, ADD_GALLERY_ITEMS_SUCCESS));
@@ -596,15 +596,15 @@ export const deleteGalleryItem = (
   style: TattooStyleType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await portfolioApi.deleteGalleryItem(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await portfolioApi.deleteGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit))
+      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
@@ -616,15 +616,15 @@ export const deleteArchivedGalleryItem = (
     pageLimit: number
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await portfolioApi.deleteArchivedGalleryItem(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await portfolioApi.deleteArchivedGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit))
+      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
@@ -637,15 +637,15 @@ export const archiveGalleryItem = (
     style: TattooStyleType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await portfolioApi.archiveGalleryItem(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await portfolioApi.archiveGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit))
+      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
@@ -657,21 +657,21 @@ export const reactivateArchivedGalleryItem = (
     pageLimit: number
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id))
-    let response = await portfolioApi.reactivateArchivedGalleryItem(id)
+    dispatch(toggleIsDeletingInProcessAC(true, id));
+    let response = await portfolioApi.reactivateArchivedGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit))
+      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit));
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id))
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
 export const updateGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
   try {
-    let response = await portfolioApi.updateGalleryItem(id, values)
+    let response = await portfolioApi.updateGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryItemAC(response.galleryItem));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
@@ -684,7 +684,7 @@ export const updateGalleryItem = (id: string, values: object): ThunkType => asyn
 
 export const updateArchivedGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
   try {
-    let response = await portfolioApi.updateArchiveGalleryItem(id, values)
+    let response = await portfolioApi.updateArchiveGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateArchivedGalleryItemAC(response.archivedGalleryItem));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
