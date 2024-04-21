@@ -122,7 +122,6 @@ class galleryController {
   }
 
   async addGalleryItems(req, res) {
-    console.log("it is a hit!!!!!!!!")
 
     const files = req.files;
     let gallery = [];
@@ -132,6 +131,7 @@ class galleryController {
       for (let key in files) {
         const fileNewName = generateFileRandomNameWithDate(files[key].name);
         gallery.push(fileNewName);
+
         try {
           await files[key].mv(`./uploads/gallery/${fileNewName}`);
         } catch (error) {

@@ -1,28 +1,28 @@
-const userService = require('../services/userService')
-const {validationResult} = require('express-validator')
-const ApiError = require('../exeptions/apiErrors')
+const userService = require('../services/userService');
+const {validationResult} = require('express-validator');
+const ApiError = require('../exeptions/apiErrors');
 
 class AuthController {
   async registration(req, res, next) {
-    const results = {}
+    const results = {};
     try {
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if(!errors.isEmpty()) {
-        return next(ApiError.BadRequest('Validation error', errors.array()))
+        return next(ApiError.BadRequest('Validation error', errors.array()));
       }
-      const { displayName, email, password } = req.body
-      const userData = await userService.registration(displayName, email, password)
-      res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
-      results.resultCode = 0
-      results.userData = userData
-      return res.json(results)
+      const { displayName, email, password } = req.body;
+      const userData = await userService.registration(displayName, email, password);
+      res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
+      results.resultCode = 0;
+      results.userData = userData;
+      return res.json(results);
     } catch(e) {
-      next(e)
+      next(e);
     }
   }
 
   async login(req, res) {
-    const results = {}
+    const results = {};
     try {
       const {email, password} = req.body;
       const userData = await userService.login(email, password);
@@ -42,7 +42,6 @@ class AuthController {
     const results = {};
     try {
       const {refreshToken} = req.cookies;
-      console.log(req.cookies + " coocies!!!!!!!!!!!!!!!!!");
       await userService.logout(refreshToken);
       res.clearCookie('refreshToken');
       results.resultCode = 0;
@@ -56,16 +55,16 @@ class AuthController {
   }
 
   async activate(req, res) {
-    const results = {}
+    const results = {};
     try {
-      const activationLink = req.params.link
-      await userService.activate(activationLink)
-      return res.redirect(process.env.CLIENT_URL)
+      const activationLink = req.params.link;
+      await userService.activate(activationLink);
+      return res.redirect(process.env.CLIENT_URL);
     } catch(e) {
-      results.resultCode = 1
-      results.message = e.message
-      console.log(e)
-      res.status(400).json(results)
+      results.resultCode = 1;
+      results.message = e.message;
+      console.log(e);
+      res.status(400).json(results);
     }
   }
 
