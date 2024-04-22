@@ -649,7 +649,7 @@ export const getClientProfile = (
 
 export const updateClientGallery = (
   id: string,
-  values: any
+  values: FormData
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))

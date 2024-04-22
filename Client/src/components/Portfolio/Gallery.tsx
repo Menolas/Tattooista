@@ -26,7 +26,7 @@ type PropsType = {
   gallery: Array<GalleryItemType>
   isDeletingInProcess: Array<string>
   tattooStyles: Array<TattooStyleType>
-  updateGallery: (style: string, values: any) => void
+  updateGallery: (values: FormData) => void
   deleteGalleryItem: (itemId: string) => void
   setCurrentPage: (page: number) => void
   setPageSize: (limit: number) => void
@@ -195,8 +195,9 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           }
           {  editGalleryMode &&
               <GalleryUploadForm
+                  isEditPortfolio={true}
                   updateId={activeStyle?._id}
-                  updateGallery={updateGallery}
+                  updatePortfolio={updateGallery}
                   closeModal={closeEditGalleryForm}
               />
           }

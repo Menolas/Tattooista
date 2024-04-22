@@ -21,7 +21,7 @@ type PropsType = {
   successModal: SuccessModalType
   apiError: string
   setPageSize: (pageSize: number) => void
-  updateGallery: (style: string, values: any) => void
+  updateGallery: (values: FormData) => void
   deleteGalleryItem: (itemId: string) => void
   setCurrentPage: (page: number) => void
   resetActiveStyle: (style: TattooStyleType) => void

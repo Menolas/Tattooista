@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
 import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid } from "../../utils/validators";
 // @ts-ignore
@@ -7,6 +7,7 @@ import Sprite from "../../assets/svg/sprite.svg";
 import {API_URL} from "../../http";
 import {FieldWrapper} from "./FieldWrapper";
 import * as Yup from "yup";
+import {ClientType} from "../../types/Types";
 
 const filesUploadingValidationSchema = Yup.object().shape({
   gallery: Yup.array()
@@ -25,24 +26,32 @@ const filesUploadingValidationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-  updateId: string
-  gallery?: Array<string>
-  isDeletingPicturesInProcess?: Array<string>
-  closeModal: () => void
-  updateGallery: (clientId: string, values: any) => void
-  deleteClientGalleryPicture?: (clientId: string, picture: string) => void
+  isEditPortfolio: boolean;
+  client?: ClientType;
+  isDeletingPicturesInProcess?: Array<string>;
+  closeModal: () => void;
+  updatePortfolio?: (values: FormData) => void;
+  updateGallery?: (clientId: string, values: FormData) => void;
+  deleteClientGalleryPicture?: (clientId: string, picture: string) => void;
 }
 
-export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
-  updateId,
-  gallery,
+export const GalleryUploadForm: React.FC<PropsType> = ({
+  isEditPortfolio,
+  client,
   isDeletingPicturesInProcess,
+  updatePortfolio,
   updateGallery,
   deleteClientGalleryPicture,
   closeModal
 }) => {
 
   const [imageURLS, setImageURLS] = useState([]);
+  //const [clientGallery, setClientGallery] = useState(null);
+
+  // useEffect(() => {
+  //   if (client)
+  //   setClientGallery(client?.gallery);
+  // }, [client]);
 
   const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>, setImageURLS) => {
     event.preventDefault();
@@ -64,7 +73,8 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
     const formData = new FormData();
     values['gallery'].forEach((file: File) => formData.append(file.name, file));
     formData.append('gallery', values['gallery']);
-    updateGallery(updateId, formData);
+    if (isEditPortfolio) updatePortfolio(formData);
+    if (!isEditPortfolio) updateGallery(client._id, formData);
     closeModal();
   }
 
@@ -82,23 +92,23 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
         return (
           <Form className="form form--galleryUpload" encType={"multipart/form-data"}>
             {
-              gallery &&
+                client?.gallery &&
                 <ul className={"list client-gallery"}>
                   {
-                    gallery?.map((item,i) => {
+                    client.gallery.map((item,i) => {
                       return (
                           <li className={"client-gallery__item"} key={i}>
                             <button
                                 className={"btn btn--icon btn--icon--light"}
                                 disabled={isDeletingPicturesInProcess?.some(id => id === item)}
                                 onClick={(event) => {
-                                  event.preventDefault()
-                                  deleteClientGalleryPicture(updateId, item)
+                                  event.preventDefault();
+                                  deleteClientGalleryPicture(client._id, item);
                                 }}
                             >
                               <svg><use href={`${Sprite}#trash`}/></svg>
                             </button>
-                            <img src={`${API_URL}/clients/${updateId}/doneTattooGallery/${item}`} alt={''}/>
+                            <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
                           </li>
                       )
                     })
@@ -159,4 +169,4 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
       }}
     </Formik>
   )
-})
+}

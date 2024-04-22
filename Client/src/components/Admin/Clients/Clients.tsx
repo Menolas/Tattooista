@@ -13,7 +13,6 @@ import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {clientFilterSelectOptions} from "../../../utils/constants";
 import {Navigate} from "react-router";
-import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 
 type PropsType = {
@@ -76,18 +75,17 @@ export const Clients: React.FC<PropsType> = React.memo(({
 
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
-  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
   const [client, setClient] = useState<ClientType>(null);
 
   const closeModal = () => {
     setAddClientMode(false);
     setEditClientMode(false);
-    setEditGalleryMode(false);
     setClient(null);
   }
 
   const modalTitleAddClient = 'ADD CLIENT';
   const modalTitleUpdateClient = 'EDIT CLIENT';
+  const modalUpdateGalleryTitle = 'Update Gallery';
 
   const clientsElements = clients
       .map(client => {
@@ -96,11 +94,13 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 key={client._id}
                 client={client}
                 isDeletingInProcess={isDeletingInProcess}
+                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 deleteClient={deleteClient}
                 archiveClient={archiveClient}
                 setClient={setClient}
                 setEditClientMode={setEditClientMode}
-                setEditGalleryMode={setEditGalleryMode}
+                updateClientGallery={updateClientGallery}
+                deleteClientGalleryPicture={deleteClientGalleryPicture}
             />
         )
       });
@@ -144,8 +144,12 @@ export const Clients: React.FC<PropsType> = React.memo(({
                               : <NothingToShow/>
                   }
                   <ModalPopUp
-                      isOpen={addClientMode || editClientMode || editGalleryMode}
-                      modalTitle={addClientMode ? modalTitleAddClient : editClientMode ? modalTitleUpdateClient : ''}
+                      isOpen={addClientMode || editClientMode}
+                      modalTitle={ addClientMode
+                          ? modalTitleAddClient
+                          : editClientMode
+                              ? modalTitleUpdateClient
+                              : modalUpdateGalleryTitle }
                       closeModal={closeModal}
                   >
                       { (editClientMode || addClientMode) &&
@@ -154,22 +158,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
                               profile={client}
                               editClient={editClient}
                               addClient={addClient}
-                              closeModal={closeModal}
-                          />
-                      }
-                  </ModalPopUp>
-                  <ModalPopUp
-                      isOpen={editGalleryMode}
-                      modalTitle="Edit Gallery"
-                      closeModal={closeModal}
-                  >
-                      {editGalleryMode &&
-                          <GalleryUploadForm
-                              updateId={client._id}
-                              gallery={client.gallery}
-                              isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                              updateGallery={updateClientGallery}
-                              deleteClientGalleryPicture={deleteClientGalleryPicture}
                               closeModal={closeModal}
                           />
                       }

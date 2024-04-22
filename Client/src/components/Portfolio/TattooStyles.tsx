@@ -1,7 +1,7 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
-import {BookConsultationFormValues, TattooStyleType} from "../../types/Types";
+import {TattooStyleType} from "../../types/Types";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
 import {UpdateTattooStyleFormFormik} from "../Forms/UpdateTattooStyleFormFormik";
@@ -43,7 +43,6 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
   const [editTattooStyleMode, setEditTattooStyleMode] = useState(false);
   const [style, setStyle] = useState(null);
   const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-  const successPopUpContent = "You successfully added a new style for your gallery";
 
   const closeModal = () => {
     setAddTattooStyleMode(false);

@@ -569,7 +569,7 @@ export const resetActiveStyle = (
 
 export const adminUpdateGallery = (
   tattooStyle: string,
-  values: any
+  values: FormData
 ): ThunkType => async (dispatch) => {
 
   try {

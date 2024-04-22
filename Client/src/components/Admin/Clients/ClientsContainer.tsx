@@ -49,7 +49,6 @@ export const ClientsContainer: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  // @ts-ignore
   useEffect(() => {
     dispatch(getClients(token, currentPage, pageSize, filter));
 

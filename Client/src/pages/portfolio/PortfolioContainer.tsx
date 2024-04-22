@@ -70,8 +70,8 @@ export const PortfolioContainer: React.FC = () =>  {
     dispatch(setGalleryPageSizeAC(pageSize));
   }
 
-  const adminUpdateGalleryCallBack = (style: string, values: any) => {
-    dispatch(adminUpdateGallery(style, values));
+  const adminUpdateGalleryCallBack = (values: FormData) => {
+    dispatch(adminUpdateGallery(activeStyle._id, values));
   }
 
   const deleteGalleryItemCallBack = (itemId: string) => {
