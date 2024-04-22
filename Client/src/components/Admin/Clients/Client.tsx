@@ -11,25 +11,30 @@ import { ModalPopUp } from "../../common/ModalPopUp";
 import { Tooltip } from "react-tooltip";
 import { Confirmation } from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
+import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 
 type PropsType = {
   client: ClientType
   isDeletingInProcess: Array<string>
+  isDeletingPicturesInProcess: Array<string>
   deleteClient: (clientId: string) => void
   archiveClient: (clientId: string) => void
   setClient: (client: ClientType) => void
   setEditClientMode: (mode: boolean) => void
-  setEditGalleryMode: (mode: boolean) => void
+  updateClientGallery: (clientId: string, values: FormData) => void
+  deleteClientGalleryPicture: (clientId: string, picture: string) => void
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
   client,
   isDeletingInProcess,
+  isDeletingPicturesInProcess,
   deleteClient,
   archiveClient,
   setClient,
   setEditClientMode,
-  setEditGalleryMode,
+  updateClientGallery,
+  deleteClientGalleryPicture,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{
@@ -39,6 +44,7 @@ export const Client: React.FC<PropsType> = React.memo(({
       needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
   const [confirmationForArchivingData, setConfirmationForArchivingData] = useState<{
       needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
+  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
 
   const clientContacts: ContactType = client.contacts;
 
@@ -161,8 +167,23 @@ export const Client: React.FC<PropsType> = React.memo(({
                   cancel={() => {setConfirmationData({ needConfirmation: false });}}
               />
           }
-
       </ModalPopUp>
+        <ModalPopUp
+            isOpen={editGalleryMode}
+            modalTitle={'Edit Client Gallery'}
+            closeModal={() => {setEditGalleryMode(false);}}
+        >
+            {editGalleryMode &&
+                <GalleryUploadForm
+                    isEditPortfolio={false}
+                    client={client}
+                    isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+                    updateGallery={updateClientGallery}
+                    deleteClientGalleryPicture={deleteClientGalleryPicture}
+                    closeModal={() => {setEditGalleryMode(false);}}
+                />
+            }
+        </ModalPopUp>
       {  carouselData.isOpen &&
         <ImageFullView
             isOpen={carouselData.isOpen}

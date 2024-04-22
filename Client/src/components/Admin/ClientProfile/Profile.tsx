@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {NavLink, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 // @ts-ignore
 import avatar from "../../../assets/img/fox.webp";
 import {ClientType, ContactType} from "../../../types/Types";
@@ -39,6 +39,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
     archiveClient,
     setSuccessModal,
 }) => {
+    const navigate = useNavigate();
 
     const { clientId } = useParams(); // Assuming you are using React Router for navigation
 
@@ -59,6 +60,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
   const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+  const [needConfirmationForArchiving, setConfirmationForArchiving] = useState<boolean>(false);
   const [carouselData, setCarouselData] = useState<{
         isOpen: boolean, activeIndex?: number}>({isOpen: false});
 
@@ -68,10 +70,17 @@ export const Profile: React.FC<PropsType> = React.memo(({
     setEditClientMode(false);
     setEditGalleryMode(false);
     setNeedConfirmation(false);
+    setConfirmationForArchiving(false);
   }
 
   const deleteClientCallBack = () => {
       deleteClient(profile._id);
+      navigate("/admin/clients");
+  }
+
+  const archiveClientCallBack = () => {
+      archiveClient(profile._id);
+      navigate("/admin/clients");
   }
 
   if (!profile) {
@@ -104,6 +113,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
           .map((item, index) => {
               return (
                   <li
+                      key={index}
                       onClick={() => {
                           setCarouselData({isOpen: true, activeIndex: index});
                       }}
@@ -134,24 +144,24 @@ export const Profile: React.FC<PropsType> = React.memo(({
         >
           <svg><use href={`${Sprite}#images-user`}/></svg>
         </button>
-        <NavLink
+        <button
             data-tooltip-id="profile-tooltip"
             data-tooltip-content="Move client to archive client"
             className={"btn btn--icon"}
-            to={'/admin/clients'}
-            onClick={() => { archiveClient(profile._id); }}
+            onClick={() => {
+                setConfirmationForArchiving(true);
+            }}
         >
           <svg><use href={`${Sprite}#archive`}/></svg>
-        </NavLink>
-        <NavLink
+        </button>
+        <button
             data-tooltip-id="profile-tooltip"
             data-tooltip-content="Delete client"
             className="btn btn--icon"
-            to={'/admin/clients'}
             onClick={() => { setNeedConfirmation(true); }}
         >
           <svg><use href={`${Sprite}#trash`}/></svg>
-        </NavLink>
+        </button>
       </div>
       <div className="admin__card-link">
         <div className="admin__card-avatar">
@@ -196,8 +206,8 @@ export const Profile: React.FC<PropsType> = React.memo(({
       >
           {  editGalleryMode &&
               <GalleryUploadForm
-                  updateId={profile._id}
-                  gallery={profile.gallery}
+                  isEditPortfolio={false}
+                  client={profile}
                   isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                   updateGallery={updateClientGallery}
                   deleteClientGalleryPicture={deleteClientGalleryPicture}
@@ -206,13 +216,13 @@ export const Profile: React.FC<PropsType> = React.memo(({
           }
       </ModalPopUp>
       <ModalPopUp
-        isOpen={needConfirmation}
+        isOpen={needConfirmation || needConfirmationForArchiving}
         modalTitle={''}
         closeModal={closeModal}
       >
         <Confirmation
             content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-            confirm={deleteClientCallBack}
+            confirm={ needConfirmation ? deleteClientCallBack : archiveClientCallBack }
             cancel={closeModal}
         />
       </ModalPopUp>
