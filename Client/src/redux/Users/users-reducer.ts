@@ -1,5 +1,5 @@
 import type {} from "redux-thunk/extend-redux";
-import { RoleType, UserType } from "../../types/Types";
+import {RoleType, SearchFilterType, UserType} from "../../types/Types";
 import { ResultCodesEnum } from "../../utils/constants";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
@@ -34,9 +34,9 @@ let initialState = {
     currentPage: 1 as number,
     isDeletingInProcess: [] as Array<string>,
     usersFilter: {
-        term: '' as string | null,
-        condition: 'any' as string | null
-    },
+        term: '',
+        condition: 'any'
+    } as SearchFilterType,
     accessError: '' as string | undefined,
     successModal: {
         isSuccess: false as boolean,
@@ -46,7 +46,6 @@ let initialState = {
 }
 
 export type InitialStateType = typeof initialState;
-export type UsersFilterType = typeof initialState.usersFilter;
 
 export const usersReducer = (
     state = initialState,
@@ -199,10 +198,10 @@ const addUserAC = (user: UserType): AddUserAT => ({
 
 type SetUsersFilterAT = {
     type: typeof SET_USERS_FILTER
-    filter: UsersFilterType
+    filter: SearchFilterType
 }
 
-export const setUsersFilterAC = (filter: UsersFilterType): SetUsersFilterAT => ({
+export const setUsersFilterAC = (filter: SearchFilterType): SetUsersFilterAT => ({
         type: SET_USERS_FILTER, filter
 });
 
@@ -308,7 +307,7 @@ export const getUsers = (
     token: string,
     currentPage: number,
     pageLimit: number,
-    filter: UsersFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
     try {
         dispatch(toggleIsFetchingAC(true));
@@ -339,7 +338,7 @@ const deleteUserThunk = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: UsersFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
     if (users.length > 1) {
         dispatch(deleteUserAC(id));
@@ -361,7 +360,7 @@ export const deleteUser = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: UsersFilterType
+    filter: SearchFilterType
 ): ThunkType => async (
     dispatch
 ) => {

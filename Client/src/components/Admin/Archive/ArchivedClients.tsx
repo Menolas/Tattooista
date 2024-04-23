@@ -2,7 +2,6 @@ import * as React from "react";
 import { useEffect} from "react";
 import {Paginator} from "../../common/Paginator";
 import {
-    ClientsFilterType,
     setArchivedClientsPageSize,
     setCurrentPageForArchivedClientsAC,
     getArchivedClients,
@@ -31,6 +30,7 @@ import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 import {clientFilterSelectOptions} from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {SearchFilterType} from "../../../types/Types";
 
 export const ArchivedClients: React.FC = () => {
     const isFetching = useSelector(getClientsIsFetching);
@@ -74,7 +74,7 @@ export const ArchivedClients: React.FC = () => {
     }
 
     const onFilterChangeCallBack = (
-        filter: ClientsFilterType
+        filter: SearchFilterType
     ) => {
         dispatch(setArchivedClientsFilterAC(filter));
     }

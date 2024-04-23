@@ -1,12 +1,11 @@
-import * as React from "react"
-import { User } from "./User"
-import {Paginator} from "../../common/Paginator"
-import {RoleType, UserType} from "../../../types/Types"
-import {UsersFilterType} from "../../../redux/Users/users-reducer"
-import {Preloader} from "../../common/Preloader"
-import {NothingToShow} from "../../common/NothingToShow"
-import { usersFilterSelectOptions } from "../../../utils/constants"
-import {SearchFilterForm} from "../../Forms/SearchFilterForm"
+import * as React from "react";
+import { User } from "./User";
+import {Paginator} from "../../common/Paginator";
+import {RoleType, SearchFilterType, UserType} from "../../../types/Types";
+import {Preloader} from "../../common/Preloader";
+import {NothingToShow} from "../../common/NothingToShow";
+import { usersFilterSelectOptions } from "../../../utils/constants";
+import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {useEffect, useState} from "react";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {UpdateUserForm} from "../../Forms/UpdateUserFormFormik";
@@ -18,7 +17,7 @@ import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 type PropsType = {
     roles: Array<RoleType>;
     users: Array<UserType>;
-    filter: UsersFilterType;
+    filter: SearchFilterType;
     isFetching: boolean;
     total: number;
     currentPage: number;
@@ -28,7 +27,7 @@ type PropsType = {
     apiError: string;
     setUsersPageLimit: (limit:number) => void;
     setUsersCurrentPage: (page: number) => void;
-    setClientsFilter: (filter: UsersFilterType) => void;
+    setClientsFilter: (filter: SearchFilterType) => void;
     deleteUser: (userId: string) => void;
     updateUser: (id: string, values: FormData) => void;
     addUser: (values: FormData) => void;

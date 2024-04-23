@@ -65,7 +65,7 @@ export const GalleryUploadForm: React.FC<PropsType> = ({
           setImageURLS(_=>[..._,reader.result]);
         }
         reader.readAsDataURL(item);
-      })
+      });
     }
   }
 

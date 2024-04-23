@@ -8,10 +8,10 @@ import {ModalPopUp} from "../../common/ModalPopUp";
 import {Confirmation} from "../../common/Confirmation";
 
 type PropsType = {
-    consultation: BookedConsultationType
-    isDeletingInProcess: Array<string>
-    deleteArchivedConsultation: (id: string) => void
-    reactivateConsultation: (id: string) => void
+    consultation: BookedConsultationType;
+    isDeletingInProcess: Array<string>;
+    deleteArchivedConsultation: (id: string) => void;
+    reactivateConsultation: (id: string) => void;
 }
 
 export const ArchivedConsultation: React.FC<PropsType> = React.memo(({

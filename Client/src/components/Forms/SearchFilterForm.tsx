@@ -1,10 +1,9 @@
 import * as React from "react";
-import {Field, Form, Formik} from "formik";
-import {BookedConsultationsFilterType} from "../../redux/Bookings/bookings-reducer";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
 import {FormSelect} from "./FormSelect";
-import {SelectOptionType} from "../../types/Types";
+import {SearchFilterType, SelectOptionType} from "../../types/Types";
 
 const handleChange = () => {
   console.log("HandleChange!!!");
@@ -17,8 +16,8 @@ type FormType = {
 
 type PropsType = {
   options: Array<SelectOptionType>
-  filter: BookedConsultationsFilterType
-  onFilterChanged: (filter: BookedConsultationsFilterType) => void
+  filter: SearchFilterType
+  onFilterChanged: (filter: SearchFilterType) => void
 }
 
 export const SearchFilterForm: React.FC<PropsType> = React.memo(({
@@ -26,19 +25,20 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
   filter,
   onFilterChanged
 }) => {
-  const submit = (values: FormType, {setSubmitting}: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    const filter: BookedConsultationsFilterType = {
+  const submit = (values: FormType, formikHelpers: FormikHelpers<FormType>) => {
+    const filter: SearchFilterType = {
       term: values.term,
       condition: values.condition
-    }
+    };
     onFilterChanged(filter);
-    setSubmitting(false);
+    formikHelpers.setSubmitting(false);
+    formikHelpers.resetForm();
   }
 
   const initialValues = {
     term: filter.term,
     condition: filter.condition
-  }
+  };
 
   return (
     <Formik
@@ -71,7 +71,6 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                   name="condition"
                   options={options}
                   handleChange={handleChange}
-                  placeholder={'All'}
               />
             </Form>
           )

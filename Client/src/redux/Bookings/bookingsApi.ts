@@ -1,7 +1,6 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {AddConsultationFormValues, BookedConsultationType, ContactsType} from "../../types/Types";
+import {AddConsultationFormValues, BookedConsultationType, ContactsType, SearchFilterType} from "../../types/Types";
 import $api, {API_URL} from "../../http";
-import { BookedConsultationsFilterType } from "./bookings-reducer";
 
 const instance = axios.create({
   baseURL: API_URL
@@ -41,7 +40,7 @@ export const bookingsApi = {
     token: string | null,
     currentPage: number,
     pageSize: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
   ) {
     return instance.get<GetBookedConsultationsResponseType>(
         `${API_URL}/bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
@@ -53,7 +52,7 @@ export const bookingsApi = {
       token: string,
       currentPage: number,
       pageSize: number,
-      filter: BookedConsultationsFilterType,
+      filter: SearchFilterType,
   ) {
     return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig

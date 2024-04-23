@@ -5,7 +5,6 @@ import {Paginator} from "../../common/Paginator";
 import {NothingToShow} from "../../common/NothingToShow";
 import {Preloader} from "../../common/Preloader";
 import {
-    BookedConsultationsFilterType,
     deleteArchivedConsultation,
     getArchivedConsultations,
     reactivateConsultation,
@@ -32,6 +31,7 @@ import {bookingFilterSelectOptions} from "../../../utils/constants";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {Navigate} from "react-router";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {SearchFilterType} from "../../../types/Types";
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector);
@@ -73,7 +73,7 @@ export const ArchivedConsultations: React.FC = () => {
     }
 
     const onFilterChangeCallBack = (
-        filter: BookedConsultationsFilterType
+        filter: SearchFilterType
     ) => {
         dispatch(setArchivedConsultationsFilterAC(filter));
     }

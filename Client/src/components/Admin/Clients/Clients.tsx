@@ -4,8 +4,7 @@ import { Client } from "./Client";
 import { Paginator } from "../../common/Paginator";
 import { ModalPopUp } from "../../common/ModalPopUp";
 import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik";
-import { ClientType } from "../../../types/Types";
-import { ClientsFilterType} from "../../../redux/Clients/clients-reducer";
+import {ClientType, SearchFilterType} from "../../../types/Types";
 import {NothingToShow} from "../../common/NothingToShow";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {Preloader} from "../../common/Preloader";
@@ -24,11 +23,11 @@ type PropsType = {
   apiError: string
   accessError: string
   clients: Array<ClientType>
-  clientsFilter: ClientsFilterType
+  clientsFilter: SearchFilterType
   isDeletingInProcess: Array<string>
   isDeletingPicturesInProcess: Array<string>
   onPageChanged: (page: number) => void
-  onFilterChanged: (filter: ClientsFilterType) => void
+  onFilterChanged: (filter: SearchFilterType) => void
   addClient: (values: FormData) => void
   deleteClient: (clientId: string) => void
   editClient: (clientId: string, values: FormData) => void
