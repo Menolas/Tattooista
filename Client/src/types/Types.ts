@@ -146,3 +146,8 @@ export type SelectOptionType = {
     value: string
     label: string
 }
+
+export type SearchFilterType = {
+    term: string,
+    condition: string
+}

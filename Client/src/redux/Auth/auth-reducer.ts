@@ -1,18 +1,18 @@
-import { authAPI } from "./authApi"
-import { ResultCodesEnum } from "../../utils/constants"
-import { ThunkAction } from "redux-thunk"
-import { AppStateType } from "../redux-store"
-import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types"
-import { IUser } from "../../types/Types"
+import { authAPI } from "./authApi";
+import { ResultCodesEnum } from "../../utils/constants";
+import { ThunkAction } from "redux-thunk";
+import { AppStateType } from "../redux-store";
+import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types";
+import { IUser } from "../../types/Types";
 import {getUserRole} from "../../utils/functions";
 
-const SET_USER_DATA = 'SET_USER_DATE'
-const SET_ROLES = 'SET_ROLES'
-const SET_AUTH = 'SET_AUTH'
-const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN'
-const SET_IS_SUCCESS = 'SET_IS_SUCCESS'
-const SET_REGISTRATION_ERROR = 'SET_REGISTRATION_ERROR'
-const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
+const SET_USER_DATA = 'SET_USER_DATE';
+const SET_ROLES = 'SET_ROLES';
+const SET_AUTH = 'SET_AUTH';
+const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
+const SET_IS_SUCCESS = 'SET_IS_SUCCESS';
+const SET_REGISTRATION_ERROR = 'SET_REGISTRATION_ERROR';
+const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
 
 let initialState = {
   user: {} as IUser | null,
@@ -24,7 +24,7 @@ let initialState = {
   loginError: '' as string | undefined
 }
 
-export type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState;
 
 export const authReducer = (
     state = initialState,
@@ -80,7 +80,7 @@ export const authReducer = (
 }
 
 type ActionsTypes = SetLoginErrorAT | SetRegistrationErrorAT | SetIsSuccessAT | SetTokenAT |
-    SetUserDataAT | SetAuthAT | SetRolesAT
+    SetUserDataAT | SetAuthAT | SetRolesAT;
 
 // actions creators
 
@@ -190,21 +190,21 @@ export const logout = (): ThunkType => async (
 
 export const registration = (values: RegistrationFormValues): ThunkType => async (dispatch) => {
   try {
-    let response = await authAPI.registration(values)
+    let response = await authAPI.registration(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setRegistrationErrorAC(''))
-      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)))
-      //console.log("getUserRole in registration")
-      dispatch(setUserDataAC(response.userData.user))
-      dispatch(setAccessTokenAC(response.userData.accessToken))
-      dispatch(setIsSuccessAC(true))
-      dispatch(setRolesAC(response.userData.roles))
+      dispatch(setRegistrationErrorAC(''));
+      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
+      //console.log("getUserRole in registration");
+      dispatch(setUserDataAC(response.userData.user));
+      dispatch(setAccessTokenAC(response.userData.accessToken));
+      dispatch(setIsSuccessAC(true));
+      dispatch(setRolesAC(response.userData.roles));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setRegistrationErrorAC(e.response.data.message))
+    dispatch(setRegistrationErrorAC(e.response.data.message));
     // @ts-ignore
-    console.log(e.response.data.message)
+    console.log(e.response.data.message);
   }
 }
 
@@ -220,7 +220,7 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
         dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
       }
     }
-  } catch (e) {
-    console.log(e)
+  } catch (e: any) {
+    console.log(e.response.data.message);
   }
 }

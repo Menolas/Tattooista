@@ -1,6 +1,6 @@
 import { clientsAPI } from "./clientApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import { ClientType } from "../../types/Types";
+import {ClientType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -49,9 +49,9 @@ let initialState = {
     condition: "any" as string | null
   },
   archivedClientsFilter: {
-    term: '' as string | null,
-    condition: "any" as string | null
-  },
+    term: '',
+    condition: "any"
+  } as SearchFilterType,
   profile: {} as ClientType,
   apiError: '' as string,
   accessError: '' as string | undefined,
@@ -62,7 +62,6 @@ let initialState = {
 }
 
 export type InitialStateType = typeof initialState
-export type ClientsFilterType = typeof initialState.clientsFilter
 
 export const clientsReducer = (
     state = initialState,
@@ -260,10 +259,10 @@ export const setApiErrorAC = (error: string): SetApiErrorAT => ({
 
 type SetArchivedClientsFilterAT = {
   type: typeof SET_FILTER_FOR_ARCHIVED_CLIENTS
-  filter: ClientsFilterType
+  filter: SearchFilterType
 }
 
-export const setArchivedClientsFilterAC = (filter: ClientsFilterType): SetArchivedClientsFilterAT => ({
+export const setArchivedClientsFilterAC = (filter: SearchFilterType): SetArchivedClientsFilterAT => ({
   type: SET_FILTER_FOR_ARCHIVED_CLIENTS, filter
 });
 
@@ -287,10 +286,10 @@ export const setArchivedClientsPageSize = (pageSize: number): SetArchivedClients
 
 type SetClientsFilterAT = {
   type: typeof SET_CLIENTS_FILTER
-  filter: ClientsFilterType
+  filter: SearchFilterType
 }
 
-export const setClientsFilterAC = (filter: ClientsFilterType): SetClientsFilterAT => ({
+export const setClientsFilterAC = (filter: SearchFilterType): SetClientsFilterAT => ({
     type: SET_CLIENTS_FILTER, filter
 });
 
@@ -433,7 +432,7 @@ const deleteClientThunk = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: ClientsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (clients.length > 1) {
     dispatch(deleteClientAC(id))
@@ -455,7 +454,7 @@ const deleteArchivedClientThunk = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: ClientsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (archivedClients.length > 1) {
     dispatch(deleteArchivedClientAC(id));
@@ -474,7 +473,7 @@ export const getClients = (
   token: string | null,
   currentClientPage: number,
   clientsPageSize: number,
-  clientsFilter: ClientsFilterType
+  clientsFilter: SearchFilterType
 ): ThunkType => async (
     dispatch,
     getState
@@ -504,7 +503,7 @@ export const getClients = (
 export const getArchivedClients = (
     currentPage: number,
     pageSize: number,
-    filter: ClientsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (
     dispatch
 ) => {
@@ -533,7 +532,7 @@ export const deleteClient = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: ClientsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (
     dispatch
 ) => {
@@ -574,7 +573,7 @@ export const deleteArchivedClient = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: ClientsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (
     dispatch
 ) => {
@@ -693,7 +692,7 @@ export const archiveClient = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: ClientsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
@@ -727,7 +726,7 @@ export const reactivateClient = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: ClientsFilterType
+    filter: SearchFilterType
 ) : ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));

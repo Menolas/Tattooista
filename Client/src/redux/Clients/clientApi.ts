@@ -1,8 +1,7 @@
-import axios, {CreateAxiosDefaults} from "axios"
-import {ClientType } from "../../types/Types"
-import {API_URL} from "../../http"
-import {ClientsFilterType} from "./clients-reducer"
-import {AxiosRequestConfig} from "axios/index";
+import axios, {CreateAxiosDefaults} from "axios";
+import {ClientType, SearchFilterType} from "../../types/Types";
+import {API_URL} from "../../http";
+import {AxiosRequestConfig} from "axios";
 
 const instance = axios.create({
   withCredentials: false,
@@ -39,7 +38,7 @@ export const clientsAPI = {
     token: string | null,
     currentPage = 1,
     pageSize = 5,
-    filter: ClientsFilterType
+    filter: SearchFilterType
   ) {
     return instance.get<GetClientsResponseType>(
         `${API_URL}/clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
@@ -50,7 +49,7 @@ export const clientsAPI = {
   getArchivedClients(
       currentPage = 1,
       pageSize = 5,
-      filter: ClientsFilterType
+      filter: SearchFilterType
   ) {
       return instance.get<GetClientsResponseType>(
           `clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)

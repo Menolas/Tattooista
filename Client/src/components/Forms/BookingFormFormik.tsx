@@ -76,8 +76,8 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
     if (closeBookingModal) {
       closeBookingModal();
     }
-    //actions.setSubmitting(false)
-    //actions.resetForm()
+    //actions.setSubmitting(false);
+    //actions.resetForm();
   }
 
   const initialValues: BookConsultationFormValues = {

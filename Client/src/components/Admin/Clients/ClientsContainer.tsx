@@ -7,7 +7,6 @@ import {
   addClient,
   deleteClient,
   editClient,
-  ClientsFilterType,
   updateClientGallery,
   deleteClientGalleryPicture,
   archiveClient,
@@ -31,6 +30,7 @@ import {
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
+import {SearchFilterType} from "../../../types/Types";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -65,7 +65,7 @@ export const ClientsContainer: React.FC = () => {
   }
 
   const onFilterChangedCallBack = (
-    filter: ClientsFilterType
+    filter: SearchFilterType
   ) => {
     dispatch(setClientsFilterAC(filter));
   }

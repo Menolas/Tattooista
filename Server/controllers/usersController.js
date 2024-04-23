@@ -4,6 +4,24 @@ const fs = require("fs");
 const generateFileRandomName = require("../utils/functions");
 const userService = require('../services/userService');
 
+const findRoleId = async (queryRole) => {
+    try {
+        console.log(queryRole + "  queryRole !!!!!!!!!!!!!!!!!")
+        const userRole = await Role.findOne({ value: queryRole }); // Add await here
+        if (userRole) {
+            const roleId = userRole._id; // Assuming the ID field is named _id
+            console.log(roleId + " this is roleID!!!!!!!!");
+            return roleId; // Return the role ID
+        } else {
+            console.log("Role not found for value:", queryRole);
+            return null; // Or handle the case where the role is not found
+        }
+    } catch (e) {
+        console.log("Error while finding role:", e);
+        throw e; // Rethrow the error to handle it elsewhere if needed
+    }
+}
+
 class usersController {
 
     async getRoles(req, res) {
@@ -21,41 +39,48 @@ class usersController {
         }
     }
 
-    async getUsers(req, res, next) {
+    async getUsers(req, res) {
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        const role = req.query.role;
+        const role = req.query.role === "any" ? null : req.query.role;
         const term = req.query.term;
         let users = [];
         const results = {};
 
         try {
-            if (role === 'any' && !term) {
-                users = await User.find().sort({createdAt: -1}).populate('roles');
-                //console.log(users[0].roles + " user roles !!!!!")
-            } else if (role === 'true' && !term) {
-                users = await User.find({roles: "ADMIN"}).sort({createdAt: -1}).populate('roles')
-            } else if (role === 'false' && !term) {
-                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}}).sort({createdAt: -1}).populate('roles');
-            } else if (role === 'any' && term) {
-                users = await User.find({displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
-            } else if (role === 'true' && term) {
-                users = await User.find({roles: "ADMIN", displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
-            } else if (role === 'false' && term) {
-                users = await User.find({roles: {$not: { $elemMatch: { $eq: "ADMIN"}}}, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
+            if (!role) {
+                if (!term) {
+                    users = await User.find().sort({createdAt: -1}).populate('roles');
+                } else if (term) {
+                    users = await User.find({
+                        displayName: {
+                            $regex: term,
+                            $options: 'i'
+                        }
+                    }).sort({createdAt: -1}).populate('roles');
+                }
+            }
+
+            if (role) {
+                const userRole = await Role.findOne({ value: role });
+                const roleId = userRole._id;
+                if (!term) {
+                    users = await User.find({roles: roleId}).sort({createdAt: -1}).populate('roles');
+                } else if (term) {
+                    users = await  User.find({roles: roleId, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
+                }
             }
 
             results.resultCode = 0;
             results.totalCount = users.length;
             results.users = users.slice(startIndex, endIndex);
-            res.json(results);
+            res.status(200).json(results);
         } catch(e) {
             results.resultCode = 1;
             results.message = e.message;
             res.status(400).json(results);
-            next(e);
         }
     }
 

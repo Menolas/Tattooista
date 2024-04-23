@@ -99,6 +99,7 @@ export const clientFilterSelectOptions = [
 
 export const usersFilterSelectOptions = [
     { value: "any", label: "All" },
-    { value: "true", label: "Only with Admin Role" },
-    { value: "false", label: "Only with User Role" },
+    { value: "ADMIN", label: "Only with Admin Role" },
+    { value: "USER", label: "Only with User Role" },
+    { value: "SUPERADMIN", label: "Only with SuperAdmin Role"}
 ]

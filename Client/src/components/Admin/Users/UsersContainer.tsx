@@ -11,7 +11,8 @@ import {
     setUsersPageLimitAC,
     updateUser,
     setSuccessModalAC,
-    UsersFilterType, addUser, setApiErrorAC
+    addUser,
+    setApiErrorAC
 } from "../../../redux/Users/users-reducer";
 import {
     getSuccessModalSelector,
@@ -25,6 +26,7 @@ import {
     getAccessErrorSelector, getUsersApiErrorSelector
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {SearchFilterType} from "../../../types/Types";
 
 export const UsersContainer: React.FC = () => {
 
@@ -55,7 +57,7 @@ export const UsersContainer: React.FC = () => {
         dispatch(setUsersCurrentPageAC(page));
     }
 
-    const setClientsFilterCallBack = (filter: UsersFilterType) => {
+    const setClientsFilterCallBack = (filter: SearchFilterType) => {
         dispatch(setUsersFilterAC(filter));
     }
 

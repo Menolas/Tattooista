@@ -1,6 +1,6 @@
 import { bookingsApi } from "./bookingsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {AddConsultationFormValues, BookedConsultationType} from "../../types/Types";
+import {AddConsultationFormValues, BookedConsultationType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -47,9 +47,9 @@ let initialState = {
     condition: 'any' as string | null
   },
   archivedConsultationsFilter: {
-    term: '' as string | null,
-    condition: 'any' as string | null
-  },
+    term: '',
+    condition: 'any',
+  } as SearchFilterType,
   apiError: '' as string,
   accessError: '' as string | undefined,
   successModal: {
@@ -60,7 +60,6 @@ let initialState = {
 
 export type SuccessModalType = typeof initialState.successModal;
 export type InitialStateType = typeof initialState;
-export type BookedConsultationsFilterType = typeof initialState.bookedConsultationsFilter;
 
 export const bookingsReducer = (
     state = initialState,
@@ -269,19 +268,19 @@ export const setArchivedConsultationsPageSizeAC = (pageSize: number): SetArchive
 
 type SetBookedConsultationsFilterAT = {
   type: typeof  SET_BOOKINGS_FILTER
-  filter: BookedConsultationsFilterType
+  filter: SearchFilterType
 }
 
-export const setBookedConsultationsFilterAC = (filter: BookedConsultationsFilterType): SetBookedConsultationsFilterAT => ({
+export const setBookedConsultationsFilterAC = (filter: SearchFilterType): SetBookedConsultationsFilterAT => ({
     type: SET_BOOKINGS_FILTER, filter
   });
 
 type SetArchivedConsultationsFilterAT = {
   type: typeof SET_ARCHIVED_BOOKINGS_FILTER
-  filter: BookedConsultationsFilterType
+  filter: SearchFilterType
 }
 
-export const setArchivedConsultationsFilterAC = (filter: BookedConsultationsFilterType): SetArchivedConsultationsFilterAT => ({
+export const setArchivedConsultationsFilterAC = (filter: SearchFilterType): SetArchivedConsultationsFilterAT => ({
   type: SET_ARCHIVED_BOOKINGS_FILTER, filter
 });
 
@@ -416,7 +415,7 @@ const deleteBookingThunk = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
     dispatch(deleteBookedConsultationAC(id));
@@ -438,7 +437,7 @@ const deleteArchivedBookingThunk = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
     dispatch(deleteArchivedConsultationAC(id));
@@ -457,7 +456,7 @@ export const getBookedConsultations = (
   token: string | null,
   currentPage: number,
   pageSize: number,
-  filter: BookedConsultationsFilterType
+  filter: SearchFilterType
 ): ThunkType => async (
     dispatch,
     getState
@@ -488,7 +487,7 @@ export const getArchivedConsultations = (
     token: string,
     currentPage: number,
     pageSize: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))
@@ -537,7 +536,7 @@ export const deleteBookedConsultation = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
@@ -559,7 +558,7 @@ export const deleteArchivedConsultation = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
@@ -599,7 +598,7 @@ export const turnConsultationToClient = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
@@ -626,7 +625,7 @@ export const archiveConsultation = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
@@ -648,7 +647,7 @@ export const reactivateConsultation = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));

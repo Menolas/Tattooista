@@ -8,7 +8,6 @@ import {
   turnConsultationToClient,
   setBookedConsultationsPageSizeAC,
   addBookedConsultation,
-  BookedConsultationsFilterType,
   archiveConsultation,
   setCurrentPageForBookedConsultationsAC,
   setSuccessModalAC,
@@ -28,7 +27,7 @@ import {
   getApiErrorSelector, getAccessErrorSelector
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
-import {AddConsultationFormValues, ContactsType} from "../../../types/Types";
+import {AddConsultationFormValues, ContactsType, SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const BookingsContainer: React.FC = () => {
@@ -63,7 +62,7 @@ export const BookingsContainer: React.FC = () => {
   }
 
   const onFilterChangedCallBack = (
-    filter: BookedConsultationsFilterType
+    filter: SearchFilterType
   ) => {
     dispatch(setBookedConsultationsFilterAC(filter));
   }
