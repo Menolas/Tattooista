@@ -29,6 +29,7 @@ import { UsersContainer } from "./components/Admin/Users/UsersContainer";
 import { NotFound } from "./components/404-page";
 import { NoAccess } from "./components/NoAccess";
 import { About } from "./pages/about/About";
+import {MainPage} from "./pages/mainPage/MainPage";
 
 const App = () => {
 
@@ -63,7 +64,7 @@ const App = () => {
                     <main className={"site-main"}>
                         <Routes>
                             <Route path='/'
-                                   element={<MainPageContainer />} />
+                                   element={<MainPage />} />
                             <Route path={'about'}
                                    element={<About />} />
                             <Route path={`registration`}
