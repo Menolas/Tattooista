@@ -162,7 +162,6 @@ export const login = (values: LoginFormValues): ThunkType => async (
       dispatch(setLoginErrorAC(''));
       dispatch(setUserDataAC(response.userData.user));
       dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
-      //console.log("getUserRole in login");
       dispatch(setAccessTokenAC(response.userData.accessToken));
       dispatch(setRolesAC(response.userData.roles));
     }
@@ -175,7 +174,6 @@ export const login = (values: LoginFormValues): ThunkType => async (
 export const logout = (): ThunkType => async (
     dispatch
 ) => {
-  //console.log("hit logout!!!")
   try {
     const response = await authAPI.logout();
      if(response.resultCode === 0) {
@@ -221,6 +219,6 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
       }
     }
   } catch (e: any) {
-    console.log(e.response.data.message);
+    console.log(e.response?.data?.message);
   }
 }

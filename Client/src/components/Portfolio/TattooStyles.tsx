@@ -6,12 +6,11 @@ import {TattooStyleType} from "../../types/Types";
 import Sprite from "../../assets/svg/sprite.svg";
 import {UpdateTattooStyleFormFormik} from "../Forms/UpdateTattooStyleFormFormik";
 import {ModalPopUp} from "../common/ModalPopUp";
-import {SuccessPopUp} from "../common/SuccessPopUp";
-import AliceCarousel from "react-alice-carousel";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../common/Confirmation";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {Advertisement} from "./Advertisement";
+import {MyCarousel} from "../common/MyCarousel";
 
 const responsive = {
   0: {items: 3},
@@ -21,13 +20,13 @@ const responsive = {
 }
 
 type PropsType = {
-  isAuth: string
-  tattooStyles: Array<TattooStyleType>,
-  activeStyle: TattooStyleType,
-  resetActiveStyle: (style: TattooStyleType) => void
-  addTattooStyle: (values: FormData) => void
-  editTattooStyle: (id: string, values: FormData) => void
-  deleteTattooStyle: (id: string) => void
+  isAuth: string;
+  tattooStyles: Array<TattooStyleType>;
+  activeStyle: TattooStyleType;
+  resetActiveStyle: (style: TattooStyleType) => void;
+  addTattooStyle: (values: FormData) => void;
+  editTattooStyle: (id: string, values: FormData) => void;
+  deleteTattooStyle: (id: string) => void;
 }
 
 export const TattooStyles: React.FC<PropsType> = React.memo(({
@@ -60,14 +59,9 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
 
   const tattooStylesAliceArray = tattooStyles
     ?.map((item) => {
-      return (
-        <div
-          className={`tattoo-style__item btn btn--sm ${activeStyle?._id === item._id ? 'btn--light-bg' : 'btn--transparent'}`}
-          onClick={() => {resetActiveStyle(item)}}
-        >
-          {item.value}
-        </div>
-      )
+        return (
+            <Style activeStyle={activeStyle} item={item} resetActiveStyle={resetActiveStyle} />
+        )
     });
 
   return (
@@ -119,11 +113,10 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
           </div>
         </div>
         <Advertisement />
-        <AliceCarousel
+        <MyCarousel
             items={tattooStylesAliceArray}
             responsive={responsive}
-            controlsStrategy="alternate"
-            mouseTracking={true}
+            controlsStrategy={"alternate"}
         />
         <ModalPopUp
             isOpen={addTattooStyleMode || editTattooStyleMode}
@@ -156,3 +149,18 @@ export const TattooStyles: React.FC<PropsType> = React.memo(({
     </section>
   )
 });
+
+const Style = ({activeStyle, item, resetActiveStyle}: {
+  activeStyle: TattooStyleType,
+  item: TattooStyleType,
+  resetActiveStyle: (style: TattooStyleType) => void
+}) => {
+  return (
+      <div
+          className={`tattoo-style__item btn btn--sm ${activeStyle?._id === item._id ? 'btn--light-bg' : 'btn--transparent'}`}
+          onClick={() => {resetActiveStyle(item)}}
+      >
+        {item.value}
+      </div>
+  )
+}

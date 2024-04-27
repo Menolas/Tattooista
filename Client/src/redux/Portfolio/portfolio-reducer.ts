@@ -6,6 +6,7 @@ import {ResultCodesEnum} from "../../utils/constants";
 import {getNewPage} from "../../utils/functions";
 import {tattooStyles} from "../../data/StylesData";
 import { gallery } from "../../data/GalleryData";
+import {number} from "yup";
 
 const SET_GALLERY_PAGE_SIZE = 'SET_GALLERY_PAGE_SIZE';
 const SET_ARCHIVED_GALLERY_PAGE_SIZE = 'SET_ARCHIVED_GALLERY_PAGE_SIZE';
@@ -31,6 +32,7 @@ const UPDATE_TATTOO_STYLE_SUCCESS = 'You successfully updated Tattoo style in yo
 const ADD_GALLERY_ITEMS_SUCCESS = 'You successfully added gallery images';
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
 const SET_API_ERROR = 'SET_API_ERROR';
+const SET_NO_STYLE_LENGTH = 'SET_NO_STYLE_LENGTH';
 
 let initialState = {
   totalGalleryItemsCount: 0 as number,
@@ -42,6 +44,7 @@ let initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   tattooStyles: [] as Array<TattooStyleType>,
+  noStyleLength: 0 as number,
   activeStyle: {} as TattooStyleType | null,
   gallery: [] as Array<GalleryItemType>,
   archivedGallery: [] as Array<GalleryItemType>,
@@ -214,6 +217,12 @@ export const portfolioReducer = (
         apiError: action.error
       }
 
+    case SET_NO_STYLE_LENGTH:
+      return {
+        ...state,
+        noStyleLength: action.noStyleLength
+      }
+
     default: return {
       ...state
     }
@@ -225,9 +234,18 @@ type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModa
     SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT |
     SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT |
     UpdateGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT | UpdateGalleryItemAT |
-    UpdateArchivedGalleryItemAT | SetFakeApiAT
+    UpdateArchivedGalleryItemAT | SetFakeApiAT | SetNoStyleLengthAT;
 
 // actions creators
+
+type SetNoStyleLengthAT = {
+  type: typeof  SET_NO_STYLE_LENGTH
+  noStyleLength: number
+}
+
+const setNoStyleLengthAC = (noStyleLength: number): SetNoStyleLengthAT => ({
+  type: SET_NO_STYLE_LENGTH, noStyleLength
+});
 
 type SetApiErrorAT = {
   type: typeof  SET_API_ERROR
@@ -458,15 +476,16 @@ const deleteArchivedGalleryItemThunk = (
   }
 }
 
-export const getTattooStyles = (): ThunkType => async (
+export const getTattooStyles = (token: string | null): ThunkType => async (
   dispatch
 ) => {
   try {
     dispatch(setIsFetchingAC(true))
-    let response = await portfolioApi.getTattooStyles();
+    let response = await portfolioApi.getTattooStyles(token);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
       dispatch(setTattooStylesAC(response.tattooStyles));
+      dispatch(setNoStyleLengthAC(response.noStyleLength));
     }
   } catch (e) {
     console.log(e);

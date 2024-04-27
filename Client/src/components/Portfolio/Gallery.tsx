@@ -196,7 +196,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           {  editGalleryMode &&
               <GalleryUploadForm
                   isEditPortfolio={true}
-                  updateId={activeStyle?._id}
                   updatePortfolio={updateGallery}
                   closeModal={closeEditGalleryForm}
               />

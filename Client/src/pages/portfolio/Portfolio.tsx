@@ -20,6 +20,7 @@ type PropsType = {
   gallery: Array<GalleryItemType>
   successModal: SuccessModalType
   apiError: string
+  noStyleLength: number
   setPageSize: (pageSize: number) => void
   updateGallery: (values: FormData) => void
   deleteGalleryItem: (itemId: string) => void
@@ -47,6 +48,7 @@ export const Portfolio: React.FC<PropsType> = ({
   gallery,
   successModal,
   apiError,
+  noStyleLength,
   setPageSize,
   updateGallery,
   deleteGalleryItem,
@@ -75,6 +77,7 @@ export const Portfolio: React.FC<PropsType> = ({
         isAuth={isAuth}
         tattooStyles={tattooStyles}
         activeStyle={activeStyle}
+        noStyleLength={noStyleLength}
         resetActiveStyle={resetActiveStyle}
         addTattooStyle={addTattooStyle}
         editTattooStyle={editTattooStyle}

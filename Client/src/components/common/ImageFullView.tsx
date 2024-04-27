@@ -1,7 +1,7 @@
 import {API_URL} from "../../http";
 import * as React from "react";
-import AliceCarousel from "react-alice-carousel";
 import {GalleryItemType} from "../../types/Types";
+import {MyCarousel} from "./MyCarousel";
 
 type PropsType = {
     isOpen: boolean
@@ -44,12 +44,10 @@ export const ImageFullView: React.FC<PropsType> = ({
 
 
         return (
-            <div
-                className={"image-full-view__img slider"}
-                style={{backgroundImage: `url(${GalleryImgUrl})`}}
-            >{''}</div>
+            <Slider  GalleryImgUrl={ GalleryImgUrl}/>
         )
-    })
+    });
+
     return (
         <div className={ !isOpen ? "image-full-view gallery__large-wrap modal-wrap" : "image-full-view gallery__large-wrap modal-wrap open" }
         >
@@ -60,15 +58,24 @@ export const ImageFullView: React.FC<PropsType> = ({
                 <span>{''}</span>
             </button>
             <div className="image-full-view__inner-wrap gallery__large">
-                <AliceCarousel
+                <MyCarousel
                     items={sliders}
-                    activeIndex={activeIndex}
                     responsive={responsive}
+                    activeIndex={activeIndex}
                     controlsStrategy={"default"}
-                    mouseTracking
+                    mouseTracking={true}
                     disableDotsControls={true}
                 />
             </div>
         </div>
+    )
+}
+
+const Slider = ({GalleryImgUrl}) => {
+    return (
+        <div
+            className={"image-full-view__img slider"}
+            style={{backgroundImage: `url(${GalleryImgUrl})`}}
+        >{''}</div>
     )
 }

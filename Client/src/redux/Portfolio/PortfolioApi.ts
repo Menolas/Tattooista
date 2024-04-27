@@ -1,4 +1,4 @@
-import axios, { CreateAxiosDefaults } from "axios";
+import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
 import { GalleryItemType, TattooStyleType } from "../../types/Types";
 import {API_URL} from "../../http";
 import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";
@@ -31,6 +31,7 @@ type UpdateGalleryItemResponseType = CommonResponseFields & {
 
 type GetTattooStylesResponseType = CommonResponseFields & {
     tattooStyles: Array<TattooStyleType>
+    noStyleLength: number
 }
 
 type AddTattooStylesResponseType = CommonResponseFields & {
@@ -49,9 +50,10 @@ type ReactivateArchivedGalleryItemResponseType = CommonResponseFields
 
 export const portfolioApi = {
 
-    getTattooStyles() {
-        return instance.get<GetTattooStylesResponseType>('tattooStyle/')
-            .then(response => response.data);
+    getTattooStyles(token: string | null) {
+        return instance.get<GetTattooStylesResponseType>('tattooStyle/',
+            { headers: {Authorization: `Bearer ${token}`}} as AxiosRequestConfig
+            ).then(response => response.data);
     },
 
     addTattooStyle(
