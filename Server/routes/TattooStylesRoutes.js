@@ -2,10 +2,11 @@ const Router = require('express');
 const router = new Router();
 const TattooStyle = require('../models/TattooStyle');
 const controller = require('../controllers/tattooStyleController');
+const roleCheckMiddleware = require('../middlewares/roleCheckMiddleware');
 
 //getting all tattooStyles
 
-router.get('/', controller.getTattooStyles);
+router.get('/', roleCheckMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles);
 
 // Deleting one
 router.delete('/:id', getTattooStyle, controller.deleteTattooStyle);

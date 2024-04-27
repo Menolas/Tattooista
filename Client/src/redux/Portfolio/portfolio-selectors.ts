@@ -60,3 +60,7 @@ export const getSuccessModalSelector = (state: AppStateType) => {
   return state.portfolio.successModal;
 }
 
+export const getNoStyleLengthSelector = (state: AppStateType) => {
+  return state.portfolio.noStyleLength;
+}
+

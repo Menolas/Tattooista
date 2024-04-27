@@ -1,15 +1,15 @@
-import * as React from "react"
-import { NavLink } from "react-router-dom"
-import AliceCarousel from "react-alice-carousel"
-import "react-alice-carousel/lib/alice-carousel.css"
-import { TattooStyleType } from "../../types/Types"
-import {API_URL} from "../../http"
+import * as React from "react";
+import { NavLink } from "react-router-dom";
+import "react-alice-carousel/lib/alice-carousel.css";
+import { TattooStyleType } from "../../types/Types";
+import {API_URL} from "../../http";
+import {MyCarousel} from "../common/MyCarousel";
 
 type PropsType = {
-    fakeApi: boolean
-    galleryPageSize: number
-    tattooStyles: Array<TattooStyleType>
-    setActiveStyle: (style: TattooStyleType) => void
+    fakeApi: boolean;
+    galleryPageSize: number;
+    tattooStyles: Array<TattooStyleType>;
+    setActiveStyle: (style: TattooStyleType) => void;
 }
 
 const responsive = {
@@ -26,10 +26,12 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   setActiveStyle
 }) => {
 
-  const sliders = tattooStyles?.filter(slider => slider.value !== "No Style").map((slider) => {
+  const sliders = tattooStyles?.map((slider) => {
+
      const wallpaperUrl = fakeApi
          ? `./uploads/TattooStylesWallpapers/${slider.wallPaper}`
-         : `${API_URL}/styleWallpapers/${slider._id}/${slider.wallPaper}`
+         : `${API_URL}/styleWallpapers/${slider._id}/${slider.wallPaper}`;
+
      return (
          <div
              className="slider-item"
@@ -40,7 +42,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
                  className="portfolio-slider__link"
                  style={{backgroundImage: `url(${wallpaperUrl})`}}
                  onClick={() => {
-                     setActiveStyle(slider)
+                     setActiveStyle(slider);
                  }}
              >
                  <div className={'slider-item-title__wrap'}>
@@ -49,16 +51,15 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
              </NavLink>
          </div>
      )
-  })
+  });
 
     return (
       <section className="page-block portfolio-slider container">
           <h2 className="page-block__title">Portfolio</h2>
-          <AliceCarousel
+          <MyCarousel
               items={sliders}
               responsive={responsive}
               controlsStrategy={"alternate"}
-              mouseTracking
           />
       </section>
   )

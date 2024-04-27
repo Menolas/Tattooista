@@ -13,7 +13,7 @@ import {
   getActiveStyleSelector,
   getApiErrorSelector,
   getFakeApiSelector,
-  getSuccessModalSelector
+  getSuccessModalSelector, getNoStyleLengthSelector
 } from "../../redux/Portfolio/portfolio-selectors";
 import {
   getGallery,
@@ -32,7 +32,7 @@ import {
   setActiveStyleAC, setSuccessModalAC
 } from "../../redux/Portfolio/portfolio-reducer";
 import { Portfolio } from "./Portfolio";
-import {getAuthSelector} from "../../redux/Auth/auth-selectors";
+import {getAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 export const PortfolioContainer: React.FC = () =>  {
   const isAuth = useSelector(getAuthSelector);
@@ -47,18 +47,20 @@ export const PortfolioContainer: React.FC = () =>  {
   const successModal = useSelector(getSuccessModalSelector);
   const apiError = useSelector(getApiErrorSelector);
   const fakeApi = useSelector(getFakeApiSelector);
+  const noStyleLength = useSelector(getNoStyleLengthSelector);
+  const token = useSelector(getTokenSelector);
 
   const dispatch = useDispatch();
 
   useEffect( () => {
 
-    dispatch(getTattooStyles()).then(r => {
+    dispatch(getTattooStyles(token)).then(r => {
       if (!activeStyle?._id) {
         activeStyle = tattooStyles[0];
         dispatch(setActiveStyleAC(tattooStyles[0]));
       }
       dispatch(getGallery(activeStyle?._id, currentPage, pageSize));
-    })
+    });
 
   }, [activeStyle, currentPage, pageSize]);
 
@@ -124,6 +126,7 @@ export const PortfolioContainer: React.FC = () =>  {
       gallery={gallery}
       successModal={successModal}
       apiError={apiError}
+      noStyleLength={noStyleLength}
       setPageSize={setGalleryPageSizeCallBack}
       updateGallery={adminUpdateGalleryCallBack}
       deleteGalleryItem={deleteGalleryItemCallBack}

@@ -4,24 +4,6 @@ const fs = require("fs");
 const generateFileRandomName = require("../utils/functions");
 const userService = require('../services/userService');
 
-const findRoleId = async (queryRole) => {
-    try {
-        console.log(queryRole + "  queryRole !!!!!!!!!!!!!!!!!")
-        const userRole = await Role.findOne({ value: queryRole }); // Add await here
-        if (userRole) {
-            const roleId = userRole._id; // Assuming the ID field is named _id
-            console.log(roleId + " this is roleID!!!!!!!!");
-            return roleId; // Return the role ID
-        } else {
-            console.log("Role not found for value:", queryRole);
-            return null; // Or handle the case where the role is not found
-        }
-    } catch (e) {
-        console.log("Error while finding role:", e);
-        throw e; // Rethrow the error to handle it elsewhere if needed
-    }
-}
-
 class usersController {
 
     async getRoles(req, res) {

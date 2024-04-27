@@ -6,10 +6,25 @@ const generateFileRandomName = require("../utils/functions");
 class tattooStyleController {
 
   async getTattooStyles (req, res) {
+    console.log (req.hasRole + " role check result !!!!!!!!!!!!!!")
     const results = {};
     try {
+      const tattooStyles = await TattooStyle.find().sort({createdAt: -1});
+      if (req.hasRole) {
+        results.tattooStyles = tattooStyles;
+      } else {
+        const filteredStyles = await Promise.all(tattooStyles.map(async style =>  {
+          const gallery = await GalleryItem.find({tattooStyles: style._id});
+          if (gallery.length > 0) {
+            return style;
+          } else {
+            return null;
+          }
+        }));
+        results.tattooStyles = filteredStyles.filter(style => style !== null);
+      }
       results.resultCode = 0;
-      results.tattooStyles = await TattooStyle.find().sort({createdAt: -1});
+
       res.status(200).json(results);
     } catch (e) {
       results.resultCode = 1;
