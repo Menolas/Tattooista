@@ -1,6 +1,6 @@
 # Tattoista
 
-if you want this project works locally on your machine you going to need to this:
+if you want this project make work locally on your machine you  need to do this:
 1. clone it to your machine
 2. run "npm i" from folder "Server"
 3. run "npm i" from folder "Client"
