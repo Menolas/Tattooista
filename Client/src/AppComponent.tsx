@@ -9,7 +9,6 @@ import { withRouter } from "./hoc/withRouter";
 import "./assets/scss/style.css";
 import { SmoothScroll } from "./utils/smoothScroll";
 import { HeaderContainer } from "./components/Header/HeaderContainer";
-import { MainPageContainer } from "./pages/mainPage/MainPageContainer";
 import { Contacts } from "./components/Contacts";
 import { Footer } from "./components/Footer/Footer";
 import Admin from "./pages/admin/Admin";
@@ -17,7 +16,6 @@ import { BookingsContainer} from "./components/Admin/Bookings/BookingsContainer"
 import { ClientsContainer } from "./components/Admin/Clients/ClientsContainer";
 import { ProfileContainer } from "./components/Admin/ClientProfile/ProfileContainer";
 import { LoginContainer } from "./pages/login/LoginContainer";
-import { PortfolioContainer } from "./pages/portfolio/PortfolioContainer";
 import { Preloader } from "./components/common/Preloader";
 import { ArchivedClients } from "./components/Admin/Archive/ArchivedClients";
 import { ArchivedConsultations } from "./components/Admin/Archive/ArchivedConsultations";
@@ -30,6 +28,7 @@ import { NotFound } from "./components/404-page";
 import { NoAccess } from "./components/NoAccess";
 import { About } from "./pages/about/About";
 import {MainPage} from "./pages/mainPage/MainPage";
+import {Portfolio} from "./pages/portfolio/Portfolio";
 
 const App = () => {
 
@@ -72,7 +71,7 @@ const App = () => {
                             <Route path={`login`}
                                    element={<LoginContainer />} />
                             <Route path={`portfolio`}
-                                   element={<PortfolioContainer />} />
+                                   element={<Portfolio />} />
                             <Route path={`admin`}
                                    element={<Admin />}>
                                 <Route path={`bookedConsultations`}

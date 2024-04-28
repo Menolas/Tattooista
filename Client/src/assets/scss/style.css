@@ -1966,7 +1966,7 @@ img {
   text-align: left;
   background-color: transparent;
   z-index: 20;
-  transform: translateY(-100%);
+  transform: translateY(-200%);
 }
 .modal-wrap.open {
   animation: popUp 0.5s ease forwards;

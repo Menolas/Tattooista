@@ -1,75 +1,121 @@
 import * as React from "react";
 import { Gallery } from "../../components/Portfolio/Gallery";
 import { TattooStyles } from "../../components/Portfolio/TattooStyles";
-import { GalleryItemType, TattooStyleType} from "../../types/Types";
-import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
-import {SuccessModalType} from "../../redux/Portfolio/portfolio-reducer";
+import { TattooStyleType } from "../../types/Types";
+import { ApiErrorMessage } from "../../components/common/ApiErrorMessage";
+import {
+  addTattooStyle,
+  adminUpdateGallery,
+  archiveGalleryItem,
+  deleteGalleryItem,
+  deleteTattooStyle,
+  editTattooStyle,
+  getGallery,
+  getTattooStyles,
+  resetActiveStyle,
+  setActiveStyleAC,
+  setApiErrorAC,
+  setCurrentGalleryPageAC,
+  setGalleryPageSizeAC,
+  setSuccessModalAC,
+  updateGalleryItem
+} from "../../redux/Portfolio/portfolio-reducer";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {getAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {
+  getActiveStyleSelector, getApiErrorSelector,
+  getCurrentGalleryPage, getFakeApiSelector,
+  getGalleryPageSize, getGallerySelector,
+  getIsFetching, getIsGalleryItemDeletingInProcessSelector, getSuccessModalSelector, getTattooStylesSelector,
+  getTotalGalleryItemsCount
+} from "../../redux/Portfolio/portfolio-selectors";
 
-type PropsType = {
-  fakeApi: boolean
-  isAuth: string
-  isFetching: boolean
-  totalCount: number
-  pageSize: number
-  currentPage: number
-  isDeletingInProcess: Array<string>
-  tattooStyles: Array<TattooStyleType>
-  activeStyle: TattooStyleType
-  gallery: Array<GalleryItemType>
-  successModal: SuccessModalType
-  apiError: string
-  noStyleLength: number
-  setPageSize: (pageSize: number) => void
-  updateGallery: (values: FormData) => void
-  deleteGalleryItem: (itemId: string) => void
-  setCurrentPage: (page: number) => void
-  resetActiveStyle: (style: TattooStyleType) => void
-  addTattooStyle: (values: FormData) => void
-  editTattooStyle: (vid: string, values: FormData) => void
-  deleteTattooStyle: (id: string) => void
-  archiveGalleryItem: (id: string) => void
-  setSuccessModal: () => void
-  setApiError: () => void
-  updateGalleryItem: (id: string, values: object) => void
-}
+export const Portfolio: React.FC = () => {
+  const isAuth = useSelector(getAuthSelector);
+  const isFetching = useSelector(getIsFetching);
+  const totalCount = useSelector(getTotalGalleryItemsCount);
+  const pageSize = useSelector(getGalleryPageSize);
+  let currentPage = useSelector(getCurrentGalleryPage);
+  const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector);
+  const tattooStyles = useSelector(getTattooStylesSelector);
+  let activeStyle = useSelector(getActiveStyleSelector);
+  const gallery = useSelector(getGallerySelector);
+  const successModal = useSelector(getSuccessModalSelector);
+  const apiError = useSelector(getApiErrorSelector);
+  const fakeApi = useSelector(getFakeApiSelector);
+  const token = useSelector(getTokenSelector);
 
-export const Portfolio: React.FC<PropsType> = ({
-  fakeApi,
-  isAuth,
-  isFetching,
-  totalCount,
-  pageSize,
-  currentPage,
-  isDeletingInProcess,
-  tattooStyles,
-  activeStyle,
-  gallery,
-  successModal,
-  apiError,
-  noStyleLength,
-  setPageSize,
-  updateGallery,
-  deleteGalleryItem,
-  setCurrentPage,
-  resetActiveStyle,
-  addTattooStyle,
-  editTattooStyle,
-  deleteTattooStyle,
-  archiveGalleryItem,
-  setSuccessModal,
-  setApiError,
-  updateGalleryItem
-}) => {
+  const dispatch = useDispatch();
+
+  useEffect( () => {
+
+    dispatch(getTattooStyles(token)).then(r => {
+      if (!activeStyle?._id) {
+        activeStyle = tattooStyles[0];
+        dispatch(setActiveStyleAC(tattooStyles[0]));
+      }
+      dispatch(getGallery(activeStyle?._id, currentPage, pageSize));
+    });
+
+  }, [activeStyle, currentPage, pageSize]);
 
   useEffect(() => {
     if (successModal.isSuccess) {
       setTimeout( () => {
-        setSuccessModal();
+        setSuccessModalCallBack();
       }, 3000);
     }
   }, [successModal]);
+
+  const setCurrentPageCallBack = (page: number) => {
+    dispatch(setCurrentGalleryPageAC(page));
+  }
+
+  const setGalleryPageSizeCallBack = (pageSize: number) => {
+    dispatch(setGalleryPageSizeAC(pageSize));
+  }
+
+  const adminUpdateGalleryCallBack = (values: FormData) => {
+    dispatch(adminUpdateGallery(activeStyle._id, values));
+  }
+
+  const deleteGalleryItemCallBack = (itemId: string) => {
+    dispatch(deleteGalleryItem(itemId, gallery, currentPage, totalCount, pageSize, activeStyle));
+  }
+
+  const resetActiveStyleCallBack = (style: TattooStyleType) => {
+    dispatch(resetActiveStyle(style));
+  }
+
+  const addTattooStyleCallBack = (values: FormData) => {
+    dispatch(addTattooStyle(values));
+  }
+
+  const editTattooStyleCallBack = (id: string, values: FormData) => {
+    dispatch(editTattooStyle(id, values));
+  }
+
+  const deleteTattooStyleCallBack = (id: string) => {
+    dispatch(deleteTattooStyle(id));
+  }
+
+  const archiveGalleryItemCallBack = (itemId: string) => {
+    dispatch(archiveGalleryItem(itemId, gallery, currentPage, totalCount, pageSize, activeStyle));
+  }
+
+  const setSuccessModalCallBack = () => {
+    dispatch(setSuccessModalAC(false, ''));
+  }
+
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(''));
+  }
+
+  const updateGalleryItemCallBack = (id: string, values: object) => {
+    dispatch(updateGalleryItem(id, values));
+  }
 
   return (
     <div>
@@ -77,11 +123,10 @@ export const Portfolio: React.FC<PropsType> = ({
         isAuth={isAuth}
         tattooStyles={tattooStyles}
         activeStyle={activeStyle}
-        noStyleLength={noStyleLength}
-        resetActiveStyle={resetActiveStyle}
-        addTattooStyle={addTattooStyle}
-        editTattooStyle={editTattooStyle}
-        deleteTattooStyle={deleteTattooStyle}
+        resetActiveStyle={resetActiveStyleCallBack}
+        addTattooStyle={addTattooStyleCallBack}
+        editTattooStyle={editTattooStyleCallBack}
+        deleteTattooStyle={deleteTattooStyleCallBack}
       />
 
       <Gallery
@@ -92,25 +137,25 @@ export const Portfolio: React.FC<PropsType> = ({
         totalCount={totalCount}
         pageSize={pageSize}
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        setPageSize={setPageSize}
         gallery={gallery}
         tattooStyles={tattooStyles}
-        updateGallery={updateGallery}
-        deleteGalleryItem={deleteGalleryItem}
-        archiveGalleryItem={archiveGalleryItem}
         isDeletingInProcess={isDeletingInProcess}
-        updateGalleryItem={updateGalleryItem}
+        setCurrentPage={setCurrentPageCallBack}
+        setPageSize={setGalleryPageSizeCallBack}
+        updateGallery={adminUpdateGalleryCallBack}
+        deleteGalleryItem={deleteGalleryItemCallBack}
+        archiveGalleryItem={archiveGalleryItemCallBack}
+        updateGalleryItem={updateGalleryItemCallBack}
       />
       <SuccessPopUp
           isOpen={successModal.isSuccess}
-          closeModal={setSuccessModal}
+          closeModal={setSuccessModalCallBack}
           content={successModal.successText}
       />
       <ApiErrorMessage
           isOpen={!!apiError}
           error={apiError}
-          closeModal={setApiError}
+          closeModal={setApiErrorCallBack}
       />
     </div>
   );

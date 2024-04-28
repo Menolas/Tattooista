@@ -118,7 +118,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                       <button
                           className="btn btn--bg btn--light-bg add-btn"
                           onClick={() => {
-                              setAddClientMode(true)
+                              setAddClientMode(true);
                           }}
                       >
                           Add Client
