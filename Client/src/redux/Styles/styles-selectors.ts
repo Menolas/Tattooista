@@ -12,42 +12,6 @@ export const getActiveStyleSelector = (state: AppStateType) => {
   return state.portfolio.activeStyle;
 }
 
-export const getGallerySelector = (state: AppStateType) => {
-  return state.portfolio.gallery;
-}
-
-export const getArchivedGallerySelector = (state: AppStateType) => {
-  return state.portfolio.archivedGallery;
-}
-
-export const getGalleryPageSize = (state: AppStateType) => {
-  return state.portfolio.galleryPageSize;
-}
-
-export const getArchivedGalleryPageSizeSelector = (state: AppStateType) => {
-  return state.portfolio.archivedGalleryPageSize;
-}
-
-export const getCurrentGalleryPage = (state: AppStateType) => {
-  return state.portfolio.currentGalleryPage;
-}
-
-export const getCurrentArchivedGalleryPageSelector = (state: AppStateType) => {
-  return state.portfolio.currentArchivedGalleryPage;
-}
-
-export const getTotalGalleryItemsCount = (state: AppStateType) => {
-  return state.portfolio.totalGalleryItemsCount;
-}
-
-export const getTotalArchivedGalleryItemsCountSelector = (state: AppStateType) => {
-  return state.portfolio.totalArchivedGalleryItemsCount;
-}
-
-export const getIsGalleryItemDeletingInProcessSelector = (state: AppStateType) => {
-  return state.portfolio.isDeletingInProcess;
-}
-
 export const getApiErrorSelector = (state: AppStateType) => {
   return state.portfolio.apiError;
 }
@@ -59,8 +23,3 @@ export const getFakeApiSelector = (state: AppStateType) => {
 export const getSuccessModalSelector = (state: AppStateType) => {
   return state.portfolio.successModal;
 }
-
-export const getNoStyleLengthSelector = (state: AppStateType) => {
-  return state.portfolio.noStyleLength;
-}
-
