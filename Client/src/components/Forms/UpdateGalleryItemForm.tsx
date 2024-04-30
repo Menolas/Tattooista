@@ -27,9 +27,10 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
 
     let initialValues = {};
     styles.forEach((style) => {
-        if (!style.nonStyle) {
-            initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id);
-        }
+        // if (!style.nonStyle) {
+        //     initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id);
+        // }
+        initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id);
     });
 
     return (

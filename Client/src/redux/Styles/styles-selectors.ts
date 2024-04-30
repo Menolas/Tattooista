@@ -1,25 +1,21 @@
 import { AppStateType } from "../redux-store";
 
-export const getIsFetching = (state: AppStateType) => {
-  return state.portfolio.isFetching;
+export const getIsFetchingSelector = (state: AppStateType) => {
+  return state.styles.isFetching;
 }
 
-export const getTattooStylesSelector = (state: AppStateType) => {
-  return state.portfolio.tattooStyles;
+export const getStylesSelector = (state: AppStateType) => {
+  return state.styles.styles;
 }
 
 export const getActiveStyleSelector = (state: AppStateType) => {
-  return state.portfolio.activeStyle;
-}
-
-export const getApiErrorSelector = (state: AppStateType) => {
-  return state.portfolio.apiError;
+  return state.styles.activeStyle;
 }
 
 export const getFakeApiSelector = (state: AppStateType) => {
-  return state.portfolio.fakeApi;
+  return state.styles.fakeApi;
 }
 
-export const getSuccessModalSelector = (state: AppStateType) => {
-  return state.portfolio.successModal;
+export const getIsDeletingInProcess = (state: AppStateType) => {
+  return state.styles.isDeletingInProcess;
 }

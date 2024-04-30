@@ -8,8 +8,6 @@ import { Booking } from "../../components/MainPage/Booking";
 import {
     BookConsultationFormValues,
     FaqType,
-    PageType,
-    ServiceType,
     TattooStyleType
 } from "../../types/Types";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
@@ -18,35 +16,42 @@ import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
 import {Preloader} from "../../components/common/Preloader";
 import {
   addFaqItem,
-  addService, bookConsultation,
-  changeAboutPageVisibility, deleteFaqItem, deleteService,
-  editAboutPage, editService,
+  addService,
+  bookConsultation,
+  changeAboutPageVisibility,
+  deleteFaqItem,
+  deleteService,
+  editAboutPage,
+  editService,
   getAboutPage,
   getFaqItems,
-  getServices, setApiErrorAC, setSuccessModalAC,
-  SuccessModalType, updateFaqItem
+  getServices,
+  setApiErrorAC,
+  setSuccessModalAC,
+  updateFaqItem
 } from "../../redux/General/general-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {getAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
 import {
   getFakeApiSelector,
   getGalleryPageSize,
-  getTattooStylesSelector
-} from "../../redux/Portfolio/portfolio-selectors";
+} from "../../redux/Gallery/gallery-selectors";
+import {getStylesSelector} from "../../redux/Styles/styles-selectors";
 import {
   getApiErrorSelector,
   getFaqItemsSelector,
   getIsGeneralFetchingSelector,
   getPageAboutSelector,
-  getServicesSelector, getSuccessModalSelector
+  getServicesSelector,
+  getSuccessModalSelector
 } from "../../redux/General/general-selectors";
-import {getTattooStyles, setActiveStyleAC} from "../../redux/Portfolio/portfolio-reducer";
+import {getTattooStyles, setActiveStyleAC} from "../../redux/Styles/styles-reducer";
 
 export const MainPage: React.FC = () => {
 
   const isAuth = useSelector(getAuthSelector);
   const galleryPageSize = useSelector(getGalleryPageSize);
-  const tattooStyles = useSelector(getTattooStylesSelector);
+  const tattooStyles = useSelector(getStylesSelector);
   const services = useSelector(getServicesSelector);
   const faq = useSelector(getFaqItemsSelector);
   const pageAbout = useSelector(getPageAboutSelector);

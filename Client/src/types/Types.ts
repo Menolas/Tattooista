@@ -62,12 +62,13 @@ export type ServiceType = {
     conditions: Array<string>
 }
 
-export type TattooStyleType = {
+export type StyleType = {
     _id: string
     value: string
-    wallPaper: string
+    wallPaper?: string
     description: string
     nonStyle: boolean
+    createdAt?: Date
 }
 
 export type GalleryCreatedAtType = {

@@ -1,52 +1,28 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import { GalleryItemType, TattooStyleType } from "../../types/Types";
+import {StyleType} from "../../types/Types";
 import {API_URL} from "../../http";
-import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";
 
 const instance = axios.create({
     baseURL: API_URL
-} as CreateAxiosDefaults)
+} as CreateAxiosDefaults);
 
 type CommonResponseFields = {
-    resultCode: number
-    message?: string
-}
-
-type AdminUpdateGalleryResponseType = CommonResponseFields & {
-    gallery: Array<GalleryItemType>
-}
-
-type DeleteGalleryItemResponseType = CommonResponseFields
-
-type GetGalleryItemsResponseType = CommonResponseFields & {
-    gallery: Array<GalleryItemType>
-    totalCount: number
-}
-
-type ArchiveGalleryItemResponseType = CommonResponseFields
-
-type UpdateGalleryItemResponseType = CommonResponseFields & {
-    galleryItem: GalleryItemType
+    resultCode: number;
+    message?: string;
 }
 
 type GetTattooStylesResponseType = CommonResponseFields & {
-    tattooStyles: Array<TattooStyleType>
-    noStyleLength: number
+    tattooStyles: Array<StyleType>;
+    noStyleLength: number;
 }
 
 type AddTattooStylesResponseType = CommonResponseFields & {
-    tattooStyle: TattooStyleType
+    tattooStyle: StyleType
 }
 
-type EditTattooStyleResponseType = AddTattooStylesResponseType
+type EditTattooStyleResponseType = AddTattooStylesResponseType;
 
-type DeleteTattooStyleResponseType = GetTattooStylesResponseType
-
-type UpdateArchiveGalleryItemResponseType = CommonResponseFields & {
-    archivedGalleryItem: GalleryItemType
-}
-
-type ReactivateArchivedGalleryItemResponseType = CommonResponseFields
+type DeleteTattooStyleResponseType = GetTattooStylesResponseType;
 
 export const stylesApi = {
 

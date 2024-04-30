@@ -941,6 +941,10 @@ img {
   width: 70px;
   height: 70px;
 }
+.about__add-block .booking-btn {
+  width: auto;
+  margin: 0 auto 0 0;
+}
 
 @media (min-width: 990px) {
   .about {

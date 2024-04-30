@@ -1,34 +1,29 @@
-import { stylesApi } from "./StylesApi";
-import { TattooStyleType, GalleryItemType } from "../../types/Types";
+import {stylesApi} from "./StylesApi";
+import {StyleType} from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ResultCodesEnum} from "../../utils/constants";
 import {tattooStyles} from "../../data/StylesData";
+import {
+  setSuccessModalAC,
+  SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT} from "../General/general-reducer";
 
 const SET_STYLES = 'SET_STYLES';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
 const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE';
-const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const SET_FAKE_API = 'SET_FAKE_API';
 const ADD_TATTOO_STYLE_SUCCESS = 'You successfully added a new Tattoo style to your gallery.';
 const UPDATE_TATTOO_STYLE_SUCCESS = 'You successfully updated Tattoo style in your gallery.';
-const SET_API_ERROR = 'SET_API_ERROR';
 
 let initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
-  tattooStyles: [] as Array<TattooStyleType>,
-  activeStyle: {} as TattooStyleType | null,
+  styles: [] as Array<StyleType>,
+  activeStyle: {} as StyleType | null,
   fakeApi: false as boolean,
-  successModal: {
-    isSuccess: false as boolean,
-    successText: '' as string,
-  },
-  apiError: '' as string
 }
-
-export type SuccessModalType = typeof initialState.successModal;
 
 export type InitialStateType = typeof initialState;
 
@@ -64,7 +59,7 @@ export const stylesReducer = (
     case SET_STYLES:
       return {
         ...state,
-        tattooStyles: action.tattooStyles
+        styles: action.styles
       }
 
     case SET_ACTIVE_STYLE:
@@ -75,65 +70,16 @@ export const stylesReducer = (
         //currentGalleryPage: 1
       }
 
-    case SET_SUCCESS_MODAL:
-      return {
-        ...state,
-        successModal: {
-          isSuccess: action.isSuccess,
-          successText: action.text
-        }
-      }
-
-    case SET_FAKE_API:
-      return {
-        ...state,
-        fakeApi: action.fakeApi
-      }
-
-    case SET_API_ERROR:
-      return {
-        ...state,
-        apiError: action.error
-      }
-
     default: return {
       ...state
     }
   }
 }
 
-type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
-    SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT | SetFakeApiAT ;
+type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
+    SetStylesAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT;
 
 // actions creators
-
-type SetApiErrorAT = {
-  type: typeof  SET_API_ERROR
-  error: string
-};
-
-export const setApiErrorAC = (error: string): SetApiErrorAT  => ({
-  type: SET_API_ERROR, error
-});
-
-type SetSuccessModalAT = {
-  type: typeof SET_SUCCESS_MODAL
-  isSuccess: boolean
-  text: string
-}
-
-export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
-  type: SET_SUCCESS_MODAL, isSuccess, text
-});
-
-type SetFakeApiAT = {
-  type: typeof SET_FAKE_API
-  fakeApi: boolean
-}
-
-const setFakeApiAC = (fakeApi: boolean): SetFakeApiAT => ({
-  type: SET_FAKE_API, fakeApi
-});
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
@@ -155,21 +101,21 @@ const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
 });
 
-type SetTattooStylesAT = {
+type SetStylesAT = {
   type: typeof SET_STYLES,
-  tattooStyles: Array<TattooStyleType>
+  styles: Array<StyleType>
 }
 
-const setTattooStylesAC = (tattooStyles: Array<TattooStyleType>): SetTattooStylesAT => ({
-    type: SET_STYLES, tattooStyles
+const setStylesAC = (styles: Array<StyleType>): SetStylesAT => ({
+    type: SET_STYLES, styles
 });
 
 type SetActiveStyleAT = {
   type: typeof SET_ACTIVE_STYLE,
-  style: TattooStyleType | null
+  style: StyleType | null
 }
 
-export const setActiveStyleAC = (style: TattooStyleType | null): SetActiveStyleAT => ({
+export const setActiveStyleAC = (style: StyleType | null): SetActiveStyleAT => ({
     type: SET_ACTIVE_STYLE, style
 });
 
@@ -184,13 +130,13 @@ export const getTattooStyles = (token: string | null): ThunkType => async (
     dispatch(setIsFetchingAC(true))
     let response = await stylesApi.getTattooStyles(token);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFakeApiAC(false));
-      dispatch(setTattooStylesAC(response.tattooStyles));
+      //dispatch(setFakeApiAC(false));
+      dispatch(setStylesAC(response.tattooStyles));
     }
   } catch (e) {
     console.log(e);
-    dispatch(setTattooStylesAC(tattooStyles));
-    dispatch(setFakeApiAC(true));
+    dispatch(setStylesAC(tattooStyles));
+    //dispatch(setFakeApiAC(true));
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -226,20 +172,21 @@ export const editTattooStyle = (id: string, values: FormData): ThunkType => asyn
 
 export const deleteTattooStyle = (id: string): ThunkType => async (dispatch) => {
   try {
+    dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await stylesApi.deleteTattooStyle(id)
     if (response.resultCode === ResultCodesEnum.Success) {
-      //dispatch(setTattooStylesAC(response.tattooStyles));
       dispatch(setActiveStyleAC(response.tattooStyles[0]));
     }
 
   } catch (e) {
     console.log(e);
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
 export const resetActiveStyle = (
-  style: TattooStyleType
+  style: StyleType
 ): ThunkType => async (dispatch) => {
   dispatch(setActiveStyleAC(style));
-  //dispatch(setCurrentGalleryPageAC(1));
 }

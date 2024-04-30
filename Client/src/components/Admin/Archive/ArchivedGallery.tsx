@@ -6,18 +6,19 @@ import {
     getArchivedGallerySelector,
     getCurrentArchivedGalleryPageSelector,
     getIsGalleryItemDeletingInProcessSelector,
-    getTattooStylesSelector,
     getTotalArchivedGalleryItemsCountSelector
-} from "../../../redux/Portfolio/portfolio-selectors";
+} from "../../../redux/Gallery/gallery-selectors";
+import {getStylesSelector,} from "../../../redux/Styles/styles-selectors";
 import {Paginator} from "../../common/Paginator";
 import {
     deleteArchivedGalleryItem,
-    getArchivedGallery, getTattooStyles,
+    getArchivedGallery,
     reactivateArchivedGalleryItem,
     setArchivedGalleryPageSizeAC,
     setCurrentArchivedGalleryPageAC,
     updateArchivedGalleryItem
-} from "../../../redux/Portfolio/portfolio-reducer";
+} from "../../../redux/Gallery/gallery-reducer";
+import {getTattooStyles,} from "../../../redux/Styles/styles-reducer";
 import { API_URL } from "../../../http";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg"
@@ -26,6 +27,7 @@ import {ModalPopUp} from "../../common/ModalPopUp"
 import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm"
 import {Tooltip} from "react-tooltip"
 import {Confirmation} from "../../common/Confirmation";
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const ArchivedGallery = () => {
 
@@ -34,13 +36,14 @@ export const ArchivedGallery = () => {
     const currentPage = useSelector(getCurrentArchivedGalleryPageSelector);
     const archivedGallery = useSelector(getArchivedGallerySelector);
     const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector);
-    const tattooStyles = useSelector(getTattooStylesSelector);
+    const styles = useSelector(getStylesSelector);
+    const token = useSelector(getTokenSelector);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (tattooStyles.length === 0) {
-            dispatch(getTattooStyles());
+        if (styles.length === 0) {
+            dispatch(getTattooStyles(token));
         }
         dispatch(getArchivedGallery(currentPage, pageSize));
     }, [currentPage, pageSize]);
@@ -141,7 +144,6 @@ export const ArchivedGallery = () => {
     return (
         <>
             <div className="admin__cards-header">
-
                 <Paginator
                     totalCount={totalCount}
                     pageSize={pageSize}
@@ -149,7 +151,6 @@ export const ArchivedGallery = () => {
                     onPageChanged={onPageChangedCallBack}
                     setPageLimit={setArchivedGalleryPageSizeACCallBack}
                 />
-
             </div>
             { archivedGallery.length > 0
                 ? (
@@ -182,7 +183,7 @@ export const ArchivedGallery = () => {
                     <UpdateGalleryItemForm
                         folder={'archivedGallery'}
                         galleryItem={editGalleryItem}
-                        styles={tattooStyles}
+                        styles={styles}
                         updateGalleryItem={updateArchivedGalleryItemCallBack}
                         closeModal={closeGalleryItemEditModal}
                     />

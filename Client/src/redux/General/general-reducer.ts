@@ -93,7 +93,7 @@ type ActionsTypes = SetIsGeneralFetchingAT | SetApiErrorAT | SetAboutPageAT |
 
 // action creators
 
-type SetSuccessModalAT = {
+export type SetSuccessModalAT = {
   type: typeof SET_SUCCESS_MODAL
   isSuccess: boolean
   text: string
@@ -103,7 +103,7 @@ export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessM
   type: SET_SUCCESS_MODAL, isSuccess, text
 });
 
-type SetApiErrorAT = {
+export type SetApiErrorAT = {
   type: typeof  SET_API_ERROR
   error: string
 };
