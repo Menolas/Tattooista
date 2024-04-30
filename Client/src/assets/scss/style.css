@@ -941,6 +941,10 @@ img {
   width: 70px;
   height: 70px;
 }
+.about__add-block .booking-btn {
+  width: auto;
+  margin: 0 auto 0 0;
+}
 
 @media (min-width: 990px) {
   .about {
@@ -1966,7 +1970,7 @@ img {
   text-align: left;
   background-color: transparent;
   z-index: 20;
-  transform: translateY(-100%);
+  transform: translateY(-200%);
 }
 .modal-wrap.open {
   animation: popUp 0.5s ease forwards;

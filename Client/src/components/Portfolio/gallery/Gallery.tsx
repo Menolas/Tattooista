@@ -1,19 +1,19 @@
 import * as React from "react";
 import { useState } from "react";
-import { Preloader } from "../common/Preloader";
-import {GalleryItemType, TattooStyleType} from "../../types/Types";
-import { ModalPopUp } from "../common/ModalPopUp";
-import {API_URL} from "../../http";
+import { Preloader } from "../../common/Preloader";
+import {GalleryItemType, TattooStyleType} from "../../../types/Types";
+import { ModalPopUp } from "../../common/ModalPopUp";
+import {API_URL} from "../../../http";
 import {Tooltip} from "react-tooltip";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
-import {Paginator} from "../common/Paginator";
-import {UpdateGalleryItemForm} from "../Forms/UpdateGalleryItemForm";
-import {NothingToShow} from "../common/NothingToShow";
-import {GalleryUploadForm} from "../Forms/GalleryUploadForm";
-import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
-import {ImageFullView} from "../common/ImageFullView";
-import {Confirmation} from "../common/Confirmation";
+import Sprite from "../../../assets/svg/sprite.svg";
+import {Paginator} from "../../common/Paginator";
+import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm";
+import {NothingToShow} from "../../common/NothingToShow";
+import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
+import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
+import {ImageFullView} from "../../common/ImageFullView";
+import {Confirmation} from "../../common/Confirmation";
 
 type PropsType = {
   fakeApi: boolean
@@ -25,13 +25,13 @@ type PropsType = {
   activeStyle: TattooStyleType
   gallery: Array<GalleryItemType>
   isDeletingInProcess: Array<string>
-  tattooStyles: Array<TattooStyleType>
+  styles: Array<TattooStyleType>
   updateGallery: (values: FormData) => void
-  deleteGalleryItem: (itemId: string) => void
+  remove: (itemId: string) => void
   setCurrentPage: (page: number) => void
   setPageSize: (limit: number) => void
-  archiveGalleryItem: (id: string) => void
-  updateGalleryItem: (id: string, values: object) => void
+  archive: (id: string) => void
+  updateItem: (id: string, values: object) => void
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
@@ -44,18 +44,18 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   currentPage,
   gallery,
   isDeletingInProcess,
-  tattooStyles,
+  styles,
   setCurrentPage,
   setPageSize,
   updateGallery,
-  deleteGalleryItem,
-  archiveGalleryItem,
-  updateGalleryItem
+  remove,
+  archive,
+  updateItem,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
   const [ editGalleryMode, setEditGalleryMode ] = useState(false);
-  const [ editGalleryItem, setEditGalleryItem ] = useState(null);
+  const [ galleryItem, setGalleryItem ] = useState(null);
   const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
     needConfirmation: false,
   });
@@ -72,7 +72,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   }
 
   const closeGalleryItemEditModal = () => {
-    setEditGalleryItem(null);
+    setGalleryItem(null);
     setEditGalleryMode(false);
   }
 
@@ -106,7 +106,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Edit gallery item"
                   className={"btn btn--icon"}
-                  onClick={() => { setEditGalleryItem(item); }}
+                  onClick={() => { setGalleryItem(item); }}
               >
                   <svg><use href={`${Sprite}#edit`}/></svg>
               </button>
@@ -177,19 +177,19 @@ export const Gallery: React.FC<PropsType> = React.memo(({
            />
         }
         <ModalPopUp
-            isOpen={editGalleryItem || editGalleryMode}
+            isOpen={galleryItem || editGalleryMode}
             closeModal={closeGalleryItemEditModal}
-            modalTitle={ editGalleryItem
+            modalTitle={ galleryItem
                          ? 'Update tattoo styles for this image'
                          : `Update you gallery for ${activeStyle?.value}`
             }
         >
-          {  editGalleryItem &&
+          {  galleryItem &&
               <UpdateGalleryItemForm
                   folder={'gallery'}
-                  galleryItem={editGalleryItem}
-                  styles={tattooStyles}
-                  updateGalleryItem={updateGalleryItem}
+                  galleryItem={galleryItem}
+                  styles={styles}
+                  updateGalleryItem={updateItem}
                   closeModal={closeGalleryItemEditModal}
               />
           }
@@ -209,14 +209,14 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           { confirmationData.needConfirmation &&
               <Confirmation
                   content={'Are you sure? You about to delete this gallery image FOREVER...'}
-                  confirm={() => {deleteGalleryItem(confirmationData.itemId)}}
+                  confirm={() => {remove(confirmationData.itemId)}}
                   cancel={closeConfirmationModalCallBack}
               />
           }
           { confirmationForArchivingData.needConfirmation &&
               <Confirmation
                   content={'Are you sure? You about to move this gallery image to archive.'}
-                  confirm={() => {archiveGalleryItem(confirmationForArchivingData.itemId)}}
+                  confirm={() => {archive(confirmationForArchivingData.itemId)}}
                   cancel={closeConfirmationModalCallBack}
               />
           }

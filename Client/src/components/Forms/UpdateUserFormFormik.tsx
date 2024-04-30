@@ -7,7 +7,7 @@ import {
   MAX_FILE_SIZE,
   VALID_FILE_EXTENSIONS
 } from "../../utils/validators";
-import {RoleType, UpdateUserFormValues, UserType} from "../../types/Types";
+import {RoleType, UserType} from "../../types/Types";
 import {API_URL} from "../../http";
 // @ts-ignore
 import avatar from "../../assets/img/fox.webp";
@@ -66,8 +66,6 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   addUser,
 }) => {
 
-  //console.log(JSON.stringify(profile) + " profile !!!!!!!!!!!!!!!!!!");
-
   const [hasNewFile, setHasNewFile] = useState(false);
   const validationSchema = getValidationSchema(isEditing, hasNewFile);
   const [imageURL, setImageURL] = useState('')
@@ -104,14 +102,12 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     roles: rolesInitialValues
   }
 
-  console.log(JSON.stringify(initialValues) + " initialValues!!!!!!!!!!");
-
   const submit = (values, actions: FormikHelpers<FormikValues>) => {
     const formData = new FormData();
 
     // Append each field from values to formData
     for (let key in values) {
-      // If the field is 'roles', append each role ID and its boolean value directly
+
       if (key === 'roles') {
         let roles = "";
         const userRoles = values[key];
@@ -133,10 +129,8 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
     if (isEditing) {
       updateUser(profile._id, formData);
-      //console.log(JSON.stringify(formData) + " formData !!!!!!!!!!");
     } else {
       addUser(formData);
-      //console.log(JSON.stringify(formData) + " formData !!!!!!!!!!");
     }
     actions.resetForm();
     closeModal();

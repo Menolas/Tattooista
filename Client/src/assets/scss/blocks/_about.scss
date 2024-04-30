@@ -28,14 +28,6 @@
       filter: none;
     }
   }
-
-  //&::before {
-  //  @include element-style(100%, calc(100vw - 2rem), transparent);
-  //  left: 50%;
-  //  top: 30px;
-  //  border: $light-border;
-  //  transform: translate(-50%, 0);
-  //}
 }
 
 .about__content {
@@ -69,6 +61,10 @@
         height: 70px;
       }
     }
+  }
+  .booking-btn {
+    width: auto;
+    margin: 0 auto 0 0;
   }
 }
 

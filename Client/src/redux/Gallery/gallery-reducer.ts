@@ -1,12 +1,15 @@
-import { portfolioApi } from "./PortfolioApi";
-import { TattooStyleType, GalleryItemType } from "../../types/Types";
+import { galleryApi } from "./GalleryApi";
+import { StyleType, GalleryItemType } from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ResultCodesEnum} from "../../utils/constants";
 import {getNewPage} from "../../utils/functions";
-import {tattooStyles} from "../../data/StylesData";
 import { gallery } from "../../data/GalleryData";
-import {number} from "yup";
+import {
+  setSuccessModalAC,
+  SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT} from "../General/general-reducer";
 
 const SET_GALLERY_PAGE_SIZE = 'SET_GALLERY_PAGE_SIZE';
 const SET_ARCHIVED_GALLERY_PAGE_SIZE = 'SET_ARCHIVED_GALLERY_PAGE_SIZE';
@@ -14,10 +17,8 @@ const SET_CURRENT_GALLERY_PAGE = 'SET_CURRENT_GALLERY_PAGE';
 const SET_CURRENT_ARCHIVED_GALLERY_PAGE = 'SET_CURRENT_ARCHIVED_GALLERY_PAGE';
 const SET_GALLERY_TOTAL_COUNT = 'SET_GALLERY_TOTAL_COUNT';
 const SET_ARCHIVED_GALLERY_TOTAL_COUNT = 'SET_ARCHIVED_GALLERY_TOTAL_COUNT';
-const SET_STYLES = 'SET_STYLES';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
-const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE';
 const SET_GALLERY = 'SET_GALLERY';
 const UPDATE_GALLERY = 'UPDATE_GALLERY';
 const UPDATE_GALLERY_ITEM = 'UPDATE_GALLERY_ITEM';
@@ -25,14 +26,9 @@ const UPDATE_ARCHIVED_GALLERY_ITEM = 'UPDATE_ARCHIVED_GALLERY_ITEM';
 const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY';
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM';
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM';
-const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const SET_FAKE_API = 'SET_FAKE_API';
-const ADD_TATTOO_STYLE_SUCCESS = 'You successfully added a new Tattoo style to your gallery.';
-const UPDATE_TATTOO_STYLE_SUCCESS = 'You successfully updated Tattoo style in your gallery.';
 const ADD_GALLERY_ITEMS_SUCCESS = 'You successfully added gallery images';
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
-const SET_API_ERROR = 'SET_API_ERROR';
-const SET_NO_STYLE_LENGTH = 'SET_NO_STYLE_LENGTH';
 
 let initialState = {
   totalGalleryItemsCount: 0 as number,
@@ -43,20 +39,10 @@ let initialState = {
   currentArchivedGalleryPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
-  tattooStyles: [] as Array<TattooStyleType>,
-  noStyleLength: 0 as number,
-  activeStyle: {} as TattooStyleType | null,
   gallery: [] as Array<GalleryItemType>,
   archivedGallery: [] as Array<GalleryItemType>,
   fakeApi: false as boolean,
-  successModal: {
-    isSuccess: false as boolean,
-    successText: '' as string,
-  },
-  apiError: '' as string
 }
-
-export type SuccessModalType = typeof initialState.successModal;
 
 export type InitialStateType = typeof initialState;
 
@@ -69,7 +55,7 @@ export type InitialStateType = typeof initialState;
 //OldSchool
 //No style Here the images of tattoos which difficult to define which style it is actually
 
-export const portfolioReducer = (
+export const galleryReducer = (
   state = initialState,
   action: ActionsTypes): InitialStateType => {
 
@@ -124,21 +110,6 @@ export const portfolioReducer = (
         isDeletingInProcess: action.isFetching
             ? [...state.isDeletingInProcess, action.id]
             : state.isDeletingInProcess.filter(id => id !== action.id)
-      }
-
-    case SET_STYLES:
-      return {
-        ...state,
-        tattooStyles: action.tattooStyles
-      }
-
-    case SET_ACTIVE_STYLE:
-
-      return {
-        ...state,
-        activeStyle: action.style,
-        //activeStyleValue: action.style.value,
-        currentGalleryPage: 1
       }
 
     case SET_GALLERY:
@@ -196,31 +167,10 @@ export const portfolioReducer = (
         })
       }
 
-    case SET_SUCCESS_MODAL:
-      return {
-        ...state,
-        successModal: {
-          isSuccess: action.isSuccess,
-          successText: action.text
-        }
-      }
-
     case SET_FAKE_API:
       return {
         ...state,
         fakeApi: action.fakeApi
-      }
-
-    case SET_API_ERROR:
-      return {
-        ...state,
-        apiError: action.error
-      }
-
-    case SET_NO_STYLE_LENGTH:
-      return {
-        ...state,
-        noStyleLength: action.noStyleLength
       }
 
     default: return {
@@ -232,39 +182,11 @@ export const portfolioReducer = (
 type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
     SetGalleryPageSizeAT | SetArchivedGalleryPageSizeAT | SetCurrentGalleryPageAT |
     SetCurrentArchivedGalleryPageAT | SetGalleryTotalCountAT | SetArchivedGalleryTotalCountAT |
-    SetIsFetchingAT | SetTattooStylesAT | SetActiveStyleAT | SetGalleryAT | SetArchivedGalleryAT |
+    SetIsFetchingAT | SetGalleryAT | SetArchivedGalleryAT |
     UpdateGalleryAT | DeleteGalleryItemAT | DeleteArchivedGalleryItemAT | UpdateGalleryItemAT |
-    UpdateArchivedGalleryItemAT | SetFakeApiAT | SetNoStyleLengthAT;
+    UpdateArchivedGalleryItemAT | SetFakeApiAT ;
 
 // actions creators
-
-type SetNoStyleLengthAT = {
-  type: typeof  SET_NO_STYLE_LENGTH
-  noStyleLength: number
-}
-
-const setNoStyleLengthAC = (noStyleLength: number): SetNoStyleLengthAT => ({
-  type: SET_NO_STYLE_LENGTH, noStyleLength
-});
-
-type SetApiErrorAT = {
-  type: typeof  SET_API_ERROR
-  error: string
-};
-
-export const setApiErrorAC = (error: string): SetApiErrorAT  => ({
-  type: SET_API_ERROR, error
-});
-
-type SetSuccessModalAT = {
-  type: typeof SET_SUCCESS_MODAL
-  isSuccess: boolean
-  text: string
-}
-
-export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
-  type: SET_SUCCESS_MODAL, isSuccess, text
-});
 
 type SetFakeApiAT = {
   type: typeof SET_FAKE_API
@@ -347,24 +269,6 @@ type SetIsFetchingAT = {
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
-});
-
-type SetTattooStylesAT = {
-  type: typeof SET_STYLES,
-  tattooStyles: Array<TattooStyleType>
-}
-
-const setTattooStylesAC = (tattooStyles: Array<TattooStyleType>): SetTattooStylesAT => ({
-    type: SET_STYLES, tattooStyles
-});
-
-type SetActiveStyleAT = {
-  type: typeof SET_ACTIVE_STYLE,
-  style: TattooStyleType | null
-}
-
-export const setActiveStyleAC = (style: TattooStyleType | null): SetActiveStyleAT => ({
-    type: SET_ACTIVE_STYLE, style
 });
 
 type SetGalleryAT = {
@@ -476,26 +380,6 @@ const deleteArchivedGalleryItemThunk = (
   }
 }
 
-export const getTattooStyles = (token: string | null): ThunkType => async (
-  dispatch
-) => {
-  try {
-    dispatch(setIsFetchingAC(true))
-    let response = await portfolioApi.getTattooStyles(token);
-    if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFakeApiAC(false));
-      dispatch(setTattooStylesAC(response.tattooStyles));
-      dispatch(setNoStyleLengthAC(response.noStyleLength));
-    }
-  } catch (e) {
-    console.log(e);
-    dispatch(setTattooStylesAC(tattooStyles));
-    dispatch(setFakeApiAC(true));
-  } finally {
-    dispatch(setIsFetchingAC(false));
-  }
-}
-
 export const getGallery = (
     styleId: string,
     currentPage: number,
@@ -503,7 +387,7 @@ export const getGallery = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await portfolioApi.getGalleryItems(styleId, currentPage, pageSize)
+    let response = await galleryApi.getGalleryItems(styleId, currentPage, pageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
       dispatch(setGalleryAC(response.gallery));
@@ -520,54 +404,13 @@ export const getGallery = (
   }
 }
 
-export const addTattooStyle = (values: FormData): ThunkType => async (
-    dispatch
-) => {
-  try {
-    let response = await portfolioApi.addTattooStyle(values)
-    if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setActiveStyleAC(response.tattooStyle));
-      dispatch(setSuccessModalAC(true, ADD_TATTOO_STYLE_SUCCESS));
-    }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e.response?.data?.message);
-  }
-}
-
-export const editTattooStyle = (id: string, values: FormData): ThunkType => async (dispatch) => {
-  try {
-    let response = await portfolioApi.editTattooStyle(id, values)
-    if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setActiveStyleAC(response.tattooStyle));
-      dispatch(setSuccessModalAC(true, UPDATE_TATTOO_STYLE_SUCCESS));
-    }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
-  }
-}
-
-export const deleteTattooStyle = (id: string): ThunkType => async (dispatch) => {
-  try {
-    let response = await portfolioApi.deleteTattooStyle(id)
-    if (response.resultCode === ResultCodesEnum.Success) {
-      //dispatch(setTattooStylesAC(response.tattooStyles));
-      dispatch(setActiveStyleAC(response.tattooStyles[0]));
-    }
-
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 export const getArchivedGallery = (
     currentArchivedGalleryPage: number,
     archivedGalleryPageSize: number,
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))
-    let response = await portfolioApi.getArchivedGalleryItems(currentArchivedGalleryPage, archivedGalleryPageSize)
+    let response = await galleryApi.getArchivedGalleryItems(currentArchivedGalleryPage, archivedGalleryPageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedGalleryAC(response.gallery));
       dispatch(setArchivedGalleryTotalCountAC(response.totalCount));
@@ -579,13 +422,6 @@ export const getArchivedGallery = (
   }
 }
 
-export const resetActiveStyle = (
-  style: TattooStyleType
-): ThunkType => async (dispatch) => {
-  dispatch(setActiveStyleAC(style));
-  dispatch(setCurrentGalleryPageAC(1));
-}
-
 export const adminUpdateGallery = (
   tattooStyle: string,
   values: FormData
@@ -593,7 +429,7 @@ export const adminUpdateGallery = (
 
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await portfolioApi.adminUpdateGallery(tattooStyle, values);
+    let response = await galleryApi.adminUpdateGallery(tattooStyle, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryAC(response.gallery));
       dispatch(setSuccessModalAC(true, ADD_GALLERY_ITEMS_SUCCESS));
@@ -612,11 +448,11 @@ export const deleteGalleryItem = (
   currentPage: number,
   total: number,
   pageLimit: number,
-  style: TattooStyleType
+  style: StyleType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await portfolioApi.deleteGalleryItem(id);
+    let response = await galleryApi.deleteGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit));
     }
@@ -636,7 +472,7 @@ export const deleteArchivedGalleryItem = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await portfolioApi.deleteArchivedGalleryItem(id);
+    let response = await galleryApi.deleteArchivedGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit));
     }
@@ -653,11 +489,11 @@ export const archiveGalleryItem = (
     currentPage: number,
     total: number,
     pageLimit: number,
-    style: TattooStyleType
+    style: StyleType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await portfolioApi.archiveGalleryItem(id);
+    let response = await galleryApi.archiveGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit));
     }
@@ -677,7 +513,7 @@ export const reactivateArchivedGalleryItem = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await portfolioApi.reactivateArchivedGalleryItem(id);
+    let response = await galleryApi.reactivateArchivedGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit));
     }
@@ -690,7 +526,7 @@ export const reactivateArchivedGalleryItem = (
 
 export const updateGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
   try {
-    let response = await portfolioApi.updateGalleryItem(id, values);
+    let response = await galleryApi.updateGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryItemAC(response.galleryItem));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
@@ -703,7 +539,7 @@ export const updateGalleryItem = (id: string, values: object): ThunkType => asyn
 
 export const updateArchivedGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
   try {
-    let response = await portfolioApi.updateArchiveGalleryItem(id, values);
+    let response = await galleryApi.updateArchiveGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateArchivedGalleryItemAC(response.archivedGalleryItem));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));

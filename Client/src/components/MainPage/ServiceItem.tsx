@@ -5,6 +5,9 @@ import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
+import {useState} from "react";
+import {Confirmation} from "../common/Confirmation";
+import {ModalPopUp} from "../common/ModalPopUp";
 
 type SetUpdateServiceDataType = React.Dispatch<React.SetStateAction<{
     isUpdateMode: boolean,
@@ -30,9 +33,15 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
     deleteService,
     setUpdateServiceData,
 }) => {
+
+    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
     const conditions = service.conditions.map((item, i) => {
         return item ? <li key = { i }>{item}</li> : null
     });
+
+    const closeModal = () => {
+        setNeedConfirmation(false);
+    }
 
     const wallPaperUrl = !fakeApi && service.wallPaper
         ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
@@ -58,7 +67,9 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                             data-tooltip-id="service-tooltip"
                             data-tooltip-content="Delete service item"
                             className={"btn btn--icon"}
-                            onClick={() => {deleteService(service._id)}}
+                            onClick={() => {
+                                setNeedConfirmation(true);
+                            }}
                         >
                             <svg><use href={`${Sprite}#trash`}/></svg>
                         </button>
@@ -75,6 +86,19 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                     </ul>
                 </div>
             </article>
+            <ModalPopUp
+                isOpen={needConfirmation}
+                modalTitle={''}
+                closeModal={closeModal}
+            >
+                { needConfirmation &&
+                    <Confirmation
+                        content={'Are you sure? You about to delete this Service FOREVER...'}
+                        confirm={()=> {deleteService(service._id);}}
+                        cancel={closeModal}
+                    />
+                }
+            </ModalPopUp>
             <Tooltip id="service-tooltip" />
         </li>
     )

@@ -7,7 +7,6 @@ import {ADMIN, ADMIN_BUTTONS_DATA, SUPER_ADMIN} from "../../utils/constants"
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg"
 import { useState} from "react"
-import {array} from "yup";
 
 const Admin: React.FC = React.memo(() => {
 

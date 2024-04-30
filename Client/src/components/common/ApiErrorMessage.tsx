@@ -14,7 +14,7 @@ export const ApiErrorMessage: React.FC<PropsType> = ({
 }) => {
     return (
         <ModalPopUp isOpen={isOpen} closeModal={closeModal} modalClasses={"apiErrorMessage"}>
-            <p>Sorry, but something went wrong on the server side, please try a bit later</p>
+            <p>Sorry, but something went wrong on the server side, please try with another data or a bit later</p>
             <p>{error}</p>
         </ModalPopUp>
     )
