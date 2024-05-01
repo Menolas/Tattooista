@@ -5,34 +5,18 @@ export const getBookingsSelector = (state: AppStateType) => {
   return state.bookings.bookings;
 }
 
-export const getArchivedBookingsSelector = (state: AppStateType) => {
-  return state.bookings.archivedBookings;
-}
-
 //reselect library selector
 
 export const getBookedConsultationsPageSizeSelector = (state: AppStateType) => {
   return state.bookings.bookedConsultationsPageSize;
 }
 
-export const getArchivedConsultationsPageSizeSelector = (state: AppStateType) => {
-  return state.bookings.archivedConsultationsPageSize;
-}
-
 export const getTotalBookingsCountSelector = (state: AppStateType) => {
   return state.bookings.totalBookingsCount;
 }
 
-export const getTotalArchivedConsultationsCountSelector = (state: AppStateType) => {
-  return state.bookings.totalArchivedConsultationsCount;
-}
-
 export const getCurrentBookedConsultationsPageSelector = (state: AppStateType) => {
   return state.bookings.currentBookedConsultationsPage;
-}
-
-export const getCurrentArchivedConsultationsPageSelector = (state: AppStateType) => {
-  return state.bookings.currentArchivedConsultationsPage;
 }
 
 export const getIsStatusChangingSelector = (state: AppStateType) => {
@@ -49,10 +33,6 @@ export const getBookedConsultationsIsFetchingSelector = (state: AppStateType) =>
 
 export const getBookedConsultationsFilterSelector = (state: AppStateType) => {
   return state.bookings.bookedConsultationsFilter;
-}
-
-export const getArchivedConsultationsFilterSelector = (state: AppStateType) => {
-  return state.bookings.archivedConsultationsFilter;
 }
 
 export const getSuccessModalSelector = (state: AppStateType) => {

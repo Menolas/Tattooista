@@ -145,7 +145,7 @@ export const getStyles = (token: string | null): ThunkType => async (
 ) => {
   try {
     dispatch(setIsFetchingAC(true))
-    let response = await stylesApi.getTattooStyles(token);
+    let response = await stylesApi.getStyles(token);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
       dispatch(setStylesAC(response.tattooStyles));
@@ -163,7 +163,7 @@ export const addStyle = (values: FormData): ThunkType => async (
     dispatch
 ) => {
   try {
-    let response = await stylesApi.addTattooStyle(values)
+    let response = await stylesApi.addStyle(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
@@ -176,7 +176,7 @@ export const addStyle = (values: FormData): ThunkType => async (
 
 export const editStyle = (id: string, values: FormData): ThunkType => async (dispatch) => {
   try {
-    let response = await stylesApi.editTattooStyle(id, values)
+    let response = await stylesApi.editStyle(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, UPDATE_STYLE_SUCCESS));
@@ -190,7 +190,7 @@ export const editStyle = (id: string, values: FormData): ThunkType => async (dis
 export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await stylesApi.deleteTattooStyle(id)
+    let response = await stylesApi.deleteStyle(id)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyles[0]));
     }

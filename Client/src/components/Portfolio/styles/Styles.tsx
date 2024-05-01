@@ -48,6 +48,8 @@ export const Styles: React.FC<PropsType> = React.memo(({
   const [style, setStyle] = useState(null);
   const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
 
+  const confirmationText = 'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...';
+
   const closeModal = () => {
     setAddMode(false);
     setEditMode(false);
@@ -153,7 +155,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
             closeModal={closeConfirmationModalCallBack}
         >
           <Confirmation
-              content={'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...'}
+              content={confirmationText}
               confirm={removeCallBack}
               cancel={closeConfirmationModalCallBack}
           />

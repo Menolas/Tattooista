@@ -1,14 +1,14 @@
 import * as React from "react";
 import {Field, Form, Formik} from "formik";
-import { GalleryItemType, TattooStyleType} from "../../types/Types";
+import { GalleryItemType, StyleType} from "../../types/Types";
 import {FieldWrapper} from "./FieldWrapper";
 import {API_URL} from "../../http";
 
 type PropsType = {
     folder: string;
     galleryItem: GalleryItemType;
-    styles: Array<TattooStyleType>;
-    updateGalleryItem: (id: string, values: object) => void;
+    styles: Array<StyleType>;
+    edit: (id: string, values: object) => void;
     closeModal?: () => void;
 }
 
@@ -16,12 +16,12 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
     folder,
     galleryItem,
     styles,
-    updateGalleryItem,
+    edit,
     closeModal
 }) => {
 
     const submit = (values: any) => {
-        updateGalleryItem(galleryItem._id, values);
+        edit(galleryItem._id, values);
         closeModal();
     }
 

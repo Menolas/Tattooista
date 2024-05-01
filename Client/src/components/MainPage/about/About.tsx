@@ -11,16 +11,19 @@ import {ADMIN, SUPER_ADMIN} from "../../../utils/constants"
 import {SocialNav} from "../../SocialNav";
 import {BookingButton} from "../../common/BookingButton"
 import {ReadMore} from "../../common/ReadMore";
+import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
-    fakeApi: boolean
-    isAuth: string
-    pageAbout?: PageType
-    edit: (values: FormData) => void
-    changeVisibility: (isActive: boolean) => void
+    isFetching: boolean;
+    fakeApi: boolean;
+    isAuth: string;
+    pageAbout?: PageType;
+    edit: (values: FormData) => void;
+    changeVisibility: (isActive: boolean) => void;
 }
 
 export const About: React.FC<PropsType> = React.memo(({
+     isFetching,
      fakeApi,
      isAuth,
      pageAbout,
@@ -71,31 +74,39 @@ export const About: React.FC<PropsType> = React.memo(({
                     </button>
                 </div>
             }
-            <h2 className={'page-block__title'}>{pageAbout?.title ? pageAbout.title : 'Tattoo Artist'}</h2>
-            <div className={'about__layout-wrap'}>
-                <div className={'about__img-wrap-decor'}>
-                    <div
-                        className={'about__img-wrap'}
-                        style={{backgroundImage: imgUrl}}
-                    >{''}</div>
-                </div>
-                <div className={'about__content-wrap'}>
-                    <h3 className={'page-block__title-secondary'}>Facts about me</h3>
-                    <div className={'about__content'}>
-                        {
-                            pageAbout?.content &&
-                            <ReadMore id={'text-about'} text={pageAbout?.content} amountOfWords={36} />
-                        }
-                    </div>
-                    <div className={'about__add-block'}>
-                        <h3 className={'page-block__title-secondary'}>Follow me</h3>
-                        <SocialNav />
-                        <BookingButton
-                            consentId={"consent2"}
-                        />
-                    </div>
-                </div>
-            </div>
+            {
+                isFetching
+                    ? (
+                        <>
+                            <h2 className={'page-block__title'}>{pageAbout?.title ? pageAbout.title : 'Tattoo Artist'}</h2>
+                            <div className={'about__layout-wrap'}>
+                                <div className={'about__img-wrap-decor'}>
+                                    <div
+                                        className={'about__img-wrap'}
+                                        style={{backgroundImage: imgUrl}}
+                                    >{''}</div>
+                                </div>
+                                <div className={'about__content-wrap'}>
+                                    <h3 className={'page-block__title-secondary'}>Facts about me</h3>
+                                    <div className={'about__content'}>
+                                        {
+                                            pageAbout?.content &&
+                                            <ReadMore id={'text-about'} text={pageAbout?.content} amountOfWords={36} />
+                                        }
+                                    </div>
+                                    <div className={'about__add-block'}>
+                                        <h3 className={'page-block__title-secondary'}>Follow me</h3>
+                                        <SocialNav />
+                                        <BookingButton
+                                            consentId={"consent2"}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                      )
+                    : <Preloader />
+            }
             <ModalPopUp
                 isOpen={isEditMode}
                 modalTitle={editModalTitle}

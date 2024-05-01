@@ -26,13 +26,13 @@ type DeleteTattooStyleResponseType = GetTattooStylesResponseType;
 
 export const stylesApi = {
 
-    getTattooStyles(token: string | null) {
+    getStyles(token: string | null) {
         return instance.get<GetTattooStylesResponseType>('tattooStyle/',
             { headers: {Authorization: `Bearer ${token}`}} as AxiosRequestConfig
             ).then(response => response.data);
     },
 
-    addTattooStyle(
+    addStyle(
         values: FormData
     ) {
         return instance.post<AddTattooStylesResponseType>('tattooStyle/', values)
@@ -40,7 +40,7 @@ export const stylesApi = {
 
     },
 
-    editTattooStyle(
+    editStyle(
         id: string,
         values: FormData
     ) {
@@ -49,7 +49,7 @@ export const stylesApi = {
 
     },
 
-    deleteTattooStyle(id: string) {
+    deleteStyle(id: string) {
         return instance.delete<DeleteTattooStyleResponseType>(`tattooStyle/${id}`)
             .then(response => response.data);
     },
