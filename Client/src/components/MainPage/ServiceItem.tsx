@@ -21,7 +21,7 @@ type PropsType = {
     isAuth: string;
     serviceIndex: number;
     service: ServiceType;
-    deleteService: (id: string) => void;
+    remove: (id: string) => void;
     setUpdateServiceData: SetUpdateServiceDataType
 };
 
@@ -30,7 +30,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
     isAuth,
     serviceIndex,
     service,
-    deleteService,
+    remove,
     setUpdateServiceData,
 }) => {
 
@@ -94,7 +94,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                 { needConfirmation &&
                     <Confirmation
                         content={'Are you sure? You about to delete this Service FOREVER...'}
-                        confirm={()=> {deleteService(service._id);}}
+                        confirm={()=> {remove(service._id);}}
                         cancel={closeModal}
                     />
                 }

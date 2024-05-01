@@ -18,7 +18,7 @@ import {
   getGalleryPageSize,
   getGallerySelector,
   getIsFetching,
-  getIsGalleryItemDeletingInProcessSelector,
+  getIsDeletingInProcessSelector,
   getTotalGalleryItemsCount
 } from "../../../redux/Gallery/gallery-selectors";
 
@@ -30,14 +30,14 @@ import {
 export const GalleryContainer: React.FC = () => {
   const isAuth = useSelector(getAuthSelector);
   const isFetching = useSelector(getIsFetching);
+  const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
+  const fakeApi = useSelector(getFakeApiSelector);
   const totalCount = useSelector(getTotalGalleryItemsCount);
   const pageSize = useSelector(getGalleryPageSize);
   let currentPage = useSelector(getCurrentGalleryPage);
-  const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector);
   const styles = useSelector(getStylesSelector);
   let activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);
-  const fakeApi = useSelector(getFakeApiSelector);
 
   const dispatch = useDispatch();
 

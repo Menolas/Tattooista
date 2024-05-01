@@ -1,25 +1,30 @@
 import * as React from "react";
 import {useState} from "react";
-import { FaqType } from "../../types/Types";
+import { FaqType } from "../../../types/Types";
 import { FaqItem } from "./FaqItem";
-import {ModalPopUp} from "../common/ModalPopUp";
-import {UpdateFaqItemFormFormik} from "../Forms/UpdateFaqItemFormFormik";
-import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {UpdateFaqItemFormFormik} from "../../Forms/UpdateFaqItemFormFormik";
+import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
+import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
+  isFetching: boolean;
+  isDeletingInProcess: Array<string>;
   isAuth: string;
   faq: Array<FaqType>;
-  updateFaqItem: (id: string, values: any) => void;
-  addFaqItem: (values: FaqType) => void;
-  deleteFaqItem: (id: string) => void;
+  edit: (id: string, values: any) => void;
+  add: (values: FaqType) => void;
+  remove: (id: string) => void;
 }
 
 export const FaqItems: React.FC<PropsType> = React.memo(({
+  isFetching,
+  isDeletingInProcess,
   isAuth,
   faq,
-  updateFaqItem,
-  addFaqItem,
-  deleteFaqItem
+  edit,
+  add,
+  remove,
 }) => {
 
   const [addFaqItemMode, setAddFaqItemMode] = useState(false);
@@ -35,10 +40,9 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
       <FaqItem
         key={item._id}
         isAuth={isAuth}
-        faqItem={item}
-        updateFaqItem={updateFaqItem}
-        deleteFaqItem={deleteFaqItem}
-        setUpdateFaqItemData={setUpdateFaqItemData}
+        item={item}
+        remove={remove}
+        setEditData={setUpdateFaqItemData}
       />
     )
   });
@@ -65,8 +69,8 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
           { (updateFaqItemData.isUpdateMode || addFaqItemMode) &&
               <UpdateFaqItemFormFormik
                   faqItem={updateFaqItemData.faqItem}
-                  updateFaqItem={updateFaqItem}
-                  addFaqItem={addFaqItem}
+                  updateFaqItem={edit}
+                  addFaqItem={add}
                   closeModal={() => {
                     setUpdateFaqItemData({isUpdateMode: false});
                     setAddFaqItemMode(false);
@@ -77,7 +81,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
         </ModalPopUp>
         <h2 className="page-block__title">F.A.Q</h2>
         <ul className="faq__list list">
-          {faqItemsArray}
+          { isFetching ? <Preloader /> : faqItemsArray }
         </ul>
       </div>
     </section>

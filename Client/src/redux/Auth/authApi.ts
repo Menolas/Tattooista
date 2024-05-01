@@ -1,6 +1,6 @@
-import $api, {API_URL} from "../../http"
-import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types"
-import {IUser} from "../../types/Types"
+import $api, {API_URL} from "../../http";
+import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types";
+import {IUser} from "../../types/Types";
 
 type CommonResponseFields = {
     resultCode: number
@@ -53,22 +53,22 @@ export const authAPI = {
 
   registration(values: RegistrationFormValues) {
       return $api.post<RegistrationResponseType>('auth/registration', values)
-          .then(res => res.data)
+          .then(res => res.data);
 
   },
 
   login(values: LoginFormValues) {
       return $api.post<LoginResponseType>('auth/login',  values)
-        .then(response => response.data)
+        .then(response => response.data);
   },
 
   logout() {
     return $api.post<LogoutResponseType>(`auth/logout`)
-        .then(response => response.data)
+        .then(response => response.data);
   },
 
   checkAuth() {
       return $api.get<CheckAuthResponseType>(`${API_URL}/auth/refresh`)
-          .then(response => response.data)
+          .then(response => response.data);
   }
 }

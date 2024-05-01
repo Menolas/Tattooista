@@ -14,30 +14,29 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
     faqItem?: FaqType
-    updateFaqItem?: (id: string, values: FaqType) => void
-    addFaqItem?: (values: FaqType) => void
+    edit?: (id: string, values: FaqType) => void
+    add?: (values: FaqType) => void
     closeModal: () => void
 }
 export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
   faqItem,
-  updateFaqItem,
-  addFaqItem,
+  edit,
+  add,
   closeModal,
 }) => {
-
     const initialValues = {
         question: faqItem?.question ?? '',
         answer: faqItem?.answer ?? '',
-    }
+    };
 
     const submit = (values) => {
         if (faqItem) {
-            updateFaqItem(faqItem._id, values);
+            edit(faqItem._id, values);
         } else {
-            addFaqItem(values);
+            add(values);
         }
         closeModal();
-    }
+    };
 
     return (
         <Formik

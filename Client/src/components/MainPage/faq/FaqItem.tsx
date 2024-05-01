@@ -1,12 +1,12 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {FaqType} from "../../types/Types";
+import {FaqType} from "../../../types/Types";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import Sprite from "../../../assets/svg/sprite.svg";
 import {Tooltip} from "react-tooltip";
-import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
-import {Confirmation} from "../common/Confirmation";
-import {ModalPopUp} from "../common/ModalPopUp";
+import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
+import {Confirmation} from "../../common/Confirmation";
+import {ModalPopUp} from "../../common/ModalPopUp";
 
 type SetUpdateFaqItemDataType = React.Dispatch<React.SetStateAction<{
     isUpdateMode: boolean;
@@ -15,17 +15,16 @@ type SetUpdateFaqItemDataType = React.Dispatch<React.SetStateAction<{
 
 type PropsType = {
   isAuth: string;
-  faqItem: FaqType;
-  updateFaqItem: (id: string, values: any) => void;
-  deleteFaqItem: (id: string) => void;
-  setUpdateFaqItemData: SetUpdateFaqItemDataType;
+  item: FaqType;
+  remove: (id: string) => void;
+  setEditData: SetUpdateFaqItemDataType;
 }
 
 export const FaqItem: React.FC<PropsType> = React.memo(({
     isAuth,
-    faqItem,
-    deleteFaqItem,
-    setUpdateFaqItemData,
+    item,
+    remove,
+    setEditData,
 }) => {
 
     let [faqItemClasses, setFaqItemClasses] = useState('faq__item');
@@ -69,10 +68,6 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
         setNeedConfirmation(false);
     }
 
-    const deleteFaqItemCallBack = () => {
-        deleteFaqItem(faqItem._id);
-    }
-
     return (
       <li
         className={faqItemClasses}
@@ -85,7 +80,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                     data-tooltip-content="Edit FAQ item"
                     className={"btn btn--icon"}
                     onClick={() => {
-                        setUpdateFaqItemData({isUpdateMode: true, faqItem: faqItem});
+                        setEditData({isUpdateMode: true, faqItem: item});
                     }}
                 >
                     <svg><use href={`${Sprite}#edit`}/></svg>
@@ -101,7 +96,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
             </div>
           }
           <h5 className="faq__item-title">
-            {faqItem.question}
+            {item.question}
           </h5>
           <button
               className="btn btn--icon faq__item-handle"
@@ -113,7 +108,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
           </button>
         </div>
         <p className="faq__item-text">
-          {faqItem.answer}
+          {item.answer}
         </p>
         <ModalPopUp
               isOpen={needConfirmation}
@@ -123,7 +118,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
             { needConfirmation &&
                 <Confirmation
                     content={'Are you sure? You about to delete this FAQ item FOREVER...'}
-                    confirm={deleteFaqItemCallBack}
+                    confirm={() => {remove(item._id);}}
                     cancel={closeModal}
                 />
             }

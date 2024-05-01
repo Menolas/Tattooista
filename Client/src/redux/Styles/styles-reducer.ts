@@ -14,8 +14,10 @@ const SET_STYLES = 'SET_STYLES';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
 const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE';
-const ADD_TATTOO_STYLE_SUCCESS = 'You successfully added a new Tattoo style to your gallery.';
-const UPDATE_TATTOO_STYLE_SUCCESS = 'You successfully updated Tattoo style in your gallery.';
+const SET_FAKE_API = 'SET_FAKE_API';
+
+const ADD_STYLE_SUCCESS = 'You successfully added a new Tattoo style to your gallery.';
+const UPDATE_STYLE_SUCCESS = 'You successfully updated Tattoo style in your gallery.';
 
 let initialState = {
   isFetching: false as boolean,
@@ -59,7 +61,7 @@ export const stylesReducer = (
     case SET_STYLES:
       return {
         ...state,
-        styles: action.styles
+        styles: action.styles,
       }
 
     case SET_ACTIVE_STYLE:
@@ -70,16 +72,31 @@ export const stylesReducer = (
         //currentGalleryPage: 1
       }
 
+    case SET_FAKE_API:
+      return {
+        ...state,
+        fakeApi: action.fakeApi,
+      }
+
     default: return {
-      ...state
+      ...state,
     }
   }
 }
 
 type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
-    SetStylesAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT;
+    SetStylesAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT | SetFakeApiAT;
 
 // actions creators
+
+type SetFakeApiAT = {
+  type: typeof SET_FAKE_API
+  fakeApi: boolean
+}
+
+const setFakeApiAC = (fakeApi: boolean): SetFakeApiAT => ({
+  type: SET_FAKE_API, fakeApi
+});
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
@@ -123,33 +140,33 @@ export const setActiveStyleAC = (style: StyleType | null): SetActiveStyleAT => (
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
-export const getTattooStyles = (token: string | null): ThunkType => async (
+export const getStyles = (token: string | null): ThunkType => async (
   dispatch
 ) => {
   try {
     dispatch(setIsFetchingAC(true))
     let response = await stylesApi.getTattooStyles(token);
     if (response.resultCode === ResultCodesEnum.Success) {
-      //dispatch(setFakeApiAC(false));
+      dispatch(setFakeApiAC(false));
       dispatch(setStylesAC(response.tattooStyles));
     }
   } catch (e) {
     console.log(e);
     dispatch(setStylesAC(tattooStyles));
-    //dispatch(setFakeApiAC(true));
+    dispatch(setFakeApiAC(true));
   } finally {
     dispatch(setIsFetchingAC(false));
   }
 }
 
-export const addTattooStyle = (values: FormData): ThunkType => async (
+export const addStyle = (values: FormData): ThunkType => async (
     dispatch
 ) => {
   try {
     let response = await stylesApi.addTattooStyle(values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyle));
-      dispatch(setSuccessModalAC(true, ADD_TATTOO_STYLE_SUCCESS));
+      dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
@@ -157,12 +174,12 @@ export const addTattooStyle = (values: FormData): ThunkType => async (
   }
 }
 
-export const editTattooStyle = (id: string, values: FormData): ThunkType => async (dispatch) => {
+export const editStyle = (id: string, values: FormData): ThunkType => async (dispatch) => {
   try {
     let response = await stylesApi.editTattooStyle(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyle));
-      dispatch(setSuccessModalAC(true, UPDATE_TATTOO_STYLE_SUCCESS));
+      dispatch(setSuccessModalAC(true, UPDATE_STYLE_SUCCESS));
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
@@ -170,7 +187,7 @@ export const editTattooStyle = (id: string, values: FormData): ThunkType => asyn
   }
 }
 
-export const deleteTattooStyle = (id: string): ThunkType => async (dispatch) => {
+export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await stylesApi.deleteTattooStyle(id)

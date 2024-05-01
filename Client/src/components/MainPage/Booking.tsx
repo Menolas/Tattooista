@@ -1,10 +1,10 @@
-import * as React from "react"
-import {BookingForm} from "../Forms/BookingFormFormik"
-import {BookConsultationFormValues} from "../../types/Types"
+import * as React from "react";
+import {BookingForm} from "../Forms/BookingFormFormik";
+import {BookConsultationFormValues} from "../../types/Types";
 
 type PropsType = {
-  consentId: string
-  bookConsultation: (values: BookConsultationFormValues) => void
+  consentId: string;
+  bookConsultation: (values: BookConsultationFormValues) => void;
 }
 
 export const Booking: React.FC<PropsType> = React.memo(({consentId, bookConsultation}) => {
@@ -23,4 +23,4 @@ export const Booking: React.FC<PropsType> = React.memo(({consentId, bookConsulta
       </div>
     </section>
   )
-})
+});
