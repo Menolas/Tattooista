@@ -1,33 +1,31 @@
 import * as React from "react"
 import {useState} from "react"
-import {BookConsultationFormValues, PageType} from "../../types/Types"
+import {BookConsultationFormValues, PageType} from "../../../types/Types"
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
-import {API_URL} from "../../http"
-import {ModalPopUp} from "../common/ModalPopUp"
-import { UpdateAboutPageFormFormik } from "../Forms/UpdateAboutPageFormFormik"
+import Sprite from "../../../assets/svg/sprite.svg"
+import {API_URL} from "../../../http"
+import {ModalPopUp} from "../../common/ModalPopUp"
+import { UpdateAboutPageFormFormik } from "../../Forms/UpdateAboutPageFormFormik"
 import {Tooltip} from "react-tooltip"
-import {ADMIN, SUPER_ADMIN} from "../../utils/constants"
-import {SocialNav} from "../SocialNav";
-import {BookingButton} from "../common/BookingButton"
-import {ReadMore} from "../common/ReadMore";
+import {ADMIN, SUPER_ADMIN} from "../../../utils/constants"
+import {SocialNav} from "../../SocialNav";
+import {BookingButton} from "../../common/BookingButton"
+import {ReadMore} from "../../common/ReadMore";
 
 type PropsType = {
     fakeApi: boolean
     isAuth: string
     pageAbout?: PageType
-    editAboutPage: (values: FormData) => void
-    changeAboutPageVisibility: (isActive: boolean) => void
-    bookConsultation: (values: BookConsultationFormValues) => void
+    edit: (values: FormData) => void
+    changeVisibility: (isActive: boolean) => void
 }
 
 export const About: React.FC<PropsType> = React.memo(({
      fakeApi,
      isAuth,
      pageAbout,
-     editAboutPage,
-     changeAboutPageVisibility,
-     bookConsultation
+     edit,
+     changeVisibility,
 }) => {
 
     const [isEditMode, setIsEditMode] = useState(false)
@@ -55,7 +53,7 @@ export const About: React.FC<PropsType> = React.memo(({
                         }
                         className={"btn btn--icon"}
                         onClick={() => {
-                            changeAboutPageVisibility(pageAbout.isActive)
+                            changeVisibility(pageAbout.isActive)
                         }}
                     >
                         {pageAbout?.isActive
@@ -107,11 +105,10 @@ export const About: React.FC<PropsType> = React.memo(({
                     isEditMode &&
                     <UpdateAboutPageFormFormik
                         pageAbout={pageAbout}
-                        editAboutPage={editAboutPage}
+                        edit={edit}
                         closeModal={closeEditModal}
                     />
                 }
-
             </ModalPopUp>
             <Tooltip id="about-tooltip" />
         </section>

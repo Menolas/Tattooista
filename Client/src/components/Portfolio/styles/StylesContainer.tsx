@@ -1,10 +1,10 @@
 import * as React from "react";
-import { TattooStyleType } from "../../../types/Types";
+import { StyleType } from "../../../types/Types";
 import {
-    addTattooStyle,
-    deleteTattooStyle,
-    editTattooStyle,
-    getTattooStyles,
+    addStyle,
+    deleteStyle,
+    editStyle,
+    getStyles,
     resetActiveStyle,
     setActiveStyleAC,
 } from "../../../redux/Styles/styles-reducer";
@@ -14,7 +14,8 @@ import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-select
 import {
     getIsFetchingSelector,
     getActiveStyleSelector,
-    getStylesSelector, getIsDeletingInProcess,
+    getStylesSelector,
+    getIsDeletingInProcess,
 } from "../../../redux/Styles/styles-selectors";
 import {Styles} from "./Styles";
 
@@ -29,7 +30,7 @@ export const StylesContainer: React.FC = () => {
     const dispatch = useDispatch();
 
     useEffect( () => {
-        dispatch(getTattooStyles(token)).then(r => {
+        dispatch(getStyles(token)).then(r => {
             if (!activeStyle?._id) {
                 activeStyle = tattooStyles[0];
                 dispatch(setActiveStyleAC(tattooStyles[0]));
@@ -38,20 +39,20 @@ export const StylesContainer: React.FC = () => {
 
     }, [activeStyle]);
 
-    const resetActiveStyleCallBack = (style: TattooStyleType) => {
+    const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(resetActiveStyle(style));
     }
 
-    const addTattooStyleCallBack = (values: FormData) => {
-        dispatch(addTattooStyle(values));
+    const addCallBack = (values: FormData) => {
+        dispatch(addStyle(values));
     }
 
-    const editTattooStyleCallBack = (id: string, values: FormData) => {
-        dispatch(editTattooStyle(id, values));
+    const editCallBack = (id: string, values: FormData) => {
+        dispatch(editStyle(id, values));
     }
 
-    const deleteTattooStyleCallBack = (id: string) => {
-        dispatch(deleteTattooStyle(id));
+    const removeCallBack = (id: string) => {
+        dispatch(deleteStyle(id));
     }
 
     return (
@@ -62,9 +63,9 @@ export const StylesContainer: React.FC = () => {
             activeStyle={activeStyle}
             isDeletingInProcess={isDeletingInProcess}
             resetActiveStyle={resetActiveStyleCallBack}
-            add={addTattooStyleCallBack}
-            edit={editTattooStyleCallBack}
-            remove={deleteTattooStyleCallBack}
+            add={addCallBack}
+            edit={editCallBack}
+            remove={removeCallBack}
         />
-    );
+    )
 }

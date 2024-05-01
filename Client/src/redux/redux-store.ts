@@ -7,8 +7,14 @@ import { clientsReducer } from "./Clients/clients-reducer";
 import { authReducer } from "./Auth/auth-reducer";
 import { usersReducer} from "./Users/users-reducer";
 import {stylesReducer} from "./Styles/styles-reducer";
+import {servicesReducer} from "./Services/services-reducer";
+import {aboutReducer} from "./About/about-reducer";
+import {faqReducer} from "./Faq/faq-reducer";
 
 let rootReducer = combineReducers({
+  about: aboutReducer,
+  services: servicesReducer,
+  faq: faqReducer,
   gallery: galleryReducer,
   styles: stylesReducer,
   general: generalReducer,

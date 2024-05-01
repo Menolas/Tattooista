@@ -5,7 +5,7 @@ import {
     getArchivedGalleryPageSizeSelector,
     getArchivedGallerySelector,
     getCurrentArchivedGalleryPageSelector,
-    getIsGalleryItemDeletingInProcessSelector,
+    getIsDeletingInProcessSelector,
     getTotalArchivedGalleryItemsCountSelector
 } from "../../../redux/Gallery/gallery-selectors";
 import {getStylesSelector,} from "../../../redux/Styles/styles-selectors";
@@ -18,7 +18,7 @@ import {
     setCurrentArchivedGalleryPageAC,
     updateArchivedGalleryItem
 } from "../../../redux/Gallery/gallery-reducer";
-import {getTattooStyles,} from "../../../redux/Styles/styles-reducer";
+import {getStyles,} from "../../../redux/Styles/styles-reducer";
 import { API_URL } from "../../../http";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg"
@@ -35,7 +35,7 @@ export const ArchivedGallery = () => {
     const pageSize = useSelector(getArchivedGalleryPageSizeSelector);
     const currentPage = useSelector(getCurrentArchivedGalleryPageSelector);
     const archivedGallery = useSelector(getArchivedGallerySelector);
-    const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector);
+    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const styles = useSelector(getStylesSelector);
     const token = useSelector(getTokenSelector);
 
@@ -43,7 +43,7 @@ export const ArchivedGallery = () => {
 
     useEffect(() => {
         if (styles.length === 0) {
-            dispatch(getTattooStyles(token));
+            dispatch(getStyles(token));
         }
         dispatch(getArchivedGallery(currentPage, pageSize));
     }, [currentPage, pageSize]);

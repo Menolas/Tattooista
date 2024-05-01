@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useState} from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
-import {TattooStyleType} from "../../../types/Types";
+import {StyleType} from "../../../types/Types";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg";
 import {UpdateTattooStyleFormFormik} from "../../Forms/UpdateTattooStyleFormFormik";
@@ -23,10 +23,10 @@ const responsive = {
 type PropsType = {
   isAuth: string;
   isFetching: boolean;
-  styles: Array<TattooStyleType>;
-  activeStyle: TattooStyleType;
+  styles: Array<StyleType>;
+  activeStyle: StyleType;
   isDeletingInProcess: Array<string>;
-  resetActiveStyle: (style: TattooStyleType) => void;
+  resetActiveStyle: (style: StyleType) => void;
   add: (values: FormData) => void;
   edit: (id: string, values: FormData) => void;
   remove: (id: string) => void;
@@ -83,6 +83,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
         {
           !isFetching
             ? (
+                <>
                   <div className="tattoo-style__item-content">
                     { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                         <div className={"tattoo-style__item-actions"}>
@@ -121,16 +122,16 @@ export const Styles: React.FC<PropsType> = React.memo(({
                       </div>
                     </div>
                   </div>
+                  <Advertisement />
+                  <MyCarousel
+                  items={stylesArray}
+                  responsive={responsive}
+                  controlsStrategy={"alternate"}
+                  />
+                </>
               )
-              : <Preloader />
+            : <Preloader />
         }
-
-        <Advertisement />
-        <MyCarousel
-            items={stylesArray}
-            responsive={responsive}
-            controlsStrategy={"alternate"}
-        />
         <ModalPopUp
             isOpen={addMode || editMode}
             modalTitle={'Update tattoo styles'}
@@ -164,9 +165,9 @@ export const Styles: React.FC<PropsType> = React.memo(({
 });
 
 const Style = ({activeStyle, item, resetActiveStyle}: {
-  activeStyle: TattooStyleType,
-  item: TattooStyleType,
-  resetActiveStyle: (style: TattooStyleType) => void
+  activeStyle: StyleType,
+  item: StyleType,
+  resetActiveStyle: (style: StyleType) => void
 }) => {
   return (
       <div

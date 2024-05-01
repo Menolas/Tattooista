@@ -1,26 +1,30 @@
 import * as React from "react";
 import {useState} from "react";
-import {ServiceType} from "../../types/Types";
-import {ServiceItem} from "./ServiceItem";
-import {ModalPopUp} from "../common/ModalPopUp";
-import {UpdateServiceItemFormFormik} from "../Forms/UpdateServiceItemFormFormik";
+import {ServiceType} from "../../../types/Types";
+import {ServiceItem} from "../ServiceItem";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {UpdateServiceItemFormFormik} from "../../Forms/UpdateServiceItemFormFormik";
+import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
   fakeApi: boolean;
+  isFetching: boolean;
+  isDeletingInProcess: Array<string>;
   isAuth: string;
   services: Array<ServiceType>;
-  editService: (id: string, values: FormData) => void;
-  addService: (values: FormData) => void;
-  deleteService: (id: string) => void;
+  edit: (id: string, values: FormData) => void;
+  add: (values: FormData) => void;
+  remove: (id: string) => void;
 };
 
 export const Services: React.FC<PropsType> = React.memo(({
   fakeApi,
+  isFetching,
   isAuth,
   services,
-  editService,
-  addService,
-  deleteService,
+  edit,
+  add,
+  remove,
 }) => {
 
   const [updateServiceData, setUpdateServiceData] = useState<{
@@ -50,7 +54,7 @@ export const Services: React.FC<PropsType> = React.memo(({
         isAuth={isAuth}
         serviceIndex={i + 1}
         service={item}
-        deleteService={deleteService}
+        remove={remove}
         setUpdateServiceData={setUpdateServiceData}
       />
     )
@@ -71,28 +75,29 @@ export const Services: React.FC<PropsType> = React.memo(({
              Add Service
          </button>
       }
-      <ModalPopUp
-            isOpen={updateServiceData.isUpdateMode}
-            modalTitle={updateServiceData.isEdit ?
-                updateServiceModalTitle : addServiceModalTitle}
-            closeModal={closeUpdateServiceModal}
-      >
-          {
-              updateServiceData.isUpdateMode &&
-              <UpdateServiceItemFormFormik
-                  service={updateServiceData.service}
-                  addService={addService}
-                  editService={editService}
-                  closeModal={closeUpdateServiceModal}
-              />
-
-          }
-      </ModalPopUp>
-
       <h2 className="page-block__title">Studio services</h2>
       <ul className="services__list list">
-        { servicesArray }
+        { isFetching
+            ? <Preloader />
+            : servicesArray
+        }
       </ul>
+      <ModalPopUp
+        isOpen={updateServiceData.isUpdateMode}
+        modalTitle={updateServiceData.isEdit ?
+            updateServiceModalTitle : addServiceModalTitle}
+        closeModal={closeUpdateServiceModal}
+      >
+        {
+            updateServiceData.isUpdateMode &&
+            <UpdateServiceItemFormFormik
+                service={updateServiceData.service}
+                addService={add}
+                editService={edit}
+                closeModal={closeUpdateServiceModal}
+            />
+        }
+      </ModalPopUp>
     </section>
   )
 });

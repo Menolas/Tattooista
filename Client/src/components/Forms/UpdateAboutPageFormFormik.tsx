@@ -10,13 +10,13 @@ import {validateFile} from "../../utils/validators";
 
 type PropsType = {
     pageAbout?: PageType
-    editAboutPage: (values: FormData) => void
+    edit: (values: FormData) => void
     closeModal: () => void
 };
 
 export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
     pageAbout,
-    editAboutPage,
+    edit,
     closeModal
 }) => {
 
@@ -67,7 +67,7 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
         }
 
         try {
-            await editAboutPage(formData);
+            await edit(formData);
             closeModal();
         } catch (error) {
             console.error('Error submitting form:', error);

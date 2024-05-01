@@ -1,15 +1,15 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 import "react-alice-carousel/lib/alice-carousel.css";
-import { TattooStyleType } from "../../types/Types";
+import { StyleType } from "../../types/Types";
 import {API_URL} from "../../http";
 import {MyCarousel} from "../common/MyCarousel";
 
 type PropsType = {
     fakeApi: boolean;
     galleryPageSize: number;
-    tattooStyles: Array<TattooStyleType>;
-    setActiveStyle: (style: TattooStyleType) => void;
+    styles: Array<StyleType>;
+    setActiveStyle: (style: StyleType) => void;
 }
 
 const responsive = {
@@ -22,11 +22,11 @@ const responsive = {
 export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   fakeApi,
   galleryPageSize,
-  tattooStyles,
+  styles,
   setActiveStyle
 }) => {
 
-  const sliders = tattooStyles?.map((slider) => {
+  const sliders = styles?.map((slider) => {
 
      const wallpaperUrl = fakeApi
          ? `./uploads/TattooStylesWallpapers/${slider.wallPaper}`
