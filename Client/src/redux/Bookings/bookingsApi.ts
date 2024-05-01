@@ -48,17 +48,6 @@ export const bookingsApi = {
     ).then(response => response.data);
   },
 
-  getArchivedConsultations(
-      token: string,
-      currentPage: number,
-      pageSize: number,
-      filter: SearchFilterType,
-  ) {
-    return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
-        { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
-    ).then(response => response.data);
-  },
-
   changeConsultationStatus(id: string, status: boolean) {
     return instance.patch<ChangeConsultationStatusResponseType>(`bookings/status/${id}`, {status: status})
       .then(response => response.data);
@@ -96,11 +85,4 @@ export const bookingsApi = {
     return instance.post<ArchiveConsultationResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   },
-
-  reactivateConsultation(
-      id: string
-  ) {
-    return instance.get<ReactivateConsultationResponseType>(`bookings/archive/${id}`)
-        .then(response => response.data);
-  }
 }

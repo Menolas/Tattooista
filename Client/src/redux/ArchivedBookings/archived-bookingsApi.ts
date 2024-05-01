@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {AddConsultationFormValues, BookedConsultationType, ContactsType, SearchFilterType} from "../../types/Types";
+import {BookedConsultationType, SearchFilterType} from "../../types/Types";
 import $api, {API_URL} from "../../http";
 
 const instance = axios.create({

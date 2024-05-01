@@ -6,12 +6,12 @@ import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
 
-const SET_BOOKINGS_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
-const SET_BOOKINGS_FILTER = 'SET_BOOKINGS_FILTER';
-const SET_BOOKINGS_STATUS = 'SET_BOOKINGS_STATUS';
+const SET_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
+const SET_FILTER = 'SET_BOOKINGS_FILTER';
+const SET_STATUS = 'SET_BOOKINGS_STATUS';
 const SET_BOOKINGS = 'SET_BOOKINGS';
-const SET_CURRENT_PAGE_FOR_BOOKINGS = 'SET_CURRENT_PAGE_FOR_BOOKINGS';
-const SET_TOTAL_BOOKINGS_COUNT = 'SET_TOTAL_BOOKINGS_COUNT';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE_FOR_BOOKINGS';
+const SET_TOTAL = 'SET_TOTAL_BOOKINGS_COUNT';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
@@ -25,13 +25,13 @@ const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You've just created a clien
 
 let initialState = {
   bookings: [] as Array<BookedConsultationType>,
-  totalBookingsCount: 0 as number,
-  bookedConsultationsPageSize: 5 as number,
-  currentBookedConsultationsPage: 1 as number,
-  bookedConsultationsIsFetching: false,
+  total: 0 as number,
+  pageSize: 5 as number,
+  currentPage: 1 as number,
+  isFetching: false,
   isStatusChanging: [] as Array<string>,
   isDeletingInProcess: [] as Array<string>,
-  bookedConsultationsFilter: {
+  filter: {
     term: '' as string | null,
     condition: 'any' as string | null
   } as SearchFilterType,
@@ -52,17 +52,17 @@ export const bookingsReducer = (
 ): InitialStateType => {
 
   switch (action.type) {
-    case SET_BOOKINGS_PAGE_SIZE:
+    case SET_PAGE_SIZE:
       return {
         ...state,
-        bookedConsultationsPageSize: action.pageSize,
-        currentBookedConsultationsPage: 1
+        pageSize: action.pageSize,
+        currentPage: 1
       }
 
-    case SET_BOOKINGS_FILTER:
+    case SET_FILTER:
       return {
         ...state,
-        bookedConsultationsFilter: action.filter
+        filter: action.filter
       }
 
     case SET_BOOKINGS:
@@ -71,19 +71,19 @@ export const bookingsReducer = (
         bookings: action.bookings,
       }
 
-    case SET_CURRENT_PAGE_FOR_BOOKINGS:
+    case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentBookedConsultationsPage: action.page,
+        currentPage: action.page,
       }
 
-    case SET_TOTAL_BOOKINGS_COUNT:
+    case SET_TOTAL:
       return {
         ...state,
-        totalBookingsCount: action.count,
+        total: action.count,
       }
 
-    case SET_BOOKINGS_STATUS:
+    case SET_STATUS:
       return {
         ...state,
         bookings: state.bookings.map(booking => {
@@ -96,7 +96,7 @@ export const bookingsReducer = (
     case TOGGLE_IS_FETCHING:
       return {
         ...state,
-        bookedConsultationsIsFetching: action.isFetching,
+        isFetching: action.isFetching,
       }
     case TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS:
       return {
@@ -117,7 +117,7 @@ export const bookingsReducer = (
       return {
         ...state,
         bookings: state.bookings.filter(booking => booking._id !== action.id),
-        totalBookingsCount: state.totalBookingsCount - 1
+        total: state.total - 1
       }
 
     case ADD_BOOKING:
@@ -188,21 +188,21 @@ export const setApiErrorAC = (error: string): SetApiErrorAT => ({
 });
 
 type SetBookedConsultationsPageSizeAT = {
-  type: typeof  SET_BOOKINGS_PAGE_SIZE
+  type: typeof  SET_PAGE_SIZE
   pageSize: number
 }
 
 export const setBookedConsultationsPageSizeAC = (pageSize: number): SetBookedConsultationsPageSizeAT => ({
-    type: SET_BOOKINGS_PAGE_SIZE, pageSize
+    type: SET_PAGE_SIZE, pageSize
 });
 
 type SetBookedConsultationsFilterAT = {
-  type: typeof  SET_BOOKINGS_FILTER
+  type: typeof  SET_FILTER
   filter: SearchFilterType
 }
 
 export const setBookedConsultationsFilterAC = (filter: SearchFilterType): SetBookedConsultationsFilterAT => ({
-    type: SET_BOOKINGS_FILTER, filter
+    type: SET_FILTER, filter
   });
 
 type SetBookedConsultationsAT = {
@@ -215,31 +215,31 @@ const setBookedConsultationsAC = (bookings: Array<BookedConsultationType>): SetB
 });
 
 type SetCurrentPageForBookedConsultationsAT = {
-  type: typeof SET_CURRENT_PAGE_FOR_BOOKINGS,
+  type: typeof SET_CURRENT_PAGE,
   page: number
 }
 
 export const setCurrentPageForBookedConsultationsAC = (page: number): SetCurrentPageForBookedConsultationsAT => ({
-      type: SET_CURRENT_PAGE_FOR_BOOKINGS, page
+      type: SET_CURRENT_PAGE, page
 });
 
 type SetBookedConsultationsTotalCountAT = {
-  type: typeof SET_TOTAL_BOOKINGS_COUNT,
+  type: typeof SET_TOTAL,
   count: number
 }
 
 const setBookedConsultationsTotalCountAC = (count: number): SetBookedConsultationsTotalCountAT => ({
-      type: SET_TOTAL_BOOKINGS_COUNT, count
+      type: SET_TOTAL, count
     });
 
 type ChangeBookedConsultationStatusAT = {
-  type: typeof SET_BOOKINGS_STATUS,
+  type: typeof SET_STATUS,
   id: string,
   status: boolean
 }
 
 const changeBookedConsultationStatusAC = (id: string, status: boolean): ChangeBookedConsultationStatusAT => ({
-    type: SET_BOOKINGS_STATUS, id, status
+    type: SET_STATUS, id, status
   });
 
 type SetIsFetchingAT = {

@@ -19,8 +19,8 @@ import {
   getBookedConsultationsPageSizeSelector,
   getTotalBookingsCountSelector,
   getCurrentBookedConsultationsPageSelector,
-  getBookedConsultationsIsFetchingSelector,
-  getBookedConsultationsFilterSelector,
+  getIsFetchingSelector,
+  getFilterSelector,
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
   getSuccessModalSelector,
@@ -32,12 +32,12 @@ import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const BookingsContainer: React.FC = () => {
 
-  const isFetching = useSelector(getBookedConsultationsIsFetchingSelector);
+  const isFetching = useSelector(getIsFetchingSelector);
   const totalCount = useSelector(getTotalBookingsCountSelector);
   const currentPage = useSelector(getCurrentBookedConsultationsPageSelector);
   const pageSize = useSelector(getBookedConsultationsPageSizeSelector);
   const bookings = useSelector(getBookingsSelector);
-  const filter = useSelector(getBookedConsultationsFilterSelector);
+  const filter = useSelector(getFilterSelector);
   const isStatusChanging = useSelector(getIsStatusChangingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const successModal = useSelector(getSuccessModalSelector);

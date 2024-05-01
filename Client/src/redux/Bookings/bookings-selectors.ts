@@ -8,15 +8,15 @@ export const getBookingsSelector = (state: AppStateType) => {
 //reselect library selector
 
 export const getBookedConsultationsPageSizeSelector = (state: AppStateType) => {
-  return state.bookings.bookedConsultationsPageSize;
+  return state.bookings.pageSize;
 }
 
 export const getTotalBookingsCountSelector = (state: AppStateType) => {
-  return state.bookings.totalBookingsCount;
+  return state.bookings.total;
 }
 
 export const getCurrentBookedConsultationsPageSelector = (state: AppStateType) => {
-  return state.bookings.currentBookedConsultationsPage;
+  return state.bookings.currentPage;
 }
 
 export const getIsStatusChangingSelector = (state: AppStateType) => {
@@ -27,12 +27,12 @@ export const getIsDeletingInProcessSelector = (state: AppStateType) => {
   return state.bookings.isDeletingInProcess;
 }
 
-export const getBookedConsultationsIsFetchingSelector = (state: AppStateType) => {
-  return state.bookings.bookedConsultationsIsFetching;
+export const getIsFetchingSelector = (state: AppStateType) => {
+  return state.bookings.isFetching;
 }
 
-export const getBookedConsultationsFilterSelector = (state: AppStateType) => {
-  return state.bookings.bookedConsultationsFilter;
+export const getFilterSelector = (state: AppStateType) => {
+  return state.bookings.filter;
 }
 
 export const getSuccessModalSelector = (state: AppStateType) => {
