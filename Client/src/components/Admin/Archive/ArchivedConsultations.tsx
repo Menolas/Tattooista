@@ -12,7 +12,7 @@ import {
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
     setCurrentPageForArchivedConsultationsAC, setSuccessModalAC
-} from "../../../redux/Bookings/bookings-reducer";
+} from "../../../redux/ArchivedBookings/archived-bookings-reducer";
 import {
     getArchivedConsultationsFilterSelector,
     getArchivedConsultationsPageSizeSelector,
@@ -23,7 +23,7 @@ import {
     getIsDeletingInProcessSelector,
     getApiErrorSelector,
     getAccessErrorSelector, getSuccessModalSelector,
-} from "../../../redux/Bookings/bookings-selectors";
+} from "../../../redux/ArchivedBookings/archived-bookings-selectors";
 import {ArchivedConsultation} from "./ArchivedConsultation";
 import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";

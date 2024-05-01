@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { Preloader } from "../../common/Preloader";
-import {GalleryItemType, TattooStyleType} from "../../../types/Types";
+import {GalleryItemType, StyleType} from "../../../types/Types";
 import { ModalPopUp } from "../../common/ModalPopUp";
 import {API_URL} from "../../../http";
 import {Tooltip} from "react-tooltip";
@@ -22,10 +22,10 @@ type PropsType = {
   totalCount: number
   pageSize: number
   currentPage: number
-  activeStyle: TattooStyleType
+  activeStyle: StyleType
   gallery: Array<GalleryItemType>
   isDeletingInProcess: Array<string>
-  styles: Array<TattooStyleType>
+  styles: Array<StyleType>
   updateGallery: (values: FormData) => void
   remove: (itemId: string) => void
   setCurrentPage: (page: number) => void
@@ -54,8 +54,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 }) => {
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
-  const [ editGalleryMode, setEditGalleryMode ] = useState(false);
-  const [ galleryItem, setGalleryItem ] = useState(null);
+  const [editGalleryMode, setEditGalleryMode] = useState(false);
+  const [galleryItem, setGalleryItem] = useState(null);
   const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
     needConfirmation: false,
   });
@@ -157,15 +157,13 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               </button>
           }
         </div>
-        {  isFetching
-            ? <Preloader />
-            : totalCount && totalCount > 0
-              ? (
-                    <ul className="gallery__list list">
-                      { GalleryItemsArray }
-                    </ul>
-                )
-              : <NothingToShow/>
+        { totalCount && totalCount > 0
+          ? (
+                <ul className="gallery__list list">
+                  { isFetching ? <Preloader /> : GalleryItemsArray }
+                </ul>
+            )
+          : <NothingToShow/>
         }
         {  carouselData.isOpen &&
            <ImageFullView
@@ -189,7 +187,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   folder={'gallery'}
                   galleryItem={galleryItem}
                   styles={styles}
-                  updateGalleryItem={updateItem}
+                  edit={updateItem}
                   closeModal={closeGalleryItemEditModal}
               />
           }

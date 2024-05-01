@@ -5,34 +5,18 @@ export const getBookingsSelector = (state: AppStateType) => {
   return state.bookings.bookings;
 }
 
-export const getArchivedBookingsSelector = (state: AppStateType) => {
-  return state.bookings.archivedBookings;
-}
-
 //reselect library selector
 
 export const getBookedConsultationsPageSizeSelector = (state: AppStateType) => {
-  return state.bookings.bookedConsultationsPageSize;
-}
-
-export const getArchivedConsultationsPageSizeSelector = (state: AppStateType) => {
-  return state.bookings.archivedConsultationsPageSize;
+  return state.bookings.pageSize;
 }
 
 export const getTotalBookingsCountSelector = (state: AppStateType) => {
-  return state.bookings.totalBookingsCount;
-}
-
-export const getTotalArchivedConsultationsCountSelector = (state: AppStateType) => {
-  return state.bookings.totalArchivedConsultationsCount;
+  return state.bookings.total;
 }
 
 export const getCurrentBookedConsultationsPageSelector = (state: AppStateType) => {
-  return state.bookings.currentBookedConsultationsPage;
-}
-
-export const getCurrentArchivedConsultationsPageSelector = (state: AppStateType) => {
-  return state.bookings.currentArchivedConsultationsPage;
+  return state.bookings.currentPage;
 }
 
 export const getIsStatusChangingSelector = (state: AppStateType) => {
@@ -43,16 +27,12 @@ export const getIsDeletingInProcessSelector = (state: AppStateType) => {
   return state.bookings.isDeletingInProcess;
 }
 
-export const getBookedConsultationsIsFetchingSelector = (state: AppStateType) => {
-  return state.bookings.bookedConsultationsIsFetching;
+export const getIsFetchingSelector = (state: AppStateType) => {
+  return state.bookings.isFetching;
 }
 
-export const getBookedConsultationsFilterSelector = (state: AppStateType) => {
-  return state.bookings.bookedConsultationsFilter;
-}
-
-export const getArchivedConsultationsFilterSelector = (state: AppStateType) => {
-  return state.bookings.archivedConsultationsFilter;
+export const getFilterSelector = (state: AppStateType) => {
+  return state.bookings.filter;
 }
 
 export const getSuccessModalSelector = (state: AppStateType) => {

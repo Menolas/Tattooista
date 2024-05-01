@@ -63,4 +63,4 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
           />
       </section>
   )
-})
+});

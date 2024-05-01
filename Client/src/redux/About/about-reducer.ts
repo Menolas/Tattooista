@@ -12,6 +12,7 @@ import {
 
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
 const SET_FAKE_API = 'SET_FAKE_API';
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 
 const ABOUT_PAGE_SUCCESS = "You successfully updated your 'about' block";
 
@@ -31,6 +32,11 @@ export const aboutReducer = (
   //debugger
 
   switch (action.type) {
+    case TOGGLE_IS_FETCHING:
+      return {
+        ...state,
+        isFetching: action.isFetching,
+      }
 
     case SET_ABOUT_PAGE:
       return {
@@ -50,9 +56,19 @@ export const aboutReducer = (
   }
 }
 
-type ActionsTypes = SetAboutPageAT | SetSuccessModalAT | SetApiErrorAT | SetFakeApiAT;
+type ActionsTypes = SetAboutPageAT | SetSuccessModalAT | SetApiErrorAT
+    | SetFakeApiAT | SetIsFetchingAT;
 
 // action creators
+
+type SetIsFetchingAT = {
+  type: typeof TOGGLE_IS_FETCHING,
+  isFetching: boolean
+}
+
+const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
+  type: TOGGLE_IS_FETCHING, isFetching
+});
 
 type SetFakeApiAT = {
   type: typeof SET_FAKE_API
@@ -78,16 +94,18 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {
-    //dispatch(setIsGeneralFetchingAC(true));
+    dispatch(setIsFetchingAC(true));
     const response = await aboutApi.getAboutPage();
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setFakeApiAC(false));
       dispatch(setAboutPageAC(response.page));
     }
   } catch (e) {
     console.log(e);
+    dispatch(setFakeApiAC(true));
     dispatch(setAboutPageAC(pages));
   } finally {
-    //dispatch(setIsGeneralFetchingAC(false));
+    dispatch(setIsFetchingAC(false));
   }
 }
 

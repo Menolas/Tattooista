@@ -10,6 +10,7 @@ import {stylesReducer} from "./Styles/styles-reducer";
 import {servicesReducer} from "./Services/services-reducer";
 import {aboutReducer} from "./About/about-reducer";
 import {faqReducer} from "./Faq/faq-reducer";
+import {archivedBookingsReducer} from "./ArchivedBookings/archived-bookings-reducer";
 
 let rootReducer = combineReducers({
   about: aboutReducer,
@@ -19,6 +20,7 @@ let rootReducer = combineReducers({
   styles: stylesReducer,
   general: generalReducer,
   bookings: bookingsReducer,
+  archivedBookings: archivedBookingsReducer,
   clients: clientsReducer,
   auth: authReducer,
   users: usersReducer,
