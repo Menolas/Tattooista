@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {BookedConsultationType, SearchFilterType} from "../../types/Types";
+import {BookingType, SearchFilterType} from "../../types/Types";
 import $api, {API_URL} from "../../http";
 
 const instance = axios.create({
@@ -16,7 +16,7 @@ type DeleteConsultationResponseType = CommonResponseFields;
 type ReactivateConsultationResponseType = CommonResponseFields;
 
 type GetBookedConsultationsResponseType = CommonResponseFields & {
-  bookings: Array<BookedConsultationType>;
+  bookings: Array<BookingType>;
   totalCount: number;
 };
 

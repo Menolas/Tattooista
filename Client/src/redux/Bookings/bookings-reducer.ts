@@ -1,6 +1,6 @@
 import { bookingsApi } from "./bookingsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {AddConsultationFormValues, BookedConsultationType, SearchFilterType} from "../../types/Types";
+import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -24,7 +24,7 @@ const BOOKING_SUCCESS = "Congratulation! You've just created a consultation requ
 const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You've just created a client from a consultation request.";
 
 let initialState = {
-  bookings: [] as Array<BookedConsultationType>,
+  bookings: [] as Array<BookingType>,
   total: 0 as number,
   pageSize: 5 as number,
   currentPage: 1 as number,
@@ -151,11 +151,11 @@ export const bookingsReducer = (
   }
 }
 
-type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetBookedConsultationsPageSizeAT |
-     SetBookedConsultationsFilterAT | SetBookedConsultationsAT | SetCurrentPageForBookedConsultationsAT |
-    SetBookedConsultationsTotalCountAT | ChangeBookedConsultationStatusAT | SetIsFetchingAT |
-    ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT | DeleteBookedConsultationAT |
-    AddBookedConsultationAT | SetAccessErrorAT;
+type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
+     SetFilterAT | SetBookingsAT | SetCurrentPageAT |
+    SetTotalAT | ChangeStatusAT | SetIsFetchingAT |
+    ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT | DeleteBookingAT |
+    AddBookingAT | SetAccessErrorAT;
 
 // actions creators
 
@@ -187,58 +187,58 @@ export const setApiErrorAC = (error: string): SetApiErrorAT => ({
   type: SET_API_ERROR, error
 });
 
-type SetBookedConsultationsPageSizeAT = {
+type SetPageSizeAT = {
   type: typeof  SET_PAGE_SIZE
   pageSize: number
 }
 
-export const setBookedConsultationsPageSizeAC = (pageSize: number): SetBookedConsultationsPageSizeAT => ({
+export const setPageSizeAC = (pageSize: number): SetPageSizeAT => ({
     type: SET_PAGE_SIZE, pageSize
 });
 
-type SetBookedConsultationsFilterAT = {
+type SetFilterAT = {
   type: typeof  SET_FILTER
   filter: SearchFilterType
 }
 
-export const setBookedConsultationsFilterAC = (filter: SearchFilterType): SetBookedConsultationsFilterAT => ({
+export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
     type: SET_FILTER, filter
   });
 
-type SetBookedConsultationsAT = {
+type SetBookingsAT = {
   type: typeof SET_BOOKINGS,
-  bookings: Array<BookedConsultationType>
+  bookings: Array<BookingType>
 }
 
-const setBookedConsultationsAC = (bookings: Array<BookedConsultationType>): SetBookedConsultationsAT => ({
+const setBookingsAC = (bookings: Array<BookingType>): SetBookingsAT => ({
       type: SET_BOOKINGS, bookings
 });
 
-type SetCurrentPageForBookedConsultationsAT = {
+type SetCurrentPageAT = {
   type: typeof SET_CURRENT_PAGE,
   page: number
 }
 
-export const setCurrentPageForBookedConsultationsAC = (page: number): SetCurrentPageForBookedConsultationsAT => ({
+export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
       type: SET_CURRENT_PAGE, page
 });
 
-type SetBookedConsultationsTotalCountAT = {
+type SetTotalAT = {
   type: typeof SET_TOTAL,
   count: number
 }
 
-const setBookedConsultationsTotalCountAC = (count: number): SetBookedConsultationsTotalCountAT => ({
+const setTotalAC = (count: number): SetTotalAT => ({
       type: SET_TOTAL, count
     });
 
-type ChangeBookedConsultationStatusAT = {
+type ChangeStatusAT = {
   type: typeof SET_STATUS,
   id: string,
   status: boolean
 }
 
-const changeBookedConsultationStatusAC = (id: string, status: boolean): ChangeBookedConsultationStatusAT => ({
+const changeStatusAC = (id: string, status: boolean): ChangeStatusAT => ({
     type: SET_STATUS, id, status
   });
 
@@ -271,21 +271,21 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
   });
 
-type DeleteBookedConsultationAT = {
+type DeleteBookingAT = {
   type: typeof DELETE_BOOKING,
   id: string
 }
 
-const deleteBookedConsultationAC = (id: string): DeleteBookedConsultationAT => ({
+const deleteBookingAC = (id: string): DeleteBookingAT => ({
     type: DELETE_BOOKING, id
 });
 
-type AddBookedConsultationAT = {
+type AddBookingAT = {
   type: typeof ADD_BOOKING,
-  consultation: BookedConsultationType
+  consultation: BookingType
 }
 
-const addBookedConsultationAC = (consultation: BookedConsultationType): AddBookedConsultationAT => ({
+const addBookingAC = (consultation: BookingType): AddBookingAT => ({
     type: ADD_BOOKING, consultation
 });
 
@@ -296,26 +296,26 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 const deleteBookingThunk = (
     token: string | null,
     id: string,
-    bookings: Array<BookedConsultationType>,
+    bookings: Array<BookingType>,
     currentPage: number,
     total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
-    dispatch(deleteBookedConsultationAC(id));
-    dispatch(setBookedConsultationsTotalCountAC(total - 1));
+    dispatch(deleteBookingAC(id));
+    dispatch(setTotalAC(total - 1));
   } else {
     const newPage = getNewPage(currentPage);
     if (currentPage === newPage) {
-      await dispatch(getBookedConsultations(token, newPage, pageLimit, filter));
+      await dispatch(getBookings(token, newPage, pageLimit, filter));
     }
-    dispatch(deleteBookedConsultationAC(id));
-    dispatch(setCurrentPageForBookedConsultationsAC(newPage));
+    dispatch(deleteBookingAC(id));
+    dispatch(setCurrentPageAC(newPage));
   }
 }
 
-export const getBookedConsultations = (
+export const getBookings = (
   token: string | null,
   currentPage: number,
   pageSize: number,
@@ -326,7 +326,7 @@ export const getBookedConsultations = (
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await bookingsApi.getBookedConsultations(
+    let response = await bookingsApi.getBookings(
       token,
       currentPage,
       pageSize,
@@ -334,8 +334,8 @@ export const getBookedConsultations = (
     );
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(''));
-      dispatch(setBookedConsultationsAC(response.bookings));
-      dispatch(setBookedConsultationsTotalCountAC(response.totalCount));
+      dispatch(setBookingsAC(response.bookings));
+      dispatch(setTotalAC(response.totalCount));
     }
   } catch (e) {
     // @ts-ignore
@@ -346,7 +346,7 @@ export const getBookedConsultations = (
   }
 }
 
-export const changeBookedConsultationStatus = (
+export const changeStatus = (
   id: string,
   status: boolean
 ): ThunkType => async (dispatch) => {
@@ -355,7 +355,7 @@ export const changeBookedConsultationStatus = (
     dispatch(toggleIsStatusChangingAC(true, id));
     let response = await bookingsApi.changeConsultationStatus(id, status);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(changeBookedConsultationStatusAC(id, response.status));
+      dispatch(changeStatusAC(id, response.status));
     }
   } catch (e) {
     console.log(e);
@@ -364,10 +364,10 @@ export const changeBookedConsultationStatus = (
   }
 }
 
-export const deleteBookedConsultation = (
+export const deleteBooking = (
     token: string | null,
     id: string,
-    bookings: Array<BookedConsultationType>,
+    bookings: Array<BookingType>,
     currentPage: number,
     total: number,
     pageLimit: number,
@@ -386,15 +386,15 @@ export const deleteBookedConsultation = (
   }
 }
 
-export const addBookedConsultation = (
+export const addBooking = (
   values: AddConsultationFormValues,
   total: number
 ): ThunkType => async (dispatch) => {
   try {
     let response = await bookingsApi.addConsultation(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(addBookedConsultationAC(response.booking));
-      dispatch(setBookedConsultationsTotalCountAC(total + 1));
+      dispatch(addBookingAC(response.booking));
+      dispatch(setTotalAC(total + 1));
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
     }
   } catch (e: any) {
@@ -402,12 +402,12 @@ export const addBookedConsultation = (
   }
 }
 
-export const turnConsultationToClient = (
+export const turnBookingToClient = (
     token: string | null,
     id: string,
     fullName: string,
     contacts: {},
-    bookings: Array<BookedConsultationType>,
+    bookings: Array<BookingType>,
     currentPage: number,
     total: number,
     pageLimit: number,
@@ -415,7 +415,7 @@ export const turnConsultationToClient = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await bookingsApi.turnConsultationToClient(
+    let response = await bookingsApi.turnBookingToClient(
       id,
       fullName,
       contacts
@@ -431,10 +431,10 @@ export const turnConsultationToClient = (
   }
 }
 
-export const archiveConsultation = (
+export const archiveBooking = (
     token: string | null,
     id: string,
-    bookings: Array<BookedConsultationType>,
+    bookings: Array<BookingType>,
     currentPage: number,
     total: number,
     pageLimit: number,
@@ -442,7 +442,7 @@ export const archiveConsultation = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await bookingsApi.archiveConsultation(id);
+    let response = await bookingsApi.archiveBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
     }

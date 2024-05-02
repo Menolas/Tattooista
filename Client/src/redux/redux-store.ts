@@ -11,17 +11,21 @@ import {servicesReducer} from "./Services/services-reducer";
 import {aboutReducer} from "./About/about-reducer";
 import {faqReducer} from "./Faq/faq-reducer";
 import {archivedBookingsReducer} from "./ArchivedBookings/archived-bookings-reducer";
+import {archivedClientsReducer} from "./ArchivedClients/archived-clients-reducer";
+import {archivedGalleryReducer} from "./ArchivedGallery/archived-gallery-reducer";
 
 let rootReducer = combineReducers({
   about: aboutReducer,
   services: servicesReducer,
   faq: faqReducer,
   gallery: galleryReducer,
+  archivedGallery: archivedGalleryReducer,
   styles: stylesReducer,
   general: generalReducer,
   bookings: bookingsReducer,
   archivedBookings: archivedBookingsReducer,
   clients: clientsReducer,
+  archivedClients: archivedClientsReducer,
   auth: authReducer,
   users: usersReducer,
 });

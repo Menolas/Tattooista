@@ -7,7 +7,7 @@ import {
     getCurrentArchivedGalleryPageSelector,
     getIsDeletingInProcessSelector,
     getTotalArchivedGalleryItemsCountSelector
-} from "../../../redux/Gallery/gallery-selectors";
+} from "../../../redux/ArchivedGallery/archived-gallery-selectors";
 import {getStylesSelector,} from "../../../redux/Styles/styles-selectors";
 import {Paginator} from "../../common/Paginator";
 import {
@@ -17,7 +17,7 @@ import {
     setArchivedGalleryPageSizeAC,
     setCurrentArchivedGalleryPageAC,
     updateArchivedGalleryItem
-} from "../../../redux/Gallery/gallery-reducer";
+} from "../../../redux/ArchivedGallery/archived-gallery-reducer";
 import {getStyles,} from "../../../redux/Styles/styles-reducer";
 import { API_URL } from "../../../http";
 // @ts-ignore
@@ -184,7 +184,7 @@ export const ArchivedGallery = () => {
                         folder={'archivedGallery'}
                         galleryItem={editGalleryItem}
                         styles={styles}
-                        updateGalleryItem={updateArchivedGalleryItemCallBack}
+                        edit={updateArchivedGalleryItemCallBack}
                         closeModal={closeGalleryItemEditModal}
                     />
                 }

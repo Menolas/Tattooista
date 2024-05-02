@@ -5,7 +5,7 @@ import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";
 
 const instance = axios.create({
     baseURL: API_URL
-} as CreateAxiosDefaults);
+} as CreateAxiosDefaults)
 
 type CommonResponseFields = {
     resultCode: number
@@ -16,20 +16,26 @@ type AdminUpdateGalleryResponseType = CommonResponseFields & {
     gallery: Array<GalleryItemType>
 }
 
-type ArchiveGalleryItemResponseType = CommonResponseFields;
-
-type DeleteGalleryItemResponseType = CommonResponseFields;
+type DeleteGalleryItemResponseType = CommonResponseFields
 
 type GetGalleryItemsResponseType = CommonResponseFields & {
     gallery: Array<GalleryItemType>
     totalCount: number
 }
 
+type ArchiveGalleryItemResponseType = CommonResponseFields
+
 type UpdateGalleryItemResponseType = CommonResponseFields & {
     galleryItem: GalleryItemType
 }
 
-export const galleryApi = {
+type UpdateArchiveGalleryItemResponseType = CommonResponseFields & {
+    archivedGalleryItem: GalleryItemType
+}
+
+type ReactivateArchivedGalleryItemResponseType = CommonResponseFields
+
+export const archivedGalleryApi = {
 
     getGalleryItems(
       style = ACTIVE_TATTOO_STYLE_FALLBACK as string,
@@ -40,11 +46,26 @@ export const galleryApi = {
             .then(response => response.data);
     },
 
+    getArchivedGalleryItems(
+        currentPage: number,
+        pageSize: number
+    ) {
+        return instance.get<GetGalleryItemsResponseType>(`gallery/archive?&page=${currentPage}&limit=${pageSize}`)
+            .then(response => response.data);
+    },
+
     deleteGalleryItem(
       itemId: string
     ) {
         return instance.delete<DeleteGalleryItemResponseType>(`gallery/${itemId}`)
           .then(response => response.data);
+    },
+
+    deleteArchivedGalleryItem(
+        itemId: string
+    ) {
+        return instance.delete<DeleteGalleryItemResponseType>(`gallery/archive/${itemId}`)
+            .then(response => response.data);
     },
 
     adminUpdateGallery(style: string, gallery: FormData) {
@@ -62,4 +83,14 @@ export const galleryApi = {
         return instance.patch<UpdateGalleryItemResponseType>(`gallery/updateGalleryItem/${id}`, {values})
             .then(response => response.data);
     },
+
+    updateArchiveGalleryItem(id: string, values: object) {
+        return instance.patch<UpdateArchiveGalleryItemResponseType>(`gallery/updateArchivedGalleryItem/${id}`, {values})
+            .then(response => response.data);
+    },
+
+    reactivateArchivedGalleryItem(id: string) {
+        return instance.get<ReactivateArchivedGalleryItemResponseType>(`gallery/reactivate/${id}`)
+            .then(response => response.data);
+    }
 }
