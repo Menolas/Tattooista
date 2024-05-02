@@ -2,15 +2,15 @@ import * as React from "react";
 import { useEffect} from "react";
 import {Paginator} from "../../common/Paginator";
 import {
-    setArchivedClientsPageSize,
-    setCurrentPageForArchivedClientsAC,
+    setPageSize,
+    setCurrentPageAC,
     getArchivedClients,
     deleteArchivedClient,
     reactivateClient,
-    setArchivedClientsFilterAC,
+    setFilterAC,
     setApiErrorAC,
     setSuccessModalAC
-} from "../../../redux/Clients/clients-reducer";
+} from "../../../redux/ArchivedClients/archived-clients-reducer";
 import {NothingToShow} from "../../common/NothingToShow";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -20,10 +20,10 @@ import {
     getArchivedClientsSelector,
     getClientsIsFetching,
     getCurrentArchivedClientsPageSelector,
-    getIsClientDeletingInProcessSelector,
+    getIsDeletingInProcessSelector,
     getTotalArchivedClientsCount,
     getSuccessModalSelector,
-} from "../../../redux/Clients/clients-selectors";
+} from "../../../redux/ArchivedClients/archived-clients-selectors";
 import {Preloader} from "../../common/Preloader";
 import {ArchivedClient} from "./ArchivedClient";
 import {ApiErrorMessage} from "../../common/ApiErrorMessage";
@@ -34,7 +34,7 @@ import {SearchFilterType} from "../../../types/Types";
 
 export const ArchivedClients: React.FC = () => {
     const isFetching = useSelector(getClientsIsFetching);
-    const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector);
+    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const archivedClients = useSelector(getArchivedClientsSelector);
     const totalCount = useSelector(getTotalArchivedClientsCount);
     const pageSize = useSelector(getArchivedClientsPageSize);
@@ -64,31 +64,45 @@ export const ArchivedClients: React.FC = () => {
     const onPageChangedCallBack = (
         page: number
     ) => {
-        dispatch(setCurrentPageForArchivedClientsAC(page));
+        dispatch(setCurrentPageAC(page));
     }
 
-    const setArchivedClientsPageSizeCallBack = (
+    const setPageSizeCallBack = (
         pageSize: number
     ) => {
-        dispatch(setArchivedClientsPageSize(pageSize));
+        dispatch(setPageSize(pageSize));
     }
 
     const onFilterChangeCallBack = (
         filter: SearchFilterType
     ) => {
-        dispatch(setArchivedClientsFilterAC(filter));
+        dispatch(setFilterAC(filter));
     }
 
     const deleteArchivedClientCallBack = (
         clientId: string
     ) => {
-        dispatch(deleteArchivedClient(clientId, archivedClients, currentPage, totalCount, pageSize, filter));
+        dispatch(deleteArchivedClient(
+            clientId,
+            archivedClients,
+            currentPage,
+            totalCount,
+            pageSize,
+            filter
+        ));
     }
 
     const reactivateClientCallBack = (
         clientId: string
     ) => {
-        dispatch(reactivateClient(clientId, archivedClients, currentPage, totalCount, pageSize, filter));
+        dispatch(reactivateClient(
+            clientId,
+            archivedClients,
+            currentPage,
+            totalCount,
+            pageSize,
+            filter
+        ));
     }
 
     const setApiErrorCallBack = () => {
@@ -121,7 +135,7 @@ export const ArchivedClients: React.FC = () => {
                     pageSize={pageSize}
                     currentPage={currentPage}
                     onPageChanged={onPageChangedCallBack}
-                    setPageLimit={setArchivedClientsPageSizeCallBack}
+                    setPageLimit={setPageSizeCallBack}
                 />
             </div>
             {

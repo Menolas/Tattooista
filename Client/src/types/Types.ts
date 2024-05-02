@@ -40,7 +40,7 @@ export type ClientType = {
     gallery?: Array<string>
 }
 
-export type BookedConsultationType = {
+export type BookingType = {
     _id: string
     fullName: string
     message?: string

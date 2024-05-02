@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import { Navigate } from "react-router";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
-import {AddConsultationFormValues, BookedConsultationType, SearchFilterType} from "../../../types/Types";
+import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../../types/Types";
 import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {AddConsultationForm} from "../../Forms/AddConsultationForm";
@@ -18,10 +18,10 @@ type PropsType = {
   isFetching: boolean;
   successModal: SuccessModalType;
   totalCount: number;
-  currentBookedConsultationsPage: number;
+  currentPage: number;
   pageSize: number;
-  bookings?: Array<BookedConsultationType>;
-  bookedConsultationsFilter: SearchFilterType;
+  bookings?: Array<BookingType>;
+  filter: SearchFilterType;
   isStatusChanging?: Array<string>;
   isDeletingInProcess?: Array<string>;
   apiError: string;
@@ -29,11 +29,11 @@ type PropsType = {
   setCurrentPage: (page: number) => void;
   onFilterChanged: (filter: SearchFilterType) => void;
   changeStatus: (id: string, status: boolean) => void;
-  deleteConsultation: (id: string) => void;
-  turnConsultationToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void;
+  remove: (id: string) => void;
+  turnBookingToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void;
   setPageLimit: (pageSize: number) => void;
-  addBookedConsultation: (values: AddConsultationFormValues) => void;
-  archiveConsultation: (id: string) => void;
+  add: (values: AddConsultationFormValues) => void;
+  archive: (id: string) => void;
   setSuccessModal: () => void;
   setApiError: () => void;
 }
@@ -42,10 +42,10 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   isFetching,
   successModal,
   totalCount,
-  currentBookedConsultationsPage,
+  currentPage,
   pageSize,
   bookings,
-  bookedConsultationsFilter,
+  filter,
   isStatusChanging,
   isDeletingInProcess,
   apiError,
@@ -53,11 +53,11 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   setCurrentPage,
   onFilterChanged,
   changeStatus,
-  deleteConsultation,
-  turnConsultationToClient,
+  remove,
+  turnBookingToClient,
   setPageLimit,
-  addBookedConsultation,
-  archiveConsultation,
+  add,
+  archive,
   setSuccessModal,
   setApiError
 }) => {
@@ -84,13 +84,13 @@ export const Bookings: React.FC<PropsType> = React.memo(({
           key={consultation._id}
           consultation={consultation}
           pageSize={pageSize}
-          currentPage={currentBookedConsultationsPage}
+          currentPage={currentPage}
           isStatusChanging={isStatusChanging}
           changeStatus={changeStatus}
           isDeletingInProcess={isDeletingInProcess}
-          deleteConsultation={deleteConsultation}
-          turnConsultationToClient={turnConsultationToClient}
-          archiveConsultation={archiveConsultation}
+          remove={remove}
+          turnBookingToClient={turnBookingToClient}
+          archive={archive}
         />
       )
     });
@@ -103,7 +103,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                   <div className="admin__cards-header">
                       <SearchFilterForm
                           options={bookingFilterSelectOptions}
-                          filter={bookedConsultationsFilter}
+                          filter={filter}
                           onFilterChanged={onFilterChanged}
                       />
                       <button
@@ -115,7 +115,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                       <Paginator
                           totalCount={totalCount}
                           pageSize={pageSize}
-                          currentPage={currentBookedConsultationsPage}
+                          currentPage={currentPage}
                           onPageChanged={setCurrentPage}
                           setPageLimit={setPageLimit}
                       />
@@ -137,7 +137,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                       closeModal={closeModal}
                   >
                       <AddConsultationForm
-                          addBookedConsultation={addBookedConsultation}
+                          addBookedConsultation={add}
                           closeBookingModal={closeModal}
                       />
                   </ModalPopUp>
@@ -155,4 +155,4 @@ export const Bookings: React.FC<PropsType> = React.memo(({
           }
       </>
     )
-})
+});

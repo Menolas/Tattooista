@@ -2,16 +2,16 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getBookedConsultations,
-  changeBookedConsultationStatus,
-  deleteBookedConsultation,
-  turnConsultationToClient,
-  setBookedConsultationsPageSizeAC,
-  addBookedConsultation,
-  archiveConsultation,
-  setCurrentPageForBookedConsultationsAC,
+  getBookings,
+  changeStatus,
+  deleteBooking,
+  turnBookingToClient,
+  setPageSizeAC,
+  addBooking,
+  archiveBooking,
+  setCurrentPageAC,
   setSuccessModalAC,
-  setBookedConsultationsFilterAC,
+  setFilterAC,
   setApiErrorAC,
 } from "../../../redux/Bookings/bookings-reducer";
 import {
@@ -48,58 +48,58 @@ export const BookingsContainer: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBookedConsultations(token, currentPage, pageSize, filter));
+    dispatch(getBookings(token, currentPage, pageSize, filter));
   }, [token, currentPage, pageSize, filter]);
 
   useEffect(() => {
-    dispatch(setCurrentPageForBookedConsultationsAC(1));
+    dispatch(setCurrentPageAC(1));
   }, [filter]);
 
   const setCurrentPageCallBack = (
     page: number
   ) => {
-    dispatch(setCurrentPageForBookedConsultationsAC(page));
+    dispatch(setCurrentPageAC(page));
   }
 
   const onFilterChangedCallBack = (
     filter: SearchFilterType
   ) => {
-    dispatch(setBookedConsultationsFilterAC(filter));
+    dispatch(setFilterAC(filter));
   }
 
-  const changeBookedConsultationStatusCallBack = (
+  const changeStatusCallBack = (
     id: string,
     status: boolean
   ) => {
-    dispatch(changeBookedConsultationStatus(id, status));
+    dispatch(changeStatus(id, status));
   }
 
-  const deleteConsultationCallBack = (
+  const removeCallBack = (
       id: string,
   ) => {
-    dispatch(deleteBookedConsultation(token, id, bookings, currentPage, totalCount, pageSize, filter));
+    dispatch(deleteBooking(token, id, bookings, currentPage, totalCount, pageSize, filter));
   }
 
-  const turnConsultationToClientCallBack = (
+  const turnBookingToClientCallBack = (
     id: string,
     fullName: string,
     contacts?: ContactsType | {}
   ) => {
-    dispatch(turnConsultationToClient(token, id, fullName, contacts, bookings, currentPage, totalCount, pageSize, filter));
+    dispatch(turnBookingToClient(token, id, fullName, contacts, bookings, currentPage, totalCount, pageSize, filter));
   }
 
-  const setBookedConsultationsPageSizeCallBack = (
+  const setPageSizeCallBack = (
     pageSize: number
   ) => {
-    dispatch(setBookedConsultationsPageSizeAC(pageSize));
+    dispatch(setPageSizeAC(pageSize));
   }
 
-  const addBookedConsultationCallBack = (values: AddConsultationFormValues) => {
-    dispatch(addBookedConsultation(values, totalCount));
+  const addCallBack = (values: AddConsultationFormValues) => {
+    dispatch(addBooking(values, totalCount));
   }
 
-  const archiveConsultationCallBack = (id: string) => {
-    dispatch(archiveConsultation(token, id, bookings, currentPage, totalCount, pageSize, filter))
+  const archiveCallBack = (id: string) => {
+    dispatch(archiveBooking(token, id, bookings, currentPage, totalCount, pageSize, filter))
   }
 
   const setSuccessModalCallBack = () => {
@@ -115,22 +115,22 @@ export const BookingsContainer: React.FC = () => {
         isFetching={isFetching}
         successModal={successModal}
         totalCount={totalCount}
-        currentBookedConsultationsPage={currentPage}
+        currentPage={currentPage}
         pageSize={pageSize}
         bookings={bookings}
-        bookedConsultationsFilter={filter}
+        filter={filter}
         isStatusChanging={isStatusChanging}
         isDeletingInProcess={isDeletingInProcess}
         apiError={apiError}
         accessError={accessError}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
-        changeStatus={changeBookedConsultationStatusCallBack}
-        deleteConsultation={deleteConsultationCallBack}
-        turnConsultationToClient={turnConsultationToClientCallBack}
-        setPageLimit={setBookedConsultationsPageSizeCallBack}
-        addBookedConsultation={addBookedConsultationCallBack}
-        archiveConsultation={archiveConsultationCallBack}
+        changeStatus={changeStatusCallBack}
+        remove={removeCallBack}
+        turnBookingToClient={turnBookingToClientCallBack}
+        setPageLimit={setPageSizeCallBack}
+        add={addCallBack}
+        archive={archiveCallBack}
         setSuccessModal={setSuccessModalCallBack}
         setApiError={setApiErrorCallBack}
       />

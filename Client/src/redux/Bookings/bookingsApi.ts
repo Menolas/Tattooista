@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {AddConsultationFormValues, BookedConsultationType, ContactsType, SearchFilterType} from "../../types/Types";
+import {AddConsultationFormValues, BookingType, ContactsType, SearchFilterType} from "../../types/Types";
 import $api, {API_URL} from "../../http";
 
 const instance = axios.create({
@@ -13,30 +13,26 @@ type CommonResponseFields = {
 
 type DeleteConsultationResponseType = CommonResponseFields;
 
-type TurnConsultationToClientResponseType = CommonResponseFields;
+type TurnBookingToClientResponseType = CommonResponseFields;
 
 type ArchiveConsultationResponseType = CommonResponseFields;
 
-type ReactivateConsultationResponseType = CommonResponseFields;
-
 type GetBookedConsultationsResponseType = CommonResponseFields & {
-  bookings: Array<BookedConsultationType>;
+  bookings: Array<BookingType>;
   totalCount: number;
 };
-
-type GetArchivedConsultationsResponseType = GetBookedConsultationsResponseType;
 
 type ChangeConsultationStatusResponseType = CommonResponseFields & {
   status: boolean;
 };
 
 type AddConsultationResponseType = CommonResponseFields & {
-  booking: BookedConsultationType
+  booking: BookingType
 };
 
 export const bookingsApi = {
 
-  getBookedConsultations(
+  getBookings(
     token: string | null,
     currentPage: number,
     pageSize: number,
@@ -68,18 +64,18 @@ export const bookingsApi = {
         .then(response => response.data);
   },
 
-  turnConsultationToClient(
+  turnBookingToClient(
     id: string,
     fullName: string,
     contacts: ContactsType | {}
   ) {
-    return instance.post<TurnConsultationToClientResponseType>(`bookings/bookingToClient/${id}`, {
+    return instance.post<TurnBookingToClientResponseType>(`bookings/bookingToClient/${id}`, {
       fullName,
       contacts
     }).then(response => response.data);
   },
 
-  archiveConsultation(
+  archiveBooking(
       id: string
   ) {
     return instance.post<ArchiveConsultationResponseType>(`bookings/archive/${id}`)

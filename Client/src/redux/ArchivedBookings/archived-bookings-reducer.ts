@@ -1,6 +1,6 @@
 import { archivedBookingsApi } from "./archived-bookingsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {AddConsultationFormValues, BookedConsultationType, SearchFilterType} from "../../types/Types";
+import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -20,7 +20,7 @@ const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const RESTORE_BOOKING_FROM_ARCHIVE = "Congratulations! You just restored this consultation!";
 
 let initialState = {
-  archivedBookings: [] as Array<BookedConsultationType>,
+  archivedBookings: [] as Array<BookingType>,
   totalArchivedConsultationsCount: 0 as number,
   archivedConsultationsPageSize: 5 as number,
   currentArchivedConsultationsPage: 1 as number,
@@ -187,10 +187,10 @@ export const setArchivedConsultationsFilterAC = (filter: SearchFilterType): SetA
 
 type SetArchivedConsultationsAT = {
   type: typeof SET_ARCHIVED_BOOKINGS,
-  archivedBookings: Array<BookedConsultationType>
+  archivedBookings: Array<BookingType>
 }
 
-const setArchivedConsultationsAC = (archivedBookings: Array<BookedConsultationType>): SetArchivedConsultationsAT => ({
+const setArchivedConsultationsAC = (archivedBookings: Array<BookingType>): SetArchivedConsultationsAT => ({
   type: SET_ARCHIVED_BOOKINGS, archivedBookings
 });
 
@@ -247,7 +247,7 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 const deleteArchivedBookingThunk = (
     token: string,
     id: string,
-    bookings: Array<BookedConsultationType>,
+    bookings: Array<BookingType>,
     currentPage: number,
     total: number,
     pageLimit: number,
@@ -297,7 +297,7 @@ export const getArchivedConsultations = (
 export const deleteArchivedConsultation = (
     token: string,
     id: string,
-    bookings: Array<BookedConsultationType>,
+    bookings: Array<BookingType>,
     currentPage: number,
     total: number,
     pageLimit: number,
@@ -319,7 +319,7 @@ export const deleteArchivedConsultation = (
 export const reactivateConsultation = (
     token: string,
     id: string,
-    bookings: Array<BookedConsultationType>,
+    bookings: Array<BookingType>,
     currentPage: number,
     total: number,
     pageLimit: number,

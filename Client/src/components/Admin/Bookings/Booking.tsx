@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ContactType, BookedConsultationType} from "../../../types/Types";
+import {ContactType, BookingType} from "../../../types/Types";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg";
 import {Tooltip} from "react-tooltip";
@@ -9,15 +9,15 @@ import {Confirmation} from "../../common/Confirmation";
 import {ReadMore} from "../../common/ReadMore";
 
 type PropsType = {
-  consultation: BookedConsultationType
+  consultation: BookingType
   pageSize: number
   currentPage: number
   isDeletingInProcess?: Array<string>
   isStatusChanging?: Array<string>
   changeStatus: (id: string, status: boolean) => void
-  turnConsultationToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
-  deleteConsultation: (id: string) => void
-  archiveConsultation: (id: string) => void
+  turnBookingToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
+  remove: (id: string) => void
+  archive: (id: string) => void
 }
 
 export const Booking: React.FC<PropsType> = React.memo(({
@@ -27,9 +27,9 @@ export const Booking: React.FC<PropsType> = React.memo(({
     isDeletingInProcess,
     isStatusChanging,
     changeStatus,
-    turnConsultationToClient,
-    deleteConsultation,
-    archiveConsultation
+    turnBookingToClient,
+    remove,
+    archive
 }) => {
 
     const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
@@ -42,17 +42,17 @@ export const Booking: React.FC<PropsType> = React.memo(({
         setNeedConfirmationBeforeArchiving(false);
     }
 
-    const deleteConsultationCallBack = () => {
-        deleteConsultation(consultation._id);
+    const removeCallBack = () => {
+        remove(consultation._id);
         setNeedConfirmation(false);
     }
 
-    const turnConsultationToClientCallBack = () => {
-        turnConsultationToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage);
+    const turnBookingToClientCallBack = () => {
+        turnBookingToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage);
     }
 
-    const archiveConsultationCallBack = () => {
-        archiveConsultation(consultation._id);
+    const archiveCallBack = () => {
+        archive(consultation._id);
     }
 
     const bookingContacts: ContactType = consultation.contacts;
@@ -149,21 +149,21 @@ export const Booking: React.FC<PropsType> = React.memo(({
             { needConfirmation &&
                 <Confirmation
                     content={'Are you sure? You about to delete this consultation FOREVER along with  all the data...'}
-                    confirm={deleteConsultationCallBack}
+                    confirm={removeCallBack}
                     cancel={closeModal}
                 />
             }
             { needConfirmationBeforeTurnToClient &&
                 <Confirmation
                     content={'Are you sure? You about to turn this consultation into client.'}
-                    confirm={turnConsultationToClientCallBack}
+                    confirm={turnBookingToClientCallBack}
                     cancel={closeModal}
                 />
             }
             { needConfirmationBeforeArchiving &&
                 <Confirmation
                     content={'Are you sure? You about to archive this consultation.'}
-                    confirm={archiveConsultationCallBack}
+                    confirm={archiveCallBack}
                     cancel={closeModal}
                 />
             }
