@@ -1,9 +1,9 @@
-import * as React from "react"
-import {BookConsultationFormValues} from "../../types/Types"
+import * as React from "react";
+import {BookConsultationFormValues} from "../../types/Types";
 import {BookingButton} from "../common/BookingButton";
 
 type PropsType = {
-  bookConsultation: (values: BookConsultationFormValues) => void
+  bookConsultation: (values: BookConsultationFormValues) => void;
 }
 
 export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) => {
@@ -23,4 +23,4 @@ export const MainOffer: React.FC<PropsType> = React.memo(({bookConsultation}) =>
       />
     </div>
   )
-})
+});

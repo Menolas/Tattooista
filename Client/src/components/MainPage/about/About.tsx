@@ -1,13 +1,13 @@
-import * as React from "react"
+import * as React from "react";
 import {useState} from "react"
-import {BookConsultationFormValues, PageType} from "../../../types/Types"
+import {PageType} from "../../../types/Types";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg"
-import {API_URL} from "../../../http"
-import {ModalPopUp} from "../../common/ModalPopUp"
-import { UpdateAboutPageFormFormik } from "../../Forms/UpdateAboutPageFormFormik"
-import {Tooltip} from "react-tooltip"
-import {ADMIN, SUPER_ADMIN} from "../../../utils/constants"
+import Sprite from "../../../assets/svg/sprite.svg";
+import {API_URL} from "../../../http";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import { UpdateAboutPageForm } from "../../Forms/UpdateAboutPageForm";
+import {Tooltip} from "react-tooltip";
+import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 import {SocialNav} from "../../SocialNav";
 import {BookingButton} from "../../common/BookingButton"
 import {ReadMore} from "../../common/ReadMore";
@@ -17,7 +17,7 @@ type PropsType = {
     isFetching: boolean;
     fakeApi: boolean;
     isAuth: string;
-    pageAbout?: PageType;
+    page?: PageType;
     edit: (values: FormData) => void;
     changeVisibility: (isActive: boolean) => void;
 }
@@ -26,7 +26,7 @@ export const About: React.FC<PropsType> = React.memo(({
      isFetching,
      fakeApi,
      isAuth,
-     pageAbout,
+     page,
      edit,
      changeVisibility,
 }) => {
@@ -41,7 +41,7 @@ export const About: React.FC<PropsType> = React.memo(({
 
     const imgUrl = fakeApi
         ? `url("./uploads/avatars/avatar.jpg")`
-        : pageAbout?.wallPaper ? `url("${API_URL}/pageWallpapers/${pageAbout._id}/${pageAbout.wallPaper}")` : `url("./uploads/avatars/avatar.jpg")`
+        : page?.wallPaper ? `url("${API_URL}/pageWallpapers/${page._id}/${page.wallPaper}")` : `url("./uploads/avatars/avatar.jpg")`
 
     return (
         <section className="page-block about container" id="about">
@@ -50,16 +50,16 @@ export const About: React.FC<PropsType> = React.memo(({
                     <button
                         data-tooltip-id="about-tooltip"
                         data-tooltip-content={
-                            pageAbout?.isActive
+                            page?.isActive
                             ? 'Hide "about me" block'
                             : 'Show "about me" block'
                         }
                         className={"btn btn--icon"}
                         onClick={() => {
-                            changeVisibility(pageAbout.isActive)
+                            changeVisibility(page.isActive);
                         }}
                     >
-                        {pageAbout?.isActive
+                        {page?.isActive
                                 ? <svg><use href={`${Sprite}#hide`}/></svg>
                                 : <svg><use href={`${Sprite}#eye`}/></svg>
                         }
@@ -75,10 +75,10 @@ export const About: React.FC<PropsType> = React.memo(({
                 </div>
             }
             {
-                isFetching
+                !isFetching
                     ? (
                         <>
-                            <h2 className={'page-block__title'}>{pageAbout?.title ? pageAbout.title : 'Tattoo Artist'}</h2>
+                            <h2 className={'page-block__title'}>{page?.title ? page.title : 'Tattoo Artist'}</h2>
                             <div className={'about__layout-wrap'}>
                                 <div className={'about__img-wrap-decor'}>
                                     <div
@@ -90,8 +90,8 @@ export const About: React.FC<PropsType> = React.memo(({
                                     <h3 className={'page-block__title-secondary'}>Facts about me</h3>
                                     <div className={'about__content'}>
                                         {
-                                            pageAbout?.content &&
-                                            <ReadMore id={'text-about'} text={pageAbout?.content} amountOfWords={36} />
+                                            page?.content &&
+                                            <ReadMore id={'text-about'} text={page?.content} amountOfWords={36} />
                                         }
                                     </div>
                                     <div className={'about__add-block'}>
@@ -114,8 +114,8 @@ export const About: React.FC<PropsType> = React.memo(({
             >
                 {
                     isEditMode &&
-                    <UpdateAboutPageFormFormik
-                        pageAbout={pageAbout}
+                    <UpdateAboutPageForm
+                        data={page}
                         edit={edit}
                         closeModal={closeEditModal}
                     />

@@ -7,7 +7,7 @@ import { ResultCodesEnum } from "../../utils/constants";
 const SET_IS_FETCHING = 'SET_IS_GENERAL_FETCHING';
 const SET_API_ERROR = 'SET_API_ERROR';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const BOOKING_SUCCESS = "Congratulation! You've just submitted your booking request.";
+const BOOKING_SUCCESS = "Congratulation! You've just submitted your request for consultation.";
 
 let initialState = {
   isFetching: false as boolean,

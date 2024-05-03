@@ -11,42 +11,42 @@ import {useState} from "react";
 import { ModalPopUp } from "../../common/ModalPopUp";
 
 type PropsType = {
-    user: UserType;
+    data: UserType;
     isDeletingInProcess?: Array<string>;
-    deleteUser: (userId: string) => void;
-    setEditUserMode: (mode: boolean) => void;
-    setUser: (user: UserType) => void;
+    remove: (userId: string) => void;
+    setEditMode: (mode: boolean) => void;
+    setData: (user: UserType) => void;
 }
 
 export const User: React.FC<PropsType> = ({
-  user,
+  data,
   isDeletingInProcess,
-  deleteUser,
-  setEditUserMode,
-  setUser,
+  remove,
+  setEditMode,
+  setData,
 }) => {
 
     const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-    const userAvatar = user.avatar ? `${API_URL}/users/${user._id}/avatar/${user.avatar}` : avatar;
+    const userAvatar = data.avatar ? `${API_URL}/users/${data._id}/avatar/${data.avatar}` : avatar;
 
     const closeModal = () => {
-        setNeedConfirmation(false)
+        setNeedConfirmation(false);
     }
 
     const deleteUserCallBack = () => {
-        deleteUser(user._id)
+        remove(data._id);
     }
 
     return (
-        <li key={user._id} className="admin__card admin__card--avatar admin__card--user">
+        <li key={data._id} className="admin__card admin__card--avatar admin__card--user">
             <div className="admin__card-actions">
                 <button
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Edit user"
                     className={"btn btn--icon"}
                     onClick={() => {
-                        setEditUserMode(true);
-                        setUser(user);
+                        setEditMode(true);
+                        setData(data);
                     }}
                 >
                     <svg><use href={`${Sprite}#edit`}/></svg>
@@ -55,7 +55,7 @@ export const User: React.FC<PropsType> = ({
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Delete client"
                     className={"btn btn--icon"}
-                    disabled={isDeletingInProcess?.some(id => id === user._id)}
+                    disabled={isDeletingInProcess?.some(id => id === data._id)}
                     onClick={() => {
                         setNeedConfirmation(true)
                     }}
@@ -64,7 +64,7 @@ export const User: React.FC<PropsType> = ({
                 </button>
             </div>
             <NavLink
-                to={`/admin/profile?clientId=${user._id}`}
+                to={`/admin/profile?clientId=${data._id}`}
                 className="admin__card-link">
                 <div className={"admin__card-avatar"}>
                     <img src={userAvatar} alt={""}/>
@@ -72,16 +72,16 @@ export const User: React.FC<PropsType> = ({
                 <div className={"admin__card-details"}>
                     <div className={"admin__card-detail-item"}>
                         <span className={"admin__card-data-type"}>Display Name:&nbsp;</span>
-                        <span className={"admin__card-data"}>{user.displayName}</span>
+                        <span className={"admin__card-data"}>{data.displayName}</span>
                     </div>
                     <div className={"admin__card-detail-item"}>
                         <span className={"admin__card-data-type"}>Email:&nbsp;</span>
-                        <span className={"admin__card-data"}>{user.email}</span>
+                        <span className={"admin__card-data"}>{data.email}</span>
                     </div>
                     <div className="admin__card-detail-item admin__card-roles">
                         <span className={"admin__card-data-type"}>Roles:&nbsp;</span>
-                        { user.roles.length > 0
-                            ? user.roles.map(role => <span key={role._id}>{role.value}</span>)
+                        { data.roles.length > 0
+                            ? data.roles.map(role => <span key={role._id}>{role.value}</span>)
                             : <span className={"admin__card-data"}>{''}</span>
                         }
                     </div>

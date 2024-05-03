@@ -222,4 +222,4 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         <Tooltip id="my-tooltip" />
       </section>
   )
-})
+});

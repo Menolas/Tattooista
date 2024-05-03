@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {API_URL} from "../../http";
 // @ts-ignore
 import tattooMachine from "../../assets/img/tattoo-machine.webp";
-import {TattooStyleType} from "../../types/Types";
+import {StyleType} from "../../types/Types";
 import {FieldComponent} from "./FieldComponent";
 import {FieldWrapper} from "./FieldWrapper";
 import {
@@ -27,11 +27,11 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
             wallPaper: Yup.mixed()
                 .test('fileType', 'Invalid file type', (value: File) => {
                     if (!value) return true
-                    return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
+                    return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
                 })
                 .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
                     if (!value) return true
-                    return isFileSizeValid([value], MAX_FILE_SIZE)
+                    return isFileSizeValid([value], MAX_FILE_SIZE);
                 })
         }));
     }
@@ -39,13 +39,13 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 }
 
 type PropsType = {
-    isEditing: boolean
-    style?: TattooStyleType
-    addTattooStyle?: (values: FormData) => void
-    editTattooStyle?: (id: string, values: FormData) => void
-    closeModal: () => void
+    isEditing: boolean;
+    style?: StyleType;
+    addTattooStyle?: (values: FormData) => void;
+    editTattooStyle?: (id: string, values: FormData) => void;
+    closeModal: () => void;
 }
-export const UpdateTattooStyleFormFormik: React.FC<PropsType> = ({
+export const UpdateTattooStyleForm: React.FC<PropsType> = ({
     isEditing,
     style,
     addTattooStyle,

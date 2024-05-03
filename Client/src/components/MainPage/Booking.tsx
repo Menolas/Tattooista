@@ -1,5 +1,5 @@
 import * as React from "react";
-import {BookingForm} from "../Forms/BookingFormFormik";
+import {BookingForm} from "../Forms/BookingForm";
 import {BookConsultationFormValues} from "../../types/Types";
 
 type PropsType = {

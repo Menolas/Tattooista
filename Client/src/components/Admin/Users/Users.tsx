@@ -8,7 +8,7 @@ import { usersFilterSelectOptions } from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {useEffect, useState} from "react";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
-import {UpdateUserForm} from "../../Forms/UpdateUserFormFormik";
+import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Navigate} from "react-router";
 import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
@@ -25,12 +25,12 @@ type PropsType = {
     successModal: SuccessModalType;
     accessError: string;
     apiError: string;
-    setUsersPageLimit: (limit:number) => void;
-    setUsersCurrentPage: (page: number) => void;
-    setClientsFilter: (filter: SearchFilterType) => void;
-    deleteUser: (userId: string) => void;
-    updateUser: (id: string, values: FormData) => void;
-    addUser: (values: FormData) => void;
+    setPageLimit: (limit:number) => void;
+    setCurrentPage: (page: number) => void;
+    setFilter: (filter: SearchFilterType) => void;
+    remove: (userId: string) => void;
+    edit: (id: string, values: FormData) => void;
+    add: (values: FormData) => void;
     setSuccessModal: () => void;
     setApiError: () => void;
 }
@@ -46,12 +46,12 @@ export const Users: React.FC<PropsType> = ({
    successModal,
    accessError,
    apiError,
-   setUsersPageLimit,
-   setUsersCurrentPage,
-   setClientsFilter,
-   deleteUser,
-   updateUser,
-   addUser,
+   setPageLimit,
+   setCurrentPage,
+   setFilter,
+   remove,
+   edit,
+   add,
    setSuccessModal,
    setApiError,
 }) => {
@@ -68,30 +68,30 @@ export const Users: React.FC<PropsType> = ({
         }
     }, [successModal]);
 
-    const [addUserMode, setAddUserMode] = useState<boolean>(false);
-    const [editUserMode, setEditUserMode] = useState<boolean>(false);
-    const [user, setUser] = useState<UserType>(null)
+    const [addUserMode, setAddMode] = useState<boolean>(false);
+    const [editUserMode, setEditMode] = useState<boolean>(false);
+    const [data, setData] = useState<UserType>(null);
 
     const closeModal = () => {
-        setAddUserMode(false);
-        setEditUserMode(false);
-        setUser(null);
+        setAddMode(false);
+        setEditMode(false);
+        setData(null);
     }
 
     const addUserModalTitle = 'ADD USER';
     const editUserModalTitle = 'Edit USER';
 
-    const usersElements = users.map(user => {
+    const usersElements = users.map(data => {
         return (
             <User
-                key={user._id}
-                user={user}
-                deleteUser={deleteUser}
-                setEditUserMode={setEditUserMode}
-                setUser={setUser}
+                key={data._id}
+                data={data}
+                remove={remove}
+                setEditMode={setEditMode}
+                setData={setData}
             />
         )
-    })
+    });
 
     return (
         <>
@@ -102,12 +102,12 @@ export const Users: React.FC<PropsType> = ({
                         <SearchFilterForm
                             options={usersFilterSelectOptions}
                             filter={filter}
-                            onFilterChanged={setClientsFilter}
+                            onFilterChanged={setFilter}
                         />
                         <button
                             className="btn btn--bg btn--light-bg add-btn"
                             onClick={() => {
-                                setAddUserMode(true)
+                                setAddMode(true)
                             }}
                         >
                             Add User
@@ -116,8 +116,8 @@ export const Users: React.FC<PropsType> = ({
                             totalCount={total}
                             pageSize={pageLimit}
                             currentPage={currentPage}
-                            onPageChanged={setUsersCurrentPage}
-                            setPageLimit={setUsersPageLimit}
+                            onPageChanged={setCurrentPage}
+                            setPageLimit={setPageLimit}
                         />
                     </div>
                     {
@@ -139,10 +139,10 @@ export const Users: React.FC<PropsType> = ({
                         {(addUserMode || editUserMode) &&
                             <UpdateUserForm
                                 isEditing={editUserMode}
-                                profile={user}
+                                data={data}
                                 roles={roles}
-                                addUser={addUser}
-                                updateUser={updateUser}
+                                add={add}
+                                edit={edit}
                                 closeModal={closeModal}
                             />
                         }

@@ -6,7 +6,7 @@ import avatar from "../../../assets/img/fox.webp";
 import {ClientType, ContactType} from "../../../types/Types";
 import { API_URL } from "../../../http";
 import { ModalPopUp } from "../../common/ModalPopUp";
-import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik";
+import { UpdateClientForm } from "../../Forms/UpdateClientForm";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg";
 import { GalleryUploadForm } from "../../Forms/GalleryUploadForm";
@@ -18,25 +18,25 @@ import {ImageFullView} from "../../common/ImageFullView";
 
 type PropsType = {
   successModal: SuccessModalType
-  profile: ClientType
+  data: ClientType
   isDeletingPicturesInProcess: Array<string>
-  deleteClient: (clientId: string) => void
-  editClient: (clientId: string, values: FormData) => void
-  updateClientGallery: (clientId: string, values: FormData) => void
-  deleteClientGalleryPicture: (clientId: string, picture: string) => void
-  archiveClient: (id: string) => void
+  remove: (clientId: string) => void
+  edit: (clientId: string, values: FormData) => void
+  updateGallery: (clientId: string, values: FormData) => void
+  deleteGalleryItem: (clientId: string, picture: string) => void
+  archive: (id: string) => void
   setSuccessModal: () => void
 }
 
 export const Profile: React.FC<PropsType> = React.memo(({
     successModal,
-    profile,
+    data,
     isDeletingPicturesInProcess,
-    deleteClient,
-    editClient,
-    updateClientGallery,
-    deleteClientGalleryPicture,
-    archiveClient,
+    remove,
+    edit,
+    updateGallery,
+    deleteGalleryItem,
+    archive,
     setSuccessModal,
 }) => {
     const navigate = useNavigate();
@@ -74,20 +74,20 @@ export const Profile: React.FC<PropsType> = React.memo(({
   }
 
   const deleteClientCallBack = () => {
-      deleteClient(profile._id);
+      remove(data._id);
       navigate("/admin/clients");
   }
 
   const archiveClientCallBack = () => {
-      archiveClient(profile._id);
+      archive(data._id);
       navigate("/admin/clients");
   }
 
-  if (!profile) {
+  if (!data) {
     return <div>Sorry, we can not find such a client in data base</div>
   }
 
-  const profileContacts: ContactType = profile.contacts
+  const profileContacts: ContactType = data.contacts
 
   const contactsArray = profileContacts
       ? Object.keys(profileContacts).map(contact => {
@@ -102,14 +102,14 @@ export const Profile: React.FC<PropsType> = React.memo(({
         }) : <></>
 
 
-  const Avatar = profile.avatar
-      ? `${API_URL}/clients/${profile._id}/avatar/${profile.avatar}`
+  const Avatar = data.avatar
+      ? `${API_URL}/clients/${data._id}/avatar/${data.avatar}`
       : avatar;
 
   let profileGallery = [];
 
-  if (profile.gallery?.length) {
-      profileGallery = profile.gallery
+  if (data.gallery?.length) {
+      profileGallery = data.gallery
           .map((item, index) => {
               return (
                   <li
@@ -118,7 +118,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
                           setCarouselData({isOpen: true, activeIndex: index});
                       }}
                   >
-                      <img src={`${API_URL}/clients/${profile._id}/doneTattooGallery/${item}`} alt={''}/>
+                      <img src={`${API_URL}/clients/${data._id}/doneTattooGallery/${item}`} alt={''}/>
                   </li>
               )
           });
@@ -165,17 +165,17 @@ export const Profile: React.FC<PropsType> = React.memo(({
       </div>
       <div className="admin__card-link">
         <div className="admin__card-avatar">
-          <img src={`${Avatar}`} alt={profile.fullName} />
+          <img src={`${Avatar}`} alt={data.fullName} />
         </div>
         <div className="admin__card-details">
           <div className={"admin__card-detail-item"}>
             <span className={"admin__card-data-type"}>Name:&nbsp;</span>
-            <span className={"admin__card-data"}>{profile.fullName}</span>
+            <span className={"admin__card-data"}>{data.fullName}</span>
           </div>
           { contactsArray }
         </div>
       </div>
-      { profile.gallery && profile.gallery.length
+      { data.gallery && data.gallery.length
           ? (
             <div className="client-profile__gallery">
               <ul className="client-profile__gallery-list list">
@@ -193,8 +193,8 @@ export const Profile: React.FC<PropsType> = React.memo(({
           {editClientMode &&
               <UpdateClientForm
                   isEditing={editClientMode}
-                  profile={profile}
-                  editClient={editClient}
+                  data={data}
+                  edit={edit}
                   closeModal={closeModal}
               />
           }
@@ -207,10 +207,10 @@ export const Profile: React.FC<PropsType> = React.memo(({
           {  editGalleryMode &&
               <GalleryUploadForm
                   isEditPortfolio={false}
-                  client={profile}
+                  client={data}
                   isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                  updateGallery={updateClientGallery}
-                  deleteClientGalleryPicture={deleteClientGalleryPicture}
+                  updateGallery={updateGallery}
+                  deleteClientGalleryPicture={deleteGalleryItem}
                   closeModal={closeModal}
               />
           }
@@ -234,8 +234,8 @@ export const Profile: React.FC<PropsType> = React.memo(({
         {  carouselData.isOpen &&
             <ImageFullView
                 isOpen={carouselData.isOpen}
-                clientId={profile._id}
-                gallery={profile.gallery}
+                clientId={data._id}
+                gallery={data.gallery}
                 activeIndex={carouselData.activeIndex}
                 closeImg={()=> {setCarouselData({isOpen: false});}}
             />

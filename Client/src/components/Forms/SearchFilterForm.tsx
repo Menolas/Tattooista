@@ -10,8 +10,8 @@ const handleChange = () => {
 }
 
 type FormType = {
-  term: string
-  condition: string
+  term: string;
+  condition: string;
 }
 
 type PropsType = {
@@ -78,4 +78,4 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
       }
     </Formik>
   )
-})
+});

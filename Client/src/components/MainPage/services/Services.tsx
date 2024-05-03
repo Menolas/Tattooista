@@ -1,9 +1,9 @@
 import * as React from "react";
 import {useState} from "react";
 import {ServiceType} from "../../../types/Types";
-import {ServiceItem} from "../ServiceItem";
+import {ServiceItem} from "./ServiceItem";
 import {ModalPopUp} from "../../common/ModalPopUp";
-import {UpdateServiceItemFormFormik} from "../../Forms/UpdateServiceItemFormFormik";
+import {UpdateServiceItemForm} from "../../Forms/UpdateServiceItemForm";
 import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
@@ -90,10 +90,10 @@ export const Services: React.FC<PropsType> = React.memo(({
       >
         {
             updateServiceData.isUpdateMode &&
-            <UpdateServiceItemFormFormik
+            <UpdateServiceItemForm
                 service={updateServiceData.service}
-                addService={add}
-                editService={edit}
+                add={add}
+                edit={edit}
                 closeModal={closeUpdateServiceModal}
             />
         }

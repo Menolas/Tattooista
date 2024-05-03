@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
+import axios, {CreateAxiosDefaults} from "axios";
 import {GalleryItemType} from "../../types/Types";
 import {API_URL} from "../../http";
 import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";

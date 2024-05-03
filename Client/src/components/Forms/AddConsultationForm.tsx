@@ -39,8 +39,8 @@ const initialValues: AddConsultationFormValues = {
 }
 
 type PropsType = {
-  addBookedConsultation: (values: AddConsultationFormValues) => void
-  closeBookingModal: () => void
+  addBookedConsultation: (values: AddConsultationFormValues) => void;
+  closeBookingModal: () => void;
 }
 
 export const AddConsultationForm: React.FC<PropsType> = React.memo(({

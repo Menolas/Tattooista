@@ -3,7 +3,7 @@ import {useState} from "react";
 import { FaqType } from "../../../types/Types";
 import { FaqItem } from "./FaqItem";
 import {ModalPopUp} from "../../common/ModalPopUp";
-import {UpdateFaqItemFormFormik} from "../../Forms/UpdateFaqItemFormFormik";
+import {UpdateFaqItemForm} from "../../Forms/UpdateFaqItemForm";
 import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 import {Preloader} from "../../common/Preloader";
 
@@ -67,10 +67,10 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
           }}
         >
           { (updateFaqItemData.isUpdateMode || addFaqItemMode) &&
-              <UpdateFaqItemFormFormik
+              <UpdateFaqItemForm
                   faqItem={updateFaqItemData.faqItem}
-                  updateFaqItem={edit}
-                  addFaqItem={add}
+                  edit={edit}
+                  add={add}
                   closeModal={() => {
                     setUpdateFaqItemData({isUpdateMode: false});
                     setAddFaqItemMode(false);

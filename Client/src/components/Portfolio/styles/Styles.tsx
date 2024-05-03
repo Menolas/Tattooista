@@ -4,7 +4,7 @@ import "react-alice-carousel/lib/alice-carousel.css";
 import {StyleType} from "../../../types/Types";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg";
-import {UpdateTattooStyleFormFormik} from "../../Forms/UpdateTattooStyleFormFormik";
+import {UpdateTattooStyleForm} from "../../Forms/UpdateTattooStyleForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
@@ -140,7 +140,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
             closeModal={closeModal}
         >
           {
-              <UpdateTattooStyleFormFormik
+              <UpdateTattooStyleForm
                   isEditing={editMode}
                   style={style}
                   editTattooStyle={edit}

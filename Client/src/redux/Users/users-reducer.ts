@@ -7,11 +7,11 @@ import { usersAPI } from "./usersApi";
 import { getNewPage } from "../../utils/functions";
 
 const SET_USERS = 'SET_USERS';
-const SET_USERS_TOTAL_COUNT = 'SET_USERS_TOTAL_COUNT';
-const SET_USERS_PAGE_LIMIT = 'SET_PAGE_LIMIT';
-const SET_USERS_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+const SET_TOTAL = 'SET_TOTAL';
+const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const SET_USERS_FILTER = 'SET_USERS_FILTER';
+const SET_FILTER = 'SET_FILTER';
 const DELETE_USER = 'DELETE_USER';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ROLES = 'SET_ROLES';
@@ -28,12 +28,12 @@ const ADD_USER_SUCCESS = 'You successfully added new user!';
 let initialState = {
     users: [] as Array<UserType>,
     roles: [] as Array<RoleType>,
-    totalUsersCount: 0 as number,
-    usersIsFetching: false as boolean,
+    totalCount: 0 as number,
+    isFetching: false as boolean,
     pageLimit: 5 as number,
     currentPage: 1 as number,
     isDeletingInProcess: [] as Array<string>,
-    usersFilter: {
+    filter: {
         term: '',
         condition: 'any'
     } as SearchFilterType,
@@ -52,10 +52,10 @@ export const usersReducer = (
     action: ActionsTypes
 ): InitialStateType => {
     switch (action.type) {
-        case SET_USERS_FILTER:
+        case SET_FILTER:
             return {
                 ...state,
-                usersFilter: action.filter
+                filter: action.filter
             }
 
         case SET_USERS:
@@ -67,23 +67,23 @@ export const usersReducer = (
         case TOGGLE_IS_FETCHING:
             return {
                 ...state,
-                usersIsFetching: action.isFetching,
+                isFetching: action.isFetching,
             }
 
-        case SET_USERS_TOTAL_COUNT:
+        case SET_TOTAL:
             return {
                 ...state,
-                totalUsersCount: action.total
+                totalCount: action.total
             }
 
-        case SET_USERS_CURRENT_PAGE:
+        case SET_CURRENT_PAGE:
             return {
                 ...state,
                 currentPage: action.page
 
             }
 
-        case SET_USERS_PAGE_LIMIT:
+        case SET_PAGE_LIMIT:
             return {
                 ...state,
                 pageLimit: action.pageLimit
@@ -197,12 +197,12 @@ const addUserAC = (user: UserType): AddUserAT => ({
 });
 
 type SetUsersFilterAT = {
-    type: typeof SET_USERS_FILTER
+    type: typeof SET_FILTER
     filter: SearchFilterType
 }
 
 export const setUsersFilterAC = (filter: SearchFilterType): SetUsersFilterAT => ({
-        type: SET_USERS_FILTER, filter
+        type: SET_FILTER, filter
 });
 
 type SetUsersAT = {
@@ -224,30 +224,30 @@ const toggleIsFetchingAC = (isFetching: boolean): ToggleIsFetchingAT => ({
 });
 
 type SetUsersTotalCountAT = {
-    type: typeof SET_USERS_TOTAL_COUNT,
+    type: typeof SET_TOTAL,
     total: number
 }
 
-const setUsersTotalCountAC = (total: number): SetUsersTotalCountAT => ({
-    type: SET_USERS_TOTAL_COUNT, total
+const setTotalCountAC = (total: number): SetUsersTotalCountAT => ({
+    type: SET_TOTAL, total
 });
 
 type SetUsersCurrentPageAT = {
-    type: typeof SET_USERS_CURRENT_PAGE,
+    type: typeof SET_CURRENT_PAGE,
     page: number
 }
 
-export const setUsersCurrentPageAC = (page: number): SetUsersCurrentPageAT => ({
-    type: SET_USERS_CURRENT_PAGE, page
+export const setCurrentPageAC = (page: number): SetUsersCurrentPageAT => ({
+    type: SET_CURRENT_PAGE, page
 });
 
 type SetPageLimitAT = {
-    type: typeof SET_USERS_PAGE_LIMIT,
+    type: typeof SET_PAGE_LIMIT,
     pageLimit: number
 }
 
-export const setUsersPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
-    type: SET_USERS_PAGE_LIMIT, pageLimit
+export const setPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
+    type: SET_PAGE_LIMIT, pageLimit
 });
 
 type DeleteUserAT = {
@@ -320,7 +320,7 @@ export const getUsers = (
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(setAccessErrorAC(''));
             dispatch(setUsersAC(response.users));
-            dispatch(setUsersTotalCountAC(response.totalCount));
+            dispatch(setTotalCountAC(response.totalCount));
         }
     } catch (e) {
         // @ts-ignore
@@ -342,14 +342,14 @@ const deleteUserThunk = (
 ): ThunkType => async (dispatch) => {
     if (users.length > 1) {
         dispatch(deleteUserAC(id));
-        dispatch(setUsersTotalCountAC(total -1));
+        dispatch(setTotalCountAC(total -1));
     } else {
         const newPage = getNewPage(currentPage);
         if (currentPage === newPage) {
             await dispatch(getUsers(token, newPage, pageLimit, filter));
         }
         dispatch(deleteUserAC(id));
-        dispatch(setUsersCurrentPageAC(newPage));
+        dispatch(setCurrentPageAC(newPage));
     }
 }
 
@@ -406,7 +406,7 @@ export const addUser = (
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addUserAC(response.user));
             dispatch(setSuccessModalAC(true, ADD_USER_SUCCESS));
-            dispatch(setUsersTotalCountAC(total + 1));
+            dispatch(setTotalCountAC(total + 1));
         }
     } catch (e: any) {
         dispatch(setApiErrorAC(e.response.data.message));

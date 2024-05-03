@@ -11,9 +11,9 @@ import {
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
 
-const SET_GALLERY_PAGE_SIZE = 'SET_GALLERY_PAGE_SIZE';
-const SET_CURRENT_GALLERY_PAGE = 'SET_CURRENT_GALLERY_PAGE';
-const SET_GALLERY_TOTAL_COUNT = 'SET_GALLERY_TOTAL_COUNT';
+const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+const SET_TOTAL = 'SET_TOTAL';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
 const SET_GALLERY = 'SET_GALLERY';
@@ -21,13 +21,14 @@ const UPDATE_GALLERY = 'UPDATE_GALLERY';
 const UPDATE_GALLERY_ITEM = 'UPDATE_GALLERY_ITEM';
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM';
 const SET_FAKE_API = 'SET_FAKE_API';
+
 const ADD_GALLERY_ITEMS_SUCCESS = 'You successfully added gallery images';
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
 
 let initialState = {
-  totalGalleryItemsCount: 0 as number,
-  galleryPageSize: 16 as number | null,
-  currentGalleryPage: 1 as number,
+  totalCount: 0 as number,
+  pageSize: 16 as number | null,
+  currentPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   gallery: [] as Array<GalleryItemType>,
@@ -50,24 +51,23 @@ export const galleryReducer = (
   action: ActionsTypes): InitialStateType => {
 
   switch (action.type) {
-    case SET_GALLERY_PAGE_SIZE:
+    case SET_PAGE_SIZE:
       return {
         ...state,
-        galleryPageSize: action.pageSize,
-        currentGalleryPage: 1
-
+        pageSize: action.pageSize,
+        currentPage: 1
       }
 
-    case SET_CURRENT_GALLERY_PAGE:
+    case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentGalleryPage: action.page
+        currentPage: action.page
       }
 
-    case SET_GALLERY_TOTAL_COUNT:
+    case SET_TOTAL:
       return {
         ...state,
-        totalGalleryItemsCount: action.total
+        totalCount: action.total
       }
 
     case TOGGLE_IS_FETCHING:
@@ -94,7 +94,7 @@ export const galleryReducer = (
       return {
         ...state,
         gallery: [...action.gallery.concat(state.gallery)],
-        totalGalleryItemsCount: state.totalGalleryItemsCount + action.gallery.length
+        totalCount: state.totalCount + action.gallery.length
       }
 
     case DELETE_GALLERY_ITEM:
@@ -110,8 +110,7 @@ export const galleryReducer = (
           if (item._id === action.galleryItem._id) {
             item.tattooStyles = action.galleryItem.tattooStyles
           }
-
-          return item
+          return item;
         })
       }
 
@@ -155,30 +154,30 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
 });
 
 type SetGalleryPageSizeAT = {
-  type: typeof SET_GALLERY_PAGE_SIZE
+  type: typeof SET_PAGE_SIZE
   pageSize: number
 }
 
 export const setGalleryPageSizeAC = (pageSize: number): SetGalleryPageSizeAT => ({
-    type: SET_GALLERY_PAGE_SIZE, pageSize
+    type: SET_PAGE_SIZE, pageSize
 });
 
 type SetCurrentGalleryPageAT = {
-  type: typeof SET_CURRENT_GALLERY_PAGE,
+  type: typeof SET_CURRENT_PAGE,
   page: number
 }
 
 export const setCurrentGalleryPageAC = (page: number): SetCurrentGalleryPageAT => ({
-    type: SET_CURRENT_GALLERY_PAGE, page
+    type: SET_CURRENT_PAGE, page
 });
 
 type SetGalleryTotalCountAT = {
-  type: typeof SET_GALLERY_TOTAL_COUNT,
+  type: typeof SET_TOTAL,
   total: number
 }
 
 const setGalleryTotalCountAC = (total: number): SetGalleryTotalCountAT => ({
-  type: SET_GALLERY_TOTAL_COUNT, total
+  type: SET_TOTAL, total
 });
 
 type SetIsFetchingAT = {

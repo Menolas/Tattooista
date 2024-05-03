@@ -1,42 +1,57 @@
-import * as React from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Registration } from "./Registration"
-import { registration } from "../../redux/Auth/auth-reducer"
-
+import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Registration } from "./Registration";
+import { registration } from "../../redux/Auth/auth-reducer";
+import {
+    getSuccessModalSelector,
+} from "../../redux/General/general-selectors";
+import {setSuccessModalAC} from "../../redux/General/general-reducer";
 import {
     getAuthSelector,
     getUserSelector,
-    getIsSuccessSelector,
     getRegistrationErrorSelector
-} from "../../redux/Auth/auth-selectors"
-import {RegistrationFormValues} from "../../types/Types"
-import {setIsSuccessAC} from "../../redux/Auth/auth-reducer"
+} from "../../redux/Auth/auth-selectors";
+import {RegistrationFormValues} from "../../types/Types";
+import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+import {useEffect} from "react";
 
 export const RegistrationContainer: React.FC = () => {
 
-    const isAuth = useSelector(getAuthSelector)
-    const user = useSelector(getUserSelector)
-    const isSuccess = useSelector(getIsSuccessSelector)
-    const registrationError = useSelector(getRegistrationErrorSelector)
+    const isAuth = useSelector(getAuthSelector);
+    const user = useSelector(getUserSelector);
+    const successModal = useSelector(getSuccessModalSelector);
+    const registrationError = useSelector(getRegistrationErrorSelector);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                setSuccessModalCallBack();
+            }, 3000);
+        }
+    }, [successModal]);
 
     const registrationCallBack = (values: RegistrationFormValues) => {
         dispatch(registration(values))
     }
 
-    const setIsSuccessCallBack = (bol: boolean) => {
-        dispatch(setIsSuccessAC(bol))
+    const setSuccessModalCallBack = () => {
+        dispatch(setSuccessModalAC(false, ''));
     }
 
     return (
-        <Registration
-            isSuccess={isSuccess}
-            isAuth={isAuth}
-            user={user}
-            registrationError={registrationError}
-            registration={registrationCallBack}
-            setIsSuccess={setIsSuccessCallBack}
-        />
+        <>
+            <Registration
+                isAuth={isAuth}
+                user={user}
+                registrationError={registrationError}
+                registration={registrationCallBack}
+            />
+            <SuccessPopUp
+                isOpen={successModal.isSuccess}
+                closeModal={setSuccessModalCallBack}
+                content={successModal.successText}
+            />
+        </>
     )
 }
