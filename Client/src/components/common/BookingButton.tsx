@@ -1,7 +1,7 @@
 import {BookConsultationFormValues} from "../../types/Types";
 import {useEffect, useState} from "react";
 import {ModalPopUp} from "./ModalPopUp";
-import {BookingForm} from "../Forms/BookingFormFormik";
+import {BookingForm} from "../Forms/BookingForm";
 import * as React from "react";
 import {
     bookConsultation,
@@ -14,7 +14,7 @@ import {SuccessPopUp} from "./SuccessPopUp";
 import {ApiErrorMessage} from "./ApiErrorMessage";
 
 type PropsType = {
-    consentId: string
+    consentId: string;
 };
 
 export const BookingButton: React.FC<PropsType> = ({
@@ -50,11 +50,11 @@ export const BookingButton: React.FC<PropsType> = ({
     const modalTitle = ''
 
     const showBookConsultationModal = () => {
-        setBookingModal(true)
+        setBookingModal(true);
     }
 
     const closeBookingModal = () => {
-        setBookingModal(false)
+        setBookingModal(false);
     }
 
     return (

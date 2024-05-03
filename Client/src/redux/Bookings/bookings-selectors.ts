@@ -7,15 +7,15 @@ export const getBookingsSelector = (state: AppStateType) => {
 
 //reselect library selector
 
-export const getBookedConsultationsPageSizeSelector = (state: AppStateType) => {
+export const getPageSizeSelector = (state: AppStateType) => {
   return state.bookings.pageSize;
 }
 
-export const getTotalBookingsCountSelector = (state: AppStateType) => {
+export const getTotalSelector = (state: AppStateType) => {
   return state.bookings.total;
 }
 
-export const getCurrentBookedConsultationsPageSelector = (state: AppStateType) => {
+export const getCurrentPageSelector = (state: AppStateType) => {
   return state.bookings.currentPage;
 }
 

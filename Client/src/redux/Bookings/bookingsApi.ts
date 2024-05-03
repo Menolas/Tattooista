@@ -1,32 +1,27 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {AddConsultationFormValues, BookingType, ContactsType, SearchFilterType} from "../../types/Types";
+import {AddConsultationFormValues, BookingType, ContactsType, SearchFilterType, CommonResponseFields} from "../../types/Types";
 import $api, {API_URL} from "../../http";
 
 const instance = axios.create({
   baseURL: API_URL
 } as CreateAxiosDefaults);
 
-type CommonResponseFields = {
-  resultCode: number;
-  message?: string;
-}
-
-type DeleteConsultationResponseType = CommonResponseFields;
+type DeleteBookingResponseType = CommonResponseFields;
 
 type TurnBookingToClientResponseType = CommonResponseFields;
 
-type ArchiveConsultationResponseType = CommonResponseFields;
+type ArchiveBookingResponseType = CommonResponseFields;
 
-type GetBookedConsultationsResponseType = CommonResponseFields & {
+type GetBookingsResponseType = CommonResponseFields & {
   bookings: Array<BookingType>;
   totalCount: number;
 };
 
-type ChangeConsultationStatusResponseType = CommonResponseFields & {
+type ChangeBookingStatusResponseType = CommonResponseFields & {
   status: boolean;
 };
 
-type AddConsultationResponseType = CommonResponseFields & {
+type AddBookingResponseType = CommonResponseFields & {
   booking: BookingType
 };
 
@@ -38,29 +33,29 @@ export const bookingsApi = {
     pageSize: number,
     filter: SearchFilterType
   ) {
-    return instance.get<GetBookedConsultationsResponseType>(
+    return instance.get<GetBookingsResponseType>(
         `${API_URL}/bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
     ).then(response => response.data);
   },
 
   changeConsultationStatus(id: string, status: boolean) {
-    return instance.patch<ChangeConsultationStatusResponseType>(`bookings/status/${id}`, {status: status})
+    return instance.patch<ChangeBookingStatusResponseType>(`bookings/status/${id}`, {status: status})
       .then(response => response.data);
   },
 
   deleteConsultation(id: string) {
-    return instance.delete<DeleteConsultationResponseType>(`bookings/${id}`)
+    return instance.delete<DeleteBookingResponseType>(`bookings/${id}`)
       .then(response => response.data);
   },
 
   deleteArchivedConsultation(id: string) {
-    return instance.delete<DeleteConsultationResponseType>(`bookings/archive/${id}`)
+    return instance.delete<DeleteBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   },
 
   addConsultation(values: AddConsultationFormValues) {
-    return instance.post<AddConsultationResponseType>(`${API_URL}/bookings`, values)
+    return instance.post<AddBookingResponseType>(`${API_URL}/bookings`, values)
         .then(response => response.data);
   },
 
@@ -78,7 +73,7 @@ export const bookingsApi = {
   archiveBooking(
       id: string
   ) {
-    return instance.post<ArchiveConsultationResponseType>(`bookings/archive/${id}`)
+    return instance.post<ArchiveBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   },
 }

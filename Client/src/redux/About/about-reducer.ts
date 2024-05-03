@@ -18,7 +18,7 @@ const ABOUT_PAGE_SUCCESS = "You successfully updated your 'about' block";
 
 
 let initialState = {
-  pageAbout: {} as PageType,
+  page: {} as PageType,
   isFetching: false as boolean,
   fakeApi: false as boolean,
 }
@@ -41,7 +41,7 @@ export const aboutReducer = (
     case SET_ABOUT_PAGE:
       return {
         ...state,
-        pageAbout: action.page
+        page: action.page
       }
 
     case SET_FAKE_API:

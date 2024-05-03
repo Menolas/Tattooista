@@ -1,15 +1,10 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {RoleType, SearchFilterType, UserType} from "../../types/Types";
+import {RoleType, SearchFilterType, UserType, CommonResponseFields} from "../../types/Types";
 import {API_URL} from "../../http";
 
 const instance = axios.create({
     baseURL: API_URL
 } as CreateAxiosDefaults);
-
-type CommonResponseFields = {
-    resultCode: number
-    message?: string
-}
 
 type DeleteUserResponseType = CommonResponseFields;
 
@@ -27,7 +22,6 @@ type UpdateUserResponseType = CommonResponseFields & {
 }
 
 type AddUserResponseType = UpdateUserResponseType;
-
 
 export const usersAPI = {
 
@@ -50,7 +44,7 @@ export const usersAPI = {
 
     deleteUser(userId: string) {
         return instance.delete<DeleteUserResponseType>(`users/${userId}`)
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     updateUser(
@@ -58,11 +52,11 @@ export const usersAPI = {
         values: FormData
     ) {
         return instance.post<UpdateUserResponseType>(`users/edit/${userId}`, values)
-            .then(response => response.data)
+            .then(response => response.data);
     },
 
     addUser(values: FormData) {
         return instance.post<AddUserResponseType>('users', values)
-            .then(response => response.data)
+            .then(response => response.data);
     }
 }

@@ -1,11 +1,11 @@
-import * as React from "react"
-import {LoginForm} from "../../components/Forms/LoginFormFormik"
-import {LoginFormValues} from "../../types/Types"
+import * as React from "react";
+import {LoginForm} from "../../components/Forms/LoginForm";
+import {LoginFormValues} from "../../types/Types";
 
 type PropsType = {
-  isAuth: null | string
-  loginError: string
-  login: (values: LoginFormValues) => void
+  isAuth: null | string;
+  loginError: string;
+  login: (values: LoginFormValues) => void;
 }
 
 export const Login: React.FC<PropsType> = React.memo(({
@@ -25,4 +25,4 @@ export const Login: React.FC<PropsType> = React.memo(({
       </div>
     </div>
   )
-})
+});

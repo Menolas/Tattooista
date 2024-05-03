@@ -12,10 +12,6 @@ export const getUserSelector = (state: AppStateType) => {
   return state.auth.user
 }
 
-export const getIsSuccessSelector = (state: AppStateType) => {
-  return state.auth.isSuccess
-}
-
 export const getRegistrationErrorSelector = (state: AppStateType) => {
   return state.auth.registrationError
 }

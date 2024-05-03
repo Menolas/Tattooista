@@ -16,9 +16,9 @@ import {
 } from "../../../redux/Bookings/bookings-reducer";
 import {
   getBookingsSelector,
-  getBookedConsultationsPageSizeSelector,
-  getTotalBookingsCountSelector,
-  getCurrentBookedConsultationsPageSelector,
+  getPageSizeSelector,
+  getTotalSelector,
+  getCurrentPageSelector,
   getIsFetchingSelector,
   getFilterSelector,
   getIsStatusChangingSelector,
@@ -33,9 +33,9 @@ import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 export const BookingsContainer: React.FC = () => {
 
   const isFetching = useSelector(getIsFetchingSelector);
-  const totalCount = useSelector(getTotalBookingsCountSelector);
-  const currentPage = useSelector(getCurrentBookedConsultationsPageSelector);
-  const pageSize = useSelector(getBookedConsultationsPageSizeSelector);
+  const totalCount = useSelector(getTotalSelector);
+  const currentPage = useSelector(getCurrentPageSelector);
+  const pageSize = useSelector(getPageSizeSelector);
   const bookings = useSelector(getBookingsSelector);
   const filter = useSelector(getFilterSelector);
   const isStatusChanging = useSelector(getIsStatusChangingSelector);

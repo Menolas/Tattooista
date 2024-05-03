@@ -9,19 +9,19 @@ export const getClientsSelector = (state: AppStateType) => {
 //reselect library selector
 
 export const getClientsPageSizeSelector = (state: AppStateType) => {
-  return state.clients.clientsPageSize;
+  return state.clients.pageSize;
 }
 
 export const getTotalClientsCount = (state: AppStateType) => {
-  return state.clients.totalClientsCount;
+  return state.clients.total;
 }
 
 export const getCurrentClientsPage = (state: AppStateType) => {
-  return state.clients.currentClientsPage;
+  return state.clients.currentPage;
 }
 
 export const getClientsIsFetching = (state: AppStateType) => {
-  return state.clients.clientsIsFetching;
+  return state.clients.isFetching;
 }
 
 export const getIsClientDeletingInProcessSelector = (state: AppStateType) => {
@@ -33,7 +33,7 @@ export const getIsDeletingPicturesInProcessSelector = (state: AppStateType) => {
 }
 
 export const getClientsFilterSelector = (state: AppStateType) => {
-  return state.clients.clientsFilter;
+  return state.clients.filter;
 }
 
 export const getClientProfileSelector = (state: AppStateType) => {

@@ -14,27 +14,27 @@ import {ImageFullView} from "../../common/ImageFullView";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 
 type PropsType = {
-  client: ClientType
-  isDeletingInProcess: Array<string>
-  isDeletingPicturesInProcess: Array<string>
-  deleteClient: (clientId: string) => void
-  archiveClient: (clientId: string) => void
-  setClient: (client: ClientType) => void
-  setEditClientMode: (mode: boolean) => void
-  updateClientGallery: (clientId: string, values: FormData) => void
-  deleteClientGalleryPicture: (clientId: string, picture: string) => void
+  data: ClientType;
+  isDeletingInProcess: Array<string>;
+  isDeletingPicturesInProcess: Array<string>;
+  remove: (clientId: string) => void;
+  archive: (clientId: string) => void;
+  setData: (client: ClientType) => void;
+  setEditClientMode: (mode: boolean) => void;
+  updateGallery: (clientId: string, values: FormData) => void;
+  deleteGalleryItem: (clientId: string, picture: string) => void;
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
-  client,
+  data,
   isDeletingInProcess,
   isDeletingPicturesInProcess,
-  deleteClient,
-  archiveClient,
-  setClient,
+  remove,
+  archive,
+  setData,
   setEditClientMode,
-  updateClientGallery,
-  deleteClientGalleryPicture,
+  updateGallery,
+  deleteGalleryItem,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{
@@ -46,7 +46,7 @@ export const Client: React.FC<PropsType> = React.memo(({
       needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
 
-  const clientContacts: ContactType = client.contacts;
+  const clientContacts: ContactType = data.contacts;
 
   const contacts = Object.keys(clientContacts).map(contact => {
     return clientContacts[contact]
@@ -59,7 +59,7 @@ export const Client: React.FC<PropsType> = React.memo(({
        : null
   });
 
-  const clientAvatar = client.avatar ? `${API_URL}/clients/${client._id}/avatar/${client.avatar}` : avatar;
+  const clientAvatar = data.avatar ? `${API_URL}/clients/${data._id}/avatar/${data.avatar}` : avatar;
 
   return (
     <li className="admin__card admin__card--avatar">
@@ -70,7 +70,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             onClick={() => {
                 setEditClientMode(true);
-                setClient(client);
+                setData(data);
             }}
         >
           <svg><use href={`${Sprite}#edit`}/></svg>
@@ -81,7 +81,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             onClick={() => {
                 setEditGalleryMode(true);
-                setClient(client);
+                setData(data);
             }}
         >
           <svg><use href={`${Sprite}#images-user`}/></svg>
@@ -90,9 +90,9 @@ export const Client: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Move client to archive"
             className={"btn btn--icon"}
-            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
-                setConfirmationForArchivingData({needConfirmation: true, itemId: client._id});
+                setConfirmationForArchivingData({needConfirmation: true, itemId: data._id});
             }}
         >
           <svg><use href={`${Sprite}#archive`}/></svg>
@@ -101,16 +101,16 @@ export const Client: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Delete client"
             className={"btn btn--icon"}
-            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
-              setConfirmationData({ needConfirmation: true, itemId: client._id });
+              setConfirmationData({ needConfirmation: true, itemId: data._id });
             }}
         >
           <svg><use href={`${Sprite}#trash`}/></svg>
         </button>
       </div>
       <NavLink
-          to={`/admin/profile?clientId=${client._id}`}
+          to={`/admin/profile?clientId=${data._id}`}
           className={"admin__card-link"}
       >
           <div className={"admin__card-avatar"}>
@@ -119,17 +119,17 @@ export const Client: React.FC<PropsType> = React.memo(({
           <div className={"admin__card-details"}>
             <div className={"admin__card-detail-item"}>
               <span className={"admin__card-data-type"}>Name:&nbsp;</span>
-              <span className={"admin__card-data"}>{client.fullName}</span>
+              <span className={"admin__card-data"}>{data.fullName}</span>
             </div>
             { contacts }
           </div>
       </NavLink>
       {
-        client.gallery && client.gallery.length > 0 &&
+          data.gallery && data.gallery.length > 0 &&
         <div className={"client-profile__gallery"}>
           <ul className={"client-profile__gallery-list list"}>
             {
-              client.gallery.map((item, index) => {
+                data.gallery.map((item, index) => {
                 return (
                     <li
                         key={item}
@@ -137,7 +137,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                             setCarouselData({isOpen: true, activeIndex: index});
                         }}
                     >
-                      <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
+                      <img src={`${API_URL}/clients/${data._id}/doneTattooGallery/${item}`} alt={''}/>
                     </li>
                 )
               })
@@ -156,14 +156,14 @@ export const Client: React.FC<PropsType> = React.memo(({
           { confirmationForArchivingData.needConfirmation &&
               <Confirmation
                   content={'Are you sure? You about to move this client to archive along with  all the data and images...'}
-                  confirm={() => {archiveClient(confirmationForArchivingData.itemId);}}
+                  confirm={() => {archive(confirmationForArchivingData.itemId);}}
                   cancel={() => {setConfirmationForArchivingData({needConfirmation: false});}}
               />
           }
           { confirmationData.needConfirmation &&
               <Confirmation
                   content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-                  confirm={() => {deleteClient(confirmationData.itemId)}}
+                  confirm={() => {remove(confirmationData.itemId)}}
                   cancel={() => {setConfirmationData({ needConfirmation: false });}}
               />
           }
@@ -176,10 +176,10 @@ export const Client: React.FC<PropsType> = React.memo(({
             {editGalleryMode &&
                 <GalleryUploadForm
                     isEditPortfolio={false}
-                    client={client}
+                    client={data}
                     isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                    updateGallery={updateClientGallery}
-                    deleteClientGalleryPicture={deleteClientGalleryPicture}
+                    updateGallery={updateGallery}
+                    deleteClientGalleryPicture={deleteGalleryItem}
                     closeModal={() => {setEditGalleryMode(false);}}
                 />
             }
@@ -187,8 +187,8 @@ export const Client: React.FC<PropsType> = React.memo(({
       {  carouselData.isOpen &&
         <ImageFullView
             isOpen={carouselData.isOpen}
-            clientId={client._id}
-            gallery={client.gallery}
+            clientId={data._id}
+            gallery={data.gallery}
             activeIndex={carouselData.activeIndex}
             closeImg={()=> {setCarouselData({isOpen: false});}}
         />

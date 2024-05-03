@@ -19,9 +19,9 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-  isAuth: null | string
-  loginError: string
-  login: (values: LoginFormValues) => void
+  isAuth: null | string;
+  loginError: string;
+  login: (values: LoginFormValues) => void;
 }
 
 export const LoginForm: React.FC<PropsType> = React.memo(({

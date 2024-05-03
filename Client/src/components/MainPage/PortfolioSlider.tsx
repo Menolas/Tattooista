@@ -7,7 +7,7 @@ import {MyCarousel} from "../common/MyCarousel";
 
 type PropsType = {
     fakeApi: boolean;
-    galleryPageSize: number;
+    pageSize: number;
     styles: Array<StyleType>;
     setActiveStyle: (style: StyleType) => void;
 }
@@ -21,7 +21,7 @@ const responsive = {
 
 export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   fakeApi,
-  galleryPageSize,
+  pageSize,
   styles,
   setActiveStyle
 }) => {
@@ -38,7 +38,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
              key={slider._id}
          >
              <NavLink
-                 to={`/portfolio?&style=${slider.value}&page=1&limit=${galleryPageSize}`}
+                 to={`/portfolio?&style=${slider.value}&page=1&limit=${pageSize}`}
                  className="portfolio-slider__link"
                  style={{backgroundImage: `url(${wallpaperUrl})`}}
                  onClick={() => {

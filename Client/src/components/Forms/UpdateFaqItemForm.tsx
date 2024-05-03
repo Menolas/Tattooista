@@ -13,12 +13,12 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-    faqItem?: FaqType
-    edit?: (id: string, values: FaqType) => void
-    add?: (values: FaqType) => void
-    closeModal: () => void
+    faqItem?: FaqType;
+    edit?: (id: string, values: FaqType) => void;
+    add?: (values: FaqType) => void;
+    closeModal: () => void;
 }
-export const UpdateFaqItemFormFormik: React.FC<PropsType> = ({
+export const UpdateFaqItemForm: React.FC<PropsType> = ({
   faqItem,
   edit,
   add,

@@ -9,13 +9,13 @@ import * as Yup from "yup";
 import {validateFile} from "../../utils/validators";
 
 type PropsType = {
-    pageAbout?: PageType
-    edit: (values: FormData) => void
-    closeModal: () => void
+    data?: PageType;
+    edit: (values: FormData) => void;
+    closeModal: () => void;
 };
 
-export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
-    pageAbout,
+export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
+    data,
     edit,
     closeModal
 }) => {
@@ -42,9 +42,9 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
     }
 
     const initialValues = {
-        aboutPageWallPaper: pageAbout && pageAbout.wallPaper ? pageAbout.wallPaper : '',
-        aboutPageTitle: pageAbout && pageAbout.title ? pageAbout.title : '',
-        aboutPageContent: pageAbout && pageAbout.content ? pageAbout.content : '',
+        aboutPageWallPaper: data && data.wallPaper ? data.wallPaper : '',
+        aboutPageTitle: data && data.title ? data.title : '',
+        aboutPageContent: data && data.content ? data.content : '',
     }
 
     const submit = async (values, actions) => {
@@ -88,8 +88,8 @@ export const UpdateAboutPageFormFormik: React.FC<PropsType> =  React.memo(({
                                 <img
                                     src={
                                         imageURL ? imageURL
-                                            : pageAbout?.wallPaper
-                                            ? `${API_URL}/pageWallpapers/${pageAbout?._id}/${pageAbout.wallPaper}`
+                                            : data?.wallPaper
+                                            ? `${API_URL}/pageWallpapers/${data?._id}/${data.wallPaper}`
                                             : "./uploads/ServicesWallpapers/service.jpg"
                                     }
                                     alt="preview"

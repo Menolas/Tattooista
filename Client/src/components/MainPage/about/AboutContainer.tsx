@@ -2,7 +2,7 @@ import * as React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {About} from "./About";
 import {
-    getPageAboutSelector,
+    getPageSelector,
     getFakeApiSelector,
     getIsFetchingSelector,
 } from "../../../redux/About/about-selectors";
@@ -18,7 +18,7 @@ import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
 export const AboutContainer = () => {
     const isAuth = useSelector(getAuthSelector);
     const fakeApi = useSelector(getFakeApiSelector);
-    const pageAbout = useSelector(getPageAboutSelector);
+    const page = useSelector(getPageSelector);
     const isFetching = useSelector(getIsFetchingSelector);
 
     const dispatch = useDispatch();
@@ -35,13 +35,13 @@ export const AboutContainer = () => {
         dispatch(changeAboutPageVisibility(isActive));
     }
 
-    if  (isAuth || pageAbout?.isActive) {
+    if  (isAuth || page?.isActive) {
         return (
             <About
                 isFetching={isFetching}
                 fakeApi={fakeApi}
                 isAuth={isAuth}
-                pageAbout={pageAbout}
+                page={page}
                 edit={editAboutPageCallBack}
                 changeVisibility={changeAboutPageVisibilityCallBack}
             />

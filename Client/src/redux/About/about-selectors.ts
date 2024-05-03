@@ -1,7 +1,7 @@
 import { AppStateType } from "../redux-store";
 
-export const getPageAboutSelector = (state: AppStateType) => {
-  return state.about.pageAbout;
+export const getPageSelector = (state: AppStateType) => {
+  return state.about.page;
 }
 
 export const getFakeApiSelector = (state: AppStateType) => {

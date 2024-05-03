@@ -6,9 +6,9 @@ import {
     deleteUser,
     getRoles,
     getUsers,
-    setUsersCurrentPageAC,
+    setCurrentPageAC,
     setUsersFilterAC,
-    setUsersPageLimitAC,
+    setPageLimitAC,
     updateUser,
     setSuccessModalAC,
     addUser,
@@ -17,12 +17,12 @@ import {
 import {
     getSuccessModalSelector,
     getRolesSelector,
-    getUsersCurrentPageSelector,
-    getUsersFiletSelector,
-    getUsersIsFetching,
-    getUsersPageLimitSelector,
+    getCurrentPageSelector,
+    getFiletSelector,
+    getIsFetching,
+    getPageLimitSelector,
     getUsersSelector,
-    getUsersTotalCountSelector,
+    getTotalCountSelector,
     getAccessErrorSelector, getUsersApiErrorSelector
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
@@ -33,36 +33,36 @@ export const UsersContainer: React.FC = () => {
     const token = useSelector(getTokenSelector);
     const roles = useSelector(getRolesSelector);
     const users = useSelector(getUsersSelector);
-    const isFetching = useSelector(getUsersIsFetching);
-    const total = useSelector(getUsersTotalCountSelector);
-    const currentPage = useSelector(getUsersCurrentPageSelector);
-    const pageLimit = useSelector(getUsersPageLimitSelector);
-    const filter = useSelector(getUsersFiletSelector);
+    const isFetching = useSelector(getIsFetching);
+    const total = useSelector(getTotalCountSelector);
+    const currentPage = useSelector(getCurrentPageSelector);
+    const pageLimit = useSelector(getPageLimitSelector);
+    const filter = useSelector(getFiletSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const accessError = useSelector(getAccessErrorSelector);
     const apiError = useSelector(getUsersApiErrorSelector);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getRoles())
         dispatch(getUsers(token, currentPage, pageLimit, filter));
     }, [dispatch, token, currentPage, pageLimit, filter]);
 
-    const setUsersPageLimitCallBack = (limit: number) => {
-        dispatch(setUsersPageLimitAC(limit));
+    const setPageLimitCallBack = (limit: number) => {
+        dispatch(setPageLimitAC(limit));
     }
 
-    const setUsersCurrentPageCallBack = (page: number) => {
-        dispatch(setUsersCurrentPageAC(page));
+    const setCurrentPageCallBack = (page: number) => {
+        dispatch(setCurrentPageAC(page));
     }
 
-    const setClientsFilterCallBack = (filter: SearchFilterType) => {
+    const setFilterCallBack = (filter: SearchFilterType) => {
         dispatch(setUsersFilterAC(filter));
     }
 
-    const deleteUserCallBack = (userId: string) => {
-        dispatch(deleteUser(token, userId, users, currentPage, total, pageLimit, filter))
+    const removeCallBack = (userId: string) => {
+        dispatch(deleteUser(token, userId, users, currentPage, total, pageLimit, filter));
     }
 
     const setSuccessModalCallBack = () => {
@@ -73,7 +73,7 @@ export const UsersContainer: React.FC = () => {
         dispatch(setApiErrorAC(''));
     }
 
-    const updateUserCallBack = (
+    const editCallBack = (
         id: string,
         values: FormData
     ) => {
@@ -96,12 +96,12 @@ export const UsersContainer: React.FC = () => {
             successModal={successModal}
             accessError={accessError}
             apiError={apiError}
-            setUsersPageLimit={setUsersPageLimitCallBack}
-            setUsersCurrentPage={setUsersCurrentPageCallBack}
-            setClientsFilter={setClientsFilterCallBack}
-            deleteUser={deleteUserCallBack}
-            updateUser={updateUserCallBack}
-            addUser={addUserCallBack}
+            setPageLimit={setPageLimitCallBack}
+            setCurrentPage={setCurrentPageCallBack}
+            setFilter={setFilterCallBack}
+            remove={removeCallBack}
+            edit={editCallBack}
+            add={addUserCallBack}
             setSuccessModal={setSuccessModalCallBack}
             setApiError={setApiErrorCallBack}
         />

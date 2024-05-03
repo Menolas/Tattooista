@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useEffect } from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Paginator} from "../../common/Paginator";
-import {NothingToShow} from "../../common/NothingToShow";
-import {Preloader} from "../../common/Preloader";
+import {Paginator} from "../../../common/Paginator";
+import {NothingToShow} from "../../../common/NothingToShow";
+import {Preloader} from "../../../common/Preloader";
 import {
     deleteArchivedConsultation,
     getArchivedConsultations,
@@ -12,7 +12,7 @@ import {
     setArchivedConsultationsFilterAC,
     setArchivedConsultationsPageSizeAC,
     setCurrentPageForArchivedConsultationsAC, setSuccessModalAC
-} from "../../../redux/ArchivedBookings/archived-bookings-reducer";
+} from "../../../../redux/ArchivedBookings/archived-bookings-reducer";
 import {
     getArchivedConsultationsFilterSelector,
     getArchivedConsultationsPageSizeSelector,
@@ -23,15 +23,15 @@ import {
     getIsDeletingInProcessSelector,
     getApiErrorSelector,
     getAccessErrorSelector, getSuccessModalSelector,
-} from "../../../redux/ArchivedBookings/archived-bookings-selectors";
+} from "../../../../redux/ArchivedBookings/archived-bookings-selectors";
 import {ArchivedConsultation} from "./ArchivedConsultation";
-import {ApiErrorMessage} from "../../common/ApiErrorMessage";
-import {SearchFilterForm} from "../../Forms/SearchFilterForm";
-import {bookingFilterSelectOptions} from "../../../utils/constants";
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {ApiErrorMessage} from "../../../common/ApiErrorMessage";
+import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
+import {bookingFilterSelectOptions} from "../../../../utils/constants";
+import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Navigate} from "react-router";
-import {SuccessPopUp} from "../../common/SuccessPopUp";
-import {SearchFilterType} from "../../../types/Types";
+import {SuccessPopUp} from "../../../common/SuccessPopUp";
+import {SearchFilterType} from "../../../../types/Types";
 
 export const ArchivedConsultations: React.FC = () => {
     const isFetching = useSelector(getBookedConsultationsIsFetchingSelector);

@@ -7,9 +7,9 @@ import {
     getCurrentArchivedGalleryPageSelector,
     getIsDeletingInProcessSelector,
     getTotalArchivedGalleryItemsCountSelector
-} from "../../../redux/ArchivedGallery/archived-gallery-selectors";
-import {getStylesSelector,} from "../../../redux/Styles/styles-selectors";
-import {Paginator} from "../../common/Paginator";
+} from "../../../../redux/ArchivedGallery/archived-gallery-selectors";
+import {getStylesSelector,} from "../../../../redux/Styles/styles-selectors";
+import {Paginator} from "../../../common/Paginator";
 import {
     deleteArchivedGalleryItem,
     getArchivedGallery,
@@ -17,17 +17,17 @@ import {
     setArchivedGalleryPageSizeAC,
     setCurrentArchivedGalleryPageAC,
     updateArchivedGalleryItem
-} from "../../../redux/ArchivedGallery/archived-gallery-reducer";
-import {getStyles,} from "../../../redux/Styles/styles-reducer";
-import { API_URL } from "../../../http";
+} from "../../../../redux/ArchivedGallery/archived-gallery-reducer";
+import {getStyles,} from "../../../../redux/Styles/styles-reducer";
+import { API_URL } from "../../../../http";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg"
-import {NothingToShow} from "../../common/NothingToShow"
-import {ModalPopUp} from "../../common/ModalPopUp"
-import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm"
+import Sprite from "../../../../assets/svg/sprite.svg"
+import {NothingToShow} from "../../../common/NothingToShow"
+import {ModalPopUp} from "../../../common/ModalPopUp"
+import {UpdateGalleryItemForm} from "../../../Forms/UpdateGalleryItemForm"
 import {Tooltip} from "react-tooltip"
-import {Confirmation} from "../../common/Confirmation";
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {Confirmation} from "../../../common/Confirmation";
+import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 
 export const ArchivedGallery = () => {
 

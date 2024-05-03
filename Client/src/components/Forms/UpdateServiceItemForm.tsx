@@ -22,16 +22,16 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-    service?: ServiceType
-    editService?: (id: string, values: FormData) => void
-    addService?: (values: FormData) => void
-    setService?: (service: ServiceType | null) => void
-    closeModal: () => void
+    service?: ServiceType;
+    edit?: (id: string, values: FormData) => void;
+    add?: (values: FormData) => void;
+    setService?: (service: ServiceType | null) => void;
+    closeModal: () => void;
 }
-export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
+export const UpdateServiceItemForm: React.FC<PropsType> = ({
     service,
-    editService,
-    addService,
+    edit,
+    add,
     setService,
     closeModal,
 }) => {
@@ -80,10 +80,10 @@ export const UpdateServiceItemFormFormik: React.FC<PropsType> = ({
         }
         try {
             if (service) {
-                editService(service._id, formData);
+                edit(service._id, formData);
                 setService(null);
             } else {
-                addService(formData);
+                add(formData);
             }
         } catch (error) {
             console.error('Error submitting form:', error);

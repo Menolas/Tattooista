@@ -6,11 +6,11 @@ import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
 
-const SET_CLIENTS_PAGE_SIZE = 'SET_CLIENTS_PAGE_SIZE';
-const SET_CLIENTS_FILTER = 'SET_CLIENTS_FILTER';
+const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
+const SET_FILTER = 'SET_FILTER';
 const SET_CLIENTS = 'SET_CLIENTS';
-const SET_CURRENT_PAGE_FOR_CLIENTS = 'SET_CURRENT_PAGE_FOR_CLIENTS';
-const SET_TOTAL_CLIENTS_COUNT = 'SET_TOTAL_CLIENTS_COUNT';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+const SET_TOTAL = 'SET_TOTAL';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const TOGGLE_IS_DELETING_PICTURES_IN_PROCESS = 'TOGGLE_IS_DELETING_PICTURE_IN_PROGRESS';
 const DELETE_CLIENT = 'DELETE_CLIENT';
@@ -27,13 +27,13 @@ const UPDATE_CLIENT_GALLERY_SUCCESS = "You successfully updated client's gallery
 
 let initialState = {
   clients: [] as Array<ClientType>,
-  totalClientsCount: 0 as number,
-  clientsPageSize: 5 as number,
-  currentClientsPage: 1 as number,
-  clientsIsFetching: false as boolean,
+  total: 0 as number,
+  pageSize: 5 as number,
+  currentPage: 1 as number,
+  isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   isDeletingPicturesInProcess: [] as Array<string>,
-  clientsFilter: {
+  filter: {
     term: '' as string | null,
     condition: "any" as string | null
   },
@@ -54,17 +54,17 @@ export const clientsReducer = (
 ): InitialStateType => {
 
   switch (action.type) {
-    case SET_CLIENTS_PAGE_SIZE:
+    case SET_PAGE_SIZE:
       return {
         ...state,
-        clientsPageSize: action.clientsPageSize,
-        currentClientsPage: 1
+        pageSize: action.clientsPageSize,
+        currentPage: 1
       }
 
-    case SET_CLIENTS_FILTER:
+    case SET_FILTER:
       return {
         ...state,
-        clientsFilter: action.filter
+        filter: action.filter
       }
 
     case SET_CLIENTS:
@@ -73,22 +73,22 @@ export const clientsReducer = (
         clients: action.clients,
       }
 
-    case SET_CURRENT_PAGE_FOR_CLIENTS:
+    case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentClientsPage: action.page,
+        currentPage: action.page,
       }
 
-    case SET_TOTAL_CLIENTS_COUNT:
+    case SET_TOTAL:
       return {
         ...state,
-        totalClientsCount: action.count,
+        total: action.count,
       }
 
     case TOGGLE_IS_FETCHING:
       return {
         ...state,
-        clientsIsFetching: action.isFetching,
+        isFetching: action.isFetching,
       }
 
     case DELETE_CLIENT:
@@ -162,8 +162,8 @@ export const clientsReducer = (
   }
 }
 
-type ActionsTypes = SetApiErrorAT | SetClientsPageSizeAT | SetClientsFilterAT |
-    SetClientsAT | SetCurrentPageAT | SetClientsTotalCountAT | ToggleIsDeletingInProcessAT |
+type ActionsTypes = SetApiErrorAT | SetClientsPageSizeAT | SetFilterAT |
+    SetClientsAT | SetCurrentPageAT | SetTotalCountAT | ToggleIsDeletingInProcessAT |
     ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT | DeleteClientAT | EditClientAT |
     AddClientAT | SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT;
 
@@ -198,21 +198,21 @@ export const setApiErrorAC = (error: string): SetApiErrorAT => ({
 });
 
 type SetClientsPageSizeAT = {
-  type: typeof  SET_CLIENTS_PAGE_SIZE
+  type: typeof  SET_PAGE_SIZE
   clientsPageSize: number
 }
 
-export const setClientsPageSize = (clientsPageSize: number): SetClientsPageSizeAT => ({
-    type: SET_CLIENTS_PAGE_SIZE, clientsPageSize
+export const setPageSize = (clientsPageSize: number): SetClientsPageSizeAT => ({
+    type: SET_PAGE_SIZE, clientsPageSize
 });
 
-type SetClientsFilterAT = {
-  type: typeof SET_CLIENTS_FILTER
+type SetFilterAT = {
+  type: typeof SET_FILTER
   filter: SearchFilterType
 }
 
-export const setClientsFilterAC = (filter: SearchFilterType): SetClientsFilterAT => ({
-    type: SET_CLIENTS_FILTER, filter
+export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
+    type: SET_FILTER, filter
 });
 
 type SetClientsAT = {
@@ -225,21 +225,21 @@ const setClientsAC = (clients: Array<ClientType>): SetClientsAT => ({
 });
 
 type SetCurrentPageAT = {
-  type: typeof SET_CURRENT_PAGE_FOR_CLIENTS,
+  type: typeof SET_CURRENT_PAGE,
   page: number
 }
 
-export const setCurrentClientsPageAC = (page: number): SetCurrentPageAT => ({
-    type: SET_CURRENT_PAGE_FOR_CLIENTS, page
+export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
+    type: SET_CURRENT_PAGE, page
 });
 
-type SetClientsTotalCountAT = {
-  type: typeof SET_TOTAL_CLIENTS_COUNT,
+type SetTotalCountAT = {
+  type: typeof SET_TOTAL,
   count: number
 }
 
-const setClientsTotalCountAC = (count: number): SetClientsTotalCountAT => ({
-      type: SET_TOTAL_CLIENTS_COUNT, count
+const setTotalCountAC = (count: number): SetTotalCountAT => ({
+      type: SET_TOTAL, count
 });
 
 type ToggleIsDeletingPicturesInProcessAT = {
@@ -322,14 +322,14 @@ const deleteClientThunk = (
 ): ThunkType => async (dispatch) => {
   if (clients.length > 1) {
     dispatch(deleteClientAC(id))
-    dispatch(setClientsTotalCountAC(total -1))
+    dispatch(setTotalCountAC(total -1))
   } else {
     const newPage = getNewPage(currentPage)
     if (currentPage === newPage) {
       await dispatch(getClients(token, newPage, pageLimit, filter))
     }
     dispatch(deleteClientAC(id));
-    dispatch(setCurrentClientsPageAC(newPage));
+    dispatch(setCurrentPageAC(newPage));
 
   }
 }
@@ -354,7 +354,7 @@ export const getClients = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(''));
       dispatch(setClientsAC(response.clients));
-      dispatch(setClientsTotalCountAC(response.totalCount));
+      dispatch(setTotalCountAC(response.totalCount));
     }
   } catch (e) {
     // @ts-ignore
@@ -415,7 +415,7 @@ export const addClient = (
     let response = await clientsAPI.addClient(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addClientAC(response.client))
-      dispatch(setClientsTotalCountAC(total + 1));
+      dispatch(setTotalCountAC(total + 1));
       dispatch(setSuccessModalAC(true, ADD_CLIENT_SUCCESS));
     }
   } catch (e) {

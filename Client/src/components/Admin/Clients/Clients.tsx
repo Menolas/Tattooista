@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import { Client } from "./Client";
 import { Paginator } from "../../common/Paginator";
 import { ModalPopUp } from "../../common/ModalPopUp";
-import { UpdateClientForm } from "../../Forms/UpdateClientFormFormik";
+import { UpdateClientForm } from "../../Forms/UpdateClientForm";
 import {ClientType, SearchFilterType} from "../../../types/Types";
 import {NothingToShow} from "../../common/NothingToShow";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
@@ -15,28 +15,28 @@ import {Navigate} from "react-router";
 import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 
 type PropsType = {
-  isFetching: boolean
-  successModal: SuccessModalType
-  totalCount: number
-  currentPage: number
-  pageSize: number
-  apiError: string
-  accessError: string
-  clients: Array<ClientType>
-  clientsFilter: SearchFilterType
-  isDeletingInProcess: Array<string>
-  isDeletingPicturesInProcess: Array<string>
-  onPageChanged: (page: number) => void
-  onFilterChanged: (filter: SearchFilterType) => void
-  addClient: (values: FormData) => void
-  deleteClient: (clientId: string) => void
-  editClient: (clientId: string, values: FormData) => void
-  setPageLimit: (clientsPageSize: number) => void
-  updateClientGallery: (clientId: string, values: FormData) => void
-  deleteClientGalleryPicture: (clientId: string, picture: string) => void
-  archiveClient: (clientId: string) => void
-  setSuccessModal: () => void
-  setApiError: () => void
+  isFetching: boolean;
+  successModal: SuccessModalType;
+  totalCount: number;
+  currentPage: number;
+  pageSize: number;
+  apiError: string;
+  accessError: string;
+  clients: Array<ClientType>;
+  clientsFilter: SearchFilterType;
+  isDeletingInProcess: Array<string>;
+  isDeletingPicturesInProcess: Array<string>;
+  onPageChanged: (page: number) => void;
+  onFilterChanged: (filter: SearchFilterType) => void;
+  add: (values: FormData) => void;
+  remove: (clientId: string) => void;
+  edit: (clientId: string, values: FormData) => void;
+  setPageLimit: (clientsPageSize: number) => void;
+  updateGallery: (clientId: string, values: FormData) => void;
+  deleteGalleryItem: (clientId: string, picture: string) => void;
+  archive: (clientId: string) => void;
+  setSuccessModal: () => void;
+  setApiError: () => void;
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
@@ -53,13 +53,13 @@ export const Clients: React.FC<PropsType> = React.memo(({
     isDeletingPicturesInProcess,
     onPageChanged,
     onFilterChanged,
-    addClient,
-    deleteClient,
-    editClient,
+    add,
+    remove,
+    edit,
     setPageLimit,
-    updateClientGallery,
-    deleteClientGalleryPicture,
-    archiveClient,
+    updateGallery,
+    deleteGalleryItem,
+    archive,
     setSuccessModal,
     setApiError,
 }) => {
@@ -91,15 +91,15 @@ export const Clients: React.FC<PropsType> = React.memo(({
         return (
             <Client
                 key={client._id}
-                client={client}
+                data={client}
                 isDeletingInProcess={isDeletingInProcess}
                 isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                deleteClient={deleteClient}
-                archiveClient={archiveClient}
-                setClient={setClient}
+                remove={remove}
+                archive={archive}
+                setData={setClient}
                 setEditClientMode={setEditClientMode}
-                updateClientGallery={updateClientGallery}
-                deleteClientGalleryPicture={deleteClientGalleryPicture}
+                updateGallery={updateGallery}
+                deleteGalleryItem={deleteGalleryItem}
             />
         )
       });
@@ -154,9 +154,9 @@ export const Clients: React.FC<PropsType> = React.memo(({
                       { (editClientMode || addClientMode) &&
                           < UpdateClientForm
                               isEditing={editClientMode}
-                              profile={client}
-                              editClient={editClient}
-                              addClient={addClient}
+                              data={client}
+                              edit={edit}
+                              add={add}
                               closeModal={closeModal}
                           />
                       }

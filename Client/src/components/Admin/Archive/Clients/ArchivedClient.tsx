@@ -1,16 +1,16 @@
 import * as React from "react";
 // @ts-ignore
-import avatar from "../../../assets/img/fox.webp";
+import avatar from "../../../../assets/img/fox.webp";
 // @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import Sprite from "../../../../assets/svg/sprite.svg";
 import { NavLink } from "react-router-dom";
-import {ClientType, ContactType} from "../../../types/Types";
-import { API_URL } from "../../../http";
+import {ClientType, ContactType} from "../../../../types/Types";
+import { API_URL } from "../../../../http";
 import {Tooltip} from "react-tooltip";
-import {Confirmation} from "../../common/Confirmation";
+import {Confirmation} from "../../../common/Confirmation";
 import {useState} from "react";
-import {ModalPopUp} from "../../common/ModalPopUp";
-import {ImageFullView} from "../../common/ImageFullView";
+import {ModalPopUp} from "../../../common/ModalPopUp";
+import {ImageFullView} from "../../../common/ImageFullView";
 
 type PropsType = {
   client: ClientType

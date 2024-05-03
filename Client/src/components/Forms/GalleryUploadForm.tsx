@@ -46,12 +46,6 @@ export const GalleryUploadForm: React.FC<PropsType> = ({
 }) => {
 
   const [imageURLS, setImageURLS] = useState([]);
-  //const [clientGallery, setClientGallery] = useState(null);
-
-  // useEffect(() => {
-  //   if (client)
-  //   setClientGallery(client?.gallery);
-  // }, [client]);
 
   const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>, setImageURLS) => {
     event.preventDefault();

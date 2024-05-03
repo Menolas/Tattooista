@@ -1,13 +1,13 @@
 import * as React from "react";
-import {ServiceType} from "../../types/Types";
-import {API_URL} from "../../http";
+import {ServiceType} from "../../../types/Types";
+import {API_URL} from "../../../http";
 import {Tooltip} from "react-tooltip";
-import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
+import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import Sprite from "../../../assets/svg/sprite.svg";
 import {useState} from "react";
-import {Confirmation} from "../common/Confirmation";
-import {ModalPopUp} from "../common/ModalPopUp";
+import {Confirmation} from "../../common/Confirmation";
+import {ModalPopUp} from "../../common/ModalPopUp";
 
 type SetUpdateServiceDataType = React.Dispatch<React.SetStateAction<{
     isUpdateMode: boolean,

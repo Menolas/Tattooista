@@ -13,13 +13,13 @@ import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
 import {
-  getCurrentGalleryPage,
+  getCurrentPageSelector,
   getFakeApiSelector,
-  getGalleryPageSize,
+  getPageSizeSelector,
   getGallerySelector,
-  getIsFetching,
+  getIsFetchingSelector,
   getIsDeletingInProcessSelector,
-  getTotalGalleryItemsCount
+  getTotalCountSelector
 } from "../../../redux/Gallery/gallery-selectors";
 
 import {
@@ -29,12 +29,12 @@ import {
 
 export const GalleryContainer: React.FC = () => {
   const isAuth = useSelector(getAuthSelector);
-  const isFetching = useSelector(getIsFetching);
+  const isFetching = useSelector(getIsFetchingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const fakeApi = useSelector(getFakeApiSelector);
-  const totalCount = useSelector(getTotalGalleryItemsCount);
-  const pageSize = useSelector(getGalleryPageSize);
-  let currentPage = useSelector(getCurrentGalleryPage);
+  const totalCount = useSelector(getTotalCountSelector);
+  const pageSize = useSelector(getPageSizeSelector);
+  let currentPage = useSelector(getCurrentPageSelector);
   const styles = useSelector(getStylesSelector);
   let activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);

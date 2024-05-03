@@ -3,10 +3,10 @@ import {ErrorMessage} from "formik";
 import {ErrorMessageWrapper} from "../../utils/validators";
 
 type PropsType = {
-    wrapperClass?: string
-    name: string
-    label?: string
-    children: any
+    wrapperClass?: string;
+    name: string;
+    label?: string;
+    children: any;
 }
 
 export const FieldWrapper:React.FC<PropsType> = ({

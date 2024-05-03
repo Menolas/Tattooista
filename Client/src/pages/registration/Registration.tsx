@@ -1,28 +1,22 @@
-import * as React from "react"
-import {RegistrationForm} from "../../components/Forms/RegistrationFormFormik"
-import {RegistrationFormValues} from "../../types/Types"
-import {IUser} from "../../types/Types"
-import {SuccessPopUp} from "../../components/common/SuccessPopUp"
+import * as React from "react";
+import {RegistrationForm} from "../../components/Forms/RegistrationForm";
+import {RegistrationFormValues} from "../../types/Types";
+import {IUser} from "../../types/Types";
 
 type PropsType = {
-    isSuccess: boolean
-    isAuth: boolean
-    user?: IUser
-    registrationError: string | null
-    registration: (values: RegistrationFormValues) => void
-    setIsSuccess: (bol: boolean) => void
+    isAuth: string;
+    user?: IUser;
+    registrationError: string | null;
+    registration: (values: RegistrationFormValues) => void;
 }
 
 export const Registration: React.FC<PropsType> = React.memo(({
-  isSuccess,
   isAuth,
   user,
   registrationError,
   registration,
-  setIsSuccess
 }) => {
 
-    const successPopUpContent = 'You registered as admin now!'
     return (
         <div className="registration page-block page-block--top">
             { !isAuth &&
@@ -37,10 +31,6 @@ export const Registration: React.FC<PropsType> = React.memo(({
             { isAuth && !user?.isActivated &&
                 <p>Please activate your account by link we sent to your email</p>
             }
-            {
-                isSuccess &&
-                <SuccessPopUp closeModal={setIsSuccess} content={successPopUpContent}/>
-            }
         </div>
     )
-})
+});

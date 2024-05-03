@@ -5,12 +5,15 @@ import { AppStateType } from "../redux-store";
 import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types";
 import { IUser } from "../../types/Types";
 import {getUserRole} from "../../utils/functions";
+import {
+  setSuccessModalAC,
+  SetSuccessModalAT,
+} from "../General/general-reducer";
 
 const SET_USER_DATA = 'SET_USER_DATE';
 const SET_ROLES = 'SET_ROLES';
 const SET_AUTH = 'SET_AUTH';
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
-const SET_IS_SUCCESS = 'SET_IS_SUCCESS';
 const SET_REGISTRATION_ERROR = 'SET_REGISTRATION_ERROR';
 const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
 
@@ -19,7 +22,6 @@ let initialState = {
   roles: [] as Array<RoleType>,
   token: null as string | null | undefined,
   isAuth: null as string | null,
-  isSuccess: false as boolean,
   registrationError: '' as string | undefined,
   loginError: '' as string | undefined
 }
@@ -57,12 +59,6 @@ export const authReducer = (
         isAuth: action.isAuth
       }
 
-    case SET_IS_SUCCESS:
-      return {
-        ...state,
-        isSuccess: action.isSuccess
-      }
-
     case SET_LOGIN_ERROR:
       return {
         ...state,
@@ -79,7 +75,7 @@ export const authReducer = (
   }
 }
 
-type ActionsTypes = SetLoginErrorAT | SetRegistrationErrorAT | SetIsSuccessAT | SetTokenAT |
+type ActionsTypes = SetLoginErrorAT | SetRegistrationErrorAT | SetSuccessModalAT | SetTokenAT |
     SetUserDataAT | SetAuthAT | SetRolesAT;
 
 // actions creators
@@ -91,7 +87,7 @@ type SetRolesAT = {
 
 const setRolesAC = (roles: Array<RoleType>): SetRolesAT => ({
   type: SET_ROLES, roles
-})
+});
 
 type SetLoginErrorAT = {
   type: typeof SET_LOGIN_ERROR
@@ -100,7 +96,7 @@ type SetLoginErrorAT = {
 
 const setLoginErrorAC = (error: string | undefined): SetLoginErrorAT => ({
   type: SET_LOGIN_ERROR, error
-})
+});
 
 type SetRegistrationErrorAT = {
   type: typeof  SET_REGISTRATION_ERROR
@@ -109,16 +105,7 @@ type SetRegistrationErrorAT = {
 
 const setRegistrationErrorAC = (error: string | undefined): SetRegistrationErrorAT => ({
   type: SET_REGISTRATION_ERROR, error
-})
-
-type SetIsSuccessAT = {
-  type: typeof SET_IS_SUCCESS
-  isSuccess: boolean
-}
-
-export const setIsSuccessAC = (isSuccess: boolean): SetIsSuccessAT => ({
-  type: SET_IS_SUCCESS, isSuccess
-})
+});
 
 type SetTokenAT = {
   type: typeof SET_ACCESS_TOKEN,
@@ -127,7 +114,7 @@ type SetTokenAT = {
 
 const setAccessTokenAC = (token: string | null): SetTokenAT => ({
   type: SET_ACCESS_TOKEN, token
-})
+});
 
 type SetUserDataAT = {
   type: typeof SET_USER_DATA,
@@ -138,16 +125,16 @@ const setUserDataAC = (
     user: IUser | null
 ): SetUserDataAT => ({
     type: SET_USER_DATA, user
-})
+});
 
 type SetAuthAT = {
   type: typeof SET_AUTH
   isAuth: null | string
 }
 
-const setAuth = (isAuth: null | string): SetAuthAT => ({
+const setAuthAC = (isAuth: null | string): SetAuthAT => ({
     type: SET_AUTH, isAuth
-})
+});
 
 //thunks
 
@@ -161,7 +148,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
     if(response.resultCode === 0) {
       dispatch(setLoginErrorAC(''));
       dispatch(setUserDataAC(response.userData.user));
-      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
+      dispatch(setAuthAC(getUserRole(response.userData.user.roles, response.userData.roles)));
       dispatch(setAccessTokenAC(response.userData.accessToken));
       dispatch(setRolesAC(response.userData.roles));
     }
@@ -179,7 +166,7 @@ export const logout = (): ThunkType => async (
      if(response.resultCode === 0) {
        dispatch(setAccessTokenAC(null));
        dispatch(setUserDataAC(null));
-       dispatch(setAuth(null));
+       dispatch(setAuthAC(null));
      }
   } catch (e) {
     console.log(e);
@@ -191,11 +178,11 @@ export const registration = (values: RegistrationFormValues): ThunkType => async
     let response = await authAPI.registration(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setRegistrationErrorAC(''));
-      dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
+      dispatch(setAuthAC(getUserRole(response.userData.user.roles, response.userData.roles)));
       //console.log("getUserRole in registration");
       dispatch(setUserDataAC(response.userData.user));
       dispatch(setAccessTokenAC(response.userData.accessToken));
-      dispatch(setIsSuccessAC(true));
+      dispatch(setSuccessModalAC(true, "You successfully subscribed!"));
       dispatch(setRolesAC(response.userData.roles));
     }
   } catch (e) {
@@ -215,7 +202,7 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
         dispatch(setAccessTokenAC(response.userData.accessToken));
         dispatch(setUserDataAC(response.userData.user));
         dispatch(setRolesAC(response.userData.roles));
-        dispatch(setAuth(getUserRole(response.userData.user.roles, response.userData.roles)));
+        dispatch(setAuthAC(getUserRole(response.userData.user.roles, response.userData.roles)));
       }
     }
   } catch (e: any) {

@@ -3,12 +3,12 @@ import {ErrorMessage, Field} from "formik";
 import {ErrorMessageWrapper} from "../../utils/validators";
 
 type PropsType = {
-    name: string
-    type: string
-    placeholder: string
-    label?: string
-    value: string
-    onChange?: (e: any) => void
+    name: string;
+    type: string;
+    placeholder: string;
+    label?: string;
+    value: string;
+    onChange?: (e: any) => void;
 }
 
 export const FieldComponent:React.FC<PropsType> = ({

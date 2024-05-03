@@ -1,5 +1,5 @@
 import axios, {CreateAxiosDefaults} from "axios";
-import {ClientType, SearchFilterType} from "../../types/Types";
+import {ClientType, SearchFilterType, CommonResponseFields} from "../../types/Types";
 import {API_URL} from "../../http";
 import {AxiosRequestConfig} from "axios";
 
@@ -7,11 +7,6 @@ const instance = axios.create({
   withCredentials: false,
   baseURL: API_URL
 } as CreateAxiosDefaults)
-
-type CommonResponseFields = {
-  resultCode: number
-  message?: string
-}
 
 type DeleteClientResponseType = CommonResponseFields
 

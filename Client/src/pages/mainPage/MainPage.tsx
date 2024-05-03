@@ -22,10 +22,9 @@ import {
     getTokenSelector
 } from "../../redux/Auth/auth-selectors";
 import {
-  getFakeApiSelector,
-  getGalleryPageSize,
+  getPageSizeSelector,
 } from "../../redux/Gallery/gallery-selectors";
-import {getStylesSelector} from "../../redux/Styles/styles-selectors";
+import {getStylesSelector, getFakeApiSelector} from "../../redux/Styles/styles-selectors";
 import {
   getApiErrorSelector,
   getSuccessModalSelector
@@ -40,7 +39,7 @@ import {FaqContainer} from "../../components/MainPage/faq/FaqContainer";
 
 export const MainPage: React.FC = () => {
 
-  const galleryPageSize = useSelector(getGalleryPageSize);
+  const pageSize = useSelector(getPageSizeSelector);
   const styles = useSelector(getStylesSelector);
   const successModal = useSelector(getSuccessModalSelector);
   const apiError = useSelector(getApiErrorSelector);
@@ -94,7 +93,7 @@ export const MainPage: React.FC = () => {
       <MainOffer bookConsultation={bookConsultationCallBack} />
       <PortfolioSlider
           fakeApi={fakeApi}
-          galleryPageSize={galleryPageSize}
+          pageSize={pageSize}
           setActiveStyle={setActiveStyleCallBack}
           styles={styles}
       />

@@ -115,7 +115,7 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 export const getServices = (): ThunkType => async (dispatch) => {
   try {
-    //dispatch(setIsGeneralFetchingAC(true));
+    dispatch(setIsFetchingAC(true));
     let response = await servicesApi.getServices();
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServicesAC(response.services));
@@ -123,8 +123,9 @@ export const getServices = (): ThunkType => async (dispatch) => {
   } catch (e) {
     console.log(e);
     dispatch(setServicesAC(services));
+    dispatch(setFakeApiAC(true));
   } finally {
-    //dispatch(setIsGeneralFetchingAC(false));
+    dispatch(setIsFetchingAC(false));
   }
 }
 
@@ -140,7 +141,7 @@ export const editService = (
       dispatch(setSuccessModalAC(true, SERVICE_UPDATE_SUCCESS));
     }
   } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'))
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
   }
 }

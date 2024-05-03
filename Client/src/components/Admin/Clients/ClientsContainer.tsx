@@ -3,16 +3,16 @@ import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
   getClients,
-  setCurrentClientsPageAC,
+  setCurrentPageAC,
   addClient,
   deleteClient,
   editClient,
   updateClientGallery,
   deleteClientGalleryPicture,
   archiveClient,
-  setClientsPageSize,
+  setPageSize,
   setSuccessModalAC,
-  setClientsFilterAC,
+  setFilterAC,
   setApiErrorAC,
 } from "../../../redux/Clients/clients-reducer";
 import {
@@ -55,19 +55,19 @@ export const ClientsContainer: React.FC = () => {
   }, [dispatch, token, currentPage, pageSize, filter]);
 
   useEffect(() => {
-    dispatch(setCurrentClientsPageAC(1));
+    dispatch(setCurrentPageAC(1));
   }, [dispatch, filter]);
 
   const setCurrentPageCallBack = (
     page: number
   ) => {
-    dispatch(setCurrentClientsPageAC(page));
+    dispatch(setCurrentPageAC(page));
   }
 
   const onFilterChangedCallBack = (
     filter: SearchFilterType
   ) => {
-    dispatch(setClientsFilterAC(filter));
+    dispatch(setFilterAC(filter));
   }
 
   const addClientCallBack = (
@@ -92,7 +92,7 @@ export const ClientsContainer: React.FC = () => {
   const setPageLimitCallBack = (
     clientsPageSize: number
   ) => {
-    dispatch(setClientsPageSize(clientsPageSize));
+    dispatch(setPageSize(clientsPageSize));
   }
 
   const updateClientGalleryCallBack = (clientId: string, values: FormData) => {
@@ -130,13 +130,13 @@ export const ClientsContainer: React.FC = () => {
           accessError={accessError}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChangedCallBack}
-          addClient={addClientCallBack}
-          deleteClient={deleteClientCallBack}
-          editClient={editClientCallBack}
+          add={addClientCallBack}
+          remove={deleteClientCallBack}
+          edit={editClientCallBack}
           setPageLimit={setPageLimitCallBack}
-          updateClientGallery={updateClientGalleryCallBack}
-          deleteClientGalleryPicture={deleteClientGalleryPictureCallBack}
-          archiveClient={archiveClientCallBack}
+          updateGallery={updateClientGalleryCallBack}
+          deleteGalleryItem={deleteClientGalleryPictureCallBack}
+          archive={archiveClientCallBack}
           setSuccessModal={setSuccessModalCallBack}
           setApiError={setApiErrorCallBack}
       />

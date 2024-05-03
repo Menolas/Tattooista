@@ -5,10 +5,9 @@ import {
   isFileSizeValid,
   isFileTypesValid,
   MAX_FILE_SIZE,
-  phoneRegex,
   VALID_FILE_EXTENSIONS
 } from "../../utils/validators";
-import {AddClientFormValues, ClientType} from "../../types/Types";
+import {RoleType, UserType} from "../../types/Types";
 import {API_URL} from "../../http";
 // @ts-ignore
 import avatar from "../../assets/img/fox.webp";
@@ -18,9 +17,8 @@ import {FieldWrapper} from "./FieldWrapper";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
-    clientName: Yup.string()
+    displayName: Yup.string()
         .min(2, 'Name is too short - should be 2 chars minimum.')
-        .matches(/^([^0-9]*)$/, "First name should not contain numbers")
         .required("First name is a required field"),
     email: Yup.string()
         .email("Email should have correct format")
@@ -29,16 +27,9 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
               !phone && !insta && !messenger && !whatsapp,
           then: () => Yup.string().required('At least one field must be filled'),
         }),
-    phone: Yup.string()
-        .min(8, 'Phone number is too short - should be 8 chars minimum.')
-        .matches(phoneRegex, 'That does not look like phone number'),
-    insta: Yup.string()
-        .min(3, 'Insta name is too short - should be 3 chars minimum.'),
-    messenger: Yup.string()
-        .min(3, 'Messenger name is too short - should be 3 chars minimum.'),
-    whatsapp: Yup.string()
-        .min(8, 'Whatsapp number is too short - should be 8 chars minimum.')
-        .matches(phoneRegex, 'That does not look like whatsapp number'),
+    password: Yup
+        .string()
+        .min(4, 'Password is too short - should be 4 chars minimum.'),
   });
 
   if (!isEditing || hasNewFile) {
@@ -55,24 +46,25 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     }));
   }
   return schema;
-};
+}
 
 type PropsType = {
   isEditing: boolean;
-  profile: ClientType;
+  roles: Array<RoleType>;
+  data?: UserType;
   closeModal: () => void;
-  editClient: (clientId: string, values: FormData) => void;
-  addClient?: (values: FormData) => void;
+  edit?: (clientId: string, values: FormData) => void;
+  add?: (values: FormData) => void;
 }
 
-export const UpdateClientForm: React.FC<PropsType> = React.memo(({
+export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   isEditing,
-  profile,
+  roles,
+  data,
   closeModal,
-  editClient,
-  addClient,
+  edit,
+  add,
 }) => {
-  //console.log(JSON.stringify(profile) + " profile !!!!!!!!!!!!!!!!!!");
 
   const [hasNewFile, setHasNewFile] = useState(false);
   const validationSchema = getValidationSchema(isEditing, hasNewFile);
@@ -92,25 +84,53 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
     }
   }
 
-  const initialValues: AddClientFormValues = {
-    avatar: profile?.avatar ?? '',
-    clientName: profile?.fullName ?? '',
-    email: profile?.contacts?.email ?? '',
-    insta: profile?.contacts?.insta ?? '',
-    messenger: profile?.contacts?.messenger ?? '',
-    phone: profile?.contacts?.phone ?? '',
-    whatsapp: profile?.contacts?.whatsapp ?? ''
+  let rolesInitialValues = {};
+  rolesInitialValues = roles.reduce((acc, role) => {
+    const isSelected = isEditing ? data.roles.some(profileRole => profileRole._id === role._id) : false;
+    return {
+        ...acc,
+        [role._id]: isSelected,
+    };
+  }, {});
+
+
+  const initialValues = {
+    avatar: data?.avatar ?? '',
+    displayName: data?.displayName ?? '',
+    email: data?.email ?? '',
+    password: '',
+    roles: rolesInitialValues
   }
 
-  const submit = (values: AddClientFormValues, actions: FormikHelpers<FormikValues>) => {
+  const submit = (values, actions: FormikHelpers<FormikValues>) => {
     const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
+
+    // Append each field from values to formData
+    for (let key in values) {
+
+      if (key === 'roles') {
+        let roles = "";
+        const userRoles = values[key];
+        for (let roleId in userRoles) {
+          if (userRoles[roleId]) {
+            roles = roles + roleId + ' '
+          }
+        }
+        formData.append(key, roles);
+      } else {
+        formData.append(key, values[key]);
+      }
     }
+
+    // Log formData for debugging
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
+
     if (isEditing) {
-      editClient(profile._id, formData);
+      edit(data._id, formData);
     } else {
-      addClient(formData);
+      add(formData);
     }
     actions.resetForm();
     closeModal();
@@ -126,83 +146,81 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
     >
       {propsF => {
 
+        const rolesFields = roles.map((role) => {
+          return (
+              <FieldWrapper
+                  key={role._id}
+                  wrapperClass={'form__input-wrap--checkbox'}
+                  name={`roles.${role._id}`}
+              >
+                <Field
+                    type="checkbox"
+                    name={`roles.${role._id}`}
+                    id={role._id}
+                    //value={role._id}
+                    checked={propsF.values.roles[role._id]}
+                    onChange={(e) => {
+                      propsF.setFieldValue(`roles.${role._id}`, e.target.checked);
+                    }}
+                />
+                <label htmlFor={role._id}>
+                  <span className="checkbox">{''}</span>
+                  {role.value}
+                </label>
+              </FieldWrapper>
+          )
+        });
+
         return (
-          <Form className="form form--updateClient" encType={"multipart/form-data"}>
+          <Form className="form" encType={"multipart/form-data"}>
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
               <div className="form__input-wrap--uploadFile-img">
                 <img
-                  src={ imageURL
+                  src={imageURL
                       ? imageURL
-                      : profile?.avatar
-                          ? `${API_URL}/clients/${profile._id}/avatar/${profile.avatar}`
+                      : data?.avatar
+                          ? `${API_URL}/users/${data._id}/avatar/${data.avatar}`
                           : avatar
                   }
                   alt="preview"
                 />
-                <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>
-                  Pick File
-                </label>
+                <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>Pick File</label>
               </div>
               <Field
-                className="hidden"
-                id="avatar"
-                name={'avatar'}
-                type={'file'}
-                value={undefined}
-                onChange={(e) => {
-                  propsF.setFieldValue('avatar', e.currentTarget.files[0]);
-                  handleOnChange(e);
-                }}
+                  className="hidden"
+                  id="avatar"
+                  name={'avatar'}
+                  type={'file'}
+                  value={undefined}
+                  onChange={(e) => {
+                    propsF.setFieldValue('avatar', e.currentTarget.files[0]);
+                    handleOnChange(e);
+                  }}
               />
             </FieldWrapper>
             <FieldComponent
-                name={'clientName'}
+                name={'displayName'}
                 type={'text'}
-                placeholder={'Monica Bellucci'}
-                label={'Full Name'}
+                placeholder={'Full Name'}
                 onChange={propsF.handleChange}
-                value={propsF.values.clientName}
+                value={propsF.values.displayName}
             />
             <FieldComponent
                 name={'email'}
                 type={'text'}
-                placeholder={'monica_bellucci@gmail.com'}
-                label={'Email'}
+                placeholder={'Email'}
                 onChange={propsF.handleChange}
                 value={propsF.values.email}
             />
             <FieldComponent
-                name={'phone'}
-                type={'tel'}
-                placeholder={'+47(222)-23-34'}
-                label={'Phone'}
+                name={'password'}
+                type={'password'}
+                placeholder={'xxxxxxxx'}
+                label={'Password'}
                 onChange={propsF.handleChange}
-                value={propsF.values.phone}
+                value={propsF.values.password}
             />
-            <FieldComponent
-                name={'insta'}
-                type={'text'}
-                placeholder={'@Monica'}
-                label={'Instagram'}
-                onChange={propsF.handleChange}
-                value={propsF.values.insta}
-            />
-            <FieldComponent
-                name={'messenger'}
-                type={'text'}
-                placeholder={'@Monica'}
-                label={'Messenger'}
-                onChange={propsF.handleChange}
-                value={propsF.values.messenger}
-            />
-            <FieldComponent
-                name={'whatsapp'}
-                type={'text'}
-                placeholder={'+47(222)-23-34'}
-                label={'Whatsapp'}
-                onChange={propsF.handleChange}
-                value={propsF.values.whatsapp}
-            />
+            { rolesFields }
             <button
               type="submit"
               disabled={!propsF.dirty || propsF.isSubmitting}
