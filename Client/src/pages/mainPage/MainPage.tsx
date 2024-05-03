@@ -24,7 +24,11 @@ import {
 import {
   getPageSizeSelector,
 } from "../../redux/Gallery/gallery-selectors";
-import {getStylesSelector, getFakeApiSelector} from "../../redux/Styles/styles-selectors";
+import {
+    getStylesSelector,
+    getFakeApiSelector,
+    getIsFetchingSelector,
+} from "../../redux/Styles/styles-selectors";
 import {
   getApiErrorSelector,
   getSuccessModalSelector
@@ -36,6 +40,7 @@ import {
 import {AboutContainer} from "../../components/MainPage/about/AboutContainer";
 import {ServicesContainer} from "../../components/MainPage/services/SevicesContainer";
 import {FaqContainer} from "../../components/MainPage/faq/FaqContainer";
+import {Preloader} from "../../components/common/Preloader";
 
 export const MainPage: React.FC = () => {
 
@@ -45,6 +50,7 @@ export const MainPage: React.FC = () => {
   const apiError = useSelector(getApiErrorSelector);
   const fakeApi = useSelector(getFakeApiSelector);
   const token = useSelector(getTokenSelector);
+  const isFetching = useSelector(getIsFetchingSelector);
 
   const dispatch = useDispatch();
 
@@ -91,12 +97,18 @@ export const MainPage: React.FC = () => {
   return (
     <>
       <MainOffer bookConsultation={bookConsultationCallBack} />
-      <PortfolioSlider
-          fakeApi={fakeApi}
-          pageSize={pageSize}
-          setActiveStyle={setActiveStyleCallBack}
-          styles={styles}
-      />
+        {
+            isFetching
+                ? <Preloader />
+                : (
+                    <PortfolioSlider
+                        fakeApi={fakeApi}
+                        pageSize={pageSize}
+                        setActiveStyle={setActiveStyleCallBack}
+                        styles={styles}
+                    />
+                )
+        }
       <AboutContainer />
       <ServicesContainer />
       <FaqContainer />

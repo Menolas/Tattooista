@@ -6,8 +6,8 @@ import {API_URL} from "../../http";
 // @ts-ignore
 import tattooMachine from "../../assets/img/tattoo-machine.webp";
 import {StyleType} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldComponent} from "./formComponents/FieldComponent";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {
     isFileSizeValid, isFileTypesValid,
     MAX_FILE_SIZE, VALID_FILE_EXTENSIONS,
@@ -41,15 +41,15 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 type PropsType = {
     isEditing: boolean;
     style?: StyleType;
-    addTattooStyle?: (values: FormData) => void;
-    editTattooStyle?: (id: string, values: FormData) => void;
+    add?: (values: FormData) => void;
+    edit?: (id: string, values: FormData) => void;
     closeModal: () => void;
 }
 export const UpdateTattooStyleForm: React.FC<PropsType> = ({
     isEditing,
     style,
-    addTattooStyle,
-    editTattooStyle,
+    add,
+    edit,
     closeModal,
 }) => {
 
@@ -103,9 +103,9 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
                formData.append(value, values[value]);
            }
            if (isEditing) {
-               editTattooStyle(style._id, formData);
+               edit(style._id, formData);
            } else {
-               addTattooStyle(formData);
+               add(formData);
            }
            actions.resetForm();
            closeModal();

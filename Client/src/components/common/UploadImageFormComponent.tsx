@@ -3,7 +3,7 @@ import { Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
 import {useState} from "react";
-import {FieldWrapper} from "../Forms/FieldWrapper";
+import {FieldWrapper} from "../Forms/formComponents/FieldWrapper";
 
 type PropsType = {
     imgUrl?: string;

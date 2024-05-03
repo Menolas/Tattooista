@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Field, Form, Formik} from "formik";
 import { GalleryItemType, StyleType} from "../../types/Types";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {API_URL} from "../../http";
 
 type PropsType = {

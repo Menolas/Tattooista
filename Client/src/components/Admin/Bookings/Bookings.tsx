@@ -6,7 +6,7 @@ import { Booking } from "./Booking";
 import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../../types/Types";
 import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 import {ModalPopUp} from "../../common/ModalPopUp";
-import {AddConsultationForm} from "../../Forms/AddConsultationForm";
+import {AddBookingForm} from "../../Forms/AddBookingForm";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
@@ -136,8 +136,8 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                       modalTitle={modalTitle}
                       closeModal={closeModal}
                   >
-                      <AddConsultationForm
-                          addBookedConsultation={add}
+                      <AddBookingForm
+                          addBooking={add}
                           closeBookingModal={closeModal}
                       />
                   </ModalPopUp>

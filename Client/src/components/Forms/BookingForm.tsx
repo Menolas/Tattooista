@@ -3,10 +3,10 @@ import {Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
 import {phoneRegex} from "../../utils/validators";
 import * as Yup from "yup";
 import {BookConsultationFormValues} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
+import {FieldComponent} from "./formComponents/FieldComponent";
 import {useState} from "react";
-import {FieldWrapper} from "./FieldWrapper";
-import {FormSelect} from "./FormSelect";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {FormSelect} from "./formComponents/FormSelect";
 
 const options = [
   { value: "email", label: "email" },

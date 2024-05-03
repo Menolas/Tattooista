@@ -1,6 +1,6 @@
 import { AppStateType } from "../redux-store";
 
-export const getIsFetching = (state: AppStateType) => {
+export const getIsFetchingSelector = (state: AppStateType) => {
   return state.archivedGallery.isFetching;
 }
 

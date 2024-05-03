@@ -2,6 +2,7 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    getIsFetchingSelector,
     getArchivedGalleryPageSizeSelector,
     getArchivedGallerySelector,
     getCurrentArchivedGalleryPageSelector,
@@ -28,9 +29,10 @@ import {UpdateGalleryItemForm} from "../../../Forms/UpdateGalleryItemForm"
 import {Tooltip} from "react-tooltip"
 import {Confirmation} from "../../../common/Confirmation";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
+import {Preloader} from "../../../common/Preloader";
 
 export const ArchivedGallery = () => {
-
+    const isFetching = useSelector(getIsFetchingSelector);
     const totalCount = useSelector(getTotalArchivedGalleryItemsCountSelector);
     const pageSize = useSelector(getArchivedGalleryPageSizeSelector);
     const currentPage = useSelector(getCurrentArchivedGalleryPageSelector);
@@ -152,13 +154,15 @@ export const ArchivedGallery = () => {
                     setPageLimit={setArchivedGalleryPageSizeACCallBack}
                 />
             </div>
-            { archivedGallery.length > 0
-                ? (
-                    <ul className="gallery__list gallery__list--archive list">
-                        { galleryItems }
-                    </ul>
-                  )
-                : <NothingToShow/>
+            { isFetching
+                ? <Preloader />
+                : archivedGallery.length > 0
+                    ? (
+                        <ul className="gallery__list gallery__list--archive list">
+                            { galleryItems }
+                        </ul>
+                      )
+                    : <NothingToShow/>
             }
             {
                 bigImg &&

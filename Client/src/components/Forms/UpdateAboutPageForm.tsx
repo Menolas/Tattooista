@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Field, Form, Formik} from "formik";
 import {API_URL} from "../../http";
 import {PageType} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldComponent} from "./formComponents/FieldComponent";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
 import {validateFile} from "../../utils/validators";
 
