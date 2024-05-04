@@ -4,8 +4,8 @@ import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {API_URL} from "../../http";
 import {ServiceType} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldComponent} from "./formComponents/FieldComponent";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {
     validateFile
 } from "../../utils/validators";

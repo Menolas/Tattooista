@@ -1,23 +1,23 @@
 import * as React from "react";
 // @ts-ignore
 import Sprite from "../../../../assets/svg/sprite.svg";
-import {ContactType, BookedConsultationType} from "../../../../types/Types";
+import {ContactType, BookingType} from "../../../../types/Types";
 import {Tooltip} from "react-tooltip";
 import {useState} from "react";
 import {ModalPopUp} from "../../../common/ModalPopUp";
 import {Confirmation} from "../../../common/Confirmation";
 
 type PropsType = {
-    consultation: BookedConsultationType;
+    data: BookingType;
     isDeletingInProcess: Array<string>;
-    deleteArchivedConsultation: (id: string) => void;
-    reactivateConsultation: (id: string) => void;
+    remove: (id: string) => void;
+    reactivate: (id: string) => void;
 }
 
-export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
-   consultation,
-   deleteArchivedConsultation,
-   reactivateConsultation,
+export const ArchivedBooking: React.FC<PropsType> = React.memo(({
+   data,
+   remove,
+   reactivate,
    isDeletingInProcess
 }) => {
 
@@ -30,16 +30,16 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
     }
 
     const deleteConsultationCallBack = () => {
-        deleteArchivedConsultation(consultation._id);
+        remove(data._id);
         setNeedConfirmation(false);
     }
 
     const reactivateConsultationCallBack = () => {
-        reactivateConsultation(consultation._id);
+        reactivate(data._id);
         setNeedRestoreConfirmation(false);
     }
 
-    const archivedBookingContacts: ContactType = consultation.contacts
+    const archivedBookingContacts: ContactType = data.contacts
 
     const contacts = Object.keys(archivedBookingContacts).map(contact => {
         return archivedBookingContacts[contact] ?
@@ -56,7 +56,7 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Restore consultation"
                     className={"btn btn--icon"}
-                    disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+                    disabled={isDeletingInProcess?.some(id => id === data._id)}
                     onClick={() => {
                         setNeedRestoreConfirmation(true);
                     }}
@@ -68,7 +68,7 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Delete consultation"
                     className={"btn btn--icon"}
-                    disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+                    disabled={isDeletingInProcess?.some(id => id === data._id)}
                     onClick={() => {
                         setNeedConfirmation(true)
                     }}
@@ -79,7 +79,7 @@ export const ArchivedConsultation: React.FC<PropsType> = React.memo(({
             <div className="admin__card-details">
                 <div className={"admin__card-detail-item"}>
                     <span className={"admin__card-data-type"}>Name:&nbsp;</span>
-                    <span className={"admin__card-data"}>{consultation.fullName}</span>
+                    <span className={"admin__card-data"}>{data.fullName}</span>
                 </div>
                 { contacts }
             </div>

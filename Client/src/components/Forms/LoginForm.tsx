@@ -4,7 +4,7 @@ import { ApiErrorMessage } from "../../utils/validators";
 import * as Yup from "yup";
 import { Navigate } from "react-router";
 import { LoginFormValues } from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
+import {FieldComponent} from "./formComponents/FieldComponent";
 import { NavLink } from "react-router-dom";
 import {ADMIN, SUPER_ADMIN, USER} from "../../utils/constants";
 

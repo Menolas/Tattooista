@@ -5,83 +5,69 @@ import {Paginator} from "../../../common/Paginator";
 import {NothingToShow} from "../../../common/NothingToShow";
 import {Preloader} from "../../../common/Preloader";
 import {
-    deleteArchivedConsultation,
-    getArchivedConsultations,
-    reactivateConsultation,
-    setApiErrorAC,
-    setArchivedConsultationsFilterAC,
-    setArchivedConsultationsPageSizeAC,
-    setCurrentPageForArchivedConsultationsAC, setSuccessModalAC
+    deleteArchivedBooking,
+    getArchivedBookings,
+    reactivateBooking,
+    setFilterAC,
+    setPageSizeAC,
+    setCurrentPageAC,
 } from "../../../../redux/ArchivedBookings/archived-bookings-reducer";
 import {
-    getArchivedConsultationsFilterSelector,
-    getArchivedConsultationsPageSizeSelector,
+    getFilterSelector,
+    getPageSizeSelector,
     getArchivedBookingsSelector,
-    getCurrentArchivedConsultationsPageSelector,
-    getBookedConsultationsIsFetchingSelector,
-    getTotalArchivedConsultationsCountSelector,
+    getCurrentPageSelector,
+    getIsFetchingSelector,
+    getTotalCountSelector,
     getIsDeletingInProcessSelector,
-    getApiErrorSelector,
-    getAccessErrorSelector, getSuccessModalSelector,
+    getAccessErrorSelector,
 } from "../../../../redux/ArchivedBookings/archived-bookings-selectors";
-import {ArchivedConsultation} from "./ArchivedConsultation";
-import {ApiErrorMessage} from "../../../common/ApiErrorMessage";
+import {ArchivedBooking} from "./ArchivedBooking";
 import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
 import {bookingFilterSelectOptions} from "../../../../utils/constants";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Navigate} from "react-router";
-import {SuccessPopUp} from "../../../common/SuccessPopUp";
 import {SearchFilterType} from "../../../../types/Types";
 
-export const ArchivedConsultations: React.FC = () => {
-    const isFetching = useSelector(getBookedConsultationsIsFetchingSelector);
+export const ArchivedBookings: React.FC = () => {
+    const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const archivedBookings = useSelector(getArchivedBookingsSelector);
-    const totalCount = useSelector(getTotalArchivedConsultationsCountSelector);
-    const pageSize = useSelector(getArchivedConsultationsPageSizeSelector);
-    const currentPage = useSelector(getCurrentArchivedConsultationsPageSelector);
-    const filter = useSelector(getArchivedConsultationsFilterSelector);
-    const apiError = useSelector(getApiErrorSelector);
+    const totalCount = useSelector(getTotalCountSelector);
+    const pageSize = useSelector(getPageSizeSelector);
+    const currentPage = useSelector(getCurrentPageSelector);
+    const filter = useSelector(getFilterSelector);
     const token = useSelector(getTokenSelector);
     const accessError = useSelector(getAccessErrorSelector);
-    const successModal = useSelector(getSuccessModalSelector);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getArchivedConsultations(token, currentPage, pageSize, filter));
+        dispatch(getArchivedBookings(token, currentPage, pageSize, filter));
     }, [token, currentPage, pageSize, filter]);
-
-    useEffect(() => {
-        if (successModal.isSuccess) {
-            setTimeout( () => {
-                setSuccessModalCallBack();
-            }, 3000);
-        }
-    }, [successModal]);
 
     const onPageChangedCallBack = (
         page: number
     ) => {
-        dispatch(setCurrentPageForArchivedConsultationsAC(page));
+        dispatch(setCurrentPageAC(page));
     }
 
-    const setArchivedConsultationsPageSizeCallBack = (
+    const setPageSizeCallBack = (
         pageSize: number
     ) => {
-        dispatch(setArchivedConsultationsPageSizeAC(pageSize));
+        dispatch(setPageSizeAC(pageSize));
     }
 
     const onFilterChangeCallBack = (
         filter: SearchFilterType
     ) => {
-        dispatch(setArchivedConsultationsFilterAC(filter));
+        dispatch(setFilterAC(filter));
     }
 
-    const deleteArchivedConsultationCallBack = (
+    const removeCallBack = (
         clientId: string
     ) => {
-        dispatch(deleteArchivedConsultation(
+        dispatch(deleteArchivedBooking(
             token,
             clientId,
             archivedBookings,
@@ -92,10 +78,10 @@ export const ArchivedConsultations: React.FC = () => {
         ));
     }
 
-    const reactivateConsultationCallBack = (
+    const reactivateCallBack = (
         id: string
     ) => {
-        dispatch(reactivateConsultation(
+        dispatch(reactivateBooking(
             token,
             id,
             archivedBookings,
@@ -106,22 +92,14 @@ export const ArchivedConsultations: React.FC = () => {
         ));
     }
 
-    const setApiErrorCallBack = () => {
-        dispatch(setApiErrorAC(''));
-    }
-
-    const setSuccessModalCallBack = () => {
-        dispatch(setSuccessModalAC(false, ''));
-    }
-
     const archivedConsultationsArray = archivedBookings
-        .map(consultation => {
+        .map(data => {
             return (
-                <ArchivedConsultation
-                    key={consultation._id}
-                    consultation={consultation}
-                    deleteArchivedConsultation={deleteArchivedConsultationCallBack}
-                    reactivateConsultation={reactivateConsultationCallBack}
+                <ArchivedBooking
+                    key={data._id}
+                    data={data}
+                    remove={removeCallBack}
+                    reactivate={reactivateCallBack}
                     isDeletingInProcess={isDeletingInProcess}
                 />
             )
@@ -143,7 +121,7 @@ export const ArchivedConsultations: React.FC = () => {
                             pageSize={pageSize}
                             currentPage={currentPage}
                             onPageChanged={onPageChangedCallBack}
-                            setPageLimit={setArchivedConsultationsPageSizeCallBack}
+                            setPageLimit={setPageSizeCallBack}
                         />
                     </div>
                     {isFetching
@@ -155,16 +133,6 @@ export const ArchivedConsultations: React.FC = () => {
                                 </ul>
                             ) : <NothingToShow/>
                     }
-                    <ApiErrorMessage
-                        isOpen={!!apiError}
-                        error={apiError}
-                        closeModal={setApiErrorCallBack}
-                    />
-                    <SuccessPopUp
-                        isOpen={successModal.isSuccess}
-                        closeModal={setSuccessModalCallBack}
-                        content={successModal.successText}
-                    />
                 </>
             }
         </>

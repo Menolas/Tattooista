@@ -10,8 +10,8 @@ import {
 } from "../../utils/validators";
 import * as Yup from "yup";
 import {RegistrationFormValues} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldComponent} from "./formComponents/FieldComponent";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {useState} from "react";
 // @ts-ignore
 import avatar from "../../assets/img/fox.webp";
@@ -45,8 +45,8 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-  registrationError: string | null
-  registration: (values: RegistrationFormValues) => void
+  registrationError: string | null;
+  registration: (values: RegistrationFormValues) => void;
 }
 
 export const RegistrationForm: React.FC<PropsType> = React.memo(({

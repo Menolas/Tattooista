@@ -3,7 +3,7 @@ import { Form, Formik} from "formik";
 import * as Yup from 'yup';
 import {phoneRegex} from "../../utils/validators";
 import {AddConsultationFormValues} from "../../types/Types";
-import {FieldComponent} from "./FieldComponent";
+import {FieldComponent} from "./formComponents/FieldComponent";
 
 const validationSchema = Yup.object().shape({
   bookingName: Yup.string()
@@ -39,17 +39,17 @@ const initialValues: AddConsultationFormValues = {
 }
 
 type PropsType = {
-  addBookedConsultation: (values: AddConsultationFormValues) => void;
+  addBooking: (values: AddConsultationFormValues) => void;
   closeBookingModal: () => void;
 }
 
-export const AddConsultationForm: React.FC<PropsType> = React.memo(({
-  addBookedConsultation,
+export const AddBookingForm: React.FC<PropsType> = React.memo(({
+  addBooking,
   closeBookingModal,
 }) => {
 
   const submit = (values: AddConsultationFormValues, actions) => {
-    addBookedConsultation(values);
+    addBooking(values);
     //actions.setSubmitting(false);
     actions.resetForm();
     closeBookingModal();

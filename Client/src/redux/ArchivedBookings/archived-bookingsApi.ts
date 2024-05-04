@@ -1,49 +1,45 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {BookingType, SearchFilterType} from "../../types/Types";
+import {BookingType, SearchFilterType, CommonResponseFields} from "../../types/Types";
 import $api, {API_URL} from "../../http";
 
 const instance = axios.create({
   baseURL: API_URL
 } as CreateAxiosDefaults);
 
-type CommonResponseFields = {
-  resultCode: number;
-  message?: string;
-}
+type DeleteBookingResponseType = CommonResponseFields;
 
-type DeleteConsultationResponseType = CommonResponseFields;
+type ReactivateBookingResponseType = CommonResponseFields;
 
-type ReactivateConsultationResponseType = CommonResponseFields;
-
-type GetBookedConsultationsResponseType = CommonResponseFields & {
+type GetBookingsResponseType = CommonResponseFields & {
   bookings: Array<BookingType>;
   totalCount: number;
 };
 
-type GetArchivedConsultationsResponseType = GetBookedConsultationsResponseType;
+type GetArchivedBookingsResponseType = GetBookingsResponseType;
 
 export const archivedBookingsApi = {
 
-  getArchivedConsultations(
+  getArchivedBookings(
       token: string,
       currentPage: number,
       pageSize: number,
       filter: SearchFilterType,
   ) {
-    return instance.get<GetArchivedConsultationsResponseType>(`bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
+    return instance.get<GetArchivedBookingsResponseType>(
+        `bookings/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
     ).then(response => response.data);
   },
 
-  deleteArchivedConsultation(id: string) {
-    return instance.delete<DeleteConsultationResponseType>(`bookings/archive/${id}`)
+  deleteArchivedBooking(id: string) {
+    return instance.delete<DeleteBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   },
 
-  reactivateConsultation(
+  reactivateBooking(
       id: string
   ) {
-    return instance.get<ReactivateConsultationResponseType>(`bookings/archive/${id}`)
+    return instance.get<ReactivateBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   }
 }

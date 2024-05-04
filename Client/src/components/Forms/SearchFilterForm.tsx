@@ -2,7 +2,7 @@ import * as React from "react";
 import {Field, Form, Formik, FormikHelpers} from "formik";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
-import {FormSelect} from "./FormSelect";
+import {FormSelect} from "./formComponents/FormSelect";
 import {SearchFilterType, SelectOptionType} from "../../types/Types";
 
 const handleChange = () => {
@@ -15,9 +15,9 @@ type FormType = {
 }
 
 type PropsType = {
-  options: Array<SelectOptionType>
-  filter: SearchFilterType
-  onFilterChanged: (filter: SearchFilterType) => void
+  options: Array<SelectOptionType>;
+  filter: SearchFilterType;
+  onFilterChanged: (filter: SearchFilterType) => void;
 }
 
 export const SearchFilterForm: React.FC<PropsType> = React.memo(({

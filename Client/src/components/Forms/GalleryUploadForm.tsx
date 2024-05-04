@@ -5,7 +5,7 @@ import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid 
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
 import {API_URL} from "../../http";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
 import {ClientType} from "../../types/Types";
 

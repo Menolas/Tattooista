@@ -32,14 +32,6 @@ export const getArchivedClientsFilter = (state: AppStateType) => {
   return state.archivedClients.filter;
 }
 
-export const getSuccessModalSelector = (state: AppStateType) => {
-  return state.archivedClients.successModal;
-}
-
-export const getApiErrorSelector = (state: AppStateType) => {
-  return state.archivedClients.apiError;
-}
-
 export const getAccessErrorSelector = (state: AppStateType) => {
   return state.archivedClients.accessError;
 }

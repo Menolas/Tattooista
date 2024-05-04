@@ -1,5 +1,5 @@
-import { archivedGalleryApi } from "./ArchivedGalleryApi";
-import { StyleType, GalleryItemType } from "../../types/Types";
+import {archivedGalleryApi} from "./ArchivedGalleryApi";
+import {GalleryItemType} from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ResultCodesEnum} from "../../utils/constants";
@@ -20,15 +20,15 @@ const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY';
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM';
 
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
+const RESTORE_GALLERY_ITEM_FROM_ARCHIVE = 'You successfully restored gallery image';
 
 let initialState = {
-  totalArchivedGalleryItemsCount: 0 as number | null,
-  archivedGalleryPageSize: 16 as number,
-  currentArchivedGalleryPage: 1 as number,
+  totalCount: 0 as number | null,
+  pageSize: 16 as number,
+  currentPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   archivedGallery: [] as Array<GalleryItemType>,
-  fakeApi: false as boolean,
 }
 
 export type InitialStateType = typeof initialState;
@@ -51,20 +51,20 @@ export const archivedGalleryReducer = (
     case SET_PAGE_SIZE:
       return {
         ...state,
-        archivedGalleryPageSize: action.pageSize,
-        currentArchivedGalleryPage: 1
+        pageSize: action.pageSize,
+        currentPage: 1
       }
 
     case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentArchivedGalleryPage: action.page
+        currentPage: action.page
       }
 
     case SET_TOTAL:
       return {
         ...state,
-        totalArchivedGalleryItemsCount: action.totalCount
+        totalCount: action.totalCount
       }
 
     case TOGGLE_IS_FETCHING:
@@ -112,15 +112,15 @@ export const archivedGalleryReducer = (
 }
 
 type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
-    SetArchivedGalleryPageSizeAT | SetCurrentArchivedGalleryPageAT | SetArchivedGalleryTotalCountAT |
+    SetPageSizeAT | SetCurrentPageAT | SetTotalCountAT |
     SetIsFetchingAT | SetArchivedGalleryAT | DeleteArchivedGalleryItemAT | UpdateArchivedGalleryItemAT;
 
 // actions creators
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
 }
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
@@ -128,36 +128,36 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
       type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
 });
 
-type SetArchivedGalleryPageSizeAT = {
-  type: typeof SET_PAGE_SIZE
-  pageSize: number
+type SetPageSizeAT = {
+  type: typeof SET_PAGE_SIZE;
+  pageSize: number;
 }
 
-export const setArchivedGalleryPageSizeAC = (pageSize: number): SetArchivedGalleryPageSizeAT => ({
+export const setPageSizeAC = (pageSize: number): SetPageSizeAT => ({
   type: SET_PAGE_SIZE, pageSize
 });
 
-type SetCurrentArchivedGalleryPageAT = {
-  type: typeof SET_CURRENT_PAGE,
-  page: number
+type SetCurrentPageAT = {
+  type: typeof SET_CURRENT_PAGE;
+  page: number;
 }
 
-export const setCurrentArchivedGalleryPageAC = (page: number): SetCurrentArchivedGalleryPageAT => ({
+export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
   type: SET_CURRENT_PAGE, page
 });
 
-type SetArchivedGalleryTotalCountAT = {
-  type: typeof SET_TOTAL,
-  totalCount: number
+type SetTotalCountAT = {
+  type: typeof SET_TOTAL;
+  totalCount: number;
 }
 
-const setArchivedGalleryTotalCountAC = (totalCount: number): SetArchivedGalleryTotalCountAT => ({
+const setTotalCountAC = (totalCount: number): SetTotalCountAT => ({
   type: SET_TOTAL, totalCount
 });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
 }
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
@@ -165,8 +165,8 @@ const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
 });
 
 type SetArchivedGalleryAT = {
-  type: typeof SET_ARCHIVED_GALLERY,
-  archivedGallery: Array<GalleryItemType>
+  type: typeof SET_ARCHIVED_GALLERY;
+  archivedGallery: Array<GalleryItemType>;
 }
 
 const setArchivedGalleryAC = (archivedGallery: Array<GalleryItemType>): SetArchivedGalleryAT => ({
@@ -174,8 +174,8 @@ const setArchivedGalleryAC = (archivedGallery: Array<GalleryItemType>): SetArchi
 });
 
 type DeleteArchivedGalleryItemAT = {
-  type: typeof DELETE_ARCHIVED_GALLERY_ITEM
-  itemId: string
+  type: typeof DELETE_ARCHIVED_GALLERY_ITEM;
+  itemId: string;
 }
 
 const deleteArchivedGalleryItemAC = (itemId: string): DeleteArchivedGalleryItemAT => ({
@@ -183,8 +183,8 @@ const deleteArchivedGalleryItemAC = (itemId: string): DeleteArchivedGalleryItemA
 });
 
 type UpdateArchivedGalleryItemAT = {
-  type: typeof UPDATE_ARCHIVED_GALLERY_ITEM
-  archivedGalleryItem: GalleryItemType
+  type: typeof UPDATE_ARCHIVED_GALLERY_ITEM;
+  archivedGalleryItem: GalleryItemType;
 }
 
 const updateArchivedGalleryItemAC = (archivedGalleryItem: GalleryItemType): UpdateArchivedGalleryItemAT => ({
@@ -194,7 +194,7 @@ const updateArchivedGalleryItemAC = (archivedGalleryItem: GalleryItemType): Upda
 
 //thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
 
 const deleteArchivedGalleryItemThunk = (
     id: string,
@@ -205,14 +205,14 @@ const deleteArchivedGalleryItemThunk = (
 ): ThunkType => async (dispatch) => {
   if (archivedGallery.length > 1) {
     dispatch(deleteArchivedGalleryItemAC(id));
-    dispatch(setArchivedGalleryTotalCountAC(total - 1));
+    dispatch(setTotalCountAC(total - 1));
   } else {
     const newPage = getNewPage(currentPage);
     if (currentPage === newPage) {
       await dispatch(getArchivedGallery(newPage, pageLimit));
     }
     dispatch(deleteArchivedGalleryItemAC(id));
-    dispatch(setCurrentArchivedGalleryPageAC(newPage));
+    dispatch(setCurrentPageAC(newPage));
   }
 }
 
@@ -225,7 +225,7 @@ export const getArchivedGallery = (
     let response = await archivedGalleryApi.getArchivedGalleryItems(currentArchivedGalleryPage, archivedGalleryPageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedGalleryAC(response.gallery));
-      dispatch(setArchivedGalleryTotalCountAC(response.totalCount));
+      dispatch(setTotalCountAC(response.totalCount));
     }
   } catch (e) {
     console.log(e);
@@ -266,6 +266,7 @@ export const reactivateArchivedGalleryItem = (
     let response = await archivedGalleryApi.reactivateArchivedGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, total, pageLimit));
+      dispatch(setSuccessModalAC(true, RESTORE_GALLERY_ITEM_FROM_ARCHIVE));
     }
   } catch (e) {
     console.log(e);
@@ -276,12 +277,16 @@ export const reactivateArchivedGalleryItem = (
 
 export const updateArchivedGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
   try {
+    dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await archivedGalleryApi.updateArchiveGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateArchivedGalleryItemAC(response.archivedGalleryItem));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
     }
-  } catch (e) {
+  } catch (e: any) {
+    dispatch(setApiErrorAC(e.response.data.message));
     console.log(e);
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }

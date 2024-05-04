@@ -13,17 +13,17 @@ import {ModalPopUp} from "../../../common/ModalPopUp";
 import {ImageFullView} from "../../../common/ImageFullView";
 
 type PropsType = {
-  client: ClientType
-  isDeletingInProcess: Array<string>
-  deleteClient: (clientId: string) => void
-  reactivateClient: (clientId: string) => void
+  data: ClientType;
+  isDeletingInProcess: Array<string>;
+  remove: (clientId: string) => void;
+  reactivate: (clientId: string) => void;
 }
 
 export const ArchivedClient: React.FC<PropsType> = React.memo(({
-  client,
+  data,
   isDeletingInProcess,
-  deleteClient,
-  reactivateClient
+  remove,
+  reactivate,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{
@@ -36,14 +36,14 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   }
 
   const deleteClientCallBack = () => {
-    deleteClient(client._id);
+    remove(data._id);
   }
 
   const reactivateClientCallBack = () => {
-      reactivateClient(client._id);
+      reactivate(data._id);
   }
 
-  const clientContacts: ContactType = client.contacts;
+  const clientContacts: ContactType = data.contacts;
 
   const contactsArray = Object.keys(clientContacts).map(contact => {
     return clientContacts[contact]
@@ -56,7 +56,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         : null
   })
 
-  const clientAvatar = client.avatar ? `${API_URL}/archivedClients/${client._id}/avatar/${client.avatar}` : avatar;
+  const clientAvatar = data.avatar ? `${API_URL}/archivedClients/${data._id}/avatar/${data.avatar}` : avatar;
 
   return (
     <li className="admin__card admin__card--avatar">
@@ -65,7 +65,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Restore client"
             className={"btn btn--icon"}
-            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => setNeedRestoreConfirmation(true)}
         >
           <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
@@ -74,7 +74,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Delete client"
             className={"btn btn--icon"}
-            disabled={isDeletingInProcess?.some(id => id === client._id)}
+            disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
               setNeedConfirmation(true)
             }}
@@ -83,7 +83,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         </button>
       </div>
       <NavLink
-        to={`/admin/profile?clientId=${client._id}`}
+        to={`/admin/profile?clientId=${data._id}`}
         className="admin__card-link">
         <div className={"admin__card-avatar"}>
           <img src={clientAvatar} alt={""}/>
@@ -91,17 +91,17 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         <div className={"admin__card-details"}>
           <div className={"admin__card-detail-item"}>
             <span className={"admin__card-data-type"}>Name:&nbsp;</span>
-            <span className={"admin__card-data"}>{client.fullName}</span>
+            <span className={"admin__card-data"}>{data.fullName}</span>
           </div>
           { contactsArray }
         </div>
       </NavLink>
       {
-          client.gallery && client.gallery.length > 0 &&
+          data.gallery && data.gallery.length > 0 &&
         <div className={"client-profile__gallery"}>
           <ul className={"client-profile__gallery-list list"}>
             {
-              client.gallery?.map((item, i) => {
+                data.gallery?.map((item, i) => {
                   return (
                       <li
                           key={i}
@@ -109,7 +109,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
                               setCarouselData({isOpen: true, activeIndex: i})
                           }}
                       >
-                          <img src={`${API_URL}/archivedClients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
+                          <img src={`${API_URL}/archivedClients/${data._id}/doneTattooGallery/${item}`} alt={''}/>
                       </li>
                   )
               })
@@ -140,9 +140,9 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
       { carouselData.isOpen &&
         <ImageFullView
             isOpen={carouselData.isOpen}
-            clientId={client._id}
+            clientId={data._id}
             archive={true}
-            gallery={client.gallery}
+            gallery={data.gallery}
             activeIndex={carouselData.activeIndex}
             closeImg={()=> {setCarouselData({isOpen: false});}}
         />
@@ -150,4 +150,4 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
       <Tooltip id="my-tooltip" />
     </li>
   )
-})
+});

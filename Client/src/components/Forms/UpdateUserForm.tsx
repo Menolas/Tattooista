@@ -11,9 +11,9 @@ import {RoleType, UserType} from "../../types/Types";
 import {API_URL} from "../../http";
 // @ts-ignore
 import avatar from "../../assets/img/fox.webp";
-import {FieldComponent} from "./FieldComponent";
+import {FieldComponent} from "./formComponents/FieldComponent";
 import * as Yup from "yup";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({

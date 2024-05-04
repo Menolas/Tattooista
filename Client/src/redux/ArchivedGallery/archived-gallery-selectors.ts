@@ -1,6 +1,6 @@
 import { AppStateType } from "../redux-store";
 
-export const getIsFetching = (state: AppStateType) => {
+export const getIsFetchingSelector = (state: AppStateType) => {
   return state.archivedGallery.isFetching;
 }
 
@@ -9,21 +9,17 @@ export const getArchivedGallerySelector = (state: AppStateType) => {
 }
 
 export const getArchivedGalleryPageSizeSelector = (state: AppStateType) => {
-  return state.archivedGallery.archivedGalleryPageSize;
+  return state.archivedGallery.pageSize;
 }
 
 export const getCurrentArchivedGalleryPageSelector = (state: AppStateType) => {
-  return state.archivedGallery.currentArchivedGalleryPage;
+  return state.archivedGallery.currentPage;
 }
 
 export const getTotalArchivedGalleryItemsCountSelector = (state: AppStateType) => {
-  return state.archivedGallery.totalArchivedGalleryItemsCount;
+  return state.archivedGallery.totalCount;
 }
 
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {
   return state.archivedGallery.isDeletingInProcess;
-}
-
-export const getFakeApiSelector = (state: AppStateType) => {
-  return state.archivedGallery.fakeApi;
 }

@@ -1,44 +1,42 @@
-import { archivedBookingsApi } from "./archived-bookingsApi";
-import { ResultCodesEnum } from "../../utils/constants";
-import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../types/Types";
-import { AppStateType } from "../redux-store";
-import { ThunkAction } from "redux-thunk";
+import {archivedBookingsApi} from "./archived-bookingsApi";
+import {ResultCodesEnum} from "../../utils/constants";
+import {BookingType, SearchFilterType} from "../../types/Types";
+import {AppStateType} from "../redux-store";
+import {ThunkAction} from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
+import {
+  setSuccessModalAC,
+  SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT} from "../General/general-reducer";
 
-const SET_ARCHIVED_BOOKINGS_PAGE_SIZE = 'SET_ARCHIVED_BOOKINGS_PAGE_SIZE';
-const SET_ARCHIVED_BOOKINGS_FILTER = 'SET_ARCHIVED_BOOKINGS_FILTER';
+const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
+const SET_FILTER = 'SET_FILTER';
 const SET_ARCHIVED_BOOKINGS = 'SET_ARCHIVED_BOOKINGS';
-const SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS = 'SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS';
-const SET_TOTAL_ARCHIVED_BOOKINGS_COUNT = 'SET_TOTAL_ARCHIVED_BOOKINGS_COUNT';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+const SET_TOTAL = 'SET_TOTAL';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_ARCHIVED_BOOKING = 'DELETE_ARCHIVED_BOOKING';
-const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const SET_API_ERROR = 'SET_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+
 const RESTORE_BOOKING_FROM_ARCHIVE = "Congratulations! You just restored this consultation!";
 
 let initialState = {
   archivedBookings: [] as Array<BookingType>,
-  totalArchivedConsultationsCount: 0 as number,
-  archivedConsultationsPageSize: 5 as number,
-  currentArchivedConsultationsPage: 1 as number,
-  bookedConsultationsIsFetching: false,
+  totalCount: 0 as number,
+  pageSize: 5 as number,
+  currentPage: 1 as number,
+  isFetching: false,
   isDeletingInProcess: [] as Array<string>,
-  archivedConsultationsFilter: {
+  filter: {
     term: '',
     condition: 'any',
   } as SearchFilterType,
-  apiError: '' as string,
   accessError: '' as string | undefined,
-  successModal: {
-    isSuccess: false as boolean,
-    successText: '' as string,
-  },
 }
 
-export type SuccessModalType = typeof initialState.successModal;
 export type InitialStateType = typeof initialState;
 
 export const archivedBookingsReducer = (
@@ -48,17 +46,17 @@ export const archivedBookingsReducer = (
 
   switch (action.type) {
 
-    case SET_ARCHIVED_BOOKINGS_PAGE_SIZE:
+    case SET_PAGE_SIZE:
       return {
         ...state,
-        archivedConsultationsPageSize: action.pageSize,
-        currentArchivedConsultationsPage: 1
+        pageSize: action.pageSize,
+        currentPage: 1
       }
 
-    case SET_ARCHIVED_BOOKINGS_FILTER:
+    case SET_FILTER:
       return {
         ...state,
-        archivedConsultationsFilter: action.filter
+        filter: action.filter
       }
 
     case SET_ARCHIVED_BOOKINGS:
@@ -67,22 +65,22 @@ export const archivedBookingsReducer = (
         archivedBookings: action.archivedBookings
       }
 
-    case SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS:
+    case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentArchivedConsultationsPage: action.currentPage
+        currentPage: action.currentPage
       }
 
-    case SET_TOTAL_ARCHIVED_BOOKINGS_COUNT:
+    case SET_TOTAL:
       return {
         ...state,
-        totalArchivedConsultationsCount: action.count
+        totalCount: action.count
       }
 
     case TOGGLE_IS_FETCHING:
       return {
         ...state,
-        bookedConsultationsIsFetching: action.isFetching,
+        isFetching: action.isFetching,
       }
 
     case TOGGLE_IS_DELETING_IN_PROCESS:
@@ -98,28 +96,13 @@ export const archivedBookingsReducer = (
         return {
           ...state,
           archivedBookings: state.archivedBookings.filter(archivedBooking => archivedBooking._id !== action.id),
-          totalArchivedConsultationsCount: state.totalArchivedConsultationsCount - 1
+          totalCount: state.totalCount - 1
         }
       } else {
         return {
           ...state,
-          currentArchivedConsultationsPage: state.currentArchivedConsultationsPage - 1
+          currentPage: state.currentPage - 1
         }
-      }
-
-    case SET_SUCCESS_MODAL:
-      return {
-        ...state,
-        successModal: {
-          isSuccess: action.isSuccess,
-          successText: action.text
-        }
-      }
-
-    case SET_API_ERROR:
-      return {
-        ...state,
-        apiError: action.error
       }
 
     case SET_ACCESS_ERROR:
@@ -132,22 +115,12 @@ export const archivedBookingsReducer = (
   }
 }
 
-type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetArchivedConsultationsPageSizeAT |
-    SetArchivedConsultationsFilterAT | SetArchivedConsultationsAT | SetCurrentPageForArchivedConsultationsAT |
-    SetArchivedConsultationsTotalCountAT | SetIsFetchingAT | ToggleIsDeletingInProcessAT |
+type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
+    SetFilterAT | SetArchivedBookingsAT | SetCurrentPageAT |
+    SetTotalCountAT | SetIsFetchingAT | ToggleIsDeletingInProcessAT |
     DeleteArchivedConsultationAT | SetAccessErrorAT;
 
 // actions creators
-
-type SetSuccessModalAT = {
-  type: typeof SET_SUCCESS_MODAL
-  isSuccess: boolean
-  text: string
-}
-
-export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
-  type: SET_SUCCESS_MODAL, isSuccess, text
-});
 
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR
@@ -158,58 +131,49 @@ export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT =>
   type: SET_ACCESS_ERROR, error
 });
 
-type SetApiErrorAT = {
-  type: typeof SET_API_ERROR
-  error: string
-}
-
-export const setApiErrorAC = (error: string): SetApiErrorAT => ({
-  type: SET_API_ERROR, error
-});
-
-type SetArchivedConsultationsPageSizeAT = {
-  type: typeof SET_ARCHIVED_BOOKINGS_PAGE_SIZE
+type SetPageSizeAT = {
+  type: typeof SET_PAGE_SIZE
   pageSize: number
 }
 
-export const setArchivedConsultationsPageSizeAC = (pageSize: number): SetArchivedConsultationsPageSizeAT => ({
-  type: SET_ARCHIVED_BOOKINGS_PAGE_SIZE, pageSize
+export const setPageSizeAC = (pageSize: number): SetPageSizeAT => ({
+  type: SET_PAGE_SIZE, pageSize
 });
 
-type SetArchivedConsultationsFilterAT = {
-  type: typeof SET_ARCHIVED_BOOKINGS_FILTER
+type SetFilterAT = {
+  type: typeof SET_FILTER
   filter: SearchFilterType
 }
 
-export const setArchivedConsultationsFilterAC = (filter: SearchFilterType): SetArchivedConsultationsFilterAT => ({
-  type: SET_ARCHIVED_BOOKINGS_FILTER, filter
+export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
+  type: SET_FILTER, filter
 });
 
-type SetArchivedConsultationsAT = {
+type SetArchivedBookingsAT = {
   type: typeof SET_ARCHIVED_BOOKINGS,
   archivedBookings: Array<BookingType>
 }
 
-const setArchivedConsultationsAC = (archivedBookings: Array<BookingType>): SetArchivedConsultationsAT => ({
+const setArchivedBookingsAC = (archivedBookings: Array<BookingType>): SetArchivedBookingsAT => ({
   type: SET_ARCHIVED_BOOKINGS, archivedBookings
 });
 
-type SetCurrentPageForArchivedConsultationsAT = {
-  type: typeof SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS,
+type SetCurrentPageAT = {
+  type: typeof SET_CURRENT_PAGE,
   currentPage: number
 }
 
-export const setCurrentPageForArchivedConsultationsAC = (currentPage: number): SetCurrentPageForArchivedConsultationsAT => ({
-  type: SET_CURRENT_PAGE_FOR_ARCHIVED_BOOKINGS, currentPage
+export const setCurrentPageAC = (currentPage: number): SetCurrentPageAT => ({
+  type: SET_CURRENT_PAGE, currentPage
 });
 
-type SetArchivedConsultationsTotalCountAT = {
-  type: typeof SET_TOTAL_ARCHIVED_BOOKINGS_COUNT,
+type SetTotalCountAT = {
+  type: typeof SET_TOTAL,
   count: number
 }
 
-const setArchivedConsultationsTotalCountAC = (count: number): SetArchivedConsultationsTotalCountAT => ({
-  type: SET_TOTAL_ARCHIVED_BOOKINGS_COUNT, count
+const setTotalCountAC = (count: number): SetTotalCountAT => ({
+  type: SET_TOTAL, count
 });
 
 type SetIsFetchingAT = {
@@ -236,7 +200,7 @@ type DeleteArchivedConsultationAT = {
   id: string
 }
 
-export const deleteArchivedConsultationAC = (id: string): DeleteArchivedConsultationAT => ({
+export const deleteArchivedBookingAC = (id: string): DeleteArchivedConsultationAT => ({
   type: DELETE_ARCHIVED_BOOKING, id
 });
 
@@ -254,19 +218,19 @@ const deleteArchivedBookingThunk = (
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
-    dispatch(deleteArchivedConsultationAC(id));
-    dispatch(setArchivedConsultationsTotalCountAC(total - 1));
+    dispatch(deleteArchivedBookingAC(id));
+    dispatch(setTotalCountAC(total - 1));
   } else {
     const newPage = getNewPage(currentPage)
     if (currentPage === newPage) {
-      await dispatch(getArchivedConsultations(token, newPage, pageLimit, filter));
+      await dispatch(getArchivedBookings(token, newPage, pageLimit, filter));
     }
-    dispatch(deleteArchivedConsultationAC(id));
-    dispatch(setCurrentPageForArchivedConsultationsAC(newPage));
+    dispatch(deleteArchivedBookingAC(id));
+    dispatch(setCurrentPageAC(newPage));
   }
 }
 
-export const getArchivedConsultations = (
+export const getArchivedBookings = (
     token: string,
     currentPage: number,
     pageSize: number,
@@ -274,7 +238,7 @@ export const getArchivedConsultations = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))
-    let response = await archivedBookingsApi.getArchivedConsultations(
+    let response = await archivedBookingsApi.getArchivedBookings(
         token,
         currentPage,
         pageSize,
@@ -282,8 +246,8 @@ export const getArchivedConsultations = (
     )
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(''));
-      dispatch(setArchivedConsultationsTotalCountAC(response.totalCount));
-      dispatch(setArchivedConsultationsAC(response.bookings));
+      dispatch(setTotalCountAC(response.totalCount));
+      dispatch(setArchivedBookingsAC(response.bookings));
     }
   } catch (e) {
     // @ts-ignore
@@ -294,7 +258,7 @@ export const getArchivedConsultations = (
   }
 }
 
-export const deleteArchivedConsultation = (
+export const deleteArchivedBooking = (
     token: string,
     id: string,
     bookings: Array<BookingType>,
@@ -305,7 +269,7 @@ export const deleteArchivedConsultation = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await archivedBookingsApi.deleteArchivedConsultation(id);
+    let response = await archivedBookingsApi.deleteArchivedBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
     }
@@ -316,7 +280,7 @@ export const deleteArchivedConsultation = (
   }
 }
 
-export const reactivateConsultation = (
+export const reactivateBooking = (
     token: string,
     id: string,
     bookings: Array<BookingType>,
@@ -327,7 +291,7 @@ export const reactivateConsultation = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await archivedBookingsApi.reactivateConsultation(id);
+    let response = await archivedBookingsApi.reactivateBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
       dispatch(setSuccessModalAC(true, RESTORE_BOOKING_FROM_ARCHIVE));

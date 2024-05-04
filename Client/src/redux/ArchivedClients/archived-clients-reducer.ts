@@ -5,6 +5,11 @@ import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
+import {
+  setSuccessModalAC,
+  SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT} from "../General/general-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_ARCHIVED_CLIENTS = 'SET_ARCHIVED_CLIENTS';
@@ -14,9 +19,7 @@ const SET_TOTAL = 'SET_TOTAL';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_ARCHIVED_CLIENT = 'DELETE_ARCHIVED_CLIENT';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const SET_API_ERROR = 'SET_ADD_CLIENT_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
-const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 
 const RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS = "You successfully restored this client!";
 
@@ -31,12 +34,7 @@ let initialState = {
     term: '',
     condition: "any"
   } as SearchFilterType,
-  apiError: '' as string,
   accessError: '' as string | undefined,
-  successModal: {
-    isSuccess: false as boolean,
-    successText: '' as string,
-  },
 }
 
 export type InitialStateType = typeof initialState
@@ -107,21 +105,6 @@ export const archivedClientsReducer = (
             : state.isDeletingInProcess.filter(id => id !== action.id)
       }
 
-    case SET_SUCCESS_MODAL:
-      return {
-        ...state,
-        successModal: {
-          isSuccess: action.isSuccess,
-          successText: action.text
-        }
-      }
-
-    case SET_API_ERROR:
-      return {
-        ...state,
-        apiError: action.error
-      }
-
     case SET_ACCESS_ERROR:
       return {
         ...state,
@@ -140,16 +123,6 @@ type ActionsTypes = SetApiErrorAT | SetPageSizeAT | SetFilterAT |
 
 // actions creators
 
-type SetSuccessModalAT = {
-  type: typeof SET_SUCCESS_MODAL
-  isSuccess: boolean
-  text: string
-}
-
-export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
-  type: SET_SUCCESS_MODAL, isSuccess, text
-});
-
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR
   error: string | undefined
@@ -157,15 +130,6 @@ type SetAccessErrorAT = {
 
 export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
-});
-
-type SetApiErrorAT = {
-  type: typeof SET_API_ERROR
-  error: string
-}
-
-export const setApiErrorAC = (error: string): SetApiErrorAT => ({
-  type: SET_API_ERROR, error
 });
 
 type SetFilterAT = {
@@ -287,8 +251,11 @@ export const getArchivedClients = (
       dispatch(setIsFetchingAC(false));
     }
   } catch (e) {
-    dispatch(setIsFetchingAC(false));
+    // @ts-ignore
+    dispatch(setAccessErrorAC(e.response.data.message));
     console.log(e);
+  } finally {
+    dispatch(setIsFetchingAC(false));
   }
 }
 

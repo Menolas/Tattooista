@@ -143,8 +143,8 @@ export const Styles: React.FC<PropsType> = React.memo(({
               <UpdateTattooStyleForm
                   isEditing={editMode}
                   style={style}
-                  editTattooStyle={edit}
-                  addTattooStyle={add}
+                  edit={edit}
+                  add={add}
                   closeModal={closeModal}
               />
           }
