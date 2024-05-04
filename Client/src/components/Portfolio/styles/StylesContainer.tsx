@@ -23,7 +23,7 @@ export const StylesContainer: React.FC = () => {
     const isAuth = useSelector(getAuthSelector);
     const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcess);
-    const tattooStyles = useSelector(getStylesSelector);
+    const styles = useSelector(getStylesSelector);
     let activeStyle = useSelector(getActiveStyleSelector);
     const token = useSelector(getTokenSelector);
 
@@ -32,12 +32,11 @@ export const StylesContainer: React.FC = () => {
     useEffect( () => {
         dispatch(getStyles(token)).then(r => {
             if (!activeStyle?._id) {
-                activeStyle = tattooStyles[0];
-                dispatch(setActiveStyleAC(tattooStyles[0]));
+                activeStyle = styles[0];
+                dispatch(setActiveStyleAC(styles[0]));
             }
         });
-
-    }, [activeStyle]);
+    }, []);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(resetActiveStyle(style));
@@ -59,7 +58,7 @@ export const StylesContainer: React.FC = () => {
         <Styles
             isAuth={isAuth}
             isFetching={isFetching}
-            styles={tattooStyles}
+            styles={styles}
             activeStyle={activeStyle}
             isDeletingInProcess={isDeletingInProcess}
             resetActiveStyle={resetActiveStyleCallBack}

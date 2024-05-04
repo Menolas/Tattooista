@@ -144,7 +144,7 @@ export const getStyles = (token: string | null): ThunkType => async (
   dispatch
 ) => {
   try {
-    dispatch(setIsFetchingAC(true))
+    dispatch(setIsFetchingAC(true));
     let response = await stylesApi.getStyles(token);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
@@ -152,6 +152,7 @@ export const getStyles = (token: string | null): ThunkType => async (
     }
   } catch (e) {
     console.log(e);
+    console.log("you are here!!!!!!!!!!!")
     dispatch(setStylesAC(tattooStyles));
     dispatch(setFakeApiAC(true));
   } finally {
@@ -163,7 +164,8 @@ export const addStyle = (values: FormData): ThunkType => async (
     dispatch
 ) => {
   try {
-    let response = await stylesApi.addStyle(values)
+    dispatch(setIsFetchingAC(true));
+    let response = await stylesApi.addStyle(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
@@ -171,6 +173,8 @@ export const addStyle = (values: FormData): ThunkType => async (
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e.response?.data?.message);
+  } finally {
+    dispatch(setIsFetchingAC(false));
   }
 }
 
@@ -190,11 +194,10 @@ export const editStyle = (id: string, values: FormData): ThunkType => async (dis
 export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await stylesApi.deleteStyle(id)
+    let response = await stylesApi.deleteStyle(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyles[0]));
     }
-
   } catch (e) {
     console.log(e);
   } finally {
