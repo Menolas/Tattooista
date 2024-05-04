@@ -49,7 +49,7 @@ class tattooStyleController {
       await res.tattooStyle.remove();
 
       results.resultCode = 0;
-      results.tattooStyles = await TattooStyle.find();
+      results.tattooStyles = await TattooStyle.find().sort({createdAt: -1});
       res.status(200).json(results);
     } catch (err) {
       results.resultCode = 1;

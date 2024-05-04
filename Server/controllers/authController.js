@@ -68,7 +68,7 @@ class AuthController {
     }
   }
 
-  async refresh(req, res, next) {
+  async refresh(req, res) {
     const results = {};
     try {
       const {refreshToken} = req.cookies;
@@ -84,7 +84,6 @@ class AuthController {
       results.message = e.message;
       console.log(e);
       res.status(400).json(results);
-      //next(e)
     }
   }
 }
