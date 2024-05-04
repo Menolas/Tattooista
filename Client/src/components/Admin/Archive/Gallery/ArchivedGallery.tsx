@@ -15,8 +15,8 @@ import {
     deleteArchivedGalleryItem,
     getArchivedGallery,
     reactivateArchivedGalleryItem,
-    setArchivedGalleryPageSizeAC,
-    setCurrentArchivedGalleryPageAC,
+    setPageSizeAC,
+    setCurrentPageAC,
     updateArchivedGalleryItem
 } from "../../../../redux/ArchivedGallery/archived-gallery-reducer";
 import {getStyles,} from "../../../../redux/Styles/styles-reducer";
@@ -74,11 +74,11 @@ export const ArchivedGallery = () => {
     }
 
     const onPageChangedCallBack = (page: number) => {
-        dispatch(setCurrentArchivedGalleryPageAC(page));
+        dispatch(setCurrentPageAC(page));
     }
 
-    const setArchivedGalleryPageSizeACCallBack = (archivedGalleryPageSize: number) => {
-        dispatch(setArchivedGalleryPageSizeAC(archivedGalleryPageSize));
+    const setPageSizeACCallBack = (archivedGalleryPageSize: number) => {
+        dispatch(setPageSizeAC(archivedGalleryPageSize));
     }
 
     const deleteArchivedGalleryItemCallBack = (itemId: string) => {
@@ -116,7 +116,9 @@ export const ArchivedGallery = () => {
                         data-tooltip-id="my-tooltip"
                         data-tooltip-content="Edit archived gallery item"
                         className={"btn btn--icon"}
-                        onClick={() => {setEditGalleryItem(item)}}
+                        onClick={() => {
+                            setEditGalleryItem(item);
+                        }}
                     >
                         <svg><use href={`${Sprite}#edit`}/></svg>
                     </button>
@@ -125,7 +127,9 @@ export const ArchivedGallery = () => {
                         data-tooltip-content="Restore archived gallery item"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
-                        onClick={() => {setConfirmationForRestoreData({ needConfirmation: true, itemId: item._id })}}
+                        onClick={() => {
+                            setConfirmationForRestoreData({ needConfirmation: true, itemId: item._id });
+                        }}
                     >
                         <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
                     </button>
@@ -141,7 +145,7 @@ export const ArchivedGallery = () => {
                 </div>
             </li>
         )
-    })
+    });
 
     return (
         <>
@@ -151,7 +155,7 @@ export const ArchivedGallery = () => {
                     pageSize={pageSize}
                     currentPage={currentPage}
                     onPageChanged={onPageChangedCallBack}
-                    setPageLimit={setArchivedGalleryPageSizeACCallBack}
+                    setPageLimit={setPageSizeACCallBack}
                 />
             </div>
             { isFetching

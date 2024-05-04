@@ -28,6 +28,7 @@ import {
 } from "../../../redux/Styles/styles-selectors";
 
 export const GalleryContainer: React.FC = () => {
+
   const isAuth = useSelector(getAuthSelector);
   const isFetching = useSelector(getIsFetchingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);

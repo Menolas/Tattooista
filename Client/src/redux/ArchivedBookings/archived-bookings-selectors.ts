@@ -8,36 +8,28 @@ export const getArchivedBookingsSelector = (state: AppStateType) => {
 
 //reselect library selector
 
-export const getArchivedConsultationsPageSizeSelector = (state: AppStateType) => {
-  return state.archivedBookings.archivedConsultationsPageSize;
+export const getPageSizeSelector = (state: AppStateType) => {
+  return state.archivedBookings.pageSize;
 }
 
-export const getTotalArchivedConsultationsCountSelector = (state: AppStateType) => {
-  return state.archivedBookings.totalArchivedConsultationsCount;
+export const getTotalCountSelector = (state: AppStateType) => {
+  return state.archivedBookings.totalCount;
 }
 
-export const getCurrentArchivedConsultationsPageSelector = (state: AppStateType) => {
-  return state.archivedBookings.currentArchivedConsultationsPage;
+export const getCurrentPageSelector = (state: AppStateType) => {
+  return state.archivedBookings.currentPage;
 }
 
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {
   return state.archivedBookings.isDeletingInProcess;
 }
 
-export const getBookedConsultationsIsFetchingSelector = (state: AppStateType) => {
-  return state.archivedBookings.bookedConsultationsIsFetching;
+export const getIsFetchingSelector = (state: AppStateType) => {
+  return state.archivedBookings.isFetching;
 }
 
-export const getArchivedConsultationsFilterSelector = (state: AppStateType) => {
-  return state.archivedBookings.archivedConsultationsFilter;
-}
-
-export const getSuccessModalSelector = (state: AppStateType) => {
-  return state.archivedBookings.successModal;
-}
-
-export const getApiErrorSelector = (state: AppStateType) => {
-  return state.archivedBookings.apiError;
+export const getFilterSelector = (state: AppStateType) => {
+  return state.archivedBookings.filter;
 }
 
 export const getAccessErrorSelector = (state: AppStateType) => {
