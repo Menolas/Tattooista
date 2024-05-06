@@ -1,50 +1,43 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
-import {useDispatch, useSelector} from "react-redux"
-import {logout} from "../../redux/Auth/auth-reducer"
-import { Header } from "./Header"
-import {getAuthSelector} from "../../redux/Auth/auth-selectors"
-import {useLocation} from "react-router-dom"
-import {BookConsultationFormValues} from "../../types/Types";
-import {bookConsultation} from "../../redux/General/general-reducer";
+import * as React from "react";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {logout} from "../../redux/Auth/auth-reducer";
+import { Header } from "./Header";
+import {getAuthSelector} from "../../redux/Auth/auth-selectors";
+import {useLocation} from "react-router-dom";
 
 export const HeaderContainer: React.FC = () => {
 
-  const isAuth = useSelector(getAuthSelector)
-  const dispatch = useDispatch()
-  const [headerClasses, setHeaderClasses] = useState('')
-  const location = useLocation()
-  const [pageLocation, setPageLocation] = useState(location.pathname)
+  const isAuth = useSelector(getAuthSelector);
+  const dispatch = useDispatch();
+  const [headerClasses, setHeaderClasses] = useState('');
+  const location = useLocation();
+  const [pageLocation, setPageLocation] = useState(location.pathname);
 
   useEffect(() => {
 
-    const pathArray = pageLocation.split('/')
+    const pathArray = pageLocation.split('/');
 
     if (pathArray[1] === 'portfolio') {
-      setHeaderClasses('main-header--portfolio')
+      setHeaderClasses('main-header--portfolio');
     } else if (pathArray[1] === 'admin') {
-      setHeaderClasses('main-header--admin')
+      setHeaderClasses('main-header--admin');
     } else if (!pathArray[1]) {
-      setHeaderClasses('')
+      setHeaderClasses('');
     }
-  }, [pageLocation])
+  }, [pageLocation]);
 
   useEffect(() => {
     setPageLocation(location.pathname)
-  }, [location.pathname])
+  }, [location.pathname]);
 
   const logoutCallBack = () => {
-    dispatch(logout())
-  }
-
-  const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-    dispatch(bookConsultation(values))
+    dispatch(logout());
   }
 
   return <Header
       isAuth={isAuth}
       headerClasses={headerClasses}
       logout={logoutCallBack}
-      bookConsultation={bookConsultationCallBack}
   />
 }

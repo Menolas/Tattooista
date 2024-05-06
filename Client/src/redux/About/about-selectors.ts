@@ -11,3 +11,7 @@ export const getFakeApiSelector = (state: AppStateType) => {
 export const getIsFetchingSelector = (state: AppStateType) => {
   return state.about.isFetching;
 }
+
+export const getIsEditingSelector = (state: AppStateType) => {
+  return state.about.isEditing;
+}

@@ -1,10 +1,15 @@
 import { bookingsApi } from "./bookingsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../types/Types";
+import {AddConsultationFormValues, BookConsultationFormValues, BookingType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
+import {
+  setSuccessModalAC,
+  SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT} from "../General/general-reducer";
 
 const SET_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
 const SET_FILTER = 'SET_BOOKINGS_FILTER';
@@ -17,10 +22,8 @@ const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROG
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_BOOKING = 'DELETE_BOOKING';
 const ADD_BOOKING = 'ADD_BOOKING';
-const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const SET_API_ERROR = 'SET_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
-const BOOKING_SUCCESS = "Congratulation! You've just created a consultation request.";
+const BOOKING_SUCCESS = "\"Congratulation! You've just submitted new request for consultation.";
 const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You've just created a client from a consultation request.";
 
 let initialState = {
@@ -35,15 +38,9 @@ let initialState = {
     term: '' as string | null,
     condition: 'any' as string | null
   } as SearchFilterType,
-  apiError: '' as string,
   accessError: '' as string | undefined,
-  successModal: {
-    isSuccess: false as boolean,
-    successText: '' as string,
-  },
 }
 
-export type SuccessModalType = typeof initialState.successModal;
 export type InitialStateType = typeof initialState;
 
 export const bookingsReducer = (
@@ -126,21 +123,6 @@ export const bookingsReducer = (
         bookings: [{...action.consultation}, ...state.bookings]
       }
 
-    case SET_SUCCESS_MODAL:
-      return {
-        ...state,
-        successModal: {
-          isSuccess: action.isSuccess,
-          successText: action.text
-        }
-      }
-
-    case SET_API_ERROR:
-      return {
-        ...state,
-        apiError: action.error
-      }
-
     case SET_ACCESS_ERROR:
       return {
         ...state,
@@ -159,16 +141,6 @@ type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
 
 // actions creators
 
-type SetSuccessModalAT = {
-  type: typeof SET_SUCCESS_MODAL
-  isSuccess: boolean
-  text: string
-}
-
-export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
-  type: SET_SUCCESS_MODAL, isSuccess, text
-});
-
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR
   error: string | undefined
@@ -176,15 +148,6 @@ type SetAccessErrorAT = {
 
 export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
-});
-
-type SetApiErrorAT = {
-  type: typeof SET_API_ERROR
-  error: string
-}
-
-export const setApiErrorAC = (error: string): SetApiErrorAT => ({
-  type: SET_API_ERROR, error
 });
 
 type SetPageSizeAT = {
@@ -387,14 +350,16 @@ export const deleteBooking = (
 }
 
 export const addBooking = (
-  values: AddConsultationFormValues,
-  total: number
+  values: AddConsultationFormValues | BookConsultationFormValues,
+  total: number | null
 ): ThunkType => async (dispatch) => {
   try {
     let response = await bookingsApi.addConsultation(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookingAC(response.booking));
-      dispatch(setTotalAC(total + 1));
+      if (total) {
+        dispatch(setTotalAC(total + 1));
+      }
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
     }
   } catch (e: any) {

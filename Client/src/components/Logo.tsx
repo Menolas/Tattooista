@@ -1,5 +1,5 @@
-import * as React from "react"
-import { NavLink } from "react-router-dom"
+import * as React from "react";
+import { NavLink } from "react-router-dom";
 
 export const Logo: React.FC = React.memo(() => {
   return (
@@ -9,4 +9,4 @@ export const Logo: React.FC = React.memo(() => {
       </NavLink>
     </div>
   )
-})
+});

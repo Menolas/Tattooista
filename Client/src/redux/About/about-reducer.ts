@@ -13,6 +13,7 @@ import {
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
 const SET_FAKE_API = 'SET_FAKE_API';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+const TOGGLE_IS_EDITING = 'TOGGLE_IS_EDITING';
 
 const ABOUT_PAGE_SUCCESS = "You successfully updated your 'about' block";
 
@@ -20,6 +21,7 @@ const ABOUT_PAGE_SUCCESS = "You successfully updated your 'about' block";
 let initialState = {
   page: {} as PageType,
   isFetching: false as boolean,
+  isEditing: false as boolean,
   fakeApi: false as boolean,
 }
 
@@ -36,6 +38,12 @@ export const aboutReducer = (
       return {
         ...state,
         isFetching: action.isFetching,
+      }
+
+    case TOGGLE_IS_EDITING:
+      return {
+        ...state,
+        isEditing: action.isEditing,
       }
 
     case SET_ABOUT_PAGE:
@@ -57,7 +65,7 @@ export const aboutReducer = (
 }
 
 type ActionsTypes = SetAboutPageAT | SetSuccessModalAT | SetApiErrorAT
-    | SetFakeApiAT | SetIsFetchingAT;
+    | SetFakeApiAT | SetIsFetchingAT | SetIsEditingAT;
 
 // action creators
 
@@ -68,6 +76,15 @@ type SetIsFetchingAT = {
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
   type: TOGGLE_IS_FETCHING, isFetching
+});
+
+type SetIsEditingAT = {
+  type: typeof TOGGLE_IS_EDITING,
+  isEditing: boolean
+}
+
+const setIsEditingAC = (isEditing: boolean): SetIsEditingAT => ({
+  type: TOGGLE_IS_EDITING, isEditing
 });
 
 type SetFakeApiAT = {
@@ -111,6 +128,8 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
 
 export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch) => {
   try {
+    dispatch(setIsEditingAC(true));
+    dispatch(setIsFetchingAC(true));
     const response = await aboutApi.editAboutPage(FormData);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setApiErrorAC(''));
@@ -120,6 +139,9 @@ export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch)
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
+  } finally {
+    dispatch(setIsFetchingAC(false));
+    dispatch(setIsEditingAC(false));
   }
 }
 

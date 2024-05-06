@@ -1,7 +1,7 @@
-import * as React from "react"
-import { SocialNav } from "../SocialNav"
-import {Logo} from "../Logo"
-import {NavLink} from "react-router-dom"
+import * as React from "react";
+import { SocialNav } from "../SocialNav";
+import {Logo} from "../Logo";
+import {NavLink} from "react-router-dom";
 
 export const Footer = React.memo(() => {
   return (
@@ -32,4 +32,4 @@ export const Footer = React.memo(() => {
       </div>
     </footer>
   )
-})
+});

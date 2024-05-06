@@ -10,10 +10,10 @@ import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useEffect} from "react";
 import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
 import {
-  bookConsultation,
   setApiErrorAC,
   setSuccessModalAC,
 } from "../../redux/General/general-reducer";
+import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {
     useDispatch,
     useSelector
@@ -83,7 +83,8 @@ export const MainPage: React.FC = () => {
   }
 
   const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-    dispatch(bookConsultation(values));
+      const total = null;
+    dispatch(addBooking(values, total));
   }
 
   const setSuccessModalCallBack = () => {
@@ -113,8 +114,9 @@ export const MainPage: React.FC = () => {
       <ServicesContainer />
       <FaqContainer />
       <Booking
+          apiError={apiError}
           consentId="consent3"
-          bookConsultation={bookConsultationCallBack}
+          addBooking={bookConsultationCallBack}
       />
       <SuccessPopUp
           isOpen={successModal.isSuccess}

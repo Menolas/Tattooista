@@ -11,9 +11,7 @@ import {
   deleteClientGalleryPicture,
   archiveClient,
   setPageSize,
-  setSuccessModalAC,
   setFilterAC,
-  setApiErrorAC,
 } from "../../../redux/Clients/clients-reducer";
 import {
   getClientsIsFetching,
@@ -21,8 +19,6 @@ import {
   getCurrentClientsPage,
   getClientsSelector,
   getIsClientDeletingInProcessSelector,
-  getSuccessModalSelector,
-  getApiErrorSelector,
   getClientsFilterSelector,
   getClientsPageSizeSelector,
   getIsDeletingPicturesInProcessSelector
@@ -42,8 +38,6 @@ export const ClientsContainer: React.FC = () => {
   const filter = useSelector(getClientsFilterSelector);
   const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector);
-  const successModal = useSelector(getSuccessModalSelector);
-  const apiError = useSelector(getApiErrorSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
 
@@ -107,18 +101,9 @@ export const ClientsContainer: React.FC = () => {
     dispatch(archiveClient(token, clientId, clients, currentPage, totalCount, pageSize, filter));
   }
 
-  const setSuccessModalCallBack = () => {
-    dispatch(setSuccessModalAC(false, ''));
-  }
-
-  const setApiErrorCallBack = () => {
-    dispatch(setApiErrorAC(''));
-  }
-
   return (
       <Clients
           isFetching={isFetching}
-          successModal={successModal}
           totalCount={totalCount}
           currentPage={currentPage}
           pageSize={pageSize}
@@ -126,7 +111,6 @@ export const ClientsContainer: React.FC = () => {
           clientsFilter={filter}
           isDeletingInProcess={isDeletingInProcess}
           isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-          apiError={apiError}
           accessError={accessError}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChangedCallBack}
@@ -137,8 +121,6 @@ export const ClientsContainer: React.FC = () => {
           updateGallery={updateClientGalleryCallBack}
           deleteGalleryItem={deleteClientGalleryPictureCallBack}
           archive={archiveClientCallBack}
-          setSuccessModal={setSuccessModalCallBack}
-          setApiError={setApiErrorCallBack}
       />
   )
 }

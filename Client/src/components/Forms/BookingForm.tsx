@@ -53,12 +53,14 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
+  apiError: string;
   consentId: string;
   bookConsultation: (values: BookConsultationFormValues) => void;
   closeBookingModal?: () => void;
 };
 
 export const BookingForm: React.FC<PropsType> = React.memo(({
+  apiError,
   consentId,
   bookConsultation,
   closeBookingModal,

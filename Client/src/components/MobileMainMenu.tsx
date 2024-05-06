@@ -1,10 +1,9 @@
-import * as React from "react"
-import { useState } from "react"
-import { NavLink } from "react-router-dom"
-import { HashLink } from "react-router-hash-link"
-import {ADMIN, mainNavHashLinksData, socialLinksData, SUPER_ADMIN} from "../utils/constants"
+import * as React from "react";
+import { NavLink } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
+import {ADMIN, mainNavHashLinksData, socialLinksData, SUPER_ADMIN} from "../utils/constants";
 // @ts-ignore
-import Sprite from "../assets/svg/sprite.svg"
+import Sprite from "../assets/svg/sprite.svg";
 
 export const MobileMainMenu = ({
     isAuth,
@@ -88,8 +87,8 @@ export const MobileMainMenu = ({
                             <NavLink
                                 to="/"
                                 onClick={() => {
-                                    closeMenu()
-                                    logout()
+                                    closeMenu();
+                                    logout();
                                 }}
                             >
                                 <svg>

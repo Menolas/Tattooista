@@ -40,16 +40,8 @@ export const getClientProfileSelector = (state: AppStateType) => {
   return state.clients.profile;
 }
 
-export const getSuccessModalSelector = (state: AppStateType) => {
-  return state.clients.successModal;
-}
-
 export const getIsDeletingPicturesInProcess = (state: AppStateType) => {
   return state.clients.isDeletingPicturesInProcess;
-}
-
-export const getApiErrorSelector = (state: AppStateType) => {
-  return state.clients.apiError;
 }
 
 export const getAccessErrorSelector = (state: AppStateType) => {

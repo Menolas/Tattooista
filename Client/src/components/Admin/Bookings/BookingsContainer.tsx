@@ -10,9 +10,7 @@ import {
   addBooking,
   archiveBooking,
   setCurrentPageAC,
-  setSuccessModalAC,
   setFilterAC,
-  setApiErrorAC,
 } from "../../../redux/Bookings/bookings-reducer";
 import {
   getBookingsSelector,
@@ -23,8 +21,7 @@ import {
   getFilterSelector,
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
-  getSuccessModalSelector,
-  getApiErrorSelector, getAccessErrorSelector
+  getAccessErrorSelector
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
 import {AddConsultationFormValues, ContactsType, SearchFilterType} from "../../../types/Types";
@@ -40,8 +37,6 @@ export const BookingsContainer: React.FC = () => {
   const filter = useSelector(getFilterSelector);
   const isStatusChanging = useSelector(getIsStatusChangingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
-  const successModal = useSelector(getSuccessModalSelector);
-  const apiError = useSelector(getApiErrorSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
 
@@ -102,18 +97,9 @@ export const BookingsContainer: React.FC = () => {
     dispatch(archiveBooking(token, id, bookings, currentPage, totalCount, pageSize, filter))
   }
 
-  const setSuccessModalCallBack = () => {
-    dispatch(setSuccessModalAC(false, ''));
-  }
-
-  const setApiErrorCallBack = () => {
-    dispatch(setApiErrorAC(''));
-  }
-
   return (
       <Bookings
         isFetching={isFetching}
-        successModal={successModal}
         totalCount={totalCount}
         currentPage={currentPage}
         pageSize={pageSize}
@@ -121,7 +107,6 @@ export const BookingsContainer: React.FC = () => {
         filter={filter}
         isStatusChanging={isStatusChanging}
         isDeletingInProcess={isDeletingInProcess}
-        apiError={apiError}
         accessError={accessError}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
@@ -131,8 +116,6 @@ export const BookingsContainer: React.FC = () => {
         setPageLimit={setPageSizeCallBack}
         add={addCallBack}
         archive={archiveCallBack}
-        setSuccessModal={setSuccessModalCallBack}
-        setApiError={setApiErrorCallBack}
       />
   )
 }

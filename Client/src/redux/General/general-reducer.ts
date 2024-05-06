@@ -1,13 +1,5 @@
-import { generalSourcesApi } from "./generalSourcesApi";
-import { BookConsultationFormValues,} from "../../types/Types";
-import { ThunkAction } from "redux-thunk";
-import { AppStateType } from "../redux-store";
-import { ResultCodesEnum } from "../../utils/constants";
-
-const SET_IS_FETCHING = 'SET_IS_GENERAL_FETCHING';
 const SET_API_ERROR = 'SET_API_ERROR';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
-const BOOKING_SUCCESS = "Congratulation! You've just submitted your request for consultation.";
 
 let initialState = {
   isFetching: false as boolean,
@@ -30,12 +22,6 @@ export const generalReducer = (
 
   switch (action.type) {
 
-    case SET_IS_FETCHING:
-      return {
-        ...state,
-        isFetching: action.bol
-      }
-
     case SET_SUCCESS_MODAL:
       return {
         ...state,
@@ -57,7 +43,7 @@ export const generalReducer = (
   }
 }
 
-type ActionsTypes = SetIsFetchingAT | SetApiErrorAT | SetSuccessModalAT;
+type ActionsTypes = SetApiErrorAT | SetSuccessModalAT;
 
 // action creators
 
@@ -79,30 +65,3 @@ export type SetApiErrorAT = {
 export const setApiErrorAC = (error: string): SetApiErrorAT  => ({
   type: SET_API_ERROR, error
 });
-
-type SetIsFetchingAT = {
-  type: typeof SET_IS_FETCHING
-  bol: boolean
-};
-
-export const setIsFetchingAC = (bol: boolean): SetIsFetchingAT => ({
-  type: SET_IS_FETCHING, bol
-});
-
-// thunks
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
-
-export const bookConsultation = (
-    values: BookConsultationFormValues
-): ThunkType => async (dispatch) => {
-  try {
-    const response = await generalSourcesApi.bookConsultation(values)
-    if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(''));
-      dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
-    }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-  }
-}

@@ -15,6 +15,7 @@ import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
     isFetching: boolean;
+    isEditing: boolean;
     fakeApi: boolean;
     isAuth: string;
     page?: PageType;
@@ -24,6 +25,7 @@ type PropsType = {
 
 export const About: React.FC<PropsType> = React.memo(({
      isFetching,
+     isEditing,
      fakeApi,
      isAuth,
      page,
@@ -31,10 +33,10 @@ export const About: React.FC<PropsType> = React.memo(({
      changeVisibility,
 }) => {
 
-    const [isEditMode, setIsEditMode] = useState(false)
+    const [isEditMode, setIsEditMode] = useState(false);
 
     const closeEditModal = () => {
-        setIsEditMode(false)
+        setIsEditMode(false);
     }
 
     const editModalTitle = 'Update "about" block'
@@ -67,6 +69,7 @@ export const About: React.FC<PropsType> = React.memo(({
                     <button
                         data-tooltip-id="about-tooltip"
                         data-tooltip-content='Edit "about me" block'
+                        disabled={isEditing}
                         className={"btn btn--icon"}
                         onClick={() => setIsEditMode(true)}
                     >
