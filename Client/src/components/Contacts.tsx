@@ -1,6 +1,6 @@
-import * as React from "react"
-import {useEffect} from "react"
-import {NavLink} from "react-router-dom"
+import * as React from "react";
+import {useEffect} from "react";
+import {NavLink} from "react-router-dom";
 
 export const Contacts: React.FC = React.memo(() => {
 
@@ -14,7 +14,7 @@ export const Contacts: React.FC = React.memo(() => {
         targetElement.scrollIntoView({ behavior: 'smooth' })
       }
     }
-  }, [])
+  }, []);
 
   return (
     <section className = "page-block contacts" id="contacts">

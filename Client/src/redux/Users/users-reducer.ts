@@ -5,6 +5,11 @@ import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import { usersAPI } from "./usersApi";
 import { getNewPage } from "../../utils/functions";
+import {
+    setSuccessModalAC,
+    SetSuccessModalAT,
+    setApiErrorAC,
+    SetApiErrorAT} from "../General/general-reducer";
 
 const SET_USERS = 'SET_USERS';
 const SET_TOTAL = 'SET_TOTAL';
@@ -17,9 +22,7 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ROLES = 'SET_ROLES';
 const EDIT_USER = 'EDIT_USER';
 const ADD_USER = 'ADD_USER';
-const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
-const SET_API_ERROR = 'SET_API_ERROR';
 
 const UPDATE_USER_SUCCESS = 'You successfully updated user info!';
 const ADD_USER_SUCCESS = 'You successfully added new user!';
@@ -38,11 +41,6 @@ let initialState = {
         condition: 'any'
     } as SearchFilterType,
     accessError: '' as string | undefined,
-    successModal: {
-        isSuccess: false as boolean,
-        successText: '' as string,
-    },
-    apiError: '' as string
 }
 
 export type InitialStateType = typeof initialState;
@@ -127,25 +125,10 @@ export const usersReducer = (
                 users: [{...action.user}, ...state.users ],
             }
 
-        case SET_SUCCESS_MODAL:
-            return {
-                ...state,
-                successModal: {
-                    isSuccess: action.isSuccess,
-                    successText: action.text
-                }
-            }
-
         case SET_ACCESS_ERROR:
             return {
                 ...state,
                 accessError: action.error
-            }
-
-        case SET_API_ERROR:
-            return {
-                ...state,
-                apiError: action.apiError
             }
 
         default: return state
@@ -158,25 +141,6 @@ type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
     | SetAccessErrorAT | SetSuccessModalAT | SetApiErrorAT;
 
 //actions creators
-
-type SetApiErrorAT = {
-    type: typeof SET_API_ERROR
-    apiError: string
-}
-
-export const setApiErrorAC = (apiError: string): SetApiErrorAT => ({
-    type: SET_API_ERROR, apiError
-});
-
-type SetSuccessModalAT = {
-    type: typeof SET_SUCCESS_MODAL
-    isSuccess: boolean
-    text: string
-}
-
-export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
-    type: SET_SUCCESS_MODAL, isSuccess, text
-});
 
 type SetAccessErrorAT = {
     type: typeof SET_ACCESS_ERROR

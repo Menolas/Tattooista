@@ -9,15 +9,15 @@ import {Confirmation} from "../../common/Confirmation";
 import {ReadMore} from "../../common/ReadMore";
 
 type PropsType = {
-  consultation: BookingType
-  pageSize: number
-  currentPage: number
-  isDeletingInProcess?: Array<string>
-  isStatusChanging?: Array<string>
-  changeStatus: (id: string, status: boolean) => void
-  turnBookingToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void
-  remove: (id: string) => void
-  archive: (id: string) => void
+  consultation: BookingType;
+  pageSize: number;
+  currentPage: number;
+  isDeletingInProcess?: Array<string>;
+  isStatusChanging?: Array<string>;
+  changeStatus: (id: string, status: boolean) => void;
+  turnBookingToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void;
+  remove: (id: string) => void;
+  archive: (id: string) => void;
 }
 
 export const Booking: React.FC<PropsType> = React.memo(({

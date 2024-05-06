@@ -11,7 +11,6 @@ import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Navigate} from "react-router";
-import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 
 type PropsType = {
@@ -22,17 +21,13 @@ type PropsType = {
     total: number;
     currentPage: number;
     pageLimit: number;
-    successModal: SuccessModalType;
     accessError: string;
-    apiError: string;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
     setFilter: (filter: SearchFilterType) => void;
     remove: (userId: string) => void;
     edit: (id: string, values: FormData) => void;
     add: (values: FormData) => void;
-    setSuccessModal: () => void;
-    setApiError: () => void;
 }
 
 export const Users: React.FC<PropsType> = ({
@@ -43,30 +38,14 @@ export const Users: React.FC<PropsType> = ({
    total,
    currentPage,
    pageLimit,
-   successModal,
    accessError,
-   apiError,
    setPageLimit,
    setCurrentPage,
    setFilter,
    remove,
    edit,
    add,
-   setSuccessModal,
-   setApiError,
 }) => {
-
-    const setSuccessModalCallBack = () => {
-        setSuccessModal();
-    }
-
-    useEffect(() => {
-        if (successModal.isSuccess) {
-            setTimeout( () => {
-                setSuccessModal();
-            }, 3000);
-        }
-    }, [successModal]);
 
     const [addUserMode, setAddMode] = useState<boolean>(false);
     const [editUserMode, setEditMode] = useState<boolean>(false);
@@ -147,16 +126,6 @@ export const Users: React.FC<PropsType> = ({
                             />
                         }
                     </ModalPopUp>
-                    <SuccessPopUp
-                        isOpen={successModal.isSuccess}
-                        closeModal={setSuccessModalCallBack}
-                        content={successModal.successText}
-                    />
-                    <ApiErrorMessage
-                        isOpen={!!apiError}
-                        error={apiError}
-                        closeModal={setApiError}
-                    />
                 </>
             }
         </>

@@ -1,13 +1,13 @@
-import * as React from "react"
-import { useState } from "react"
-import { NavLink } from "react-router-dom"
-import { HashLink } from "react-router-hash-link"
-import { mainNavHashLinksData } from "../utils/constants"
-import {MobileMainMenu} from "./MobileMainMenu"
+import * as React from "react";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
+import { mainNavHashLinksData } from "../utils/constants";
+import {MobileMainMenu} from "./MobileMainMenu";
 
 type PropsType = {
-  isAuth: string | null
-  logout: () => void
+  isAuth: string | null;
+  logout: () => void;
 }
 
 export const MainNav: React.FC<PropsType> = React.memo(({

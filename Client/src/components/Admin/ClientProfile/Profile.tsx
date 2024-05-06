@@ -10,26 +10,21 @@ import { UpdateClientForm } from "../../Forms/UpdateClientForm";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg";
 import { GalleryUploadForm } from "../../Forms/GalleryUploadForm";
-import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
-import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 import {ImageFullView} from "../../common/ImageFullView";
 
 type PropsType = {
-  successModal: SuccessModalType
-  data: ClientType
-  isDeletingPicturesInProcess: Array<string>
-  remove: (clientId: string) => void
-  edit: (clientId: string, values: FormData) => void
-  updateGallery: (clientId: string, values: FormData) => void
-  deleteGalleryItem: (clientId: string, picture: string) => void
-  archive: (id: string) => void
-  setSuccessModal: () => void
+  data: ClientType;
+  isDeletingPicturesInProcess: Array<string>;
+  remove: (clientId: string) => void;
+  edit: (clientId: string, values: FormData) => void;
+  updateGallery: (clientId: string, values: FormData) => void;
+  deleteGalleryItem: (clientId: string, picture: string) => void;
+  archive: (id: string) => void;
 }
 
 export const Profile: React.FC<PropsType> = React.memo(({
-    successModal,
     data,
     isDeletingPicturesInProcess,
     remove,
@@ -37,7 +32,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
     updateGallery,
     deleteGalleryItem,
     archive,
-    setSuccessModal,
 }) => {
     const navigate = useNavigate();
 
@@ -47,14 +41,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
         // Scroll to the top of the page when the component mounts
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [clientId]); // This effect will run whenever clientId changes
-
-    useEffect(() => {
-        if (successModal.isSuccess) {
-            setTimeout( () => {
-                setSuccessModal();
-            }, 3000);
-        }
-    }, [successModal]);
 
   //debugger
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
@@ -226,20 +212,15 @@ export const Profile: React.FC<PropsType> = React.memo(({
             cancel={closeModal}
         />
       </ModalPopUp>
-        <SuccessPopUp
-            isOpen={successModal.isSuccess}
-            closeModal={setSuccessModal}
-            content={successModal.successText}
-        />
-        {  carouselData.isOpen &&
-            <ImageFullView
+      {  carouselData.isOpen &&
+        <ImageFullView
                 isOpen={carouselData.isOpen}
                 clientId={data._id}
                 gallery={data.gallery}
                 activeIndex={carouselData.activeIndex}
                 closeImg={()=> {setCarouselData({isOpen: false});}}
-            />
-        }
+        />
+      }
       <Tooltip id="profile-tooltip" />
     </div>
   )

@@ -10,12 +10,9 @@ import {
     setUsersFilterAC,
     setPageLimitAC,
     updateUser,
-    setSuccessModalAC,
     addUser,
-    setApiErrorAC
 } from "../../../redux/Users/users-reducer";
 import {
-    getSuccessModalSelector,
     getRolesSelector,
     getCurrentPageSelector,
     getFiletSelector,
@@ -23,7 +20,7 @@ import {
     getPageLimitSelector,
     getUsersSelector,
     getTotalCountSelector,
-    getAccessErrorSelector, getUsersApiErrorSelector
+    getAccessErrorSelector,
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../types/Types";
@@ -38,9 +35,7 @@ export const UsersContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
     const pageLimit = useSelector(getPageLimitSelector);
     const filter = useSelector(getFiletSelector);
-    const successModal = useSelector(getSuccessModalSelector);
     const accessError = useSelector(getAccessErrorSelector);
-    const apiError = useSelector(getUsersApiErrorSelector);
 
     const dispatch = useDispatch();
 
@@ -65,14 +60,6 @@ export const UsersContainer: React.FC = () => {
         dispatch(deleteUser(token, userId, users, currentPage, total, pageLimit, filter));
     }
 
-    const setSuccessModalCallBack = () => {
-        dispatch(setSuccessModalAC(false, ''));
-    }
-
-    const setApiErrorCallBack = () => {
-        dispatch(setApiErrorAC(''));
-    }
-
     const editCallBack = (
         id: string,
         values: FormData
@@ -93,17 +80,13 @@ export const UsersContainer: React.FC = () => {
             total={total}
             currentPage={currentPage}
             pageLimit={pageLimit}
-            successModal={successModal}
             accessError={accessError}
-            apiError={apiError}
             setPageLimit={setPageLimitCallBack}
             setCurrentPage={setCurrentPageCallBack}
             setFilter={setFilterCallBack}
             remove={removeCallBack}
             edit={editCallBack}
             add={addUserCallBack}
-            setSuccessModal={setSuccessModalCallBack}
-            setApiError={setApiErrorCallBack}
         />
     )
 }

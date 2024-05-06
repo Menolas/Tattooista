@@ -4,7 +4,6 @@ import { Navigate } from "react-router";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
 import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../../types/Types";
-import {SuccessModalType} from "../../../redux/Bookings/bookings-reducer";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {AddBookingForm} from "../../Forms/AddBookingForm";
 import {SuccessPopUp} from "../../common/SuccessPopUp";
@@ -16,7 +15,6 @@ import {bookingFilterSelectOptions} from "../../../utils/constants";
 
 type PropsType = {
   isFetching: boolean;
-  successModal: SuccessModalType;
   totalCount: number;
   currentPage: number;
   pageSize: number;
@@ -24,7 +22,6 @@ type PropsType = {
   filter: SearchFilterType;
   isStatusChanging?: Array<string>;
   isDeletingInProcess?: Array<string>;
-  apiError: string;
   accessError: string;
   setCurrentPage: (page: number) => void;
   onFilterChanged: (filter: SearchFilterType) => void;
@@ -34,13 +31,10 @@ type PropsType = {
   setPageLimit: (pageSize: number) => void;
   add: (values: AddConsultationFormValues) => void;
   archive: (id: string) => void;
-  setSuccessModal: () => void;
-  setApiError: () => void;
 }
 
 export const Bookings: React.FC<PropsType> = React.memo(({
   isFetching,
-  successModal,
   totalCount,
   currentPage,
   pageSize,
@@ -48,7 +42,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   filter,
   isStatusChanging,
   isDeletingInProcess,
-  apiError,
   accessError,
   setCurrentPage,
   onFilterChanged,
@@ -58,17 +51,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   setPageLimit,
   add,
   archive,
-  setSuccessModal,
-  setApiError
 }) => {
-
-    useEffect(() => {
-        if (successModal.isSuccess) {
-            setTimeout( () => {
-                setSuccessModal();
-            }, 3000);
-        }
-    }, [successModal]);
 
     let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
 
@@ -141,16 +124,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                           closeBookingModal={closeModal}
                       />
                   </ModalPopUp>
-                  <SuccessPopUp
-                      isOpen={successModal.isSuccess}
-                      closeModal={setSuccessModal}
-                      content={successModal.successText}
-                  />
-                  <ApiErrorMessage
-                      isOpen={!!apiError}
-                      error={apiError}
-                      closeModal={setApiError}
-                  />
                 </>
           }
       </>

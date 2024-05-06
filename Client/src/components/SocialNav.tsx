@@ -1,7 +1,7 @@
-import * as React from "react"
+import * as React from "react";
 // @ts-ignore
-import Sprite from "../assets/svg/sprite.svg"
-import { socialLinksData } from "../utils/constants"
+import Sprite from "../assets/svg/sprite.svg";
+import { socialLinksData } from "../utils/constants";
 
 const socialLinks = socialLinksData.map(item => {
   return (

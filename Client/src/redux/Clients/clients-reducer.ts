@@ -5,6 +5,11 @@ import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
+import {
+  setSuccessModalAC,
+  SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT} from "../General/general-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_FILTER = 'SET_FILTER';
@@ -18,9 +23,7 @@ const EDIT_CLIENT = 'EDIT_CLIENT';
 const ADD_CLIENT = 'ADD_CLIENT';
 const SET_CLIENT_PROFILE = 'SET_CLIENT_PROFILE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const SET_API_ERROR = 'SET_ADD_CLIENT_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
-const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 const ADD_CLIENT_SUCCESS = "Congratulation! You've just created a new client.";
 const UPDATE_CLIENT_SUCCESS = "Congratulation! You've just updated a client's info.";
 const UPDATE_CLIENT_GALLERY_SUCCESS = "You successfully updated client's gallery.";
@@ -38,12 +41,7 @@ let initialState = {
     condition: "any" as string | null
   },
   profile: {} as ClientType,
-  apiError: '' as string,
   accessError: '' as string | undefined,
-  successModal: {
-    isSuccess: false as boolean,
-    successText: '' as string,
-  },
 }
 
 export type InitialStateType = typeof initialState
@@ -136,21 +134,6 @@ export const clientsReducer = (
         profile: action.profile,
       }
 
-    case SET_SUCCESS_MODAL:
-      return {
-        ...state,
-        successModal: {
-          isSuccess: action.isSuccess,
-          successText: action.text
-        }
-      }
-
-    case SET_API_ERROR:
-      return {
-        ...state,
-        apiError: action.error
-      }
-
     case SET_ACCESS_ERROR:
       return {
         ...state,
@@ -169,16 +152,6 @@ type ActionsTypes = SetApiErrorAT | SetClientsPageSizeAT | SetFilterAT |
 
 // actions creators
 
-type SetSuccessModalAT = {
-  type: typeof SET_SUCCESS_MODAL
-  isSuccess: boolean
-  text: string
-}
-
-export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
-  type: SET_SUCCESS_MODAL, isSuccess, text
-});
-
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR
   error: string | undefined
@@ -186,15 +159,6 @@ type SetAccessErrorAT = {
 
 export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
-});
-
-type SetApiErrorAT = {
-  type: typeof SET_API_ERROR
-  error: string
-}
-
-export const setApiErrorAC = (error: string): SetApiErrorAT => ({
-  type: SET_API_ERROR, error
 });
 
 type SetClientsPageSizeAT = {

@@ -35,14 +35,6 @@ export const getFilterSelector = (state: AppStateType) => {
   return state.bookings.filter;
 }
 
-export const getSuccessModalSelector = (state: AppStateType) => {
-  return state.bookings.successModal;
-}
-
-export const getApiErrorSelector = (state: AppStateType) => {
-  return state.bookings.apiError;
-}
-
 export const getAccessErrorSelector = (state: AppStateType) => {
   return state.bookings.accessError;
 }

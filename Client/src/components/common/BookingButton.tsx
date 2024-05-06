@@ -4,10 +4,10 @@ import {ModalPopUp} from "./ModalPopUp";
 import {BookingForm} from "../Forms/BookingForm";
 import * as React from "react";
 import {
-    bookConsultation,
     setApiErrorAC,
     setSuccessModalAC
 } from "../../redux/General/general-reducer";
+import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {getApiErrorSelector, getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {SuccessPopUp} from "./SuccessPopUp";
@@ -38,7 +38,8 @@ export const BookingButton: React.FC<PropsType> = ({
     }
 
     const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-        dispatch(bookConsultation(values));
+        const total = null;
+        dispatch(addBooking(values, total));
     }
 
     const setApiErrorCallBack = () => {
@@ -74,6 +75,7 @@ export const BookingButton: React.FC<PropsType> = ({
             >
                 { bookingModal &&
                     <BookingForm
+                        apiError={apiError}
                         consentId={consentId}
                         bookConsultation={bookConsultationCallBack}
                         closeBookingModal={closeBookingModal}

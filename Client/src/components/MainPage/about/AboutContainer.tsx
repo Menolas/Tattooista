@@ -4,7 +4,7 @@ import {About} from "./About";
 import {
     getPageSelector,
     getFakeApiSelector,
-    getIsFetchingSelector,
+    getIsFetchingSelector, getIsEditingSelector,
 } from "../../../redux/About/about-selectors";
 import {
     getAboutPage,
@@ -20,6 +20,7 @@ export const AboutContainer = () => {
     const fakeApi = useSelector(getFakeApiSelector);
     const page = useSelector(getPageSelector);
     const isFetching = useSelector(getIsFetchingSelector);
+    const isEditing = useSelector(getIsEditingSelector);
 
     const dispatch = useDispatch();
 
@@ -39,6 +40,7 @@ export const AboutContainer = () => {
         return (
             <About
                 isFetching={isFetching}
+                isEditing={isEditing}
                 fakeApi={fakeApi}
                 isAuth={isAuth}
                 page={page}

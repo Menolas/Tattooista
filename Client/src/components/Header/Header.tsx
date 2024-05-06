@@ -8,13 +8,11 @@ import Sprite from "../../assets/svg/sprite.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
-import {BookConsultationFormValues} from "../../types/Types";
 
 type PropsType = {
-    isAuth: string | null
-    headerClasses: string | null
-    logout: () => void
-    bookConsultation: (values: BookConsultationFormValues) => void
+    isAuth: string | null;
+    headerClasses: string | null;
+    logout: () => void;
 }
 
 export const Header: React.FC<PropsType> = ({

@@ -1,5 +1,12 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {AddConsultationFormValues, BookingType, ContactsType, SearchFilterType, CommonResponseFields} from "../../types/Types";
+import {
+  AddConsultationFormValues,
+  BookingType,
+  ContactsType,
+  SearchFilterType,
+  CommonResponseFields,
+  BookConsultationFormValues
+} from "../../types/Types";
 import $api, {API_URL} from "../../http";
 
 const instance = axios.create({
@@ -54,7 +61,7 @@ export const bookingsApi = {
         .then(response => response.data);
   },
 
-  addConsultation(values: AddConsultationFormValues) {
+  addConsultation(values: AddConsultationFormValues | BookConsultationFormValues) {
     return instance.post<AddBookingResponseType>(`${API_URL}/bookings`, values)
         .then(response => response.data);
   },
