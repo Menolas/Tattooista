@@ -40,11 +40,26 @@ export const Client: React.FC<PropsType> = React.memo(({
   const [carouselData, setCarouselData] = useState<{
       isOpen: boolean, activeIndex?: number}>({isOpen: false});
 
-  const [confirmationData, setConfirmationData] = useState<{
-      needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
-  const [confirmationForArchivingData, setConfirmationForArchivingData] = useState<{
-      needConfirmation: boolean, itemId?: string}>({needConfirmation: false});
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
+
+  const [confirmationData, setConfirmationData] = useState<{
+    needConfirmation: boolean,
+    itemId?: string,
+    cb?: () => void,
+    context: string
+  }>({needConfirmation: false, context: ''});
+
+  const closeModal = () => {
+    setConfirmationData({needConfirmation: false, context: ''});
+  }
+
+  const archiveCallBack = () => {
+      archive(data._id);
+  }
+
+  const removeCallBack = () => {
+      remove(data._id);
+  }
 
   const clientContacts: ContactType = data.contacts;
 
@@ -92,7 +107,12 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
-                setConfirmationForArchivingData({needConfirmation: true, itemId: data._id});
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: data._id,
+                    context: 'Are you sure? You about to archive this client.',
+                    cb: archiveCallBack
+                });
             }}
         >
           <svg><use href={`${Sprite}#archive`}/></svg>
@@ -103,7 +123,12 @@ export const Client: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
-              setConfirmationData({ needConfirmation: true, itemId: data._id });
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: data._id,
+                    context: 'Are you sure? You about to delete this client.',
+                    cb: removeCallBack
+                });
             }}
         >
           <svg><use href={`${Sprite}#trash`}/></svg>
@@ -145,45 +170,28 @@ export const Client: React.FC<PropsType> = React.memo(({
           </ul>
         </div>
       }
+      <Confirmation
+        isOpen={confirmationData.needConfirmation}
+        content={confirmationData.context}
+        confirm={() => confirmationData.cb()}
+        cancel={closeModal}
+      />
       <ModalPopUp
-          isOpen={confirmationData.needConfirmation || confirmationForArchivingData.needConfirmation}
-          modalTitle={''}
-          closeModal={()=> {
-              setConfirmationForArchivingData({needConfirmation: false});
-              setConfirmationData({ needConfirmation: false });
-          }}
-      >
-          { confirmationForArchivingData.needConfirmation &&
-              <Confirmation
-                  content={'Are you sure? You about to move this client to archive along with  all the data and images...'}
-                  confirm={() => {archive(confirmationForArchivingData.itemId);}}
-                  cancel={() => {setConfirmationForArchivingData({needConfirmation: false});}}
-              />
-          }
-          { confirmationData.needConfirmation &&
-              <Confirmation
-                  content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-                  confirm={() => {remove(confirmationData.itemId)}}
-                  cancel={() => {setConfirmationData({ needConfirmation: false });}}
-              />
-          }
-      </ModalPopUp>
-        <ModalPopUp
             isOpen={editGalleryMode}
             modalTitle={'Edit Client Gallery'}
             closeModal={() => {setEditGalleryMode(false);}}
-        >
-            {editGalleryMode &&
-                <GalleryUploadForm
-                    isEditPortfolio={false}
-                    client={data}
-                    isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                    updateGallery={updateGallery}
-                    deleteClientGalleryPicture={deleteGalleryItem}
-                    closeModal={() => {setEditGalleryMode(false);}}
-                />
-            }
-        </ModalPopUp>
+      >
+        {editGalleryMode &&
+            <GalleryUploadForm
+                isEditPortfolio={false}
+                client={data}
+                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+                updateGallery={updateGallery}
+                deleteClientGalleryPicture={deleteGalleryItem}
+                closeModal={() => {setEditGalleryMode(false);}}
+            />
+        }
+      </ModalPopUp>
       {  carouselData.isOpen &&
         <ImageFullView
             isOpen={carouselData.isOpen}

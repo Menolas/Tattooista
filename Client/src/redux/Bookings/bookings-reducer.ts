@@ -370,8 +370,6 @@ export const addBooking = (
 export const turnBookingToClient = (
     token: string | null,
     id: string,
-    fullName: string,
-    contacts: {},
     bookings: Array<BookingType>,
     currentPage: number,
     total: number,
@@ -380,11 +378,7 @@ export const turnBookingToClient = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await bookingsApi.turnBookingToClient(
-      id,
-      fullName,
-      contacts
-    )
+    let response = await bookingsApi.turnBookingToClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
       dispatch(setSuccessModalAC(true, BOOKING_INTO_CLIENT_SUCCESS));

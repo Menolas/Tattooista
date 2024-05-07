@@ -46,9 +46,12 @@ export const Styles: React.FC<PropsType> = React.memo(({
   const [addMode, setAddMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [style, setStyle] = useState(null);
-  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-
-  const confirmationText = 'Are you sure? You about to delete this tattoo style FOREVER along with  all the data and images...';
+  const [confirmationData, setConfirmationData] = useState<{
+    needConfirmation: boolean,
+    itemId?: string,
+    cb?: () => void,
+    context: string
+  }>({needConfirmation: false, context: ''});
 
   const closeModal = () => {
     setAddMode(false);
@@ -57,7 +60,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
   }
 
   const closeConfirmationModalCallBack = () => {
-    setNeedConfirmation(false);
+    setConfirmationData({needConfirmation: false, context: ''});
   }
 
   const removeCallBack = () => {
@@ -107,7 +110,12 @@ export const Styles: React.FC<PropsType> = React.memo(({
                                   className={"btn btn--icon"}
                                   disabled={isDeletingInProcess?.some(id => id === activeStyle._id)}
                                   onClick={() => {
-                                    setNeedConfirmation(true)
+                                    setConfirmationData({
+                                      needConfirmation: true,
+                                      itemId: activeStyle._id,
+                                      context: 'Are you sure? You about to delete this tattoo style along with all images.',
+                                      cb: removeCallBack
+                                    });
                                   }}
                               >
                                 <svg>
@@ -149,17 +157,12 @@ export const Styles: React.FC<PropsType> = React.memo(({
               />
           }
         </ModalPopUp>
-        <ModalPopUp
-            isOpen={needConfirmation}
-            modalTitle={''}
-            closeModal={closeConfirmationModalCallBack}
-        >
-          <Confirmation
-              content={confirmationText}
-              confirm={removeCallBack}
-              cancel={closeConfirmationModalCallBack}
-          />
-        </ModalPopUp>
+        <Confirmation
+            isOpen={confirmationData.needConfirmation}
+            content={confirmationData.context}
+            confirm={() => confirmationData.cb()}
+            cancel={closeConfirmationModalCallBack}
+        />
         <Tooltip id="my-tooltip" />
       </div>
     </section>

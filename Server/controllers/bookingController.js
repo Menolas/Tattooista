@@ -126,9 +126,9 @@ class bookingController {
 
   async bookingToClient(req, res) {
     const client = new Client({
-      fullName: req.body.fullName,
-      contacts: req.body.contacts
-    })
+      fullName: res.booking.fullName,
+      contacts: res.booking.contacts
+    });
     const results = {};
 
     try {

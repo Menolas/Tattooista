@@ -68,17 +68,13 @@ export const bookingsApi = {
 
   turnBookingToClient(
     id: string,
-    fullName: string,
-    contacts: ContactsType | {}
   ) {
-    return instance.post<TurnBookingToClientResponseType>(`bookings/bookingToClient/${id}`, {
-      fullName,
-      contacts
-    }).then(response => response.data);
+    return instance.get<TurnBookingToClientResponseType>(`bookings/bookingToClient/${id}`)
+        .then(response => response.data);
   },
 
   archiveBooking(
-      id: string
+      id: string,
   ) {
     return instance.post<ArchiveBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);

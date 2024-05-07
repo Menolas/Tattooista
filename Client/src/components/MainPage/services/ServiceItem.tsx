@@ -34,13 +34,24 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
     setUpdateServiceData,
 }) => {
 
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+
     const conditions = service.conditions.map((item, i) => {
         return item ? <li key = { i }>{item}</li> : null
     });
 
+    const [confirmationData, setConfirmationData] = useState<{
+        needConfirmation: boolean,
+        itemId?: string,
+        cb?: () => void,
+        context: string
+    }>({needConfirmation: false, context: ''});
+
     const closeModal = () => {
-        setNeedConfirmation(false);
+        setConfirmationData({needConfirmation: false, context: ''});
+    }
+
+    const removeCallBack = () => {
+        remove(service._id);
     }
 
     const wallPaperUrl = !fakeApi && service.wallPaper
@@ -49,8 +60,8 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
 
     return (
         <li className="services__item">
-            <span className={'services__item-index'}>{`0${serviceIndex}`}</span>
             <article className="services__article">
+                <span className={'services__item-index'}>{`0${serviceIndex}`}</span>
                 { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
                     <div className={"actionBar"}>
                         <button
@@ -68,7 +79,12 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                             data-tooltip-content="Delete service item"
                             className={"btn btn--icon"}
                             onClick={() => {
-                                setNeedConfirmation(true);
+                                setConfirmationData({
+                                    needConfirmation: true,
+                                    itemId: service._id,
+                                    context: 'Are you sure? You about to delete this service FOREVER...',
+                                    cb: removeCallBack
+                                });
                             }}
                         >
                             <svg><use href={`${Sprite}#trash`}/></svg>
@@ -86,19 +102,12 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                     </ul>
                 </div>
             </article>
-            <ModalPopUp
-                isOpen={needConfirmation}
-                modalTitle={''}
-                closeModal={closeModal}
-            >
-                { needConfirmation &&
-                    <Confirmation
-                        content={'Are you sure? You about to delete this Service FOREVER...'}
-                        confirm={()=> {remove(service._id);}}
-                        cancel={closeModal}
-                    />
-                }
-            </ModalPopUp>
+            <Confirmation
+                isOpen={confirmationData.needConfirmation}
+                content={confirmationData.context}
+                confirm={() => confirmationData.cb()}
+                cancel={closeModal}
+            />
             <Tooltip id="service-tooltip" />
         </li>
     )

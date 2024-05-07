@@ -27,12 +27,17 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
 }) => {
 
   const [carouselData, setCarouselData] = useState<{
-        isOpen: boolean, activeIndex?: number}>({isOpen: false});
-  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-  const [needRestoreConfirmation, setNeedRestoreConfirmation] = useState<boolean>(false);
+    isOpen: boolean, activeIndex?: number}>({isOpen: false});
+  const [confirmationData, setConfirmationData] = useState<{
+    needConfirmation: boolean,
+    itemId?: string,
+    cb?: (itemId: string) => void,
+    context: string
+  }>({needConfirmation: false, context: ''});
+
 
   const closeModal = () => {
-    setNeedConfirmation(false);
+      setConfirmationData({needConfirmation: false, context: ''});
   }
 
   const deleteClientCallBack = () => {
@@ -66,7 +71,14 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             data-tooltip-content="Restore client"
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === data._id)}
-            onClick={() => setNeedRestoreConfirmation(true)}
+            onClick={() => {
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: data._id,
+                    context: 'Are you sure? You about to restore this client.',
+                    cb: reactivateClientCallBack
+                });
+            }}
         >
           <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
         </button>
@@ -76,7 +88,12 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
-              setNeedConfirmation(true)
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: data._id,
+                    context: 'Are you sure? You about to delete this client FOREVER along with  all the data...',
+                    cb: deleteClientCallBack
+                });
             }}
         >
           <svg><use href={`${Sprite}#trash`}/></svg>
@@ -117,26 +134,12 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
           </ul>
         </div>
       }
-      <ModalPopUp
-          isOpen={needConfirmation || needRestoreConfirmation}
-          modalTitle={''}
-          closeModal={closeModal}
-      >
-          { needConfirmation &&
-              <Confirmation
-                  content={'Are you sure? You about to delete this client from archive FOREVER along with all the data and images...'}
-                  confirm={deleteClientCallBack}
-                  cancel={closeModal}
-              />
-          }
-          { needRestoreConfirmation &&
-              <Confirmation
-                  content={'Are you sure? You about to restore this client from archive along with all the data and images...'}
-                  confirm={reactivateClientCallBack}
-                  cancel={closeModal}
-              />
-          }
-      </ModalPopUp>
+      <Confirmation
+            isOpen={confirmationData.needConfirmation}
+            content={confirmationData.context}
+            confirm={() => confirmationData.cb(confirmationData.itemId)}
+            cancel={closeModal}
+      />
       { carouselData.isOpen &&
         <ImageFullView
             isOpen={carouselData.isOpen}
@@ -144,7 +147,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
             archive={true}
             gallery={data.gallery}
             activeIndex={carouselData.activeIndex}
-            closeImg={()=> {setCarouselData({isOpen: false});}}
+            closeImg={()=> setCarouselData({isOpen: false})}
         />
       }
       <Tooltip id="my-tooltip" />

@@ -56,12 +56,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
   const [editGalleryMode, setEditGalleryMode] = useState(false);
   const [galleryItem, setGalleryItem] = useState(null);
-  const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
-    needConfirmation: false,
-  });
-  const [confirmationForArchivingData, setConfirmationForArchivingData] = useState<{needConfirmation: boolean, itemId?: string}>({
-    needConfirmation: false,
-  });
+  const [confirmationData, setConfirmationData] = useState<{
+    needConfirmation: boolean,
+    itemId?: string,
+    cb?: () => void,
+    context: string
+  }>({needConfirmation: false, context: ''});
 
   const openEditGalleryForm = () => {
     setEditGalleryMode(true);
@@ -76,9 +76,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
     setEditGalleryMode(false);
   }
 
-  const closeConfirmationModalCallBack = () => {
-    setConfirmationData({ needConfirmation: false });
-    setConfirmationForArchivingData({needConfirmation: false});
+  const closeModal = () => {
+    setConfirmationData({needConfirmation: false, context: ''});
   }
 
   const GalleryItemsArray = gallery?.map((item, index) => {
@@ -116,7 +115,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}
                   onClick={() => {
-                    setConfirmationForArchivingData({needConfirmation: true, itemId: item._id});
+                    setConfirmationData({
+                      needConfirmation: true,
+                      itemId: item._id,
+                      context: 'Are you sure? You about to archive this image.',
+                      cb: () => archive(item._id)
+                    });
                   }}
               >
                   <svg><use href={`${Sprite}#archive`}/></svg>
@@ -127,7 +131,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   className={"btn btn--icon"}
                   disabled={isDeletingInProcess?.some(id => id === item._id)}
                   onClick={() => {
-                    setConfirmationData({ needConfirmation: true, itemId: item._id });
+                    setConfirmationData({
+                      needConfirmation: true,
+                      itemId: item._id,
+                      context: 'Are you sure? You about to delete this image.',
+                      cb: () => remove(item._id)
+                    });
                   }}
               >
                   <svg><use href={`${Sprite}#trash`}/></svg>
@@ -199,26 +208,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               />
           }
         </ModalPopUp>
-        <ModalPopUp
-            isOpen={confirmationData.needConfirmation || confirmationForArchivingData.needConfirmation}
-            modalTitle={''}
-            closeModal={closeConfirmationModalCallBack}
-        >
-          { confirmationData.needConfirmation &&
-              <Confirmation
-                  content={'Are you sure? You about to delete this gallery image FOREVER...'}
-                  confirm={() => {remove(confirmationData.itemId)}}
-                  cancel={closeConfirmationModalCallBack}
-              />
-          }
-          { confirmationForArchivingData.needConfirmation &&
-              <Confirmation
-                  content={'Are you sure? You about to move this gallery image to archive.'}
-                  confirm={() => {archive(confirmationForArchivingData.itemId)}}
-                  cancel={closeConfirmationModalCallBack}
-              />
-          }
-        </ModalPopUp>
+        <Confirmation
+            isOpen={confirmationData.needConfirmation}
+            content={confirmationData.context}
+            confirm={() => confirmationData.cb()}
+            cancel={closeModal}
+        />
         <Tooltip id="my-tooltip" />
       </section>
   )

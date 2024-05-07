@@ -13,7 +13,6 @@
 }
 
 .services__item {
-  position: relative;
   padding-top: 0.5rem;
   padding-left: 20px;
   width: 100%;
@@ -21,7 +20,16 @@
   min-width: 100%;
   display: flex;
   justify-content: center;
+}
 
+.services__link {
+  @include link-style;
+  width: 100%;
+}
+
+.services__article {
+  position: relative;
+  width: 100%;
   .services__item-index {
     position: absolute;
     top: 0;
@@ -37,16 +45,6 @@
       transform: translate(-100%, -50%);
     }
   }
-}
-
-.services__link {
-  @include link-style;
-  width: 100%;
-}
-
-.services__article {
-  position: relative;
-  width: 100%;
 
   .actionBar {
     top: 10px;
@@ -117,7 +115,7 @@
     min-width: 46%;
     max-width: 46%;
     &:nth-child(even) {
-      transform: translate(0, 110px);
+      margin-top: 110px;
     }
   }
 

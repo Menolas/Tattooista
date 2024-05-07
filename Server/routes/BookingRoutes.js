@@ -20,7 +20,7 @@ router.patch('/status/:id', getBooking, controller.changeBookingStatus);
 
 // turn booking to client
 
-router.post('/bookingToClient/:id', getBooking, controller.bookingToClient);
+router.get('/bookingToClient/:id', getBooking, controller.bookingToClient);
 
 // Delete bookings
 router.delete('/:id', getBooking, controller.deleteBooking);
@@ -47,7 +47,7 @@ async function getBooking(req, res, next) {
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
-  res.booking = booking
+  res.booking = booking;
   next()
 }
 
