@@ -26,11 +26,16 @@ export const User: React.FC<PropsType> = ({
   setData,
 }) => {
 
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
+    const [confirmationData, setConfirmationData] = useState<{
+        needConfirmation: boolean,
+        itemId?: string,
+        cb?: () => void,
+        context: string
+    }>({needConfirmation: false, context: ''});
     const userAvatar = data.avatar ? `${API_URL}/users/${data._id}/avatar/${data.avatar}` : avatar;
 
     const closeModal = () => {
-        setNeedConfirmation(false);
+        setConfirmationData({needConfirmation: false, context: ''});
     }
 
     const deleteUserCallBack = () => {
@@ -57,7 +62,12 @@ export const User: React.FC<PropsType> = ({
                     className={"btn btn--icon"}
                     disabled={isDeletingInProcess?.some(id => id === data._id)}
                     onClick={() => {
-                        setNeedConfirmation(true)
+                        setConfirmationData({
+                            needConfirmation: true,
+                            itemId: data._id,
+                            context: 'Are you sure? You about to delete this user FOREVER along with  all the data...',
+                            cb: deleteUserCallBack
+                        });
                     }}
                 >
                     <svg><use href={`${Sprite}#trash`}/></svg>
@@ -87,17 +97,12 @@ export const User: React.FC<PropsType> = ({
                     </div>
                 </div>
             </NavLink>
-            <ModalPopUp
-                isOpen={needConfirmation}
-                modalTitle={''}
-                closeModal={closeModal}
-            >
-                <Confirmation
-                    content={'Are you sure? You about to delete this user FOREVER along with  all the data...'}
-                    confirm={deleteUserCallBack}
-                    cancel={closeModal}
-                />
-            </ModalPopUp>
+            <Confirmation
+                isOpen={confirmationData.needConfirmation}
+                content={confirmationData.context}
+                confirm={() => confirmationData.cb()}
+                cancel={closeModal}
+            />
         </li>
     )
 }

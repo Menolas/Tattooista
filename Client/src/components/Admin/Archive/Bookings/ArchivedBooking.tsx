@@ -21,22 +21,23 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
    isDeletingInProcess
 }) => {
 
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-    const [needRestoreConfirmation, setNeedRestoreConfirmation] = useState<boolean>(false);
+    const [confirmationData, setConfirmationData] = useState<{
+        needConfirmation: boolean,
+        itemId?: string,
+        cb?: (itemId: string) => void,
+        context: string
+    }>({needConfirmation: false, context: ''});
 
     const closeModal = () => {
-        setNeedConfirmation(false);
-        setNeedRestoreConfirmation(false);
+        setConfirmationData({needConfirmation: false, context: ''});
     }
 
     const deleteConsultationCallBack = () => {
         remove(data._id);
-        setNeedConfirmation(false);
     }
 
     const reactivateConsultationCallBack = () => {
         reactivate(data._id);
-        setNeedRestoreConfirmation(false);
     }
 
     const archivedBookingContacts: ContactType = data.contacts
@@ -58,7 +59,12 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                     className={"btn btn--icon"}
                     disabled={isDeletingInProcess?.some(id => id === data._id)}
                     onClick={() => {
-                        setNeedRestoreConfirmation(true);
+                        setConfirmationData({
+                            needConfirmation: true,
+                            itemId: data._id,
+                            context: 'Are you sure? You about to restore this consultation.',
+                            cb: reactivateConsultationCallBack
+                        });
                     }}
                 >
                     <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
@@ -70,7 +76,12 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                     className={"btn btn--icon"}
                     disabled={isDeletingInProcess?.some(id => id === data._id)}
                     onClick={() => {
-                        setNeedConfirmation(true)
+                        setConfirmationData({
+                            needConfirmation: true,
+                            itemId: data._id,
+                            context: 'Are you sure? You about to delete this consultation FOREVER along with  all the data...',
+                            cb: deleteConsultationCallBack
+                        });
                     }}
                 >
                     <svg><use href={`${Sprite}#trash`}/></svg>
@@ -83,27 +94,12 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                 </div>
                 { contacts }
             </div>
-            <ModalPopUp
-                isOpen={needConfirmation || needRestoreConfirmation}
-                modalTitle={''}
-                closeModal={closeModal}
-            >
-                {  needConfirmation &&
-                    <Confirmation
-                        content={'Are you sure? You about to delete this consultation FOREVER along with  all the data...'}
-                        confirm={deleteConsultationCallBack}
-                        cancel={closeModal}
-                    />
-                }
-                {  needRestoreConfirmation &&
-                    <Confirmation
-                        content={'Are you sure? You about to restore this consultation.'}
-                        confirm={reactivateConsultationCallBack}
-                        cancel={closeModal}
-                    />
-                }
-
-            </ModalPopUp>
+            <Confirmation
+                isOpen={confirmationData.needConfirmation}
+                content={confirmationData.context}
+                confirm={() => confirmationData.cb(confirmationData.itemId)}
+                cancel={closeModal}
+            />
             <Tooltip id="my-tooltip" />
         </li>
     )

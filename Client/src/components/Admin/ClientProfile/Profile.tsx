@@ -45,18 +45,22 @@ export const Profile: React.FC<PropsType> = React.memo(({
   //debugger
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
-  const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-  const [needConfirmationForArchiving, setConfirmationForArchiving] = useState<boolean>(false);
   const [carouselData, setCarouselData] = useState<{
         isOpen: boolean, activeIndex?: number}>({isOpen: false});
+
+    const [confirmationData, setConfirmationData] = useState<{
+        needConfirmation: boolean,
+        itemId?: string,
+        cb?: () => void,
+        context: string
+    }>({needConfirmation: false, context: ''});
 
   const modalTitle = 'EDIT CLIENT';
 
   const closeModal = () => {
     setEditClientMode(false);
     setEditGalleryMode(false);
-    setNeedConfirmation(false);
-    setConfirmationForArchiving(false);
+      setConfirmationData({needConfirmation: false, context: ''});
   }
 
   const deleteClientCallBack = () => {
@@ -135,7 +139,12 @@ export const Profile: React.FC<PropsType> = React.memo(({
             data-tooltip-content="Move client to archive client"
             className={"btn btn--icon"}
             onClick={() => {
-                setConfirmationForArchiving(true);
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: data._id,
+                    context: 'Are you sure? You about to archive this client.',
+                    cb: archiveClientCallBack
+                });
             }}
         >
           <svg><use href={`${Sprite}#archive`}/></svg>
@@ -144,7 +153,14 @@ export const Profile: React.FC<PropsType> = React.memo(({
             data-tooltip-id="profile-tooltip"
             data-tooltip-content="Delete client"
             className="btn btn--icon"
-            onClick={() => { setNeedConfirmation(true); }}
+            onClick={() => {
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: data._id,
+                    context: 'Are you sure? You about to delete this client FOREVER along with all data...',
+                    cb: deleteClientCallBack
+                });
+            }}
         >
           <svg><use href={`${Sprite}#trash`}/></svg>
         </button>
@@ -201,17 +217,12 @@ export const Profile: React.FC<PropsType> = React.memo(({
               />
           }
       </ModalPopUp>
-      <ModalPopUp
-        isOpen={needConfirmation || needConfirmationForArchiving}
-        modalTitle={''}
-        closeModal={closeModal}
-      >
-        <Confirmation
-            content={'Are you sure? You about to delete this client FOREVER along with  all the data and images...'}
-            confirm={ needConfirmation ? deleteClientCallBack : archiveClientCallBack }
+      <Confirmation
+            isOpen={confirmationData.needConfirmation}
+            content={confirmationData.context}
+            confirm={() => confirmationData.cb()}
             cancel={closeModal}
-        />
-      </ModalPopUp>
+      />
       {  carouselData.isOpen &&
         <ImageFullView
                 isOpen={carouselData.isOpen}

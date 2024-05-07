@@ -28,8 +28,21 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
 }) => {
 
     let [faqItemClasses, setFaqItemClasses] = useState('faq__item');
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
     const [isMobile, setIsMobile] = useState<boolean>(false);
+    const [confirmationData, setConfirmationData] = useState<{
+        needConfirmation: boolean,
+        itemId?: string,
+        cb?: () => void,
+        context: string
+    }>({needConfirmation: false, context: ''});
+
+    const closeModal = () => {
+        setConfirmationData({needConfirmation: false, context: ''});
+    }
+
+    const removeCallBack = () => {
+        remove(item._id);
+    }
 
     useEffect(() => {
         const handleResize = () => {
@@ -64,10 +77,6 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
         }
     };
 
-    const closeModal = () => {
-        setNeedConfirmation(false);
-    }
-
     return (
       <li
         className={faqItemClasses}
@@ -89,7 +98,14 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                     data-tooltip-id="faq-tooltip"
                     data-tooltip-content="Delete FAQ item"
                     className={"btn btn--icon"}
-                    onClick={() => {setNeedConfirmation(true);}}
+                    onClick={() => {
+                        setConfirmationData({
+                            needConfirmation: true,
+                            itemId: item._id,
+                            context: 'Are you sure? You about to delete this FAQ item FOREVER...',
+                            cb: removeCallBack
+                        });
+                    }}
                 >
                     <svg><use href={`${Sprite}#trash`}/></svg>
                 </button>
@@ -110,20 +126,12 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
         <p className="faq__item-text">
           {item.answer}
         </p>
-        <ModalPopUp
-              isOpen={needConfirmation}
-              modalTitle={''}
-              closeModal={closeModal}
-          >
-            { needConfirmation &&
-                <Confirmation
-                    content={'Are you sure? You about to delete this FAQ item FOREVER...'}
-                    confirm={() => {remove(item._id);}}
-                    cancel={closeModal}
-                />
-            }
-
-        </ModalPopUp>
+        <Confirmation
+          isOpen={confirmationData.needConfirmation}
+          content={confirmationData.context}
+          confirm={() => confirmationData.cb()}
+          cancel={closeModal}
+        />
         <Tooltip id="faq-tooltip" />
       </li>
     )

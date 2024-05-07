@@ -77,10 +77,8 @@ export const BookingsContainer: React.FC = () => {
 
   const turnBookingToClientCallBack = (
     id: string,
-    fullName: string,
-    contacts?: ContactsType | {}
   ) => {
-    dispatch(turnBookingToClient(token, id, fullName, contacts, bookings, currentPage, totalCount, pageSize, filter));
+    dispatch(turnBookingToClient(token, id, bookings, currentPage, totalCount, pageSize, filter));
   }
 
   const setPageSizeCallBack = (
@@ -94,7 +92,7 @@ export const BookingsContainer: React.FC = () => {
   }
 
   const archiveCallBack = (id: string) => {
-    dispatch(archiveBooking(token, id, bookings, currentPage, totalCount, pageSize, filter))
+    dispatch(archiveBooking(token, id, bookings, currentPage, totalCount, pageSize, filter));
   }
 
   return (

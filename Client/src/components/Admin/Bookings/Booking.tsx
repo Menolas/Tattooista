@@ -10,20 +10,16 @@ import {ReadMore} from "../../common/ReadMore";
 
 type PropsType = {
   consultation: BookingType;
-  pageSize: number;
-  currentPage: number;
   isDeletingInProcess?: Array<string>;
   isStatusChanging?: Array<string>;
   changeStatus: (id: string, status: boolean) => void;
-  turnBookingToClient: (id: string, fullName: string, contacts: any, pageSize: number, currentPage: number) => void;
+  turnBookingToClient: (id: string) => void;
   remove: (id: string) => void;
   archive: (id: string) => void;
 }
 
 export const Booking: React.FC<PropsType> = React.memo(({
     consultation,
-    pageSize,
-    currentPage,
     isDeletingInProcess,
     isStatusChanging,
     changeStatus,
@@ -32,23 +28,23 @@ export const Booking: React.FC<PropsType> = React.memo(({
     archive
 }) => {
 
-    const [needConfirmation, setNeedConfirmation] = useState<boolean>(false);
-    const [needConfirmationBeforeTurnToClient, setNeedConfirmationBeforeTurnToClient] = useState<boolean>(false);
-    const [needConfirmationBeforeArchiving, setNeedConfirmationBeforeArchiving] = useState<boolean>(false);
+    const [confirmationData, setConfirmationData] = useState<{
+        needConfirmation: boolean,
+        itemId?: string,
+        cb?: () => void,
+        context: string
+    }>({needConfirmation: false, context: ''});
 
     const closeModal = () => {
-        setNeedConfirmation(false);
-        setNeedConfirmationBeforeTurnToClient(false);
-        setNeedConfirmationBeforeArchiving(false);
+        setConfirmationData({needConfirmation: false, context: ''});
     }
 
     const removeCallBack = () => {
         remove(consultation._id);
-        setNeedConfirmation(false);
     }
 
     const turnBookingToClientCallBack = () => {
-        turnBookingToClient(consultation._id, consultation.fullName, consultation.contacts, pageSize, currentPage);
+        turnBookingToClient(consultation._id,);
     }
 
     const archiveCallBack = () => {
@@ -93,7 +89,12 @@ export const Booking: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === consultation._id)}
             onClick={() => {
-                setNeedConfirmationBeforeTurnToClient(true);
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: consultation._id,
+                    context: 'Are you sure? You about to turn this consultation into client.',
+                    cb: turnBookingToClientCallBack
+                });
             }}
         >
             <svg><use href={`${Sprite}#users-medical`}/></svg>
@@ -104,7 +105,12 @@ export const Booking: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === consultation._id)}
             onClick={() => {
-                setNeedConfirmationBeforeArchiving(true);
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: consultation._id,
+                    context: 'Are you sure? You about to archive this consultation.',
+                    cb: archiveCallBack
+                });
             }}
         >
             <svg><use href={`${Sprite}#archive`}/></svg>
@@ -115,7 +121,12 @@ export const Booking: React.FC<PropsType> = React.memo(({
             className={"btn btn--icon"}
             disabled={isDeletingInProcess?.some(id => id === consultation._id)}
             onClick={() => {
-                setNeedConfirmation(true);
+                setConfirmationData({
+                    needConfirmation: true,
+                    itemId: consultation._id,
+                    context: 'Are you sure? You about to delete this consultation FOREVER along with  all the data...',
+                    cb: removeCallBack
+                });
             }}
         >
             <svg><use href={`${Sprite}#trash`}/></svg>
@@ -134,41 +145,19 @@ export const Booking: React.FC<PropsType> = React.memo(({
         </div>
         { contacts }
       </div>
-        {
-            consultation.message &&
-            <div className={"admin__card-detail-item admin__card-detail-item--message"}>
-                <span className={"admin__card-data-type"}>Message:&nbsp;</span>
-                <ReadMore id={'message'} text={consultation.message} amountOfWords={6} />
-            </div>
-        }
-        <ModalPopUp
-            isOpen={needConfirmation || needConfirmationBeforeTurnToClient || needConfirmationBeforeArchiving}
-            modalTitle={''}
-            closeModal={closeModal}
-        >
-            { needConfirmation &&
-                <Confirmation
-                    content={'Are you sure? You about to delete this consultation FOREVER along with  all the data...'}
-                    confirm={removeCallBack}
-                    cancel={closeModal}
-                />
-            }
-            { needConfirmationBeforeTurnToClient &&
-                <Confirmation
-                    content={'Are you sure? You about to turn this consultation into client.'}
-                    confirm={turnBookingToClientCallBack}
-                    cancel={closeModal}
-                />
-            }
-            { needConfirmationBeforeArchiving &&
-                <Confirmation
-                    content={'Are you sure? You about to archive this consultation.'}
-                    confirm={archiveCallBack}
-                    cancel={closeModal}
-                />
-            }
-
-        </ModalPopUp>
+      {
+        consultation.message &&
+        <div className={"admin__card-detail-item admin__card-detail-item--message"}>
+            <span className={"admin__card-data-type"}>Message:&nbsp;</span>
+            <ReadMore id={'message'} text={consultation.message} amountOfWords={6} />
+        </div>
+      }
+      <Confirmation
+        isOpen={confirmationData.needConfirmation}
+        content={confirmationData.context}
+        confirm={() => confirmationData.cb()}
+        cancel={closeModal}
+      />
       <Tooltip id="my-tooltip" />
     </li>
   )

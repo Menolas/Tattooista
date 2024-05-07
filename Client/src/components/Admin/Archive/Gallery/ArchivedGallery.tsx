@@ -51,16 +51,15 @@ export const ArchivedGallery = () => {
     }, [currentPage, pageSize]);
 
     const [bigImg, setBigImg] = useState('');
-    const [confirmationData, setConfirmationData] = useState<{needConfirmation: boolean, itemId?: string}>({
-        needConfirmation: false,
-    });
-    const [confirmationForRestoreData, setConfirmationForRestoreData] = useState<{needConfirmation: boolean, itemId?: string}>({
-        needConfirmation: false,
-    });
+    const [confirmationData, setConfirmationData] = useState<{
+        needConfirmation: boolean,
+        itemId?: string,
+        cb?: (itemId: string) => void,
+        context: string
+    }>({needConfirmation: false, context: ''});
 
-    const closeConfirmationModalCallBack = () => {
-        setConfirmationData({needConfirmation: false});
-        setConfirmationForRestoreData({needConfirmation: false});
+    const closeModal = () => {
+        setConfirmationData({needConfirmation: false, context: ''});
     }
 
     const showBigImg = (fileName) => {
@@ -128,7 +127,11 @@ export const ArchivedGallery = () => {
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
                         onClick={() => {
-                            setConfirmationForRestoreData({ needConfirmation: true, itemId: item._id });
+                            setConfirmationData({
+                                needConfirmation: true,
+                                itemId: item._id,
+                                context: 'Are you sure? You about to restore this gallery image.',
+                                cb: reactivateArchivedGalleryItemCallBack });
                         }}
                     >
                         <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
@@ -138,7 +141,13 @@ export const ArchivedGallery = () => {
                         data-tooltip-content="Delete archived gallery item"
                         className={"btn btn--icon"}
                         disabled={isDeletingInProcess?.some(id => id === item._id)}
-                        onClick={() => {setConfirmationData({ needConfirmation: true, itemId: item._id });}}
+                        onClick={() => {setConfirmationData({
+                            needConfirmation: true,
+                            itemId: item._id,
+                            context: 'Are you sure? You about to delete this gallery image from archive FOREVER...',
+                            cb: deleteArchivedGalleryItemCallBack
+                            });
+                        }}
                     >
                         <svg><use href={`${Sprite}#trash`}/></svg>
                     </button>
@@ -197,26 +206,12 @@ export const ArchivedGallery = () => {
                     />
                 }
             </ModalPopUp>
-            <ModalPopUp
-                isOpen={confirmationData.needConfirmation || confirmationForRestoreData.needConfirmation}
-                modalTitle={''}
-                closeModal={closeConfirmationModalCallBack}
-            >
-                { confirmationData.needConfirmation &&
-                    <Confirmation
-                        content={'Are you sure? You about to delete this gallery image from archive FOREVER...'}
-                        confirm={() => {deleteArchivedGalleryItemCallBack(confirmationData.itemId)}}
-                        cancel={closeConfirmationModalCallBack}
-                    />
-                }
-                { confirmationForRestoreData.needConfirmation &&
-                    <Confirmation
-                        content={'Are you sure? You about to restore this gallery image.'}
-                        confirm={() => {reactivateArchivedGalleryItemCallBack(confirmationForRestoreData.itemId)}}
-                        cancel={closeConfirmationModalCallBack}
-                    />
-                }
-            </ModalPopUp>
+            <Confirmation
+                isOpen={confirmationData.needConfirmation}
+                content={confirmationData.context}
+                confirm={() => confirmationData.cb(confirmationData.itemId)}
+                cancel={closeModal}
+            />
             <Tooltip id="my-tooltip" />
         </>
     )
