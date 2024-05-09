@@ -36,7 +36,7 @@ export const StylesContainer: React.FC = () => {
                 dispatch(setActiveStyleAC(styles[0]));
             }
         });
-    }, []);
+    }, [activeStyle, token, dispatch]);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(resetActiveStyle(style));
