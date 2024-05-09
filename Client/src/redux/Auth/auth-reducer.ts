@@ -32,7 +32,6 @@ export const authReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
-  //console.log(state.isAuth + " isAuth in state!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
   switch (action.type) {
     case SET_ROLES:

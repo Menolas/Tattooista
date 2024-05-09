@@ -2,21 +2,21 @@ const jwt = require("jsonwebtoken");
 const Role = require("../models/Role");
 
 module.exports = function (roles) {
+    console.log("hit roleCheckMiddleware!!!");
     return async function (req, res, next) {
         if (req.method === "OPTIONS") {
             next();
             return;
         }
+        const token = req.headers.authorization.split(' ')[1];
+        console.log(token + " token!!!!!!!!!!!!!");
+        if (!token || token === 'null') {
+            req.hasRole = false;
+            next();
+            return;
+        }
 
         try {
-            const token = req.headers.authorization.split(' ')[1];
-            console.log(token + " token!!!!!!!!!!!!!")
-            if (!token || token === 'null') {
-                req.hasRole = false;
-                next();
-                return;
-            }
-
             jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
                 if (err) {
                     console.log(err)
@@ -24,16 +24,13 @@ module.exports = function (roles) {
                     next();
                     return;
                 }
-
                 const userRoles = decoded?.roles;
                 const roleObjectPromises = roles.map(async role => {
                     const roleObject = await Role.findOne({ value: role });
                     return roleObject._id;
                 });
-
-                const roleIds = await Promise.all(roleObjectPromises)
+                const roleIds = await Promise.all(roleObjectPromises);
                 let hasRole = false;
-
                 userRoles?.forEach(role => {
                     roleIds.forEach(roleId => {
                         if (roleId.toString() === role) {
@@ -41,7 +38,6 @@ module.exports = function (roles) {
                         }
                     })
                 });
-
                 req.hasRole = hasRole;
                 next();
             });

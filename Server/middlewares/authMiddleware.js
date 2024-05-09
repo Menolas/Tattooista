@@ -1,23 +1,47 @@
-const jwt = require('jsonwebtoken');
-const { secret } = require('../config');
+const jwt = require("jsonwebtoken");
+//const { refreshTokens } = require("../utils/auth"); // Import the function to refresh tokens
 
 module.exports = function () {
-  return function (req, res, next) {
+  console.log("hit authMiddleware!!!");
+  return async function (req, res, next) {
+    console.log(" options!!!!!!!!!!!")
     if (req.method === "OPTIONS") {
       next();
+      return;
     }
 
-    try {
-      const token = req.headers.authorization.split(' ')[1];
-      if (!token) {
-        return res.status(200).json({ message: "Not authorized user" });
-      }
-      const decodedData = jwt.verify(token, secret);
-      req.user = decodedData
+    const token = req.headers.authorization.split(' ')[1];
+    console.log(req.headers.authorization + " token!!!!!!!!!!!")
+    if (!token || token === 'null') {
+      console.log("hit authMiddleware no token!!!");
+      req.hasRole = false;
       next();
-    } catch (e) {
-      console.log(e);
-      return res.status(403).json({ message: "Did not catch" });
+      return;
     }
+
+    jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
+      if (err) {
+        console.log(err)
+        req.hasRole = false;
+        next();
+        return;
+      }
+
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+      const { exp } = decoded; // Expiration time of the token
+      const expirationThreshold = 60 * 5; // Threshold: 5 minutes
+      const timeToExpire = exp - currentTime;
+
+      if (timeToExpire < expirationThreshold) {
+        const refreshedTokens = ''//await refreshTokens(token); // Call the function to refresh tokens
+        if (refreshedTokens) {
+          res.setHeader('Authorization', `Bearer ${refreshedTokens.accessToken}`);
+        } else {
+          res.status(401).json({ message: "Failed to refresh access token" });
+          return;
+        }
+      }
+      next();
+    });
   }
 }

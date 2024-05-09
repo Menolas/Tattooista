@@ -46,11 +46,11 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
       avatar: Yup.mixed()
           .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
             if (!value) return true
-            return isFileSizeValid([value], MAX_FILE_SIZE)
+            return isFileSizeValid([value], MAX_FILE_SIZE);
           })
           .test('fileType', 'Invalid file type', (value: File) => {
             if (!value) return true
-            return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
+            return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
           }),
     }));
   }

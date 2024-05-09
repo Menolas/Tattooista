@@ -145,10 +145,14 @@ export const getStyles = (token: string | null): ThunkType => async (
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await stylesApi.getStyles(token);
+    let response = await stylesApi.getStyles(token)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
       dispatch(setStylesAC(response.tattooStyles));
+    }else {
+      console.log("no responce");
+      dispatch(setStylesAC(tattooStyles));
+      dispatch(setFakeApiAC(true));
     }
   } catch (e) {
     console.log(e);

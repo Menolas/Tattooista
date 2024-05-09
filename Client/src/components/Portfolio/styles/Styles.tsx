@@ -134,9 +134,9 @@ export const Styles: React.FC<PropsType> = React.memo(({
                   </div>
                   <Advertisement />
                   <MyCarousel
-                  items={stylesArray}
-                  responsive={responsive}
-                  controlsStrategy={"alternate"}
+                    items={stylesArray}
+                    responsive={responsive}
+                    controlsStrategy={"alternate"}
                   />
                 </>
               )
@@ -177,7 +177,7 @@ const Style = ({activeStyle, item, resetActiveStyle}: {
   return (
       <div
           className={`tattoo-style__item btn btn--sm ${activeStyle?._id === item._id ? 'btn--light-bg' : 'btn--transparent'}`}
-          onClick={() => {resetActiveStyle(item)}}
+          onClick={() => resetActiveStyle(item)}
       >
         {item.value}
       </div>

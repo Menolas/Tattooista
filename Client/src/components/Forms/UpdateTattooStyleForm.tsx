@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Field, Form, Formik} from "formik";
+import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
 import * as Yup from "yup";
 import {API_URL} from "../../http";
 // @ts-ignore
@@ -25,14 +25,14 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     if (!isEditing || hasNewFile) {
         schema = schema.concat(Yup.object().shape({
             wallPaper: Yup.mixed()
-                .test('fileType', 'Invalid file type', (value: File) => {
-                    if (!value) return true
-                    return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
-                })
                 .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
                     if (!value) return true
                     return isFileSizeValid([value], MAX_FILE_SIZE);
                 })
+                .test('fileType', 'Invalid file type', (value: File) => {
+                    if (!value) return true
+                    return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+                }),
         }));
     }
     return schema;
@@ -55,19 +55,17 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
 
     const [hasNewFile, setHasNewFile] = useState(false);
     const validationSchema = getValidationSchema(isEditing, hasNewFile);
-
     const [imageURL, setImageURL] = useState('');
-
-    const fileReader = new FileReader();
-    fileReader.onloadend = () => {
-        // @ts-ignore
-        setImageURL(fileReader.result);
-    }
 
     const handleOnChange = (event) => {
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
             const file = event.target.files[0];
+            const fileReader = new FileReader();
+            fileReader.onloadend = () => {
+                // @ts-ignore
+                setImageURL(fileReader.result);
+            }
             setHasNewFile(true);
             fileReader.readAsDataURL(file);
         }
@@ -97,7 +95,7 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
         description: ''
     });
 
-    const submit = async (values, actions) => {
+    const submit = async (values, actions: FormikHelpers<FormikValues>) => {
            const formData = new FormData();
            for (let value in values) {
                formData.append(value, values[value]);
@@ -134,7 +132,6 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
                                 />
                                 <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
                             </div>
-
                             <Field
                                 className="hidden"
                                 id="wallPaper"
