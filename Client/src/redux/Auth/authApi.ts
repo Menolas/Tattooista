@@ -1,11 +1,6 @@
 import $api, {API_URL} from "../../http";
-import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types";
+import {LoginFormValues, RegistrationFormValues, RoleType, CommonResponseFields} from "../../types/Types";
 import {IUser} from "../../types/Types";
-
-type CommonResponseFields = {
-    resultCode: number
-    message?: string
-}
 
 type LoginResponseType = CommonResponseFields & {
     userData: {

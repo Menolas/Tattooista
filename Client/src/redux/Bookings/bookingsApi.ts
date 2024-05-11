@@ -2,12 +2,11 @@ import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
 import {
   AddConsultationFormValues,
   BookingType,
-  ContactsType,
   SearchFilterType,
   CommonResponseFields,
   BookConsultationFormValues
 } from "../../types/Types";
-import $api, {API_URL} from "../../http";
+import {API_URL} from "../../http";
 
 const instance = axios.create({
   baseURL: API_URL
