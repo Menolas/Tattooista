@@ -1,16 +1,11 @@
-import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {GalleryItemType} from "../../types/Types";
+import axios, {CreateAxiosDefaults} from "axios";
+import {GalleryItemType, CommonResponseFields} from "../../types/Types";
 import {API_URL} from "../../http";
 import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";
 
 const instance = axios.create({
     baseURL: API_URL
 } as CreateAxiosDefaults)
-
-type CommonResponseFields = {
-    resultCode: number
-    message?: string
-}
 
 type AdminUpdateGalleryResponseType = CommonResponseFields & {
     gallery: Array<GalleryItemType>

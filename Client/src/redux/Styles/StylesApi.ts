@@ -1,15 +1,10 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
-import {StyleType} from "../../types/Types";
+import {StyleType, CommonResponseFields} from "../../types/Types";
 import {API_URL} from "../../http";
 
 const instance = axios.create({
     baseURL: API_URL
 } as CreateAxiosDefaults);
-
-type CommonResponseFields = {
-    resultCode: number;
-    message?: string;
-}
 
 type GetTattooStylesResponseType = CommonResponseFields & {
     tattooStyles: Array<StyleType>;

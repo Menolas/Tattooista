@@ -1,7 +1,6 @@
-import axios, {CreateAxiosDefaults} from "axios";
+import axios, {CreateAxiosDefaults, AxiosRequestConfig} from "axios";
 import {ClientType, SearchFilterType, CommonResponseFields} from "../../types/Types";
 import {API_URL} from "../../http";
-import {AxiosRequestConfig} from "axios";
 
 const instance = axios.create({
   withCredentials: false,

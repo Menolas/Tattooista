@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
 import {BookingType, SearchFilterType, CommonResponseFields} from "../../types/Types";
-import $api, {API_URL} from "../../http";
+import {API_URL} from "../../http";
 
 const instance = axios.create({
   baseURL: API_URL
