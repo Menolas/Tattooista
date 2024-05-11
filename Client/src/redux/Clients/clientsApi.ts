@@ -5,7 +5,7 @@ import {API_URL} from "../../http";
 const instance = axios.create({
   withCredentials: false,
   baseURL: API_URL
-} as CreateAxiosDefaults)
+} as CreateAxiosDefaults);
 
 type DeleteClientResponseType = CommonResponseFields
 
@@ -37,7 +37,7 @@ export const clientsAPI = {
     return instance.get<GetClientsResponseType>(
         `${API_URL}/clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
-            .then(response => response.data)
+            .then(response => response.data);
   },
 
   getArchivedClients(
@@ -47,28 +47,23 @@ export const clientsAPI = {
   ) {
       return instance.get<GetClientsResponseType>(
           `clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)
-          .then(response => response.data)
+          .then(response => response.data);
   },
 
   getClientProfile(clientId: string) {
     return instance.get<GetClientProfileResponseType>(`clients/${clientId}`)
-        .then(response => response.data)
+        .then(response => response.data);
   },
 
   updateClientGallery(clientId: string, values: FormData) {
     return instance.post<UpdateClientResponseType>(`clients/updateGallery/${clientId}`,
         values
-    ).then(response => response.data)
+    ).then(response => response.data);
   },
 
   deleteClient(clientId: string) {
     return instance.delete<DeleteClientResponseType>(`clients/${clientId}`)
-        .then(response => response.data)
-  },
-
-  deleteArchivedClient(clientId: string) {
-    return instance.delete<DeleteClientResponseType>(`clients/archive/${clientId}`)
-        .then(response => response.data)
+        .then(response => response.data);
   },
 
   addClient(
@@ -84,7 +79,7 @@ export const clientsAPI = {
     values: FormData,
   ) {
      return instance.post<UpdateClientResponseType>(`clients/edit/${clientId}`, values)
-        .then(response => response.data)
+        .then(response => response.data);
   },
 
   deleteClientGalleryPicture(
@@ -92,20 +87,13 @@ export const clientsAPI = {
       picture: string
   ) {
       return instance.delete<DeleteClientGalleryPictureResponseType>(`clients/updateGallery/${clientId}?&picture=${picture}`)
-          .then(response => response.data)
+          .then(response => response.data);
   },
 
   archiveClient(
       clientId: string
   ) {
       return instance.post<ArchiveClientResponseType>(`clients/archive/${clientId}`)
-          .then(response => response.data)
+          .then(response => response.data);
   },
-
-  reactivateClient(
-    clientId: string
-  ) {
-    return instance.get<ReactivateClientResponseType>(`clients/archive/${clientId}`)
-        .then(response => response.data)
-  }
 }

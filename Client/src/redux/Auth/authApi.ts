@@ -1,4 +1,4 @@
-import $api, {API_URL} from "../../http";
+import $api from "../../http";
 import {LoginFormValues, RegistrationFormValues, RoleType, CommonResponseFields} from "../../types/Types";
 import {IUser} from "../../types/Types";
 
@@ -34,18 +34,6 @@ type CheckAuthResponseType = CommonResponseFields & {
 
 export const authAPI = {
 
-  // auth(token: string | null) {
-  //   //debugger;
-  //   return instance.get<number>('auth/', {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`
-  //     }
-  //   } as AxiosRequestConfig)
-  //   .then(response => {
-  //     return response.data
-  //   })
-  // },
-
   registration(values: RegistrationFormValues) {
       return $api.post<RegistrationResponseType>('auth/registration', values)
           .then(res => res.data);
@@ -63,7 +51,7 @@ export const authAPI = {
   },
 
   checkAuth() {
-      return $api.get<CheckAuthResponseType>(`${API_URL}/auth/refresh`)
+      return $api.get<CheckAuthResponseType>(`auth/refresh`)
           .then(response => response.data);
-  }
+  },
 }
