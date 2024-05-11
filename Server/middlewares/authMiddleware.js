@@ -2,10 +2,10 @@ const jwt = require("jsonwebtoken");
 //const { refreshTokens } = require("../utils/auth"); // Import the function to refresh tokens
 
 module.exports = function () {
-  console.log("hit authMiddleware!!!");
   return async function (req, res, next) {
-    console.log(" options!!!!!!!!!!!")
+
     if (req.method === "OPTIONS") {
+      console.log("hit authMiddleware!!!");
       next();
       return;
     }

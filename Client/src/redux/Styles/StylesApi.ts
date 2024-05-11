@@ -1,10 +1,6 @@
-import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
+import {AxiosRequestConfig} from "axios";
 import {StyleType, CommonResponseFields} from "../../types/Types";
-import {API_URL} from "../../http";
-
-const instance = axios.create({
-    baseURL: API_URL
-} as CreateAxiosDefaults);
+import {instance} from "../../http";
 
 type GetTattooStylesResponseType = CommonResponseFields & {
     tattooStyles: Array<StyleType>;
@@ -32,7 +28,6 @@ export const stylesApi = {
     ) {
         return instance.post<AddTattooStylesResponseType>('tattooStyle/', values)
             .then(response => response.data);
-
     },
 
     editStyle(
@@ -41,7 +36,6 @@ export const stylesApi = {
     ) {
         return instance.post<EditTattooStyleResponseType>(`tattooStyle/${id}`, values)
             .then(response => response.data);
-
     },
 
     deleteStyle(id: string) {

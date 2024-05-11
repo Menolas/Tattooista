@@ -1,17 +1,10 @@
-import axios, {CreateAxiosDefaults, AxiosRequestConfig} from "axios";
+import {AxiosRequestConfig} from "axios";
 import {ClientType, SearchFilterType, CommonResponseFields} from "../../types/Types";
-import {API_URL} from "../../http";
-
-const instance = axios.create({
-  withCredentials: false,
-  baseURL: API_URL
-} as CreateAxiosDefaults);
+import {instance} from "../../http";
 
 type DeleteClientResponseType = CommonResponseFields
 
 type ArchiveClientResponseType = CommonResponseFields
-
-type ReactivateClientResponseType = CommonResponseFields
 
 type GetClientsResponseType = CommonResponseFields & {
     clients: Array<ClientType>,
@@ -35,7 +28,7 @@ export const clientsAPI = {
     filter: SearchFilterType
   ) {
     return instance.get<GetClientsResponseType>(
-        `${API_URL}/clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
+        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
             .then(response => response.data);
   },

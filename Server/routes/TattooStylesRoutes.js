@@ -7,7 +7,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 //getting all tattooStyles
 
-router.get('/', authMiddleware, controller.getTattooStyles); //roleCheckMiddleware(["ADMIN", "SUPERADMIN"]),
+router.get('/', authMiddleware, roleCheckMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles); //roleCheckMiddleware(["ADMIN", "SUPERADMIN"]),
 
 // Deleting one
 router.delete('/:id', getTattooStyle, controller.deleteTattooStyle);

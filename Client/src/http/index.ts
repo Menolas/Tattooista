@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {CreateAxiosDefaults} from "axios";
 import {IUser} from "../types/Types";
 
 export const API_URL = `http://localhost:3030`;
@@ -8,6 +8,11 @@ export interface AuthResponse {
     refreshToken: string
     user: IUser
 }
+
+export const instance = axios.create({
+    withCredentials: true,
+    baseURL: API_URL
+} as CreateAxiosDefaults);
 
 const $api = axios.create({
     withCredentials: true,
@@ -26,6 +31,7 @@ $api.interceptors.response.use((config) => {
     if (error.response.status === 401 && error.config && !error.config._isRetry) {
         originalRequest._isRetry = true;
         try {
+            console.log("hit in http!!!!!!!!!!!!!!!!");
             const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true});
             localStorage.setItem('token', response.data.accessToken);
             return $api.request(originalRequest);

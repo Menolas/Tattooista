@@ -51,6 +51,7 @@ export const authAPI = {
   },
 
   checkAuth() {
+      console.log("hit in authAPi!!!!!!!!!!!!!!!!");
       return $api.get<CheckAuthResponseType>(`auth/refresh`)
           .then(response => response.data);
   },

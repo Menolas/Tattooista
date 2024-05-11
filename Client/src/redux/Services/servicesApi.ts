@@ -1,10 +1,5 @@
-import axios, { CreateAxiosDefaults } from "axios";
 import {ServiceType} from "../../types/Types";
-import {API_URL} from "../../http";
-
-const instance = axios.create({
-    baseURL: API_URL
-} as CreateAxiosDefaults)
+import {instance} from "../../http";
 
 type CommonResponseFields = {
     resultCode: number

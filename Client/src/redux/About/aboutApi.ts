@@ -1,15 +1,5 @@
-import axios, { CreateAxiosDefaults } from "axios";
-import {PageType,} from "../../types/Types";
-import {API_URL} from "../../http";
-
-const instance = axios.create({
-    baseURL: API_URL
-} as CreateAxiosDefaults);
-
-type CommonResponseFields = {
-    resultCode: number
-    message?: string
-}
+import {instance} from "../../http";
+import {PageType, CommonResponseFields} from "../../types/Types";
 
 type GetPagesResponseType = CommonResponseFields & {
     page: PageType

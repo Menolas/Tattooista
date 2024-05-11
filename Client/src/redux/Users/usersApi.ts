@@ -1,10 +1,6 @@
-import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
+import {AxiosRequestConfig} from "axios";
 import {RoleType, SearchFilterType, UserType, CommonResponseFields} from "../../types/Types";
-import {API_URL} from "../../http";
-
-const instance = axios.create({
-    baseURL: API_URL
-} as CreateAxiosDefaults);
+import {instance} from "../../http";
 
 type DeleteUserResponseType = CommonResponseFields;
 
@@ -37,7 +33,7 @@ export const usersAPI = {
         filter: SearchFilterType
     ) {
         return instance.get<GetUsersResponseType>(
-            `${API_URL}/users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`,
+            `users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`,
             { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
                 .then(response => response.data);
     },
