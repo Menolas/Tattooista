@@ -26,9 +26,9 @@ class tattooStyleController {
         results.tattooStyles = filteredStyles.filter(style => style !== null);
       }
       results.resultCode = 0;
-
       res.status(200).json(results);
     } catch (e) {
+      console.error(e);
       results.resultCode = 1;
       results.message = e.message;
       res.status(500).json(results);

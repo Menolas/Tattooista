@@ -27,7 +27,7 @@ type PropsType = {
   onFilterChanged: (filter: SearchFilterType) => void;
   changeStatus: (id: string, status: boolean) => void;
   remove: (id: string) => void;
-  turnBookingToClient: (id: string, pageSize: number, currentPage: number) => void;
+  turnBookingToClient: (id: string) => void;
   setPageLimit: (pageSize: number) => void;
   add: (values: AddConsultationFormValues) => void;
   archive: (id: string) => void;
@@ -66,8 +66,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
         <Booking
           key={consultation._id}
           consultation={consultation}
-          pageSize={pageSize}
-          currentPage={currentPage}
           isStatusChanging={isStatusChanging}
           changeStatus={changeStatus}
           isDeletingInProcess={isDeletingInProcess}

@@ -16,14 +16,15 @@ const SET_AUTH = 'SET_AUTH';
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
 const SET_REGISTRATION_ERROR = 'SET_REGISTRATION_ERROR';
 const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
+const CHECK_AUTH = 'CHECK_AUTH';
 
 let initialState = {
   user: {} as IUser | null,
   roles: [] as Array<RoleType>,
   token: null as string | null | undefined,
   isAuth: null as string | null,
-  registrationError: '' as string | undefined,
-  loginError: '' as string | undefined
+  registrationError: '' as string,
+  loginError: '' as string,
 }
 
 export type InitialStateType = typeof initialState;
@@ -70,12 +71,21 @@ export const authReducer = (
         registrationError: action.error
       }
 
+    case CHECK_AUTH:
+      return {
+        ...state,
+        token: action.accessToken,
+        user: action.user,
+        roles: action.roles,
+        isAuth: getUserRole(action.user.roles, action.roles),
+      }
+
     default: return state
   }
 }
 
 type ActionsTypes = SetLoginErrorAT | SetRegistrationErrorAT | SetSuccessModalAT | SetTokenAT |
-    SetUserDataAT | SetAuthAT | SetRolesAT;
+    SetUserDataAT | SetAuthAT | SetRolesAT | CheckAuthAT;
 
 // actions creators
 
@@ -90,19 +100,19 @@ const setRolesAC = (roles: Array<RoleType>): SetRolesAT => ({
 
 type SetLoginErrorAT = {
   type: typeof SET_LOGIN_ERROR
-  error: string | undefined
+  error: string
 }
 
-const setLoginErrorAC = (error: string | undefined): SetLoginErrorAT => ({
+const setLoginErrorAC = (error: string): SetLoginErrorAT => ({
   type: SET_LOGIN_ERROR, error
 });
 
 type SetRegistrationErrorAT = {
   type: typeof  SET_REGISTRATION_ERROR
-  error: string | undefined
+  error: string
 }
 
-const setRegistrationErrorAC = (error: string | undefined): SetRegistrationErrorAT => ({
+const setRegistrationErrorAC = (error: string): SetRegistrationErrorAT => ({
   type: SET_REGISTRATION_ERROR, error
 });
 
@@ -133,6 +143,21 @@ type SetAuthAT = {
 
 const setAuthAC = (isAuth: null | string): SetAuthAT => ({
     type: SET_AUTH, isAuth
+});
+
+export type CheckAuthAT = {
+  type: typeof CHECK_AUTH;
+  user: IUser;
+  accessToken: string;
+  roles: Array<RoleType>;
+}
+
+export const checkAuthAC = (
+    user: IUser,
+    accessToken: string,
+    roles: Array<RoleType>,
+): CheckAuthAT => ({
+    type: CHECK_AUTH, user, accessToken, roles
 });
 
 //thunks
@@ -198,10 +223,11 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
     let response = await authAPI.checkAuth();
     if (response.resultCode === ResultCodesEnum.Success) {
       if (response.userData.isAuth === true) {
-        dispatch(setAccessTokenAC(response.userData.accessToken));
-        dispatch(setUserDataAC(response.userData.user));
-        dispatch(setRolesAC(response.userData.roles));
-        dispatch(setAuthAC(getUserRole(response.userData.user.roles, response.userData.roles)));
+        dispatch(checkAuthAC(
+            response.userData.user,
+            response.userData.accessToken,
+            response.userData.roles,
+        ));
       }
     }
   } catch (e: any) {

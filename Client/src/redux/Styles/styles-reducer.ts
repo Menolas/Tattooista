@@ -3,12 +3,13 @@ import {StyleType} from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ResultCodesEnum} from "../../utils/constants";
-import {tattooStyles} from "../../data/StylesData";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {checkAuthAC, CheckAuthAT} from "../Auth/auth-reducer";
+import {authAPI} from "../Auth/authApi";
 
 const SET_STYLES = 'SET_STYLES';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -85,7 +86,8 @@ export const stylesReducer = (
 }
 
 type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
-    SetStylesAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT | SetFakeApiAT;
+    SetStylesAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT |
+    SetFakeApiAT | CheckAuthAT;
 
 // actions creators
 
@@ -145,20 +147,31 @@ export const getStyles = (token: string | null): ThunkType => async (
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await stylesApi.getStyles(token)
-    if (response.resultCode === ResultCodesEnum.Success) {
+    let getStylesResponse = await stylesApi.getStyles(token)
+    if (getStylesResponse.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
-      dispatch(setStylesAC(response.tattooStyles));
-    }else {
-      console.log("no responce");
-      dispatch(setStylesAC(tattooStyles));
-      dispatch(setFakeApiAC(true));
+      dispatch(setStylesAC(getStylesResponse.tattooStyles));
     }
   } catch (e) {
     console.log(e);
-    console.log("you are here!!!!!!!!!!!")
-    dispatch(setStylesAC(tattooStyles));
-    dispatch(setFakeApiAC(true));
+    console.log("you are here!!!!!!!!!!!");
+    let checkAuthResponse = await authAPI.checkAuth();
+    if (checkAuthResponse.resultCode === ResultCodesEnum.Success) {
+      if (checkAuthResponse.userData.isAuth === true) {
+        dispatch(checkAuthAC(
+            checkAuthResponse.userData.user,
+            checkAuthResponse.userData.accessToken,
+            checkAuthResponse.userData.roles,
+        ));
+        let getStylesResponse = await stylesApi.getStyles(checkAuthResponse.userData.accessToken);
+        if (getStylesResponse.resultCode === ResultCodesEnum.Success) {
+          dispatch(setFakeApiAC(false));
+          dispatch(setStylesAC(getStylesResponse.tattooStyles));
+        }
+      }
+    }
+    //dispatch(setStylesAC(tattooStyles));
+    //dispatch(setFakeApiAC(true));
   } finally {
     dispatch(setIsFetchingAC(false));
   }

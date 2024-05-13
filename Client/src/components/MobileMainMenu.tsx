@@ -10,7 +10,7 @@ export const MobileMainMenu = ({
     logout,
     closeMenu
 }: {
-    isAuth: string
+    isAuth: string | null
     logout: () => void
     closeMenu: () => void
 }) => {

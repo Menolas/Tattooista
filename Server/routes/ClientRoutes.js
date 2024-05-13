@@ -10,29 +10,24 @@ const roleMiddleware = require("../middlewares/roleMiddleware");
 router.get('/', roleMiddleware(["ADMIN"]), controller.getClients);
 
 // get archived clients
-
 router.get('/archive', controller.getArchivedClients);
 
 // Getting one
 router.get('/:id', getClient, controller.getClient);
 
 // Creating one
-
 router.post('/', controller.addClient);
 
 // update client tattoo gallery
-
 router.post('/updateGallery/:id', getClient, controller.updateClientGallery);
 
 // delete picture from client gallery
-
 router.delete('/updateGallery/:id', getClient, controller.deleteClientGalleryPicture);
 
 // delete client
 router.delete('/:id', getClient, controller.deleteClient);
 
 // delete archived client
-
 router.delete('/archive/:id', getArchivedClient, controller.deleteArchivedClient);
 
 // edit client
