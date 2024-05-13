@@ -2,22 +2,19 @@ const Router = require('express');
 const router = new Router();
 const TattooStyle = require('../models/TattooStyle');
 const controller = require('../controllers/tattooStyleController');
-const roleCheckMiddleware = require('../middlewares/roleCheckMiddleware');
+const afterAuthRoleCheckMiddleware = require('../middlewares/afterAuthRoleCheckMiddleware');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 //getting all tattooStyles
-
-router.get('/', authMiddleware, controller.getTattooStyles); //roleCheckMiddleware(["ADMIN", "SUPERADMIN"]),
+router.get('/', authMiddleware(), afterAuthRoleCheckMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles);
 
 // Deleting one
 router.delete('/:id', getTattooStyle, controller.deleteTattooStyle);
 
 // Creating category (tattooStyle)
-
 router.post('/', controller.addTattooStyle);
 
 // updating category
-
 router.post('/:id', getTattooStyle, controller.updateTattooStyle);
 
 async function getTattooStyle(req, res, next) {
@@ -30,10 +27,8 @@ async function getTattooStyle(req, res, next) {
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
-
   res.tattooStyle = tattooStyle;
   next();
 }
 
 module.exports = router;
-

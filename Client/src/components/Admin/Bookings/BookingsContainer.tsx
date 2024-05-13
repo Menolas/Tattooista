@@ -24,7 +24,7 @@ import {
   getAccessErrorSelector
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
-import {AddConsultationFormValues, ContactsType, SearchFilterType} from "../../../types/Types";
+import {AddConsultationFormValues, SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const BookingsContainer: React.FC = () => {

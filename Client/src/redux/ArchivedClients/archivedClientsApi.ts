@@ -1,11 +1,5 @@
-import axios, {CreateAxiosDefaults} from "axios";
+import {instance} from "../../http";
 import {ClientType, SearchFilterType, CommonResponseFields} from "../../types/Types";
-import {API_URL} from "../../http";
-
-const instance = axios.create({
-  withCredentials: false,
-  baseURL: API_URL
-} as CreateAxiosDefaults);
 
 type DeleteClientResponseType = CommonResponseFields;
 

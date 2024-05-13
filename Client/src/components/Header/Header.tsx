@@ -8,6 +8,7 @@ import Sprite from "../../assets/svg/sprite.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
+import {useState} from "react";
 
 type PropsType = {
     isAuth: string | null;
@@ -21,12 +22,19 @@ export const Header: React.FC<PropsType> = ({
   logout,
 }) => {
 
+  let [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeMenu = () => {
+      setIsMenuOpen(false);
+  }
+
   return (
     <header className = { 'main-header ' + headerClasses }>
-      <Logo />
+      <Logo closeMenu={closeMenu}/>
       <MainNav
+          isMenuOpen={isMenuOpen}
           isAuth={isAuth}
           logout={logout}
+          setIsMenuOpen={setIsMenuOpen}
       />
       <SocialNav />
       <div className={'main-header__right'}>

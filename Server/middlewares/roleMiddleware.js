@@ -5,6 +5,7 @@ module.exports = function (roles) {
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
       next();
+      return;
     }
 
     try {

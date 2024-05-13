@@ -1,11 +1,5 @@
-import axios, { CreateAxiosDefaults } from "axios";
+import {instance} from "../../http";
 import {FaqType, CommonResponseFields} from "../../types/Types";
-import {API_URL} from "../../http";
-
-
-const instance = axios.create({
-    baseURL: API_URL
-} as CreateAxiosDefaults)
 
 type GetFaqItemsResponseType = CommonResponseFields & {
     faqItems: Array<FaqType>

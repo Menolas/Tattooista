@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, CreateAxiosDefaults} from "axios";
+import {AxiosRequestConfig} from "axios";
 import {
   AddConsultationFormValues,
   BookingType,
@@ -6,11 +6,7 @@ import {
   CommonResponseFields,
   BookConsultationFormValues
 } from "../../types/Types";
-import {API_URL} from "../../http";
-
-const instance = axios.create({
-  baseURL: API_URL
-} as CreateAxiosDefaults);
+import {instance} from "../../http";
 
 type DeleteBookingResponseType = CommonResponseFields;
 
@@ -40,7 +36,7 @@ export const bookingsApi = {
     filter: SearchFilterType
   ) {
     return instance.get<GetBookingsResponseType>(
-        `${API_URL}/bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
+        `bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
     ).then(response => response.data);
   },
@@ -61,7 +57,7 @@ export const bookingsApi = {
   },
 
   addConsultation(values: AddConsultationFormValues | BookConsultationFormValues) {
-    return instance.post<AddBookingResponseType>(`${API_URL}/bookings`, values)
+    return instance.post<AddBookingResponseType>(`bookings`, values)
         .then(response => response.data);
   },
 
