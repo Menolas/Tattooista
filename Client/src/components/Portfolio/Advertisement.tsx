@@ -28,4 +28,4 @@ export const Advertisement: React.FC = React.memo(() => {
       />
     </section>
   )
-})
+});
