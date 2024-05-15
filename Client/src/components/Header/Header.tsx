@@ -41,7 +41,7 @@ export const Header: React.FC<PropsType> = ({
           {
               (headerClasses === 'main-header--portfolio') &&
                   <BookingButton
-                      consentId={"consentAdvertismentHeader"}
+                      consentId={"consentAdvertisementHeader"}
                   />
           }
           <nav className={'admin-nav'}>

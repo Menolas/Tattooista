@@ -25,6 +25,9 @@ class tattooStyleController {
         }));
         results.tattooStyles = filteredStyles.filter(style => style !== null);
       }
+      if (req.userData) {
+        results.userData = req.userData;
+      }
       results.resultCode = 0;
       res.status(200).json(results);
     } catch (e) {

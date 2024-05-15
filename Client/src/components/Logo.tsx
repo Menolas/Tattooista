@@ -1,7 +1,11 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 
-export const Logo: React.FC = React.memo(({closeMenu}: {closeMenu: () => void}) => {
+type PropsType = {
+    closeMenu: () => void;
+}
+
+export const Logo: React.FC<PropsType> = React.memo(({closeMenu}) => {
   return (
     <div className={'logo'}>
       <NavLink
