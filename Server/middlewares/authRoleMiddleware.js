@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const userService = require('../services/userService');
+const Role = require("../models/Role");
 
-module.exports = function () {
+module.exports = function (roles) {
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
       next();
@@ -10,17 +11,17 @@ module.exports = function () {
 
     let token = req.headers.authorization?.split(' ')[1];
     if (!token || token === 'null') {
-      console.log("auth no token !!!!!!!!!!!")
+      console.log("auth no token !!!!!!!!!!!");
       req.hasRole = false;
       next();
       return;
     }
 
     try {
-      const results = {};
       jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
         if (err) {
-          console.log("jwt error !!!!!!!!!!!");
+          console.log(err + "jwt error !!!!!!!!!!!");
+          const results = {};
           results.resultCode = 1;
           results.message = err.message;
           res.status(401).json(results);
@@ -38,16 +39,27 @@ module.exports = function () {
           if (userData) {
             console.log("jwt refreshing !!!!!!!!!!!")
             req.userData = userData;
-            next();
-            return;
           } else {
             console.log("Failed to refresh access token !!!!!!!!!!!")
             res.status(401).json({ message: "Failed to refresh access token" });
             return;
           }
         }
-        req.token = token;
-        console.log("user logged in and token is ok!!!!!!!!!!!!!!!!");
+        const userRoles = decoded?.roles;
+        const roleObjectPromises = roles.map(async role => {
+          const roleObject = await Role.findOne({ value: role });
+          return roleObject._id;
+        });
+        const roleIds = await Promise.all(roleObjectPromises);
+        let hasRole = false;
+        userRoles?.forEach(role => {
+          roleIds.forEach(roleId => {
+            if (roleId.toString() === role) {
+              hasRole = true;
+            }
+          });
+        });
+        req.hasRole = hasRole;
         next();
       });
 
