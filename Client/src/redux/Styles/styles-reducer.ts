@@ -8,8 +8,7 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
-import {checkAuthAC, CheckAuthAT} from "../Auth/auth-reducer";
-import {authAPI} from "../Auth/authApi";
+import {checkAuth, CheckAuthAT} from "../Auth/auth-reducer";
 
 const SET_STYLES = 'SET_STYLES';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -153,23 +152,9 @@ export const getStyles = (token: string | null): ThunkType => async (
       dispatch(setStylesAC(getStylesResponse.tattooStyles));
     }
   } catch (e) {
-    console.log(e);
-    console.log("you are here!!!!!!!!!!!");
-    let checkAuthResponse = await authAPI.checkAuth();
-    if (checkAuthResponse.resultCode === ResultCodesEnum.Success) {
-      if (checkAuthResponse.userData.isAuth === true) {
-        dispatch(checkAuthAC(
-            checkAuthResponse.userData.user,
-            checkAuthResponse.userData.accessToken,
-            checkAuthResponse.userData.roles,
-        ));
-        let getStylesResponse = await stylesApi.getStyles(checkAuthResponse.userData.accessToken);
-        if (getStylesResponse.resultCode === ResultCodesEnum.Success) {
-          dispatch(setFakeApiAC(false));
-          dispatch(setStylesAC(getStylesResponse.tattooStyles));
-        }
-      }
-    }
+      console.log(e);
+      console.log("you are here!!!!!!!!!!!");
+      dispatch(checkAuth());
     //dispatch(setStylesAC(tattooStyles));
     //dispatch(setFakeApiAC(true));
   } finally {

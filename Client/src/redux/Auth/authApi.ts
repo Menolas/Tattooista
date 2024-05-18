@@ -51,7 +51,6 @@ export const authAPI = {
   },
 
   checkAuth() {
-      console.log("refresh with cookies!!!!!!!!")
       return $api.get<CheckAuthResponseType>(`auth/refresh`)
           .then(response => response.data);
   },

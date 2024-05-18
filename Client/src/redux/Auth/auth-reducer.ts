@@ -20,7 +20,7 @@ const CHECK_AUTH = 'CHECK_AUTH';
 
 let initialState = {
   user: {} as IUser | null,
-  roles: [] as Array<RoleType>,
+  roles: [] as Array<RoleType> | null,
   token: null as string | null | undefined,
   isAuth: null as string | null,
   registrationError: '' as string,
@@ -77,7 +77,7 @@ export const authReducer = (
         token: action.accessToken,
         user: action.user,
         roles: action.roles,
-        isAuth: getUserRole(action.user.roles, action.roles),
+        isAuth: action.isAuth,
       }
 
     default: return state
@@ -147,17 +147,19 @@ const setAuthAC = (isAuth: null | string): SetAuthAT => ({
 
 export type CheckAuthAT = {
   type: typeof CHECK_AUTH;
-  user: IUser;
-  accessToken: string;
-  roles: Array<RoleType>;
+  user: IUser | null;
+  accessToken: string | null;
+  roles: Array<RoleType> | null;
+  isAuth: string | null;
 }
 
 export const checkAuthAC = (
-    user: IUser,
-    accessToken: string,
-    roles: Array<RoleType>,
+    user: IUser | null,
+    accessToken: string | null,
+    roles: Array<RoleType> | null,
+    isAuth: string | null
 ): CheckAuthAT => ({
-    type: CHECK_AUTH, user, accessToken, roles
+    type: CHECK_AUTH, user, accessToken, roles, isAuth
 });
 
 //thunks
@@ -223,10 +225,20 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
     let response = await authAPI.checkAuth();
     if (response.resultCode === ResultCodesEnum.Success) {
       if (response.userData.isAuth === true) {
+        const isAuth = getUserRole(response.userData.user.roles, response.userData.roles);
         dispatch(checkAuthAC(
             response.userData.user,
             response.userData.accessToken,
             response.userData.roles,
+            isAuth
+        ));
+      }
+      if (response.userData.isAuth === false) {
+        dispatch(checkAuthAC(
+            null,
+            null,
+            null,
+            null
         ));
       }
     }
