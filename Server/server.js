@@ -18,7 +18,9 @@ const faqRouter = require('./routes/FaqRoutes');
 const serviceRouter = require('./routes/ServiceRoutes');
 const pagesRouter = require('./routes/PagesRoutes');
 const usersRouter = require('./routes/UsersRoutes');
-//const rateLimit = require("express-rate-limit")
+//const rateLimit = require("express-rate-limit");
+
+mongoose.set('strictQuery', false);
 
 app.use(express.json());
 app.use(cookieParser());
