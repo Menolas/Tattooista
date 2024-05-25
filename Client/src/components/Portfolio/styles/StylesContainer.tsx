@@ -31,12 +31,13 @@ export const StylesContainer: React.FC = () => {
 
     useEffect( () => {
         dispatch(getStyles(token)).then(r => {
+            console.log("get style dispatch !!!!!!!!!!!!!!!!!");
             if (!activeStyle?._id) {
                 activeStyle = styles[0];
                 dispatch(setActiveStyleAC(styles[0]));
             }
         });
-    }, [token, dispatch]);
+    }, []);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(resetActiveStyle(style));

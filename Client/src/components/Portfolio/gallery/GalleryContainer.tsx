@@ -67,7 +67,7 @@ export const GalleryContainer: React.FC = () => {
   }
 
   const updateGalleryItemCallBack = (id: string, values: object) => {
-    dispatch(updateGalleryItem(id, values));
+    dispatch(updateGalleryItem(id, values, activeStyle._id, currentPage, pageSize));
   }
 
   return (

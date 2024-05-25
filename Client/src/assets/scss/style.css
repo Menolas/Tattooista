@@ -2904,7 +2904,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 }
 .portfolio-slider .alice-carousel .alice-carousel__wrapper .alice-carousel__stage li.alice-carousel__stage-item .slider-item-title__wrap {
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(55, 55, 55, 0.3);
 }
 .portfolio-slider .alice-carousel .alice-carousel__wrapper .alice-carousel__stage li.alice-carousel__stage-item .slider-item-title {
   position: relative;

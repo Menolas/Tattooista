@@ -75,9 +75,9 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
         if (isEditing) {
             // Set initial values based on style
             setInitialValues({
-                wallPaper: style.wallPaper || '',
-                value: style.value || '',
-                description: style.description || ''
+                wallPaper: style?.wallPaper || '',
+                value: style?.value || '',
+                description: style?.description || ''
             });
         } else {
             setInitialValues({
