@@ -11,8 +11,10 @@ import {
 import {checkAuth, CheckAuthAT} from "../Auth/auth-reducer";
 
 const SET_STYLES = 'SET_STYLES';
+const ADD_STYLE = 'ADD_STYLE';
+const UPDATE_STYLE = 'UPDATE_STYLE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
+const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE';
 const SET_FAKE_API = 'SET_FAKE_API';
 
@@ -64,6 +66,23 @@ export const stylesReducer = (
         styles: action.styles,
       }
 
+    case ADD_STYLE:
+      return {
+        ...state,
+        styles: [{...action.style}, ...state.styles]
+      }
+
+    case UPDATE_STYLE:
+      return {
+        ...state,
+        styles: state.styles.map(style => {
+          if (style._id === action.style._id) {
+            return {...action.style};
+          }
+          return style;
+        })
+      }
+
     case SET_ACTIVE_STYLE:
 
       return {
@@ -86,7 +105,7 @@ export const stylesReducer = (
 
 type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
     SetStylesAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT |
-    SetFakeApiAT | CheckAuthAT;
+    SetFakeApiAT | CheckAuthAT | AddStyleAT | UpdateStyleAT;
 
 // actions creators
 
@@ -128,6 +147,22 @@ const setStylesAC = (styles: Array<StyleType>): SetStylesAT => ({
     type: SET_STYLES, styles
 });
 
+type AddStyleAT = {
+  type: typeof ADD_STYLE, style: StyleType
+}
+
+export const addStyleAC = (style: StyleType): AddStyleAT => ({
+    type: ADD_STYLE, style
+});
+
+type UpdateStyleAT = {
+    type: typeof UPDATE_STYLE, style: StyleType
+}
+
+export const updateStyleAC = (style: StyleType): UpdateStyleAT => ({
+    type: UPDATE_STYLE, style
+});
+
 type SetActiveStyleAT = {
   type: typeof SET_ACTIVE_STYLE,
   style: StyleType | null
@@ -152,9 +187,8 @@ export const getStyles = (token: string | null): ThunkType => async (
       dispatch(setStylesAC(getStylesResponse.tattooStyles));
     }
   } catch (e) {
-      console.log(e);
-      console.log("you are here!!!!!!!!!!!");
-      dispatch(checkAuth());
+    console.log(e);
+    dispatch(checkAuth());
     //dispatch(setStylesAC(tattooStyles));
     //dispatch(setFakeApiAC(true));
   } finally {
@@ -169,6 +203,7 @@ export const addStyle = (values: FormData): ThunkType => async (
     dispatch(setIsFetchingAC(true));
     let response = await stylesApi.addStyle(values);
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(addStyleAC(response.tattooStyle));
       dispatch(setActiveStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
     }
@@ -184,6 +219,7 @@ export const editStyle = (id: string, values: FormData): ThunkType => async (dis
   try {
     let response = await stylesApi.editStyle(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(updateStyleAC(response.tattooStyle));
       dispatch(setActiveStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, UPDATE_STYLE_SUCCESS));
     }
@@ -199,6 +235,7 @@ export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
     let response = await stylesApi.deleteStyle(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setActiveStyleAC(response.tattooStyles[0]));
+      dispatch(setStylesAC(response.tattooStyles));
     }
   } catch (e) {
     console.log(e);
