@@ -52,9 +52,11 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
 
   const submit = async (values: AddConsultationFormValues, actions) => {
     await addBooking(values);
-    //actions.setSubmitting(false);
+    actions.setSubmitting(false);
     actions.resetForm();
-    if (!!apiError) closeBookingModal();
+    if (!!apiError) {
+      closeBookingModal();
+    }
   }
 
   return (

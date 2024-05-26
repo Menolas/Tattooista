@@ -21,6 +21,7 @@ type PropsType = {
   isStatusChanging?: Array<string>;
   isDeletingInProcess?: Array<string>;
   accessError: string;
+  apiError: string;
   setCurrentPage: (page: number) => void;
   onFilterChanged: (filter: SearchFilterType) => void;
   changeStatus: (id: string, status: boolean) => void;
@@ -41,6 +42,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   isStatusChanging,
   isDeletingInProcess,
   accessError,
+  apiError,
   setCurrentPage,
   onFilterChanged,
   changeStatus,
@@ -116,6 +118,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                       closeModal={closeModal}
                   >
                       <AddBookingForm
+                          apiError={apiError}
                           addBooking={add}
                           closeBookingModal={closeModal}
                       />

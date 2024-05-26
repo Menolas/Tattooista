@@ -104,7 +104,7 @@ class tattooStyleController {
     try {
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper;
-        if(!file)  return res.json({error: 'Incorrect input name'})
+        if(!file)  return res.json({error: 'Incorrect input name'});
         const newFileName = generateFileRandomName(file.name);
         await fs.unlink(`./uploads/styleWallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
           if (err) console.log(err);
