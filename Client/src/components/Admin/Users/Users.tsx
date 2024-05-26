@@ -6,12 +6,10 @@ import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
 import { usersFilterSelectOptions } from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
-import {useEffect, useState} from "react";
-import {SuccessPopUp} from "../../common/SuccessPopUp";
+import {useState} from "react";
 import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Navigate} from "react-router";
-import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 
 type PropsType = {
     roles: Array<RoleType>;
