@@ -29,7 +29,7 @@ export const Header: React.FC<PropsType> = ({
 
   return (
     <header className = { 'main-header ' + headerClasses }>
-      <Logo closeMenu={closeMenu}/>
+      <Logo />
       <MainNav
           isMenuOpen={isMenuOpen}
           isAuth={isAuth}

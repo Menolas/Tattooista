@@ -26,6 +26,7 @@ import {
 import { Bookings } from "./Bookings";
 import {AddConsultationFormValues, SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 
 export const BookingsContainer: React.FC = () => {
 
@@ -39,6 +40,7 @@ export const BookingsContainer: React.FC = () => {
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
+  const apiError = useSelector(getApiErrorSelector);
 
   const dispatch = useDispatch();
 
@@ -106,6 +108,7 @@ export const BookingsContainer: React.FC = () => {
         isStatusChanging={isStatusChanging}
         isDeletingInProcess={isDeletingInProcess}
         accessError={accessError}
+        apiError={apiError}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
         changeStatus={changeStatusCallBack}

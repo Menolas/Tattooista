@@ -72,7 +72,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
     setContactInput(input);
   }
 
-
   const submit = async (values: BookConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
     await bookConsultation(values);
     if (closeBookingModal && !!apiError) {
@@ -109,7 +108,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
             <h3 className="form__title">
               FILL THE FORM AND WE WILL CONTACT YOU SOON
             </h3>
-            { apiError  !== '' &&
+            { !!apiError &&
                 <ApiErrorMessage message={apiError}/>
             }
             <FieldComponent
