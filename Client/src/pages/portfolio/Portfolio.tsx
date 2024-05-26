@@ -42,11 +42,11 @@ export const Portfolio: React.FC = () => {
           closeModal={setSuccessModalCallBack}
           content={successModal.successText}
       />
-      <ApiErrorMessage
-          isOpen={!!apiError}
-          error={apiError}
-          closeModal={setApiErrorCallBack}
-      />
+      {/*<ApiErrorMessage*/}
+      {/*    isOpen={!!apiError}*/}
+      {/*    error={apiError}*/}
+      {/*    closeModal={setApiErrorCallBack}*/}
+      {/*/>*/}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form, Formik} from "formik";
 import * as Yup from 'yup';
-import {phoneRegex} from "../../utils/validators";
+import {ApiErrorMessage, phoneRegex} from "../../utils/validators";
 import {AddConsultationFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 
@@ -39,20 +39,22 @@ const initialValues: AddConsultationFormValues = {
 }
 
 type PropsType = {
+  apiError: string;
   addBooking: (values: AddConsultationFormValues) => void;
   closeBookingModal: () => void;
 }
 
 export const AddBookingForm: React.FC<PropsType> = React.memo(({
+  apiError,
   addBooking,
   closeBookingModal,
 }) => {
 
-  const submit = (values: AddConsultationFormValues, actions) => {
-    addBooking(values);
+  const submit = async (values: AddConsultationFormValues, actions) => {
+    await addBooking(values);
     //actions.setSubmitting(false);
     actions.resetForm();
-    closeBookingModal();
+    if (!!apiError) closeBookingModal();
   }
 
   return (
@@ -68,6 +70,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
           <Form id="booking"
             className="form booking__form"
           >
+            { apiError  !== '' &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <FieldComponent
                 name={'bookingName'}
                 type={'text'}

@@ -6,10 +6,8 @@ import { Booking } from "./Booking";
 import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../../types/Types";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {AddBookingForm} from "../../Forms/AddBookingForm";
-import {SuccessPopUp} from "../../common/SuccessPopUp";
 import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
-import {ApiErrorMessage} from "../../common/ApiErrorMessage";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {bookingFilterSelectOptions} from "../../../utils/constants";
 

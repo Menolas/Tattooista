@@ -135,11 +135,11 @@ export const Admin: React.FC = React.memo(() => {
       <section className={'admin__content'}>
           <Outlet />
       </section>
-      <ApiErrorMessage
-            isOpen={!!apiError}
-            error={apiError}
-            closeModal={setApiErrorCallBack}
-      />
+      {/*<ApiErrorMessage*/}
+      {/*      isOpen={!!apiError}*/}
+      {/*      error={apiError}*/}
+      {/*      closeModal={setApiErrorCallBack}*/}
+      {/*/>*/}
       <SuccessPopUp
             isOpen={successModal.isSuccess}
             closeModal={setSuccessModalCallBack}
