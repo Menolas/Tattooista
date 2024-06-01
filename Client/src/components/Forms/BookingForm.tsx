@@ -6,7 +6,7 @@ import {BookConsultationFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {useState} from "react";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
-import {FormSelect} from "./formComponents/FormSelect";
+import {FormSelect2} from "./formComponents/FormSelect2";
 
 const options = [
   { value: "email", label: "email" },
@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
   contact: Yup.string()
       .required("Please select a way to contact you"),
   email: Yup.string().when('contact', {
-        is: (contact) => contact === 'mail',
+        is: (contact) => contact === 'email',
         then: () => Yup.string().required("Please, provide your email.").email("Email should have correct format")
       }),
   phone: Yup.string().when('contact', {
@@ -52,6 +52,18 @@ const validationSchema = Yup.object().shape({
   consent: Yup.boolean().oneOf([true],"Required Field")
 });
 
+const initialValues: BookConsultationFormValues = {
+  bookingName: '',
+  contact: '',
+  email: '',
+  phone: '',
+  insta: '',
+  whatsapp: '',
+  messenger: '',
+  message: '',
+  consent: false,
+};
+
 type PropsType = {
   apiError: string;
   consentId: string;
@@ -73,24 +85,11 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   }
 
   const submit = async (values: BookConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
-    await bookConsultation(values);
-    if (closeBookingModal && !!apiError) {
+    const success = await bookConsultation(values);
+    if (success && closeBookingModal) {
       closeBookingModal();
     }
     actions.setSubmitting(false);
-    //actions.resetForm();
-  }
-
-  const initialValues: BookConsultationFormValues = {
-    bookingName: '',
-    contact: '',
-    email: '',
-    phone: '',
-    insta: '',
-    whatsapp: '',
-    messenger: '',
-    message: '',
-    consent: false,
   }
 
   return (
@@ -115,7 +114,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
               name={'bookingName'}
               type={'text'}
               placeholder={'Your Full Name'}
-              value={propsF.values.name}
+              value={propsF.values.bookingName}
               onChange={propsF.handleChange}
             />
 
@@ -123,14 +122,15 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 wrapperClass={'booking__input-wrap'}
                 name={"contact"}
             >
-              <FormSelect
+              <FormSelect2
                   name="contact"
                   options={options}
+                  value={propsF.values.contact}
                   handleChange={handleChange}
                   placeholder={'Choose the way you want me to contact you'}
               />
-
             </FieldWrapper>
+
             { contactInput &&
                 <FieldComponent
                     name={contactInput}
@@ -185,4 +185,4 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
         )
       }}
     </Formik>
-)})
+)});

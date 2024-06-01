@@ -7,7 +7,7 @@ type PropsType = {
     type: string;
     placeholder: string;
     label?: string;
-    value: string;
+    value?: string;
     onChange?: (e: any) => void;
 }
 
@@ -30,7 +30,15 @@ export const FieldComponent:React.FC<PropsType> = ({
                 placeholder={placeholder}
                 onChange={onChange}
                 value={value}
-            />
+            >
+                {({ field }) => (
+                <input
+                    {...field}
+                    type={type}
+                    placeholder={placeholder}
+                />
+                )}
+            </Field>
             <ErrorMessage name={name}>
                 {ErrorMessageWrapper}
             </ErrorMessage>
