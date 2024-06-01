@@ -114,13 +114,13 @@ export const bookingsReducer = (
       return {
         ...state,
         bookings: state.bookings.filter(booking => booking._id !== action.id),
-        total: state.total - 1
+        total: state.total - 1,
       }
 
     case ADD_BOOKING:
       return {
         ...state,
-        bookings: [{...action.consultation}, ...state.bookings]
+        bookings: [{...action.consultation}, ...state.bookings],
       }
 
     case SET_ACCESS_ERROR:
@@ -261,13 +261,12 @@ const deleteBookingThunk = (
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
-    total: number,
+    //total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
     dispatch(deleteBookingAC(id));
-    dispatch(setTotalAC(total - 1));
   } else {
     const newPage = getNewPage(currentPage);
     if (currentPage === newPage) {
@@ -340,7 +339,7 @@ export const deleteBooking = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await bookingsApi.deleteConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
     }
   } catch (e) {
     console.log(e);
@@ -357,6 +356,7 @@ export const addBooking = (
     let response = await bookingsApi.addConsultation(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookingAC(response.booking));
+      dispatch(setApiErrorAC(null));
       if (total) {
         dispatch(setTotalAC(total + 1));
       }
@@ -380,7 +380,7 @@ export const turnBookingToClient = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await bookingsApi.turnBookingToClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setSuccessModalAC(true, BOOKING_INTO_CLIENT_SUCCESS));
     }
   } catch (e: any) {
@@ -403,7 +403,7 @@ export const archiveBooking = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await bookingsApi.archiveBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
+      await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
     }
   } catch (e) {
     console.log(e);

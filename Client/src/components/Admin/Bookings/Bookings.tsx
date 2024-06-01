@@ -57,6 +57,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
 
     const closeModal = () => {
         setAddConsultationMode(false);
+
     }
 
     const modalTitle = 'Add a Consultation';

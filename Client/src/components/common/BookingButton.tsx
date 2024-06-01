@@ -4,14 +4,12 @@ import {ModalPopUp} from "./ModalPopUp";
 import {BookingForm} from "../Forms/BookingForm";
 import * as React from "react";
 import {
-    setApiErrorAC,
     setSuccessModalAC
 } from "../../redux/General/general-reducer";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {getApiErrorSelector, getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {SuccessPopUp} from "./SuccessPopUp";
-import {ApiErrorMessage} from "./ApiErrorMessage";
 
 type PropsType = {
     consentId: string;
@@ -22,6 +20,7 @@ export const BookingButton: React.FC<PropsType> = ({
 }) => {
 
     const apiError = useSelector(getApiErrorSelector);
+    console.log('!!!!!!!!!!!!!!!apiError', apiError)
     const successModal = useSelector(getSuccessModalSelector);
     const dispatch = useDispatch();
 
@@ -33,6 +32,12 @@ export const BookingButton: React.FC<PropsType> = ({
         }
     }, [successModal]);
 
+    useEffect(() => {
+        if (bookingModal && apiError === null) {
+            closeBookingModal();
+        }
+    }, [apiError]);
+
     const setSuccessModalCallBack = () => {
         dispatch(setSuccessModalAC(false, ''));
     }
@@ -40,10 +45,6 @@ export const BookingButton: React.FC<PropsType> = ({
     const bookConsultationCallBack = (values: BookConsultationFormValues) => {
         const total = null;
         dispatch(addBooking(values, total));
-    }
-
-    const setApiErrorCallBack = () => {
-        dispatch(setApiErrorAC(''));
     }
 
     const [bookingModal, setBookingModal] = useState(false)
@@ -87,11 +88,6 @@ export const BookingButton: React.FC<PropsType> = ({
                 closeModal={setSuccessModalCallBack}
                 content={successModal.successText}
             />
-            {/*<ApiErrorMessage*/}
-            {/*    isOpen={!!apiError}*/}
-            {/*    error={apiError}*/}
-            {/*    closeModal={setApiErrorCallBack}*/}
-            {/*/>*/}
         </div>
     )
 }

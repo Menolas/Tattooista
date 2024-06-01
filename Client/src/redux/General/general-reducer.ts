@@ -3,7 +3,7 @@ const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 
 let initialState = {
   isFetching: false as boolean,
-  apiError: '' as string,
+  apiError: null as null | string,
   successModal: {
     isSuccess: false as boolean,
     successText: '' as string,
@@ -59,9 +59,9 @@ export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessM
 
 export type SetApiErrorAT = {
   type: typeof  SET_API_ERROR
-  error: string
+  error: null | string
 };
 
-export const setApiErrorAC = (error: string): SetApiErrorAT  => ({
+export const setApiErrorAC = (error: null | string): SetApiErrorAT  => ({
   type: SET_API_ERROR, error
 });
