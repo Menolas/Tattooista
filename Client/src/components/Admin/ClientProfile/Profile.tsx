@@ -15,6 +15,7 @@ import {Confirmation} from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
 
 type PropsType = {
+  apiError: null | string;
   data: ClientType;
   isDeletingPicturesInProcess: Array<string>;
   remove: (clientId: string) => void;
@@ -25,6 +26,7 @@ type PropsType = {
 }
 
 export const Profile: React.FC<PropsType> = React.memo(({
+    apiError,
     data,
     isDeletingPicturesInProcess,
     remove,
@@ -35,12 +37,17 @@ export const Profile: React.FC<PropsType> = React.memo(({
 }) => {
     const navigate = useNavigate();
 
-    const { clientId } = useParams(); // Assuming you are using React Router for navigation
+    const { clientId } = useParams();
 
     useEffect(() => {
-        // Scroll to the top of the page when the component mounts
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [clientId]); // This effect will run whenever clientId changes
+    }, [clientId]);
+
+    useEffect(() => {
+        if (editClientMode && apiError === null) {
+            setEditClientMode(false);
+        }
+    }, [apiError]);
 
   //debugger
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
@@ -194,6 +201,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
       >
           {editClientMode &&
               <UpdateClientForm
+                  apiError={apiError}
                   isEditing={editClientMode}
                   data={data}
                   edit={edit}

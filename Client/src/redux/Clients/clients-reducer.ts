@@ -106,6 +106,12 @@ export const clientsReducer = (
         })
       }
 
+    case SET_CLIENT_PROFILE:
+      return {
+        ...state,
+        profile: action.profile,
+      }
+
     case ADD_CLIENT:
       return {
         ...state,
@@ -126,12 +132,6 @@ export const clientsReducer = (
         isDeletingPicturesInProcess: action.isFetching
             ? [...state.isDeletingPicturesInProcess, action.id]
             : state.isDeletingPicturesInProcess.filter(id => id !== action.id)
-      }
-
-    case SET_CLIENT_PROFILE:
-      return {
-        ...state,
-        profile: action.profile,
       }
 
     case SET_ACCESS_ERROR:
@@ -378,7 +378,8 @@ export const addClient = (
   try {
     let response = await clientsAPI.addClient(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(addClientAC(response.client))
+      dispatch(addClientAC(response.client));
+      dispatch(setApiErrorAC(null));
       dispatch(setTotalCountAC(total + 1));
       dispatch(setSuccessModalAC(true, ADD_CLIENT_SUCCESS));
     }
@@ -399,6 +400,7 @@ export const editClient = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(editClientAC(response.client));
       dispatch(setClientProfile(response.client));
+      dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, UPDATE_CLIENT_SUCCESS));
     }
   } catch (e) {
