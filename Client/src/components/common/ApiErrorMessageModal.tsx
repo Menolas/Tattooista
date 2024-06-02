@@ -7,7 +7,7 @@ type PropsType = {
     closeModal: () => void;
 }
 
-export const ApiErrorMessage: React.FC<PropsType> = ({
+export const ApiErrorMessageModal: React.FC<PropsType> = ({
   isOpen,
   error,
   closeModal,

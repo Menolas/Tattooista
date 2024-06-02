@@ -35,3 +35,7 @@ export const getFilterSelector = (state: AppStateType) => {
 export const getAccessErrorSelector = (state: AppStateType) => {
   return state.archivedBookings.accessError;
 }
+
+export const getArchivedBookingApiErrorSelector = (state: AppStateType) => {
+  return state.archivedBookings.bookingApiError;
+}
