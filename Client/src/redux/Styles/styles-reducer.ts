@@ -205,6 +205,7 @@ export const addStyle = (values: FormData): ThunkType => async (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addStyleAC(response.tattooStyle));
       dispatch(setActiveStyleAC(response.tattooStyle));
+      dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
     }
   } catch (e: any) {
@@ -215,10 +216,15 @@ export const addStyle = (values: FormData): ThunkType => async (
   }
 }
 
-export const editStyle = (id: string, values: FormData): ThunkType => async (dispatch) => {
+export const editStyle = (
+    id: string,
+    values: FormData
+): ThunkType => async (dispatch) => {
+  console.log('editStyle thunk');
   try {
     let response = await stylesApi.editStyle(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setApiErrorAC(null));
       dispatch(updateStyleAC(response.tattooStyle));
       dispatch(setActiveStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, UPDATE_STYLE_SUCCESS));

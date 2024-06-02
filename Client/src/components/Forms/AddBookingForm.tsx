@@ -39,7 +39,7 @@ const initialValues: AddConsultationFormValues = {
 };
 
 type PropsType = {
-  apiError: string;
+  apiError: number | string;
   addBooking: (values: AddConsultationFormValues) => void;
   closeBookingModal: () => void;
 };

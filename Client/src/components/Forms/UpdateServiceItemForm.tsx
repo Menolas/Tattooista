@@ -1,12 +1,13 @@
 import * as React from "react";
 import {useState} from "react";
-import {Field, Form, Formik} from "formik";
+import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
 import * as Yup from "yup";
 import {API_URL} from "../../http";
 import {ServiceType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {
+    ApiErrorMessage,
     validateFile
 } from "../../utils/validators";
 
@@ -22,6 +23,7 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
+    apiError: null | string;
     service?: ServiceType;
     edit?: (id: string, values: FormData) => void;
     add?: (values: FormData) => void;
@@ -29,6 +31,7 @@ type PropsType = {
     closeModal: () => void;
 }
 export const UpdateServiceItemForm: React.FC<PropsType> = ({
+    apiError,
     service,
     edit,
     add,
@@ -63,7 +66,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = ({
         condition_5: service?.conditions[5] ?? '',
     }
 
-    const submit = async (values, actions) => {
+    const submit = async (values, actions: FormikHelpers<FormikValues>) => {
         // Check if picture is a File object
         if (values.wallPaper instanceof File) {
             const isValidFile = validateFile(values.wallPaper);
@@ -78,17 +81,22 @@ export const UpdateServiceItemForm: React.FC<PropsType> = ({
         for (let value in values) {
             formData.append(value, values[value]);
         }
+        let success;
         try {
             if (service) {
-                edit(service._id, formData);
+                success = await edit(service._id, formData);
                 setService(null);
             } else {
-                add(formData);
+                success = await add(formData);
+            }
+            const isSuccess = Boolean(success);
+            if (isSuccess) {
+                closeModal();
             }
         } catch (error) {
             console.error('Error submitting form:', error);
         }
-        closeModal();
+        actions.setSubmitting(false);
     }
 
     return (
@@ -101,6 +109,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = ({
 
                 return (
                     <Form className="form form--updateService" encType={"multipart/form-data"}>
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img

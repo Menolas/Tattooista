@@ -18,9 +18,11 @@ import {
 } from "react-redux";
 import {FaqType} from "../../../types/Types";
 import {useEffect} from "react";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 
 export const FaqContainer = () => {
 
+    const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
     const faq = useSelector(getFaqItemsSelector);
     const isFetching = useSelector(getIsFetchingSelector);
@@ -46,6 +48,7 @@ export const FaqContainer = () => {
 
     return (
         <FaqItems
+            apiError={apiError}
             isAuth={isAuth}
             isFetching={isFetching}
             isDeletingInProcess={isDeletingInProcess}

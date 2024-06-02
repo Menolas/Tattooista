@@ -20,7 +20,6 @@ export const BookingButton: React.FC<PropsType> = ({
 }) => {
 
     const apiError = useSelector(getApiErrorSelector);
-    console.log('!!!!!!!!!!!!!!!apiError', apiError)
     const successModal = useSelector(getSuccessModalSelector);
     const dispatch = useDispatch();
 

@@ -6,19 +6,22 @@ import {PageType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
-import {validateFile} from "../../utils/validators";
+import {ApiErrorMessage, validateFile} from "../../utils/validators";
+import {useDispatch} from "react-redux";
+import {editAboutPage} from "../../redux/About/about-reducer";
 
 type PropsType = {
+    apiError: null | string;
     data?: PageType;
-    edit: (values: FormData) => void;
     closeModal: () => void;
 };
 
 export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
+    apiError,
     data,
-    edit,
     closeModal
 }) => {
+    const dispatch = useDispatch();
 
     const validationSchema = Yup.object().shape({
         aboutPageTitle: Yup.string(),
@@ -48,14 +51,12 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
     }
 
     const submit = async (values, actions) => {
-        // Check if aboutPageWallPaper is a File object
         if (values.aboutPageWallPaper instanceof File) {
             const isValidFile = validateFile(values.aboutPageWallPaper);
             if (!isValidFile) {
                 actions.setFieldError('aboutPageWallPaper', 'Invalid file');
                 return;
             } else {
-                // Clear any existing field error
                 actions.setFieldError('aboutPageWallPaper', '');
             }
         }
@@ -67,11 +68,17 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
         }
 
         try {
-            await edit(formData);
+            const response = await dispatch(editAboutPage(formData));
+            console.log('Response:', response); // Log the response here
+            if (!response || response.message) { // Check the response here
+                throw new Error('Error submitting form');
+            }
+            console.log("i am about to hit closeModal!!!!!!!!!")
             closeModal();
         } catch (error) {
             console.error('Error submitting form:', error);
         }
+        actions.setSubmitting(false);
     }
 
     return (
@@ -83,6 +90,9 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
             {propsF => {
                 return (
                     <Form className="form form--updateAboutForm" encType={"multipart/form-data"}>
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <FieldWrapper name={'aboutPageWallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img

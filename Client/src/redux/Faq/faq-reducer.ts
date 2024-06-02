@@ -117,7 +117,7 @@ export const addFaqItem = (values: FaqType): ThunkType => async (dispatch) => {
   try {
     let response = await faqApi.addFaqItem(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(''));
+      dispatch(setApiErrorAC(null));
       dispatch(setFaqItems(response.faqItems));
       dispatch(setSuccessModalAC(true, FAQ_ADD_SUCCESS));
     }
@@ -131,7 +131,7 @@ export const updateFaqItem = (id: string, values: any): ThunkType => async (disp
   try {
     let response = await faqApi.updateFaqItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(''));
+      dispatch(setApiErrorAC(null));
       dispatch(setFaqItems(response.faqItems));
       dispatch(setSuccessModalAC(true, FAQ_UPDATE_SUCCESS));
     }

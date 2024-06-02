@@ -1,4 +1,4 @@
-import {aboutApi} from "./aboutApi";
+import {aboutApi, GetPagesResponseType} from "./aboutApi";
 import {PageType} from "../../types/Types";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType } from "../redux-store";
@@ -107,7 +107,7 @@ const setAboutPageAC = (page: PageType): SetAboutPageAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<GetPagesResponseType | null> | Promise<void>, AppStateType, unknown, ActionsTypes>
 
 export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {
@@ -126,13 +126,17 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
   }
 }
 
-export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch) => {
+export const editAboutPage = (
+  FormData: FormData
+): ThunkType => async (dispatch) => {
+  let apiResponse = null;
   try {
     dispatch(setIsEditingAC(true));
     dispatch(setIsFetchingAC(true));
-    const response = await aboutApi.editAboutPage(FormData);
+    let response = await aboutApi.editAboutPage(FormData);
+    apiResponse = response;
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(''));
+      dispatch(setApiErrorAC(null));
       dispatch(setAboutPageAC(response.page));
       dispatch(setSuccessModalAC(true, ABOUT_PAGE_SUCCESS));
     }
@@ -143,6 +147,7 @@ export const editAboutPage = (FormData: FormData): ThunkType => async (dispatch)
     dispatch(setIsFetchingAC(false));
     dispatch(setIsEditingAC(false));
   }
+  return apiResponse; // Return the response
 }
 
 export const changeAboutPageVisibility = (

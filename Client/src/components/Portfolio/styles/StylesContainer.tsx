@@ -18,8 +18,10 @@ import {
     getIsDeletingInProcess,
 } from "../../../redux/Styles/styles-selectors";
 import {Styles} from "./Styles";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 
 export const StylesContainer: React.FC = () => {
+    const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
     const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcess);
@@ -57,6 +59,7 @@ export const StylesContainer: React.FC = () => {
 
     return (
         <Styles
+            apiError={apiError}
             isAuth={isAuth}
             isFetching={isFetching}
             styles={styles}

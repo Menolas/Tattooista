@@ -8,14 +8,15 @@ import {
 } from "../../../redux/About/about-selectors";
 import {
     getAboutPage,
-    editAboutPage,
     changeAboutPageVisibility,
 } from "../../../redux/About/about-reducer";
 import {useEffect} from "react";
 import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 
 
 export const AboutContainer = () => {
+    const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
     const fakeApi = useSelector(getFakeApiSelector);
     const page = useSelector(getPageSelector);
@@ -28,10 +29,6 @@ export const AboutContainer = () => {
         dispatch(getAboutPage());
     }, [dispatch]);
 
-    const editAboutPageCallBack = (values: FormData) => {
-        dispatch(editAboutPage(values));
-    }
-
     const changeAboutPageVisibilityCallBack = (isActive: boolean) => {
         dispatch(changeAboutPageVisibility(isActive));
     }
@@ -39,12 +36,12 @@ export const AboutContainer = () => {
     if  (isAuth || page?.isActive) {
         return (
             <About
+                apiError={apiError}
                 isFetching={isFetching}
                 isEditing={isEditing}
                 fakeApi={fakeApi}
                 isAuth={isAuth}
                 page={page}
-                edit={editAboutPageCallBack}
                 changeVisibility={changeAboutPageVisibilityCallBack}
             />
         )
