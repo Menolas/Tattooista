@@ -12,6 +12,7 @@ import {clientFilterSelectOptions} from "../../../utils/constants";
 import {Navigate} from "react-router";
 
 type PropsType = {
+  apiError: null | string;
   isFetching: boolean;
   totalCount: number;
   currentPage: number;
@@ -33,6 +34,7 @@ type PropsType = {
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
+    apiError,
     isFetching,
     totalCount,
     currentPage,
@@ -56,6 +58,12 @@ export const Clients: React.FC<PropsType> = React.memo(({
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [client, setClient] = useState<ClientType>(null);
+
+  useEffect(() => {
+    if ((addClientMode || editClientMode) && apiError === null) {
+        closeModal();
+    }
+}, [apiError]);
 
   const closeModal = () => {
     setAddClientMode(false);
@@ -134,6 +142,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                   >
                       { (editClientMode || addClientMode) &&
                           < UpdateClientForm
+                              apiError={apiError}
                               isEditing={editClientMode}
                               data={client}
                               edit={edit}

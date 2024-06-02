@@ -15,11 +15,13 @@ import {
   getClientProfileSelector,
   getIsDeletingPicturesInProcess,
 } from "../../../redux/Clients/clients-selectors";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 
 export const ProfileContainer: React.FC = React.memo(() => {
 
   const profile = useSelector(getClientProfileSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
+  const apiError = useSelector(getApiErrorSelector);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,6 +61,7 @@ export const ProfileContainer: React.FC = React.memo(() => {
 
   return (
     <Profile
+      apiError={apiError}
       data={profile}
       isDeletingPicturesInProcess={isDeletingPicturesInProcess}
       remove={deleteClientCallBack}

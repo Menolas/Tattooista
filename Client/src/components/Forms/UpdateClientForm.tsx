@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
 import {
+  ApiErrorMessage,
   isFileSizeValid,
   isFileTypesValid,
   MAX_FILE_SIZE,
@@ -58,6 +59,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 };
 
 type PropsType = {
+  apiError: string;
   isEditing: boolean;
   data: ClientType;
   closeModal: () => void;
@@ -66,6 +68,7 @@ type PropsType = {
 }
 
 export const UpdateClientForm: React.FC<PropsType> = React.memo(({
+  apiError,
   isEditing,
   data,
   closeModal,
@@ -102,18 +105,22 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
     whatsapp: data?.contacts?.whatsapp ?? ''
   }
 
-  const submit = (values: AddClientFormValues, actions: FormikHelpers<FormikValues>) => {
+  const submit = async (values: AddClientFormValues, actions: FormikHelpers<FormikValues>) => {
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
     }
+    let success;
     if (isEditing) {
-      edit(data._id, formData);
+      success = await edit(data._id, formData);
     } else {
-      add(formData);
+      success = await add(formData);
     }
-    actions.resetForm();
-    closeModal();
+    const isSuccess = Boolean(success);
+    if (isSuccess) {
+        closeModal();
+    }
+    actions.setSubmitting(false);
   }
 
   return (
@@ -128,6 +135,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form className="form form--updateClient" encType={"multipart/form-data"}>
+            { !!apiError &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
               <div className="form__input-wrap--uploadFile-img">
                 <img

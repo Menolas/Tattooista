@@ -27,6 +27,7 @@ import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
 import {SearchFilterType} from "../../../types/Types";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -40,6 +41,7 @@ export const ClientsContainer: React.FC = () => {
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
+  const apiError = useSelector(getApiErrorSelector);
 
   const dispatch = useDispatch();
 
@@ -103,6 +105,7 @@ export const ClientsContainer: React.FC = () => {
 
   return (
       <Clients
+          apiError={apiError}
           isFetching={isFetching}
           totalCount={totalCount}
           currentPage={currentPage}
