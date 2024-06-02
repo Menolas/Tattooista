@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
 import {StyleType} from "../../../types/Types";
 // @ts-ignore
@@ -21,6 +21,7 @@ const responsive = {
 }
 
 type PropsType = {
+  apiError: null | string;
   isAuth: string;
   isFetching: boolean;
   styles: Array<StyleType>;
@@ -33,6 +34,7 @@ type PropsType = {
 }
 
 export const Styles: React.FC<PropsType> = React.memo(({
+  apiError,
   isAuth,
   isFetching,
   styles,
@@ -52,6 +54,12 @@ export const Styles: React.FC<PropsType> = React.memo(({
     cb?: () => void,
     context: string
   }>({needConfirmation: false, context: ''});
+
+  useEffect(() => {
+    if ((editMode || addMode) && apiError === null) {
+      closeModal();
+    }
+  }, [apiError]);
 
   const closeModal = () => {
     setAddMode(false);
@@ -149,6 +157,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
         >
           {
               <UpdateTattooStyleForm
+                  apiError={apiError}
                   isEditing={editMode}
                   style={style}
                   edit={edit}

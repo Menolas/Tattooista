@@ -9,9 +9,12 @@ import {StyleType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {
+    ApiErrorMessage,
     isFileSizeValid, isFileTypesValid,
     MAX_FILE_SIZE, VALID_FILE_EXTENSIONS,
 } from "../../utils/validators";
+import {useDispatch} from "react-redux";
+import {addStyle, editStyle} from "../../redux/Styles/styles-reducer";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     let schema = Yup.object().shape({
@@ -39,6 +42,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 }
 
 type PropsType = {
+    apiError: null | string;
     isEditing: boolean;
     style?: StyleType;
     add?: (values: FormData) => void;
@@ -46,6 +50,7 @@ type PropsType = {
     closeModal: () => void;
 }
 export const UpdateTattooStyleForm: React.FC<PropsType> = ({
+    apiError,
     isEditing,
     style,
     add,
@@ -56,6 +61,8 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
     const [hasNewFile, setHasNewFile] = useState(false);
     const validationSchema = getValidationSchema(isEditing, hasNewFile);
     const [imageURL, setImageURL] = useState('');
+
+    const dispatch = useDispatch();
 
     const handleOnChange = (event) => {
         event.preventDefault();
@@ -96,17 +103,28 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
     });
 
     const submit = async (values, actions: FormikHelpers<FormikValues>) => {
-           const formData = new FormData();
-           for (let value in values) {
-               formData.append(value, values[value]);
-           }
-           if (isEditing) {
-               edit(style._id, formData);
+       const formData = new FormData();
+       for (let value in values) {
+           formData.append(value, values[value]);
+       }
+       try {
+           let response;
+           if(isEditing) {
+               response = await dispatch(editStyle(style._id, formData));
            } else {
-               add(formData);
+               response = await dispatch(addStyle(formData));
            }
-           actions.resetForm();
+           console.log('Response:', response); // Log the response here
+           if (!response || response.message) { // Check the response here
+               throw new Error('Error submitting form');
+           }
+           console.log("i am about to hit closeModal!!!!!!!!!")
            closeModal();
+
+       } catch (error) {
+           console.error('Error submitting form:', error);
+       }
+       actions.setSubmitting(false);
     }
 
     return (
@@ -120,6 +138,9 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
             {propsF => {
                 return (
                     <Form className="form form--updateTattooStyle" encType={"multipart/form-data"}>
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img

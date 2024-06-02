@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {PageType} from "../../../types/Types";
 // @ts-ignore
 import Sprite from "../../../assets/svg/sprite.svg";
@@ -14,22 +14,22 @@ import {ReadMore} from "../../common/ReadMore";
 import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
+    apiError: null | string;
     isFetching: boolean;
     isEditing: boolean;
     fakeApi: boolean;
     isAuth: string;
     page?: PageType;
-    edit: (values: FormData) => void;
     changeVisibility: (isActive: boolean) => void;
 }
 
 export const About: React.FC<PropsType> = React.memo(({
+     apiError,
      isFetching,
      isEditing,
      fakeApi,
      isAuth,
      page,
-     edit,
      changeVisibility,
 }) => {
 
@@ -38,6 +38,12 @@ export const About: React.FC<PropsType> = React.memo(({
     const closeEditModal = () => {
         setIsEditMode(false);
     }
+
+    useEffect(() => {
+        if (isEditMode && apiError === null) {
+            closeEditModal();
+        }
+    }, [apiError]);
 
     const editModalTitle = 'Update "about" block'
 
@@ -118,8 +124,8 @@ export const About: React.FC<PropsType> = React.memo(({
                 {
                     isEditMode &&
                     <UpdateAboutPageForm
+                        apiError={apiError}
                         data={page}
-                        edit={edit}
                         closeModal={closeEditModal}
                     />
                 }

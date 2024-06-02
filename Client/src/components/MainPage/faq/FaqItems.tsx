@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { FaqType } from "../../../types/Types";
 import { FaqItem } from "./FaqItem";
 import {ModalPopUp} from "../../common/ModalPopUp";
@@ -8,6 +8,7 @@ import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
+  apiError: null | string;
   isFetching: boolean;
   isDeletingInProcess: Array<string>;
   isAuth: string;
@@ -18,6 +19,7 @@ type PropsType = {
 }
 
 export const FaqItems: React.FC<PropsType> = React.memo(({
+  apiError,
   isFetching,
   isDeletingInProcess,
   isAuth,
@@ -31,6 +33,13 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   const [updateFaqItemData, setUpdateFaqItemData] = useState<{
     isUpdateMode: boolean, faqItem?: FaqType
   }>({isUpdateMode: false});
+
+  useEffect(() => {
+    if ((updateFaqItemData.isUpdateMode || addFaqItemMode) && apiError === null) {
+      setUpdateFaqItemData({isUpdateMode: false});
+      setAddFaqItemMode(false);
+    }
+  }, [apiError]);
 
   const updateFaqItemModalTitle = 'Update FAQ';
   const addFaqItemTitle = 'Add FAQ';
@@ -68,6 +77,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
         >
           { (updateFaqItemData.isUpdateMode || addFaqItemMode) &&
               <UpdateFaqItemForm
+                  apiError={apiError}
                   faqItem={updateFaqItemData.faqItem}
                   edit={edit}
                   add={add}

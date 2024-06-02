@@ -1,9 +1,10 @@
 import * as React from "react";
-import {Field, Form, Formik} from "formik";
+import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
 import * as Yup from "yup";
 import {FaqType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {ApiErrorMessage} from "../../utils/validators";
 
 const validationSchema = Yup.object().shape({
     question: Yup.string()
@@ -13,12 +14,14 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
+    apiError: number | string;
     faqItem?: FaqType;
     edit?: (id: string, values: FaqType) => void;
     add?: (values: FaqType) => void;
     closeModal: () => void;
 }
 export const UpdateFaqItemForm: React.FC<PropsType> = ({
+  apiError,
   faqItem,
   edit,
   add,
@@ -29,13 +32,18 @@ export const UpdateFaqItemForm: React.FC<PropsType> = ({
         answer: faqItem?.answer ?? '',
     };
 
-    const submit = (values) => {
+    const submit = async (values, actions: FormikHelpers<FormikValues>) => {
+        let success;
         if (faqItem) {
-            edit(faqItem._id, values);
+            success = await edit(faqItem._id, values);
         } else {
-            add(values);
+            success = await add(values);
         }
-        closeModal();
+        const isSuccess = Boolean(success);
+        if (isSuccess) {
+            closeModal()
+        }
+        actions.setSubmitting(false);
     };
 
     return (
@@ -47,6 +55,9 @@ export const UpdateFaqItemForm: React.FC<PropsType> = ({
             {propsF => {
                 return (
                     <Form className="form form--updateTattooStyle">
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <FieldComponent
                             name={'question'}
                             type={'text'}

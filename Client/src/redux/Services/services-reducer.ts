@@ -136,7 +136,7 @@ export const editService = (
   try {
     const response = await servicesApi.editService(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(''));
+      dispatch(setApiErrorAC(null));
       dispatch(setServicesAC(response.services));
       dispatch(setSuccessModalAC(true, SERVICE_UPDATE_SUCCESS));
     }
@@ -152,7 +152,7 @@ export const addService = (
   try {
     const response = await servicesApi.addService(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(''));
+      dispatch(setApiErrorAC(null));
       dispatch(setServicesAC(response.services));
       dispatch(setSuccessModalAC(true, SERVICE_ADD_SUCCESS));
     }

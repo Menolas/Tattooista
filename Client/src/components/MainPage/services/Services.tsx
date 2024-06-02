@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ServiceType} from "../../../types/Types";
 import {ServiceItem} from "./ServiceItem";
 import {ModalPopUp} from "../../common/ModalPopUp";
@@ -7,6 +7,7 @@ import {UpdateServiceItemForm} from "../../Forms/UpdateServiceItemForm";
 import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
+  apiError: null | string;
   fakeApi: boolean;
   isFetching: boolean;
   isDeletingInProcess: Array<string>;
@@ -18,6 +19,7 @@ type PropsType = {
 };
 
 export const Services: React.FC<PropsType> = React.memo(({
+  apiError,
   fakeApi,
   isFetching,
   isAuth,
@@ -32,7 +34,13 @@ export const Services: React.FC<PropsType> = React.memo(({
       isAdd?: boolean,
       isEdit?: boolean,
       service?: ServiceType | null
-  }>({isUpdateMode: false})
+  }>({isUpdateMode: false});
+
+  useEffect(() => {
+    if (updateServiceData.isUpdateMode && apiError === null) {
+        closeUpdateServiceModal();
+    }
+  }, [apiError]);
 
   const closeUpdateServiceModal = () => {
       setUpdateServiceData({
@@ -91,6 +99,7 @@ export const Services: React.FC<PropsType> = React.memo(({
         {
             updateServiceData.isUpdateMode &&
             <UpdateServiceItemForm
+                apiError={apiError}
                 service={updateServiceData.service}
                 add={add}
                 edit={edit}
