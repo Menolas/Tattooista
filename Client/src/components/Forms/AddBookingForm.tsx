@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Formik} from "formik";
+import {Form, Formik, FormikHelpers, FormikValues} from "formik";
 import * as Yup from 'yup';
 import {ApiErrorMessage, phoneRegex} from "../../utils/validators";
 import {AddConsultationFormValues} from "../../types/Types";
@@ -36,13 +36,13 @@ const initialValues: AddConsultationFormValues = {
   insta: '',
   whatsapp: '',
   messenger: '',
-}
+};
 
 type PropsType = {
   apiError: string;
   addBooking: (values: AddConsultationFormValues) => void;
   closeBookingModal: () => void;
-}
+};
 
 export const AddBookingForm: React.FC<PropsType> = React.memo(({
   apiError,
@@ -50,13 +50,13 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
   closeBookingModal,
 }) => {
 
-  const submit = async (values: AddConsultationFormValues, actions) => {
-    await addBooking(values);
-    actions.setSubmitting(false);
-    actions.resetForm();
-    if (!!apiError) {
+  const submit = async (values: AddConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
+    const success = await addBooking(values);
+    const isSuccess = Boolean(success);
+    if (isSuccess && closeBookingModal) {
       closeBookingModal();
     }
+    actions.setSubmitting(false);
   }
 
   return (
@@ -133,4 +133,4 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
         )
       }}
     </Formik>
-)})
+)});

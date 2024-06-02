@@ -60,7 +60,14 @@ export const Bookings: React.FC<PropsType> = React.memo(({
 
     }
 
-    const modalTitle = 'Add a Consultation';
+    useEffect(() => {
+      if (addConsultationMode && apiError === null) {
+        closeModal();
+      }
+    }, [apiError]);
+
+
+  const modalTitle = 'Add a Consultation';
 
     const bookedConsultationsArray = bookings?.map(consultation => {
       return (
