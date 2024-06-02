@@ -80,13 +80,10 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
 
   const [contactInput, setContactInput] = useState('');
 
-  const handleChange = (input: string) => {
-    setContactInput(input);
-  }
-
   const submit = async (values: BookConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
     const success = await bookConsultation(values);
-    if (success && closeBookingModal) {
+    const isSuccess = Boolean(success);
+    if (isSuccess && closeBookingModal) {
       closeBookingModal();
     }
     actions.setSubmitting(false);
@@ -99,6 +96,15 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
         onSubmit={submit}
       >
       {(propsF) => {
+
+        const handleChange = (input: string) => {
+          propsF.setFieldValue('email', '');
+          propsF.setFieldValue('phone', '');
+          propsF.setFieldValue('insta', '');
+          propsF.setFieldValue('whatsapp', '');
+          propsF.setFieldValue('messenger', '');
+          setContactInput(input);
+        }
 
         return (
           <Form id="booking"
