@@ -8,9 +8,7 @@ import {
 } from "../../types/Types";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useEffect} from "react";
-import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
 import {
-  setApiErrorAC,
   setSuccessModalAC,
 } from "../../redux/General/general-reducer";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
@@ -91,10 +89,6 @@ export const MainPage: React.FC = () => {
     dispatch(setSuccessModalAC(false, ''));
   }
 
-  const setApiErrorCallBack = () => {
-    dispatch(setApiErrorAC(''));
-  }
-
   return (
     <>
       <MainOffer bookConsultation={bookConsultationCallBack} />
@@ -123,11 +117,6 @@ export const MainPage: React.FC = () => {
           closeModal={setSuccessModalCallBack}
           content={successModal.successText}
       />
-      {/*<ApiErrorMessage*/}
-      {/*    isOpen={!!apiError}*/}
-      {/*    error={apiError}*/}
-      {/*    closeModal={setApiErrorCallBack}*/}
-      {/*/>*/}
     </>
   )
 };

@@ -10,7 +10,7 @@ import {
   addBooking,
   archiveBooking,
   setCurrentPageAC,
-  setFilterAC,
+  setFilterAC, setBookingApiErrorAC,
 } from "../../../redux/Bookings/bookings-reducer";
 import {
   getBookingsSelector,
@@ -21,12 +21,13 @@ import {
   getFilterSelector,
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
-  getAccessErrorSelector
+  getAccessErrorSelector, getBookingApiErrorSelector
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
 import {AddConsultationFormValues, SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const BookingsContainer: React.FC = () => {
 
@@ -41,6 +42,7 @@ export const BookingsContainer: React.FC = () => {
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
   const apiError = useSelector(getApiErrorSelector);
+  const bookingApiError = useSelector(getBookingApiErrorSelector);
 
   const dispatch = useDispatch();
 
@@ -74,13 +76,13 @@ export const BookingsContainer: React.FC = () => {
   const removeCallBack = (
       id: string,
   ) => {
-    dispatch(deleteBooking(token, id, bookings, currentPage, totalCount, pageSize, filter));
+    dispatch(deleteBooking(token, id, bookings, currentPage, pageSize, filter));
   }
 
   const turnBookingToClientCallBack = (
     id: string,
   ) => {
-    dispatch(turnBookingToClient(token, id, bookings, currentPage, totalCount, pageSize, filter));
+    dispatch(turnBookingToClient(token, id, bookings, currentPage, pageSize, filter));
   }
 
   const setPageSizeCallBack = (
@@ -94,11 +96,16 @@ export const BookingsContainer: React.FC = () => {
   }
 
   const archiveCallBack = (id: string) => {
-    dispatch(archiveBooking(token, id, bookings, currentPage, totalCount, pageSize, filter));
+    dispatch(archiveBooking(token, id, bookings, currentPage, pageSize, filter));
+  }
+
+  const setBookingApiErrorCallBack = () => {
+    dispatch(setBookingApiErrorAC(null));
   }
 
   return (
       <Bookings
+        bookingApiError={bookingApiError}
         isFetching={isFetching}
         totalCount={totalCount}
         currentPage={currentPage}
@@ -117,6 +124,7 @@ export const BookingsContainer: React.FC = () => {
         setPageLimit={setPageSizeCallBack}
         add={addCallBack}
         archive={archiveCallBack}
+        setBookingApiError={setBookingApiErrorCallBack}
       />
   )
 }

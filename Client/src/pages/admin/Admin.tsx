@@ -10,7 +10,7 @@ import {ADMIN, ADMIN_BUTTONS_DATA, SUPER_ADMIN} from "../../utils/constants";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
 import {useEffect, useState} from "react";
-import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
+//import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {
     getApiErrorSelector,

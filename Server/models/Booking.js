@@ -42,22 +42,22 @@ const BookingSchema = new mongoose.Schema({
       trim: true,
     },
   }
-})
+});
 
 BookingSchema.index(
     { 'contacts.email': 1 },
     { unique: true, partialFilterExpression: { 'contacts.email': { $exists: true } } }
-)
+);
 
 BookingSchema.index(
     { 'contacts.phone': 1 },
     { unique: true, partialFilterExpression: { 'contacts.phone': { $exists: true } } }
-)
+);
 
 BookingSchema.index(
     { 'contacts.whatsapp': 1 },
     { unique: true, partialFilterExpression: { 'contacts.whatsapp': { $exists: true } } }
-)
+);
 
 BookingSchema.pre('save', function(next) {
   if (!this.contacts.email) {

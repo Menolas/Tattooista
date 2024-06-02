@@ -21,7 +21,8 @@ const ArchivedBookingSchema = new mongoose.Schema({
   contacts: {
     email: {
       type: String,
-      default: null,
+      unique: true,
+      sparse: true,
     },
     insta: {
       type: String,
@@ -29,17 +30,47 @@ const ArchivedBookingSchema = new mongoose.Schema({
     },
     phone: {
       type: String,
-      default: null,
+      unique: true,
+      sparse: true,
     },
     whatsapp: {
       type: String,
-      default: null,
+      unique: true,
+      sparse: true,
     },
     messenger: {
       type: String,
       default: null,
     }
   }
+});
+
+ArchivedBookingSchema.index(
+    { 'contacts.email': 1 },
+    { unique: true, partialFilterExpression: { 'contacts.email': { $exists: true } } }
+);
+
+ArchivedBookingSchema.index(
+    { 'contacts.phone': 1 },
+    { unique: true, partialFilterExpression: { 'contacts.phone': { $exists: true } } }
+);
+
+ArchivedBookingSchema.index(
+    { 'contacts.whatsapp': 1 },
+    { unique: true, partialFilterExpression: { 'contacts.whatsapp': { $exists: true } } }
+);
+
+ArchivedBookingSchema.pre('save', function(next) {
+  if (!this.contacts.email) {
+    this.contacts.email = undefined;
+  }
+  if (!this.contacts.phone) {
+    this.contacts.phone = undefined;
+  }
+  if (!this.contacts.whatsapp) {
+    this.contacts.whatsapp = undefined;
+  }
+  next();
 });
 
 module.exports = mongoose.model('ArchivedBooking', ArchivedBookingSchema);

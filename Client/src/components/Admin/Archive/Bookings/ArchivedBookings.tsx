@@ -10,7 +10,7 @@ import {
     reactivateBooking,
     setFilterAC,
     setPageSizeAC,
-    setCurrentPageAC,
+    setCurrentPageAC, setBookingApiErrorAC,
 } from "../../../../redux/ArchivedBookings/archived-bookings-reducer";
 import {
     getFilterSelector,
@@ -21,6 +21,7 @@ import {
     getTotalCountSelector,
     getIsDeletingInProcessSelector,
     getAccessErrorSelector,
+    getArchivedBookingApiErrorSelector,
 } from "../../../../redux/ArchivedBookings/archived-bookings-selectors";
 import {ArchivedBooking} from "./ArchivedBooking";
 import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
@@ -39,6 +40,7 @@ export const ArchivedBookings: React.FC = () => {
     const filter = useSelector(getFilterSelector);
     const token = useSelector(getTokenSelector);
     const accessError = useSelector(getAccessErrorSelector);
+    const archivedBookingApiError = useSelector(getArchivedBookingApiErrorSelector);
 
     const dispatch = useDispatch();
 
@@ -92,6 +94,10 @@ export const ArchivedBookings: React.FC = () => {
         ));
     }
 
+    const setApiErrorCallBack = () => {
+        dispatch(setBookingApiErrorAC(null));
+    }
+
     const archivedConsultationsArray = archivedBookings
         .map(data => {
             return (
@@ -133,6 +139,11 @@ export const ArchivedBookings: React.FC = () => {
                                 </ul>
                             ) : <NothingToShow/>
                     }
+                    {/*<ApiErrorMessage*/}
+                    {/*      isOpen={!!archivedBookingApiError}*/}
+                    {/*      error={archivedBookingApiError}*/}
+                    {/*      closeModal={setApiErrorCallBack}*/}
+                    {/*/>*/}
                 </>
             }
         </>

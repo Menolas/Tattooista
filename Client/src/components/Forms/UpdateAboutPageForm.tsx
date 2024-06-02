@@ -60,20 +60,15 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
                 actions.setFieldError('aboutPageWallPaper', '');
             }
         }
-
         const formData = new FormData();
-
         for (let value in values) {
             formData.append(value, values[value]);
         }
-
         try {
             const response = await dispatch(editAboutPage(formData));
-            console.log('Response:', response); // Log the response here
             if (!response || response.message) { // Check the response here
                 throw new Error('Error submitting form');
             }
-            console.log("i am about to hit closeModal!!!!!!!!!")
             closeModal();
         } catch (error) {
             console.error('Error submitting form:', error);

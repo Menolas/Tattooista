@@ -114,11 +114,9 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
            } else {
                response = await dispatch(addStyle(formData));
            }
-           console.log('Response:', response); // Log the response here
            if (!response || response.message) { // Check the response here
                throw new Error('Error submitting form');
            }
-           console.log("i am about to hit closeModal!!!!!!!!!")
            closeModal();
 
        } catch (error) {
