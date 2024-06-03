@@ -12,6 +12,7 @@ import {
   archiveClient,
   setPageSize,
   setFilterAC,
+  setClientsApiErrorAC,
 } from "../../../redux/Clients/clients-reducer";
 import {
   getClientsIsFetching,
@@ -21,7 +22,8 @@ import {
   getIsClientDeletingInProcessSelector,
   getClientsFilterSelector,
   getClientsPageSizeSelector,
-  getIsDeletingPicturesInProcessSelector
+  getIsDeletingPicturesInProcessSelector,
+  getClientsApiErrorSelector,
 } from "../../../redux/Clients/clients-selectors";
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
@@ -42,6 +44,7 @@ export const ClientsContainer: React.FC = () => {
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
   const apiError = useSelector(getApiErrorSelector);
+  const clientsApiError = useSelector(getClientsApiErrorSelector);
 
   const dispatch = useDispatch();
 
@@ -58,53 +61,58 @@ export const ClientsContainer: React.FC = () => {
     page: number
   ) => {
     dispatch(setCurrentPageAC(page));
-  }
+  };
 
   const onFilterChangedCallBack = (
     filter: SearchFilterType
   ) => {
     dispatch(setFilterAC(filter));
-  }
+  };
 
   const addClientCallBack = (
     values: FormData
   ) => {
     dispatch(addClient(values, totalCount));
-  }
+  };
 
   const deleteClientCallBack = (
     clientId: string
   ) => {
-    dispatch(deleteClient(token, clientId, clients, currentPage, totalCount, pageSize, filter));
-  }
+    dispatch(deleteClient(token, clientId, clients, currentPage, pageSize, filter));
+  };
 
   const editClientCallBack = (
     clientId: string,
     values: FormData
   ) => {
     dispatch(editClient(clientId, values));
-  }
+  };
 
   const setPageLimitCallBack = (
     clientsPageSize: number
   ) => {
     dispatch(setPageSize(clientsPageSize));
-  }
+  };
 
   const updateClientGalleryCallBack = (clientId: string, values: FormData) => {
     dispatch(updateClientGallery(clientId, values));
-  }
+  };
 
   const deleteClientGalleryPictureCallBack = (clientId: string, picture: string) => {
     dispatch(deleteClientGalleryPicture(clientId, picture));
-  }
+  };
 
   const archiveClientCallBack = (clientId: string) => {
-    dispatch(archiveClient(token, clientId, clients, currentPage, totalCount, pageSize, filter));
-  }
+    dispatch(archiveClient(token, clientId, clients, currentPage, pageSize, filter));
+  };
+
+  const setClientsApiErrorCallBack = () => {
+    dispatch(setClientsApiErrorAC(null));
+  };
 
   return (
       <Clients
+          clientsApiError={clientsApiError}
           apiError={apiError}
           isFetching={isFetching}
           totalCount={totalCount}
@@ -124,6 +132,7 @@ export const ClientsContainer: React.FC = () => {
           updateGallery={updateClientGalleryCallBack}
           deleteGalleryItem={deleteClientGalleryPictureCallBack}
           archive={archiveClientCallBack}
+          setClientsApiError={setClientsApiErrorCallBack}
       />
   )
 }

@@ -58,50 +58,50 @@ export const BookingsContainer: React.FC = () => {
     page: number
   ) => {
     dispatch(setCurrentPageAC(page));
-  }
+  };
 
   const onFilterChangedCallBack = (
     filter: SearchFilterType
   ) => {
     dispatch(setFilterAC(filter));
-  }
+  };
 
   const changeStatusCallBack = (
     id: string,
     status: boolean
   ) => {
     dispatch(changeStatus(id, status));
-  }
+  };
 
   const removeCallBack = (
       id: string,
   ) => {
     dispatch(deleteBooking(token, id, bookings, currentPage, pageSize, filter));
-  }
+  };
 
   const turnBookingToClientCallBack = (
     id: string,
   ) => {
     dispatch(turnBookingToClient(token, id, bookings, currentPage, pageSize, filter));
-  }
+  };
 
   const setPageSizeCallBack = (
     pageSize: number
   ) => {
     dispatch(setPageSizeAC(pageSize));
-  }
+  };
 
   const addCallBack = (values: AddConsultationFormValues) => {
     dispatch(addBooking(values, totalCount));
-  }
+  };
 
   const archiveCallBack = (id: string) => {
     dispatch(archiveBooking(token, id, bookings, currentPage, pageSize, filter));
-  }
+  };
 
   const setBookingApiErrorCallBack = () => {
     dispatch(setBookingApiErrorAC(null));
-  }
+  };
 
   return (
       <Bookings
@@ -127,4 +127,4 @@ export const BookingsContainer: React.FC = () => {
         setBookingApiError={setBookingApiErrorCallBack}
       />
   )
-}
+};
