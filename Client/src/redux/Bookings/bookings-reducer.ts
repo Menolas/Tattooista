@@ -42,7 +42,7 @@ let initialState = {
   } as SearchFilterType,
   accessError: '' as string | undefined,
   bookingApiError: null as null | string,
-}
+};
 
 export type InitialStateType = typeof initialState;
 

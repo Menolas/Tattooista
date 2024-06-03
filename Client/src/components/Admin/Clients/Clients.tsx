@@ -10,8 +10,10 @@ import {Preloader} from "../../common/Preloader";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {clientFilterSelectOptions} from "../../../utils/constants";
 import {Navigate} from "react-router";
+import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 
 type PropsType = {
+  clientsApiError: null | string;
   apiError: null | string;
   isFetching: boolean;
   totalCount: number;
@@ -31,9 +33,11 @@ type PropsType = {
   updateGallery: (clientId: string, values: FormData) => void;
   deleteGalleryItem: (clientId: string, picture: string) => void;
   archive: (clientId: string) => void;
+  setClientsApiError: () => void;
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
+    clientsApiError,
     apiError,
     isFetching,
     totalCount,
@@ -53,6 +57,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     updateGallery,
     deleteGalleryItem,
     archive,
+    setClientsApiError,
 }) => {
 
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
@@ -151,6 +156,11 @@ export const Clients: React.FC<PropsType> = React.memo(({
                           />
                       }
                   </ModalPopUp>
+                  <ApiErrorMessageModal
+                      isOpen={!!clientsApiError}
+                      error={clientsApiError}
+                      closeModal={setClientsApiError}
+                  />
               </>
           }
       </>

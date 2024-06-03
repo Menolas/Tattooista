@@ -44,6 +44,10 @@ export const getIsDeletingPicturesInProcess = (state: AppStateType) => {
   return state.clients.isDeletingPicturesInProcess;
 }
 
+export const getClientsApiErrorSelector = (state: AppStateType) => {
+    return state.clients.clientsApiError;
+}
+
 export const getAccessErrorSelector = (state: AppStateType) => {
   return state.clients.accessError;
 }
