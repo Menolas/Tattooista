@@ -29,6 +29,7 @@ import {bookingFilterSelectOptions} from "../../../../utils/constants";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Navigate} from "react-router";
 import {SearchFilterType} from "../../../../types/Types";
+import {ApiErrorMessageModal} from "../../../../components/common/ApiErrorMessageModal";
 
 export const ArchivedBookings: React.FC = () => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -139,11 +140,11 @@ export const ArchivedBookings: React.FC = () => {
                                 </ul>
                             ) : <NothingToShow/>
                     }
-                    {/*<ApiErrorMessage*/}
-                    {/*      isOpen={!!archivedBookingApiError}*/}
-                    {/*      error={archivedBookingApiError}*/}
-                    {/*      closeModal={setApiErrorCallBack}*/}
-                    {/*/>*/}
+                    <ApiErrorMessageModal
+                          isOpen={!!archivedBookingApiError}
+                          error={archivedBookingApiError}
+                          closeModal={setApiErrorCallBack}
+                    />
                 </>
             }
         </>

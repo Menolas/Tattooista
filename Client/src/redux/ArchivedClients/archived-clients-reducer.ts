@@ -20,6 +20,7 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_ARCHIVED_CLIENT = 'DELETE_ARCHIVED_CLIENT';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+const SET_ARCHIVED_CLIENT_API_ERROR = 'SET_ARCHIVED_CLIENT_API_ERROR';
 
 const RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS = "You successfully restored this client!";
 
@@ -35,6 +36,7 @@ let initialState = {
     condition: "any"
   } as SearchFilterType,
   accessError: '' as string | undefined,
+  archivedClientsApiError: null as null | string,
 }
 
 export type InitialStateType = typeof initialState
@@ -111,6 +113,12 @@ export const archivedClientsReducer = (
         accessError: action.error
       }
 
+    case SET_ARCHIVED_CLIENT_API_ERROR:
+      return {
+        ...state,
+        archivedClientsApiError: action.error
+      }
+
     default: return state
 
   }
@@ -119,9 +127,18 @@ export const archivedClientsReducer = (
 type ActionsTypes = SetApiErrorAT | SetPageSizeAT | SetFilterAT |
     SetArchivedClientsAT | SetCurrentPageAT | SetTotalAT |
     ToggleIsDeletingInProcessAT | SetIsFetchingAT |
-    DeleteArchivedClientAT | SetAccessErrorAT | SetSuccessModalAT;
+    DeleteArchivedClientAT | SetAccessErrorAT | SetSuccessModalAT | setArchivedClientsApiErrorAT;
 
 // actions creators
+
+type setArchivedClientsApiErrorAT = {
+    type: typeof SET_ARCHIVED_CLIENT_API_ERROR
+    error: string | null
+}
+
+export const setArchivedClientsApiErrorAC = (error: string | null): setArchivedClientsApiErrorAT => ({
+    type: SET_ARCHIVED_CLIENT_API_ERROR, error
+});
 
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR
@@ -295,11 +312,12 @@ export const reactivateClient = (
     let response = await archivedClientsAPI.reactivateClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, total, pageLimit, filter));
+      dispatch(setArchivedClientsApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS));
     }
   } catch (e) {
     // @ts-ignore
-    dispatch(setApiErrorAC(e.response.data.message));
+    dispatch(setArchivedClientsApiErrorAC(e.response.data.message));
     console.log(e);
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
