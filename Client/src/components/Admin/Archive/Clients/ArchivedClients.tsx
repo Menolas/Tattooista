@@ -7,11 +7,12 @@ import {
     getArchivedClients,
     deleteArchivedClient,
     reactivateClient,
-    setFilterAC,
+    setFilterAC, setArchivedClientsApiErrorAC,
 } from "../../../../redux/ArchivedClients/archived-clients-reducer";
 import {NothingToShow} from "../../../common/NothingToShow";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    getArchivedClientsApiErrorSelector,
     getArchivedClientsFilter,
     getArchivedClientsPageSize,
     getArchivedClientsSelector,
@@ -25,6 +26,7 @@ import {ArchivedClient} from "./ArchivedClient";
 import {clientFilterSelectOptions} from "../../../../utils/constants";
 import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
 import {SearchFilterType} from "../../../../types/Types";
+import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
 
 export const ArchivedClients: React.FC = () => {
     const isFetching = useSelector(getClientsIsFetching);
@@ -34,6 +36,7 @@ export const ArchivedClients: React.FC = () => {
     const pageSize = useSelector(getArchivedClientsPageSize);
     const currentPage = useSelector(getCurrentArchivedClientsPageSelector);
     const filter = useSelector(getArchivedClientsFilter);
+    const archivedClientsApiError = useSelector(getArchivedClientsApiErrorSelector);
 
     const dispatch = useDispatch();
 
@@ -85,6 +88,10 @@ export const ArchivedClients: React.FC = () => {
         ));
     }
 
+    const setArchivedClientsApiErrorCallBack = () => {
+        dispatch(setArchivedClientsApiErrorAC(null));
+    }
+
     const clientsElements = archivedClients
         .map(data => {
             return (
@@ -125,6 +132,11 @@ export const ArchivedClients: React.FC = () => {
                           )
                         : <NothingToShow/>
             }
+            <ApiErrorMessageModal
+                isOpen={!!archivedClientsApiError}
+                error={archivedClientsApiError}
+                closeModal={setArchivedClientsApiErrorCallBack}
+            />
         </>
     )
 }

@@ -35,3 +35,7 @@ export const getArchivedClientsFilter = (state: AppStateType) => {
 export const getAccessErrorSelector = (state: AppStateType) => {
   return state.archivedClients.accessError;
 }
+
+export const getArchivedClientsApiErrorSelector = (state: AppStateType) => {
+  return state.archivedClients.archivedClientsApiError;
+}
