@@ -32,15 +32,18 @@ export const StylesContainer: React.FC = () => {
 
     const dispatch = useDispatch();
 
-    useEffect( () => {
-        dispatch(getStyles(token)).then(r => {
-            console.log("get style dispatch !!!!!!!!!!!!!!!!!");
-            if (!activeStyle?._id) {
-                activeStyle = styles[0];
-                dispatch(setActiveStyleAC(styles[0]));
-            }
-        });
-    }, []);
+    useEffect(() => {
+        if (!activeStyle?._id && styles.length > 0) {
+            dispatch(setActiveStyleAC(styles[0]));
+        } else if (!activeStyle?._id){
+            dispatch(getStyles(token)).then(() => {
+                if (styles.length > 0) {
+                    dispatch(setActiveStyleAC(styles[0]));
+                }
+            });
+        }
+
+    }, [dispatch, styles, activeStyle]);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(resetActiveStyle(style));
