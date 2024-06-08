@@ -62,9 +62,6 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
             <h3 className="form__title">
               Login
             </h3>
-            { loginError  !== '' &&
-                <ApiErrorMessage message={loginError}/>
-            }
             <FieldComponent
                 name={'email'}
                 type={'text'}
@@ -81,6 +78,9 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                 value={propsF.values.password}
                 onChange={propsF.handleChange}
             />
+            { loginError  !== '' &&
+                <ApiErrorMessage message={loginError}/>
+            }
             <button
               className="btn btn--bg btn--dark-bg form__submit-btn"
               type="submit"

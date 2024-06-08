@@ -135,9 +135,6 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form className="form form--updateClient" encType={"multipart/form-data"}>
-            { !!apiError &&
-                <ApiErrorMessage message={apiError}/>
-            }
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
               <div className="form__input-wrap--uploadFile-img">
                 <img
@@ -213,6 +210,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 onChange={propsF.handleChange}
                 value={propsF.values.whatsapp}
             />
+            { !!apiError &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <button
               type="submit"
               disabled={!propsF.dirty || propsF.isSubmitting}

@@ -136,9 +136,6 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
             {propsF => {
                 return (
                     <Form className="form form--updateTattooStyle" encType={"multipart/form-data"}>
-                        { !!apiError &&
-                            <ApiErrorMessage message={apiError}/>
-                        }
                         <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img
@@ -182,6 +179,9 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
                                 value={propsF.values.description}/>
 
                         </FieldWrapper>
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <button
                             type="submit"
                             disabled={!propsF.dirty || propsF.isSubmitting}

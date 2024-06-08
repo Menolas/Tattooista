@@ -22,8 +22,8 @@ class PagesController {
     console.log(JSON.stringify(req.body))
     try {
       const page = await Page.findOne({name: 'about'});
-      page.title = req.body.aboutPageTitle;
-      page.content = req.body.aboutPageContent;
+      page.title = req.body.aboutPageTitle.trim();
+      page.content = req.body.aboutPageContent.trim();
       if(req.files && req.files.aboutPageWallPaper) {
         const file = req.files.aboutPageWallPaper;
         if(!file)  return res.json({error: 'Incorrect input name'});
