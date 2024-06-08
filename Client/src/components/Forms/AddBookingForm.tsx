@@ -72,9 +72,6 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
           <Form id="booking"
             className="form booking__form"
           >
-            { apiError  !== '' &&
-                <ApiErrorMessage message={apiError}/>
-            }
             <FieldComponent
                 name={'bookingName'}
                 type={'text'}
@@ -118,7 +115,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 onChange={propsF.handleChange}
                 value={propsF.values.whatsapp}
             />
-
+            { apiError  !== '' &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <button
               type="submit"
               disabled={!propsF.dirty || isSubmitting}

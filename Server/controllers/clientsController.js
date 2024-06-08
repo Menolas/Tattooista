@@ -96,12 +96,12 @@ class clientsController {
       });
     }
 
-    res.client.fullName = req.body.clientName;
+    res.client.fullName = req.body.clientName.trim();
     res.client.contacts.email = req.body.email;
-    res.client.contacts.insta = req.body.insta;
+    res.client.contacts.insta = req.body.insta.trim();
     res.client.contacts.phone = req.body.phone;
     res.client.contacts.whatsapp = req.body.whatsapp;
-    res.client.contacts.messenger = req.body.messenger;
+    res.client.contacts.messenger = req.body.messenger.trim();
 
     if (req.files && req.files.avatar) {
       if (res.client.avatar) {
@@ -175,13 +175,13 @@ class clientsController {
 
   async addClient(req, res) {
     const client = new Client({
-      fullName: req.body.clientName,
+      fullName: req.body.clientName.trim(),
       contacts: {
         email: req.body.email,
-        insta: req.body.insta,
+        insta: req.body.insta.trim(),
         phone: req.body.phone,
         whatsapp: req.body.whatsapp,
-        messenger: req.body.messenger
+        messenger: req.body.messenger.trim()
       }
     });
 

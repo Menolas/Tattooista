@@ -74,13 +74,13 @@ class bookingController {
     const results = {};
     try {
       const booking = new Booking({
-        fullName: req.body.bookingName,
+        fullName: req.body.bookingName.trim(),
         contacts: {
           email: req.body.email,
           phone: req.body.phone,
           whatsapp: req.body.whatsapp,
-          messenger: req.body.messenger,
-          insta: req.body.insta
+          messenger: req.body.messenger.trim(),
+          insta: req.body.insta.trim()
         },
         message: req.body.message
       });

@@ -55,9 +55,6 @@ export const UpdateFaqItemForm: React.FC<PropsType> = ({
             {propsF => {
                 return (
                     <Form className="form form--updateTattooStyle">
-                        { !!apiError &&
-                            <ApiErrorMessage message={apiError}/>
-                        }
                         <FieldComponent
                             name={'question'}
                             type={'text'}
@@ -78,7 +75,9 @@ export const UpdateFaqItemForm: React.FC<PropsType> = ({
                                 onChange={propsF.handleChange}
                             />
                         </FieldWrapper>
-
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <button
                             type="submit"
                             disabled={!propsF.dirty || propsF.isSubmitting}

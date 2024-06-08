@@ -173,9 +173,6 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form className="form" encType={"multipart/form-data"}>
-            { !!apiError &&
-                <ApiErrorMessage message={apiError}/>
-            }
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
               <div className="form__input-wrap--uploadFile-img">
                 <img
@@ -224,6 +221,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                 value={propsF.values.password}
             />
             { rolesFields }
+            { !!apiError &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <button
               type="submit"
               disabled={!propsF.dirty || propsF.isSubmitting}

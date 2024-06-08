@@ -4,12 +4,12 @@ const generateFileRandomName = require("../utils/functions");
 
 const getConditions = (reqBody) => {
   const conditions = [];
-  if (reqBody.condition_0 !== "undefined") conditions.push(reqBody.condition_0);
-  if (reqBody.condition_1 !== "undefined") conditions.push(reqBody.condition_1);
-  if (reqBody.condition_2 !== "undefined") conditions.push(reqBody.condition_2);
-  if (reqBody.condition_3 !== "undefined") conditions.push(reqBody.condition_3);
-  if (reqBody.condition_4 !== "undefined") conditions.push(reqBody.condition_4);
-  if (reqBody.condition_5 !== "undefined") conditions.push(reqBody.condition_5);
+  if (reqBody.condition_0 !== "undefined") conditions.push(reqBody.condition_0.trim());
+  if (reqBody.condition_1 !== "undefined") conditions.push(reqBody.condition_1.trim());
+  if (reqBody.condition_2 !== "undefined") conditions.push(reqBody.condition_2.trim());
+  if (reqBody.condition_3 !== "undefined") conditions.push(reqBody.condition_3.trim());
+  if (reqBody.condition_4 !== "undefined") conditions.push(reqBody.condition_4.trim());
+  if (reqBody.condition_5 !== "undefined") conditions.push(reqBody.condition_5.trim());
 
   return conditions;
 }

@@ -113,9 +113,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
             <h3 className="form__title">
               FILL THE FORM AND WE WILL CONTACT YOU SOON
             </h3>
-            { !!apiError &&
-                <ApiErrorMessage message={apiError}/>
-            }
             <FieldComponent
               name={'bookingName'}
               type={'text'}
@@ -177,6 +174,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 CONSENT WITH PROCESSING OF MY PERSONAL DATA
               </label>
             </FieldWrapper>
+            { !!apiError &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <button
               type="submit"
               disabled={!propsF.dirty || propsF.isSubmitting}

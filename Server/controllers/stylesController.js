@@ -65,7 +65,7 @@ class stylesController {
   async addTattooStyle(req, res) {
     const tattooStyle = new TattooStyle({
       value: req.body.value.trim(),
-      description: req.body.description
+      description: req.body.description.trim()
     });
 
     const results = {};
@@ -93,7 +93,7 @@ class stylesController {
 
   async updateTattooStyle(req, res) {
     res.tattooStyle.value = req.body.value.trim();
-    res.tattooStyle.description = req.body.description;
+    res.tattooStyle.description = req.body.description.trim();
 
     const results = {};
 

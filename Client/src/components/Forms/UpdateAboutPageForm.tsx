@@ -85,9 +85,6 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
             {propsF => {
                 return (
                     <Form className="form form--updateAboutForm" encType={"multipart/form-data"}>
-                        { !!apiError &&
-                            <ApiErrorMessage message={apiError}/>
-                        }
                         <FieldWrapper name={'aboutPageWallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
                                 <img
@@ -135,7 +132,9 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
                                 onChange={propsF.handleChange}
                                 value={propsF.values.aboutPageContent}/>
                         </FieldWrapper>
-
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <button
                             type="submit"
                             disabled={!propsF.dirty || propsF.isSubmitting}

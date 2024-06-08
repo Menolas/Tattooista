@@ -93,9 +93,6 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
         return (
           <Form id="registration" className="form">
             <h3 className="form__title">Registration</h3>
-            { registrationError  !== '' &&
-                <ApiErrorMessage message={registrationError}/>
-            }
             <FieldWrapper
                 name={'avatar'}
                 wrapperClass={'form__input-wrap--uploadFile'}
@@ -155,6 +152,9 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 CONSENT WITH PROCESSING OF MY PERSONAL DATA
               </label>
             </FieldWrapper>
+            { registrationError  !== '' &&
+                <ApiErrorMessage message={registrationError}/>
+            }
             <button
               className="btn btn--bg btn--dark-bg form__submit-btn"
               type="submit"

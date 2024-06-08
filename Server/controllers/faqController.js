@@ -16,7 +16,7 @@ class faqController {
   async addFaqItem(req, res) {
     const faqItem = new FaqItem({
       question: req.body.question.trim(),
-      answer: req.body.answer
+      answer: req.body.answer.trim()
     });
 
     const results = {};
@@ -35,7 +35,7 @@ class faqController {
 
   async updateFaqItem(req, res) {
     res.faqItem.question = req.body.question.trim();
-    res.faqItem.answer = req.body.answer;
+    res.faqItem.answer = req.body.answer.trim();
 
     const results = {};
 
