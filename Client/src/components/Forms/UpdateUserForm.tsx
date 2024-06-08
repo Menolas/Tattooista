@@ -23,11 +23,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
         .required("First name is a required field"),
     email: Yup.string()
         .email("Email should have correct format")
-        .when(['phone', 'insta', 'messenger', 'whatsapp'], {
-          is: (phone, insta, messenger, whatsapp) =>
-              !phone && !insta && !messenger && !whatsapp,
-          then: () => Yup.string().required('At least one field must be filled'),
-        }),
+        .required("Email is a required field"),
     password: Yup
         .string()
         .min(4, 'Password is too short - should be 4 chars minimum.'),

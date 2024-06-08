@@ -1,7 +1,7 @@
 const Router = require('express');
 const router = new Router();
 const TattooStyle = require('../models/TattooStyle');
-const controller = require('../controllers/tattooStyleController');
+const controller = require('../controllers/stylesController');
 const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 //getting all tattooStyles
