@@ -21,6 +21,7 @@ type PropsType = {
     isAuth: string;
     page?: PageType;
     changeVisibility: (isActive: boolean) => void;
+    setApiError: () => void;
 }
 
 export const About: React.FC<PropsType> = React.memo(({
@@ -31,12 +32,14 @@ export const About: React.FC<PropsType> = React.memo(({
      isAuth,
      page,
      changeVisibility,
+     setApiError,
 }) => {
 
     const [isEditMode, setIsEditMode] = useState(false);
 
     const closeEditModal = () => {
         setIsEditMode(false);
+        setApiError();
     }
 
     useEffect(() => {

@@ -19,6 +19,7 @@ import {
 } from "../../../redux/Styles/styles-selectors";
 import {Styles} from "./Styles";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const StylesContainer: React.FC = () => {
     const apiError = useSelector(getApiErrorSelector);
@@ -57,6 +58,10 @@ export const StylesContainer: React.FC = () => {
         dispatch(deleteStyle(id));
     }
 
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(null));
+    }
+
     return (
         <Styles
             apiError={apiError}
@@ -69,6 +74,7 @@ export const StylesContainer: React.FC = () => {
             add={addCallBack}
             edit={editCallBack}
             remove={removeCallBack}
+            setApiError={setApiErrorCallBack}
         />
     )
 }

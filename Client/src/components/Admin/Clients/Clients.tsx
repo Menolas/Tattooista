@@ -34,6 +34,7 @@ type PropsType = {
   deleteGalleryItem: (clientId: string, picture: string) => void;
   archive: (clientId: string) => void;
   setClientsApiError: () => void;
+  setApiError: () => void;
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
@@ -58,6 +59,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     deleteGalleryItem,
     archive,
     setClientsApiError,
+    setApiError,
 }) => {
 
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
@@ -68,12 +70,13 @@ export const Clients: React.FC<PropsType> = React.memo(({
     if ((addClientMode || editClientMode) && apiError === null) {
         closeModal();
     }
-}, [apiError]);
+  }, [apiError]);
 
   const closeModal = () => {
     setAddClientMode(false);
     setEditClientMode(false);
     setClient(null);
+    setApiError();
   }
 
   const modalTitleAddClient = 'ADD CLIENT';

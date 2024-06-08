@@ -16,6 +16,7 @@ type PropsType = {
   edit: (id: string, values: FormData) => void;
   add: (values: FormData) => void;
   remove: (id: string) => void;
+  setApiError: () => void;
 };
 
 export const Services: React.FC<PropsType> = React.memo(({
@@ -27,6 +28,7 @@ export const Services: React.FC<PropsType> = React.memo(({
   edit,
   add,
   remove,
+  setApiError,
 }) => {
 
   const [updateServiceData, setUpdateServiceData] = useState<{
@@ -49,6 +51,7 @@ export const Services: React.FC<PropsType> = React.memo(({
           isAdd: false,
           isEdit: false
       });
+      setApiError();
   };
 
   const updateServiceModalTitle = 'Update "Services" block';

@@ -31,6 +31,7 @@ type PropsType = {
   add: (values: FormData) => void;
   edit: (id: string, values: FormData) => void;
   remove: (id: string) => void;
+  setApiError: () => void;
 }
 
 export const Styles: React.FC<PropsType> = React.memo(({
@@ -44,6 +45,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
   add,
   edit,
   remove,
+  setApiError,
 }) => {
   const [addMode, setAddMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -65,6 +67,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
     setAddMode(false);
     setEditMode(false);
     setStyle(null);
+    setApiError();
   }
 
   const closeConfirmationModalCallBack = () => {

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
 import {
+  ApiErrorMessage,
   isFileSizeValid,
   isFileTypesValid,
   MAX_FILE_SIZE,
@@ -49,6 +50,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 }
 
 type PropsType = {
+  apiError: string | null;
   isEditing: boolean;
   roles: Array<RoleType>;
   data?: UserType;
@@ -58,6 +60,7 @@ type PropsType = {
 }
 
 export const UpdateUserForm: React.FC<PropsType> = React.memo(({
+  apiError,
   isEditing,
   roles,
   data,
@@ -82,7 +85,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
       setHasNewFile(true);
       fileReader.readAsDataURL(file);
     }
-  }
+  };
 
   let rolesInitialValues = {};
   rolesInitialValues = roles.reduce((acc, role) => {
@@ -99,13 +102,11 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     displayName: data?.displayName ?? '',
     email: data?.email ?? '',
     password: '',
-    roles: rolesInitialValues
+    roles: rolesInitialValues,
   }
 
-  const submit = (values, actions: FormikHelpers<FormikValues>) => {
+  const submit = async (values, actions: FormikHelpers<FormikValues>) => {
     const formData = new FormData();
-
-    // Append each field from values to formData
     for (let key in values) {
 
       if (key === 'roles') {
@@ -126,14 +127,17 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     // for (let [key, value] of formData.entries()) {
     //   console.log(key, value);
     // }
-
+    let success;
     if (isEditing) {
-      edit(data._id, formData);
+      success = await edit(data._id, formData);
     } else {
-      add(formData);
+      success = await add(formData);
     }
-    actions.resetForm();
-    closeModal();
+    const isSuccess = Boolean(success);
+    if (isSuccess) {
+      closeModal();
+    }
+    actions.setSubmitting(false);
   }
 
   return (
@@ -173,6 +177,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form className="form" encType={"multipart/form-data"}>
+            { !!apiError &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
               <div className="form__input-wrap--uploadFile-img">
                 <img

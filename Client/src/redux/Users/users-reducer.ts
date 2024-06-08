@@ -351,6 +351,7 @@ export const updateUser = (
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(setApiErrorAC(''));
             dispatch(editUserAC(response.user));
+            dispatch(setApiErrorAC(null));
             dispatch(setSuccessModalAC(true, UPDATE_USER_SUCCESS));
         }
     } catch (e: any) {
@@ -369,6 +370,7 @@ export const addUser = (
         let response = await usersAPI.addUser(values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addUserAC(response.user));
+            dispatch(setApiErrorAC(null));
             dispatch(setSuccessModalAC(true, ADD_USER_SUCCESS));
             dispatch(setTotalCountAC(total + 1));
         }

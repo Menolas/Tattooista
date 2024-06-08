@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const ServicesContainer = () => {
     const apiError = useSelector(getApiErrorSelector);
@@ -43,6 +44,10 @@ export const ServicesContainer = () => {
         dispatch(deleteService(id));
     }
 
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(null));
+    }
+
     return (
         <Services
             apiError={apiError}
@@ -54,6 +59,7 @@ export const ServicesContainer = () => {
             edit={editCallBack}
             add={addCallBack}
             remove={removeCallBack}
+            setApiError={setApiErrorCallBack}
         />
     )
 }

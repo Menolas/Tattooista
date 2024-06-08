@@ -33,6 +33,7 @@ type PropsType = {
   add: (values: AddConsultationFormValues) => void;
   archive: (id: string) => void;
   setBookingApiError: () => void;
+  setApiError: () => void;
 }
 
 export const Bookings: React.FC<PropsType> = React.memo(({
@@ -56,14 +57,14 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   add,
   archive,
   setBookingApiError,
+  setApiError,
 }) => {
-  console.log(bookingApiError + " booking api error !!!!!!!bokings")
 
     let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
 
     const closeModal = () => {
-        setAddConsultationMode(false);
-
+      setAddConsultationMode(false);
+      setApiError()
     }
 
     useEffect(() => {
