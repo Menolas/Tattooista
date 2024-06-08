@@ -136,7 +136,7 @@ class usersController {
 
         const results = {};
         try {
-            const displayName = req.body.displayName;
+            const displayName = req.body.displayName.trim();
             const email = req.body.email;
             const password = req.body.password;
             const roleIds = req.body.roles.match(/[a-f\d]{24}/g);

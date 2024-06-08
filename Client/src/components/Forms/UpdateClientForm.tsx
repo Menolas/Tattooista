@@ -59,7 +59,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 };
 
 type PropsType = {
-  apiError: string;
+  apiError: string | null;
   isEditing: boolean;
   data: ClientType;
   closeModal: () => void;

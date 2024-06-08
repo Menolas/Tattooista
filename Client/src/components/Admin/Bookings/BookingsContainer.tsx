@@ -103,6 +103,10 @@ export const BookingsContainer: React.FC = () => {
     dispatch(setBookingApiErrorAC(null));
   };
 
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(null));
+  }
+
   return (
       <Bookings
         bookingApiError={bookingApiError}
@@ -125,6 +129,7 @@ export const BookingsContainer: React.FC = () => {
         add={addCallBack}
         archive={archiveCallBack}
         setBookingApiError={setBookingApiErrorCallBack}
+        setApiError={setApiErrorCallBack}
       />
   )
 };

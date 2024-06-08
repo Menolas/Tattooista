@@ -24,6 +24,8 @@ import {
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../types/Types";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const UsersContainer: React.FC = () => {
 
@@ -36,6 +38,7 @@ export const UsersContainer: React.FC = () => {
     const pageLimit = useSelector(getPageLimitSelector);
     const filter = useSelector(getFiletSelector);
     const accessError = useSelector(getAccessErrorSelector);
+    const apiError = useSelector(getApiErrorSelector);
 
     const dispatch = useDispatch();
 
@@ -46,33 +49,38 @@ export const UsersContainer: React.FC = () => {
 
     const setPageLimitCallBack = (limit: number) => {
         dispatch(setPageLimitAC(limit));
-    }
+    };
 
     const setCurrentPageCallBack = (page: number) => {
         dispatch(setCurrentPageAC(page));
-    }
+    };
 
     const setFilterCallBack = (filter: SearchFilterType) => {
         dispatch(setUsersFilterAC(filter));
-    }
+    };
 
     const removeCallBack = (userId: string) => {
         dispatch(deleteUser(token, userId, users, currentPage, total, pageLimit, filter));
-    }
+    };
 
     const editCallBack = (
         id: string,
         values: FormData
     ) => {
         dispatch(updateUser(id, values));
-    }
+    };
 
     const addUserCallBack = (values: FormData) => {
         dispatch(addUser(values, total));
-    }
+    };
+
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(null));
+    };
 
     return (
         <Users
+            apiError={apiError}
             roles={roles}
             users={users}
             filter={filter}
@@ -87,6 +95,7 @@ export const UsersContainer: React.FC = () => {
             remove={removeCallBack}
             edit={editCallBack}
             add={addUserCallBack}
+            setApiError={setApiErrorCallBack}
         />
     )
 }

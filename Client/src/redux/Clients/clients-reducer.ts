@@ -418,8 +418,7 @@ export const editClient = (
       dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, UPDATE_CLIENT_SUCCESS));
     }
-  } catch (e) {
-    // @ts-ignore
+  } catch (e: any) {
     dispatch(setApiErrorAC(e.response.data.message));
   } finally {
     dispatch(setIsFetchingAC(false));

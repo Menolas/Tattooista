@@ -6,12 +6,13 @@ import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
 import { usersFilterSelectOptions } from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Navigate} from "react-router";
 
 type PropsType = {
+    apiError: null | string;
     roles: Array<RoleType>;
     users: Array<UserType>;
     filter: SearchFilterType;
@@ -26,9 +27,11 @@ type PropsType = {
     remove: (userId: string) => void;
     edit: (id: string, values: FormData) => void;
     add: (values: FormData) => void;
+    setApiError: () => void;
 }
 
 export const Users: React.FC<PropsType> = ({
+   apiError,
    roles,
    users,
    filter,
@@ -43,16 +46,24 @@ export const Users: React.FC<PropsType> = ({
    remove,
    edit,
    add,
+   setApiError,
 }) => {
 
     const [addUserMode, setAddMode] = useState<boolean>(false);
     const [editUserMode, setEditMode] = useState<boolean>(false);
     const [data, setData] = useState<UserType>(null);
 
+    useEffect(() => {
+        if ((addUserMode || editUserMode) && apiError === null) {
+            closeModal();
+        }
+    }, [apiError]);
+
     const closeModal = () => {
         setAddMode(false);
         setEditMode(false);
         setData(null);
+        setApiError();
     }
 
     const addUserModalTitle = 'ADD USER';
@@ -115,6 +126,7 @@ export const Users: React.FC<PropsType> = ({
                     >
                         {(addUserMode || editUserMode) &&
                             <UpdateUserForm
+                                apiError={apiError}
                                 isEditing={editUserMode}
                                 data={data}
                                 roles={roles}

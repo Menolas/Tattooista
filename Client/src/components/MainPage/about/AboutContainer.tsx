@@ -13,6 +13,7 @@ import {
 import {useEffect} from "react";
 import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 
 export const AboutContainer = () => {
@@ -33,6 +34,10 @@ export const AboutContainer = () => {
         dispatch(changeAboutPageVisibility(isActive));
     }
 
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(null));
+    }
+
     if  (isAuth || page?.isActive) {
         return (
             <About
@@ -43,6 +48,7 @@ export const AboutContainer = () => {
                 isAuth={isAuth}
                 page={page}
                 changeVisibility={changeAboutPageVisibilityCallBack}
+                setApiError={setApiErrorCallBack}
             />
         )
     } else {

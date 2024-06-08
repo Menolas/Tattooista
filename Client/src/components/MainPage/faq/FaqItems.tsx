@@ -16,6 +16,7 @@ type PropsType = {
   edit: (id: string, values: any) => void;
   add: (values: FaqType) => void;
   remove: (id: string) => void;
+  setApiError: () => void;
 }
 
 export const FaqItems: React.FC<PropsType> = React.memo(({
@@ -27,6 +28,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   edit,
   add,
   remove,
+  setApiError,
 }) => {
 
   const [addFaqItemMode, setAddFaqItemMode] = useState(false);
@@ -73,6 +75,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
           closeModal={() => {
             setUpdateFaqItemData({isUpdateMode: false});
             setAddFaqItemMode(false);
+            setApiError();
           }}
         >
           { (updateFaqItemData.isUpdateMode || addFaqItemMode) &&

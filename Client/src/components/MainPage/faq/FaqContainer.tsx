@@ -19,6 +19,7 @@ import {
 import {FaqType} from "../../../types/Types";
 import {useEffect} from "react";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const FaqContainer = () => {
 
@@ -46,6 +47,10 @@ export const FaqContainer = () => {
         dispatch(deleteFaqItem(id));
     }
 
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(null));
+    }
+
     return (
         <FaqItems
             apiError={apiError}
@@ -56,6 +61,7 @@ export const FaqContainer = () => {
             edit={editCallBack}
             add={addCallBack}
             remove={removeCallBack}
+            setApiError={setApiErrorCallBack}
         />
     )
 }

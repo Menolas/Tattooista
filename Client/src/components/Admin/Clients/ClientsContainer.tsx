@@ -30,6 +30,7 @@ import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
 import {SearchFilterType} from "../../../types/Types";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -110,6 +111,10 @@ export const ClientsContainer: React.FC = () => {
     dispatch(setClientsApiErrorAC(null));
   };
 
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(null));
+  }
+
   return (
       <Clients
           clientsApiError={clientsApiError}
@@ -133,6 +138,7 @@ export const ClientsContainer: React.FC = () => {
           deleteGalleryItem={deleteClientGalleryPictureCallBack}
           archive={archiveClientCallBack}
           setClientsApiError={setClientsApiErrorCallBack}
+          setApiError={setApiErrorCallBack}
       />
   )
 }
