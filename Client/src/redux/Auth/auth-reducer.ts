@@ -171,7 +171,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
 ) => {
   try {
     let response = await authAPI.login(values);
-    if(response.resultCode === 0) {
+    if(response.resultCode === ResultCodesEnum.Success) {
       dispatch(setLoginErrorAC(''));
       dispatch(setUserDataAC(response.userData.user));
       dispatch(setAuthAC(getUserRole(response.userData.user.roles, response.userData.roles)));
@@ -189,7 +189,7 @@ export const logout = (): ThunkType => async (
 ) => {
   try {
     const response = await authAPI.logout();
-     if(response.resultCode === 0) {
+     if(response.resultCode === ResultCodesEnum.Success) {
        dispatch(setAccessTokenAC(null));
        dispatch(setUserDataAC(null));
        dispatch(setAuthAC(null));

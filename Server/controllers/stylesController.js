@@ -6,8 +6,7 @@ const generateFileRandomName = require("../utils/functions");
 class stylesController {
 
   async getTattooStyles (req, res) {
-    console.log(req.hasRole + " hit controller!!!");
-
+    console.log(req.hasRole + " if there is role!!!!!!!!!!!!!!!!!!");
     const results = {};
     try {
       const tattooStyles = await TattooStyle.find().sort({createdAt: -1});

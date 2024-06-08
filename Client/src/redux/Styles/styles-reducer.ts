@@ -25,7 +25,7 @@ let initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   styles: [] as Array<StyleType>,
-  activeStyle: {} as StyleType | null,
+  activeStyle: null as StyleType | null,
   fakeApi: false as boolean,
 }
 
