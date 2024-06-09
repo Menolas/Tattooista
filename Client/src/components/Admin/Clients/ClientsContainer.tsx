@@ -4,9 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
   getClients,
   setCurrentPageAC,
-  addClient,
   deleteClient,
-  editClient,
   updateClientGallery,
   deleteClientGalleryPicture,
   archiveClient,
@@ -70,23 +68,10 @@ export const ClientsContainer: React.FC = () => {
     dispatch(setFilterAC(filter));
   };
 
-  const addClientCallBack = (
-    values: FormData
-  ) => {
-    dispatch(addClient(values, totalCount));
-  };
-
   const deleteClientCallBack = (
     clientId: string
   ) => {
     dispatch(deleteClient(token, clientId, clients, currentPage, pageSize, filter));
-  };
-
-  const editClientCallBack = (
-    clientId: string,
-    values: FormData
-  ) => {
-    dispatch(editClient(clientId, values));
   };
 
   const setPageLimitCallBack = (
@@ -130,9 +115,7 @@ export const ClientsContainer: React.FC = () => {
           accessError={accessError}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChangedCallBack}
-          add={addClientCallBack}
           remove={deleteClientCallBack}
-          edit={editClientCallBack}
           setPageLimit={setPageLimitCallBack}
           updateGallery={updateClientGalleryCallBack}
           deleteGalleryItem={deleteClientGalleryPictureCallBack}

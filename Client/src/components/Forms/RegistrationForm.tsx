@@ -45,12 +45,12 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-  registrationError: string | null;
+  authApiError: string | null;
   registration: (values: RegistrationFormValues) => void;
 }
 
 export const RegistrationForm: React.FC<PropsType> = React.memo(({
-  registrationError,
+  authApiError,
   registration
 }) => {
 
@@ -152,8 +152,8 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 CONSENT WITH PROCESSING OF MY PERSONAL DATA
               </label>
             </FieldWrapper>
-            { registrationError  !== '' &&
-                <ApiErrorMessage message={registrationError}/>
+            { authApiError &&
+                <ApiErrorMessage message={authApiError}/>
             }
             <button
               className="btn btn--bg btn--dark-bg form__submit-btn"

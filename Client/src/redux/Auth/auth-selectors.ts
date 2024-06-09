@@ -12,12 +12,8 @@ export const getUserSelector = (state: AppStateType) => {
   return state.auth.user
 }
 
-export const getRegistrationErrorSelector = (state: AppStateType) => {
-  return state.auth.registrationError
-}
-
-export const getLoginErrorSelector = (state: AppStateType) => {
-  return state.auth.loginError
+export const getAuthApiErrorSelector = (state: AppStateType) => {
+  return state.auth.authApiError
 }
 
 export const getRolesSelector = (state: AppStateType) => {

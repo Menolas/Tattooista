@@ -6,14 +6,14 @@ import {IUser} from "../../types/Types";
 type PropsType = {
     isAuth: string;
     user?: IUser;
-    registrationError: string | null;
+    authApiError: string | null;
     registration: (values: RegistrationFormValues) => void;
 }
 
 export const Registration: React.FC<PropsType> = React.memo(({
   isAuth,
   user,
-  registrationError,
+  authApiError,
   registration,
 }) => {
 
@@ -23,7 +23,7 @@ export const Registration: React.FC<PropsType> = React.memo(({
                 <div className = "registration__form-wrap form__wrap">
                     <RegistrationForm
                         //isAuth={isAuth}
-                        registrationError={registrationError}
+                        authApiError={authApiError}
                         registration={registration}
                     />
                 </div>

@@ -7,6 +7,7 @@ import { LoginFormValues } from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import { NavLink } from "react-router-dom";
 import {ADMIN, SUPER_ADMIN, USER} from "../../utils/constants";
+import {useEffect} from "react";
 
 const validationSchema = Yup.object().shape({
   email: Yup
@@ -20,13 +21,13 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
   isAuth: null | string;
-  loginError: string;
+  authApiError: null | string;
   login: (values: LoginFormValues) => void;
 }
 
 export const LoginForm: React.FC<PropsType> = React.memo(({
   isAuth,
-  loginError,
+  authApiError,
   login
 }) => {
 
@@ -78,8 +79,8 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                 value={propsF.values.password}
                 onChange={propsF.handleChange}
             />
-            { loginError  !== '' &&
-                <ApiErrorMessage message={loginError}/>
+            { authApiError &&
+                <ApiErrorMessage message={authApiError}/>
             }
             <button
               className="btn btn--bg btn--dark-bg form__submit-btn"

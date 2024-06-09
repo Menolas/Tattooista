@@ -5,6 +5,11 @@ import {FaqType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "../../utils/validators";
+import {useDispatch} from "react-redux";
+import {
+    addFaqItem,
+    updateFaqItem,
+} from "../../redux/Faq/faq-reducer";
 
 const validationSchema = Yup.object().shape({
     question: Yup.string()
@@ -32,16 +37,17 @@ export const UpdateFaqItemForm: React.FC<PropsType> = ({
         answer: faqItem?.answer ?? '',
     };
 
+    const dispatch = useDispatch();
+
     const submit = async (values, actions: FormikHelpers<FormikValues>) => {
         let success;
         if (faqItem) {
-            success = await edit(faqItem._id, values);
+            success = await dispatch(updateFaqItem(faqItem._id, values));
         } else {
-            success = await add(values);
+            success = await dispatch(addFaqItem(values));
         }
-        const isSuccess = Boolean(success);
-        if (isSuccess) {
-            closeModal()
+        if (success) {
+            closeModal();
         }
         actions.setSubmitting(false);
     };

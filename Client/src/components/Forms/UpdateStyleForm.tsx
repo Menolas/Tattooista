@@ -45,16 +45,12 @@ type PropsType = {
     apiError: null | string;
     isEditing: boolean;
     style?: StyleType;
-    add?: (values: FormData) => void;
-    edit?: (id: string, values: FormData) => void;
     closeModal: () => void;
 }
-export const UpdateTattooStyleForm: React.FC<PropsType> = ({
+export const UpdateStyleForm: React.FC<PropsType> = ({
     apiError,
     isEditing,
     style,
-    add,
-    edit,
     closeModal,
 }) => {
 
@@ -108,17 +104,15 @@ export const UpdateTattooStyleForm: React.FC<PropsType> = ({
            formData.append(value, values[value]);
        }
        try {
-           let response;
+           let success;
            if(isEditing) {
-               response = await dispatch(editStyle(style._id, formData));
+               success = await dispatch(editStyle(style._id, formData));
            } else {
-               response = await dispatch(addStyle(formData));
+               success = await dispatch(addStyle(formData));
            }
-           if (!response || response.message) { // Check the response here
-               throw new Error('Error submitting form');
+           if (success ) { // Check the response here
+               closeModal();
            }
-           closeModal();
-
        } catch (error) {
            console.error('Error submitting form:', error);
        }

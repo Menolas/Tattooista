@@ -82,26 +82,20 @@ class UserService {
     }
 
     async refresh(refreshToken) {
-        console.log(refreshToken + " taDAm!!!!!!!!!!!!!!!!!!")
         if (!refreshToken) {
-            console.log("no refresh token!!!!!!!")
             return {
                 isAuth: false
             }
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
-        console.log(userData + " userData!!!!!!!!")
         const tokenFromDb = await tokenService.findToken(refreshToken);
-        console.log(tokenFromDb + " tokenFromDb!!!!!!!!")
         if (!userData || !tokenFromDb) {
-            console.log("no userData || !tokenFromDb !!!!!!!")
             return {
                 isAuth: false
             }
         }
         const user = await UserModel.findById(userData.id);
         if (!user) {
-            console.log("no user!!!!!!!")
             return {
                 isAuth: false
             }

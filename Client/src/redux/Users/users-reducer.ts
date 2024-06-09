@@ -59,7 +59,8 @@ export const usersReducer = (
         case SET_USERS:
             return {
                 ...state,
-                users: action.users
+                users: action.users,
+                totalCount: action.total,
             }
 
         case TOGGLE_IS_FETCHING:
@@ -90,7 +91,8 @@ export const usersReducer = (
         case DELETE_USER:
             return {
                 ...state,
-                users: state.users.filter(user => user._id !== action.userId)
+                users: state.users.filter(user => user._id !== action.userId),
+                totalCount: state.totalCount - 1,
             }
 
         case TOGGLE_IS_DELETING_IN_PROCESS:
@@ -123,6 +125,7 @@ export const usersReducer = (
             return {
                 ...state,
                 users: [{...action.user}, ...state.users ],
+                totalCount: state.totalCount + 1,
             }
 
         case SET_ACCESS_ERROR:
@@ -172,10 +175,11 @@ export const setUsersFilterAC = (filter: SearchFilterType): SetUsersFilterAT => 
 type SetUsersAT = {
     type: typeof SET_USERS
     users: Array<UserType>
+    total: number
 }
 
-export const setUsersAC = (users: Array<UserType>): SetUsersAT => ({
-    type: SET_USERS, users
+export const setUsersAC = (users: Array<UserType>, total: number): SetUsersAT => ({
+    type: SET_USERS, users, total
 });
 
 type ToggleIsFetchingAT = {
@@ -251,7 +255,7 @@ const editUserAC = (user: UserType): EditUserAT => ({
     type: EDIT_USER, user
 });
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
 
 export const getRoles = (): ThunkType => async (dispatch) => {
     try {
@@ -259,9 +263,13 @@ export const getRoles = (): ThunkType => async (dispatch) => {
         let response = await usersAPI.getRoles();
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(setRolesAC(response.roles));
+            return true;
+        } else {
+            return false;
         }
     } catch (e) {
         console.log(e);
+        return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
     }
@@ -283,13 +291,15 @@ export const getUsers = (
         );
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(setAccessErrorAC(''));
-            dispatch(setUsersAC(response.users));
-            dispatch(setTotalCountAC(response.totalCount));
+            dispatch(setUsersAC(response.users, response.totalCount));
+            return true;
+        } else {
+            return false;
         }
-    } catch (e) {
-        // @ts-ignore
+    } catch (e: any) {
         dispatch(setAccessErrorAC(e.response.message));
         console.log(e);
+        return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
     }
@@ -300,13 +310,11 @@ const deleteUserThunk = (
     id: string,
     users: Array<UserType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
     if (users.length > 1) {
         dispatch(deleteUserAC(id));
-        dispatch(setTotalCountAC(total -1));
     } else {
         const newPage = getNewPage(currentPage);
         if (currentPage === newPage) {
@@ -315,6 +323,7 @@ const deleteUserThunk = (
         dispatch(deleteUserAC(id));
         dispatch(setCurrentPageAC(newPage));
     }
+    return true;
 }
 
 export const deleteUser = (
@@ -322,7 +331,6 @@ export const deleteUser = (
     id: string,
     users: Array<UserType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (
@@ -332,10 +340,14 @@ export const deleteUser = (
         dispatch(toggleIsDeletingInProcessAC(true, id));
         let response = await usersAPI.deleteUser(id);
         if (response.resultCode === ResultCodesEnum.Success) {
-            await dispatch(deleteUserThunk(token, id, users, currentPage, total, pageLimit, filter));
+            await dispatch(deleteUserThunk(token, id, users, currentPage, pageLimit, filter));
+            return true;
+        } else {
+            return false;
         }
     } catch (e) {
         console.log(e);
+        return false;
     } finally {
         dispatch(toggleIsDeletingInProcessAC(false, id));
     }
@@ -349,13 +361,15 @@ export const updateUser = (
         dispatch(toggleIsFetchingAC(true));
         let response = await usersAPI.updateUser(id, values);
         if (response.resultCode === ResultCodesEnum.Success) {
-            dispatch(setApiErrorAC(''));
             dispatch(editUserAC(response.user));
-            dispatch(setApiErrorAC(null));
             dispatch(setSuccessModalAC(true, UPDATE_USER_SUCCESS));
+            return true;
+        } else {
+            return false;
         }
     } catch (e: any) {
         dispatch(setApiErrorAC(e.response.message));
+        return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
     }
@@ -364,17 +378,18 @@ export const updateUser = (
 
 export const addUser = (
     values: FormData,
-    total: number
 ): ThunkType => async (dispatch) => {
     try {
         let response = await usersAPI.addUser(values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addUserAC(response.user));
-            dispatch(setApiErrorAC(null));
             dispatch(setSuccessModalAC(true, ADD_USER_SUCCESS));
-            dispatch(setTotalCountAC(total + 1));
+            return true;
+        } else {
+            return false;
         }
     } catch (e: any) {
         dispatch(setApiErrorAC(e.response.data.message));
+        return false;
     }
 }

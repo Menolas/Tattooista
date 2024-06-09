@@ -9,8 +9,6 @@ import {
     setCurrentPageAC,
     setUsersFilterAC,
     setPageLimitAC,
-    updateUser,
-    addUser,
 } from "../../../redux/Users/users-reducer";
 import {
     getRolesSelector,
@@ -60,18 +58,7 @@ export const UsersContainer: React.FC = () => {
     };
 
     const removeCallBack = (userId: string) => {
-        dispatch(deleteUser(token, userId, users, currentPage, total, pageLimit, filter));
-    };
-
-    const editCallBack = (
-        id: string,
-        values: FormData
-    ) => {
-        dispatch(updateUser(id, values));
-    };
-
-    const addUserCallBack = (values: FormData) => {
-        dispatch(addUser(values, total));
+        dispatch(deleteUser(token, userId, users, currentPage, pageLimit, filter));
     };
 
     const setApiErrorCallBack = () => {
@@ -93,8 +80,6 @@ export const UsersContainer: React.FC = () => {
             setCurrentPage={setCurrentPageCallBack}
             setFilter={setFilterCallBack}
             remove={removeCallBack}
-            edit={editCallBack}
-            add={addUserCallBack}
             setApiError={setApiErrorCallBack}
         />
     )

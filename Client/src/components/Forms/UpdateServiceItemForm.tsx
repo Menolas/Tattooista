@@ -10,6 +10,11 @@ import {
     ApiErrorMessage,
     validateFile
 } from "../../utils/validators";
+import {useDispatch} from "react-redux";
+import {
+    addService,
+    editService,
+} from "../../redux/Services/services-reducer";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -25,21 +30,17 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
     apiError: null | string;
     service?: ServiceType;
-    edit?: (id: string, values: FormData) => void;
-    add?: (values: FormData) => void;
-    setService?: (service: ServiceType | null) => void;
     closeModal: () => void;
 }
 export const UpdateServiceItemForm: React.FC<PropsType> = ({
     apiError,
     service,
-    edit,
-    add,
-    setService,
     closeModal,
 }) => {
 
     const [imageURL, setImageURL] = useState('');
+
+    const dispatch = useDispatch();
 
     const fileReader = new FileReader();
     fileReader.onloadend = () => {
@@ -84,13 +85,11 @@ export const UpdateServiceItemForm: React.FC<PropsType> = ({
         let success;
         try {
             if (service) {
-                success = await edit(service._id, formData);
-                setService(null);
+                success = await dispatch(editService(service._id, formData));
             } else {
-                success = await add(formData);
+                success = await dispatch(addService(formData));
             }
-            const isSuccess = Boolean(success);
-            if (isSuccess) {
+            if (success) {
                 closeModal();
             }
         } catch (error) {

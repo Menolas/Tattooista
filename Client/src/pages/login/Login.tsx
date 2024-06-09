@@ -4,13 +4,13 @@ import {LoginFormValues} from "../../types/Types";
 
 type PropsType = {
   isAuth: null | string;
-  loginError: string;
+  authApiError: null | string;
   login: (values: LoginFormValues) => void;
 }
 
 export const Login: React.FC<PropsType> = React.memo(({
   isAuth,
-  loginError,
+  authApiError,
   login
 }) => {
 
@@ -19,7 +19,7 @@ export const Login: React.FC<PropsType> = React.memo(({
       <div className = "login__form-wrap">
         <LoginForm
           isAuth={isAuth}
-          loginError={loginError}
+          authApiError={authApiError}
           login={login}
         />
       </div>

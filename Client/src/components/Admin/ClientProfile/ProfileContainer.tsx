@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import {
   getClientProfile,
   updateClientGallery,
-  editClient,
   deleteClientGalleryPicture,
   deleteClientFromProfile,
   archiveClientFromProfile,
@@ -43,10 +42,6 @@ export const ProfileContainer: React.FC = React.memo(() => {
     dispatch(deleteClientFromProfile(clientId));
   }
 
-  const editClientCallBack = (clientId: string, values: FormData) => {
-    dispatch(editClient(clientId, values));
-  }
-
   const updateClientGalleryCallBack = (clientId: string, values: FormData) => {
     dispatch(updateClientGallery(clientId, values));
   }
@@ -65,7 +60,6 @@ export const ProfileContainer: React.FC = React.memo(() => {
       data={profile}
       isDeletingPicturesInProcess={isDeletingPicturesInProcess}
       remove={deleteClientCallBack}
-      edit={editClientCallBack}
       updateGallery={updateClientGalleryCallBack}
       deleteGalleryItem={deleteClientGalleryPictureCallBack}
       archive={archiveClientCallBack}

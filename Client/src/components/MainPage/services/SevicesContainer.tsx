@@ -7,9 +7,7 @@ import {
     getIsDeletingInProcessSelector,
 } from "../../../redux/Services/services-selectors";
 import {
-    addService,
     deleteService,
-    editService,
     getServices,
 } from "../../../redux/Services/services-reducer";
 import {useDispatch, useSelector} from "react-redux";
@@ -32,14 +30,6 @@ export const ServicesContainer = () => {
         dispatch(getServices());
     }, [dispatch]);
 
-    const editCallBack = (id: string, values: FormData) => {
-        dispatch(editService(id, values));
-    }
-
-    const addCallBack = (values: FormData) => {
-        dispatch(addService(values));
-    }
-
     const removeCallBack = (id: string) => {
         dispatch(deleteService(id));
     }
@@ -56,8 +46,6 @@ export const ServicesContainer = () => {
             isDeletingInProcess={isDeletingInProcess}
             isAuth={isAuth}
             services={services}
-            edit={editCallBack}
-            add={addCallBack}
             remove={removeCallBack}
             setApiError={setApiErrorCallBack}
         />

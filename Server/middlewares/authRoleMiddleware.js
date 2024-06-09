@@ -10,6 +10,7 @@ module.exports = function (roles) {
     }
 
     let token = req.headers.authorization?.split(' ')[1];
+    console.log(token + "auth role middleware token !!!!!!!!!!!");
     if (!token || token === 'null') {
       console.log("auth no token !!!!!!!!!!!");
       req.hasRole = false;
