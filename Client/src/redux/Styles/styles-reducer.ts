@@ -8,9 +8,11 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
-import {checkAuth, CheckAuthAT} from "../Auth/auth-reducer";
+import {checkAuth, LogInAT} from "../Auth/auth-reducer";
+import {tattooStyles} from "../../data/StylesData";
 
 const SET_STYLES = 'SET_STYLES';
+const DELETE_STYLE = 'DELETE_STYLE';
 const ADD_STYLE = 'ADD_STYLE';
 const UPDATE_STYLE = 'UPDATE_STYLE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -66,10 +68,18 @@ export const stylesReducer = (
         styles: action.styles,
       }
 
+    case DELETE_STYLE:
+      return {
+          ...state,
+          styles: state.styles.filter(style => style._id !== action.id),
+          activeStyle: state.styles[0],
+    }
+
     case ADD_STYLE:
       return {
         ...state,
-        styles: [{...action.style}, ...state.styles]
+        styles: [{...action.style}, ...state.styles],
+        activeStyle: action.style,
       }
 
     case UPDATE_STYLE:
@@ -80,7 +90,8 @@ export const stylesReducer = (
             return {...action.style};
           }
           return style;
-        })
+        }),
+        activeStyle: action.style,
       }
 
     case SET_ACTIVE_STYLE:
@@ -104,8 +115,8 @@ export const stylesReducer = (
 }
 
 type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
-    SetStylesAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT |
-    SetFakeApiAT | CheckAuthAT | AddStyleAT | UpdateStyleAT;
+    SetStylesAT | DeleteStyleAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT |
+    SetFakeApiAT | LogInAT | AddStyleAT | UpdateStyleAT;
 
 // actions creators
 
@@ -147,8 +158,18 @@ const setStylesAC = (styles: Array<StyleType>): SetStylesAT => ({
     type: SET_STYLES, styles
 });
 
+type DeleteStyleAT = {
+  type: typeof DELETE_STYLE,
+  id: string
+}
+
+const deleteStyleAC = (id: string): DeleteStyleAT => ({
+    type: DELETE_STYLE, id
+});
+
 type AddStyleAT = {
-  type: typeof ADD_STYLE, style: StyleType
+  type: typeof ADD_STYLE,
+  style: StyleType
 }
 
 export const addStyleAC = (style: StyleType): AddStyleAT => ({
@@ -174,23 +195,27 @@ export const setActiveStyleAC = (style: StyleType | null): SetActiveStyleAT => (
 
 //thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
 
 export const getStyles = (token: string | null): ThunkType => async (
   dispatch
 ) => {
+  dispatch(setIsFetchingAC(true));
   try {
-    dispatch(setIsFetchingAC(true));
     let getStylesResponse = await stylesApi.getStyles(token)
     if (getStylesResponse.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
       dispatch(setStylesAC(getStylesResponse.tattooStyles));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
-    dispatch(checkAuth());
-    //dispatch(setStylesAC(tattooStyles));
-    //dispatch(setFakeApiAC(true));
+    await dispatch(checkAuth());
+    dispatch(setStylesAC(tattooStyles));
+    dispatch(setFakeApiAC(true));
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -204,13 +229,15 @@ export const addStyle = (values: FormData): ThunkType => async (
     let response = await stylesApi.addStyle(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addStyleAC(response.tattooStyle));
-      dispatch(setActiveStyleAC(response.tattooStyle));
-      dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e.response?.data?.message);
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -220,18 +247,19 @@ export const editStyle = (
     id: string,
     values: FormData
 ): ThunkType => async (dispatch) => {
-  console.log('editStyle thunk');
   try {
     let response = await stylesApi.editStyle(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(null));
       dispatch(updateStyleAC(response.tattooStyle));
-      dispatch(setActiveStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, UPDATE_STYLE_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
+    return false;
   }
 }
 
@@ -240,11 +268,14 @@ export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await stylesApi.deleteStyle(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setActiveStyleAC(response.tattooStyles[0]));
-      dispatch(setStylesAC(response.tattooStyles));
+      dispatch(deleteStyleAC(id));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -254,4 +285,5 @@ export const resetActiveStyle = (
   style: StyleType
 ): ThunkType => async (dispatch) => {
   dispatch(setActiveStyleAC(style));
+  return true;
 }

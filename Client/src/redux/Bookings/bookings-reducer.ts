@@ -69,6 +69,7 @@ export const bookingsReducer = (
       return {
         ...state,
         bookings: action.bookings,
+        total: action.total,
       }
 
     case SET_CURRENT_PAGE:
@@ -124,6 +125,7 @@ export const bookingsReducer = (
       return {
         ...state,
         bookings: [{...action.consultation}, ...state.bookings],
+        total: state.total + 1,
       }
 
     case SET_ACCESS_ERROR:
@@ -188,11 +190,12 @@ export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
 
 type SetBookingsAT = {
   type: typeof SET_BOOKINGS,
-  bookings: Array<BookingType>
+  bookings: Array<BookingType>,
+  total: number,
 }
 
-const setBookingsAC = (bookings: Array<BookingType>): SetBookingsAT => ({
-      type: SET_BOOKINGS, bookings
+const setBookingsAC = (bookings: Array<BookingType>, total: number): SetBookingsAT => ({
+      type: SET_BOOKINGS, bookings, total
 });
 
 type SetCurrentPageAT = {
@@ -272,7 +275,7 @@ const addBookingAC = (consultation: BookingType): AddBookingAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
 
 const deleteBookingThunk = (
     token: string | null,
@@ -293,6 +296,7 @@ const deleteBookingThunk = (
     dispatch(deleteBookingAC(id));
     dispatch(setCurrentPageAC(newPage));
   }
+  return true;
 }
 
 export const getBookings = (
@@ -314,13 +318,15 @@ export const getBookings = (
     );
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(''));
-      dispatch(setBookingsAC(response.bookings));
-      dispatch(setTotalAC(response.totalCount));
+      dispatch(setBookingsAC(response.bookings, response.totalCount));
+      return true;
+    } else {
+      return false;
     }
-  } catch (e) {
-    // @ts-ignore
+  } catch (e: any) {
     dispatch(setAccessErrorAC(e.response.data.message));
     console.log(e);
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -336,9 +342,13 @@ export const changeStatus = (
     let response = await bookingsApi.changeConsultationStatus(id, status);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(changeStatusAC(id, response.status));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsStatusChangingAC(false, id));
   }
@@ -357,9 +367,13 @@ export const deleteBooking = (
     let response = await bookingsApi.deleteConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -367,20 +381,19 @@ export const deleteBooking = (
 
 export const addBooking = (
   values: AddConsultationFormValues | BookConsultationFormValues,
-  total: number | null
 ): ThunkType => async (dispatch) => {
   try {
     let response = await bookingsApi.addConsultation(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookingAC(response.booking));
-      dispatch(setApiErrorAC(null));
-      if (total) {
-        dispatch(setTotalAC(total + 1));
-      }
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response.data.message));
+    return false;
   }
 }
 
@@ -399,9 +412,13 @@ export const turnBookingToClient = (
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setBookingApiErrorAC(null));
       dispatch(setSuccessModalAC(true, BOOKING_INTO_CLIENT_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setBookingApiErrorAC(e.response.data.message));
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -421,10 +438,14 @@ export const archiveBooking = (
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setBookingApiErrorAC(null));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     console.log(e);
     dispatch(setBookingApiErrorAC(e.response.data.message));
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

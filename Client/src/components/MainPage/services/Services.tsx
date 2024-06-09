@@ -13,8 +13,6 @@ type PropsType = {
   isDeletingInProcess: Array<string>;
   isAuth: string;
   services: Array<ServiceType>;
-  edit: (id: string, values: FormData) => void;
-  add: (values: FormData) => void;
   remove: (id: string) => void;
   setApiError: () => void;
 };
@@ -25,8 +23,6 @@ export const Services: React.FC<PropsType> = React.memo(({
   isFetching,
   isAuth,
   services,
-  edit,
-  add,
   remove,
   setApiError,
 }) => {
@@ -104,8 +100,6 @@ export const Services: React.FC<PropsType> = React.memo(({
             <UpdateServiceItemForm
                 apiError={apiError}
                 service={updateServiceData.service}
-                add={add}
-                edit={edit}
                 closeModal={closeUpdateServiceModal}
             />
         }

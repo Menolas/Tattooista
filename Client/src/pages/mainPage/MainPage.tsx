@@ -80,18 +80,13 @@ export const MainPage: React.FC = () => {
     dispatch(setActiveStyleAC(style));
   }
 
-  const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-      const total = null;
-    dispatch(addBooking(values, total));
-  }
-
   const setSuccessModalCallBack = () => {
     dispatch(setSuccessModalAC(false, ''));
   }
 
   return (
     <>
-      <MainOffer bookConsultation={bookConsultationCallBack} />
+      <MainOffer />
         {
             isFetching
                 ? <Preloader />
@@ -110,7 +105,6 @@ export const MainPage: React.FC = () => {
       <Booking
           apiError={apiError}
           consentId="consent3"
-          addBooking={bookConsultationCallBack}
       />
       <SuccessPopUp
           isOpen={successModal.isSuccess}

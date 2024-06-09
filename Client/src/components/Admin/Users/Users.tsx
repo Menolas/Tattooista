@@ -25,8 +25,6 @@ type PropsType = {
     setCurrentPage: (page: number) => void;
     setFilter: (filter: SearchFilterType) => void;
     remove: (userId: string) => void;
-    edit: (id: string, values: FormData) => void;
-    add: (values: FormData) => void;
     setApiError: () => void;
 }
 
@@ -44,8 +42,6 @@ export const Users: React.FC<PropsType> = ({
    setCurrentPage,
    setFilter,
    remove,
-   edit,
-   add,
    setApiError,
 }) => {
 
@@ -130,8 +126,6 @@ export const Users: React.FC<PropsType> = ({
                                 isEditing={editUserMode}
                                 data={data}
                                 roles={roles}
-                                add={add}
-                                edit={edit}
                                 closeModal={closeModal}
                             />
                         }

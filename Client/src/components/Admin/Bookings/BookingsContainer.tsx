@@ -92,7 +92,7 @@ export const BookingsContainer: React.FC = () => {
   };
 
   const addCallBack = (values: AddConsultationFormValues) => {
-    dispatch(addBooking(values, totalCount));
+    dispatch(addBooking(values));
   };
 
   const archiveCallBack = (id: string) => {

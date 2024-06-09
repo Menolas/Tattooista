@@ -11,6 +11,9 @@ import {
   SetApiErrorAT} from "../General/general-reducer";
 
 const SET_SERVICES = 'SET_SERVICES';
+const DELETE_SERVICE = 'DELETE_SERVICE';
+const ADD_SERVICE = 'ADD_SERVICE';
+const UPDATE_SERVICE = 'UPDATE_SERVICE';
 const SET_FAKE_API = 'SET_FAKE_API';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
@@ -60,6 +63,29 @@ export const servicesReducer = (
         services: action.services
       }
 
+    case DELETE_SERVICE:
+      return {
+        ...state,
+        services: state.services.filter(item => item._id !== action.id),
+      }
+
+    case ADD_SERVICE:
+      return {
+        ...state,
+        services: [...state.services, action.service],
+      }
+
+    case UPDATE_SERVICE:
+      return {
+        ...state,
+        services: state.services.map(item => {
+          if (item._id === action.service._id) {
+            return {...action.service};
+          }
+          return item;
+        })
+      }
+
     default: return {
       ...state
     }
@@ -67,7 +93,7 @@ export const servicesReducer = (
 }
 
 type ActionsTypes = SetServicesAT | SetSuccessModalAT | SetApiErrorAT | SetFakeApiAT |
-    ToggleIsDeletingInProcessAT | SetIsFetchingAT;
+    ToggleIsDeletingInProcessAT | SetIsFetchingAT | DeleteServiceAT | AddServiceAT | UpdateServiceAT;
 
 // action creators
 
@@ -109,9 +135,36 @@ const setServicesAC = (services: Array<ServiceType>): SetServicesAT => ({
     type: SET_SERVICES, services
 });
 
+type DeleteServiceAT = {
+    type: typeof DELETE_SERVICE,
+    id: string,
+};
+
+const deleteServiceAC = (id: string): DeleteServiceAT => ({
+    type: DELETE_SERVICE, id
+});
+
+type AddServiceAT = {
+    type: typeof ADD_SERVICE,
+    service: ServiceType
+};
+
+const addServiceAC = (service: ServiceType): AddServiceAT => ({
+    type: ADD_SERVICE, service
+});
+
+type UpdateServiceAT = {
+    type: typeof UPDATE_SERVICE,
+    service: ServiceType
+};
+
+const updateServiceAC = (service: ServiceType): UpdateServiceAT => ({
+    type: UPDATE_SERVICE, service
+});
+
 // thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
 
 export const getServices = (): ThunkType => async (dispatch) => {
   try {
@@ -119,11 +172,15 @@ export const getServices = (): ThunkType => async (dispatch) => {
     let response = await servicesApi.getServices();
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServicesAC(response.services));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
     dispatch(setServicesAC(services));
     dispatch(setFakeApiAC(true));
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -136,13 +193,16 @@ export const editService = (
   try {
     const response = await servicesApi.editService(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(null));
-      dispatch(setServicesAC(response.services));
+      dispatch(updateServiceAC(response.service));
       dispatch(setSuccessModalAC(true, SERVICE_UPDATE_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
+    return false;
   }
 }
 
@@ -152,13 +212,16 @@ export const addService = (
   try {
     const response = await servicesApi.addService(values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setApiErrorAC(null));
-      dispatch(setServicesAC(response.services));
+      dispatch(addServiceAC(response.service));
       dispatch(setSuccessModalAC(true, SERVICE_ADD_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'))
     console.log(e);
+    return false;
   }
 }
 
@@ -168,9 +231,13 @@ export const deleteService = (
   try {
     const response = await servicesApi.deleteService(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setServicesAC(response.services));
+      dispatch(deleteServiceAC(id));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
+    return false;
   }
 }

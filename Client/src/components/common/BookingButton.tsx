@@ -4,6 +4,7 @@ import {ModalPopUp} from "./ModalPopUp";
 import {BookingForm} from "../Forms/BookingForm";
 import * as React from "react";
 import {
+    setApiErrorAC,
     setSuccessModalAC
 } from "../../redux/General/general-reducer";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
@@ -42,8 +43,7 @@ export const BookingButton: React.FC<PropsType> = ({
     }
 
     const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-        const total = null;
-        dispatch(addBooking(values, total));
+        dispatch(addBooking(values));
     }
 
     const [bookingModal, setBookingModal] = useState(false)
@@ -56,6 +56,7 @@ export const BookingButton: React.FC<PropsType> = ({
 
     const closeBookingModal = () => {
         setBookingModal(false);
+        dispatch(setApiErrorAC(null));
     }
 
     return (

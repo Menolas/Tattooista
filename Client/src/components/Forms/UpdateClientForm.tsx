@@ -16,6 +16,8 @@ import avatar from "../../assets/img/fox.webp";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import * as Yup from "yup";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {useDispatch} from "react-redux";
+import {editClient, addClient} from "../../redux/Clients/clients-reducer";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -63,8 +65,6 @@ type PropsType = {
   isEditing: boolean;
   data: ClientType;
   closeModal: () => void;
-  edit: (clientId: string, values: FormData) => void;
-  add?: (values: FormData) => void;
 }
 
 export const UpdateClientForm: React.FC<PropsType> = React.memo(({
@@ -72,14 +72,13 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
   isEditing,
   data,
   closeModal,
-  edit,
-  add,
 }) => {
-  //console.log(JSON.stringify(profile) + " profile !!!!!!!!!!!!!!!!!!");
 
   const [hasNewFile, setHasNewFile] = useState(false);
   const validationSchema = getValidationSchema(isEditing, hasNewFile);
   const [imageURL, setImageURL] = useState('');
+
+  const dispatch = useDispatch();
 
   const handleOnChange = (event) => {
     event.preventDefault();
@@ -112,12 +111,11 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
     }
     let success;
     if (isEditing) {
-      success = await edit(data._id, formData);
+      success = await dispatch(editClient(data._id, formData));
     } else {
-      success = await add(formData);
+      success = await dispatch(addClient(formData));
     }
-    const isSuccess = Boolean(success);
-    if (isSuccess) {
+    if (success) {
         closeModal();
     }
     actions.setSubmitting(false);

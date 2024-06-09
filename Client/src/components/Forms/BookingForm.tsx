@@ -7,6 +7,8 @@ import {FieldComponent} from "./formComponents/FieldComponent";
 import {useState} from "react";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {FormSelect2} from "./formComponents/FormSelect2";
+import {useDispatch} from "react-redux";
+import {addBooking} from "../../redux/Bookings/bookings-reducer";
 
 const options = [
   { value: "email", label: "email" },
@@ -67,23 +69,22 @@ const initialValues: BookConsultationFormValues = {
 type PropsType = {
   apiError: string;
   consentId: string;
-  bookConsultation: (values: BookConsultationFormValues) => void;
   closeBookingModal?: () => void;
 };
 
 export const BookingForm: React.FC<PropsType> = React.memo(({
   apiError,
   consentId,
-  bookConsultation,
   closeBookingModal,
 }) => {
 
   const [contactInput, setContactInput] = useState('');
 
+  const dispatch = useDispatch();
+
   const submit = async (values: BookConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
-    const success = await bookConsultation(values);
-    const isSuccess = Boolean(success);
-    if (isSuccess && closeBookingModal) {
+    const success = await dispatch(addBooking(values));
+    if (success && closeBookingModal) {
       closeBookingModal();
     }
     actions.setSubmitting(false);

@@ -26,9 +26,7 @@ type PropsType = {
   isDeletingPicturesInProcess: Array<string>;
   onPageChanged: (page: number) => void;
   onFilterChanged: (filter: SearchFilterType) => void;
-  add: (values: FormData) => void;
   remove: (clientId: string) => void;
-  edit: (clientId: string, values: FormData) => void;
   setPageLimit: (clientsPageSize: number) => void;
   updateGallery: (clientId: string, values: FormData) => void;
   deleteGalleryItem: (clientId: string, picture: string) => void;
@@ -51,9 +49,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     isDeletingPicturesInProcess,
     onPageChanged,
     onFilterChanged,
-    add,
     remove,
-    edit,
     setPageLimit,
     updateGallery,
     deleteGalleryItem,
@@ -153,8 +149,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
                               apiError={apiError}
                               isEditing={editClientMode}
                               data={client}
-                              edit={edit}
-                              add={add}
                               closeModal={closeModal}
                           />
                       }

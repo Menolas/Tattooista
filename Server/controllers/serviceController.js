@@ -49,9 +49,8 @@ class serviceController {
         })
         res.service.wallPaper = newFileName;
       }
-      await res.service.save();
       results.resultCode = 0;
-      results.services = await Service.find();
+      results.service = await res.service.save();
       res.status(201).json(results);
     } catch (e) {
       console.log(e);
@@ -81,10 +80,9 @@ class serviceController {
         const newFileName = generateFileRandomName(file.name);
         await file.mv(`./uploads/serviceWallpapers/${newService._id}/${newFileName}`, e => {
           service.wallPaper = newFileName;
-          service.save();
-        })
+        });
       }
-      results.services = await Service.find();
+      results.service = await service.save();
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;

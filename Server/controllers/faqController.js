@@ -22,9 +22,8 @@ class faqController {
     const results = {};
 
     try {
-      await faqItem.save();
       results.resultCode = 0;
-      results.faqItems = await FaqItem.find();
+      results.faqItem = await faqItem.save();
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;
@@ -40,9 +39,8 @@ class faqController {
     const results = {};
 
     try {
-      await res.faqItem.save();
       results.resultCode = 0;
-      results.faqItems = await FaqItem.find();
+      results.faqItem = await res.faqItem.save();
       res.status(201).json(results);
     } catch (e) {
       console.log(e);
@@ -58,7 +56,6 @@ class faqController {
     try {
       await res.faqItem.remove();
       results.resultCode = 0;
-      results.faqItems = await FaqItem.find();
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;

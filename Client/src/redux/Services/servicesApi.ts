@@ -1,20 +1,18 @@
 import {ServiceType} from "../../types/Types";
 import {instance} from "../../http";
-
-type CommonResponseFields = {
-    resultCode: number
-    message?: string
-}
+import {CommonResponseFields} from "../../types/Types";
 
 type GetServicesResponseType = CommonResponseFields & {
     services: Array<ServiceType>
-}
+};
 
-type EditServiceResponseType = GetServicesResponseType
+type EditServiceResponseType = CommonResponseFields & {
+    service: ServiceType
+};
 
-type AddServiceResponseType = GetServicesResponseType
+type AddServiceResponseType = EditServiceResponseType;
 
-type DeleteServiceResponseType = GetServicesResponseType
+type DeleteServiceResponseType = CommonResponseFields;
 
 export const servicesApi = {
 

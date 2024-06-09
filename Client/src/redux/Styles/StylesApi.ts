@@ -13,7 +13,7 @@ type AddTattooStylesResponseType = CommonResponseFields & {
 
 type EditTattooStyleResponseType = AddTattooStylesResponseType;
 
-type DeleteTattooStyleResponseType = GetTattooStylesResponseType;
+type DeleteTattooStyleResponseType = CommonResponseFields;
 
 export const stylesApi = {
 
