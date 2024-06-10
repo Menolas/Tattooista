@@ -8,14 +8,12 @@ import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
-  setApiErrorAC,
-  SetApiErrorAT} from "../General/general-reducer";
+} from "../General/general-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_FILTER = 'SET_FILTER';
 const SET_ARCHIVED_BOOKINGS = 'SET_ARCHIVED_BOOKINGS';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
-const SET_TOTAL = 'SET_TOTAL';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_ARCHIVED_BOOKING = 'DELETE_ARCHIVED_BOOKING';
@@ -35,7 +33,7 @@ let initialState = {
     term: '',
     condition: 'any',
   } as SearchFilterType,
-  accessError: '' as string | undefined,
+  accessError: null as null | string,
   bookingApiError: null as null | string,
 }
 
@@ -52,31 +50,26 @@ export const archivedBookingsReducer = (
       return {
         ...state,
         pageSize: action.pageSize,
-        currentPage: 1
+        currentPage: 1,
       }
 
     case SET_FILTER:
       return {
         ...state,
-        filter: action.filter
+        filter: action.filter,
       }
 
     case SET_ARCHIVED_BOOKINGS:
       return {
         ...state,
-        archivedBookings: action.archivedBookings
+        archivedBookings: action.archivedBookings,
+        totalCount: action.total,
       }
 
     case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentPage: action.currentPage
-      }
-
-    case SET_TOTAL:
-      return {
-        ...state,
-        totalCount: action.count
+        currentPage: action.currentPage,
       }
 
     case TOGGLE_IS_FETCHING:
@@ -90,7 +83,7 @@ export const archivedBookingsReducer = (
         ...state,
         isDeletingInProcess: action.isFetching
           ? [...state.isDeletingInProcess, action.id]
-          : state.isDeletingInProcess.filter(id => id !== action.id)
+          : state.isDeletingInProcess.filter(id => id !== action.id),
       }
 
     case DELETE_ARCHIVED_BOOKING:
@@ -98,35 +91,35 @@ export const archivedBookingsReducer = (
         return {
           ...state,
           archivedBookings: state.archivedBookings.filter(archivedBooking => archivedBooking._id !== action.id),
-          totalCount: state.totalCount - 1
+          totalCount: state.totalCount - 1,
         }
       } else {
         return {
           ...state,
-          currentPage: state.currentPage - 1
+          currentPage: state.currentPage - 1,
         }
       }
 
     case SET_ACCESS_ERROR:
       return {
         ...state,
-        accessError: action.error
+        accessError: action.error,
       }
 
     case SET_BOOKING_API_ERROR:
       return {
         ...state,
-        bookingApiError: action.error
+        bookingApiError: action.error,
       }
 
     default: return state
   }
 }
 
-type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
-    SetFilterAT | SetArchivedBookingsAT | SetCurrentPageAT |
-    SetTotalCountAT | SetIsFetchingAT | ToggleIsDeletingInProcessAT |
-    DeleteArchivedConsultationAT | SetAccessErrorAT | SetBookingApiErrorAT;
+type ActionsTypes = SetSuccessModalAT | SetPageSizeAT |
+    SetFilterAT | SetArchivedBookingsAT | SetCurrentPageAT | SetIsFetchingAT
+    | ToggleIsDeletingInProcessAT | DeleteArchivedConsultationAT | SetAccessErrorAT
+    | SetBookingApiErrorAT;
 
 // actions creators
 
@@ -141,10 +134,10 @@ export const setBookingApiErrorAC = (error: string | null): SetBookingApiErrorAT
 
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR
-  error: string | undefined
+  error: string | null
 }
 
-export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
 });
 
@@ -168,11 +161,12 @@ export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
 
 type SetArchivedBookingsAT = {
   type: typeof SET_ARCHIVED_BOOKINGS,
-  archivedBookings: Array<BookingType>
+  archivedBookings: Array<BookingType>,
+  total: number
 }
 
-const setArchivedBookingsAC = (archivedBookings: Array<BookingType>): SetArchivedBookingsAT => ({
-  type: SET_ARCHIVED_BOOKINGS, archivedBookings
+const setArchivedBookingsAC = (archivedBookings: Array<BookingType>, total: number): SetArchivedBookingsAT => ({
+  type: SET_ARCHIVED_BOOKINGS, archivedBookings, total
 });
 
 type SetCurrentPageAT = {
@@ -182,15 +176,6 @@ type SetCurrentPageAT = {
 
 export const setCurrentPageAC = (currentPage: number): SetCurrentPageAT => ({
   type: SET_CURRENT_PAGE, currentPage
-});
-
-type SetTotalCountAT = {
-  type: typeof SET_TOTAL,
-  count: number
-}
-
-const setTotalCountAC = (count: number): SetTotalCountAT => ({
-  type: SET_TOTAL, count
 });
 
 type SetIsFetchingAT = {
@@ -230,13 +215,11 @@ const deleteArchivedBookingThunk = (
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (bookings.length > 1) {
     dispatch(deleteArchivedBookingAC(id));
-    dispatch(setTotalCountAC(total - 1));
   } else {
     const newPage = getNewPage(currentPage)
     if (currentPage === newPage) {
@@ -263,8 +246,7 @@ export const getArchivedBookings = (
     )
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(''));
-      dispatch(setTotalCountAC(response.totalCount));
-      dispatch(setArchivedBookingsAC(response.bookings));
+      dispatch(setArchivedBookingsAC(response.bookings, response.totalCount));
     }
   } catch (e) {
     // @ts-ignore
@@ -280,7 +262,6 @@ export const deleteArchivedBooking = (
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
@@ -288,7 +269,7 @@ export const deleteArchivedBooking = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await archivedBookingsApi.deleteArchivedBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, total, pageLimit, filter));
+      await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
     }
   } catch (e) {
     console.log(e);
@@ -302,7 +283,6 @@ export const reactivateBooking = (
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
@@ -315,9 +295,8 @@ export const reactivateBooking = (
           id,
           bookings,
           currentPage,
-          total,
           pageLimit,
-          filter
+          filter,
       ));
       dispatch(setBookingApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_BOOKING_FROM_ARCHIVE));

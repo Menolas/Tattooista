@@ -12,7 +12,6 @@ import {
     SetApiErrorAT} from "../General/general-reducer";
 
 const SET_USERS = 'SET_USERS';
-const SET_TOTAL = 'SET_TOTAL';
 const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -67,12 +66,6 @@ export const usersReducer = (
             return {
                 ...state,
                 isFetching: action.isFetching,
-            }
-
-        case SET_TOTAL:
-            return {
-                ...state,
-                totalCount: action.total
             }
 
         case SET_CURRENT_PAGE:
@@ -139,7 +132,7 @@ export const usersReducer = (
 }
 
 type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
-    SetUsersTotalCountAT | SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
+     SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
     ToggleIsDeletingInProcessAT | SetRolesAT | EditUserAT | AddUserAT
     | SetAccessErrorAT | SetSuccessModalAT | SetApiErrorAT;
 
@@ -189,15 +182,6 @@ type ToggleIsFetchingAT = {
 
 const toggleIsFetchingAC = (isFetching: boolean): ToggleIsFetchingAT => ({
         type: TOGGLE_IS_FETCHING, isFetching,
-});
-
-type SetUsersTotalCountAT = {
-    type: typeof SET_TOTAL,
-    total: number
-}
-
-const setTotalCountAC = (total: number): SetUsersTotalCountAT => ({
-    type: SET_TOTAL, total
 });
 
 type SetUsersCurrentPageAT = {

@@ -8,14 +8,12 @@ import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
-  setApiErrorAC,
-  SetApiErrorAT} from "../General/general-reducer";
+} from "../General/general-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_ARCHIVED_CLIENTS = 'SET_ARCHIVED_CLIENTS';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const SET_FILTER = 'SET_FILTER';
-const SET_TOTAL = 'SET_TOTAL';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_ARCHIVED_CLIENT = 'DELETE_ARCHIVED_CLIENT';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -58,19 +56,14 @@ export const archivedClientsReducer = (
     case SET_ARCHIVED_CLIENTS:
       return {
         ...state,
-        archivedClients: action.clients
+        archivedClients: action.clients,
+        total: action.total,
       }
 
     case SET_CURRENT_PAGE:
       return {
         ...state,
         currentPage: action.page
-      }
-
-    case SET_TOTAL:
-      return {
-        ...state,
-        total: action.count
       }
 
     case SET_FILTER:
@@ -124,10 +117,10 @@ export const archivedClientsReducer = (
   }
 }
 
-type ActionsTypes = SetApiErrorAT | SetPageSizeAT | SetFilterAT |
-    SetArchivedClientsAT | SetCurrentPageAT | SetTotalAT |
-    ToggleIsDeletingInProcessAT | SetIsFetchingAT |
-    DeleteArchivedClientAT | SetAccessErrorAT | SetSuccessModalAT | setArchivedClientsApiErrorAT;
+type ActionsTypes = SetPageSizeAT | SetFilterAT |
+    SetArchivedClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
+    SetIsFetchingAT | DeleteArchivedClientAT | SetAccessErrorAT | SetSuccessModalAT
+    | setArchivedClientsApiErrorAT;
 
 // actions creators
 
@@ -170,11 +163,12 @@ export const setPageSize = (pageSize: number): SetPageSizeAT => ({
 
 type SetArchivedClientsAT = {
   type: typeof SET_ARCHIVED_CLIENTS,
-  clients: Array<ClientType>
+  clients: Array<ClientType>,
+  total: number
 }
 
-const setArchivedClients = (clients: Array<ClientType>): SetArchivedClientsAT => ({
-  type: SET_ARCHIVED_CLIENTS, clients
+const setArchivedClients = (clients: Array<ClientType>, total: number): SetArchivedClientsAT => ({
+  type: SET_ARCHIVED_CLIENTS, clients, total
 });
 
 type SetCurrentPageAT = {
@@ -184,15 +178,6 @@ type SetCurrentPageAT = {
 
 export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
   type: SET_CURRENT_PAGE, page
-});
-
-type SetTotalAT = {
-  type: typeof SET_TOTAL,
-  count: number
-}
-
-const setTotalAC = (count: number): SetTotalAT => ({
-  type: SET_TOTAL, count
 });
 
 type ToggleIsDeletingInProcessAT = {
@@ -231,13 +216,11 @@ const deleteArchivedClientThunk = (
     id: string,
     archivedClients: Array<ClientType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (archivedClients.length > 1) {
     dispatch(deleteArchivedClientAC(id));
-    dispatch(setTotalAC(total - 1));
   } else {
     const newPage = getNewPage(currentPage);
     if (currentPage === newPage) {
@@ -263,12 +246,9 @@ export const getArchivedClients = (
         filter
     )
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setArchivedClients(response.clients));
-      dispatch(setTotalAC(response.totalCount));
-      dispatch(setIsFetchingAC(false));
+      dispatch(setArchivedClients(response.clients, response.totalCount));
     }
-  } catch (e) {
-    // @ts-ignore
+  } catch (e: any) {
     dispatch(setAccessErrorAC(e.response.data.message));
     console.log(e);
   } finally {
@@ -280,7 +260,6 @@ export const deleteArchivedClient = (
     id: string,
     archivedClients: Array<ClientType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (
@@ -290,7 +269,7 @@ export const deleteArchivedClient = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await archivedClientsAPI.deleteArchivedClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, total, pageLimit, filter));
+      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, pageLimit, filter));
     }
   } catch (e) {
     console.log(e);
@@ -303,7 +282,6 @@ export const reactivateClient = (
     id: string,
     archivedClients: Array<ClientType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     filter: SearchFilterType
 ) : ThunkType => async (dispatch) => {
@@ -311,12 +289,11 @@ export const reactivateClient = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await archivedClientsAPI.reactivateClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, total, pageLimit, filter));
+      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, pageLimit, filter));
       dispatch(setArchivedClientsApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS));
     }
-  } catch (e) {
-    // @ts-ignore
+  } catch (e: any) {
     dispatch(setArchivedClientsApiErrorAC(e.response.data.message));
     console.log(e);
   } finally {

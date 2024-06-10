@@ -13,7 +13,6 @@ import {
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
-const SET_TOTAL = 'SET_TOTAL';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
 const SET_GALLERY = 'SET_GALLERY';
@@ -62,12 +61,6 @@ export const galleryReducer = (
       return {
         ...state,
         currentPage: action.page
-      }
-
-    case SET_TOTAL:
-      return {
-        ...state,
-        totalCount: action.total
       }
 
     case TOGGLE_IS_FETCHING:
@@ -130,9 +123,8 @@ export const galleryReducer = (
 }
 
 type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
-    SetGalleryPageSizeAT | SetCurrentGalleryPageAT | SetGalleryTotalCountAT |
-    SetIsFetchingAT | SetGalleryAT | UpdateGalleryAT | DeleteGalleryItemAT |
-    UpdateGalleryItemAT | SetFakeApiAT;
+    SetGalleryPageSizeAT | SetCurrentGalleryPageAT | SetIsFetchingAT | SetGalleryAT
+    | UpdateGalleryAT | DeleteGalleryItemAT | UpdateGalleryItemAT | SetFakeApiAT;
 
 // actions creators
 
@@ -169,15 +161,6 @@ type SetCurrentGalleryPageAT = {
 export const setCurrentGalleryPageAC = (page: number): SetCurrentGalleryPageAT => ({
     type: SET_CURRENT_PAGE, page
 });
-
-type SetGalleryTotalCountAT = {
-  type: typeof SET_TOTAL,
-  total: number
-}
-
-// const setGalleryTotalCountAC = (total: number): SetGalleryTotalCountAT => ({
-//   type: SET_TOTAL, total
-// });
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
@@ -235,7 +218,6 @@ const deleteGalleryItemThunk = (
     styleId: string,
     gallery: Array<GalleryItemType>,
     currentPage: number,
-    total: number,
     pageLimit: number
 ): ThunkType => async (dispatch) => {
   if (gallery.length > 1) {
@@ -280,6 +262,7 @@ export const adminUpdateGallery = (
     let response = await galleryApi.adminUpdateGallery(tattooStyle, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryAC(response.gallery));
+      setApiErrorAC(null);
       dispatch(setSuccessModalAC(true, ADD_GALLERY_ITEMS_SUCCESS));
     }
   } catch (e: any) {
@@ -294,7 +277,6 @@ export const deleteGalleryItem = (
   id: string,
   gallery: Array<GalleryItemType>,
   currentPage: number,
-  total: number,
   pageLimit: number,
   style: StyleType
 ): ThunkType => async (dispatch) => {
@@ -302,7 +284,7 @@ export const deleteGalleryItem = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await galleryApi.deleteGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit));
+      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
     }
   } catch (e) {
     console.log(e);
@@ -315,7 +297,6 @@ export const archiveGalleryItem = (
     id: string,
     gallery: Array<GalleryItemType>,
     currentPage: number,
-    total: number,
     pageLimit: number,
     style: StyleType
 ): ThunkType => async (dispatch) => {
@@ -323,7 +304,7 @@ export const archiveGalleryItem = (
     dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await galleryApi.archiveGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, total, pageLimit));
+      await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
     }
   } catch (e) {
     console.log(e);

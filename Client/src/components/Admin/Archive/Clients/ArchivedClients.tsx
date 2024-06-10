@@ -69,7 +69,6 @@ export const ArchivedClients: React.FC = () => {
             clientId,
             archivedClients,
             currentPage,
-            totalCount,
             pageSize,
             filter
         ));
@@ -82,7 +81,6 @@ export const ArchivedClients: React.FC = () => {
             clientId,
             archivedClients,
             currentPage,
-            totalCount,
             pageSize,
             filter
         ));
