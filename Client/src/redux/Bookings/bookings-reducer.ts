@@ -16,7 +16,6 @@ const SET_FILTER = 'SET_BOOKINGS_FILTER';
 const SET_STATUS = 'SET_BOOKINGS_STATUS';
 const SET_BOOKINGS = 'SET_BOOKINGS';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE_FOR_BOOKINGS';
-const SET_TOTAL = 'SET_TOTAL_BOOKINGS_COUNT';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
@@ -76,12 +75,6 @@ export const bookingsReducer = (
       return {
         ...state,
         currentPage: action.page,
-      }
-
-    case SET_TOTAL:
-      return {
-        ...state,
-        total: action.count,
       }
 
     case SET_STATUS:
@@ -146,7 +139,7 @@ export const bookingsReducer = (
 
 type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
      SetFilterAT | SetBookingsAT | SetCurrentPageAT |
-    SetTotalAT | ChangeStatusAT | SetIsFetchingAT |
+     ChangeStatusAT | SetIsFetchingAT |
     ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT | DeleteBookingAT |
     AddBookingAT | SetAccessErrorAT | SetBookingApiErrorAT;
 
@@ -206,15 +199,6 @@ type SetCurrentPageAT = {
 export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
       type: SET_CURRENT_PAGE, page
 });
-
-type SetTotalAT = {
-  type: typeof SET_TOTAL,
-  count: number
-}
-
-const setTotalAC = (count: number): SetTotalAT => ({
-      type: SET_TOTAL, count
-    });
 
 type ChangeStatusAT = {
   type: typeof SET_STATUS,

@@ -78,7 +78,6 @@ export const BookingButton: React.FC<PropsType> = ({
                     <BookingForm
                         apiError={apiError}
                         consentId={consentId}
-                        bookConsultation={bookConsultationCallBack}
                         closeBookingModal={closeBookingModal}
                     />
                 }

@@ -59,11 +59,11 @@ export const GalleryContainer: React.FC = () => {
   }
 
   const deleteGalleryItemCallBack = (itemId: string) => {
-    dispatch(deleteGalleryItem(itemId, gallery, currentPage, totalCount, pageSize, activeStyle));
+    dispatch(deleteGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
   }
 
   const archiveGalleryItemCallBack = (itemId: string) => {
-    dispatch(archiveGalleryItem(itemId, gallery, currentPage, totalCount, pageSize, activeStyle));
+    dispatch(archiveGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
   }
 
   const updateGalleryItemCallBack = (id: string, values: object) => {

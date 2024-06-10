@@ -81,11 +81,11 @@ export const ArchivedGallery = () => {
     }
 
     const deleteArchivedGalleryItemCallBack = (itemId: string) => {
-        dispatch(deleteArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize));
+        dispatch(deleteArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
     }
 
     const reactivateArchivedGalleryItemCallBack = (itemId: string) => {
-        dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, totalCount, pageSize));
+        dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
     }
 
     const updateArchivedGalleryItemCallBack = (id: string, values: object) => {

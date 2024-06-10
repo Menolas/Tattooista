@@ -29,7 +29,7 @@ import {bookingFilterSelectOptions} from "../../../../utils/constants";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Navigate} from "react-router";
 import {SearchFilterType} from "../../../../types/Types";
-import {ApiErrorMessageModal} from "../../../../components/common/ApiErrorMessageModal";
+import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
 
 export const ArchivedBookings: React.FC = () => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -75,9 +75,8 @@ export const ArchivedBookings: React.FC = () => {
             clientId,
             archivedBookings,
             currentPage,
-            totalCount,
             pageSize,
-            filter
+            filter,
         ));
     }
 
@@ -89,9 +88,8 @@ export const ArchivedBookings: React.FC = () => {
             id,
             archivedBookings,
             currentPage,
-            totalCount,
             pageSize,
-            filter
+            filter,
         ));
     }
 
@@ -114,7 +112,7 @@ export const ArchivedBookings: React.FC = () => {
 
     return (
         <>
-            {(accessError && accessError !== '')
+            { accessError
                 ? <Navigate to="/noAccess"/>
                 : <>
                     <div className="admin__cards-header">
@@ -141,9 +139,9 @@ export const ArchivedBookings: React.FC = () => {
                             ) : <NothingToShow/>
                     }
                     <ApiErrorMessageModal
-                          isOpen={!!archivedBookingApiError}
-                          error={archivedBookingApiError}
-                          closeModal={setApiErrorCallBack}
+                      isOpen={!!archivedBookingApiError}
+                      error={archivedBookingApiError}
+                      closeModal={setApiErrorCallBack}
                     />
                 </>
             }
