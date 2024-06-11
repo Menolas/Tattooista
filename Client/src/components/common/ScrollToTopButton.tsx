@@ -1,10 +1,10 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
+import * as React from "react";
+import {useEffect, useState} from "react";
 // @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg"
+import Sprite from "../../assets/svg/sprite.svg";
 
 
-export const ScrollToTopButton = () => {
+export const ScrollToTopButton: React.FC = () => {
 
     const [showScrollToTopButton, setShowScrollToTopButton] = useState(false)
 
@@ -42,4 +42,4 @@ export const ScrollToTopButton = () => {
             }
         </>
     )
-}
+};

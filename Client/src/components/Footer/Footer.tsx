@@ -3,7 +3,7 @@ import { SocialNav } from "../SocialNav";
 import {Logo} from "../Logo";
 import {NavLink} from "react-router-dom";
 
-export const Footer = React.memo(() => {
+export const Footer: React.FC = () => {
   return (
     <footer className="main-footer">
       <div className={'container'}>
@@ -32,4 +32,4 @@ export const Footer = React.memo(() => {
       </div>
     </footer>
   )
-});
+};

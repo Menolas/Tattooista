@@ -20,7 +20,7 @@ const responsive = {
     1400: { items: 1 },
 }
 
-export const ImageFullView: React.FC<PropsType> = ({
+export const ImageFullView: React.FC<PropsType> = React.memo(({
     isOpen,
     clientId,
     archive,
@@ -69,7 +69,7 @@ export const ImageFullView: React.FC<PropsType> = ({
             </div>
         </div>
     )
-}
+});
 
 const Slider = ({GalleryImgUrl}) => {
     return (

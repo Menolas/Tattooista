@@ -35,9 +35,9 @@ export const GalleryContainer: React.FC = () => {
   const fakeApi = useSelector(getFakeApiSelector);
   const totalCount = useSelector(getTotalCountSelector);
   const pageSize = useSelector(getPageSizeSelector);
-  let currentPage = useSelector(getCurrentPageSelector);
+  const currentPage = useSelector(getCurrentPageSelector);
   const styles = useSelector(getStylesSelector);
-  let activeStyle = useSelector(getActiveStyleSelector);
+  const activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);
 
   const dispatch = useDispatch();

@@ -26,7 +26,6 @@ import {ScrollToTopButton} from "./components/common/ScrollToTopButton";
 import {UsersContainer} from "./components/Admin/Users/UsersContainer";
 import {NotFound} from "./components/404-page";
 import {NoAccess} from "./components/NoAccess";
-import {About} from "./pages/about/About";
 import {MainPage} from "./pages/mainPage/MainPage";
 import {Portfolio} from "./pages/portfolio/Portfolio";
 
@@ -64,8 +63,6 @@ const App = () => {
                         <Routes>
                             <Route path='/'
                                    element={<MainPage />} />
-                            <Route path={'about'}
-                                   element={<About />} />
                             <Route path={`registration`}
                                    element={<RegistrationContainer />} />
                             <Route path={`login`}

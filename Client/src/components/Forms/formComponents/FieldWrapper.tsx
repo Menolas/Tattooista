@@ -26,4 +26,4 @@ export const FieldWrapper:React.FC<PropsType> = ({
             </ErrorMessage>
         </div>
     )
-}
+};

@@ -2,7 +2,7 @@ import * as React from "react";
 import {BookingButton} from "../common/BookingButton";
 
 
-export const MainOffer: React.FC = React.memo(() => {
+export const MainOffer: React.FC = () => {
 
   return (
     <div className = "main-offer">
@@ -19,4 +19,4 @@ export const MainOffer: React.FC = React.memo(() => {
       />
     </div>
   )
-});
+};

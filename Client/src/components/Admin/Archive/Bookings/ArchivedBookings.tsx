@@ -31,7 +31,7 @@ import {Navigate} from "react-router";
 import {SearchFilterType} from "../../../../types/Types";
 import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
 
-export const ArchivedBookings: React.FC = () => {
+export const ArchivedBookings: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const archivedBookings = useSelector(getArchivedBookingsSelector);
@@ -147,4 +147,4 @@ export const ArchivedBookings: React.FC = () => {
             }
         </>
     )
-}
+});

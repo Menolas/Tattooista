@@ -3481,7 +3481,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
   height: 100%;
   width: 100%;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 

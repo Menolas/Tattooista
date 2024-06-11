@@ -32,7 +32,7 @@ type PropsType = {
     service?: ServiceType;
     closeModal: () => void;
 }
-export const UpdateServiceItemForm: React.FC<PropsType> = ({
+export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
     apiError,
     service,
     closeModal,
@@ -209,4 +209,4 @@ export const UpdateServiceItemForm: React.FC<PropsType> = ({
             }}
         </Formik>
     )
-}
+});

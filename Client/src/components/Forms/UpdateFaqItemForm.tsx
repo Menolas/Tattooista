@@ -21,15 +21,11 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
     apiError: number | string;
     faqItem?: FaqType;
-    edit?: (id: string, values: FaqType) => void;
-    add?: (values: FaqType) => void;
     closeModal: () => void;
 }
-export const UpdateFaqItemForm: React.FC<PropsType> = ({
+export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
   apiError,
   faqItem,
-  edit,
-  add,
   closeModal,
 }) => {
     const initialValues = {
@@ -98,4 +94,4 @@ export const UpdateFaqItemForm: React.FC<PropsType> = ({
             }}
         </Formik>
     )
-}
+});

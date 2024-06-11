@@ -6,21 +6,18 @@ import {
     getAuthSelector,
     getUserSelector
 } from "../../redux/Auth/auth-selectors";
-import {ADMIN, ADMIN_BUTTONS_DATA, SUPER_ADMIN} from "../../utils/constants";
+import {ADMIN_BUTTONS_DATA} from "../../utils/constants";
 // @ts-ignore
 import Sprite from "../../assets/svg/sprite.svg";
 import {useEffect, useState} from "react";
-//import {ApiErrorMessage} from "../../components/common/ApiErrorMessage";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {
-    getApiErrorSelector,
     getSuccessModalSelector
 } from "../../redux/General/general-selectors";
-import {setApiErrorAC, setSuccessModalAC} from "../../redux/General/general-reducer";
+import {setSuccessModalAC} from "../../redux/General/general-reducer";
 
-export const Admin: React.FC = React.memo(() => {
+export const Admin: React.FC = () => {
 
-  const apiError = useSelector(getApiErrorSelector);
   const successModal = useSelector(getSuccessModalSelector);
   const isAuth = useSelector(getAuthSelector);
   const user = useSelector(getUserSelector);
@@ -36,10 +33,6 @@ export const Admin: React.FC = React.memo(() => {
   }, [successModal]);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const setApiErrorCallBack = () => {
-    dispatch(setApiErrorAC(''));
-  }
 
   const setSuccessModalCallBack = () => {
     dispatch(setSuccessModalAC(false, ''));
@@ -147,4 +140,4 @@ export const Admin: React.FC = React.memo(() => {
       />
     </div>
   )
-});
+};

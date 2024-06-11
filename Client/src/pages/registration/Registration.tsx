@@ -22,7 +22,6 @@ export const Registration: React.FC<PropsType> = React.memo(({
             { !isAuth &&
                 <div className = "registration__form-wrap form__wrap">
                     <RegistrationForm
-                        //isAuth={isAuth}
                         authApiError={authApiError}
                         registration={registration}
                     />

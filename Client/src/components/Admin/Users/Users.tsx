@@ -28,7 +28,7 @@ type PropsType = {
     setApiError: () => void;
 }
 
-export const Users: React.FC<PropsType> = ({
+export const Users: React.FC<PropsType> = React.memo(({
    apiError,
    roles,
    users,
@@ -134,4 +134,4 @@ export const Users: React.FC<PropsType> = ({
             }
         </>
     )
-}
+});

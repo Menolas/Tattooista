@@ -28,7 +28,7 @@ import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
 import {SearchFilterType} from "../../../../types/Types";
 import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
 
-export const ArchivedClients: React.FC = () => {
+export const ArchivedClients: React.FC = React.memo(() => {
     const isFetching = useSelector(getClientsIsFetching);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const archivedClients = useSelector(getArchivedClientsSelector);
@@ -137,4 +137,4 @@ export const ArchivedClients: React.FC = () => {
             />
         </>
     )
-}
+});

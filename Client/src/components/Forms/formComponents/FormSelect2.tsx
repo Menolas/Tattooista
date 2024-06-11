@@ -6,7 +6,6 @@ import {useState} from "react";
 type PropsType = {
     name: string;
     options: any;
-    value: string;
     handleChange: any;
     placeholder?: string;
 }
@@ -18,17 +17,12 @@ const CustomInput = (props: any) => (
 export const FormSelect2: React.FC<PropsType> = ({
     name,
     options,
-    value,
     handleChange,
     placeholder,
 }) => {
 
     const [field, meta, helpers] = useField(name);
     let [menuIsOpen, setMenuIsOpen] = useState(false);
-
-    const handleMouseDown = (event: React.MouseEvent) => {
-        event.preventDefault();
-    };
 
     return (
         <Select
@@ -49,7 +43,6 @@ export const FormSelect2: React.FC<PropsType> = ({
             }}
             value={options.find((option) => option.value === field.value)}
             components={{ Input: CustomInput }}
-            onMouseDown={handleMouseDown}
         />
     )
 }

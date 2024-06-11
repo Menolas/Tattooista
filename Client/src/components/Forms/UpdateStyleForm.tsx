@@ -47,7 +47,7 @@ type PropsType = {
     style?: StyleType;
     closeModal: () => void;
 }
-export const UpdateStyleForm: React.FC<PropsType> = ({
+export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
     apiError,
     isEditing,
     style,
@@ -190,4 +190,4 @@ export const UpdateStyleForm: React.FC<PropsType> = ({
             }}
         </Formik>
     )
-}
+});

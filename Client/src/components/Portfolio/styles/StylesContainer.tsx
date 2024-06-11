@@ -69,8 +69,6 @@ export const StylesContainer: React.FC = () => {
             activeStyle={activeStyle}
             isDeletingInProcess={isDeletingInProcess}
             resetActiveStyle={resetActiveStyleCallBack}
-            add={addCallBack}
-            edit={editCallBack}
             remove={removeCallBack}
             setApiError={setApiErrorCallBack}
         />
