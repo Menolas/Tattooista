@@ -3,7 +3,6 @@ import { MainOffer } from "../../components/MainPage/MainOffer";
 import { PortfolioSlider } from "../../components/MainPage/PortfolioSlider";
 import { Booking } from "../../components/MainPage/Booking";
 import {
-    BookConsultationFormValues,
     StyleType
 } from "../../types/Types";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
@@ -11,7 +10,6 @@ import {useEffect} from "react";
 import {
   setSuccessModalAC,
 } from "../../redux/General/general-reducer";
-import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {
     useDispatch,
     useSelector

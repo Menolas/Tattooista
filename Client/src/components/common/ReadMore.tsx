@@ -1,13 +1,13 @@
-import * as React from "react"
-import { useState } from "react"
+import * as React from "react";
+import { useState } from "react";
 
-interface ReadMoreProps {
-    id: string
-    text: string
-    amountOfWords?: number
-}
+interface PropsType {
+    id: string;
+    text: string;
+    amountOfWords?: number;
+};
 
-export const ReadMore = ({ id, text, amountOfWords = 32 }: ReadMoreProps) => {
+export const ReadMore: React.FC<PropsType> = React.memo(({ id, text, amountOfWords = 32 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
     const splittedText = text?.split(' ')
     const itCanOverflow = splittedText.length > amountOfWords
@@ -49,4 +49,4 @@ export const ReadMore = ({ id, text, amountOfWords = 32 }: ReadMoreProps) => {
             )}
         </p>
     )
-}
+});

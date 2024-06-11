@@ -13,8 +13,6 @@ type PropsType = {
   isDeletingInProcess: Array<string>;
   isAuth: string;
   faq: Array<FaqType>;
-  edit: (id: string, values: any) => void;
-  add: (values: FaqType) => void;
   remove: (id: string) => void;
   setApiError: () => void;
 }
@@ -25,8 +23,6 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
   isDeletingInProcess,
   isAuth,
   faq,
-  edit,
-  add,
   remove,
   setApiError,
 }) => {
@@ -82,8 +78,6 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
               <UpdateFaqItemForm
                   apiError={apiError}
                   faqItem={updateFaqItemData.faqItem}
-                  edit={edit}
-                  add={add}
                   closeModal={() => {
                     setUpdateFaqItemData({isUpdateMode: false});
                     setAddFaqItemMode(false);

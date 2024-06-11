@@ -5,14 +5,16 @@ import {ADMIN, mainNavHashLinksData, socialLinksData, SUPER_ADMIN} from "../util
 // @ts-ignore
 import Sprite from "../assets/svg/sprite.svg";
 
-export const MobileMainMenu = ({
-    isAuth,
-    logout,
-    closeMenu
-}: {
+type PropsType = {
     isAuth: string | null
     logout: () => void
     closeMenu: () => void
+}
+
+export const MobileMainMenu: React.FC<PropsType> = React.memo(({
+    isAuth,
+    logout,
+    closeMenu
 }) => {
 
     const hashMobileMenuItems = mainNavHashLinksData.map(item => {
@@ -113,4 +115,4 @@ export const MobileMainMenu = ({
             </ul>
         </nav>
     )
-}
+});

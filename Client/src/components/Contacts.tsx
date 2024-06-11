@@ -2,14 +2,11 @@ import * as React from "react";
 import {useEffect} from "react";
 import {NavLink} from "react-router-dom";
 
-export const Contacts: React.FC = React.memo(() => {
+export const Contacts: React.FC = () => {
 
   useEffect(() => {
-    // Check if the URL contains a hash
     if (window.location.hash) {
-      // Get the target element using the hash
       const targetElement = document.querySelector(window.location.hash)
-      // Scroll to the target element
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' })
       }
@@ -37,4 +34,4 @@ export const Contacts: React.FC = React.memo(() => {
       </NavLink>
     </section>
   )
-})
+};

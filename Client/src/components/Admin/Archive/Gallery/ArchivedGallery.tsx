@@ -31,7 +31,7 @@ import {Confirmation} from "../../../common/Confirmation";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Preloader} from "../../../common/Preloader";
 
-export const ArchivedGallery = () => {
+export const ArchivedGallery: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
     const totalCount = useSelector(getTotalArchivedGalleryItemsCountSelector);
     const pageSize = useSelector(getArchivedGalleryPageSizeSelector);
@@ -215,4 +215,4 @@ export const ArchivedGallery = () => {
             <Tooltip id="my-tooltip" />
         </>
     )
-}
+});

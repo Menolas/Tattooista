@@ -12,7 +12,7 @@ type PropsType = {
     closeModal?: () => void;
 }
 
-export const UpdateGalleryItemForm: React.FC<PropsType> = ({
+export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
     folder,
     galleryItem,
     styles,
@@ -90,4 +90,4 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = ({
             }}
         </Formik>
     )
-}
+});

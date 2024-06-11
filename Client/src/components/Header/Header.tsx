@@ -16,16 +16,13 @@ type PropsType = {
     logout: () => void;
 }
 
-export const Header: React.FC<PropsType> = ({
+export const Header: React.FC<PropsType> = React.memo(({
   isAuth,
   headerClasses,
   logout,
 }) => {
 
   let [isMenuOpen, setIsMenuOpen] = useState(false);
-  const closeMenu = () => {
-      setIsMenuOpen(false);
-  }
 
   return (
     <header className = { 'main-header ' + headerClasses }>
@@ -97,4 +94,4 @@ export const Header: React.FC<PropsType> = ({
       <Tooltip id="my-tooltip" />
     </header>
   );
-}
+});

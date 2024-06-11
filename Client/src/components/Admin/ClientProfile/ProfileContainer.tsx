@@ -16,7 +16,7 @@ import {
 } from "../../../redux/Clients/clients-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 
-export const ProfileContainer: React.FC = React.memo(() => {
+export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
@@ -65,4 +65,4 @@ export const ProfileContainer: React.FC = React.memo(() => {
       archive={archiveClientCallBack}
     />
   )
-});
+};

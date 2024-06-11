@@ -129,7 +129,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
               <FormSelect2
                   name="contact"
                   options={options}
-                  value={propsF.values.contact}
                   handleChange={handleChange}
                   placeholder={'Choose the way you want me to contact you'}
               />
@@ -192,4 +191,5 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
         )
       }}
     </Formik>
-)});
+  )
+});

@@ -20,7 +20,7 @@ const socialLinks = socialLinksData.map(item => {
 })
 
 
-export const SocialNav: React.FC = React.memo(() => {
+export const SocialNav: React.FC = () => {
   return (
     <nav className="social-nav">
       <ul className="social-nav__list">
@@ -28,4 +28,4 @@ export const SocialNav: React.FC = React.memo(() => {
       </ul>
     </nav>
   )
-})
+};

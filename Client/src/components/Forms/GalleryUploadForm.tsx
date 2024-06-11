@@ -35,7 +35,7 @@ type PropsType = {
   deleteClientGalleryPicture?: (clientId: string, picture: string) => void;
 }
 
-export const GalleryUploadForm: React.FC<PropsType> = ({
+export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   isEditPortfolio,
   client,
   isDeletingPicturesInProcess,
@@ -163,4 +163,4 @@ export const GalleryUploadForm: React.FC<PropsType> = ({
       }}
     </Formik>
   )
-}
+});

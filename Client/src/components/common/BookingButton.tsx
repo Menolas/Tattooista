@@ -16,7 +16,7 @@ type PropsType = {
     consentId: string;
 };
 
-export const BookingButton: React.FC<PropsType> = ({
+export const BookingButton: React.FC<PropsType> = React.memo(({
     consentId = 'consent',
 }) => {
 
@@ -89,4 +89,4 @@ export const BookingButton: React.FC<PropsType> = ({
             />
         </div>
     )
-}
+});

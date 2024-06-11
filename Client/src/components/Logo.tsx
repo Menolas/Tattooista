@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 
-export const Logo: React.FC = React.memo(() => {
+export const Logo: React.FC = () => {
   return (
     <div className={'logo'}>
       <NavLink
@@ -12,4 +12,4 @@ export const Logo: React.FC = React.memo(() => {
       </NavLink>
     </div>
   )
-});
+};

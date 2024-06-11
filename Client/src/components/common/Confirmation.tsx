@@ -8,7 +8,7 @@ type PropsType = {
     cancel: () => void
 }
 
-export const Confirmation: React.FC<PropsType> = ({
+export const Confirmation: React.FC<PropsType> = React.memo(({
     isOpen,
     content,
     confirm,
@@ -38,4 +38,4 @@ export const Confirmation: React.FC<PropsType> = ({
             </div>
         </ModalPopUp>
     )
-}
+});

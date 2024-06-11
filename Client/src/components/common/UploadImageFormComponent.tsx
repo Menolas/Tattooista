@@ -11,7 +11,7 @@ type PropsType = {
     onChangeCallBack: () => void;
 }
 
-export const UploadImageFormComponent: React.FC<PropsType> = ({
+export const UploadImageFormComponent: React.FC<PropsType> = React.memo(({
     imgUrl,
     defaultImage,
     onChangeCallBack,
@@ -75,6 +75,4 @@ export const UploadImageFormComponent: React.FC<PropsType> = ({
             </FieldWrapper>
         </div>
     );
-}
-
-
+});

@@ -11,7 +11,7 @@ interface MyCarouselProps {
     disableDotsControls?: boolean;
 }
 
-export const MyCarousel: React.FC<MyCarouselProps> = ({
+export const MyCarousel: React.FC<MyCarouselProps> = React.memo(({
     items,
     responsive,
     controlsStrategy= "default",
@@ -29,4 +29,4 @@ export const MyCarousel: React.FC<MyCarouselProps> = ({
             disableDotsControls={disableDotsControls}
         />
     )
-};
+});

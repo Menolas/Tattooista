@@ -4,7 +4,7 @@ import Sprite from "../../assets/svg/sprite.svg";
 import { NavLink } from "react-router-dom";
 import {BookingButton} from "../common/BookingButton";
 
-export const Advertisement: React.FC = React.memo(() => {
+export const Advertisement: React.FC = () => {
 
   return (
     <section className="advertisement">
@@ -28,4 +28,4 @@ export const Advertisement: React.FC = React.memo(() => {
       />
     </section>
   )
-});
+};

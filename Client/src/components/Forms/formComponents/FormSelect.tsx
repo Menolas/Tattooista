@@ -18,16 +18,7 @@ export const FormSelect: React.FC<PropsType> = ({
 }) => {
 
     const [field, meta, helpers] = useField(name);
-    //const { setValue, setTouched} = helpers;
-    // [selectedOption, setSelectedOption] = useState("none");
     let [menuIsOpen, setMenuIsOpen] = useState(false);
-
-    // const setFieldProps = async (selectedOption) => {
-    //     await setTouched(true);
-    //     handleChange(selectedOption.value);
-    //     setSelectedOption(selectedOption.value);
-    //     await setValue(selectedOption.value);
-    // }
 
     return (
         <Select
@@ -42,17 +33,11 @@ export const FormSelect: React.FC<PropsType> = ({
             onMenuClose={() => {
                 setMenuIsOpen(false)
             }}
-            //onChange={setFieldProps}
             onChange={(selectedOption) => {
                 helpers.setValue(selectedOption.value);
                 handleChange(selectedOption.value);
             }}
             value={options.find((option) => option.value === field.value)}
-            // value={
-            //     options.filter(function(option) {
-            //         return option.value === selectedOption;
-            //     })
-            // }
         />
     )
 }

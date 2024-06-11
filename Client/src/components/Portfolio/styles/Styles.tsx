@@ -28,8 +28,6 @@ type PropsType = {
   activeStyle: StyleType;
   isDeletingInProcess: Array<string>;
   resetActiveStyle: (style: StyleType) => void;
-  add: (values: FormData) => void;
-  edit: (id: string, values: FormData) => void;
   remove: (id: string) => void;
   setApiError: () => void;
 }
@@ -42,8 +40,6 @@ export const Styles: React.FC<PropsType> = React.memo(({
   activeStyle,
   isDeletingInProcess,
   resetActiveStyle,
-  add,
-  edit,
   remove,
   setApiError,
 }) => {
