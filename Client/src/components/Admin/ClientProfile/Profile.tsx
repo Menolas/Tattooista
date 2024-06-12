@@ -235,6 +235,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
                 gallery={data.gallery}
                 activeIndex={carouselData.activeIndex}
                 closeImg={()=> {setCarouselData({isOpen: false});}}
+                imgUrl={`${API_URL}/clients/${data._id}/doneTattooGallery/`}
         />
       }
       <Tooltip id="profile-tooltip" />

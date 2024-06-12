@@ -4,44 +4,38 @@ import {GalleryItemType} from "../../types/Types";
 import {MyCarousel} from "./MyCarousel";
 
 type PropsType = {
-    isOpen: boolean
-    clientId?: string
-    archive?: boolean
-    gallery: Array<GalleryItemType> | Array<string>
-    activeIndex?: number
-    fakeApi?: boolean
-    closeImg: () => void
-}
+    isOpen: boolean;
+    clientId?: string;
+    gallery: Array<GalleryItemType> | Array<string>;
+    activeIndex?: number;
+    fakeApi?: boolean;
+    closeImg: () => void;
+    imgUrl?: string | undefined;
+};
 
 const responsive = {
     0: { items: 1 },
     600: { items: 1 },
     900: { items: 1 },
     1400: { items: 1 },
-}
+};
 
 export const ImageFullView: React.FC<PropsType> = React.memo(({
     isOpen,
     clientId,
-    archive,
     gallery,
     activeIndex= 0,
     fakeApi,
-    closeImg
+    closeImg,
+    imgUrl,
 }) => {
 
     const sliders = gallery.map(item => {
-        let GalleryImgUrl;
-        if (clientId) {
-            GalleryImgUrl = !archive
-                ? `${API_URL}/clients/${clientId}/doneTattooGallery/${item}`
-                : `${API_URL}/archivedClients/${clientId}/doneTattooGallery/${item}`;
-        } else {
-            GalleryImgUrl = fakeApi
-                ? `./uploads/gallery/${item.fileName}`
-                : `${API_URL}/gallery/${item.fileName}`;
-        }
-
+        let GalleryImgUrl = !fakeApi
+            ? clientId
+                ? `${imgUrl}${item}`
+                : `${imgUrl}${item.fileName}`
+            : `./uploads/gallery/${item.fileName}`;
 
         return (
             <Slider  GalleryImgUrl={ GalleryImgUrl}/>

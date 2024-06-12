@@ -26,6 +26,8 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   reactivate,
 }) => {
 
+    console.log(data.gallery + "data.gallery")
+
   const [carouselData, setCarouselData] = useState<{
     isOpen: boolean, activeIndex?: number}>({isOpen: false});
   const [confirmationData, setConfirmationData] = useState<{
@@ -144,10 +146,10 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
         <ImageFullView
             isOpen={carouselData.isOpen}
             clientId={data._id}
-            archive={true}
             gallery={data.gallery}
             activeIndex={carouselData.activeIndex}
             closeImg={()=> setCarouselData({isOpen: false})}
+            imgUrl={`${API_URL}/archivedClients/${data._id}/doneTattooGallery/`}
         />
       }
       <Tooltip id="my-tooltip" />

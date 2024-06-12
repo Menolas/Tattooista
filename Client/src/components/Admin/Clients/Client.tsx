@@ -199,6 +199,7 @@ export const Client: React.FC<PropsType> = React.memo(({
             gallery={data.gallery}
             activeIndex={carouselData.activeIndex}
             closeImg={()=> {setCarouselData({isOpen: false});}}
+            imgUrl={`${API_URL}/clients/${data._id}/doneTattooGallery/`}
         />
       }
       <Tooltip id="my-tooltip" />
