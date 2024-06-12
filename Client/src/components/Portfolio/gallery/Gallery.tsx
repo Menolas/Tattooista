@@ -54,8 +54,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 }) => {
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
-  const [editGalleryMode, setEditGalleryMode] = useState(false);
   const [galleryItem, setGalleryItem] = useState(null);
+  const [editGalleryMode, setEditGalleryMode] = useState(false);
   const [confirmationData, setConfirmationData] = useState<{
     needConfirmation: boolean,
     itemId?: string,
@@ -181,6 +181,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               activeIndex={carouselData.activeIndex}
               fakeApi={fakeApi}
               closeImg={()=>{setCarouselData({isOpen: false});}}
+              imgUrl={`${API_URL}/gallery/`}
            />
         }
         <ModalPopUp

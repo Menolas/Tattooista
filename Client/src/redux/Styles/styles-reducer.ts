@@ -8,6 +8,10 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {
+  SetCurrentGalleryPageAT,
+  setCurrentGalleryPageAC,
+} from "../Gallery/gallery-reducer";
 import {checkAuth, LogInAT} from "../Auth/auth-reducer";
 import {tattooStyles} from "../../data/StylesData";
 
@@ -99,7 +103,6 @@ export const stylesReducer = (
       return {
         ...state,
         activeStyle: action.style,
-        //currentGalleryPage: 1
       }
 
     case SET_FAKE_API:
@@ -116,7 +119,7 @@ export const stylesReducer = (
 
 type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
     SetStylesAT | DeleteStyleAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT |
-    SetFakeApiAT | LogInAT | AddStyleAT | UpdateStyleAT;
+    SetFakeApiAT | LogInAT | AddStyleAT | UpdateStyleAT | SetCurrentGalleryPageAT;
 
 // actions creators
 
@@ -196,6 +199,14 @@ export const setActiveStyleAC = (style: StyleType | null): SetActiveStyleAT => (
 //thunks
 
 type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+
+export const setActiveStyle = (style: StyleType | null): ThunkType => async (
+    dispatch
+) => {
+  dispatch(setActiveStyleAC(style));
+  dispatch(setCurrentGalleryPageAC(1));
+  return true;
+}
 
 export const getStyles = (token: string | null): ThunkType => async (
   dispatch
@@ -279,11 +290,4 @@ export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
-
-export const resetActiveStyle = (
-  style: StyleType
-): ThunkType => async (dispatch) => {
-  dispatch(setActiveStyleAC(style));
-  return true;
 }

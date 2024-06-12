@@ -30,6 +30,7 @@ import {Tooltip} from "react-tooltip"
 import {Confirmation} from "../../../common/Confirmation";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Preloader} from "../../../common/Preloader";
+import {ImageFullView} from "../../../common/ImageFullView";
 
 export const ArchivedGallery: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -50,26 +51,16 @@ export const ArchivedGallery: React.FC = React.memo(() => {
         dispatch(getArchivedGallery(currentPage, pageSize));
     }, [currentPage, pageSize]);
 
-    const [bigImg, setBigImg] = useState('');
     const [confirmationData, setConfirmationData] = useState<{
         needConfirmation: boolean,
         itemId?: string,
         cb?: (itemId: string) => void,
         context: string
     }>({needConfirmation: false, context: ''});
+    const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
 
     const closeModal = () => {
         setConfirmationData({needConfirmation: false, context: ''});
-    }
-
-    const showBigImg = (fileName) => {
-        if (!bigImg) {
-            setBigImg(fileName);
-        }
-    }
-
-    const closeBigImg = () => {
-        setBigImg('');
     }
 
     const onPageChangedCallBack = (page: number) => {
@@ -97,14 +88,16 @@ export const ArchivedGallery: React.FC = React.memo(() => {
         setEditGalleryItem(null);
     }
 
-    const galleryItems = archivedGallery.map(item => {
+    const galleryItems = archivedGallery.map((item, index) => {
         return (
             <li
                 key={item._id}
                 className="gallery__item"
             >
                 <div
-                    onClick={() => { showBigImg(item.fileName) }}
+                    onClick={() => {
+                        setCarouselData({isOpen: true, activeIndex: index});
+                    }}
                     className={"gallery__img-wrap"}
                     style={{ backgroundImage: `url(${API_URL}/archivedGallery/${item.fileName})` }}
                 >
@@ -177,18 +170,15 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                       )
                     : <NothingToShow/>
             }
-            {
-                bigImg &&
-                <div className={"gallery__large-wrap modal-wrap"}>
-                    <div className={"gallery__large"}>
-                        <button
-                            className={"closing-btn gallery__item-close-btn"}
-                            onClick={() => { closeBigImg() }}>
-                            {''}
-                        </button>
-                        <img src={`${API_URL}/archivedGallery/${bigImg}`} alt={''} />
-                    </div>
-                </div>
+            {  carouselData.isOpen &&
+                <ImageFullView
+                    isOpen={carouselData.isOpen}
+                    gallery={archivedGallery}
+                    activeIndex={carouselData.activeIndex}
+                    //fakeApi={fakeApi}
+                    closeImg={()=>{setCarouselData({isOpen: false});}}
+                    imgUrl={`${API_URL}/archivedGallery/`}
+                />
             }
             <ModalPopUp
                 isOpen={editGalleryItem}

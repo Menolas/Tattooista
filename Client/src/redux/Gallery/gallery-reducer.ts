@@ -153,7 +153,7 @@ export const setGalleryPageSizeAC = (pageSize: number): SetGalleryPageSizeAT => 
     type: SET_PAGE_SIZE, pageSize
 });
 
-type SetCurrentGalleryPageAT = {
+export type SetCurrentGalleryPageAT = {
   type: typeof SET_CURRENT_PAGE,
   page: number
 }

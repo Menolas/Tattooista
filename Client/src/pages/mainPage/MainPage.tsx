@@ -31,7 +31,7 @@ import {
 } from "../../redux/General/general-selectors";
 import {
     getStyles,
-    setActiveStyleAC
+    setActiveStyle,
 } from "../../redux/Styles/styles-reducer";
 import {AboutContainer} from "../../components/MainPage/about/AboutContainer";
 import {ServicesContainer} from "../../components/MainPage/services/SevicesContainer";
@@ -75,7 +75,7 @@ export const MainPage: React.FC = () => {
   }, [successModal]);
 
   const setActiveStyleCallBack = (style: StyleType) => {
-    dispatch(setActiveStyleAC(style));
+    dispatch(setActiveStyle(style));
   }
 
   const setSuccessModalCallBack = () => {
