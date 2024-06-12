@@ -1,12 +1,9 @@
 import * as React from "react";
 import { StyleType } from "../../../types/Types";
 import {
-    addStyle,
     deleteStyle,
-    editStyle,
     getStyles,
-    resetActiveStyle,
-    setActiveStyleAC,
+    setActiveStyle,
 } from "../../../redux/Styles/styles-reducer";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
@@ -35,21 +32,13 @@ export const StylesContainer: React.FC = () => {
     useEffect(() => {
         dispatch(getStyles(token)).then(() => {
             if (styles.length > 0 && !activeStyle?._id) {
-                dispatch(setActiveStyleAC(styles[0]));
+                dispatch(setActiveStyle(styles[0]));
             }
         });
     }, [dispatch, activeStyle, token]);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
-        dispatch(resetActiveStyle(style));
-    }
-
-    const addCallBack = (values: FormData) => {
-        dispatch(addStyle(values));
-    }
-
-    const editCallBack = (id: string, values: FormData) => {
-        dispatch(editStyle(id, values));
+        dispatch(setActiveStyle(style));
     }
 
     const removeCallBack = (id: string) => {
