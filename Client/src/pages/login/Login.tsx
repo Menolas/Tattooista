@@ -7,14 +7,12 @@ type PropsType = {
   isUserActivated: boolean;
   isAuth: null | string;
   authApiError: null | string;
-  login: (values: LoginFormValues) => void;
 }
 
 export const Login: React.FC<PropsType> = React.memo(({
   isUserActivated,
   isAuth,
   authApiError,
-  login
 }) => {
 
   return (
@@ -24,7 +22,6 @@ export const Login: React.FC<PropsType> = React.memo(({
             <LoginForm
                 isAuth={isAuth}
                 authApiError={authApiError}
-                login={login}
             />
           </div>
       }
