@@ -128,11 +128,6 @@ export const Admin: React.FC = () => {
       <section className={'admin__content'}>
           <Outlet />
       </section>
-      {/*<ApiErrorMessage*/}
-      {/*      isOpen={!!apiError}*/}
-      {/*      error={apiError}*/}
-      {/*      closeModal={setApiErrorCallBack}*/}
-      {/*/>*/}
       <SuccessPopUp
             isOpen={successModal.isSuccess}
             closeModal={setSuccessModalCallBack}

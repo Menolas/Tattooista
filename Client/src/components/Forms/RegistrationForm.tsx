@@ -15,6 +15,8 @@ import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {useState} from "react";
 // @ts-ignore
 import avatar from "../../assets/img/fox.webp";
+import {useDispatch} from "react-redux";
+import {registration} from "../../redux/Auth/auth-reducer";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
@@ -46,33 +48,36 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
   authApiError: string | null;
-  registration: (values: RegistrationFormValues) => void;
 }
 
 export const RegistrationForm: React.FC<PropsType> = React.memo(({
   authApiError,
-  registration
 }) => {
 
-  const [imageURL, setImageURL] = useState('')
+  const dispatch = useDispatch();
+
+  const [imageURL, setImageURL] = useState('');
 
   const handleOnChange = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if (event.target.files && event.target.files.length) {
-      const file = event.target.files[0]
-      const fileReader = new FileReader()
+      const file = event.target.files[0];
+      const fileReader = new FileReader();
       fileReader.onloadend = () => {
         // @ts-ignore
-        setImageURL(fileReader.result)
+        setImageURL(fileReader.result);
       }
-      fileReader.readAsDataURL(file)
+      fileReader.readAsDataURL(file);
     }
   }
 
-  const submit = (values: RegistrationFormValues, actions: FormikHelpers<FormikValues>) => {
-    registration(values)
-    actions.setSubmitting(false)
-  }
+  const submit = async (
+      values: RegistrationFormValues,
+      actions: FormikHelpers<FormikValues>
+  ) => {
+    await dispatch(registration(values));
+    actions.setSubmitting(false);
+  };
 
   const initialValues: RegistrationFormValues = {
     avatar: '',

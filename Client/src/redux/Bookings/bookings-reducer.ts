@@ -266,7 +266,6 @@ const deleteBookingThunk = (
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
-    //total: number,
     pageLimit: number,
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
@@ -289,8 +288,7 @@ export const getBookings = (
   pageSize: number,
   filter: SearchFilterType
 ): ThunkType => async (
-    dispatch,
-    getState
+    dispatch
 ) => {
   try {
     dispatch(setIsFetchingAC(true));

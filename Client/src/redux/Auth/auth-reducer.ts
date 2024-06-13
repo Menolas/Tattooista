@@ -101,7 +101,7 @@ const setAuthApiErrorAC = (error: null | string): SetAuthApiErrorAT => ({
 
 //thunks
 
-export type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
 
 export const login = (values: LoginFormValues): ThunkType => async (
     dispatch
@@ -115,10 +115,14 @@ export const login = (values: LoginFormValues): ThunkType => async (
             getUserRole(response.userData.user.roles, response.userData.roles),
             response.userData.roles
       ));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     console.log(e.response.data.message);
     dispatch(setAuthApiErrorAC(e.response.data.message));
+    return false;
   }
 }
 
@@ -129,28 +133,38 @@ export const logout = (): ThunkType => async (
     const response = await authAPI.logout();
      if(response.resultCode === ResultCodesEnum.Success) {
        dispatch(logOutAC());
+       return true;
+     } else {
+       return false;
      }
   } catch (e) {
     console.log(e);
+    return false;
   }
 }
 
-export const registration = (values: RegistrationFormValues): ThunkType => async (dispatch) => {
-  try {
-    let response = await authAPI.registration(values);
-    if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(logInAC(
-          response.userData.accessToken,
-          response.userData.user,
-          getUserRole(response.userData.user.roles, response.userData.roles),
-          response.userData.roles
-      ));
-      dispatch(setSuccessModalAC(true, "You successfully subscribed!"));
+export const registration = (
+    values: RegistrationFormValues
+): ThunkType => async (dispatch) => {
+    try {
+      let response = await authAPI.registration(values);
+      if (response.resultCode === ResultCodesEnum.Success) {
+        dispatch(logInAC(
+            response.userData.accessToken,
+            response.userData.user,
+            getUserRole(response.userData.user.roles, response.userData.roles),
+            response.userData.roles
+        ));
+        dispatch(setSuccessModalAC(true, "You successfully subscribed!"));
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e: any) {
+      dispatch(setAuthApiErrorAC(e.response.data.message));
+      console.log(e.response.data.message);
+      return false;
     }
-  } catch (e: any) {
-    dispatch(setAuthApiErrorAC(e.response.data.message));
-    console.log(e.response.data.message);
-  }
 }
 
 export const checkAuth = ():ThunkType => async (dispatch) => {
@@ -171,8 +185,12 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
       if (response.userData.isAuth === false) {
         dispatch(logOutAC());
       }
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     console.log(e.response?.data?.message);
+    return false;
   }
 }

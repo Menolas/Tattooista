@@ -82,7 +82,10 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
 
   const dispatch = useDispatch();
 
-  const submit = async (values: BookConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
+  const submit = async (
+      values: BookConsultationFormValues,
+      actions: FormikHelpers<FormikValues>
+  ) => {
     const success = await dispatch(addBooking(values));
     if (success && closeBookingModal) {
       closeBookingModal();

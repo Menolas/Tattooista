@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Registration } from "./Registration";
-import { registration } from "../../redux/Auth/auth-reducer";
 import {
     getSuccessModalSelector,
 } from "../../redux/General/general-selectors";
@@ -11,7 +10,6 @@ import {
     getUserSelector,
     getAuthApiErrorSelector
 } from "../../redux/Auth/auth-selectors";
-import {RegistrationFormValues} from "../../types/Types";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useEffect} from "react";
 
@@ -23,6 +21,7 @@ export const RegistrationContainer: React.FC = () => {
     const authApiError = useSelector(getAuthApiErrorSelector);
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         if (successModal.isSuccess) {
             setTimeout( () => {
@@ -30,10 +29,6 @@ export const RegistrationContainer: React.FC = () => {
             }, 3000);
         }
     }, [successModal]);
-
-    const registrationCallBack = (values: RegistrationFormValues) => {
-        dispatch(registration(values))
-    }
 
     const setSuccessModalCallBack = () => {
         dispatch(setSuccessModalAC(false, ''));
@@ -45,7 +40,6 @@ export const RegistrationContainer: React.FC = () => {
                 isAuth={isAuth}
                 user={user}
                 authApiError={authApiError}
-                registration={registrationCallBack}
             />
             <SuccessPopUp
                 isOpen={successModal.isSuccess}

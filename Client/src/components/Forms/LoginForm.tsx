@@ -8,6 +8,8 @@ import {FieldComponent} from "./formComponents/FieldComponent";
 import { NavLink } from "react-router-dom";
 import {ADMIN, SUPER_ADMIN, USER} from "../../utils/constants";
 import {useEffect} from "react";
+import {useDispatch} from "react-redux";
+import {login} from "../../redux/Auth/auth-reducer";
 
 const validationSchema = Yup.object().shape({
   email: Yup
@@ -22,14 +24,14 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
   isAuth: null | string;
   authApiError: null | string;
-  login: (values: LoginFormValues) => void;
 }
 
 export const LoginForm: React.FC<PropsType> = React.memo(({
   isAuth,
   authApiError,
-  login
 }) => {
+
+  const dispatch = useDispatch();
 
   if (isAuth === ADMIN || isAuth === SUPER_ADMIN) {
     return <Navigate to="/admin/bookedConsultations" />
@@ -39,8 +41,8 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
     return <Navigate to="/" />
   }
 
-  const submit = (values: LoginFormValues, actions: FormikHelpers<FormikValues>) => {
-    login(values);
+  const submit = async (values: LoginFormValues, actions: FormikHelpers<FormikValues>) => {
+    await dispatch(login(values));
     actions.setSubmitting(false);
   }
 
