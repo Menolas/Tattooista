@@ -21,7 +21,6 @@ type PropsType = {
   archive: (clientId: string) => void;
   setData: (client: ClientType) => void;
   setEditClientMode: (mode: boolean) => void;
-  updateGallery: (clientId: string, values: FormData) => void;
   deleteGalleryItem: (clientId: string, picture: string) => void;
 }
 
@@ -33,7 +32,6 @@ export const Client: React.FC<PropsType> = React.memo(({
   archive,
   setData,
   setEditClientMode,
-  updateGallery,
   deleteGalleryItem,
 }) => {
 
@@ -186,7 +184,6 @@ export const Client: React.FC<PropsType> = React.memo(({
                 isEditPortfolio={false}
                 client={data}
                 isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                updateGallery={updateGallery}
                 deleteClientGalleryPicture={deleteGalleryItem}
                 closeModal={() => {setEditGalleryMode(false);}}
             />

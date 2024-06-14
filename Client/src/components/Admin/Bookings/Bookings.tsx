@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import { Navigate } from "react-router";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
-import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../../types/Types";
+import {BookingType, SearchFilterType} from "../../../types/Types";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {AddBookingForm} from "../../Forms/AddBookingForm";
 import {Preloader} from "../../common/Preloader";

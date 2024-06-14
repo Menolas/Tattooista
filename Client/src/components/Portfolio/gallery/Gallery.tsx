@@ -26,12 +26,10 @@ type PropsType = {
   gallery: Array<GalleryItemType>
   isDeletingInProcess: Array<string>
   styles: Array<StyleType>
-  updateGallery: (values: FormData) => void
   remove: (itemId: string) => void
   setCurrentPage: (page: number) => void
   setPageSize: (limit: number) => void
   archive: (id: string) => void
-  updateItem: (id: string, values: object) => void
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
@@ -47,10 +45,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   styles,
   setCurrentPage,
   setPageSize,
-  updateGallery,
   remove,
   archive,
-  updateItem,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
@@ -203,8 +199,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           }
           {  editGalleryMode &&
               <GalleryUploadForm
+                  styleID={activeStyle._id}
                   isEditPortfolio={true}
-                  updatePortfolio={updateGallery}
                   closeModal={closeEditGalleryForm}
               />
           }

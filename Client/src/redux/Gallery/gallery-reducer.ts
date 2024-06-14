@@ -271,7 +271,7 @@ export const getGallery = (
   }
 }
 
-export const adminUpdateGallery = (
+export const updateGallery = (
   tattooStyle: string,
   values: FormData
 ): ThunkType => async (dispatch) => {

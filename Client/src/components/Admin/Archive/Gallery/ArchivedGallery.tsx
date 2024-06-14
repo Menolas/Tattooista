@@ -17,7 +17,6 @@ import {
     reactivateArchivedGalleryItem,
     setPageSizeAC,
     setCurrentPageAC,
-    updateArchivedGalleryItem
 } from "../../../../redux/ArchivedGallery/archived-gallery-reducer";
 import {getStyles,} from "../../../../redux/Styles/styles-reducer";
 import { API_URL } from "../../../../http";
@@ -78,10 +77,6 @@ export const ArchivedGallery: React.FC = React.memo(() => {
 
     const reactivateArchivedGalleryItemCallBack = (itemId: string) => {
         dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
-    }
-
-    const updateArchivedGalleryItemCallBack = (id: string, values: object) => {
-        dispatch(updateArchivedGalleryItem(id, values));
     }
 
     const [ editGalleryItem, setEditGalleryItem ] = useState(null);

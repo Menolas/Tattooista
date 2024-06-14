@@ -23,7 +23,7 @@ import {
   getAccessErrorSelector, getBookingApiErrorSelector
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
-import {AddConsultationFormValues, SearchFilterType} from "../../../types/Types";
+import {SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
