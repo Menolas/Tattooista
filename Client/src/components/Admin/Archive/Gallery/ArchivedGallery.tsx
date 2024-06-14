@@ -9,7 +9,7 @@ import {
     getIsDeletingInProcessSelector,
     getTotalArchivedGalleryItemsCountSelector
 } from "../../../../redux/ArchivedGallery/archived-gallery-selectors";
-import {getStylesSelector,} from "../../../../redux/Styles/styles-selectors";
+import {getActiveStyleSelector, getStylesSelector,} from "../../../../redux/Styles/styles-selectors";
 import {Paginator} from "../../../common/Paginator";
 import {
     deleteArchivedGalleryItem,
@@ -17,7 +17,6 @@ import {
     reactivateArchivedGalleryItem,
     setPageSizeAC,
     setCurrentPageAC,
-    updateArchivedGalleryItem
 } from "../../../../redux/ArchivedGallery/archived-gallery-reducer";
 import {getStyles,} from "../../../../redux/Styles/styles-reducer";
 import { API_URL } from "../../../../http";
@@ -41,6 +40,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const styles = useSelector(getStylesSelector);
     const token = useSelector(getTokenSelector);
+    const activeStyle = useSelector(getActiveStyleSelector);
 
     const dispatch = useDispatch();
 
@@ -77,10 +77,6 @@ export const ArchivedGallery: React.FC = React.memo(() => {
 
     const reactivateArchivedGalleryItemCallBack = (itemId: string) => {
         dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
-    }
-
-    const updateArchivedGalleryItemCallBack = (id: string, values: object) => {
-        dispatch(updateArchivedGalleryItem(id, values));
     }
 
     const [ editGalleryItem, setEditGalleryItem ] = useState(null);
@@ -191,7 +187,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                         folder={'archivedGallery'}
                         galleryItem={editGalleryItem}
                         styles={styles}
-                        edit={updateArchivedGalleryItemCallBack}
+                        activeStyleId={activeStyle._id}
                         closeModal={closeGalleryItemEditModal}
                     />
                 }

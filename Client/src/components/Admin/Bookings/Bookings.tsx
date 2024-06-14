@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import { Navigate } from "react-router";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
-import {AddConsultationFormValues, BookingType, SearchFilterType} from "../../../types/Types";
+import {BookingType, SearchFilterType} from "../../../types/Types";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {AddBookingForm} from "../../Forms/AddBookingForm";
 import {Preloader} from "../../common/Preloader";
@@ -30,7 +30,6 @@ type PropsType = {
   remove: (id: string) => void;
   turnBookingToClient: (id: string) => void;
   setPageLimit: (pageSize: number) => void;
-  add: (values: AddConsultationFormValues) => void;
   archive: (id: string) => void;
   setBookingApiError: () => void;
   setApiError: () => void;
@@ -54,7 +53,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   remove,
   turnBookingToClient,
   setPageLimit,
-  add,
   archive,
   setBookingApiError,
   setApiError,
@@ -134,7 +132,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                   >
                       <AddBookingForm
                           apiError={apiError}
-                          addBooking={add}
                           closeBookingModal={closeModal}
                       />
                   </ModalPopUp>

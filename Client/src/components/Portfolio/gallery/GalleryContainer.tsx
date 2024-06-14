@@ -1,13 +1,11 @@
 import * as React from "react";
 import { Gallery } from "./Gallery";
 import {
-  adminUpdateGallery,
   archiveGalleryItem,
   deleteGalleryItem,
   getGallery,
   setCurrentGalleryPageAC,
   setGalleryPageSizeAC,
-  updateGalleryItem
 } from "../../../redux/Gallery/gallery-reducer";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
@@ -54,20 +52,12 @@ export const GalleryContainer: React.FC = () => {
     dispatch(setGalleryPageSizeAC(pageSize));
   }
 
-  const adminUpdateGalleryCallBack = (values: FormData) => {
-    dispatch(adminUpdateGallery(activeStyle._id, values));
-  }
-
   const deleteGalleryItemCallBack = (itemId: string) => {
     dispatch(deleteGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
   }
 
   const archiveGalleryItemCallBack = (itemId: string) => {
     dispatch(archiveGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
-  }
-
-  const updateGalleryItemCallBack = (id: string, values: object) => {
-    dispatch(updateGalleryItem(id, values, activeStyle._id, currentPage, pageSize));
   }
 
   return (
@@ -85,10 +75,8 @@ export const GalleryContainer: React.FC = () => {
         isDeletingInProcess={isDeletingInProcess}
         setCurrentPage={setCurrentPageCallBack}
         setPageSize={setGalleryPageSizeCallBack}
-        updateGallery={adminUpdateGalleryCallBack}
         remove={deleteGalleryItemCallBack}
         archive={archiveGalleryItemCallBack}
-        updateItem={updateGalleryItemCallBack}
       />
     </div>
   );

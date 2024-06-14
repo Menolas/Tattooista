@@ -3,33 +3,34 @@ import {Field, Form, Formik} from "formik";
 import { GalleryItemType, StyleType} from "../../types/Types";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {API_URL} from "../../http";
+import {useDispatch} from "react-redux";
+import {updateGalleryItem} from "../../redux/Gallery/gallery-reducer";
 
 type PropsType = {
+    activeStyleId: string;
     folder: string;
     galleryItem: GalleryItemType;
     styles: Array<StyleType>;
-    edit: (id: string, values: object) => void;
     closeModal?: () => void;
 }
 
 export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
+    activeStyleId,
     folder,
     galleryItem,
     styles,
-    edit,
     closeModal
 }) => {
 
-    const submit = (values: any) => {
-        edit(galleryItem._id, values);
+    const dispatch = useDispatch();
+
+    const submit = async (values: any) => {
+        await dispatch(updateGalleryItem(galleryItem._id, values, activeStyleId));
         closeModal();
     }
 
     let initialValues = {};
     styles.forEach((style) => {
-        // if (!style.nonStyle) {
-        //     initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id);
-        // }
         initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id);
     });
 

@@ -8,6 +8,9 @@ import {API_URL} from "../../http";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
 import {ClientType} from "../../types/Types";
+import {useDispatch} from "react-redux";
+import {updateClientGallery} from "../../redux/Clients/clients-reducer";
+import {updateGallery} from "../../redux/Gallery/gallery-reducer";
 
 const filesUploadingValidationSchema = Yup.object().shape({
   gallery: Yup.array()
@@ -26,26 +29,26 @@ const filesUploadingValidationSchema = Yup.object().shape({
 });
 
 type PropsType = {
+  styleID?: string;
   isEditPortfolio: boolean;
   client?: ClientType;
   isDeletingPicturesInProcess?: Array<string>;
   closeModal: () => void;
-  updatePortfolio?: (values: FormData) => void;
-  updateGallery?: (clientId: string, values: FormData) => void;
   deleteClientGalleryPicture?: (clientId: string, picture: string) => void;
 }
 
 export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
+  styleID,
   isEditPortfolio,
   client,
   isDeletingPicturesInProcess,
-  updatePortfolio,
-  updateGallery,
   deleteClientGalleryPicture,
   closeModal
 }) => {
 
   const [imageURLS, setImageURLS] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>, setImageURLS) => {
     event.preventDefault();
@@ -63,12 +66,12 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
     }
   }
 
-  const submit = (values) => {
+  const submit = async (values) => {
     const formData = new FormData();
     values['gallery'].forEach((file: File) => formData.append(file.name, file));
     formData.append('gallery', values['gallery']);
-    if (isEditPortfolio) updatePortfolio(formData);
-    if (!isEditPortfolio) updateGallery(client._id, formData);
+    if (isEditPortfolio) await dispatch(updateGallery(styleID, formData));
+    if (!isEditPortfolio) await dispatch(updateClientGallery(client._id, formData));
     closeModal();
   }
 

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   getClientProfile,
-  updateClientGallery,
   deleteClientGalleryPicture,
   deleteClientFromProfile,
   archiveClientFromProfile,
@@ -42,10 +41,6 @@ export const ProfileContainer: React.FC = () => {
     dispatch(deleteClientFromProfile(clientId));
   }
 
-  const updateClientGalleryCallBack = (clientId: string, values: FormData) => {
-    dispatch(updateClientGallery(clientId, values));
-  }
-
   const archiveClientCallBack = (id: string) => {
     dispatch(archiveClientFromProfile(id));
   }
@@ -60,7 +55,6 @@ export const ProfileContainer: React.FC = () => {
       data={profile}
       isDeletingPicturesInProcess={isDeletingPicturesInProcess}
       remove={deleteClientCallBack}
-      updateGallery={updateClientGalleryCallBack}
       deleteGalleryItem={deleteClientGalleryPictureCallBack}
       archive={archiveClientCallBack}
     />

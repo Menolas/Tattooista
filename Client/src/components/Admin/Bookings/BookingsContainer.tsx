@@ -7,7 +7,6 @@ import {
   deleteBooking,
   turnBookingToClient,
   setPageSizeAC,
-  addBooking,
   archiveBooking,
   setCurrentPageAC,
   setFilterAC, setBookingApiErrorAC,
@@ -24,7 +23,7 @@ import {
   getAccessErrorSelector, getBookingApiErrorSelector
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
-import {AddConsultationFormValues, SearchFilterType} from "../../../types/Types";
+import {SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
@@ -91,10 +90,6 @@ export const BookingsContainer: React.FC = () => {
     dispatch(setPageSizeAC(pageSize));
   };
 
-  const addCallBack = (values: AddConsultationFormValues) => {
-    dispatch(addBooking(values));
-  };
-
   const archiveCallBack = (id: string) => {
     dispatch(archiveBooking(token, id, bookings, currentPage, pageSize, filter));
   };
@@ -126,7 +121,6 @@ export const BookingsContainer: React.FC = () => {
         remove={removeCallBack}
         turnBookingToClient={turnBookingToClientCallBack}
         setPageLimit={setPageSizeCallBack}
-        add={addCallBack}
         archive={archiveCallBack}
         setBookingApiError={setBookingApiErrorCallBack}
         setApiError={setApiErrorCallBack}

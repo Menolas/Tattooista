@@ -19,7 +19,6 @@ type PropsType = {
   data: ClientType;
   isDeletingPicturesInProcess: Array<string>;
   remove: (clientId: string) => void;
-  updateGallery: (clientId: string, values: FormData) => void;
   deleteGalleryItem: (clientId: string, picture: string) => void;
   archive: (id: string) => void;
 }
@@ -29,7 +28,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
     data,
     isDeletingPicturesInProcess,
     remove,
-    updateGallery,
     deleteGalleryItem,
     archive,
 }) => {
@@ -216,7 +214,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
                   isEditPortfolio={false}
                   client={data}
                   isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                  updateGallery={updateGallery}
                   deleteClientGalleryPicture={deleteGalleryItem}
                   closeModal={closeModal}
               />
