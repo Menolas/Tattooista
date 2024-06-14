@@ -30,7 +30,7 @@ let initialState = {
   currentPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
-  gallery: [] as Array<GalleryItemType>,
+  gallery: [] as GalleryItemType[],
   fakeApi: false as boolean,
 }
 
@@ -88,14 +88,14 @@ export const galleryReducer = (
     case UPDATE_GALLERY:
       return {
         ...state,
-        gallery: [...action.gallery.concat(state.gallery)],
+        gallery: [...action.gallery, ...state.gallery],
         totalCount: state.totalCount + action.gallery.length
       }
 
     case DELETE_GALLERY_ITEM:
       return {
         ...state,
-        gallery: state.gallery.filter(item => item._id !== action.itemId),
+        gallery: state.gallery.filter(item => item?._id !== action.itemId),
         totalCount: state.totalCount - 1
       }
 
@@ -103,11 +103,19 @@ export const galleryReducer = (
       return {
         ...state,
         gallery: state.gallery.map(item => {
-          if (item._id === action.galleryItem._id) {
-            item.tattooStyles = action.galleryItem.tattooStyles
+          if (item && item?._id === action.galleryItem._id) {
+            if (action.isInGallery) {
+              return {
+                ...item,
+                tattooStyles: action.galleryItem.tattooStyles,
+              }
+            } else {
+              return null
+            }
           }
           return item;
         })
+        .filter((item): item is GalleryItemType => item !== null),
       }
 
     case SET_FAKE_API:
@@ -201,17 +209,21 @@ const deleteGalleryItemAC = (itemId: string): DeleteGalleryItemAT => ({
 });
 
 type UpdateGalleryItemAT = {
-  type: typeof UPDATE_GALLERY_ITEM
-  galleryItem: GalleryItemType
+  type: typeof UPDATE_GALLERY_ITEM,
+  galleryItem: GalleryItemType,
+  isInGallery: boolean
 }
 
-const updateGalleryItemAC = (galleryItem: GalleryItemType): UpdateGalleryItemAT => ({
-  type: UPDATE_GALLERY_ITEM, galleryItem
+const updateGalleryItemAC = (
+    galleryItem: GalleryItemType,
+    isInGallery: boolean,
+): UpdateGalleryItemAT => ({
+  type: UPDATE_GALLERY_ITEM, galleryItem, isInGallery
 });
 
 //thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
 
 const deleteGalleryItemThunk = (
     id: string,
@@ -230,23 +242,30 @@ const deleteGalleryItemThunk = (
       await dispatch(getGallery(styleId, newPage, pageLimit));
     }
   }
+  return true;
 }
 
 export const getGallery = (
     styleId: string,
     currentPage: number,
     pageSize: number
-): ThunkType => async (dispatch) => {
+): ThunkType => async (
+    dispatch
+) => {
   try {
     dispatch(setIsFetchingAC(true));
     let response = await galleryApi.getGalleryItems(styleId, currentPage, pageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setGalleryAC(response.gallery, response.totalCount, false));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
     const galleryByStyle = gallery.filter((item) => item.tattooStyles.includes(styleId));
     dispatch(setGalleryAC(galleryByStyle, galleryByStyle.length, true));
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -264,10 +283,14 @@ export const adminUpdateGallery = (
       dispatch(updateGalleryAC(response.gallery));
       setApiErrorAC(null);
       dispatch(setSuccessModalAC(true, ADD_GALLERY_ITEMS_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
     console.log(e);
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -285,9 +308,13 @@ export const deleteGalleryItem = (
     let response = await galleryApi.deleteGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
+    return  false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -305,30 +332,43 @@ export const archiveGalleryItem = (
     let response = await galleryApi.archiveGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 }
 
+type ValuesType = {
+  [key: string]: boolean;
+};
+
 export const updateGalleryItem = (
     id: string,
-    values: object,
+    values: ValuesType,
     activeStyleId: string,
-    currentPage: number,
-    pageLimit: number,
+    //currentPage: number,
+    //pageLimit: number,
 ): ThunkType => async (dispatch) => {
+  console.log(JSON.stringify(values) + " values!!!!!!!!!!!!!!!!")
   try {
     let response = await galleryApi.updateGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(updateGalleryItemAC(response.galleryItem));
+      dispatch(updateGalleryItemAC(response.galleryItem, values[activeStyleId]));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
-      await dispatch(getGallery(activeStyleId, currentPage, pageLimit));
+      //await dispatch(getGallery(activeStyleId, currentPage, pageLimit));
+      return true;
+    } else {
+      return false;
     }
   } catch (e: any) {
     dispatch(setApiErrorAC(e.response.data.message));
     console.log(e);
+    return false;
   }
 }

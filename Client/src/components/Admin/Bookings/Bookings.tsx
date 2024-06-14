@@ -30,7 +30,6 @@ type PropsType = {
   remove: (id: string) => void;
   turnBookingToClient: (id: string) => void;
   setPageLimit: (pageSize: number) => void;
-  add: (values: AddConsultationFormValues) => void;
   archive: (id: string) => void;
   setBookingApiError: () => void;
   setApiError: () => void;
@@ -54,7 +53,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   remove,
   turnBookingToClient,
   setPageLimit,
-  add,
   archive,
   setBookingApiError,
   setApiError,
@@ -134,7 +132,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                   >
                       <AddBookingForm
                           apiError={apiError}
-                          addBooking={add}
                           closeBookingModal={closeModal}
                       />
                   </ModalPopUp>

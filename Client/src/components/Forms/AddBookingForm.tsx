@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import {ApiErrorMessage, phoneRegex} from "../../utils/validators";
 import {AddConsultationFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
+import {useDispatch} from "react-redux";
+import {addBooking} from "../../redux/Bookings/bookings-reducer";
 
 const validationSchema = Yup.object().shape({
   bookingName: Yup.string()
@@ -40,18 +42,18 @@ const initialValues: AddConsultationFormValues = {
 
 type PropsType = {
   apiError: number | string;
-  addBooking: (values: AddConsultationFormValues) => void;
   closeBookingModal: () => void;
 };
 
 export const AddBookingForm: React.FC<PropsType> = React.memo(({
   apiError,
-  addBooking,
   closeBookingModal,
 }) => {
 
+  const dispatch = useDispatch();
+
   const submit = async (values: AddConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
-    const success = await addBooking(values);
+    const success = await dispatch(addBooking(values));
     const isSuccess = Boolean(success);
     if (isSuccess && closeBookingModal) {
       closeBookingModal();

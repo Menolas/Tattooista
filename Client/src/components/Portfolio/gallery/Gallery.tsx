@@ -197,7 +197,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   folder={'gallery'}
                   galleryItem={galleryItem}
                   styles={styles}
-                  edit={updateItem}
+                  activeStyleId={activeStyle._id}
                   closeModal={closeGalleryItemEditModal}
               />
           }

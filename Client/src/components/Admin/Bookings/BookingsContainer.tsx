@@ -7,7 +7,6 @@ import {
   deleteBooking,
   turnBookingToClient,
   setPageSizeAC,
-  addBooking,
   archiveBooking,
   setCurrentPageAC,
   setFilterAC, setBookingApiErrorAC,
@@ -91,10 +90,6 @@ export const BookingsContainer: React.FC = () => {
     dispatch(setPageSizeAC(pageSize));
   };
 
-  const addCallBack = (values: AddConsultationFormValues) => {
-    dispatch(addBooking(values));
-  };
-
   const archiveCallBack = (id: string) => {
     dispatch(archiveBooking(token, id, bookings, currentPage, pageSize, filter));
   };
@@ -126,7 +121,6 @@ export const BookingsContainer: React.FC = () => {
         remove={removeCallBack}
         turnBookingToClient={turnBookingToClientCallBack}
         setPageLimit={setPageSizeCallBack}
-        add={addCallBack}
         archive={archiveCallBack}
         setBookingApiError={setBookingApiErrorCallBack}
         setApiError={setApiErrorCallBack}
