@@ -208,12 +208,15 @@ export const setActiveStyle = (style: StyleType | null): ThunkType => async (
   return true;
 }
 
-export const getStyles = (token: string | null): ThunkType => async (
+export const getStyles = (
+    token: string | null,
+    isSlider?: boolean
+): ThunkType => async (
   dispatch
 ) => {
   dispatch(setIsFetchingAC(true));
   try {
-    let getStylesResponse = await stylesApi.getStyles(token)
+    let getStylesResponse = await stylesApi.getStyles(token, isSlider)
     if (getStylesResponse.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
       dispatch(setStylesAC(getStylesResponse.tattooStyles));

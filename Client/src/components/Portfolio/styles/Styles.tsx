@@ -12,12 +12,18 @@ import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 import {Advertisement} from "../Advertisement";
 import {MyCarousel} from "../../common/MyCarousel";
 import {Preloader} from "../../common/Preloader";
+import {Slider} from "../../common/Slider";
 
 const responsive = {
-  0: {items: 3},
-  600: {items: 3},
-  900: {items: 4},
-  1400: {items: 6},
+  0: {
+    slidesPerView: 3,
+  },
+  900: {
+    slidesPerView: 4,
+  },
+  1400: {
+    slidesPerView: 6,
+  },
 }
 
 type PropsType = {
@@ -52,6 +58,12 @@ export const Styles: React.FC<PropsType> = React.memo(({
     cb?: () => void,
     context: string
   }>({needConfirmation: false, context: ''});
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const newActiveIndex = styles.findIndex(style => style._id === activeStyle?._id);
+    setActiveIndex(newActiveIndex);
+  }, [activeStyle, styles]);
 
   useEffect(() => {
     if ((editMode || addMode) && apiError === null) {
@@ -82,8 +94,8 @@ export const Styles: React.FC<PropsType> = React.memo(({
     });
 
   return (
-    <section className="tattoo-style page-block">
-      <div className={'container'}>
+    <section className="tattoo-style page-block container">
+
         { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
           <button
               className={"btn btn--sm btn--light-bg"}
@@ -140,10 +152,10 @@ export const Styles: React.FC<PropsType> = React.memo(({
                     </div>
                   </div>
                   <Advertisement />
-                  <MyCarousel
-                    items={stylesArray}
-                    responsive={responsive}
-                    controlsStrategy={"alternate"}
+                  <Slider
+                      items={stylesArray}
+                      activeIndex={activeIndex}
+                      breakpoints={responsive}
                   />
                 </>
               )
@@ -170,7 +182,6 @@ export const Styles: React.FC<PropsType> = React.memo(({
             cancel={closeConfirmationModalCallBack}
         />
         <Tooltip id="my-tooltip" />
-      </div>
     </section>
   )
 });

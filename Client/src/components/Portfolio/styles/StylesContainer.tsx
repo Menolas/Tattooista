@@ -30,7 +30,7 @@ export const StylesContainer: React.FC = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getStyles(token)).then(() => {
+        dispatch(getStyles(token, false)).then(() => {
             if (styles.length > 0 && !activeStyle?._id) {
                 dispatch(setActiveStyle(styles[0]));
             }

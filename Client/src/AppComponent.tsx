@@ -62,7 +62,7 @@ const App = () => {
                     <main className={"site-main"}>
                         <Routes>
                             <Route path='/'
-                                   element={<MainPage />} />
+                                   element={<MainPage key={Math.random()}/>} />
                             <Route path={`registration`}
                                    element={<RegistrationContainer />} />
                             <Route path={`login`}

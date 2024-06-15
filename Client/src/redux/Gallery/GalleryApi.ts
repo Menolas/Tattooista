@@ -26,7 +26,9 @@ export const galleryApi = {
       currentPage: number,
       pageSize: number
     ) {
-        return instance.get<GetGalleryItemsResponseType>(`gallery?&style=${style}&page=${currentPage}&limit=${pageSize}`)
+        return instance.get<GetGalleryItemsResponseType>(
+            `gallery?&style=${style}&page=${currentPage}&limit=${pageSize}`
+        )
             .then(response => response.data);
     },
 

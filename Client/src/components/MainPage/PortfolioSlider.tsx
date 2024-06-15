@@ -4,8 +4,10 @@ import "react-alice-carousel/lib/alice-carousel.css";
 import { StyleType } from "../../types/Types";
 import {API_URL} from "../../http";
 import {MyCarousel} from "../common/MyCarousel";
+import {useEffect, useState} from "react";
 
 type PropsType = {
+    activeStyle: StyleType;
     fakeApi: boolean;
     pageSize: number;
     styles: Array<StyleType>;
@@ -13,51 +15,76 @@ type PropsType = {
 }
 
 const responsive = {
-    0: { items: 1 },
-    600: { items: 2 },
-    900: { items: 3 },
-    1400: { items: 4 },
+    0: {
+        items: 1,
+        itemsFit: 'contain',
+    },
+    600: {
+        items: 2,
+        itemsFit: 'contain',
+    },
+    900: {
+        items: 3,
+        itemsFit: 'contain',
+    },
+    1400: {
+        items: 4,
+        itemsFit: 'contain',
+    },
 }
 
 export const PortfolioSlider: React.FC<PropsType> = React.memo(({
+  activeStyle,
   fakeApi,
   pageSize,
   styles,
   setActiveStyle
 }) => {
 
-  const sliders = styles?.map((slider) => {
+  const [activeIndex, setActiveIndex] = useState(0);
 
-     const wallpaperUrl = fakeApi
-         ? `./uploads/TattooStylesWallpapers/${slider.wallPaper}`
-         : `${API_URL}/styleWallpapers/${slider._id}/${slider.wallPaper}`;
+  useEffect(() => {
+    const newActiveIndex = styles.findIndex(slide => slide._id === activeStyle?._id);
+    setActiveIndex(newActiveIndex);
+  }, [activeStyle, styles]);
 
-     return (
-         <div
-             className="slider-item"
-             key={slider._id}
-         >
-             <NavLink
-                 to={`/portfolio?&style=${slider.value}&page=1&limit=${pageSize}`}
-                 className="portfolio-slider__link"
-                 style={{backgroundImage: `url(${wallpaperUrl})`}}
-                 onClick={() => {
-                     setActiveStyle(slider);
-                 }}
-             >
-                 <div className={'slider-item-title__wrap'}>
-                     <h4 className="slider-item-title">{slider.value}</h4>
-                 </div>
-             </NavLink>
-         </div>
-     )
-  });
+  const slides = styles?.map((slide, index) => {
+
+    if (slide.wallPaper) {
+        const wallpaperUrl = fakeApi
+            ? `./uploads/TattooStylesWallpapers/${slide.wallPaper}`
+            : `${API_URL}/styleWallpapers/${slide._id}/${slide.wallPaper}`;
+
+        return (
+            <div
+                className="slider-item"
+                key={slide._id}
+            >
+                <NavLink
+                    to={`/portfolio?&style=${slide.value}&page=1&limit=${pageSize}`}
+                    className="portfolio-slider__link"
+                    style={{backgroundImage: `url(${wallpaperUrl})`}}
+                    onClick={() => {
+                        setActiveStyle(slide);
+                    }}
+                >
+                    <div className={'slider-item-title__wrap'}>
+                        <h4 className="slider-item-title">{slide.value}</h4>
+                    </div>
+                </NavLink>
+            </div>
+        )
+    } else {
+        return null;
+    }
+  }).filter(slide => slide !== null);
 
     return (
       <section className="page-block portfolio-slider container">
           <h2 className="page-block__title">Portfolio</h2>
           <MyCarousel
-              items={sliders}
+              activeIndex={activeIndex}
+              items={slides}
               responsive={responsive}
               controlsStrategy={"alternate"}
           />

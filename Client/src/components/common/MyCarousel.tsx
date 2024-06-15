@@ -19,6 +19,7 @@ export const MyCarousel: React.FC<MyCarouselProps> = React.memo(({
     activeIndex= 0,
     disableDotsControls= false,
 }) => {
+
     return (
         <AliceCarousel
             items={items}
@@ -27,6 +28,7 @@ export const MyCarousel: React.FC<MyCarouselProps> = React.memo(({
             mouseTracking={mouseTracking}
             activeIndex={activeIndex}
             disableDotsControls={disableDotsControls}
+            syncStateOnPropsUpdate={true}
         />
     )
 });
