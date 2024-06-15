@@ -31,7 +31,7 @@ router.delete('/archive/:id', getArchivedBooking, controller.deleteBooking);
 
 // archive booking
 
-router.post('/archive/:id', getBooking, controller.archiveBooking);
+router.get('/archive/:id', getBooking, controller.archiveBooking);
 
 // reactivate booking
 

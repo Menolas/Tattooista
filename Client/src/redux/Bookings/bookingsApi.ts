@@ -51,11 +51,6 @@ export const bookingsApi = {
       .then(response => response.data);
   },
 
-  deleteArchivedConsultation(id: string) {
-    return instance.delete<DeleteBookingResponseType>(`bookings/archive/${id}`)
-        .then(response => response.data);
-  },
-
   addConsultation(values: AddConsultationFormValues | BookConsultationFormValues) {
     return instance.post<AddBookingResponseType>(`bookings`, values)
         .then(response => response.data);
@@ -71,7 +66,7 @@ export const bookingsApi = {
   archiveBooking(
       id: string,
   ) {
-    return instance.post<ArchiveBookingResponseType>(`bookings/archive/${id}`)
+    return instance.get<ArchiveBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   },
 }
