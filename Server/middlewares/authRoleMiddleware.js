@@ -10,9 +10,7 @@ module.exports = function (roles) {
     }
 
     let token = req.headers.authorization?.split(' ')[1];
-    console.log(token + "auth role middleware token !!!!!!!!!!!");
     if (!token || token === 'null') {
-      console.log("auth no token !!!!!!!!!!!");
       req.hasRole = false;
       next();
       return;
@@ -21,7 +19,6 @@ module.exports = function (roles) {
     try {
       jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
         if (err) {
-          console.log(err + "jwt error !!!!!!!!!!!");
           const results = {};
           results.resultCode = 1;
           results.message = err.message;

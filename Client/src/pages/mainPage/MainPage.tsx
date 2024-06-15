@@ -23,7 +23,7 @@ import {
 import {
     getStylesSelector,
     getFakeApiSelector,
-    getIsFetchingSelector,
+    getIsFetchingSelector, getActiveStyleSelector,
 } from "../../redux/Styles/styles-selectors";
 import {
   getApiErrorSelector,
@@ -47,6 +47,7 @@ export const MainPage: React.FC = () => {
   const fakeApi = useSelector(getFakeApiSelector);
   const token = useSelector(getTokenSelector);
   const isFetching = useSelector(getIsFetchingSelector);
+  const activeStyle = useSelector(getActiveStyleSelector);
 
   const dispatch = useDispatch();
 
@@ -63,8 +64,9 @@ export const MainPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getStyles(token));
-  }, [dispatch]);
+    console.log("iti s useEffect from main page!!!!!!!!!!!!!!!!")
+    dispatch(getStyles(token, true));
+  }, []);
 
   useEffect(() => {
     if (successModal.isSuccess) {
@@ -90,6 +92,7 @@ export const MainPage: React.FC = () => {
                 ? <Preloader />
                 : (
                     <PortfolioSlider
+                        activeStyle={activeStyle}
                         fakeApi={fakeApi}
                         pageSize={pageSize}
                         setActiveStyle={setActiveStyleCallBack}

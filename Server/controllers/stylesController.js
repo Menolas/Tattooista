@@ -7,11 +7,14 @@ class stylesController {
 
   async getTattooStyles (req, res) {
     const results = {};
+    console.log(req.query.isSlider + " parameter isSlider!!!!!!!!!!!!!!!!!")
     try {
       const tattooStyles = await TattooStyle.find().sort({createdAt: -1});
-      if (req.hasRole) {
+      if (req.hasRole && req.query.isSlider === 'false') {
+        console.log("isSlider is false_?????????????????")
         results.tattooStyles = tattooStyles;
       } else {
+        console.log("isSlider is true_?????????????????")
         const filteredStyles = await Promise.all(tattooStyles.map(async style =>  {
           const gallery = await GalleryItem.find({tattooStyles: style._id});
           if (gallery.length > 0) {

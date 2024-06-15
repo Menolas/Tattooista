@@ -17,8 +17,11 @@ type DeleteTattooStyleResponseType = CommonResponseFields;
 
 export const stylesApi = {
 
-    async getStyles(token: string | null) {
-        const response = await instance.get<GetTattooStylesResponseType>('tattooStyle/',
+    async getStyles(
+        token: string | null,
+        isSlider?: boolean
+    ) {
+        const response = await instance.get<GetTattooStylesResponseType>(`tattooStyle/?&isSlider=${isSlider}`,
             {headers: {Authorization: `Bearer ${token}`}} as AxiosRequestConfig
         );
         return response.data;
