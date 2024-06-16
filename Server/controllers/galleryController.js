@@ -15,17 +15,14 @@ class galleryController {
     let gallery = [];
     const results = {};
     try {
-      const styles = await TattooStyle.find({_id: req.query.style});
-      if (styles.length > 0) {
-        const style = styles[0]; // Access the first element
-        if (style.nonStyle) {
-          gallery = await GalleryItem.find( {$or: [{ tattooStyles: { $exists: true, $size: 0 } }, { tattooStyles:req.query.style }]}).sort({ createdAt: -1 });
-        } else {
-          gallery = await GalleryItem.find({ tattooStyles: req.query.style }).sort({ createdAt: -1 });
-        }
+      const style = await TattooStyle.findOne({_id: req.query.style});
+      const styleId = style._id;
+      if (style.nonStyle) {
+        gallery = await GalleryItem.find( {$or: [{ tattooStyles: { $exists: true, $size: 0 } }, { tattooStyles:req.query.style }]}).sort({ createdAt: -1 });
       } else {
-        //console.log('Style not found');
+          gallery = await GalleryItem.find({tattooStyles: styleId}).sort({ createdAt: -1 });
       }
+
       results.resultCode = 0;
       results.totalCount = gallery.length;
       results.gallery = gallery.slice(startIndex, endIndex);
@@ -44,7 +41,9 @@ class galleryController {
     res.galleryItem.tattooStyles = [];
     for (let key in styles) {
       if (styles[key]) {
-        res.galleryItem.tattooStyles.push(key);
+        const style = await TattooStyle.findOne({_id: key});
+        const styleId = style._id;
+        res.galleryItem.tattooStyles.push(styleId);
       }
     }
 
@@ -65,7 +64,9 @@ class galleryController {
     res.archivedGalleryItem.tattooStyles = [];
     for (let key in styles) {
       if (styles[key]) {
-        res.archivedGalleryItem.tattooStyles.push(key);
+        const style = await TattooStyle.findOne({_id: key});
+        const styleId = style._id;
+        res.archivedGalleryItem.tattooStyles.push(styleId);
       }
     }
 
@@ -122,7 +123,8 @@ class galleryController {
   }
 
   async addGalleryItems(req, res) {
-
+    const style = await TattooStyle.findOne({_id: req.params.style});
+    const styleId = style._id;
     const files = req.files;
     let gallery = [];
     const results = {};
@@ -140,14 +142,15 @@ class galleryController {
         }
       }
 
-      let updatedGallery = gallery.map((item) => {
-        const newGalleryItem = new GalleryItem({
-          fileName: item.toString(),
-          tattooStyles: [req.params.style]
-        });
-        newGalleryItem.save();
-        return newGalleryItem;
-      });
+      let updatedGallery = await Promise.all(gallery.map(
+        async (item) => {
+          const newGalleryItem = new GalleryItem({
+            fileName: item.toString(),
+            tattooStyles: [styleId],
+          });
+          await newGalleryItem.save();
+          return newGalleryItem;
+      }));
       results.resultCode = 0;
       results.gallery = updatedGallery;
       res.json(results);
@@ -159,9 +162,15 @@ class galleryController {
   }
 
   async archiveGalleryItem(req, res) {
+    const styles = res.galleryItem.tattooStyles;
+    styles.map( async (style) => {
+      const trueStyle = await TattooStyle.findOne({_id: style});
+      if (trueStyle) return trueStyle._id;
+      else return null;
+    }).filter(style => style !== null);
     const archivedGalleryItem = new ArchivedGalleryItem({
       fileName: res.galleryItem.fileName,
-      tattooStyles: res.galleryItem.tattooStyles
+      tattooStyles: styles,
     });
 
     const oldPath = `./uploads/gallery/${res.galleryItem.fileName}`;
@@ -185,9 +194,15 @@ class galleryController {
   }
 
   async reactivateGalleryItem(req, res) {
+    const styles = res.archivedGalleryItem.tattooStyles;
+    styles.map( async (style) => {
+      const trueStyle = await TattooStyle.findOne({_id: style});
+      if (trueStyle) return trueStyle._id;
+      else return null;
+    }).filter(style => style !== null);
     const galleryItem = new GalleryItem({
       fileName: res.archivedGalleryItem.fileName,
-      tattooStyles: res.archivedGalleryItem.tattooStyles
+      tattooStyles: styles,
     });
 
     const results = {};
