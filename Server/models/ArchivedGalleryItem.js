@@ -7,7 +7,7 @@ const ArchivedGalleryItem = new Schema({
     required: true,
   },
   tattooStyles: [{
-    type: String,
+    type: Schema.Types.ObjectId,
     ref: 'TattooStyle',
   }],
   createdAt: {

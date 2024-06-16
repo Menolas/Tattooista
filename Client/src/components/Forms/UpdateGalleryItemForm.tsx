@@ -22,6 +22,8 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
     closeModal
 }) => {
 
+    console.log('galleryItem.tattooStyles as string:', JSON.stringify(galleryItem.tattooStyles, null, 2));
+    console.log('styles as string:', JSON.stringify(styles, null, 2));
     const dispatch = useDispatch();
 
     const submit = async (values: any) => {

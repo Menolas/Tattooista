@@ -38,7 +38,9 @@ export const Slider: React.FC<PropsType> = ({
         <Swiper
             spaceBetween={spaceBetween}
             slidesPerView={6}
-            onSlideChange={() => console.log('slide change')}
+            onSlideChange={() => {
+                //console.log('slide change');
+            }}
             onSwiper={(swiper) => swiperRef.current = swiper}
             breakpoints={breakpoints}
         >

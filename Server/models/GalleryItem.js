@@ -8,7 +8,7 @@ const GalleryItem = new Schema({
   },
 
   tattooStyles: [{
-    type: String,
+    type: Schema.Types.ObjectId,
     ref: 'TattooStyle',
   }],
 
