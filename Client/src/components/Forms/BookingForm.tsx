@@ -1,10 +1,11 @@
 import * as React from "react";
 import {Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
-import {ApiErrorMessage, phoneRegex} from "../../utils/validators";
+import {phoneRegex} from "../../utils/validators";
 import * as Yup from "yup";
 import {BookConsultationFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
-import {useState} from "react";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
+import {useEffect, useState, useRef,} from "react";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {FormSelect2} from "./formComponents/FormSelect2";
 import {useDispatch} from "react-redux";
@@ -49,7 +50,7 @@ const validationSchema = Yup.object().shape({
       }),
   message: Yup.string()
       .min(20, "Must be at least twenty characters long")
-      .max(200, "Must be shorter than 200 character")
+      .max(600, "Must be shorter than 200 character")
       .required("Required Field"),
   consent: Yup.boolean().oneOf([true],"Required Field")
 });
@@ -62,7 +63,13 @@ const initialValues: BookConsultationFormValues = {
   insta: '',
   whatsapp: '',
   messenger: '',
-  message: '',
+  message: 'Hey there,\n' +
+      '\n' +
+      'I\'ve got a burning question about getting a tattoo and would love to get some insights from your awesome team. Do tattoos hurt more than the existential dread of knowing we\'re all just fleeting shadows in a vast, indifferent universe?\n' +
+      '\n' +
+      'Looking forward to your reply before my soul turns to dust.\n' +
+      '\n' +
+      'Cheers!',
   consent: false,
 };
 
@@ -78,6 +85,8 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   closeBookingModal,
 }) => {
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const [contactInput, setContactInput] = useState('');
 
   const dispatch = useDispatch();
@@ -92,6 +101,18 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
     }
     actions.setSubmitting(false);
   }
+
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight(); // Adjust height on mount
+  }, []);
 
   return (
     <Formik
@@ -151,12 +172,16 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 name={"message"}
             >
               <Field
+                  id="messageTextarea"
                   component="textarea"
                   name="message"
-                  row={8}
                   placeholder={'Your message'}
                   value={propsF.values.message}
-                  onChange={propsF.handleChange}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                    propsF.handleChange(e);
+                    adjustTextareaHeight();
+                  }}
+                  innerRef={textareaRef}
               />
             </FieldWrapper>
             <FieldWrapper

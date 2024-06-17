@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import {FaqType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
-import {ApiErrorMessage} from "../../utils/validators";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useDispatch} from "react-redux";
 import {
     addFaqItem,

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
 import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {
-  ApiErrorMessage,
   isFileSizeValid,
   isFileTypesValid,
   MAX_FILE_SIZE,

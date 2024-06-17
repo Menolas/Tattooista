@@ -15,7 +15,7 @@ export const Registration: React.FC<PropsType> = React.memo(({
 }) => {
 
     return (
-        <div className="registration page-block page-block--top">
+        <div className="registration page-block page-block--top container">
             { !isAuth &&
                 <div className = "registration__form-wrap form__wrap">
                     <RegistrationForm

@@ -1,4 +1,3 @@
-import {BookConsultationFormValues} from "../../types/Types";
 import {useEffect, useState} from "react";
 import {ModalPopUp} from "./ModalPopUp";
 import {BookingForm} from "../Forms/BookingForm";
@@ -7,7 +6,6 @@ import {
     setApiErrorAC,
     setSuccessModalAC
 } from "../../redux/General/general-reducer";
-import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {getApiErrorSelector, getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {SuccessPopUp} from "./SuccessPopUp";
@@ -40,10 +38,6 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
 
     const setSuccessModalCallBack = () => {
         dispatch(setSuccessModalAC(false, ''));
-    }
-
-    const bookConsultationCallBack = (values: BookConsultationFormValues) => {
-        dispatch(addBooking(values));
     }
 
     const [bookingModal, setBookingModal] = useState(false)

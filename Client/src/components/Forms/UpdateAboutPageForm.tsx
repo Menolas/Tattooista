@@ -5,8 +5,9 @@ import {API_URL} from "../../http";
 import {PageType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import * as Yup from "yup";
-import {ApiErrorMessage, validateFile} from "../../utils/validators";
+import {validateFile} from "../../utils/validators";
 import {useDispatch} from "react-redux";
 import {editAboutPage} from "../../redux/About/about-reducer";
 

@@ -210,21 +210,39 @@ img {
 
 .btn--transparent {
   background-color: transparent;
+  transition: all 0.3s ease;
+}
+.btn--transparent:hover {
+  background-color: #fafafa;
+  color: #080808 !important;
 }
 
 .btn--light-bg {
   background-color: #fafafa;
   color: #080808;
   border-color: #fafafa;
+  transition: all 0.3s ease;
 }
 .btn--light-bg svg {
   fill: #080808;
+}
+.btn--light-bg:hover {
+  background-color: #080808;
+  color: #fafafa !important;
+}
+.btn--light-bg:hover svg {
+  fill: #fafafa;
 }
 
 .btn--dark-bg {
   color: #fafafa;
   background-color: #080808;
   border: 2px solid #080808;
+  transition: all 0.3s ease;
+}
+.btn--dark-bg:hover {
+  background-color: #fafafa;
+  color: #080808 !important;
 }
 
 .btn--sm {
@@ -241,10 +259,18 @@ img {
 .btn--icon {
   padding: 8px;
   background-color: transparent;
+  transition: all 0.3s ease;
 }
 .btn--icon svg {
   width: 24px;
   height: 24px;
+}
+.btn--icon:hover {
+  background-color: #fafafa !important;
+  color: #080808 !important;
+}
+.btn--icon:hover svg {
+  fill: #080808;
 }
 
 .btn--icon:disabled svg {
@@ -2353,17 +2379,26 @@ img {
   display: flex;
   align-items: center;
   gap: 11px;
+  padding: 5px 14px;
 }
 .pagination .pagination__item {
+  position: relative;
   padding: 5px 10px;
   font-size: 20px;
   border: 2px solid #fafafa;
   cursor: pointer;
+  transition: all 0.4s ease;
+}
+.pagination .pagination__item:hover {
+  background-color: #fafafa;
+  color: #080808;
+  transform: scale(1.2);
+  z-index: 1;
 }
 .pagination .pagination__item.currentPage {
   position: relative;
-  padding: 9px 17px;
   background-color: #888888;
+  transform: scale(1.2);
 }
 .pagination .paginator__total {
   width: 100%;
@@ -2588,7 +2623,9 @@ label[for=concent] {
 .form textarea {
   padding: 0.5rem;
   min-height: 105px;
+  height: auto;
   border: 2px solid rgba(0, 0, 0, 0.7);
+  overflow-y: auto;
 }
 .form textarea:hover {
   border: 2px solid rgba(0, 0, 0, 0.7);
