@@ -1,9 +1,10 @@
 import * as React from "react";
 import {Form, Formik, FormikHelpers, FormikValues} from "formik";
 import * as Yup from 'yup';
-import {ApiErrorMessage, phoneRegex} from "../../utils/validators";
+import {phoneRegex} from "../../utils/validators";
 import {AddConsultationFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useDispatch} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 

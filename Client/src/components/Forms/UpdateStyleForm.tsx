@@ -8,8 +8,8 @@ import tattooMachine from "../../assets/img/tattoo-machine.webp";
 import {StyleType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {
-    ApiErrorMessage,
     isFileSizeValid, isFileTypesValid,
     MAX_FILE_SIZE, VALID_FILE_EXTENSIONS,
 } from "../../utils/validators";

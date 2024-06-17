@@ -2,8 +2,6 @@ import * as React from "react";
 import { Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
 // @ts-ignore
 import {
-  ErrorMessageWrapper,
-  ApiErrorMessage,
   isFileSizeValid,
   MAX_FILE_SIZE,
   isFileTypesValid, VALID_FILE_EXTENSIONS
@@ -12,6 +10,7 @@ import * as Yup from "yup";
 import {RegistrationFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useState} from "react";
 // @ts-ignore
 import avatar from "../../assets/img/fox.webp";

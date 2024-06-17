@@ -53,7 +53,9 @@ label[for="concent"] {
   textarea {
     padding: 0.5rem;
     min-height: 105px;
+    height: auto;
     border: $form-input-border;
+    overflow-y: auto;
     &:hover {
       border: $form-input-border;
     }

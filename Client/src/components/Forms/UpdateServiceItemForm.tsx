@@ -6,8 +6,8 @@ import {API_URL} from "../../http";
 import {ServiceType} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {
-    ApiErrorMessage,
     validateFile
 } from "../../utils/validators";
 import {useDispatch} from "react-redux";

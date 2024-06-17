@@ -1,6 +1,5 @@
 import * as React from "react";
 import {LoginForm} from "../../components/Forms/LoginForm";
-import {LoginFormValues} from "../../types/Types";
 import {Navigate} from "react-router";
 
 type PropsType = {

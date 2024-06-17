@@ -59,19 +59,31 @@
     display: flex;
     align-items: center;
     gap: 11px;
+    padding: 5px 14px;
   }
 
   .pagination__item {
+    position: relative;
     padding: 5px 10px;
     font-size: 20px;
     border: $light-border;
     cursor: pointer;
+    transition: all 0.4s ease;
+
+    &:hover {
+      //padding: 9px 17px;
+      background-color: $light;
+      color: $dark-text;
+      transform: scale(1.2);
+      z-index: 1;
+    }
   }
 
   .pagination__item.currentPage {
     position: relative;
-    padding: 9px 17px;
+    //padding: 9px 17px;
     background-color: #888888;
+    transform: scale(1.2);
   }
 
   .paginator__total {

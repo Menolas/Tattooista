@@ -12,15 +12,30 @@
 
 .btn--transparent {
   background-color: transparent;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: $light;
+    color: $dark-text !important;
+  }
 }
 
 .btn--light-bg {
   background-color: $light;
   color: $dark-text;
   border-color: $light;
+  transition: all 0.3s ease;
 
   svg {
     fill: $dark;
+  }
+
+  &:hover {
+    background-color: $dark;
+    color: $light-text !important;
+
+    svg {
+      fill: $light;
+    }
   }
 }
 
@@ -28,6 +43,12 @@
   color: $light-text;
   background-color: $dark;
   border: $dark-border;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $light;
+    color: $dark-text !important;
+  }
 }
 
 .btn--sm {
@@ -39,16 +60,25 @@
   padding: 0 16px;
   height: 60px;
   font-size: 16px;
-  //border-left: none;
 }
 
 .btn--icon {
   padding: 8px;
   background-color: transparent;
+  transition: all 0.3s ease;
 
   svg {
     width: 24px;
     height: 24px;
+  }
+
+  &:hover {
+    background-color: $light !important;
+    color: $dark-text !important;
+
+    svg {
+      fill: $dark;
+    }
   }
 }
 
