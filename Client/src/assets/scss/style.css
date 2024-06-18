@@ -509,6 +509,10 @@ img {
   font-size: 12px;
 }
 
+.admin-nav a:hover svg {
+  transform: scale(1.2);
+}
+
 @media (min-width: 990px) {
   .main-header {
     padding: 42px 70px 0;
@@ -557,6 +561,7 @@ img {
   .main-header .admin-nav svg {
     width: 40px;
     height: 40px;
+    transition: all 0.3s ease;
   }
   .main-header__btn {
     height: 60px;
@@ -682,11 +687,16 @@ img {
   display: flex;
   align-items: center;
   font-size: 0;
+  text-decoration: none;
 }
 .social-nav__link svg {
   width: 20px;
   height: 20px;
-  fill: white;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+.social-nav__link:hover svg {
+  transform: scale(1.2);
 }
 
 @media (min-width: 990px) {
@@ -1728,11 +1738,20 @@ img {
     max-width: 1317px;
   }
   .tattoo-style.page-block .tattoo-style__item {
+    display: block;
+    max-width: 100%;
+    text-align: center;
     font-size: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .tattoo-style.page-block .tattoo-style__title {
     margin-bottom: 1.5rem;
+    max-width: 100%;
     font-size: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .tattoo-style.page-block .advertisement {
     margin-top: 69px;

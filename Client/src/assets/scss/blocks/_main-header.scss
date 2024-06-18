@@ -44,6 +44,10 @@
   font-size: 12px;
 }
 
+.admin-nav a:hover svg {
+  transform: scale(1.2);
+}
+
 @media (min-width: 990px) {
 
   .main-header {
@@ -95,6 +99,7 @@
       svg {
         width: 40px;
         height: 40px;
+        transition: all 0.3s ease;
       }
     }
   }

@@ -9,11 +9,17 @@
   display: flex;
   align-items: center;
   font-size: 0;
+  text-decoration: none;
 
   svg {
     width: 20px;
     height: 20px;
-    fill: white;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: scale(1.2);
   }
 }
 
@@ -22,11 +28,8 @@
     column-gap: 16px;
   }
 
-  .social-nav__link {
-
-    svg {
-      width: 28px;
-      height: 28px;
-    }
+  .social-nav__link svg {
+    width: 28px;
+    height: 28px;
   }
 }
