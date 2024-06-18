@@ -178,12 +178,21 @@
     }
 
     .tattoo-style__item {
+      display: block;
+      max-width: 100%;
+      text-align: center;
       font-size: 28px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .tattoo-style__title {
       margin-bottom: 1.5rem;
+      max-width: 100%;
       font-size: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .advertisement {
