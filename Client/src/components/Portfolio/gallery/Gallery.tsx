@@ -16,25 +16,22 @@ import {ImageFullView} from "../../common/ImageFullView";
 import {Confirmation} from "../../common/Confirmation";
 
 type PropsType = {
-  fakeApi: boolean
-  isAuth: string
-  isFetching: boolean
-  totalCount: number
-  pageSize: number
-  currentPage: number
-  activeStyle: StyleType
-  gallery: Array<GalleryItemType>
-  isDeletingInProcess: Array<string>
-  styles: Array<StyleType>
-  remove: (itemId: string) => void
-  setCurrentPage: (page: number) => void
-  setPageSize: (limit: number) => void
-  archive: (id: string) => void
+  isFetching: boolean;
+  totalCount: number;
+  pageSize: number;
+  currentPage: number;
+  activeStyle: StyleType;
+  gallery: Array<GalleryItemType>;
+  isDeletingInProcess: Array<string>;
+  styles: Array<StyleType>;
+  apiError: null | string;
+  remove: (itemId: string) => void;
+  setCurrentPage: (page: number) => void;
+  setPageSize: (limit: number) => void;
+  archive: (id: string) => void;
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
-  fakeApi,
-  isAuth,
   isFetching,
   activeStyle,
   totalCount,
@@ -43,6 +40,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   gallery,
   isDeletingInProcess,
   styles,
+  apiError,
   setCurrentPage,
   setPageSize,
   remove,
@@ -77,9 +75,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   }
 
   const GalleryItemsArray = gallery?.map((item, index) => {
-    const GalleryImgUrl = fakeApi
-        ? `./uploads/gallery/${item.fileName}`
-        : `${API_URL}/gallery/${item.fileName}`;
+    const GalleryImgUrl = `${API_URL}/gallery/${item.fileName}`;
 
     return (
         <li
@@ -95,50 +91,48 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           >
             {''}
           </div>
-          {(isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-            <div className={"gallery__item-actions"}>
-              <button
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Edit gallery item"
-                  className={"btn btn--icon"}
-                  onClick={() => { setGalleryItem(item); }}
-              >
-                  <svg><use href={`${Sprite}#edit`}/></svg>
-              </button>
-              <button
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Move gallery item to archive"
-                  className={"btn btn--icon"}
-                  disabled={isDeletingInProcess?.some(id => id === item._id)}
-                  onClick={() => {
-                    setConfirmationData({
-                      needConfirmation: true,
-                      itemId: item._id,
-                      context: 'Are you sure? You about to archive this image.',
-                      cb: () => archive(item._id)
-                    });
-                  }}
-              >
-                  <svg><use href={`${Sprite}#archive`}/></svg>
-              </button>
-              <button
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Delete gallery item"
-                  className={"btn btn--icon"}
-                  disabled={isDeletingInProcess?.some(id => id === item._id)}
-                  onClick={() => {
-                    setConfirmationData({
-                      needConfirmation: true,
-                      itemId: item._id,
-                      context: 'Are you sure? You about to delete this image.',
-                      cb: () => remove(item._id)
-                    });
-                  }}
-              >
-                  <svg><use href={`${Sprite}#trash`}/></svg>
-              </button>
-            </div>
-          }
+          <div className={"gallery__item-actions"}>
+            <button
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Edit gallery item"
+                className={"btn btn--icon"}
+                onClick={() => { setGalleryItem(item); }}
+            >
+                <svg><use href={`${Sprite}#edit`}/></svg>
+            </button>
+            <button
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Move gallery item to archive"
+                className={"btn btn--icon"}
+                disabled={isDeletingInProcess?.some(id => id === item._id)}
+                onClick={() => {
+                  setConfirmationData({
+                    needConfirmation: true,
+                    itemId: item._id,
+                    context: 'Are you sure? You about to archive this image.',
+                    cb: () => archive(item._id)
+                  });
+                }}
+            >
+                <svg><use href={`${Sprite}#archive`}/></svg>
+            </button>
+            <button
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Delete gallery item"
+                className={"btn btn--icon"}
+                disabled={isDeletingInProcess?.some(id => id === item._id)}
+                onClick={() => {
+                  setConfirmationData({
+                    needConfirmation: true,
+                    itemId: item._id,
+                    context: 'Are you sure? You about to delete this image.',
+                    cb: () => remove(item._id)
+                  });
+                }}
+            >
+                <svg><use href={`${Sprite}#trash`}/></svg>
+            </button>
+          </div>
         </li>
     );
   });
@@ -153,14 +147,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             onPageChanged={setCurrentPage}
             setPageLimit={setPageSize}
           />
-          { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-              <button
-                  className={"btn btn--light-bg btn--sm add-btn"}
-                  onClick={openEditGalleryForm}
-              >
-                  Add Tattoos
-              </button>
-          }
+          <button
+              className={"btn btn--light-bg btn--sm add-btn"}
+              onClick={openEditGalleryForm}
+          >
+              Add Tattoos
+          </button>
         </div>
         { totalCount && totalCount > 0
           ? (
@@ -175,7 +167,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
               isOpen={carouselData.isOpen}
               gallery={gallery}
               activeIndex={carouselData.activeIndex}
-              fakeApi={fakeApi}
               closeImg={()=>{setCarouselData({isOpen: false});}}
               imgUrl={`${API_URL}/gallery/`}
            />

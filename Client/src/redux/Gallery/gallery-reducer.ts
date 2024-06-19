@@ -9,7 +9,8 @@ import {
   setSuccessModalAC,
   SetSuccessModalAT,
   setApiErrorAC,
-  SetApiErrorAT} from "../General/general-reducer";
+  SetApiErrorAT
+} from "../General/general-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
@@ -261,9 +262,11 @@ export const getGallery = (
     } else {
       return false;
     }
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
-    const galleryByStyle = gallery.filter((item) => item.tattooStyles.includes(styleId));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    const galleryByStyle = gallery.filter(
+        (item) => item.tattooStyles.includes(styleId));
     dispatch(setGalleryAC(galleryByStyle, galleryByStyle.length, true));
     return false;
   } finally {

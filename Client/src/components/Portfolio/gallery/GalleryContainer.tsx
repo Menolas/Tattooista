@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Gallery } from "./Gallery";
+import { GalleryInfiniteScroll } from "./GalleryInfiniteScroll";
 import {
   archiveGalleryItem,
   deleteGalleryItem,
@@ -24,6 +25,8 @@ import {
   getActiveStyleSelector,
   getStylesSelector,
 } from "../../../redux/Styles/styles-selectors";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {ADMIN, SUPER_ADMIN, USER} from "../../../utils/constants";
 
 export const GalleryContainer: React.FC = () => {
 
@@ -37,7 +40,7 @@ export const GalleryContainer: React.FC = () => {
   const styles = useSelector(getStylesSelector);
   const activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);
-
+  const apiError = useSelector(getApiErrorSelector);
   const dispatch = useDispatch();
 
   useEffect( () => {
@@ -61,23 +64,35 @@ export const GalleryContainer: React.FC = () => {
   }
 
   return (
-    <div>
-      <Gallery
-        fakeApi={fakeApi}
-        isAuth={isAuth}
-        isFetching={isFetching}
-        activeStyle={activeStyle}
-        totalCount={totalCount}
-        pageSize={pageSize}
-        currentPage={currentPage}
-        gallery={gallery}
-        styles={styles}
-        isDeletingInProcess={isDeletingInProcess}
-        setCurrentPage={setCurrentPageCallBack}
-        setPageSize={setGalleryPageSizeCallBack}
-        remove={deleteGalleryItemCallBack}
-        archive={archiveGalleryItemCallBack}
-      />
-    </div>
+      <>
+        { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+          <Gallery
+              isFetching={isFetching}
+              activeStyle={activeStyle}
+              totalCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              gallery={gallery}
+              styles={styles}
+              isDeletingInProcess={isDeletingInProcess}
+              apiError={apiError}
+              setCurrentPage={setCurrentPageCallBack}
+              setPageSize={setGalleryPageSizeCallBack}
+              remove={deleteGalleryItemCallBack}
+              archive={archiveGalleryItemCallBack}
+          />
+        }
+        { (!isAuth || isAuth === USER) &&
+            <GalleryInfiniteScroll
+                fakeApi={fakeApi}
+                isFetching={isFetching}
+                totalCount={totalCount}
+                currentPage={currentPage}
+                gallery={gallery}
+                apiError={apiError}
+                setCurrentPage={setCurrentPageCallBack}
+            />
+        }
+      </>
   );
 }
