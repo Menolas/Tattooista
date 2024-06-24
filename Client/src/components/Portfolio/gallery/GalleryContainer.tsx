@@ -41,13 +41,14 @@ export const GalleryContainer: React.FC = () => {
   const activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);
   const apiError = useSelector(getApiErrorSelector);
+
   const dispatch = useDispatch();
 
-  useEffect( () => {
-    dispatch(getGallery(activeStyle?._id, currentPage, pageSize));
+  useEffect(() => {
+    dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
   }, [activeStyle, currentPage, pageSize]);
 
-  const setCurrentPageCallBack = (page: number) => {
+  const setPageCallBack = (page: number) => {
     dispatch(setCurrentGalleryPageAC(page));
   }
 
@@ -76,7 +77,7 @@ export const GalleryContainer: React.FC = () => {
               styles={styles}
               isDeletingInProcess={isDeletingInProcess}
               apiError={apiError}
-              setCurrentPage={setCurrentPageCallBack}
+              setPage={setPageCallBack}
               setPageSize={setGalleryPageSizeCallBack}
               remove={deleteGalleryItemCallBack}
               archive={archiveGalleryItemCallBack}
@@ -85,12 +86,8 @@ export const GalleryContainer: React.FC = () => {
         { (!isAuth || isAuth === USER) &&
             <GalleryInfiniteScroll
                 fakeApi={fakeApi}
-                isFetching={isFetching}
-                totalCount={totalCount}
-                currentPage={currentPage}
-                gallery={gallery}
-                apiError={apiError}
-                setCurrentPage={setCurrentPageCallBack}
+                activeStyle={activeStyle}
+                pageSize={pageSize}
             />
         }
       </>

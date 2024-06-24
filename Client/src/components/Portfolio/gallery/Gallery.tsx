@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Preloader } from "../../common/Preloader";
 import {GalleryItemType, StyleType} from "../../../types/Types";
 import { ModalPopUp } from "../../common/ModalPopUp";
@@ -11,9 +11,9 @@ import {Paginator} from "../../common/Paginator";
 import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm";
 import {NothingToShow} from "../../common/NothingToShow";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
-import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 import {ImageFullView} from "../../common/ImageFullView";
 import {Confirmation} from "../../common/Confirmation";
+import {useDispatch} from "react-redux";
 
 type PropsType = {
   isFetching: boolean;
@@ -26,7 +26,7 @@ type PropsType = {
   styles: Array<StyleType>;
   apiError: null | string;
   remove: (itemId: string) => void;
-  setCurrentPage: (page: number) => void;
+  setPage: (page: number) => void;
   setPageSize: (limit: number) => void;
   archive: (id: string) => void;
 }
@@ -41,7 +41,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   isDeletingInProcess,
   styles,
   apiError,
-  setCurrentPage,
+  setPage,
   setPageSize,
   remove,
   archive,
@@ -144,7 +144,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
             totalCount={totalCount}
             pageSize={pageSize}
             currentPage={currentPage}
-            onPageChanged={setCurrentPage}
+            onPageChanged={setPage}
             setPageLimit={setPageSize}
           />
           <button

@@ -64,7 +64,6 @@ export const MainPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log("iti s useEffect from main page!!!!!!!!!!!!!!!!")
     dispatch(getStyles(token, true));
   }, []);
 
