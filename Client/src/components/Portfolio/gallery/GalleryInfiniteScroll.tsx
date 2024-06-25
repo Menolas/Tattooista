@@ -50,8 +50,9 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   };
 
   useEffect(() => {
-    setItems([]);
+    //setItems([]);
     fetchData();
+    console.log("useEffect works!!!!!!!!!!!")
   }, [activeStyle]);
 
   useEffect(() => {
@@ -92,7 +93,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
                 <ul className="gallery__list list">
                   { GalleryItemsArray }
                 </ul>
-                {isLoading && <p>Loading...</p>}
+                {isLoading && <Preloader/>}
                 {error && <p>Error: {error.message}</p>}
               </>
             )
