@@ -9,7 +9,8 @@ import {
   setSuccessModalAC,
   SetSuccessModalAT,
   setApiErrorAC,
-  SetApiErrorAT} from "../General/general-reducer";
+  SetApiErrorAT
+} from "../General/general-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
@@ -26,7 +27,7 @@ const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
 
 let initialState = {
   totalCount: 0 as number,
-  pageSize: 16 as number | null,
+  pageSize: 8 as number | null,
   currentPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
@@ -243,7 +244,7 @@ const deleteGalleryItemThunk = (
     }
   }
   return true;
-}
+};
 
 export const getGallery = (
     styleId: string,
@@ -252,8 +253,9 @@ export const getGallery = (
 ): ThunkType => async (
     dispatch
 ) => {
+  dispatch(setIsFetchingAC(true));
+  dispatch(setApiErrorAC(null));
   try {
-    dispatch(setIsFetchingAC(true));
     let response = await galleryApi.getGalleryItems(styleId, currentPage, pageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setGalleryAC(response.gallery, response.totalCount, false));
@@ -261,15 +263,17 @@ export const getGallery = (
     } else {
       return false;
     }
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
-    const galleryByStyle = gallery.filter((item) => item.tattooStyles.includes(styleId));
+    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
+    const galleryByStyle = gallery.filter(
+        (item) => item.tattooStyles.includes(styleId));
     dispatch(setGalleryAC(galleryByStyle, galleryByStyle.length, true));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const updateGallery = (
   tattooStyle: string,
@@ -294,7 +298,7 @@ export const updateGallery = (
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const deleteGalleryItem = (
   id: string,
@@ -303,8 +307,8 @@ export const deleteGalleryItem = (
   pageLimit: number,
   style: StyleType
 ): ThunkType => async (dispatch) => {
+  dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await galleryApi.deleteGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
@@ -318,7 +322,7 @@ export const deleteGalleryItem = (
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};
 
 export const archiveGalleryItem = (
     id: string,
@@ -327,8 +331,8 @@ export const archiveGalleryItem = (
     pageLimit: number,
     style: StyleType
 ): ThunkType => async (dispatch) => {
+  dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
-    dispatch(toggleIsDeletingInProcessAC(true, id));
     let response = await galleryApi.archiveGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
@@ -342,7 +346,7 @@ export const archiveGalleryItem = (
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};
 
 type ValuesType = {
   [key: string]: boolean;
@@ -352,16 +356,12 @@ export const updateGalleryItem = (
     id: string,
     values: ValuesType,
     activeStyleId: string,
-    //currentPage: number,
-    //pageLimit: number,
 ): ThunkType => async (dispatch) => {
-  console.log(JSON.stringify(values) + " values!!!!!!!!!!!!!!!!")
   try {
     let response = await galleryApi.updateGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryItemAC(response.galleryItem, values[activeStyleId]));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
-      //await dispatch(getGallery(activeStyleId, currentPage, pageLimit));
       return true;
     } else {
       return false;
@@ -371,4 +371,4 @@ export const updateGalleryItem = (
     console.log(e);
     return false;
   }
-}
+};

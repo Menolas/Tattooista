@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Gallery } from "./Gallery";
+import { GalleryInfiniteScroll } from "./GalleryInfiniteScroll";
 import {
   archiveGalleryItem,
   deleteGalleryItem,
@@ -24,6 +25,8 @@ import {
   getActiveStyleSelector,
   getStylesSelector,
 } from "../../../redux/Styles/styles-selectors";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {ADMIN, SUPER_ADMIN, USER} from "../../../utils/constants";
 
 export const GalleryContainer: React.FC = () => {
 
@@ -37,14 +40,15 @@ export const GalleryContainer: React.FC = () => {
   const styles = useSelector(getStylesSelector);
   const activeStyle = useSelector(getActiveStyleSelector);
   const gallery = useSelector(getGallerySelector);
+  const apiError = useSelector(getApiErrorSelector);
 
   const dispatch = useDispatch();
 
-  useEffect( () => {
-    dispatch(getGallery(activeStyle?._id, currentPage, pageSize));
+  useEffect(() => {
+    dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
   }, [activeStyle, currentPage, pageSize]);
 
-  const setCurrentPageCallBack = (page: number) => {
+  const setPageCallBack = (page: number) => {
     dispatch(setCurrentGalleryPageAC(page));
   }
 
@@ -61,23 +65,31 @@ export const GalleryContainer: React.FC = () => {
   }
 
   return (
-    <div>
-      <Gallery
-        fakeApi={fakeApi}
-        isAuth={isAuth}
-        isFetching={isFetching}
-        activeStyle={activeStyle}
-        totalCount={totalCount}
-        pageSize={pageSize}
-        currentPage={currentPage}
-        gallery={gallery}
-        styles={styles}
-        isDeletingInProcess={isDeletingInProcess}
-        setCurrentPage={setCurrentPageCallBack}
-        setPageSize={setGalleryPageSizeCallBack}
-        remove={deleteGalleryItemCallBack}
-        archive={archiveGalleryItemCallBack}
-      />
-    </div>
+      <>
+        { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+          <Gallery
+              isFetching={isFetching}
+              activeStyle={activeStyle}
+              totalCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              gallery={gallery}
+              styles={styles}
+              isDeletingInProcess={isDeletingInProcess}
+              apiError={apiError}
+              setPage={setPageCallBack}
+              setPageSize={setGalleryPageSizeCallBack}
+              remove={deleteGalleryItemCallBack}
+              archive={archiveGalleryItemCallBack}
+          />
+        }
+        { (!isAuth || isAuth === USER) &&
+            <GalleryInfiniteScroll
+                fakeApi={fakeApi}
+                activeStyle={activeStyle}
+                pageSize={pageSize}
+            />
+        }
+      </>
   );
 }
