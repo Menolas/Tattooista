@@ -14,6 +14,7 @@ import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {ImageFullView} from "../../common/ImageFullView";
 import {Confirmation} from "../../common/Confirmation";
 import {useDispatch} from "react-redux";
+import {getGallery} from "../../../redux/Gallery/gallery-reducer";
 
 type PropsType = {
   isFetching: boolean;
@@ -46,6 +47,12 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   remove,
   archive,
 }) => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
+    }, [activeStyle, currentPage, pageSize]);
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
   const [galleryItem, setGalleryItem] = useState(null);

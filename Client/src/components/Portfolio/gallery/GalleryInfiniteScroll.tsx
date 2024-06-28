@@ -1,12 +1,14 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import { Preloader } from "../../common/Preloader";
-import {GalleryItemType, StyleType} from "../../../types/Types";
+import {StyleType} from "../../../types/Types";
 import {API_URL} from "../../../http";
 import {NothingToShow} from "../../common/NothingToShow";
 import {ImageFullView} from "../../common/ImageFullView";
 import {getGallery} from "../../../redux/Gallery/gallery-reducer";
 import {galleryApi} from "../../../redux/Gallery/GalleryApi";
+import {useDispatch, useSelector} from "react-redux";
+import {getGallerySelector, getTotalCountSelector} from "../../../redux/Gallery/gallery-selectors";
 
 type PropsType = {
   fakeApi: boolean;
@@ -20,21 +22,33 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   activeStyle,
 }) => {
 
+  const gallery = useSelector(getGallerySelector);
+  const totalCount = useSelector(getTotalCountSelector);
+  const galleryRef = React.useRef(null);
+
+  const dispatch = useDispatch();
+
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchData = async () => {
+
+    if (items.length >= totalCount) {
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
+    let nextPage = page + 1;
 
     try {
-      const response = await galleryApi.getGalleryItems(activeStyle?._id, page, pageSize);
+      const response = await galleryApi.getGalleryItems(activeStyle?._id, nextPage, pageSize);
       const data = response.gallery;
 
       setItems(prevItems => [...prevItems, ...data]);
-      setPage(prevPage => prevPage + 1);
+      setPage(nextPage);
     } catch (error) {
       setError(error);
     } finally {
@@ -43,22 +57,28 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   };
 
   const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) {
-      return;
+    const rect = galleryRef.current.getBoundingClientRect();
+    const isAtBottom = rect.bottom <= window.innerHeight;
+
+    if (isAtBottom && !isLoading && items.length < totalCount) {
+      fetchData();
     }
-    fetchData();
   };
 
   useEffect(() => {
-    //setItems([]);
-    fetchData();
-    console.log("useEffect works!!!!!!!!!!!")
-  }, [activeStyle]);
+    setItems([]);
+    setPage(1);
+    dispatch(getGallery(activeStyle?._id, 1, pageSize));
+  }, [activeStyle, dispatch]);
+
+  useEffect(() => {
+    setItems(gallery);
+  }, [gallery]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isLoading]);
+  }, [isLoading, items, totalCount]);
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
 
@@ -86,7 +106,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   });
 
   return (
-      <section className="gallery page-block container">
+      <section className="gallery page-block container" ref={galleryRef}>
         { items.length > 0
           ? (
               <>

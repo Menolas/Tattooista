@@ -27,7 +27,7 @@ const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
 
 let initialState = {
   totalCount: 0 as number,
-  pageSize: 16 as number | null,
+  pageSize: 8 as number | null,
   currentPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
