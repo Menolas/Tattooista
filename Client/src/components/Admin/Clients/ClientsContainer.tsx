@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
   getClients,
@@ -47,8 +47,14 @@ export const ClientsContainer: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const [hasFetchedItems, setHasFetchedItems] = useState(false);
+
   useEffect(() => {
-    dispatch(getClients(token, currentPage, pageSize, filter));
+    if (!hasFetchedItems) {
+      dispatch(getClients(token, currentPage, pageSize, filter)).then(() => {
+        setHasFetchedItems(true);
+      });
+    }
 
   }, [dispatch, token, currentPage, pageSize, filter]);
 

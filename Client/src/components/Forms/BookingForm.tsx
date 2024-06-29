@@ -135,9 +135,6 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
           <Form id="booking"
             className="form booking__form"
           >
-            <h3 className="form__title">
-              FILL THE FORM AND WE WILL CONTACT YOU SOON
-            </h3>
             <FieldComponent
               name={'bookingName'}
               type={'text'}
