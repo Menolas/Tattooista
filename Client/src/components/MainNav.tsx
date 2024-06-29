@@ -3,23 +3,20 @@ import { NavLink } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { mainNavHashLinksData } from "../utils/constants";
 import {MobileMainMenu} from "./MobileMainMenu";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 
 type PropsType = {
-  isMenuOpen: boolean;
   isAuth: string | null;
   logout: () => void;
-  setIsMenuOpen: (isOpen: boolean) => void;
-}
+};
 
 export const MainNav: React.FC<PropsType> = React.memo(({
-    isMenuOpen,
     isAuth,
     logout,
-    setIsMenuOpen,
 }) => {
 
  const innerBlockRef = useRef<HTMLUListElement>(null);
+ let [isMenuOpen, setIsMenuOpen] = useState(false);
 
  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,11 +30,10 @@ export const MainNav: React.FC<PropsType> = React.memo(({
         document.removeEventListener('mousedown', handleClickOutside);
     }
 
-    // Cleanup the event listener on component unmount
     return () => {
         document.removeEventListener('mousedown', handleClickOutside);
     };
- }, [isMenuOpen, setIsMenuOpen]);
+ }, [isMenuOpen]);
 
   const mainNavItems = mainNavHashLinksData.map((item, i) => {
     return (
@@ -45,7 +41,11 @@ export const MainNav: React.FC<PropsType> = React.memo(({
         <HashLink
           to={ item.url }
           className="main-nav__link"
-          onClick={() => setIsMenuOpen(false)}>
+          onClick={(event) => {
+              event.stopPropagation();
+              setIsMenuOpen(false)
+          }}
+        >
           { item.text }
         </HashLink>
       </li>
@@ -53,24 +53,34 @@ export const MainNav: React.FC<PropsType> = React.memo(({
   });
 
   return (
-    <nav className={isMenuOpen ? 'main-nav shown' : 'main-nav'} >
+    <nav className={isMenuOpen ? 'main-nav shown' : 'main-nav'} ref={innerBlockRef}>
       <div
         className="hamburger"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        onClick={() => {
+            setIsMenuOpen(prevState => !prevState)}}
+        >
         <span>{''}</span>
       </div>
-      <MobileMainMenu isAuth={isAuth} logout={logout} closeMenu={() => setIsMenuOpen(false)} />
-      <ul className="list main-nav__list main-nav--ls" ref={innerBlockRef}>
+      <MobileMainMenu
+          isAuth={isAuth}
+          logout={logout}
+          closeMenu={() => setIsMenuOpen(false)}
+      />
+      <ul className="list main-nav__list main-nav--ls">
         <li className="main-nav__item">
           <NavLink
               to={`portfolio`}
               className="main-nav__link"
-              onClick={() => setIsMenuOpen(false)}>
+              onClick={(event) => {
+                  event.stopPropagation();
+                  setIsMenuOpen(false)
+              }}
+          >
             Portfolio
           </NavLink>
         </li>
         { mainNavItems }
       </ul>
     </nav>
-  )
+  );
 });

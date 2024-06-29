@@ -40,9 +40,9 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
         dispatch(setSuccessModalAC(false, ''));
     }
 
-    const [bookingModal, setBookingModal] = useState(false)
+    const [bookingModal, setBookingModal] = useState(false);
 
-    const modalTitle = ''
+    const modalTitle = 'FILL THE FORM AND WE WILL CONTACT YOU SOON';
 
     const showBookConsultationModal = () => {
         setBookingModal(true);
@@ -58,8 +58,8 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
             <button
                 className = "btn btn--bg btn--transparent booking-btn"
                 onClick = { () => {
-                    showBookConsultationModal()
-                } }>
+                    showBookConsultationModal();
+                }}>
                 Book a consultation
             </button>
 

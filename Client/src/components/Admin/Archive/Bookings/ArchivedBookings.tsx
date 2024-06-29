@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Paginator} from "../../../common/Paginator";
 import {NothingToShow} from "../../../common/NothingToShow";
@@ -45,9 +45,15 @@ export const ArchivedBookings: React.FC = React.memo(() => {
 
     const dispatch = useDispatch();
 
+    const [hasFetchedItems, setHasFetchedItems] = useState(false);
+
     useEffect(() => {
-        dispatch(getArchivedBookings(token, currentPage, pageSize, filter));
-    }, [token, currentPage, pageSize, filter]);
+        if (token && !hasFetchedItems) {
+            dispatch(getArchivedBookings(token, currentPage, pageSize, filter)).then((response) => {
+                setHasFetchedItems(true);
+            });
+        }
+    }, [token, currentPage, pageSize, filter, dispatch, hasFetchedItems]);
 
     const onPageChangedCallBack = (
         page: number

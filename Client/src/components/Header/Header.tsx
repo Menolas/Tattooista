@@ -22,16 +22,12 @@ export const Header: React.FC<PropsType> = React.memo(({
   logout,
 }) => {
 
-  let [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <header className = { 'main-header ' + headerClasses }>
       <Logo />
       <MainNav
-          isMenuOpen={isMenuOpen}
           isAuth={isAuth}
           logout={logout}
-          setIsMenuOpen={setIsMenuOpen}
       />
       <SocialNav />
       <div className={'main-header__right'}>

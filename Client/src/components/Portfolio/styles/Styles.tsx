@@ -104,63 +104,59 @@ export const Styles: React.FC<PropsType> = React.memo(({
               Add a Tattoo Style
           </button>
         }
-        {
-          !isFetching
-            ? (
-                <>
-                  <div className="tattoo-style__item-content">
-                    { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-                        <div className={"tattoo-style__item-actions"}>
-                          <button
-                              data-tooltip-id="my-tooltip"
-                              data-tooltip-content="Edit tattoo style"
-                              className={"btn btn--icon"}
-                              onClick={() => {
-                                setEditMode(true);
-                                setStyle(activeStyle);
-                              }}
-                          >
-                            <svg><use href={`${Sprite}#edit`}/></svg>
-                          </button>
-                          { !activeStyle?.nonStyle &&
-                              <button
-                                  data-tooltip-id="my-tooltip"
-                                  data-tooltip-content="Delete tattoo style"
-                                  className={"btn btn--icon"}
-                                  disabled={isDeletingInProcess?.some(id => id === activeStyle._id)}
-                                  onClick={() => {
-                                    setConfirmationData({
-                                      needConfirmation: true,
-                                      itemId: activeStyle._id,
-                                      context: 'Are you sure? You about to delete this tattoo style along with all images.',
-                                      cb: removeCallBack
-                                    });
-                                  }}
-                              >
-                                <svg>
-                                  <use href={`${Sprite}#trash`}/>
-                                </svg>
-                              </button>
-                          }
-                        </div>
-                    }
-                    <div>
-                      <h1 className={'tattoo-style__title page-block__title'}>{activeStyle?.value}</h1>
-                      <div className={'tattoo-style__text'}>
-                        {activeStyle ? activeStyle.description : "---"}
-                      </div>
-                    </div>
+
+        <div className="tattoo-style__item-content">
+          { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+              <div className={"tattoo-style__item-actions"}>
+                <button
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Edit tattoo style"
+                    className={"btn btn--icon"}
+                    onClick={() => {
+                      setEditMode(true);
+                      setStyle(activeStyle);
+                    }}
+                >
+                  <svg><use href={`${Sprite}#edit`}/></svg>
+                </button>
+                { !activeStyle?.nonStyle &&
+                    <button
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Delete tattoo style"
+                        className={"btn btn--icon"}
+                        disabled={isDeletingInProcess?.some(id => id === activeStyle._id)}
+                        onClick={() => {
+                          setConfirmationData({
+                            needConfirmation: true,
+                            itemId: activeStyle._id,
+                            context: 'Are you sure? You about to delete this tattoo style along with all images.',
+                            cb: removeCallBack
+                          });
+                        }}
+                    >
+                      <svg>
+                        <use href={`${Sprite}#trash`}/>
+                      </svg>
+                    </button>
+                }
+              </div>
+          }
+          {!isFetching
+              ? <div>
+                  <h1 className={'tattoo-style__title page-block__title'}>{activeStyle?.value}</h1>
+                  <div className={'tattoo-style__text'}>
+                    {activeStyle ? activeStyle.description : "---"}
                   </div>
-                  <Advertisement />
-                  <Slider
-                      items={stylesArray}
-                      activeIndex={activeIndex}
-                      breakpoints={responsive}
-                  />
-                </>
-              )
-            : <Preloader />
-        }
+                </div>
+              : <Preloader />
+          }
+        </div>
+        <Advertisement/>
+        <Slider
+            items={stylesArray}
+            activeIndex={activeIndex}
+            breakpoints={responsive}
+        />
         <ModalPopUp
             isOpen={addMode || editMode}
             modalTitle={'Update tattoo styles'}

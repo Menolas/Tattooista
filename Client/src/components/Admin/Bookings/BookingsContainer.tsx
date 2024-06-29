@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getBookings,
@@ -45,8 +45,14 @@ export const BookingsContainer: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const [hasFetchedItems, setHasFetchedItems] = useState(false);
+
   useEffect(() => {
-    dispatch(getBookings(token, currentPage, pageSize, filter));
+    if (!hasFetchedItems) {
+      dispatch(getBookings(token, currentPage, pageSize, filter)).then(() => {
+        setHasFetchedItems(true);
+      });
+    }
   }, [token, currentPage, pageSize, filter]);
 
   useEffect(() => {

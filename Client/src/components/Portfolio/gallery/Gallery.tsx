@@ -13,8 +13,9 @@ import {NothingToShow} from "../../common/NothingToShow";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {ImageFullView} from "../../common/ImageFullView";
 import {Confirmation} from "../../common/Confirmation";
-import {useDispatch} from "react-redux";
-import {getGallery} from "../../../redux/Gallery/gallery-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {archiveGalleryItem, deleteGalleryItem, getGallery} from "../../../redux/Gallery/gallery-reducer";
+import {getGallerySelector} from "../../../redux/Gallery/gallery-selectors";
 
 type PropsType = {
   isFetching: boolean;
@@ -22,14 +23,11 @@ type PropsType = {
   pageSize: number;
   currentPage: number;
   activeStyle: StyleType;
-  gallery: Array<GalleryItemType>;
   isDeletingInProcess: Array<string>;
   styles: Array<StyleType>;
   apiError: null | string;
-  remove: (itemId: string) => void;
   setPage: (page: number) => void;
   setPageSize: (limit: number) => void;
-  archive: (id: string) => void;
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
@@ -38,21 +36,28 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   totalCount,
   pageSize,
   currentPage,
-  gallery,
   isDeletingInProcess,
   styles,
   apiError,
   setPage,
   setPageSize,
-  remove,
-  archive,
 }) => {
 
-    const dispatch = useDispatch();
+  const gallery = useSelector(getGallerySelector);
 
-    useEffect(() => {
-        dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
-    }, [activeStyle, currentPage, pageSize]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+      dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
+  }, [activeStyle, currentPage, pageSize]);
+
+  const deleteGalleryItemCallBack = (itemId: string) => {
+    dispatch(deleteGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
+  };
+
+  const archiveGalleryItemCallBack = (itemId: string) => {
+    dispatch(archiveGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
+  }
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
   const [galleryItem, setGalleryItem] = useState(null);
@@ -117,7 +122,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                     needConfirmation: true,
                     itemId: item._id,
                     context: 'Are you sure? You about to archive this image.',
-                    cb: () => archive(item._id)
+                    cb: () => archiveGalleryItemCallBack(item._id)
                   });
                 }}
             >
@@ -133,7 +138,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                     needConfirmation: true,
                     itemId: item._id,
                     context: 'Are you sure? You about to delete this image.',
-                    cb: () => remove(item._id)
+                    cb: () => deleteGalleryItemCallBack(item._id)
                   });
                 }}
             >
@@ -167,7 +172,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   { isFetching ? <Preloader /> : GalleryItemsArray }
                 </ul>
             )
-          : <NothingToShow/>
+          : apiError
+                ? <p>{apiError}</p> : <NothingToShow/>
         }
         {  carouselData.isOpen &&
            <ImageFullView

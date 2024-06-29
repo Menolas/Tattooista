@@ -73,11 +73,12 @@ export const stylesReducer = (
       }
 
     case DELETE_STYLE:
+      const updatedStyles = state.styles.filter(style => style._id !== action.id);
       return {
-          ...state,
-          styles: state.styles.filter(style => style._id !== action.id),
-          activeStyle: state.styles[0],
-    }
+        ...state,
+        styles: updatedStyles,
+        activeStyle: updatedStyles[0],
+      }
 
     case ADD_STYLE:
       return {

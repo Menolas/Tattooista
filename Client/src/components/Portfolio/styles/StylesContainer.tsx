@@ -5,7 +5,7 @@ import {
     getStyles,
     setActiveStyle,
 } from "../../../redux/Styles/styles-reducer";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {
@@ -29,28 +29,30 @@ export const StylesContainer: React.FC = () => {
 
     const dispatch = useDispatch();
 
+    const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
+
     useEffect(() => {
-        console.log(activeStyle?.value + " it is an activeStyle now!!!!!!!!!!!!!!!");
-        console.log(styles.length + " styles length!!!!!!");
-        dispatch(getStyles(token, false)).then(() => {
-            if (!activeStyle?._id) {
-                console.log("we are here !!!!!!!!!!!!!!!!!!!")
-                dispatch(setActiveStyle(styles[0]));
-            }
-        });
-    }, [dispatch, activeStyle, token]);
+        if (!hasFetchedStyles) {
+            dispatch(getStyles(token, false)).then(() => {
+                if (styles.length > 0 && !activeStyle?._id) {
+                    dispatch(setActiveStyle(styles[0]));
+                }
+                setHasFetchedStyles(true);
+            });
+        }
+    }, [dispatch, token, hasFetchedStyles, styles]);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(setActiveStyle(style));
-    }
+    };
 
     const removeCallBack = (id: string) => {
         dispatch(deleteStyle(id));
-    }
+    };
 
     const setApiErrorCallBack = () => {
         dispatch(setApiErrorAC(null));
-    }
+    };
 
     return (
         <Styles
@@ -64,5 +66,5 @@ export const StylesContainer: React.FC = () => {
             remove={removeCallBack}
             setApiError={setApiErrorCallBack}
         />
-    )
-}
+    );
+};
