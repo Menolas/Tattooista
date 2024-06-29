@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const Client = require("../models/Client");
 const ArchivedBooking = require("../models/ArchivedBooking");
+const mailService = require('../services/mailService');
 
 class bookingController {
 
@@ -85,6 +86,7 @@ class bookingController {
         message: req.body.message
       });
       await booking.save();
+      await mailService.sendNewBookingConsultationMail('olenachristensen777@gmail.com', booking);
       results.resultCode = 0;
       results.booking = booking;
       res.status(201).json(results);
