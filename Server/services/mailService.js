@@ -28,6 +28,39 @@ class MailService {
                  `
         });
     }
+
+    async sendNewBookingConsultationMail(to, booking) {
+        const bookingInfo = () => {
+            let contactsInfo = '';
+            for (const contactType in booking.contacts) {
+                if (booking.contacts[contactType] && typeof booking.contacts[contactType] === 'string') {
+                    contactsInfo += `<p><b>${contactType}:</b> ${booking.contacts[contactType]}</p>`;
+                }
+            }
+            return `
+                <p><b>Name:</b> ${booking.fullName}</p>
+                ${contactsInfo}
+                <p><b>Message:</b> ${booking.message}</p>
+            `
+        };
+
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: `New consultation request on Tattooista`,
+            text: '',
+            html:
+                `
+                     <div>
+                         <img src="${process.env.API_URL}/logo.ico" alt="Logo" style="width: 100px; height: auto;">
+                         <h1>You have a new request for consultation</h1>
+                         <div>
+                             ${bookingInfo()}
+                         </div>
+                     </div>
+                `
+        });
+    }
 }
 
 module.exports = new MailService();
