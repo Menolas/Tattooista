@@ -2,6 +2,7 @@ const Booking = require('../models/Booking');
 const Client = require("../models/Client");
 const ArchivedBooking = require("../models/ArchivedBooking");
 const mailService = require('../services/mailService');
+const BookingService = require('../services/bookingService');
 
 class bookingController {
 
@@ -72,23 +73,23 @@ class bookingController {
   }
 
   async createBooking(req, res) {
+    const booking ={
+      fullName: req.body.bookingName.trim(),
+      contacts: {
+        email: req.body.email,
+        phone: req.body.phone,
+        whatsapp: req.body.whatsapp,
+        messenger: req.body.messenger.trim(),
+        insta: req.body.insta.trim()
+      },
+      message: req.body.message
+    };
     const results = {};
     try {
-      const booking = new Booking({
-        fullName: req.body.bookingName.trim(),
-        contacts: {
-          email: req.body.email,
-          phone: req.body.phone,
-          whatsapp: req.body.whatsapp,
-          messenger: req.body.messenger.trim(),
-          insta: req.body.insta.trim()
-        },
-        message: req.body.message
-      });
-      await booking.save();
-      await mailService.sendNewBookingConsultationMail('olenachristensen777@gmail.com', booking);
+      const newBooking = await BookingService.addBooking(booking);
+      console.log(newBooking);
       results.resultCode = 0;
-      results.booking = booking;
+      results.booking = newBooking;
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;

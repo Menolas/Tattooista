@@ -51,19 +51,18 @@ export const Booking: React.FC<PropsType> = React.memo(({
         archive(consultation._id);
     }
 
-    const bookingContacts: ContactType = consultation.contacts;
-
-    const contacts = Object.keys(bookingContacts).map(contact => {
-
-        return bookingContacts[contact]
-            ? (
-                <div key={contact} className={"admin__card-detail-item"}>
-                    <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
-                    <span className={"admin__card-data"}>{bookingContacts[contact]}</span>
-                </div>
-               )
-            : null;
-    })
+    const bookingContacts = consultation?.contacts
+        ? Object.keys(consultation?.contacts).map(contact => {
+            return consultation.contacts[contact]
+                ? (
+                    <div key={contact} className={"admin__card-detail-item"}>
+                        <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
+                        <span className={"admin__card-data"}>{consultation.contacts[contact]}</span>
+                    </div>
+                )
+                : null;
+          })
+        : null;
 
   return (
     <li className={"admin__card"}>
@@ -133,17 +132,19 @@ export const Booking: React.FC<PropsType> = React.memo(({
         </button>
       </div>
       <div className={"admin__card-details"}>
-        <div className={"admin__card-detail-item"}>
-          <span className={"admin__card-data-type"}>Name:&nbsp;</span>
-          <span className={"admin__card-data"}>{consultation.fullName}</span>
-        </div>
-        <div className={"admin__card-detail-item"}>
-            <span className={"admin__card-data-type"}>Created:&nbsp;</span>
-            <span className={"admin__card-data"}>
-                {consultation.createdAt.split('T')[0] + ' (' + consultation.createdAt.split('T')[1].split('.')[0] + ')'}
-            </span>
-        </div>
-        { contacts }
+        <>
+            <div className={"admin__card-detail-item"}>
+              <span className={"admin__card-data-type"}>Name:&nbsp;</span>
+              <span className={"admin__card-data"}>{consultation.fullName}</span>
+            </div>
+            <div className={"admin__card-detail-item"}>
+                <span className={"admin__card-data-type"}>Created:&nbsp;</span>
+                <span className={"admin__card-data"}>
+                    {consultation.createdAt?.split('T')[0] + ' (' + consultation.createdAt?.split('T')[1].split('.')[0] + ')'}
+                </span>
+            </div>
+            { bookingContacts }
+        </>
       </div>
       {
         consultation.message &&
