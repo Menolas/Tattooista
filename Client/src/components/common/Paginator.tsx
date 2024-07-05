@@ -36,7 +36,8 @@ export const Paginator: React.FC<PropsType> = React.memo(({
           key={page}
           className={currentPage === page ? "pagination__item currentPage" : "pagination__item"}
           onClick={() => {
-            onPageChanged(page)
+              console.log("hey!!!!!!!!!!!!!!")
+            onPageChanged(page);
           }}
         >
           {page}
