@@ -35,7 +35,7 @@ router.get('/archive/:id', getBooking, controller.archiveBooking);
 
 // reactivate booking
 
-router.get('/archive/:id', getArchivedBooking, controller.reactivateBooking);
+router.get('/reactivate/:id', getArchivedBooking, controller.reactivateBooking);
 
 async function getBooking(req, res, next) {
   let booking;
@@ -56,7 +56,7 @@ async function getArchivedBooking(req, res, next) {
   try {
     booking = await ArchivedBooking.findById(req.params.id);
     if (booking == null) {
-      return res.status(404).json({ message: 'Cannot find booking' });
+      return res.status(404).json({ message: 'Cannot find archived booking' });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });

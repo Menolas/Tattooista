@@ -96,7 +96,7 @@ export interface LoginFormValues {
 }
 
 export interface BookConsultationFormValues  {
-    bookingName: string;
+    fullName: string;
     contact: string;
     email: string;
     phone: string;
@@ -108,7 +108,7 @@ export interface BookConsultationFormValues  {
 }
 
 export interface AddConsultationFormValues  {
-    bookingName: string;
+    fullName: string;
     email?: string;
     phone?: string;
     insta?: string;

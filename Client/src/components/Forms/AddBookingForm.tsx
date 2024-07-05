@@ -9,7 +9,7 @@ import {useDispatch} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 
 const validationSchema = Yup.object().shape({
-  bookingName: Yup.string()
+  fullName: Yup.string()
       .min(2, 'Must be minimum longer two characters')
       .max(30, 'Must be shorter than 31 character')
       .required('Required Field'),
@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues: AddConsultationFormValues = {
-  bookingName: '',
+  fullName: '',
   email: '',
   phone: '',
   insta: '',
@@ -76,7 +76,7 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
             className="form booking__form"
           >
             <FieldComponent
-                name={'bookingName'}
+                name={'fullName'}
                 type={'text'}
                 placeholder={"Customer's Full Name"}
                 value={propsF.values.bookingName}
