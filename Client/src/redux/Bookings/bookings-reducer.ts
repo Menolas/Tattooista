@@ -306,7 +306,7 @@ export const getBookings = (
       return false;
     }
   } catch (e: any) {
-    dispatch(setAccessErrorAC(e.response.data.message));
+    dispatch(setAccessErrorAC(e.response?.data?.message));
     console.log(e);
     return false;
   } finally {

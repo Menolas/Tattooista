@@ -1,7 +1,8 @@
 const Booking = require('../models/Booking');
 const Client = require("../models/Client");
 const ArchivedBooking = require("../models/ArchivedBooking");
-const mailService = require('../services/mailService');
+const BookingService = require('../services/bookingService');
+const mailService = require("../services/mailService");
 
 class bookingController {
 
@@ -72,28 +73,36 @@ class bookingController {
   }
 
   async createBooking(req, res) {
+
     const results = {};
+
     try {
-      const booking = new Booking({
-        fullName: req.body.bookingName.trim(),
-        contacts: {
-          email: req.body.email,
-          phone: req.body.phone,
-          whatsapp: req.body.whatsapp,
-          messenger: req.body.messenger.trim(),
-          insta: req.body.insta.trim()
-        },
-        message: req.body.message
-      });
-      await booking.save();
-      await mailService.sendNewBookingConsultationMail('olenachristensen777@gmail.com', booking);
+      const newBooking = await BookingService.addBooking(req.body);
+      await mailService.sendNewBookingConsultationMail('olenachristensen777@gmail.com', newBooking);
       results.resultCode = 0;
-      results.booking = booking;
+      results.booking = newBooking;
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;
       results.message = e.message;
       console.log(e);
+      res.status(400).json(results);
+    }
+  }
+
+  async reactivateBooking(req, res) {
+    const results = {};
+
+    try {
+      const newBooking = await BookingService.restoreBooking(res.booking);
+      await mailService.sendNewBookingConsultationMail('olenachristensen777@gmail.com', newBooking);
+      await res.booking.remove();
+      results.resultCode = 0;
+      results.booking = newBooking;
+      res.status(201).json(results);
+    } catch (e) {
+      results.resultCode = 1;
+      results.message = e.message;
       res.status(400).json(results);
     }
   }
@@ -127,13 +136,11 @@ class bookingController {
   }
 
   async bookingToClient(req, res) {
-    const client = new Client({
-      fullName: res.booking.fullName,
-      contacts: res.booking.contacts
-    });
+
     const results = {};
 
     try {
+      const client = await BookingService.bookingToClient(res.booking);
       await client.save();
       await res.booking.remove();
       results.resultCode = 0;
@@ -166,33 +173,6 @@ class bookingController {
       results.booking = archivedBooking;
       res.status(201).json(results);
 
-    } catch (e) {
-      results.resultCode = 1;
-      results.message = e.message;
-      res.status(400).json(results);
-    }
-  }
-
-  async reactivateBooking(req, res) {
-    const booking = new Booking({
-      fullName: res.booking.fullName,
-      contacts: {
-        email: res.booking.contacts.email,
-        insta: res.booking.contacts.insta,
-        phone: res.booking.contacts.phone,
-        whatsapp: res.booking.contacts.whatsapp,
-        messenger: res.booking.contacts.messenger
-      }
-    })
-
-    const results = {};
-
-    try {
-      await booking.save();
-      await res.booking.remove();
-      results.resultCode = 0;
-      results.booking = booking;
-      res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;
       results.message = e.message;

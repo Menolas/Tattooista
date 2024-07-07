@@ -45,15 +45,18 @@ export const ArchivedBookings: React.FC = React.memo(() => {
 
     const dispatch = useDispatch();
 
-    const [hasFetchedItems, setHasFetchedItems] = useState(false);
+    //const [hasFetchedItems, setHasFetchedItems] = useState(false);
 
     useEffect(() => {
-        if (token && !hasFetchedItems) {
-            dispatch(getArchivedBookings(token, currentPage, pageSize, filter)).then((response) => {
-                setHasFetchedItems(true);
-            });
-        }
-    }, [token, currentPage, pageSize, filter, dispatch, hasFetchedItems]);
+        dispatch(getArchivedBookings(token, currentPage, pageSize, filter)).then((response) => {
+            //setHasFetchedItems(true);
+        });
+        // if (token && !hasFetchedItems) {
+        //     dispatch(getArchivedBookings(token, currentPage, pageSize, filter)).then((response) => {
+        //         setHasFetchedItems(true);
+        //     });
+        // }
+    }, [token, currentPage, pageSize, filter, dispatch]);
 
     const onPageChangedCallBack = (
         page: number

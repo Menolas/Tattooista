@@ -216,6 +216,9 @@ img {
   background-color: #fafafa;
   color: #080808 !important;
 }
+.btn--transparent:hover svg {
+  fill: #080808;
+}
 
 .btn--light-bg {
   background-color: #fafafa;

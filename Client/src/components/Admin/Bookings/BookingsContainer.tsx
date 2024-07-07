@@ -33,6 +33,7 @@ export const BookingsContainer: React.FC = () => {
   const isFetching = useSelector(getIsFetchingSelector);
   const totalCount = useSelector(getTotalSelector);
   const currentPage = useSelector(getCurrentPageSelector);
+  console.log(currentPage + "current page it is!!!!!!!!!!!!!!!")
   const pageSize = useSelector(getPageSizeSelector);
   const bookings = useSelector(getBookingsSelector);
   const filter = useSelector(getFilterSelector);
@@ -47,12 +48,21 @@ export const BookingsContainer: React.FC = () => {
 
   const [hasFetchedItems, setHasFetchedItems] = useState(false);
 
+  // useEffect(() => {
+  //   // This effect resets hasFetchedItems to false whenever currentPage changes,
+  //   // ensuring that the fetching logic below can be re-executed.
+  //   setHasFetchedItems(false);
+  // }, [currentPage]);
+
   useEffect(() => {
-    if (!hasFetchedItems) {
-      dispatch(getBookings(token, currentPage, pageSize, filter)).then(() => {
-        setHasFetchedItems(true);
-      });
-    }
+    dispatch(getBookings(token, currentPage, pageSize, filter)).then(() => {
+      //setHasFetchedItems(true);
+    });
+    // if (!hasFetchedItems) {
+    //   dispatch(getBookings(token, currentPage, pageSize, filter)).then(() => {
+    //     setHasFetchedItems(true);
+    //   });
+    // }
   }, [token, currentPage, pageSize, filter]);
 
   useEffect(() => {

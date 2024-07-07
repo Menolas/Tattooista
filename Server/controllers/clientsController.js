@@ -3,6 +3,7 @@ const ArchivedClient = require('../models/ArchivedClient');
 const fs = require('fs');
 const mv = require('mv');
 const generateFileRandomName = require('../utils/functions');
+const ClientService = require('../services/clientService');
 
 class clientsController {
 
@@ -89,6 +90,29 @@ class clientsController {
     }
   }
 
+  async addClient(req, res) {
+    const results = {};
+    try {
+      const client = await ClientService.addClient(req.body);
+      if (req.files && req.files.avatar) {
+        const file = req.files.avatar;
+        const newFileName = generateFileRandomName(file.name);
+        await file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, e => {
+          if (e) console.log(e);
+        });
+        client.avatar = newFileName;
+      }
+      await client.save();
+      results.resultCode = 0;
+      results.client = client;
+      res.status(201).json(results);
+    } catch (e) {
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
+    }
+  }
+
   async editClient(req, res) {
     if (!req.body) {
       return res.status(400).send({
@@ -96,31 +120,35 @@ class clientsController {
       });
     }
 
-    res.client.fullName = req.body.clientName.trim();
-    res.client.contacts.email = req.body.email;
-    res.client.contacts.insta = req.body.insta.trim();
-    res.client.contacts.phone = req.body.phone;
-    res.client.contacts.whatsapp = req.body.whatsapp;
-    res.client.contacts.messenger = req.body.messenger.trim();
-
-    if (req.files && req.files.avatar) {
-      if (res.client.avatar) {
-        await fs.unlink(`./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`, e => {
-          if (e) console.log(e);
-        });
-      }
-
-      const file = req.files.avatar;
-      const newFileName = generateFileRandomName(file.name);
-      await file.mv(`./uploads/clients/${res.client._id}/avatar/${newFileName}`, e => {
-        if (e) console.log(e);
-      });
-      res.client.avatar = newFileName;
-    }
-
     const results = {};
 
     try {
+      const isClientUnique = await ClientService.editClient(req.params.id, req.body);
+      if (isClientUnique) {
+        res.client.fullName = req.body.fullName.trim();
+        res.client.contacts.email = req.body.email;
+        res.client.contacts.insta = req.body.insta?.trim();
+        res.client.contacts.phone = req.body.phone;
+        res.client.contacts.whatsapp = req.body.whatsapp;
+        res.client.contacts.messenger = req.body.messenger?.trim();
+
+        if (req.files && req.files.avatar) {
+          if (res.client.avatar) {
+            await fs.unlink(`./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`, e => {
+              if (e) console.log(e);
+            });
+          }
+
+          const file = req.files.avatar;
+          const newFileName = generateFileRandomName(file.name);
+          await file.mv(`./uploads/clients/${res.client._id}/avatar/${newFileName}`, e => {
+            if (e) console.log(e);
+          });
+          res.client.avatar = newFileName;
+        }
+
+      }
+
       results.client = await res.client.save();
       results.resultCode = 0;
       res.json(results);
@@ -158,50 +186,12 @@ class clientsController {
         }
       }
 
-      //await res.client.save();
-
       const oldData = [...res.client.gallery];
       res.client.gallery = [...oldData, ...newGallery];
 
       results.client = await res.client.save();
       results.resultCode = 0;
       res.json(results);
-    } catch (e) {
-      results.resultCode = 1;
-      results.message = e.message;
-      res.status(400).json(results);
-    }
-  }
-
-  async addClient(req, res) {
-    const client = new Client({
-      fullName: req.body.clientName.trim(),
-      contacts: {
-        email: req.body.email,
-        insta: req.body.insta.trim(),
-        phone: req.body.phone,
-        whatsapp: req.body.whatsapp,
-        messenger: req.body.messenger.trim()
-      }
-    });
-
-    if (req.files && req.files.avatar) {
-      const file = req.files.avatar;
-      if (!file) return res.json({error: 'Incorrect input name'});
-      const newFileName = generateFileRandomName(file.name);
-      await file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, e => {
-        if (e) console.log(e);
-      });
-      client.avatar = newFileName;
-    }
-
-    const results = {};
-
-    try {
-      let newClient = await client.save();
-      results.resultCode = 0;
-      results.client = newClient;
-      res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;
       results.message = e.message;
@@ -265,21 +255,10 @@ class clientsController {
   }
 
   async reactivateClient(req, res) {
-    const client = new Client({
-      fullName: res.client.fullName,
-      contacts: {
-        email: res.client.contacts.email,
-        insta: res.client.contacts.insta,
-        phone: res.client.contacts.phone,
-        whatsapp: res.client.contacts.whatsapp,
-        messenger: res.client.contacts.messenger
-      },
-      gallery: []
-    });
-
     const results = {};
 
     try {
+      const newClient = await ClientService.reactivateClient(res.client);
       if (res.client.avatar) {
         const oldPath = `./uploads/archivedClients/${res.client._id}/avatar/${res.client.avatar}`;
         const newPath = `./uploads/clients/${client._id}/avatar/${res.client.avatar}`;
@@ -290,22 +269,22 @@ class clientsController {
             //console.log("Avatar Successfully moved!!!!!!!")
           }
         });
-        client.avatar = res.client.avatar;
+        newClient.avatar = res.client.avatar;
       }
 
       if (res.client.gallery.length > 0) {
-        client.gallery = [...res.client.gallery];
+        newClient.gallery = [...res.client.gallery];
         await res.client.gallery.forEach((item, index) => {
           const oldGalleryPath = `./uploads/archivedClients/${res.client._id}/doneTattooGallery/${item}`;
-          const newGalleryPath = `./uploads/clients/${client._id}/doneTattooGallery/${item}`;
+          const newGalleryPath = `./uploads/clients/${newClient._id}/doneTattooGallery/${item}`;
           mv(oldGalleryPath, newGalleryPath, { mkdirp: true },function (e) {
             if (e) console.log(e);
           });
         });
-        await client.save();
+        await newClient.save();
       }
 
-      await client.save();
+      await newClient.save();
       fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, e => {
         if (e) console.log(e);
       });

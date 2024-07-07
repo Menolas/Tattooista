@@ -35,7 +35,7 @@ export const archivedBookingsApi = {
   reactivateBooking(
       id: string
   ) {
-    return instance.get<ReactivateBookingResponseType>(`bookings/archive/${id}`)
+    return instance.get<ReactivateBookingResponseType>(`bookings/reactivate/${id}`)
         .then(response => response.data);
   }
 }

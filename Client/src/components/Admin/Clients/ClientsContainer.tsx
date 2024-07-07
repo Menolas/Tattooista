@@ -50,11 +50,14 @@ export const ClientsContainer: React.FC = () => {
   const [hasFetchedItems, setHasFetchedItems] = useState(false);
 
   useEffect(() => {
-    if (!hasFetchedItems) {
-      dispatch(getClients(token, currentPage, pageSize, filter)).then(() => {
-        setHasFetchedItems(true);
-      });
-    }
+    dispatch(getClients(token, currentPage, pageSize, filter)).then(() => {
+      //setHasFetchedItems(true);
+    });
+    // if (!hasFetchedItems) {
+    //   dispatch(getClients(token, currentPage, pageSize, filter)).then(() => {
+    //     setHasFetchedItems(true);
+    //   });
+    // }
 
   }, [dispatch, token, currentPage, pageSize, filter]);
 

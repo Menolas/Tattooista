@@ -21,7 +21,7 @@ const options = [
 
 // @ts-ignore
 const validationSchema = Yup.object().shape({
-  bookingName: Yup.string()
+  fullName: Yup.string()
       .min(2, "Must be minimum longer two characters")
       .max(30, "Must be shorter than 31 character")
       .required("Required Field"),
@@ -56,7 +56,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues: BookConsultationFormValues = {
-  bookingName: '',
+  fullName: '',
   contact: '',
   email: '',
   phone: '',
@@ -136,7 +136,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
             className="form booking__form"
           >
             <FieldComponent
-              name={'bookingName'}
+              name={'fullName'}
               type={'text'}
               placeholder={'Your Full Name'}
               value={propsF.values.bookingName}
