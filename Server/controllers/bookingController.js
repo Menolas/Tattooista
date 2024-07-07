@@ -91,12 +91,10 @@ class bookingController {
   }
 
   async reactivateBooking(req, res) {
-    console.log(res.booking);
-
     const results = {};
 
     try {
-      const newBooking = await BookingService.addBooking(res.booking);
+      const newBooking = await BookingService.restoreBooking(res.booking);
       await mailService.sendNewBookingConsultationMail('olenachristensen777@gmail.com', newBooking);
       await res.booking.remove();
       results.resultCode = 0;
@@ -138,13 +136,11 @@ class bookingController {
   }
 
   async bookingToClient(req, res) {
-    const client = new Client({
-      fullName: res.booking.fullName,
-      contacts: res.booking.contacts
-    });
+
     const results = {};
 
     try {
+      const client = await BookingService.bookingToClient(res.booking);
       await client.save();
       await res.booking.remove();
       results.resultCode = 0;
