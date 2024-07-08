@@ -1,6 +1,7 @@
 const Service = require("../models/Service");
 const fs = require("fs");
 const generateFileRandomName = require("../utils/functions");
+const ServiceService = require("../services/serviceService");
 
 const getConditions = (reqBody) => {
   const conditions = [];
@@ -28,29 +29,27 @@ class serviceController {
   }
 
   async updateService(req, res) {
-    res.service.title = req.body.title.trim();
-
-    const conditions = getConditions(req.body);
-
-    res.service.conditions = [...conditions];
-
+    // res.service.title = req.body.title.trim();
+    // const conditions = getConditions(req.body);
+    // res.service.conditions = [...conditions];
     const results = {};
 
     try {
+      const updatedService = await ServiceService.editService(res.service, req.body);
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper;
         if(!file)  return res.json({error: 'Incorrect input name'});
         const newFileName = generateFileRandomName(file.name);
-        await fs.unlink(`./uploads/serviceWallpapers/${res.service._id}/${res.service.wallPaper}`, e => {
+        await fs.unlink(`./uploads/serviceWallpapers/${updatedService._id}/${updatedService.wallPaper}`, e => {
           if (e) console.log(e);
         })
-        await file.mv(`./uploads/serviceWallpapers/${res.service._id}/${newFileName}`, e => {
+        await file.mv(`./uploads/serviceWallpapers/${updatedService._id}/${newFileName}`, e => {
           if (e) console.log(e);
         })
-        res.service.wallPaper = newFileName;
+        updatedService.wallPaper = newFileName;
       }
       results.resultCode = 0;
-      results.service = await res.service.save();
+      results.service = await updatedService.save();
       res.status(201).json(results);
     } catch (e) {
       console.log(e);
@@ -61,24 +60,17 @@ class serviceController {
   }
 
   async addService(req, res) {
-
-    const conditions = getConditions(req.body);
-
-    const service = new Service({
-      title: req.body.title.trim(),
-      conditions: [...conditions]
-    });
-
     const results = {};
+    console.log(JSON.stringify(req.body) + "controller service from request")
 
     try {
-      const newService = await service.save();
+      const service = await ServiceService.addService(req.body);
       results.resultCode = 0;
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper;
         if(!file)  return res.json({error: 'Incorrect input name'});
         const newFileName = generateFileRandomName(file.name);
-        await file.mv(`./uploads/serviceWallpapers/${newService._id}/${newFileName}`, e => {
+        await file.mv(`./uploads/serviceWallpapers/${service._id}/${newFileName}`, e => {
           service.wallPaper = newFileName;
         });
       }
