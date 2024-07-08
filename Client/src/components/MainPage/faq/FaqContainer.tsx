@@ -58,8 +58,6 @@ export const FaqContainer = () => {
             isFetching={isFetching}
             isDeletingInProcess={isDeletingInProcess}
             faq={faq}
-            edit={editCallBack}
-            add={addCallBack}
             remove={removeCallBack}
             setApiError={setApiErrorCallBack}
         />

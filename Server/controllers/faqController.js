@@ -1,4 +1,5 @@
 const FaqItem = require('../models/FaqItem');
+const FaqService = require('../services/faqService');
 
 class faqController {
 
@@ -14,14 +15,10 @@ class faqController {
   }
 
   async addFaqItem(req, res) {
-    const faqItem = new FaqItem({
-      question: req.body.question.trim(),
-      answer: req.body.answer.trim()
-    });
-
     const results = {};
 
     try {
+      const faqItem = await FaqService.addFaqItem(req.body);
       results.resultCode = 0;
       results.faqItem = await faqItem.save();
       res.status(201).json(results);
@@ -33,12 +30,17 @@ class faqController {
   }
 
   async updateFaqItem(req, res) {
-    res.faqItem.question = req.body.question.trim();
-    res.faqItem.answer = req.body.answer.trim();
-
     const results = {};
 
     try {
+      const isFaqUnique = await FaqService.editFaqItem(
+          res.faqItem._id,
+          req.body
+      );
+      if (isFaqUnique) {
+        res.faqItem.question = req.body.question;
+        res.faqItem.answer = req.body.answer;
+      }
       results.resultCode = 0;
       results.faqItem = await res.faqItem.save();
       res.status(201).json(results);
