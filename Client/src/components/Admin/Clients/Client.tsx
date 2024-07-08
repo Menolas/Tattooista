@@ -61,16 +61,18 @@ export const Client: React.FC<PropsType> = React.memo(({
 
   const clientContacts: ContactType = data.contacts;
 
-  const contacts = Object.keys(clientContacts).map(contact => {
-    return clientContacts[contact]
-      ? (
-            <div key={contact} className={"admin__card-detail-item"}>
-              <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
-              <span className={"admin__card-data"}>{clientContacts[contact]}</span>
-            </div>
-        )
-       : null
-  });
+  const contacts = clientContacts
+    ? Object.keys(clientContacts).map(contact => {
+        return clientContacts[contact]
+          ? (
+                <div key={contact} className={"admin__card-detail-item"}>
+                  <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
+                  <span className={"admin__card-data"}>{clientContacts[contact]}</span>
+                </div>
+            )
+           : null
+      })
+  : null;
 
   const clientAvatar = data.avatar ? `${API_URL}/clients/${data._id}/avatar/${data.avatar}` : avatar;
 

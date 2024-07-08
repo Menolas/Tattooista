@@ -118,7 +118,7 @@ export interface AddConsultationFormValues  {
 
 export interface AddClientFormValues {
     avatar: File | string | null;
-    clientName: string;
+    fullName: string;
     email: string | null;
     insta: string | null;
     messenger: string | null;

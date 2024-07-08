@@ -21,7 +21,7 @@ import {editClient, addClient} from "../../redux/Clients/clients-reducer";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
-    clientName: Yup.string()
+    fullName: Yup.string()
         .min(2, 'Name is too short - should be 2 chars minimum.')
         .matches(/^([^0-9]*)$/, "First name should not contain numbers")
         .required("First name is a required field"),
@@ -96,7 +96,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 
   const initialValues: AddClientFormValues = {
     avatar: data?.avatar ?? '',
-    clientName: data?.fullName ?? '',
+    fullName: data?.fullName ?? '',
     email: data?.contacts?.email ?? '',
     insta: data?.contacts?.insta ?? '',
     messenger: data?.contacts?.messenger ?? '',
@@ -161,12 +161,12 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
               />
             </FieldWrapper>
             <FieldComponent
-                name={'clientName'}
+                name={'fullName'}
                 type={'text'}
                 placeholder={'Monica Bellucci'}
                 label={'Full Name'}
                 onChange={propsF.handleChange}
-                value={propsF.values.clientName}
+                value={propsF.values.fullName}
             />
             <FieldComponent
                 name={'email'}
