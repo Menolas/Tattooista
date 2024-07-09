@@ -26,8 +26,6 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   reactivate,
 }) => {
 
-    console.log(data.gallery + "data.gallery")
-
   const [carouselData, setCarouselData] = useState<{
     isOpen: boolean, activeIndex?: number}>({isOpen: false});
   const [confirmationData, setConfirmationData] = useState<{
@@ -36,7 +34,6 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
     cb?: (itemId: string) => void,
     context: string
   }>({needConfirmation: false, context: ''});
-
 
   const closeModal = () => {
       setConfirmationData({needConfirmation: false, context: ''});
@@ -101,8 +98,8 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
           <svg><use href={`${Sprite}#trash`}/></svg>
         </button>
       </div>
-      <NavLink
-        to={`/admin/profile?clientId=${data._id}`}
+      <div
+        //to={`/admin/profile?clientId=${data._id}`}
         className="admin__card-link">
         <div className={"admin__card-avatar"}>
           <img src={clientAvatar} alt={""}/>
@@ -114,7 +111,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
           </div>
           { contactsArray }
         </div>
-      </NavLink>
+      </div>
       {
           data.gallery && data.gallery.length > 0 &&
         <div className={"client-profile__gallery"}>

@@ -2,6 +2,7 @@ const GalleryItem = require('../models/GalleryItem');
 const TattooStyle = require('../models/TattooStyle');
 const fs = require("fs");
 const generateFileRandomName = require("../utils/functions");
+const StyleService = require("../services/styleService");
 
 class stylesController {
 
@@ -60,26 +61,20 @@ class stylesController {
   }
 
   async addTattooStyle(req, res) {
-    const tattooStyle = new TattooStyle({
-      value: req.body.value.trim(),
-      description: req.body.description.trim()
-    });
-
     const results = {};
 
     try {
-      const newTattooStyle = await tattooStyle.save();
+      const newTattooStyle = await StyleService.addStyle(req.body);
       results.resultCode = 0;
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper;
         if(!file)  return res.json({error: 'Incorrect input name'});
         const newFileName = generateFileRandomName(file.name);
         await file.mv(`./uploads/styleWallpapers/${newTattooStyle._id}/${newFileName}`, err => {
-          tattooStyle.wallPaper = newFileName;
-          tattooStyle.save();
+          newTattooStyle.wallPaper = newFileName;
         })
       }
-      results.tattooStyle = tattooStyle;
+      results.tattooStyle = await newTattooStyle.save();
       res.status(201).json(results);
     } catch (err) {
       results.resultCode = 1;
@@ -89,12 +84,11 @@ class stylesController {
   }
 
   async updateTattooStyle(req, res) {
-    res.tattooStyle.value = req.body.value.trim();
-    res.tattooStyle.description = req.body.description.trim();
-
     const results = {};
 
     try {
+      const updatedStyle = await StyleService.editStyle(res.tattooStyle, req.body);
+
       if(req.files && req.files.wallPaper) {
         const file = req.files.wallPaper;
         if(!file)  return res.json({error: 'Incorrect input name'});
@@ -105,10 +99,10 @@ class stylesController {
         await file.mv(`./uploads/styleWallpapers/${res.tattooStyle._id}/${newFileName}`, err => {
           if (err) console.log(err);
         })
-        res.tattooStyle.wallPaper = newFileName;
+        updatedStyle.wallPaper = newFileName;
       }
       results.resultCode = 0;
-      results.tattooStyle = await res.tattooStyle.save();
+      results.tattooStyle = await updatedStyle.save();
       res.status(201).json(results);
     } catch (err) {
       console.log(err);
