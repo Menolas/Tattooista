@@ -22,7 +22,7 @@ class StyleService {
     async editStyle(style, newData) {
         if (newData.value) {
             const valueCandidate = await  Style.findOne({
-                'title': newData.title,
+                'value': newData.value,
                 _id: {$ne: style._id}
             });
             if (valueCandidate) {

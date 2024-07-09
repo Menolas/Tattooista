@@ -15,15 +15,30 @@ class bookingController {
     const results = {};
 
     try {
-      if (status === 'any' && !term) {
-        bookings = await Booking.find().sort({createdAt: -1});
-      } else if (status !== 'any' && !term) {
-        bookings = await Booking.find({status: status}).sort({createdAt: -1});
-      } else if (status !== 'any' && term) {
-        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1});
-      } else if (status === 'any' && term) {
-        bookings = await Booking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1});
+      let query = {};
+      let searchConditions = [];
+
+      if (term) {
+        const regexSearch = { $regex: term, $options: 'i' };
+        searchConditions = [
+          { fullName: regexSearch },
+          { 'contacts.email': regexSearch },
+          { 'contacts.phone': regexSearch },
+          { 'contacts.whatsapp': regexSearch },
+          { 'contacts.messenger': regexSearch },
+          { 'contacts.insta': regexSearch },
+        ];
       }
+
+      if (status !== 'any') {
+        query = { ...query, status: status };
+      }
+
+      if (searchConditions.length > 0) {
+        query = { ...query, $or: searchConditions };
+      }
+
+      bookings = await Booking.find(query).sort({ createdAt: -1 });
 
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
