@@ -12,6 +12,7 @@ import {
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_ARCHIVED_CLIENTS = 'SET_ARCHIVED_CLIENTS';
+const ADD_ARCHIVED_CLIENT = 'ADD_ARCHIVED_CLIENT';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const SET_FILTER = 'SET_FILTER';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
@@ -58,6 +59,13 @@ export const archivedClientsReducer = (
         ...state,
         archivedClients: action.clients,
         total: action.total,
+      }
+
+    case ADD_ARCHIVED_CLIENT:
+      return {
+        ...state,
+        archivedClients: [action.client, ...state.archivedClients],
+        total: state.total + 1
       }
 
     case SET_CURRENT_PAGE:
@@ -120,7 +128,7 @@ export const archivedClientsReducer = (
 type ActionsTypes = SetPageSizeAT | SetFilterAT |
     SetArchivedClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
     SetIsFetchingAT | DeleteArchivedClientAT | SetAccessErrorAT | SetSuccessModalAT
-    | setArchivedClientsApiErrorAT;
+    | setArchivedClientsApiErrorAT | AddArchivedClientAT;
 
 // actions creators
 
@@ -169,6 +177,15 @@ type SetArchivedClientsAT = {
 
 const setArchivedClients = (clients: Array<ClientType>, total: number): SetArchivedClientsAT => ({
   type: SET_ARCHIVED_CLIENTS, clients, total
+});
+
+export type AddArchivedClientAT = {
+    type: typeof ADD_ARCHIVED_CLIENT,
+    client: ClientType
+};
+
+export const addArchivedClientAC = (client: ClientType): AddArchivedClientAT => ({
+    type: ADD_ARCHIVED_CLIENT, client
 });
 
 type SetCurrentPageAT = {

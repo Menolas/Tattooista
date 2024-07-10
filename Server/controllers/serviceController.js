@@ -29,9 +29,6 @@ class serviceController {
   }
 
   async updateService(req, res) {
-    // res.service.title = req.body.title.trim();
-    // const conditions = getConditions(req.body);
-    // res.service.conditions = [...conditions];
     const results = {};
 
     try {

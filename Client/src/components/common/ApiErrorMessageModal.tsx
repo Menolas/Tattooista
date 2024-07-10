@@ -17,5 +17,5 @@ export const ApiErrorMessageModal: React.FC<PropsType> = React.memo(({
             <p>Sorry, but something went wrong on the server side, please try with another data or a bit later</p>
             <p>{error}</p>
         </ModalPopUp>
-    )
+    );
 });

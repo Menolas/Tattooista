@@ -11,7 +11,7 @@ type PropsType = {
 export const SuccessPopUp: React.FC<PropsType> = React.memo(({
    isOpen,
    content,
-   closeModal
+   closeModal,
 }) => {
     return (
         <ModalPopUp isOpen={isOpen} closeModal={closeModal}>
@@ -24,5 +24,5 @@ export const SuccessPopUp: React.FC<PropsType> = React.memo(({
             }
 
         </ModalPopUp>
-    )
+    );
 });

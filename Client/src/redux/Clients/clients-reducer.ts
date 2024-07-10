@@ -10,6 +10,7 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {addArchivedClientAC, AddArchivedClientAT} from "../ArchivedClients/archived-clients-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_FILTER = 'SET_FILTER';
@@ -153,7 +154,8 @@ export const clientsReducer = (
 type ActionsTypes = SetApiErrorAT | SetClientsPageSizeAT | SetFilterAT |
     SetClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
     ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT | DeleteClientAT | EditClientAT |
-    AddClientAT | SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT | SetClientApiErrorAT;
+    AddClientAT | SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT | SetClientApiErrorAT
+    | AddArchivedClientAT;
 
 // actions creators
 
@@ -507,6 +509,7 @@ export const archiveClient = (
     let response = await clientsAPI.archiveClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteClientThunk(token, id, clients, currentPage, pageLimit, filter));
+      dispatch(addArchivedClientAC(response.client));
       dispatch(setClientsApiErrorAC(null));
       return true;
     } else {

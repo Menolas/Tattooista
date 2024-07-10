@@ -1,12 +1,12 @@
-import * as React from "react"
-import {useEffect, useState} from "react"
+import * as React from "react";
+import {useEffect, useState} from "react";
 
 type PropsType = {
-  totalCount: number
-  pageSize: number
-  currentPage?: number
-  onPageChanged: (page: number) => void
-  setPageLimit: (pageSize: number) => void
+  totalCount: number;
+  pageSize: number;
+  currentPage?: number;
+  onPageChanged: (page: number) => void;
+  setPageLimit: (pageSize: number) => void;
 }
 
 export const Paginator: React.FC<PropsType> = React.memo(({
@@ -14,19 +14,19 @@ export const Paginator: React.FC<PropsType> = React.memo(({
   pageSize,
   currentPage = 1,
   onPageChanged,
-  setPageLimit
+  setPageLimit,
 }) => {
-  const [isPageLimitEditable, setIsPageLimitEditable] = useState(false)
-  const [limit, setLimit] = useState(pageSize)
+  const [isPageLimitEditable, setIsPageLimitEditable] = useState(false);
+  const [limit, setLimit] = useState(pageSize);
 
   useEffect(()=> {
     setLimit(pageSize)
-  }, [pageSize])
+  }, [pageSize]);
 
-  let pagesCount: number = Math.ceil(totalCount / pageSize)
-  let pages = []
+  let pagesCount: number = Math.ceil(totalCount / pageSize);
+  let pages = [];
   for (let i = 1; i <= pagesCount; i++) {
-    pages.push(i)
+    pages.push(i);
   }
 
   pages = pages
@@ -36,14 +36,13 @@ export const Paginator: React.FC<PropsType> = React.memo(({
           key={page}
           className={currentPage === page ? "pagination__item currentPage" : "pagination__item"}
           onClick={() => {
-              console.log("hey!!!!!!!!!!!!!!")
             onPageChanged(page);
           }}
         >
           {page}
         </li>
-      )
-    })
+      );
+    });
 
   return (
       <div className="pagination">
@@ -54,7 +53,7 @@ export const Paginator: React.FC<PropsType> = React.memo(({
                       <button
                           className={"pagination__pageLimitButton"}
                           onClick={() => {
-                              setIsPageLimitEditable(true)
+                              setIsPageLimitEditable(true);
                           }}
                       >
                           {pageSize}
@@ -71,16 +70,16 @@ export const Paginator: React.FC<PropsType> = React.memo(({
                           type={"number"}
                           autoFocus={true}
                           onChange={(e) => {
-                              setLimit(Number(e.target.value))
+                              setLimit(Number(e.target.value));
                           }}
                           onBlur={() => {
-                              setIsPageLimitEditable(false)
-                              setPageLimit(limit)
+                              setIsPageLimitEditable(false);
+                              setPageLimit(limit);
                           }}
                           onKeyDown={(e) => {
                               if(e.key === "Enter") {
-                                  setIsPageLimitEditable(false)
-                                  setPageLimit(limit)
+                                  setIsPageLimitEditable(false);
+                                  setPageLimit(limit);
                               }
                           }}
                       />
@@ -95,5 +94,5 @@ export const Paginator: React.FC<PropsType> = React.memo(({
           </div>
 
       </div>
-  )
-})
+  );
+});

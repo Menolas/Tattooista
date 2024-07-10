@@ -55,6 +55,24 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
             <div className="admin__card-actions">
                 <button
                     data-tooltip-id="my-tooltip"
+                    data-tooltip-content={!data.status
+                        ? "This potential customer wasn't contacted"
+                        : "This potential customer already contacted"
+                    }
+                    className={"btn btn--icon"}
+                    disabled={true}
+                >
+                    {!data.status
+                        ? <svg>
+                            <use href={`${Sprite}#phone`}/>
+                        </svg>
+                        : <svg>
+                            <use href={`${Sprite}#phone-missed`}/>
+                        </svg>
+                    }
+                </button>
+                <button
+                    data-tooltip-id="my-tooltip"
                     data-tooltip-content="Restore consultation"
                     className={"btn btn--icon"}
                     disabled={isDeletingInProcess?.some(id => id === data._id)}
@@ -67,7 +85,9 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                         });
                     }}
                 >
-                    <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
+                    <svg>
+                        <use href={`${Sprite}#arrow-rotate-left`}/>
+                    </svg>
                 </button>
 
                 <button
@@ -84,7 +104,9 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                         });
                     }}
                 >
-                    <svg><use href={`${Sprite}#trash`}/></svg>
+                    <svg>
+                        <use href={`${Sprite}#trash`}/>
+                    </svg>
                 </button>
             </div>
             <div className="admin__card-details">
@@ -92,7 +114,7 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                     <span className={"admin__card-data-type"}>Name:&nbsp;</span>
                     <span className={"admin__card-data"}>{data.fullName}</span>
                 </div>
-                { contacts }
+                {contacts}
             </div>
             <Confirmation
                 isOpen={confirmationData.needConfirmation}

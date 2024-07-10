@@ -5,7 +5,7 @@ interface PropsType {
     id: string;
     text: string;
     amountOfWords?: number;
-};
+}
 
 export const ReadMore: React.FC<PropsType> = React.memo(({ id, text, amountOfWords = 32 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
@@ -48,5 +48,5 @@ export const ReadMore: React.FC<PropsType> = React.memo(({ id, text, amountOfWor
                 </>
             )}
         </p>
-    )
+    );
 });

@@ -1,6 +1,11 @@
 import { bookingsApi } from "./bookingsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {AddConsultationFormValues, BookConsultationFormValues, BookingType, SearchFilterType} from "../../types/Types";
+import {
+  AddConsultationFormValues,
+  BookConsultationFormValues,
+  BookingType,
+  SearchFilterType
+} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -10,6 +15,10 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {
+  addArchivedBookingAC,
+  AddArchivedBookingAT,
+} from "../ArchivedBookings/archived-bookings-reducer";
 
 const SET_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
 const SET_FILTER = 'SET_BOOKINGS_FILTER';
@@ -141,7 +150,7 @@ type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
      SetFilterAT | SetBookingsAT | SetCurrentPageAT |
      ChangeStatusAT | SetIsFetchingAT |
     ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT | DeleteBookingAT |
-    AddBookingAT | SetAccessErrorAT | SetBookingApiErrorAT;
+    AddBookingAT | SetAccessErrorAT | SetBookingApiErrorAT | AddArchivedBookingAT;
 
 // actions creators
 
@@ -419,6 +428,7 @@ export const archiveBooking = (
     let response = await bookingsApi.archiveBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
+      dispatch(addArchivedBookingAC(response.booking));
       dispatch(setBookingApiErrorAC(null));
       return true;
     } else {

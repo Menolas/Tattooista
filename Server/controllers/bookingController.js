@@ -66,15 +66,31 @@ class bookingController {
     const results = {};
 
     try {
-      if (status === 'any' && !term) {
-        archivedBookings = await ArchivedBooking.find().sort({createdAt: -1});
-      } else if (status !== 'any' && !term) {
-        archivedBookings = await ArchivedBooking.find({status: status}).sort({createdAt: -1});
-      } else if (status !== 'any' && term) {
-        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}, status: status}).sort({createdAt: -1});
-      } else if (status === 'any' && term) {
-        archivedBookings = await ArchivedBooking.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1});
+      let query = {};
+      let searchConditions = [];
+
+      if (term) {
+        const regexSearch = { $regex: term, $options: 'i' };
+        searchConditions = [
+          { fullName: regexSearch },
+          { 'contacts.email': regexSearch },
+          { 'contacts.phone': regexSearch },
+          { 'contacts.whatsapp': regexSearch },
+          { 'contacts.messenger': regexSearch },
+          { 'contacts.insta': regexSearch },
+        ];
       }
+
+      if (status !== 'any') {
+        query = { ...query, status: status };
+      }
+
+      if (searchConditions.length > 0) {
+        query = { ...query, $or: searchConditions };
+      }
+
+      archivedBookings = await ArchivedBooking.find(query).sort({ createdAt: -1 });
+
       results.resultCode = 0;
       results.totalCount = archivedBookings.length;
       results.bookings = archivedBookings.slice(startIndex, endIndex);
@@ -176,16 +192,16 @@ class bookingController {
         phone: res.booking.contacts.phone,
         whatsapp: res.booking.contacts.whatsapp,
         messenger: res.booking.contacts.messenger
-      }
-    })
+      },
+      message: res.booking.message,
+    });
 
     const results = {};
 
     try {
-      await archivedBooking.save();
       await res.booking.remove();
       results.resultCode = 0;
-      results.booking = archivedBooking;
+      results.booking = await archivedBooking.save();
       res.status(201).json(results);
 
     } catch (e) {

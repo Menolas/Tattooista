@@ -12,8 +12,6 @@ type DeleteBookingResponseType = CommonResponseFields;
 
 type TurnBookingToClientResponseType = CommonResponseFields;
 
-type ArchiveBookingResponseType = CommonResponseFields;
-
 type GetBookingsResponseType = CommonResponseFields & {
   bookings: Array<BookingType>;
   totalCount: number;
@@ -27,46 +25,48 @@ type AddBookingResponseType = CommonResponseFields & {
   booking: BookingType
 };
 
+type ArchiveBookingResponseType = AddBookingResponseType;
+
 export const bookingsApi = {
 
-  getBookings(
+  async getBookings(
     token: string | null,
     currentPage: number,
     pageSize: number,
     filter: SearchFilterType
   ) {
-    return instance.get<GetBookingsResponseType>(
+    return await instance.get<GetBookingsResponseType>(
         `bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
     ).then(response => response.data);
   },
 
-  changeConsultationStatus(id: string, status: boolean) {
-    return instance.patch<ChangeBookingStatusResponseType>(`bookings/status/${id}`, {status: status})
+  async changeConsultationStatus(id: string, status: boolean) {
+    return await instance.patch<ChangeBookingStatusResponseType>(`bookings/status/${id}`, {status: status})
       .then(response => response.data);
   },
 
-  deleteConsultation(id: string) {
-    return instance.delete<DeleteBookingResponseType>(`bookings/${id}`)
+  async deleteConsultation(id: string) {
+    return await instance.delete<DeleteBookingResponseType>(`bookings/${id}`)
       .then(response => response.data);
   },
 
-  addConsultation(values: AddConsultationFormValues | BookConsultationFormValues) {
-    return instance.post<AddBookingResponseType>(`bookings`, values)
+  async addConsultation(values: AddConsultationFormValues | BookConsultationFormValues) {
+    return await instance.post<AddBookingResponseType>(`bookings`, values)
         .then(response => response.data);
   },
 
-  turnBookingToClient(
+  async turnBookingToClient(
     id: string,
   ) {
-    return instance.get<TurnBookingToClientResponseType>(`bookings/bookingToClient/${id}`)
+    return await instance.get<TurnBookingToClientResponseType>(`bookings/bookingToClient/${id}`)
         .then(response => response.data);
   },
 
-  archiveBooking(
+  async archiveBooking(
       id: string,
   ) {
-    return instance.get<ArchiveBookingResponseType>(`bookings/archive/${id}`)
+    return await instance.get<ArchiveBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   },
 }

@@ -1,8 +1,8 @@
-import * as React from "react"
+import * as React from "react";
 
 type PropsType = {
-    nothingToShowText?: string
-}
+    nothingToShowText?: string;
+};
 
 export const NothingToShow: React.FC<PropsType> = ({nothingToShowText}) => {
     return (
@@ -12,5 +12,5 @@ export const NothingToShow: React.FC<PropsType> = ({nothingToShowText}) => {
                 {nothingToShowText}
             </p>
         </div>
-    )
-}
+    );
+};
