@@ -275,6 +275,9 @@ img {
 .btn--icon:hover svg {
   fill: #080808;
 }
+.btn--icon:hover span::before {
+  border-color: #080808;
+}
 
 .btn--icon:disabled svg {
   fill: #888;

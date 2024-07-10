@@ -38,7 +38,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   fakeApi,
   pageSize,
   styles,
-  setActiveStyle
+  setActiveStyle,
 }) => {
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -89,5 +89,5 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
               controlsStrategy={"alternate"}
           />
       </section>
-  )
+  );
 });

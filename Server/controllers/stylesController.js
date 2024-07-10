@@ -70,9 +70,16 @@ class stylesController {
         const file = req.files.wallPaper;
         if(!file)  return res.json({error: 'Incorrect input name'});
         const newFileName = generateFileRandomName(file.name);
-        await file.mv(`./uploads/styleWallpapers/${newTattooStyle._id}/${newFileName}`, err => {
-          newTattooStyle.wallPaper = newFileName;
-        })
+        await new Promise((resolve, reject) => {
+          file.mv(`./uploads/styleWallpapers/${newTattooStyle._id}/${newFileName}`, err => {
+            if (err) {
+              reject(err);
+            } else {
+              newTattooStyle.wallPaper = newFileName;
+              resolve();
+            }
+          });
+        });
       }
       results.tattooStyle = await newTattooStyle.save();
       res.status(201).json(results);

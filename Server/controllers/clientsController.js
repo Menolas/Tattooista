@@ -298,7 +298,7 @@ class clientsController {
       const newClient = await ClientService.reactivateClient(res.client);
       if (res.client.avatar) {
         const oldPath = `./uploads/archivedClients/${res.client._id}/avatar/${res.client.avatar}`;
-        const newPath = `./uploads/clients/${client._id}/avatar/${res.client.avatar}`;
+        const newPath = `./uploads/clients/${newClient._id}/avatar/${res.client.avatar}`;
         mv(oldPath, newPath, { mkdirp: true }, function(e) {
           if (e) {
             console.log(e);
