@@ -14,7 +14,7 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
     modalClasses,
     modalTitle,
     closeModal,
-    children
+    children,
 }) => {
 
     const classNames = `modal-wrap ${modalClasses} ${isOpen ? 'open' : ''}`;
@@ -57,5 +57,5 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
           {children}
       </div>
     </div>
-  )
+  );
 });

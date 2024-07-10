@@ -82,5 +82,5 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
                 content={successModal.successText}
             />
         </div>
-    )
+    );
 });

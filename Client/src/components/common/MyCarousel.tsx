@@ -30,5 +30,5 @@ export const MyCarousel: React.FC<MyCarouselProps> = React.memo(({
             disableDotsControls={disableDotsControls}
             syncStateOnPropsUpdate={true}
         />
-    )
+    );
 });

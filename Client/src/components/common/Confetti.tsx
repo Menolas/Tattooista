@@ -1,5 +1,5 @@
-import * as React from "react"
-import Confetti from "react-confetti"
+import * as React from "react";
+import Confetti from "react-confetti";
 
 export const ConfettiContainer: React.FC = () => {
     return (
@@ -8,5 +8,5 @@ export const ConfettiContainer: React.FC = () => {
                 colors={['#000', '#fff']}
             />
         </div>
-    )
-}
+    );
+};

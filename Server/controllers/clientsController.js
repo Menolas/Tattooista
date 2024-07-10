@@ -71,19 +71,38 @@ class clientsController {
     const results = {};
 
     try {
-      if (gallery === 'any' && !term) {
-        archivedClients = await ArchivedClient.find().sort({createdAt: -1});
-      } else if (gallery === 'true' && !term) {
-        archivedClients = await ArchivedClient.find({gallery: { $exists: true, $not: { $size: 0 }}}).sort({createdAt: -1});
-      } else if (gallery === 'false' && !term) {
-        archivedClients = await ArchivedClient.find({gallery: { $exists: true, $size: 0 }}).sort({createdAt: -1});
-      } else if (gallery === 'any' && term) {
-        archivedClients = await ArchivedClient.find({fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1});
-      } else if (gallery === 'true' && term) {
-        archivedClients = await ArchivedClient.find({gallery: { $exists: true, $not: { $size: 0 }}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1});
-      } else if (gallery === 'false' && term) {
-        archivedClients = await ArchivedClient.find({gallery: {$exists: true, $size: 0}, fullName: {$regex: term, $options: 'i'}}).sort({createdAt: -1});
+      let query = {};
+      let searchConditions = [];
+
+      if (term) {
+        const regexSearch = { $regex: term, $options: 'i' };
+        searchConditions = [
+          { fullName: regexSearch },
+          { 'contacts.email': regexSearch },
+          { 'contacts.phone': regexSearch },
+          { 'contacts.whatsapp': regexSearch },
+          { 'contacts.messenger': regexSearch },
+          { 'contacts.insta': regexSearch },
+        ];
       }
+
+      if (gallery === 'true') {
+        query.gallery = { $exists: true, $not: { $size: 0 } };
+      } else if (gallery === 'false') {
+        query.$or = [{ gallery: { $exists: true, $size: 0 } }, { gallery: { $exists: false } }];
+      }
+
+      if (searchConditions.length > 0) {
+        if (Object.keys(query).length > 0) {
+          // If there's already a gallery condition in the query, combine using $and
+          query = { $and: [ { $or: searchConditions }, query ] };
+        } else {
+          // If only term conditions are present, use $or
+          query = { $or: searchConditions };
+        }
+      }
+
+      archivedClients = await ArchivedClient.find(query).sort({createdAt: -1});
 
       results.resultCode = 0;
       results.totalCount = archivedClients.length;
@@ -256,15 +275,14 @@ class clientsController {
             if (e) console.log(e);
           });
         });
-        await archivedClient.save();
       }
 
-      await archivedClient.save();
       fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, e => {
         if (e) console.log(e);
       })
       await res.client.remove();
       results.resultCode = 0;
+      results.archivedClient = await archivedClient.save();
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;

@@ -10,21 +10,21 @@ export const ScrollToTopButton: React.FC = () => {
 
     useEffect(() => {
         const handleScrollButtonVisibility = () => {
-            const scrollPosition = document.documentElement.scrollTop
-            setShowScrollToTopButton(scrollPosition > 300)
+            const scrollPosition = document.documentElement.scrollTop;
+            setShowScrollToTopButton(scrollPosition > 300);
         };
 
-        window.addEventListener('scroll', handleScrollButtonVisibility)
+        window.addEventListener('scroll', handleScrollButtonVisibility);
 
         // Cleanup the event listener on component unmount
         return () => {
-            window.removeEventListener('scroll', handleScrollButtonVisibility)
+            window.removeEventListener('scroll', handleScrollButtonVisibility);
         }
-    }, [])
+    }, []);
 
     const handleScrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth'})
-    }
+        window.scrollTo({ top: 0, behavior: 'smooth'});
+    };
 
     return (
         <>
@@ -41,5 +41,5 @@ export const ScrollToTopButton: React.FC = () => {
                 </div>
             }
         </>
-    )
+    );
 };

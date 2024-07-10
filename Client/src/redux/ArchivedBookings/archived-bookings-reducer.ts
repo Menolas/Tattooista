@@ -13,6 +13,7 @@ import {
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_FILTER = 'SET_FILTER';
 const SET_ARCHIVED_BOOKINGS = 'SET_ARCHIVED_BOOKINGS';
+const ADD_ARCHIVED_BOOKING = 'ADD_ARCHIVED_BOOKING';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
@@ -64,6 +65,13 @@ export const archivedBookingsReducer = (
         ...state,
         archivedBookings: action.archivedBookings,
         totalCount: action.total,
+      }
+
+    case ADD_ARCHIVED_BOOKING:
+      return {
+        ...state,
+        archivedBookings: [action.booking, ...state.archivedBookings],
+        totalCount: state.totalCount + 1,
       }
 
     case SET_CURRENT_PAGE:
@@ -119,7 +127,7 @@ export const archivedBookingsReducer = (
 type ActionsTypes = SetSuccessModalAT | SetPageSizeAT |
     SetFilterAT | SetArchivedBookingsAT | SetCurrentPageAT | SetIsFetchingAT
     | ToggleIsDeletingInProcessAT | DeleteArchivedConsultationAT | SetAccessErrorAT
-    | SetBookingApiErrorAT;
+    | SetBookingApiErrorAT | AddArchivedBookingAT;
 
 // actions creators
 
@@ -153,7 +161,7 @@ export const setPageSizeAC = (pageSize: number): SetPageSizeAT => ({
 type SetFilterAT = {
   type: typeof SET_FILTER
   filter: SearchFilterType
-}
+};
 
 export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
   type: SET_FILTER, filter
@@ -163,16 +171,25 @@ type SetArchivedBookingsAT = {
   type: typeof SET_ARCHIVED_BOOKINGS,
   archivedBookings: Array<BookingType>,
   total: number
-}
+};
 
 const setArchivedBookingsAC = (archivedBookings: Array<BookingType>, total: number): SetArchivedBookingsAT => ({
   type: SET_ARCHIVED_BOOKINGS, archivedBookings, total
 });
 
+export type AddArchivedBookingAT = {
+    type: typeof ADD_ARCHIVED_BOOKING,
+    booking: BookingType
+};
+
+export const addArchivedBookingAC = (booking: BookingType): AddArchivedBookingAT => ({
+    type: ADD_ARCHIVED_BOOKING, booking
+});
+
 type SetCurrentPageAT = {
   type: typeof SET_CURRENT_PAGE,
   currentPage: number
-}
+};
 
 export const setCurrentPageAC = (currentPage: number): SetCurrentPageAT => ({
   type: SET_CURRENT_PAGE, currentPage

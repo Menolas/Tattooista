@@ -7,5 +7,5 @@ export const Preloader: React.FC = () => {
     <div className="preloader">
       <img src={PreloaderImg} alt="" />
     </div>
-  )
+  );
 };

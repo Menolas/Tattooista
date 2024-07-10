@@ -62,7 +62,7 @@ export const ImageFullView: React.FC<PropsType> = React.memo(({
                 />
             </div>
         </div>
-    )
+    );
 });
 
 const Slider = ({GalleryImgUrl}) => {
@@ -71,5 +71,5 @@ const Slider = ({GalleryImgUrl}) => {
             className={"image-full-view__img slider"}
             style={{backgroundImage: `url(${GalleryImgUrl})`}}
         >{''}</div>
-    )
-}
+    );
+};

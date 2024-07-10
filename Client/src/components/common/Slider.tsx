@@ -31,7 +31,7 @@ export const Slider: React.FC<PropsType> = ({
             <SwiperSlide key={index}>
                 {slide}
             </SwiperSlide>
-        )
+        );
     });
 
     return (
@@ -46,5 +46,5 @@ export const Slider: React.FC<PropsType> = ({
         >
             {slides}
         </Swiper>
-    )
-}
+    );
+};

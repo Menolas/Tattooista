@@ -2,17 +2,17 @@ import * as React from "react";
 import {ModalPopUp} from "./ModalPopUp";
 
 type PropsType = {
-    isOpen: boolean
-    content: string
-    confirm: () => void
-    cancel: () => void
+    isOpen: boolean;
+    content: string;
+    confirm: () => void;
+    cancel: () => void;
 }
 
 export const Confirmation: React.FC<PropsType> = React.memo(({
     isOpen,
     content,
     confirm,
-    cancel
+    cancel,
 }) => {
     return (
         <ModalPopUp
@@ -37,5 +37,5 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
                 </div>
             </div>
         </ModalPopUp>
-    )
+    );
 });
