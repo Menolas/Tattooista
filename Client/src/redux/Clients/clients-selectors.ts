@@ -17,7 +17,7 @@ export const getTotalClientsCount = (state: AppStateType) => {
 }
 
 export const getCurrentClientsPage = (state: AppStateType) => {
-  return state.clients.currentPage;
+  return state.clients.clientsCurrentPage;
 }
 
 export const getClientsIsFetching = (state: AppStateType) => {

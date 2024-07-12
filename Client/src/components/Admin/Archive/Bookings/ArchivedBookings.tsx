@@ -10,7 +10,7 @@ import {
     reactivateBooking,
     setFilterAC,
     setPageSizeAC,
-    setCurrentPageAC, setBookingApiErrorAC,
+    setArchiveBookingsCurrentPageAC, setBookingApiErrorAC,
 } from "../../../../redux/ArchivedBookings/archived-bookings-reducer";
 import {
     getFilterSelector,
@@ -38,6 +38,7 @@ export const ArchivedBookings: React.FC = React.memo(() => {
     const totalCount = useSelector(getTotalCountSelector);
     const pageSize = useSelector(getPageSizeSelector);
     const currentPage = useSelector(getCurrentPageSelector);
+    console.log(currentPage + " currentPage out of effect!!!!!!!!!!!!!!")
     const filter = useSelector(getFilterSelector);
     const token = useSelector(getTokenSelector);
     const accessError = useSelector(getAccessErrorSelector);
@@ -45,23 +46,16 @@ export const ArchivedBookings: React.FC = React.memo(() => {
 
     const dispatch = useDispatch();
 
-    //const [hasFetchedItems, setHasFetchedItems] = useState(false);
-
     useEffect(() => {
-        dispatch(getArchivedBookings(token, currentPage, pageSize, filter)).then((response) => {
-            //setHasFetchedItems(true);
-        });
-        // if (token && !hasFetchedItems) {
-        //     dispatch(getArchivedBookings(token, currentPage, pageSize, filter)).then((response) => {
-        //         setHasFetchedItems(true);
-        //     });
-        // }
+        console.log("Fetching archived bookings...");
+        console.log(currentPage + " currentPage inside of effect!!!!!!!!!!!!!!")
+        dispatch(getArchivedBookings(token, currentPage, pageSize, filter));
     }, [token, currentPage, pageSize, filter, dispatch]);
 
     const onPageChangedCallBack = (
         page: number
     ) => {
-        dispatch(setCurrentPageAC(page));
+        dispatch(setArchiveBookingsCurrentPageAC(page));
     }
 
     const setPageSizeCallBack = (

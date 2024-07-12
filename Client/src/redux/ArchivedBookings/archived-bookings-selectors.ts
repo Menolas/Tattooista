@@ -17,7 +17,7 @@ export const getTotalCountSelector = (state: AppStateType) => {
 }
 
 export const getCurrentPageSelector = (state: AppStateType) => {
-  return state.archivedBookings.currentPage;
+  return state.archivedBookings.archivedBookingsCurrentPage;
 }
 
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {

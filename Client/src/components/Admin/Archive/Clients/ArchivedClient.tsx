@@ -121,7 +121,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
                 data?.gallery?.map((item, i) => {
                   return (
                       <li
-                          key={i}
+                          key={`${item}-${i}`}
                           onClick={() => {
                               setCarouselData({isOpen: true, activeIndex: i})
                           }}

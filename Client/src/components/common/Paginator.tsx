@@ -11,7 +11,7 @@ type PropsType = {
 
 export const Paginator: React.FC<PropsType> = React.memo(({
   totalCount,
-  pageSize,
+  pageSize = 5,
   currentPage = 1,
   onPageChanged,
   setPageLimit,
