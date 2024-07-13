@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ModalPopUp} from "./ModalPopUp";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 
 type PropsType = {
     isOpen: boolean;
@@ -15,53 +15,58 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
     confirm,
     cancel,
 }) => {
-    const [focusedButton, setFocusedButton] = useState<'confirm' | 'cancel' | null>(null);
+    const [focusedButton, setFocusedButton] =
+        useState<'confirm' | 'cancel'>('confirm');
     const yesButtonRef = useRef<HTMLButtonElement>(null);
     const noButtonRef = useRef<HTMLButtonElement>(null);
 
-    useEffect(() => {
-        if (isOpen) {
-            yesButtonRef.current?.focus();
-            setFocusedButton('confirm');
-            const handleTabPress = (event: KeyboardEvent) => {
-                if (event.key === "Tab") {
-                    event.preventDefault();
-                    if (document.activeElement === yesButtonRef.current) {
-                        noButtonRef.current?.focus();
-                        setFocusedButton('cancel');
-                    } else {
-                        yesButtonRef.current?.focus();
-                        setFocusedButton('confirm');
-                    }
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+                console.log(focusedButton + ' hit the key Enter!!!!!!!!!!');
+                event.preventDefault();
+                if (focusedButton === 'confirm') {
+                    console.log(focusedButton + ' hit the key Enter on confirm !!!!!!!!!!');
+                    confirm();
+                    cancel();
+                } else if (focusedButton === 'cancel') {
+                    console.log(focusedButton + ' hit the key Enter on cancel !!!!!!!!!!');
+                    cancel();
                 }
-            };
-            document.addEventListener("keydown", handleTabPress);
-            return () => {
-                document.removeEventListener("keydown", handleTabPress);
-            };
-        }
-    }, [isOpen]); // Depend on isOpen to add/remove the event listener
+            }
+
+            if (event.key === "Tab") {
+                event.preventDefault();
+                if (document.activeElement === yesButtonRef.current) {
+                    noButtonRef.current?.focus();
+                    setFocusedButton('cancel');
+                    console.log('hit the key Tab on yes!!!!!!!!!!');
+                } else {
+                    yesButtonRef.current?.focus();
+                    setFocusedButton('confirm');
+                    console.log('hit the key Tab on no!!!!!!!!!!');
+                }
+            }
+        },
+        [focusedButton, confirm, cancel]
+    );
 
     useEffect(() => {
         if (isOpen) {
             yesButtonRef.current?.focus();
             setFocusedButton('confirm');
         }
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent default form submission behavior
-                if (focusedButton === 'confirm') {
-                    confirm();
-                } else if (focusedButton === 'cancel') {
-                    cancel();
-                }
-            }
-        };
-        document.addEventListener("keydown", handleKeyDown);
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [isOpen, confirm, cancel]);
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (isOpen) {
+            console.log(focusedButton + ' focusedButton after modal opened !!!!!!!!!!');
+            document.addEventListener("keydown", handleKeyDown);
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [isOpen, handleKeyDown]);
 
     return (
         <ModalPopUp
@@ -76,7 +81,6 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
                         ref={yesButtonRef}
                         className={`btn ${focusedButton === 'confirm' ? 'btn--dark-bg' : ''}`}
                         onFocus={() => setFocusedButton('confirm')}
-                        onBlur={() => setFocusedButton(null)}
                         onClick={() => {
                             confirm();
                             cancel();
@@ -86,7 +90,6 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
                         ref={noButtonRef}
                         className={`btn ${focusedButton === 'cancel' ? 'btn--dark-bg' : ''}`}
                         onFocus={() => setFocusedButton('cancel')}
-                        onBlur={() => setFocusedButton(null)}
                         onClick={() => {cancel();}}
                     >Nope</button>
                 </div>
