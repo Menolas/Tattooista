@@ -17,7 +17,7 @@ export const archivedBookingsApi = {
 
   async getArchivedBookings(
       token: string,
-      currentPage: number,
+      currentPage = 1,
       pageSize: number,
       filter: SearchFilterType,
   ) {

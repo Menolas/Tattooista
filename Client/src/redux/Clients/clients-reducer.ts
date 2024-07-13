@@ -34,7 +34,7 @@ let initialState = {
   clients: [] as Array<ClientType>,
   total: 0 as number,
   pageSize: 5 as number,
-  currentPage: 1 as number,
+  clientsCurrentPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   isDeletingPicturesInProcess: [] as Array<string>,
@@ -59,7 +59,7 @@ export const clientsReducer = (
       return {
         ...state,
         pageSize: action.clientsPageSize,
-        currentPage: 1
+        clientsCurrentPage: 1
       }
 
     case SET_FILTER:
@@ -78,7 +78,7 @@ export const clientsReducer = (
     case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentPage: action.page,
+        clientsCurrentPage: action.page,
       }
 
     case TOGGLE_IS_FETCHING:
@@ -210,7 +210,7 @@ type SetCurrentPageAT = {
   page: number
 };
 
-export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
+export const setClientsCurrentPageAC = (page: number): SetCurrentPageAT => ({
     type: SET_CURRENT_PAGE, page
 });
 
@@ -299,7 +299,7 @@ const deleteClientThunk = (
       await dispatch(getClients(token, newPage, pageLimit, filter));
     }
     dispatch(deleteClientAC(id));
-    dispatch(setCurrentPageAC(newPage));
+    dispatch(setClientsCurrentPageAC(newPage));
   }
   return true;
 };
@@ -517,7 +517,7 @@ export const archiveClient = (
     }
   } catch (e: any) {
     console.log(e);
-    dispatch(setClientsApiErrorAC(e.response.data.message));
+    dispatch(setClientsApiErrorAC(e.response?.data?.message));
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));

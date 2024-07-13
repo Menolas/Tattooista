@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
   getClients,
-  setCurrentPageAC,
+  setClientsCurrentPageAC,
   deleteClient,
   updateClientGallery,
   deleteClientGalleryPicture,
@@ -47,28 +47,19 @@ export const ClientsContainer: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const [hasFetchedItems, setHasFetchedItems] = useState(false);
-
   useEffect(() => {
-    dispatch(getClients(token, currentPage, pageSize, filter)).then(() => {
-      //setHasFetchedItems(true);
-    });
-    // if (!hasFetchedItems) {
-    //   dispatch(getClients(token, currentPage, pageSize, filter)).then(() => {
-    //     setHasFetchedItems(true);
-    //   });
-    // }
+    dispatch(getClients(token, currentPage, pageSize, filter));
 
   }, [dispatch, token, currentPage, pageSize, filter]);
 
   useEffect(() => {
-    dispatch(setCurrentPageAC(1));
+    dispatch(setClientsCurrentPageAC(1));
   }, [dispatch, filter]);
 
   const setCurrentPageCallBack = (
     page: number
   ) => {
-    dispatch(setCurrentPageAC(page));
+    dispatch(setClientsCurrentPageAC(page));
   };
 
   const onFilterChangedCallBack = (

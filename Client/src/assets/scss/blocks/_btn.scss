@@ -47,6 +47,8 @@
   color: $light-text;
   background-color: $dark;
   border: $dark-border;
+  border-radius: 0;
+  outline: none;
   transition: all 0.3s ease;
 
   &:hover {
@@ -158,6 +160,10 @@
 
 .bookingBtnBlock {
   position: relative;
+}
+
+.btn:focus, .btn:active {
+  border-radius: 0; /* Prevents rounded corners on focus/active */
 }
 
 @media (min-width: 990px) {

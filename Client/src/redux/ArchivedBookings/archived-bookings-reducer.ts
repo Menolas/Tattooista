@@ -27,7 +27,7 @@ let initialState = {
   archivedBookings: [] as Array<BookingType>,
   totalCount: 0 as number,
   pageSize: 5 as number,
-  currentPage: 1 as number,
+  archivedBookingsCurrentPage: 1 as number,
   isFetching: false,
   isDeletingInProcess: [] as Array<string>,
   filter: {
@@ -51,7 +51,7 @@ export const archivedBookingsReducer = (
       return {
         ...state,
         pageSize: action.pageSize,
-        currentPage: 1,
+        archivedBookingsCurrentPage: 1,
       }
 
     case SET_FILTER:
@@ -77,7 +77,7 @@ export const archivedBookingsReducer = (
     case SET_CURRENT_PAGE:
       return {
         ...state,
-        currentPage: action.currentPage,
+        archivedBookingsCurrentPage: action.currentPage,
       }
 
     case TOGGLE_IS_FETCHING:
@@ -104,7 +104,7 @@ export const archivedBookingsReducer = (
       } else {
         return {
           ...state,
-          currentPage: state.currentPage - 1,
+          archivedBookingsCurrentPage: state.archivedBookingsCurrentPage - 1,
         }
       }
 
@@ -191,7 +191,7 @@ type SetCurrentPageAT = {
   currentPage: number
 };
 
-export const setCurrentPageAC = (currentPage: number): SetCurrentPageAT => ({
+export const setArchiveBookingsCurrentPageAC = (currentPage: number): SetCurrentPageAT => ({
   type: SET_CURRENT_PAGE, currentPage
 });
 
@@ -243,7 +243,7 @@ const deleteArchivedBookingThunk = (
       await dispatch(getArchivedBookings(token, newPage, pageLimit, filter));
     }
     dispatch(deleteArchivedBookingAC(id));
-    dispatch(setCurrentPageAC(newPage));
+    dispatch(setArchiveBookingsCurrentPageAC(newPage));
   }
 }
 
@@ -260,7 +260,7 @@ export const getArchivedBookings = (
         currentPage,
         pageSize,
         filter
-    )
+    );
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(''));
       dispatch(setArchivedBookingsAC(response.bookings, response.totalCount));

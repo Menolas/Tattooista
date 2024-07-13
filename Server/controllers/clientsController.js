@@ -134,15 +134,21 @@ class clientsController {
       const client = await ClientService.addClient(req.body);
       if (req.files && req.files.avatar) {
         const file = req.files.avatar;
+        if(!file)  return res.json({error: 'Incorrect input name'});
         const newFileName = generateFileRandomName(file.name);
-        await file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, e => {
-          if (e) console.log(e);
+        await new Promise((resolve, reject) => {
+          file.mv(`./uploads/clients/${client._id}/avatar/${newFileName}`, err => {
+            if (err) {
+                reject(err);
+            } else {
+              client.avatar = newFileName;
+              resolve();
+            }
+          });
         });
-        client.avatar = newFileName;
       }
-      await client.save();
       results.resultCode = 0;
-      results.client = client;
+      results.client = await client.save();
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;
@@ -253,33 +259,55 @@ class clientsController {
     const results = {};
 
     try {
+      const moveOperations = [];
+
       if (res.client.avatar) {
         const oldPath = `./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`;
         const newPath = `./uploads/archivedClients/${archivedClient._id}/avatar/${res.client.avatar}`;
-        mv(oldPath, newPath, { mkdirp: true }, function(e) {
-          if (e) {
-            console.log(e);
-          } else {
-            //console.log("Avatar Successfully moved!!!!!!!")
-          }
-        })
-        archivedClient.avatar = res.client.avatar;
+        if (fs.existsSync(oldPath)) {
+          moveOperations.push(new Promise((resolve, reject) => {
+            mv(oldPath, newPath, {mkdirp: true}, e => {
+              if (e) {
+                reject(e);
+              } else {
+                resolve();
+              }
+            });
+          }));
+          archivedClient.avatar = res.client.avatar;
+        } else {
+          console.log(`File not found: ${oldPath}`);
+        }
+
       }
 
       if (res.client.gallery.length > 0) {
         archivedClient.gallery = [...res.client.gallery];
-        await res.client.gallery.forEach((item, index) => {
+        res.client.gallery.forEach((item, index) => {
           const oldGalleryPath = `./uploads/clients/${res.client._id}/doneTattooGallery/${item}`;
           const newGalleryPath = `./uploads/archivedClients/${archivedClient._id}/doneTattooGallery/${item}`;
-          mv(oldGalleryPath, newGalleryPath, { mkdirp: true },function (e) {
-            if (e) console.log(e);
-          });
+          if (fs.existsSync(oldGalleryPath)) {
+            moveOperations.push(new Promise((resolve, reject) => {
+              mv(oldGalleryPath, newGalleryPath, {mkdirp: true}, function (e) {
+                if (e) reject(e);
+                else resolve();
+              });
+            }));
+          } else {
+            console.log(`File not found: ${oldGalleryPath}`);
+          }
         });
       }
 
-      fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, e => {
-        if (e) console.log(e);
-      })
+      await Promise.all(moveOperations);
+
+      await fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, (err) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+      });
+
       await res.client.remove();
       results.resultCode = 0;
       results.archivedClient = await archivedClient.save();
@@ -296,37 +324,45 @@ class clientsController {
 
     try {
       const newClient = await ClientService.reactivateClient(res.client);
+      const moveOperations = [];
+
       if (res.client.avatar) {
         const oldPath = `./uploads/archivedClients/${res.client._id}/avatar/${res.client.avatar}`;
         const newPath = `./uploads/clients/${newClient._id}/avatar/${res.client.avatar}`;
-        mv(oldPath, newPath, { mkdirp: true }, function(e) {
-          if (e) {
-            console.log(e);
-          } else {
-            //console.log("Avatar Successfully moved!!!!!!!")
-          }
-        });
+        moveOperations.push(new Promise((resolve, reject) => {
+          mv(oldPath, newPath, { mkdirp: true }, function(e) {
+            if (e) reject(e);
+            else resolve();
+          });
+        }));
         newClient.avatar = res.client.avatar;
       }
 
       if (res.client.gallery.length > 0) {
         newClient.gallery = [...res.client.gallery];
-        await res.client.gallery.forEach((item, index) => {
+        res.client.gallery.forEach((item, index) => {
           const oldGalleryPath = `./uploads/archivedClients/${res.client._id}/doneTattooGallery/${item}`;
           const newGalleryPath = `./uploads/clients/${newClient._id}/doneTattooGallery/${item}`;
-          mv(oldGalleryPath, newGalleryPath, { mkdirp: true },function (e) {
-            if (e) console.log(e);
-          });
+          moveOperations.push(new Promise((resolve, reject) => {
+            mv(oldGalleryPath, newGalleryPath, {mkdirp: true}, (err) => {
+              if (err) reject(err);
+              else resolve();
+            });
+          }));
         });
-        await newClient.save();
       }
 
-      await newClient.save();
-      fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, e => {
-        if (e) console.log(e);
+      await Promise.all(moveOperations);
+
+      await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, (err) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
       });
       await res.client.remove();
       results.resultCode = 0;
+      results.client = await newClient.save();
       res.status(201).json(results);
     } catch (e) {
       results.resultCode = 1;

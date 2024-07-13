@@ -241,6 +241,8 @@ img {
   color: #fafafa;
   background-color: #080808;
   border: 2px solid #080808;
+  border-radius: 0;
+  outline: none;
   transition: all 0.3s ease;
 }
 .btn--dark-bg:hover {
@@ -347,6 +349,10 @@ img {
 
 .bookingBtnBlock {
   position: relative;
+}
+
+.btn:focus, .btn:active {
+  border-radius: 0; /* Prevents rounded corners on focus/active */
 }
 
 @media (min-width: 990px) {

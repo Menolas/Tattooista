@@ -91,7 +91,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 archive={archive}
                 setData={setClient}
                 setEditClientMode={setEditClientMode}
-                updateGallery={updateGallery}
                 deleteGalleryItem={deleteGalleryItem}
             />
         )

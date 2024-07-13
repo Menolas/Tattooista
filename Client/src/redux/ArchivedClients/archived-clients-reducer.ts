@@ -266,7 +266,7 @@ export const getArchivedClients = (
       dispatch(setArchivedClients(response.clients, response.totalCount));
     }
   } catch (e: any) {
-    dispatch(setAccessErrorAC(e.response.data.message));
+    dispatch(setAccessErrorAC(e.response?.data?.message));
     console.log(e);
   } finally {
     dispatch(setIsFetchingAC(false));
