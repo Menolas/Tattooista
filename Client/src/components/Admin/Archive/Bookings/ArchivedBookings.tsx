@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useEffect,} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Paginator} from "../../../common/Paginator";
 import {NothingToShow} from "../../../common/NothingToShow";
@@ -49,7 +49,7 @@ export const ArchivedBookings: React.FC = React.memo(() => {
     useEffect(() => {
         console.log("Fetching archived bookings...");
         console.log(currentPage + " currentPage inside of effect!!!!!!!!!!!!!!")
-        dispatch(getArchivedBookings(token, currentPage, pageSize, filter));
+        dispatch(getArchivedBookings(token || "", currentPage, pageSize, filter));
     }, [token, currentPage, pageSize, filter, dispatch]);
 
     const onPageChangedCallBack = (
@@ -74,7 +74,7 @@ export const ArchivedBookings: React.FC = React.memo(() => {
         clientId: string
     ) => {
         dispatch(deleteArchivedBooking(
-            token,
+            token || "",
             clientId,
             archivedBookings,
             currentPage,
@@ -87,7 +87,7 @@ export const ArchivedBookings: React.FC = React.memo(() => {
         id: string
     ) => {
         dispatch(reactivateBooking(
-            token,
+            token || "",
             id,
             archivedBookings,
             currentPage,
@@ -151,3 +151,5 @@ export const ArchivedBookings: React.FC = React.memo(() => {
         </>
     )
 });
+
+ArchivedBookings.displayName = 'ArchivedBookings';

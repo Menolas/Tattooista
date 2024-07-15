@@ -1,5 +1,5 @@
 import {aboutApi, GetPagesResponseType} from "./aboutApi";
-import {PageType} from "../../types/Types";
+import {ApiErrorType, PageType} from "../../types/Types";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType } from "../redux-store";
 import { ResultCodesEnum } from "../../utils/constants";
@@ -18,7 +18,7 @@ const TOGGLE_IS_EDITING = 'TOGGLE_IS_EDITING';
 const ABOUT_PAGE_SUCCESS = "You successfully updated your 'about' block";
 
 
-let initialState = {
+const initialState = {
   page: {} as PageType,
   isFetching: false as boolean,
   isEditing: false as boolean,
@@ -133,16 +133,17 @@ export const editAboutPage = (
   try {
     dispatch(setIsEditingAC(true));
     dispatch(setIsFetchingAC(true));
-    let response = await aboutApi.editAboutPage(FormData);
+    const response = await aboutApi.editAboutPage(FormData);
     apiResponse = response;
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setApiErrorAC(null));
       dispatch(setAboutPageAC(response.page));
       dispatch(setSuccessModalAC(true, ABOUT_PAGE_SUCCESS));
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
   } finally {
     dispatch(setIsFetchingAC(false));
     dispatch(setIsEditingAC(false));

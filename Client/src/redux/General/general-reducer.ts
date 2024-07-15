@@ -1,7 +1,7 @@
 const SET_API_ERROR = 'SET_API_ERROR';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 
-let initialState = {
+const initialState = {
   isFetching: false as boolean,
   apiError: null as null | string,
   successModal: {

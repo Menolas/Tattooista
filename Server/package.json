@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "author": "",
   "license": "ISC",
@@ -27,8 +29,11 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.7.0",
     "@types/mongoose": "^5.11.97",
     "dotenv": "^16.3.1",
+    "eslint": "^9.7.0",
+    "globals": "^15.8.0",
     "nodemon": "^2.0.20"
   }
 }

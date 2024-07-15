@@ -1,14 +1,13 @@
 import * as React from "react";
 // @ts-ignore
 import avatar from "../../../assets/img/fox.webp";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import { UserType } from "../../../types/Types";
 import { NavLink } from "react-router-dom";
 import { API_URL } from "../../../http";
 import { Confirmation } from "../../common/Confirmation";
 import {useState} from "react";
-import { ModalPopUp } from "../../common/ModalPopUp";
 
 type PropsType = {
     data: UserType;
@@ -54,7 +53,7 @@ export const User: React.FC<PropsType> = ({
                         setData(data);
                     }}
                 >
-                    <svg><use href={`${Sprite}#edit`}/></svg>
+                    <EditIcon/>
                 </button>
                 <button
                     data-tooltip-id="my-tooltip"
@@ -70,7 +69,7 @@ export const User: React.FC<PropsType> = ({
                         });
                     }}
                 >
-                    <svg><use href={`${Sprite}#trash`}/></svg>
+                    <TrashIcon/>
                 </button>
             </div>
             <NavLink
@@ -90,8 +89,8 @@ export const User: React.FC<PropsType> = ({
                     </div>
                     <div className="admin__card-detail-item admin__card-roles">
                         <span className={"admin__card-data-type"}>Roles:&nbsp;</span>
-                        { data.roles.length > 0
-                            ? data.roles.map(role => <span key={role._id}>{role.value}</span>)
+                        { data?.roles?.length > 0
+                            ? data?.roles?.map(role => <span key={role._id}>{role.value}</span>)
                             : <span className={"admin__card-data"}>{''}</span>
                         }
                     </div>
@@ -100,7 +99,13 @@ export const User: React.FC<PropsType> = ({
             <Confirmation
                 isOpen={confirmationData.needConfirmation}
                 content={confirmationData.context}
-                confirm={() => confirmationData.cb()}
+                confirm={() => {
+                    if (confirmationData.cb) {
+                        confirmationData.cb();
+                    } else {
+                        console.error("Item ID is undefined or callback function is not provided.");
+                    }
+                }}
                 cancel={closeModal}
             />
         </li>

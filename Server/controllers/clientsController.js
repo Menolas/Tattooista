@@ -204,7 +204,7 @@ class clientsController {
   }
 
   async updateClientGallery(req, res) {
-    if (!req.body.gallery) {
+    if (!req.files) {
       return res.status(400).send({
         message: "Data to update can not be empty!"
       });

@@ -1,5 +1,5 @@
 import {faqApi} from "./faqApi";
-import {FaqType,} from "../../types/Types";
+import {ApiErrorType, FaqType, UpdateFaqValues,} from "../../types/Types";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType } from "../redux-store";
 import { ResultCodesEnum } from "../../utils/constants";
@@ -20,7 +20,7 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCES
 const FAQ_ADD_SUCCESS = "You successfully added a new FAQ item";
 const FAQ_UPDATE_SUCCESS = "You successfully updated a FAQ item";
 
-let initialState = {
+const initialState = {
   faq: [] as Array<FaqType>,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
@@ -123,10 +123,9 @@ type ToggleIsDeletingInProcessAT = {
   id: string
 }
 
-const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
-    {
-      type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
-    });
+// const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
+//   type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
+// });
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
@@ -155,7 +154,7 @@ export const getFaqItems = (): ThunkType => async (
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await faqApi.getFaqItems();
+    const response = await faqApi.getFaqItems();
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setFaqItems(response.faqItems));
       return true;
@@ -171,9 +170,9 @@ export const getFaqItems = (): ThunkType => async (
   }
 }
 
-export const addFaqItem = (values: FaqType): ThunkType => async (dispatch) => {
+export const addFaqItem = (values: UpdateFaqValues): ThunkType => async (dispatch) => {
   try {
-    let response = await faqApi.addFaqItem(values);
+    const response = await faqApi.addFaqItem(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addFaqItemAC(response.faqItem));
       dispatch(setSuccessModalAC(true, FAQ_ADD_SUCCESS));
@@ -181,16 +180,17 @@ export const addFaqItem = (values: FaqType): ThunkType => async (dispatch) => {
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
     return false;
   }
 }
 
-export const updateFaqItem = (id: string, values: any): ThunkType => async (dispatch) => {
+export const updateFaqItem = (id: string, values: UpdateFaqValues): ThunkType => async (dispatch) => {
   try {
-    let response = await faqApi.updateFaqItem(id, values);
+    const response = await faqApi.updateFaqItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateFaqItemAC(id, response.faqItem));
       dispatch(setSuccessModalAC(true, FAQ_UPDATE_SUCCESS));
@@ -198,16 +198,17 @@ export const updateFaqItem = (id: string, values: any): ThunkType => async (disp
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
     return false;
   }
 }
 
 export const deleteFaqItem = (id: string): ThunkType => async (dispatch) => {
   try {
-    let response = await faqApi.deleteFaqItem(id);
+    const response = await faqApi.deleteFaqItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteFaqItemAC(id));
       return true;

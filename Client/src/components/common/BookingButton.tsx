@@ -84,3 +84,5 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
         </div>
     );
 });
+
+BookingButton.displayName = 'BookingButton';

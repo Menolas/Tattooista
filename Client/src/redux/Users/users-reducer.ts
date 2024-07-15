@@ -1,5 +1,5 @@
 import type {} from "redux-thunk/extend-redux";
-import {RoleType, SearchFilterType, UserType} from "../../types/Types";
+import {RoleType, SearchFilterType, UserType, ApiErrorType} from "../../types/Types";
 import { ResultCodesEnum } from "../../utils/constants";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
@@ -27,7 +27,7 @@ const UPDATE_USER_SUCCESS = 'You successfully updated user info!';
 const ADD_USER_SUCCESS = 'You successfully added new user!';
 
 
-let initialState = {
+const initialState = {
     users: [] as Array<UserType>,
     roles: [] as Array<RoleType>,
     totalCount: 0 as number,
@@ -39,7 +39,7 @@ let initialState = {
         term: '',
         condition: 'any'
     } as SearchFilterType,
-    accessError: '' as string | undefined,
+    accessError: null as string | null,
 }
 
 export type InitialStateType = typeof initialState;
@@ -140,10 +140,10 @@ type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
 
 type SetAccessErrorAT = {
     type: typeof SET_ACCESS_ERROR
-    error: string | undefined
+    error: string | null
 }
 
-export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
     type: SET_ACCESS_ERROR, error
 });
 
@@ -244,7 +244,7 @@ type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTyp
 export const getRoles = (): ThunkType => async (dispatch) => {
     try {
         dispatch(toggleIsFetchingAC(true));
-        let response = await usersAPI.getRoles();
+        const response = await usersAPI.getRoles();
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(setRolesAC(response.roles));
             return true;
@@ -267,22 +267,23 @@ export const getUsers = (
 ): ThunkType => async (dispatch) => {
     try {
         dispatch(toggleIsFetchingAC(true));
-        let response = await usersAPI.getUsers(
+        const response = await usersAPI.getUsers(
             token,
             currentPage,
             pageLimit,
             filter
         );
         if (response.resultCode === ResultCodesEnum.Success) {
-            dispatch(setAccessErrorAC(''));
+            dispatch(setAccessErrorAC(null));
             dispatch(setUsersAC(response.users, response.totalCount));
             return true;
         } else {
             return false;
         }
-    } catch (e: any) {
-        dispatch(setAccessErrorAC(e.response.message));
-        console.log(e);
+    } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setAccessErrorAC(error.response.data.message));
+        console.log(error);
         return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
@@ -322,7 +323,7 @@ export const deleteUser = (
 ) => {
     try {
         dispatch(toggleIsDeletingInProcessAC(true, id));
-        let response = await usersAPI.deleteUser(id);
+        const response = await usersAPI.deleteUser(id);
         if (response.resultCode === ResultCodesEnum.Success) {
             await dispatch(deleteUserThunk(token, id, users, currentPage, pageLimit, filter));
             return true;
@@ -343,7 +344,7 @@ export const updateUser = (
 ): ThunkType => async (dispatch) => {
     try {
         dispatch(toggleIsFetchingAC(true));
-        let response = await usersAPI.updateUser(id, values);
+        const response = await usersAPI.updateUser(id, values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(editUserAC(response.user));
             dispatch(setSuccessModalAC(true, UPDATE_USER_SUCCESS));
@@ -351,8 +352,9 @@ export const updateUser = (
         } else {
             return false;
         }
-    } catch (e: any) {
-        dispatch(setApiErrorAC(e.response.message));
+    } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setApiErrorAC(error.response.data.message));
         return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
@@ -364,7 +366,7 @@ export const addUser = (
     values: FormData,
 ): ThunkType => async (dispatch) => {
     try {
-        let response = await usersAPI.addUser(values);
+        const response = await usersAPI.addUser(values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addUserAC(response.user));
             dispatch(setSuccessModalAC(true, ADD_USER_SUCCESS));
@@ -372,8 +374,9 @@ export const addUser = (
         } else {
             return false;
         }
-    } catch (e: any) {
-        dispatch(setApiErrorAC(e.response.data.message));
+    } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setApiErrorAC(error.response.data.message));
         return false;
     }
 }

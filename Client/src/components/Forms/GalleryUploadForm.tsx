@@ -2,8 +2,7 @@ import * as React from "react";
 import {useState} from "react";
 import {Field, Form, Formik} from "formik";
 import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid } from "../../utils/validators";
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import {ReactComponent as TrashIcon} from "../../assets/svg/trash.svg";
 import {API_URL} from "../../http";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
@@ -17,16 +16,20 @@ const filesUploadingValidationSchema = Yup.object().shape({
       .max(5, "You can upload up to 5 files")
       .of(
           Yup.mixed()
-              .test('fileSize', "Max allowed size is 2MB ", (value: File) => {
-                if (!value) return true
+              .test('fileSize', "Max allowed size is 2MB ", (value) => {
+                if (!(value instanceof File)) return true
                 return isFileSizeValid([value], MAX_FILE_SIZE)
               })
-              .test('fileType', "Invalid file type", (value: File) => {
-                if (!value) return true
+              .test('fileType', "Invalid file type", (value) => {
+                if (!(value instanceof File)) return true
                 return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
               })
       ),
 });
+
+type FormValues = {
+  gallery: File[];
+};
 
 type PropsType = {
   styleID?: string;
@@ -50,34 +53,38 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
 
   const dispatch = useDispatch();
 
-  const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>, setImageURLS) => {
+  const handleOnFileUploadChange = (
+      event: React.ChangeEvent<HTMLInputElement>,
+      setImageURLS: React.Dispatch<React.SetStateAction<never[]>>
+  ) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
       setImageURLS([]);
-      // @ts-ignore
-      let files = [...event.target.files] || [];
-      files.forEach((item, index) => {
-        let reader = new FileReader();
+      // @ts-expect-error
+      const files = [...event.target.files] || [];
+      files.forEach((item) => {
+        const reader = new FileReader();
         reader.onloadend = () => {
+          // @ts-expect-error
           setImageURLS(_=>[..._,reader.result]);
         }
         reader.readAsDataURL(item);
       });
     }
-  }
+  };
 
-  const submit = async (values) => {
+  const submit = async (values: FormValues) => {
     const formData = new FormData();
     values['gallery'].forEach((file: File) => formData.append(file.name, file));
-    formData.append('gallery', values['gallery']);
-    if (isEditPortfolio) await dispatch(updateGallery(styleID, formData));
-    if (!isEditPortfolio) await dispatch(updateClientGallery(client._id, formData));
+    console.log(JSON.stringify(formData));
+    if (isEditPortfolio && styleID !== undefined) await dispatch(updateGallery(styleID, formData));
+    if (!isEditPortfolio && client) await dispatch(updateClientGallery(client?._id, formData));
     closeModal();
-  }
+  };
 
   const initialValues = {
     gallery: []
-  }
+  };
 
   return (
     <Formik
@@ -92,7 +99,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 client?.gallery &&
                 <ul className={"list client-gallery"}>
                   {
-                    client.gallery.map((item,i) => {
+                    client.gallery.map((item, i) => {
                       return (
                           <li className={"client-gallery__item"} key={i}>
                             <button
@@ -100,10 +107,10 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                 disabled={isDeletingPicturesInProcess?.some(id => id === item)}
                                 onClick={(event) => {
                                   event.preventDefault();
-                                  deleteClientGalleryPicture(client._id, item);
+                                  deleteClientGalleryPicture?.(client._id, item);
                                 }}
                             >
-                              <svg><use href={`${Sprite}#trash`}/></svg>
+                              <TrashIcon />
                             </button>
                             <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
                           </li>
@@ -145,8 +152,8 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 accept="image/*,.png,.jpg,.web,.jpeg,.webp"
                 value={undefined}
                 multiple
-                onChange={(e) => {
-                  propsF.setFieldValue('gallery', Array.from(e.currentTarget.files))
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  propsF.setFieldValue('gallery', Array.from(e.currentTarget.files || []))
                   handleOnFileUploadChange(e, setImageURLS)
                 }}
               />
@@ -165,5 +172,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
         )
       }}
     </Formik>
-  )
+  );
 });
+
+GalleryUploadForm.displayName = 'GalleryUploadForm';

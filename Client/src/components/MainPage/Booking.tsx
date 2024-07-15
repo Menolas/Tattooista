@@ -2,7 +2,7 @@ import * as React from "react";
 import {BookingForm} from "../Forms/BookingForm";
 
 type PropsType = {
-  apiError: string;
+  apiError: string | null;
   consentId: string;
 }
 
@@ -24,5 +24,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
         <div className = "booking__img-wrap">{''}</div>
       </div>
     </section>
-  )
+  );
 });
+
+Booking.displayName = 'Booking';

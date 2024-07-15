@@ -16,7 +16,7 @@ export type UserType = {
     email: string;
     isActivated: boolean;
     avatar: string;
-    roles: Array<RoleType> | Array<String>;
+    roles: Array<RoleType>;
 }
 
 export interface ContactType {
@@ -34,7 +34,7 @@ export type ContactsType = {
 export type ClientType = {
     _id: string;
     fullName: string;
-    createdAt?: any;
+    createdAt?: Date;
     contacts: ContactType;
     avatar?: File | string;
     gallery?: Array<string>;
@@ -46,11 +46,16 @@ export type BookingType = {
     message?: string;
     status?: boolean;
     createdAt?: string;
-    contacts: {};
+    contacts: ContactType;
 }
 
 export type FaqType = {
     _id: string;
+    answer: string;
+    question: string;
+}
+
+export type UpdateFaqValues = {
     answer: string;
     question: string;
 }
@@ -62,6 +67,18 @@ export type ServiceType = {
     conditions: Array<string>;
 }
 
+export type UpdateServiceFormValues = {
+    wallPaper: File | string | undefined;
+    title: string;
+    condition_0: string | undefined;
+    condition_1: string | undefined;
+    condition_2: string | undefined;
+    condition_3: string | undefined;
+    condition_4: string | undefined;
+    condition_5: string | undefined;
+    [key: string]: string | File | undefined;
+}
+
 export type StyleType = {
     _id: string;
     value: string;
@@ -71,15 +88,21 @@ export type StyleType = {
     createdAt?: Date;
 }
 
-export type GalleryCreatedAtType = {
+export type UpdateStyleFormValues = {
+    value: string;
+    wallPaper?: File | string | null;
+    description: string;
+}
+
+export type CreatedAtType = {
     $date: string;
 }
 
 export type GalleryItemType = {
     _id: string;
     fileName: string;
-    tattooStyles: Array<String>;
-    createdAt?: GalleryCreatedAtType;
+    tattooStyles: Array<string>;
+    createdAt?: CreatedAtType;
 }
 
 export interface RegistrationFormValues {
@@ -131,7 +154,8 @@ export interface UpdateUserFormValues {
     displayName: string;
     email: string;
     password?: string;
-    roles: Array<string>;
+    roles: { [key: string]: boolean };
+    [key: string]: any;
 }
 
 export type PageType = {
@@ -141,6 +165,12 @@ export type PageType = {
     title: string;
     content: string;
     wallPaper: string;
+}
+
+export type UpdateAboutPageFormValues = {
+    aboutPageWallPaper: File | string;
+    aboutPageTitle: string;
+    aboutPageContent: string;
 }
 
 export type SelectOptionType = {
@@ -156,4 +186,14 @@ export type SearchFilterType = {
 export type CommonResponseFields = {
     resultCode: number;
     message?: string;
+}
+
+export interface ApiErrorType {
+    response: {
+        data: {
+            message: string;
+            // Include other properties as needed
+        };
+        status?: number;
+    };
 }

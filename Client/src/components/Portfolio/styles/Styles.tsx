@@ -2,15 +2,14 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
 import {StyleType} from "../../../types/Types";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {UpdateStyleForm} from "../../Forms/UpdateStyleForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
 import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 import {Advertisement} from "../Advertisement";
-import {MyCarousel} from "../../common/MyCarousel";
 import {Preloader} from "../../common/Preloader";
 import {Slider} from "../../common/Slider";
 
@@ -28,10 +27,10 @@ const responsive = {
 
 type PropsType = {
   apiError: null | string;
-  isAuth: string;
+  isAuth: string | null;
   isFetching: boolean;
   styles: Array<StyleType>;
-  activeStyle: StyleType;
+  activeStyle: StyleType | null;
   isDeletingInProcess: Array<string>;
   resetActiveStyle: (style: StyleType) => void;
   remove: (id: string) => void;
@@ -51,7 +50,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
 }) => {
   const [addMode, setAddMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [style, setStyle] = useState(null);
+  const [style, setStyle] = useState<StyleType | null>(null);
   const [confirmationData, setConfirmationData] = useState<{
     needConfirmation: boolean,
     itemId?: string,
@@ -83,13 +82,18 @@ export const Styles: React.FC<PropsType> = React.memo(({
   }
 
   const removeCallBack = () => {
-    remove(activeStyle._id);
+    if (activeStyle && activeStyle._id) {
+      remove(activeStyle._id);
+    } else {
+      // Handle the case where activeStyle or activeStyle._id is undefined
+      console.error("Attempted to remove an undefined style");
+    }
   }
 
   const stylesArray = styles
     ?.map((item) => {
         return (
-            <Style activeStyle={activeStyle} item={item} resetActiveStyle={resetActiveStyle} />
+            <Style key={item._id} activeStyle={activeStyle} item={item} resetActiveStyle={resetActiveStyle} />
         )
     });
 
@@ -117,26 +121,24 @@ export const Styles: React.FC<PropsType> = React.memo(({
                       setStyle(activeStyle);
                     }}
                 >
-                  <svg><use href={`${Sprite}#edit`}/></svg>
+                  <EditIcon/>
                 </button>
                 { !activeStyle?.nonStyle &&
                     <button
                         data-tooltip-id="my-tooltip"
                         data-tooltip-content="Delete tattoo style"
                         className={"btn btn--icon"}
-                        disabled={isDeletingInProcess?.some(id => id === activeStyle._id)}
+                        disabled={isDeletingInProcess?.some(id => id === activeStyle?._id)}
                         onClick={() => {
                           setConfirmationData({
                             needConfirmation: true,
-                            itemId: activeStyle._id,
+                            itemId: activeStyle?._id,
                             context: 'Are you sure? You about to delete this tattoo style along with all images.',
                             cb: removeCallBack
                           });
                         }}
                     >
-                      <svg>
-                        <use href={`${Sprite}#trash`}/>
-                      </svg>
+                      <TrashIcon/>
                     </button>
                 }
               </div>
@@ -174,7 +176,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
         <Confirmation
             isOpen={confirmationData.needConfirmation}
             content={confirmationData.context}
-            confirm={() => confirmationData.cb()}
+            confirm={() => confirmationData.cb ? confirmationData.cb() : undefined}
             cancel={closeConfirmationModalCallBack}
         />
         <Tooltip id="my-tooltip" />
@@ -183,7 +185,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
 });
 
 const Style = ({activeStyle, item, resetActiveStyle}: {
-  activeStyle: StyleType,
+  activeStyle: StyleType | null,
   item: StyleType,
   resetActiveStyle: (style: StyleType) => void
 }) => {
@@ -194,5 +196,7 @@ const Style = ({activeStyle, item, resetActiveStyle}: {
       >
         {item.value}
       </div>
-  )
-}
+  );
+};
+
+Styles.displayName = 'Styles';

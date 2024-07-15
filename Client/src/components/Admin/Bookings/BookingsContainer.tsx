@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useEffect,} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getBookings,
@@ -45,23 +45,8 @@ export const BookingsContainer: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  //const [hasFetchedItems, setHasFetchedItems] = useState(false);
-
-  // useEffect(() => {
-  //   // This effect resets hasFetchedItems to false whenever currentPage changes,
-  //   // ensuring that the fetching logic below can be re-executed.
-  //   setHasFetchedItems(false);
-  // }, [currentPage]);
-
   useEffect(() => {
-    dispatch(getBookings(token, currentPage, pageSize, filter)).then(() => {
-      //setHasFetchedItems(true);
-    });
-    // if (!hasFetchedItems) {
-    //   dispatch(getBookings(token, currentPage, pageSize, filter)).then(() => {
-    //     setHasFetchedItems(true);
-    //   });
-    // }
+    dispatch(getBookings(token || "", currentPage, pageSize, filter));
   }, [token, currentPage, pageSize, filter]);
 
   useEffect(() => {
@@ -90,13 +75,13 @@ export const BookingsContainer: React.FC = () => {
   const removeCallBack = (
       id: string,
   ) => {
-    dispatch(deleteBooking(token, id, bookings, currentPage, pageSize, filter));
+    dispatch(deleteBooking(token || "", id, bookings, currentPage, pageSize, filter));
   };
 
   const turnBookingToClientCallBack = (
     id: string,
   ) => {
-    dispatch(turnBookingToClient(token, id, bookings, currentPage, pageSize, filter));
+    dispatch(turnBookingToClient(token || "", id, bookings, currentPage, pageSize, filter));
   };
 
   const setPageSizeCallBack = (
@@ -106,7 +91,7 @@ export const BookingsContainer: React.FC = () => {
   };
 
   const archiveCallBack = (id: string) => {
-    dispatch(archiveBooking(token, id, bookings, currentPage, pageSize, filter));
+    dispatch(archiveBooking(token || "", id, bookings, currentPage, pageSize, filter));
   };
 
   const setBookingApiErrorCallBack = () => {

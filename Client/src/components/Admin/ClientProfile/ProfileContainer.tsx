@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import {
   getClientProfile,
   deleteClientGalleryPicture,
@@ -26,15 +26,14 @@ export const ProfileContainer: React.FC = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    let actualId = profile._id;
-    if(!!profile) actualId = profile._id;
-    if (!!urlParams.get('clientId')) actualId = urlParams.get('clientId');
-    dispatch(getClientProfile(actualId));
+    let actualId: string | null = profile?._id;
+    if (urlParams.get('clientId')) actualId = urlParams.get('clientId');
+    if (actualId) dispatch(getClientProfile(actualId));
 
   }, []);
 
   useEffect(() => {
-    if(!!profile) navigate(`?clientId=${profile._id}`)
+    if(profile) navigate(`?clientId=${profile._id}`)
   }, [profile]);
 
   const deleteClientCallBack = (clientId: string) => {

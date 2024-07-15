@@ -1,7 +1,7 @@
 import { bookingsApi } from "./bookingsApi";
 import { ResultCodesEnum } from "../../utils/constants";
 import {
-  AddConsultationFormValues,
+  AddConsultationFormValues, ApiErrorType,
   BookConsultationFormValues,
   BookingType,
   SearchFilterType
@@ -36,7 +36,7 @@ const SET_BOOKING_API_ERROR = 'SET_BOOKING_API_ERROR';
 const BOOKING_SUCCESS = "Congratulation! You've just submitted new request for consultation.";
 const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You've just created a client from a consultation request.";
 
-let initialState = {
+const initialState = {
   bookings: [] as Array<BookingType>,
   total: 0 as number,
   pageSize: 5 as number,
@@ -48,7 +48,7 @@ let initialState = {
     term: '' as string | null,
     condition: 'any' as string | null
   } as SearchFilterType,
-  accessError: '' as string | undefined,
+  accessError: null as string | null,
   bookingApiError: null as null | string,
 };
 
@@ -155,27 +155,27 @@ type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
 // actions creators
 
 type SetBookingApiErrorAT = {
-  type: typeof SET_BOOKING_API_ERROR
-  error: string | null
-}
+  type: typeof SET_BOOKING_API_ERROR;
+  error: string | null;
+};
 
 export const setBookingApiErrorAC = (error: string | null): SetBookingApiErrorAT => ({
   type: SET_BOOKING_API_ERROR, error
 });
 
 type SetAccessErrorAT = {
-  type: typeof SET_ACCESS_ERROR
-  error: string | undefined
-}
+  type: typeof SET_ACCESS_ERROR;
+  error: string | null;
+};
 
-export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
 });
 
 type SetPageSizeAT = {
-  type: typeof  SET_PAGE_SIZE
-  pageSize: number
-}
+  type: typeof  SET_PAGE_SIZE;
+  pageSize: number;
+};
 
 export const setPageSizeAC = (pageSize: number): SetPageSizeAT => ({
     type: SET_PAGE_SIZE, pageSize
@@ -301,7 +301,7 @@ export const getBookings = (
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await bookingsApi.getBookings(
+    const response = await bookingsApi.getBookings(
       token,
       currentPage,
       pageSize,
@@ -314,9 +314,10 @@ export const getBookings = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setAccessErrorAC(e.response?.data?.message));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setAccessErrorAC(error.response?.data?.message));
+    console.log(error);
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -330,7 +331,7 @@ export const changeStatus = (
 
   try {
     dispatch(toggleIsStatusChangingAC(true, id));
-    let response = await bookingsApi.changeConsultationStatus(id, status);
+    const response = await bookingsApi.changeConsultationStatus(id, status);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(changeStatusAC(id, response.status));
       return true;
@@ -355,7 +356,7 @@ export const deleteBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await bookingsApi.deleteConsultation(id);
+    const response = await bookingsApi.deleteConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       return true;
@@ -374,7 +375,7 @@ export const addBooking = (
   values: AddConsultationFormValues | BookConsultationFormValues,
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await bookingsApi.addConsultation(values);
+    const response = await bookingsApi.addConsultation(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookingAC(response.booking));
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
@@ -382,8 +383,9 @@ export const addBooking = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response.data.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message));
     return false;
   }
 }
@@ -398,7 +400,7 @@ export const turnBookingToClient = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await bookingsApi.turnBookingToClient(id);
+    const response = await bookingsApi.turnBookingToClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setBookingApiErrorAC(null));
@@ -407,8 +409,9 @@ export const turnBookingToClient = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setBookingApiErrorAC(e.response.data.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setBookingApiErrorAC(error.response?.data?.message));
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
@@ -425,7 +428,7 @@ export const archiveBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await bookingsApi.archiveBooking(id);
+    const response = await bookingsApi.archiveBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(addArchivedBookingAC(response.booking));
@@ -434,9 +437,10 @@ export const archiveBooking = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    console.log(e);
-    dispatch(setBookingApiErrorAC(e.response.data.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    console.log(error);
+    dispatch(setBookingApiErrorAC(error.response?.data?.message));
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));

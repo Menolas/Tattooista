@@ -3,6 +3,11 @@ import Select from "react-select";
 import * as React from "react";
 import {useState} from "react";
 
+type OptionType = {
+    value: string;
+    label: string;
+};
+
 type PropsType = {
     name: string;
     options: any;
@@ -18,7 +23,7 @@ export const FormSelect: React.FC<PropsType> = ({
 }) => {
 
     const [field, meta, helpers] = useField(name);
-    let [menuIsOpen, setMenuIsOpen] = useState(false);
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
 
     return (
         <Select
@@ -37,7 +42,7 @@ export const FormSelect: React.FC<PropsType> = ({
                 helpers.setValue(selectedOption.value);
                 handleChange(selectedOption.value);
             }}
-            value={options.find((option) => option.value === field.value)}
+            value={options.find((option: OptionType) => option.value === field.value)}
         />
     )
 }

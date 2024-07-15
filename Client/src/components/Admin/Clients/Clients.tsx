@@ -19,7 +19,7 @@ type PropsType = {
   totalCount: number;
   currentPage: number;
   pageSize: number;
-  accessError: string;
+  accessError: string | null;
   clients: Array<ClientType>;
   clientsFilter: SearchFilterType;
   isDeletingInProcess: Array<string>;
@@ -28,7 +28,6 @@ type PropsType = {
   onFilterChanged: (filter: SearchFilterType) => void;
   remove: (clientId: string) => void;
   setPageLimit: (clientsPageSize: number) => void;
-  updateGallery: (clientId: string, values: FormData) => void;
   deleteGalleryItem: (clientId: string, picture: string) => void;
   archive: (clientId: string) => void;
   setClientsApiError: () => void;
@@ -51,7 +50,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
     onFilterChanged,
     remove,
     setPageLimit,
-    updateGallery,
     deleteGalleryItem,
     archive,
     setClientsApiError,
@@ -60,7 +58,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
 
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
-  const [client, setClient] = useState<ClientType>(null);
+  const [client, setClient] = useState<ClientType | null>(null);
 
   useEffect(() => {
     if ((addClientMode || editClientMode) && apiError === null) {
@@ -160,5 +158,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
               </>
           }
       </>
-  )
+  );
 });
+
+Clients.displayName = 'Clients';

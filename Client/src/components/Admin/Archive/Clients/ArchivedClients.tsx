@@ -94,7 +94,7 @@ export const ArchivedClients: React.FC = React.memo(() => {
         .map(data => {
             return (
                 <ArchivedClient
-                    key={data._id}
+                    key={data?._id}
                     data={data}
                     isDeletingInProcess={isDeletingInProcess}
                     remove={removeCallBack}
@@ -136,5 +136,7 @@ export const ArchivedClients: React.FC = React.memo(() => {
                 closeModal={setArchivedClientsApiErrorCallBack}
             />
         </>
-    )
+    );
 });
+
+ArchivedClients.displayName = 'ArchivedClients';

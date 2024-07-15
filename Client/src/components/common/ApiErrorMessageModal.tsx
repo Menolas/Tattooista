@@ -3,7 +3,7 @@ import {ModalPopUp} from "./ModalPopUp";
 
 type PropsType = {
     isOpen: boolean;
-    error: string;
+    error: string | null;
     closeModal: () => void;
 }
 
@@ -19,3 +19,5 @@ export const ApiErrorMessageModal: React.FC<PropsType> = React.memo(({
         </ModalPopUp>
     );
 });
+
+ApiErrorMessageModal.displayName = 'ApiErrorMessageModal';

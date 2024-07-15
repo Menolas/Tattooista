@@ -20,16 +20,18 @@ import {
 } from "../../../../redux/ArchivedGallery/archived-gallery-reducer";
 import {getStyles,} from "../../../../redux/Styles/styles-reducer";
 import { API_URL } from "../../../../http";
-// @ts-ignore
-import Sprite from "../../../../assets/svg/sprite.svg"
-import {NothingToShow} from "../../../common/NothingToShow"
-import {ModalPopUp} from "../../../common/ModalPopUp"
-import {UpdateGalleryItemForm} from "../../../Forms/UpdateGalleryItemForm"
-import {Tooltip} from "react-tooltip"
+import {ReactComponent as EditIcon} from "../../../../assets/svg/edit.svg";
+import {ReactComponent as TrashIcon} from "../../../../assets/svg/trash.svg";
+import {ReactComponent as ArrowRotateLeftIcon} from "../../../../assets/svg/arrow-rotate-left.svg";
+import {NothingToShow} from "../../../common/NothingToShow";
+import {ModalPopUp} from "../../../common/ModalPopUp";
+import {UpdateGalleryItemForm} from "../../../Forms/UpdateGalleryItemForm";
+import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../../common/Confirmation";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Preloader} from "../../../common/Preloader";
 import {ImageFullView} from "../../../common/ImageFullView";
+import {GalleryItemType} from "../../../../types/Types";
 
 export const ArchivedGallery: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -79,7 +81,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
         dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
     }
 
-    const [ editGalleryItem, setEditGalleryItem ] = useState(null);
+    const [ editGalleryItem, setEditGalleryItem ] = useState<GalleryItemType | null>(null);
     const closeGalleryItemEditModal = () => {
         setEditGalleryItem(null);
     }
@@ -108,7 +110,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                             setEditGalleryItem(item);
                         }}
                     >
-                        <svg><use href={`${Sprite}#edit`}/></svg>
+                        <EditIcon/>
                     </button>
                     <button
                         data-tooltip-id="my-tooltip"
@@ -123,7 +125,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                                 cb: reactivateArchivedGalleryItemCallBack });
                         }}
                     >
-                        <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
+                        <ArrowRotateLeftIcon/>
                     </button>
                     <button
                         data-tooltip-id="my-tooltip"
@@ -138,7 +140,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                             });
                         }}
                     >
-                        <svg><use href={`${Sprite}#trash`}/></svg>
+                        <TrashIcon/>
                     </button>
                 </div>
             </li>
@@ -171,13 +173,12 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                     isOpen={carouselData.isOpen}
                     gallery={archivedGallery}
                     activeIndex={carouselData.activeIndex}
-                    //fakeApi={fakeApi}
                     closeImg={()=>{setCarouselData({isOpen: false});}}
                     imgUrl={`${API_URL}/archivedGallery/`}
                 />
             }
             <ModalPopUp
-                isOpen={editGalleryItem}
+                isOpen={!!editGalleryItem}
                 closeModal={closeGalleryItemEditModal}
                 modalTitle={'Update tattoo styles for this image'}
             >
@@ -187,7 +188,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                         folder={'archivedGallery'}
                         galleryItem={editGalleryItem}
                         styles={styles}
-                        activeStyleId={activeStyle._id}
+                        activeStyleId={activeStyle?._id || ''}
                         closeModal={closeGalleryItemEditModal}
                     />
                 }
@@ -195,10 +196,18 @@ export const ArchivedGallery: React.FC = React.memo(() => {
             <Confirmation
                 isOpen={confirmationData.needConfirmation}
                 content={confirmationData.context}
-                confirm={() => confirmationData.cb(confirmationData.itemId)}
+                confirm={() => {
+                    if (confirmationData.cb && confirmationData.itemId) {
+                        confirmationData.cb(confirmationData.itemId);
+                    } else {
+                        console.error("Item ID is undefined or callback function is not provided.");
+                    }
+                }}
                 cancel={closeModal}
             />
             <Tooltip id="my-tooltip" />
         </>
     )
 });
+
+ArchivedGallery.displayName = 'ArchivedGallery';

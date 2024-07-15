@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {
   isFileSizeValid,
@@ -11,13 +11,12 @@ import {
 } from "../../utils/validators";
 import {AddClientFormValues, ClientType} from "../../types/Types";
 import {API_URL} from "../../http";
-// @ts-ignore
-import avatar from "../../assets/img/fox.webp";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import * as Yup from "yup";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {useDispatch} from "react-redux";
 import {editClient, addClient} from "../../redux/Clients/clients-reducer";
+import {DefaultAvatar} from "../common/DefaultAvatar";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -28,7 +27,12 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     email: Yup.string()
         .email("Email should have correct format")
         .when(['phone', 'insta', 'messenger', 'whatsapp'], {
-          is: (phone, insta, messenger, whatsapp) =>
+          is: (
+              phone: string | undefined,
+              insta: string | undefined,
+              messenger: string | undefined,
+              whatsapp: string | undefined
+          ) =>
               !phone && !insta && !messenger && !whatsapp,
           then: () => Yup.string().required('At least one field must be filled'),
         }),
@@ -47,13 +51,23 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   if (!isEditing || hasNewFile) {
     schema = schema.concat(Yup.object().shape({
       avatar: Yup.mixed()
-          .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-            if (!value) return true
-            return isFileSizeValid([value], MAX_FILE_SIZE);
+          .test(
+              'fileSize',
+              'Max allowed size is 1024*1024',
+              (value) => {
+            if (value instanceof File) {
+              return isFileSizeValid([value], MAX_FILE_SIZE);
+            }
+            return true;
           })
-          .test('fileType', 'Invalid file type', (value: File) => {
-            if (!value) return true
-            return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+          .test(
+              'fileType',
+              'Invalid file type',
+              (value) => {
+            if (value instanceof File) {
+              return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+            }
+            return true;
           }),
     }));
   }
@@ -63,7 +77,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 type PropsType = {
   apiError: string | null;
   isEditing: boolean;
-  data: ClientType;
+  data: ClientType | null;
   closeModal: () => void;
 }
 
@@ -80,7 +94,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
 
   const dispatch = useDispatch();
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
@@ -104,13 +118,19 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
     whatsapp: data?.contacts?.whatsapp ?? ''
   }
 
-  const submit = async (values: AddClientFormValues, actions: FormikHelpers<FormikValues>) => {
+  const submit = async (values: AddClientFormValues, actions: FormikHelpers<AddClientFormValues>) => {
     const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
+    Object.keys(values).forEach((key) => {
+      const valueKey = key as keyof AddClientFormValues;
+      const value = values[valueKey];
+      if (value instanceof File) {
+        formData.append(valueKey, value);
+      } else if (typeof value === 'string') {
+        formData.append(valueKey, value);
+      }
+    });
     let success;
-    if (isEditing) {
+    if (isEditing && data) {
       success = await dispatch(editClient(data._id, formData));
     } else {
       success = await dispatch(addClient(formData));
@@ -135,15 +155,12 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
           <Form className="form form--updateClient" encType={"multipart/form-data"}>
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
               <div className="form__input-wrap--uploadFile-img">
-                <img
-                  src={ imageURL
-                      ? imageURL
-                      : data?.avatar
-                          ? `${API_URL}/clients/${data._id}/avatar/${data.avatar}`
-                          : avatar
-                  }
-                  alt="preview"
-                />
+                { !imageURL
+                    ? !data?.avatar
+                        ? <DefaultAvatar/>
+                        : <img src={`${API_URL}/clients/${data._id}/avatar/${data.avatar}`} alt="preview"/>
+                    : <img src={imageURL} alt="preview"/>
+                }
                 <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>
                   Pick File
                 </label>
@@ -154,9 +171,11 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 name={'avatar'}
                 type={'file'}
                 value={undefined}
-                onChange={(e) => {
-                  propsF.setFieldValue('avatar', e.currentTarget.files[0]);
-                  handleOnChange(e);
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+                    propsF.setFieldValue('avatar', e.currentTarget.files[0]);
+                    handleOnChange(e);
+                  }
                 }}
               />
             </FieldWrapper>
@@ -174,7 +193,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 placeholder={'monica_bellucci@gmail.com'}
                 label={'Email'}
                 onChange={propsF.handleChange}
-                value={propsF.values.email}
+                value={propsF.values.email ?? ''}
             />
             <FieldComponent
                 name={'phone'}
@@ -182,7 +201,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 placeholder={'+47(222)-23-34'}
                 label={'Phone'}
                 onChange={propsF.handleChange}
-                value={propsF.values.phone}
+                value={propsF.values.phone ?? ''}
             />
             <FieldComponent
                 name={'insta'}
@@ -190,7 +209,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 placeholder={'@Monica'}
                 label={'Instagram'}
                 onChange={propsF.handleChange}
-                value={propsF.values.insta}
+                value={propsF.values.insta ?? ''}
             />
             <FieldComponent
                 name={'messenger'}
@@ -198,7 +217,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 placeholder={'@Monica'}
                 label={'Messenger'}
                 onChange={propsF.handleChange}
-                value={propsF.values.messenger}
+                value={propsF.values.messenger ?? ''}
             />
             <FieldComponent
                 name={'whatsapp'}
@@ -206,7 +225,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 placeholder={'+47(222)-23-34'}
                 label={'Whatsapp'}
                 onChange={propsF.handleChange}
-                value={propsF.values.whatsapp}
+                value={propsF.values.whatsapp ?? ''}
             />
             { !!apiError &&
                 <ApiErrorMessage message={apiError}/>
@@ -226,3 +245,5 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
     </Formik>
   )
 });
+
+UpdateClientForm.displayName = 'UpdateClientForm';

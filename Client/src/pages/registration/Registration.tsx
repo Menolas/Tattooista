@@ -3,8 +3,8 @@ import {RegistrationForm} from "../../components/Forms/RegistrationForm";
 import {IUser} from "../../types/Types";
 
 type PropsType = {
-    isAuth: string;
-    user?: IUser;
+    isAuth: string | null;
+    user?: IUser | null | undefined;
     authApiError: string | null;
 }
 
@@ -29,3 +29,5 @@ export const Registration: React.FC<PropsType> = React.memo(({
         </div>
     )
 });
+
+Registration.displayName = 'Registration';

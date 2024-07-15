@@ -4,12 +4,14 @@ import {useNavigate, useParams} from "react-router-dom";
 // @ts-ignore
 import avatar from "../../../assets/img/fox.webp";
 import {ClientType, ContactType} from "../../../types/Types";
-import { API_URL } from "../../../http";
-import { ModalPopUp } from "../../common/ModalPopUp";
-import { UpdateClientForm } from "../../Forms/UpdateClientForm";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
-import { GalleryUploadForm } from "../../Forms/GalleryUploadForm";
+import {API_URL} from "../../../http";
+import {ModalPopUp} from "../../common/ModalPopUp";
+import {UpdateClientForm} from "../../Forms/UpdateClientForm";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
+import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
+import {ReactComponent as ImageUserIcon} from "../../../assets/svg/images-user.svg";
+import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
@@ -99,7 +101,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
       ? `${API_URL}/clients/${data._id}/avatar/${data.avatar}`
       : avatar;
 
-  let profileGallery = [];
+  let profileGallery: JSX.Element[] = [];
 
   if (data.gallery?.length) {
       profileGallery = data.gallery
@@ -127,7 +129,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
             className="btn btn--icon"
             onClick={() => { setEditClientMode(true) }}
         >
-          <svg><use href={`${Sprite}#edit`}/></svg>
+          <EditIcon />
         </button>
         <button
             data-tooltip-id="profile-tooltip"
@@ -135,7 +137,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
             className="btn btn--icon"
             onClick={() => { setEditGalleryMode(true); }}
         >
-          <svg><use href={`${Sprite}#images-user`}/></svg>
+          <ImageUserIcon />
         </button>
         <button
             data-tooltip-id="profile-tooltip"
@@ -150,7 +152,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-          <svg><use href={`${Sprite}#archive`}/></svg>
+          <ArchiveIcon />
         </button>
         <button
             data-tooltip-id="profile-tooltip"
@@ -165,7 +167,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-          <svg><use href={`${Sprite}#trash`}/></svg>
+          <TrashIcon />
         </button>
       </div>
       <div className="admin__card-link">
@@ -222,14 +224,20 @@ export const Profile: React.FC<PropsType> = React.memo(({
       <Confirmation
             isOpen={confirmationData.needConfirmation}
             content={confirmationData.context}
-            confirm={() => confirmationData.cb()}
+            confirm={() => {
+                if (confirmationData.cb) {
+                    confirmationData.cb();
+                } else {
+                    console.error("Item ID is undefined or callback function is not provided.");
+                }
+            }}
             cancel={closeModal}
       />
       {  carouselData.isOpen &&
         <ImageFullView
                 isOpen={carouselData.isOpen}
                 clientId={data._id}
-                gallery={data.gallery}
+                gallery={data.gallery || []}
                 activeIndex={carouselData.activeIndex}
                 closeImg={()=> {setCarouselData({isOpen: false});}}
                 imgUrl={`${API_URL}/clients/${data._id}/doneTattooGallery/`}
@@ -237,5 +245,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
       }
       <Tooltip id="profile-tooltip" />
     </div>
-  )
+  );
 });
+
+Profile.displayName = 'Profile';

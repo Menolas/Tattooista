@@ -1,10 +1,12 @@
 import * as React from "react";
-import {ContactType, BookingType} from "../../../types/Types";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {BookingType} from "../../../types/Types";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
+import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
+import {ReactComponent as PhoneMissedIcon} from "../../../assets/svg/phone-missed.svg";
+import {ReactComponent as PhoneIcon} from "../../../assets/svg/phone.svg";
+import {ReactComponent as UsersMedicalIcon} from "../../../assets/svg/users-medical.svg";
 import {Tooltip} from "react-tooltip";
 import {useState} from "react";
-import {ModalPopUp} from "../../common/ModalPopUp";
 import {Confirmation} from "../../common/Confirmation";
 import {ReadMore} from "../../common/ReadMore";
 
@@ -75,11 +77,11 @@ export const Booking: React.FC<PropsType> = React.memo(({
             }
             className={"btn btn--icon"}
             disabled={ isStatusChanging?.some(id => id === consultation._id) }
-            onClick={() => {changeStatus(consultation._id, consultation.status)}}
+            onClick={() => {changeStatus(consultation._id, consultation.status || false)}}
         >
             { !consultation.status
-                ? <svg><use href={`${Sprite}#phone`}/></svg>
-                : <svg><use href={`${Sprite}#phone-missed`}/></svg>
+                ? <PhoneIcon />
+                : <PhoneMissedIcon />
             }
         </button>
         <button
@@ -96,7 +98,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-            <svg><use href={`${Sprite}#users-medical`}/></svg>
+            <UsersMedicalIcon />
         </button>
         <button
             data-tooltip-id="my-tooltip"
@@ -112,7 +114,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-            <svg><use href={`${Sprite}#archive`}/></svg>
+            <ArchiveIcon />
         </button>
         <button
             data-tooltip-id="my-tooltip"
@@ -128,7 +130,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-            <svg><use href={`${Sprite}#trash`}/></svg>
+            <TrashIcon />
         </button>
       </div>
       <div className={"admin__card-details"}>
@@ -156,10 +158,18 @@ export const Booking: React.FC<PropsType> = React.memo(({
       <Confirmation
         isOpen={confirmationData.needConfirmation}
         content={confirmationData.context}
-        confirm={() => confirmationData.cb()}
+        confirm={() => {
+            if (confirmationData.cb) {
+                confirmationData.cb();
+            } else {
+                console.error("Item ID is undefined or callback function is not provided.");
+            }
+        }}
         cancel={closeModal}
       />
       <Tooltip id="my-tooltip" />
     </li>
-  )
-})
+  );
+});
+
+Booking.displayName = 'Booking';

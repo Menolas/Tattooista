@@ -1,5 +1,5 @@
 import { galleryApi } from "./GalleryApi";
-import { StyleType, GalleryItemType } from "../../types/Types";
+import {StyleType, GalleryItemType, ApiErrorType} from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ResultCodesEnum} from "../../utils/constants";
@@ -25,9 +25,9 @@ const SET_FAKE_API = 'SET_FAKE_API';
 const ADD_GALLERY_ITEMS_SUCCESS = 'You successfully added gallery images';
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
 
-let initialState = {
+const initialState = {
   totalCount: 0 as number,
-  pageSize: 8 as number | null,
+  pageSize: 8 as number,
   currentPage: 1 as number,
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
@@ -256,16 +256,17 @@ export const getGallery = (
   dispatch(setIsFetchingAC(true));
   dispatch(setApiErrorAC(null));
   try {
-    let response = await galleryApi.getGalleryItems(styleId, currentPage, pageSize)
+    const response = await galleryApi.getGalleryItems(styleId, currentPage, pageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setGalleryAC(response.gallery, response.totalCount, false));
       return true;
     } else {
       return false;
     }
-  } catch (e: any) {
-    console.log(e);
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
     const galleryByStyle = gallery.filter(
         (item) => item.tattooStyles.includes(styleId));
     dispatch(setGalleryAC(galleryByStyle, galleryByStyle.length, true));
@@ -282,7 +283,7 @@ export const updateGallery = (
 
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await galleryApi.adminUpdateGallery(tattooStyle, values);
+    const response = await galleryApi.adminUpdateGallery(tattooStyle, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryAC(response.gallery));
       setApiErrorAC(null);
@@ -291,9 +292,10 @@ export const updateGallery = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -309,7 +311,7 @@ export const deleteGalleryItem = (
 ): ThunkType => async (dispatch) => {
   dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
-    let response = await galleryApi.deleteGalleryItem(id);
+    const response = await galleryApi.deleteGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
       return true;
@@ -333,7 +335,7 @@ export const archiveGalleryItem = (
 ): ThunkType => async (dispatch) => {
   dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
-    let response = await galleryApi.archiveGalleryItem(id);
+    const response = await galleryApi.archiveGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
       return true;
@@ -358,7 +360,7 @@ export const updateGalleryItem = (
     activeStyleId: string,
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await galleryApi.updateGalleryItem(id, values);
+    const response = await galleryApi.updateGalleryItem(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryItemAC(response.galleryItem, values[activeStyleId]));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
@@ -366,9 +368,10 @@ export const updateGalleryItem = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response.data.message));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response.data.message));
+    console.log(error);
     return false;
   }
 };

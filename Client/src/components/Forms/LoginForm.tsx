@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Formik, FormikHelpers, FormikValues} from "formik";
+import { Form, Formik, FormikHelpers} from "formik";
 import * as Yup from "yup";
 import { Navigate } from "react-router";
 import { LoginFormValues } from "../../types/Types";
@@ -40,7 +40,7 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
     return <Navigate to="/" />
   }
 
-  const submit = async (values: LoginFormValues, actions: FormikHelpers<FormikValues>) => {
+  const submit = async (values: LoginFormValues, actions: FormikHelpers<LoginFormValues>) => {
     await dispatch(login(values));
     actions.setSubmitting(false);
   }
@@ -57,7 +57,7 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
         onSubmit={submit}
     >
       {(propsF) => {
-        let {isSubmitting} = propsF
+        const {isSubmitting} = propsF
 
         return (
           <Form id="login" className="form">
@@ -102,3 +102,5 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
     </Formik>
   )
 });
+
+LoginForm.displayName = 'LoginForm';

@@ -2,8 +2,10 @@ import * as React from "react";
 import {useState} from "react";
 // @ts-ignore
 import avatar from "../../../assets/img/fox.webp";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
+import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
+import {ReactComponent as ImageUserIcon} from "../../../assets/svg/images-user.svg";
 import { NavLink } from "react-router-dom";
 import { ClientType, ContactType } from "../../../types/Types";
 import { API_URL } from "../../../http";
@@ -88,7 +90,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                 setData(data);
             }}
         >
-          <svg><use href={`${Sprite}#edit`}/></svg>
+          <EditIcon/>
         </button>
         <button
             data-tooltip-id="my-tooltip"
@@ -99,7 +101,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                 setData(data);
             }}
         >
-          <svg><use href={`${Sprite}#images-user`}/></svg>
+          <ImageUserIcon />
         </button>
         <button
             data-tooltip-id="my-tooltip"
@@ -115,7 +117,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-          <svg><use href={`${Sprite}#archive`}/></svg>
+          <ArchiveIcon/>
         </button>
         <button
             data-tooltip-id="my-tooltip"
@@ -131,7 +133,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-          <svg><use href={`${Sprite}#trash`}/></svg>
+          <TrashIcon/>
         </button>
       </div>
       <NavLink
@@ -173,7 +175,13 @@ export const Client: React.FC<PropsType> = React.memo(({
       <Confirmation
         isOpen={confirmationData.needConfirmation}
         content={confirmationData.context}
-        confirm={() => confirmationData.cb()}
+        confirm={() => {
+            if (confirmationData.cb) {
+                confirmationData.cb();
+            } else {
+                console.error("Item ID is undefined or callback function is not provided.");
+            }
+        }}
         cancel={closeModal}
       />
       <ModalPopUp
@@ -195,7 +203,7 @@ export const Client: React.FC<PropsType> = React.memo(({
         <ImageFullView
             isOpen={carouselData.isOpen}
             clientId={data._id}
-            gallery={data.gallery}
+            gallery={data.gallery || []}
             activeIndex={carouselData.activeIndex}
             closeImg={()=> {setCarouselData({isOpen: false});}}
             imgUrl={`${API_URL}/clients/${data._id}/doneTattooGallery/`}
@@ -203,5 +211,7 @@ export const Client: React.FC<PropsType> = React.memo(({
       }
       <Tooltip id="my-tooltip" />
     </li>
-  )
-})
+  );
+});
+
+Client.displayName = 'Client';

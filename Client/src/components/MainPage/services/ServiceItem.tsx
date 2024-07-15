@@ -3,26 +3,19 @@ import {ServiceType} from "../../../types/Types";
 import {API_URL} from "../../../http";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {useState} from "react";
 import {Confirmation} from "../../common/Confirmation";
-import {ModalPopUp} from "../../common/ModalPopUp";
-
-type SetUpdateServiceDataType = React.Dispatch<React.SetStateAction<{
-    isUpdateMode: boolean,
-    isAdd?: boolean,
-    isEdit?: boolean,
-    service?: ServiceType
-}>>;
+import {UpdateServiceDataType} from "./Services";
 
 type PropsType = {
     fakeApi: boolean;
-    isAuth: string;
+    isAuth: string | null;
     serviceIndex: number;
     service: ServiceType;
     remove: (id: string) => void;
-    setUpdateServiceData: SetUpdateServiceDataType
+    setUpdateServiceData: React.Dispatch<React.SetStateAction<UpdateServiceDataType>>;
 };
 
 export const ServiceItem: React.FC<PropsType> = React.memo(({
@@ -69,10 +62,15 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                             data-tooltip-content="Edit service item"
                             className={"btn btn--icon"}
                             onClick={() => {
-                                setUpdateServiceData({isUpdateMode: true, isEdit: true, service: service});
+                                setUpdateServiceData(prevState => ({
+                                    ...prevState,
+                                    isUpdateMode: true,
+                                    isEdit: true,
+                                    service: service
+                                }));
                             }}
                         >
-                            <svg><use href={`${Sprite}#edit`}/></svg>
+                            <EditIcon/>
                         </button>
                         <button
                             data-tooltip-id="service-tooltip"
@@ -87,7 +85,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                                 });
                             }}
                         >
-                            <svg><use href={`${Sprite}#trash`}/></svg>
+                            <TrashIcon/>
                         </button>
                     </div>
                 }
@@ -105,10 +103,18 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
             <Confirmation
                 isOpen={confirmationData.needConfirmation}
                 content={confirmationData.context}
-                confirm={() => confirmationData.cb()}
+                confirm={() => {
+                    if (confirmationData.cb) {
+                        confirmationData.cb();
+                    } else {
+                        console.error("Item ID is undefined or callback function is not provided.");
+                    }
+                }}
                 cancel={closeModal}
             />
             <Tooltip id="service-tooltip" />
         </li>
     )
 });
+
+ServiceItem.displayName = 'ServiceItem';

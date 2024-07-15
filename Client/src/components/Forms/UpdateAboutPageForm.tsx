@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
-import { Field, Form, Formik} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import {API_URL} from "../../http";
-import {PageType} from "../../types/Types";
+import {PageType, UpdateAboutPageFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
@@ -37,7 +37,7 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
         setImageURL(fileReader.result)
     }
 
-    const handleOnChange = (event) => {
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
             const file = event.target.files[0];
@@ -45,13 +45,16 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
         }
     }
 
-    const initialValues = {
+    const initialValues: UpdateAboutPageFormValues = {
         aboutPageWallPaper: data && data.wallPaper ? data.wallPaper : '',
         aboutPageTitle: data && data.title ? data.title : '',
         aboutPageContent: data && data.content ? data.content : '',
     }
 
-    const submit = async (values, actions) => {
+    const submit = async (
+        values: UpdateAboutPageFormValues,
+        actions:FormikHelpers<UpdateAboutPageFormValues>
+    ) => {
         if (values.aboutPageWallPaper instanceof File) {
             const isValidFile = validateFile(values.aboutPageWallPaper);
             if (!isValidFile) {
@@ -62,9 +65,15 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
             }
         }
         const formData = new FormData();
-        for (let value in values) {
-            formData.append(value, values[value]);
-        }
+        Object.keys(values).forEach((key) => {
+            const valueKey = key as keyof UpdateAboutPageFormValues;
+            const value = values[valueKey];
+            if (value instanceof File) {
+                formData.append(valueKey, value);
+            } else if (typeof value === 'string') {
+                formData.append(valueKey, value);
+            }
+        });
         try {
             const response = await dispatch(editAboutPage(formData));
             if (!response || response.message) { // Check the response here
@@ -108,9 +117,11 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
                                 type={'file'}
                                 accept='image/*,.png,.jpg,.web,.jpeg'
                                 value={undefined}
-                                onChange={(e) => {
-                                    propsF.setFieldValue('aboutPageWallPaper', e.currentTarget.files[0])
-                                    handleOnChange(e)
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+                                        propsF.setFieldValue('aboutPageWallPaper', e.currentTarget.files[0]);
+                                        handleOnChange(e);
+                                    }
                                 }}
                             />
                         </FieldWrapper>
@@ -151,3 +162,5 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
         </Formik>
     )
 });
+
+UpdateAboutPageForm.displayName = 'UpdateAboutPageForm';

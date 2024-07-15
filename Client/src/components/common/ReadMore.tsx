@@ -16,7 +16,7 @@ export const ReadMore: React.FC<PropsType> = React.memo(({ id, text, amountOfWor
         : text
     const endText = splittedText.slice(amountOfWords - 1).join(' ')
 
-    const handleKeyboard = (e) => {
+    const handleKeyboard = (e: React.KeyboardEvent) => {
         if (e.code === 'Space' || e.code === 'Enter') {
             setIsExpanded(!isExpanded)
         }
@@ -50,3 +50,5 @@ export const ReadMore: React.FC<PropsType> = React.memo(({ id, text, amountOfWor
         </p>
     );
 });
+
+ReadMore.displayName = 'ReadMore';

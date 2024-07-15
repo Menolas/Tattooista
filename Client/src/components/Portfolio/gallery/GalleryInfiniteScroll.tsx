@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import { Preloader } from "../../common/Preloader";
-import {StyleType} from "../../../types/Types";
+import {GalleryItemType, StyleType} from "../../../types/Types";
 import {API_URL} from "../../../http";
 import {NothingToShow} from "../../common/NothingToShow";
 import {ImageFullView} from "../../common/ImageFullView";
@@ -11,27 +11,29 @@ import {useDispatch, useSelector} from "react-redux";
 import {getGallerySelector, getTotalCountSelector} from "../../../redux/Gallery/gallery-selectors";
 
 type PropsType = {
-  fakeApi: boolean;
   activeStyle: StyleType;
   pageSize: number;
 }
 
+type ErrorType = {
+  message: string;
+};
+
 export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
-  fakeApi,
   pageSize,
   activeStyle,
 }) => {
 
   const gallery = useSelector(getGallerySelector);
   const totalCount = useSelector(getTotalCountSelector);
-  const galleryRef = React.useRef(null);
+  const galleryRef = React.useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<GalleryItemType[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<ErrorType | null>(null);
 
   const fetchData = async () => {
 
@@ -41,7 +43,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
 
     setIsLoading(true);
     setError(null);
-    let nextPage = page + 1;
+    const nextPage = page + 1;
 
     try {
       const response = await galleryApi.getGalleryItems(activeStyle?._id, nextPage, pageSize);
@@ -50,18 +52,20 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
       setItems(prevItems => [...prevItems, ...data]);
       setPage(nextPage);
     } catch (error) {
-      setError(error);
+      setError({ message: (error as Error).message });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleScroll = () => {
-    const rect = galleryRef.current.getBoundingClientRect();
-    const isAtBottom = rect.bottom <= window.innerHeight;
+    if (galleryRef.current) {
+      const rect = galleryRef.current.getBoundingClientRect();
+      const isAtBottom = rect.bottom <= window.innerHeight;
 
-    if (isAtBottom && !isLoading && items.length < totalCount) {
-      fetchData();
+      if (isAtBottom && !isLoading && items.length < totalCount) {
+        fetchData();
+      }
     }
   };
 
@@ -83,9 +87,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
 
   const GalleryItemsArray = items?.map((item, index) => {
-    const GalleryImgUrl = fakeApi
-        ? `./uploads/gallery/${item.fileName}`
-        : `${API_URL}/gallery/${item.fileName}`;
+    const GalleryImgUrl = `${API_URL}/gallery/${item.fileName}`;
 
     return (
         <li
@@ -124,7 +126,6 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
               isOpen={carouselData.isOpen}
               gallery={items}
               activeIndex={carouselData.activeIndex}
-              fakeApi={fakeApi}
               closeImg={()=>{setCarouselData({isOpen: false});}}
               imgUrl={`${API_URL}/gallery/`}
            />
@@ -132,3 +133,5 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
       </section>
   )
 });
+
+GalleryInfiniteScroll.displayName = 'GalleryInfiniteScroll';

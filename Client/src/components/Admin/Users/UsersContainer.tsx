@@ -42,7 +42,7 @@ export const UsersContainer: React.FC = () => {
 
     useEffect(() => {
         dispatch(getRoles())
-        dispatch(getUsers(token, currentPage, pageLimit, filter));
+        dispatch(getUsers(token || "", currentPage, pageLimit, filter));
     }, [dispatch, token, currentPage, pageLimit, filter]);
 
     const setPageLimitCallBack = (limit: number) => {
@@ -58,7 +58,7 @@ export const UsersContainer: React.FC = () => {
     };
 
     const removeCallBack = (userId: string) => {
-        dispatch(deleteUser(token, userId, users, currentPage, pageLimit, filter));
+        dispatch(deleteUser(token || "", userId, users, currentPage, pageLimit, filter));
     };
 
     const setApiErrorCallBack = () => {

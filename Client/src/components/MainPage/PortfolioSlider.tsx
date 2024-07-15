@@ -7,7 +7,7 @@ import {MyCarousel} from "../common/MyCarousel";
 import {useEffect, useState} from "react";
 
 type PropsType = {
-    activeStyle: StyleType;
+    activeStyle: StyleType | null;
     fakeApi: boolean;
     pageSize: number;
     styles: Array<StyleType>;
@@ -48,7 +48,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
     setActiveIndex(newActiveIndex);
   }, [activeStyle, styles]);
 
-  const slides = styles?.map((slide, index) => {
+  const slides = styles?.map((slide) => {
 
     if (slide.wallPaper) {
         const wallpaperUrl = fakeApi
@@ -91,3 +91,5 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
       </section>
   );
 });
+
+PortfolioSlider.displayName = 'PortfolioSlider';

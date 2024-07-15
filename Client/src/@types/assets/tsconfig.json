@@ -22,9 +22,12 @@
     "jsx": "preserve"
   },
   "include": [
-    "src/svg.d.ts",
+    "src/**/*.d.ts",
+    "src/custom.d.ts",
     "src/**/*.ts",
-    "tests/**/*.ts"
+    "src/**/*",
+    "tests/**/*.ts",
+    "src/**/*.tsx"
   ],
   "files": [
     "src/svg.d.ts",

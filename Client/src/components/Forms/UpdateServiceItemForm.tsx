@@ -1,9 +1,9 @@
 import * as React from "react";
 import {useState} from "react";
-import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import * as Yup from "yup";
 import {API_URL} from "../../http";
-import {ServiceType} from "../../types/Types";
+import {ServiceType, UpdateServiceFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
@@ -48,7 +48,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
         setImageURL(fileReader.result);
     }
 
-    const handleOnChange = (event) => {
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
             const file = event.target.files[0];
@@ -56,7 +56,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
         }
     }
 
-    const initialValues = {
+    const initialValues: UpdateServiceFormValues = {
         wallPaper: service?.wallPaper ?? '',
         title: service?.title ?? '',
         condition_0: service?.conditions[0] ?? '',
@@ -67,7 +67,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
         condition_5: service?.conditions[5] ?? '',
     }
 
-    const submit = async (values, actions: FormikHelpers<FormikValues>) => {
+    const submit = async (values: UpdateServiceFormValues, actions: FormikHelpers<UpdateServiceFormValues>) => {
         // Check if picture is a File object
         if (values.wallPaper instanceof File) {
             const isValidFile = validateFile(values.wallPaper);
@@ -79,8 +79,15 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
             }
         }
         const formData = new FormData();
-        for (let value in values) {
-            formData.append(value, values[value]);
+        for (const key in values) {
+            const value = values[key];
+            if (value instanceof File) {
+                formData.append(key, value);
+            } else if (value !== undefined) { // Check if value is not undefined
+                formData.append(key, value.toString());
+            } else {
+                formData.append(key, '');
+            }
         }
         let success;
         try {
@@ -130,9 +137,11 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                                 type={'file'}
                                 accept='image/*,.png,.jpg,.web,.jpeg'
                                 value={undefined}
-                                onChange={(e) => {
-                                    propsF.setFieldValue('wallPaper', e.currentTarget.files[0])
-                                    handleOnChange(e)
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    if (e.currentTarget.files && e.currentTarget.files.length) {
+                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
+                                        handleOnChange(e);
+                                    };
                                 }}
                             />
                         </FieldWrapper>
@@ -210,3 +219,5 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
         </Formik>
     )
 });
+
+UpdateServiceItemForm.displayName = 'UpdateServiceItemForm';

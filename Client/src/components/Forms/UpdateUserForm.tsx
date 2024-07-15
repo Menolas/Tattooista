@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {
   isFileSizeValid,
@@ -8,10 +8,8 @@ import {
   MAX_FILE_SIZE,
   VALID_FILE_EXTENSIONS
 } from "../../utils/validators";
-import {RoleType, UserType} from "../../types/Types";
+import {RoleType, UpdateUserFormValues, UserType} from "../../types/Types";
 import {API_URL} from "../../http";
-// @ts-ignore
-import avatar from "../../assets/img/fox.webp";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import * as Yup from "yup";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
@@ -20,6 +18,7 @@ import {
   updateUser,
   addUser,
 } from "../../redux/Users/users-reducer";
+import {DefaultAvatar} from "../common/DefaultAvatar";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -37,13 +36,23 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   if (!isEditing || hasNewFile) {
     schema = schema.concat(Yup.object().shape({
       avatar: Yup.mixed()
-          .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-            if (!value) return true
-            return isFileSizeValid([value], MAX_FILE_SIZE)
+          .test(
+              'fileSize',
+              'Max allowed size is 1024*1024',
+              (value) => {
+            if (value instanceof File) {
+              return isFileSizeValid([value], MAX_FILE_SIZE);
+            }
+            return true;
           })
-          .test('fileType', 'Invalid file type', (value: File) => {
-            if (!value) return true
-            return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
+          .test(
+              'fileType',
+              'Invalid file type',
+              (value) => {
+            if (value instanceof File) {
+              return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+            }
+            return true;
           }),
     }));
   }
@@ -54,7 +63,7 @@ type PropsType = {
   apiError: string | null;
   isEditing: boolean;
   roles: Array<RoleType>;
-  data?: UserType;
+  data?: UserType | null;
   closeModal: () => void;
 }
 
@@ -72,13 +81,13 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
   const dispatch = useDispatch();
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        // @ts-ignore
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         setImageURL(fileReader.result);
       }
       setHasNewFile(true);
@@ -86,9 +95,10 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     }
   };
 
-  let rolesInitialValues = {};
-  rolesInitialValues = roles.reduce((acc, role) => {
-    const isSelected = isEditing ? data.roles.some(profileRole => profileRole._id === role._id) : false;
+  const isEditingWithData = isEditing && data;
+
+  const rolesInitialValues = roles.reduce((acc, role) => {
+    const isSelected = isEditingWithData ? data.roles.some(profileRole => profileRole._id === role._id) : false;
     return {
         ...acc,
         [role._id]: isSelected,
@@ -96,7 +106,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   }, {});
 
 
-  const initialValues = {
+  const initialValues: UpdateUserFormValues = {
     avatar: data?.avatar ?? '',
     displayName: data?.displayName ?? '',
     email: data?.email ?? '',
@@ -104,14 +114,13 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     roles: rolesInitialValues,
   }
 
-  const submit = async (values, actions: FormikHelpers<FormikValues>) => {
+  const submit = async (values: UpdateUserFormValues, actions: FormikHelpers<UpdateUserFormValues>) => {
     const formData = new FormData();
-    for (let key in values) {
-
+    for (const key in values) {
       if (key === 'roles') {
         let roles = "";
         const userRoles = values[key];
-        for (let roleId in userRoles) {
+        for (const roleId in userRoles) {
           if (userRoles[roleId]) {
             roles = roles + roleId + ' '
           }
@@ -123,7 +132,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     }
 
     let success;
-    if (isEditing) {
+    if (isEditing && data) {
       success = await dispatch(updateUser(data._id, formData));
     } else {
       success = await dispatch(addUser(formData));
@@ -155,9 +164,8 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                     type="checkbox"
                     name={`roles.${role._id}`}
                     id={role._id}
-                    //value={role._id}
-                    checked={propsF.values.roles[role._id]}
-                    onChange={(e) => {
+                    checked={(propsF.values.roles as { [key: string]: boolean })[role._id]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       propsF.setFieldValue(`roles.${role._id}`, e.target.checked);
                     }}
                 />
@@ -173,15 +181,12 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
           <Form className="form" encType={"multipart/form-data"}>
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
               <div className="form__input-wrap--uploadFile-img">
-                <img
-                  src={imageURL
-                      ? imageURL
-                      : data?.avatar
-                          ? `${API_URL}/users/${data._id}/avatar/${data.avatar}`
-                          : avatar
-                  }
-                  alt="preview"
-                />
+                { !imageURL
+                    ? !data?.avatar
+                        ? <DefaultAvatar/>
+                        : <img src={`${API_URL}/users/${data?._id}/avatar/${data?.avatar}`} alt="preview"/>
+                    : <img src={imageURL} alt="preview"/>
+                }
                 <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>Pick File</label>
               </div>
               <Field
@@ -190,9 +195,11 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                   name={'avatar'}
                   type={'file'}
                   value={undefined}
-                  onChange={(e) => {
-                    propsF.setFieldValue('avatar', e.currentTarget.files[0]);
-                    handleOnChange(e);
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+                      propsF.setFieldValue('avatar', e.currentTarget.files[0]);
+                      handleOnChange(e);
+                    }
                   }}
               />
             </FieldWrapper>
@@ -237,3 +244,5 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     </Formik>
   )
 });
+
+UpdateUserForm.displayName = 'UpdateUserForm';

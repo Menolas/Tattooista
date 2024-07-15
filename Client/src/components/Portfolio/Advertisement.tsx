@@ -1,6 +1,6 @@
 import * as React from "react";
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import {ReactComponent as FaceBookIcon} from "../../assets/svg/facebook.svg";
+import {ReactComponent as InstagramIcon} from "../../assets/svg/instagram.svg";
 import { NavLink } from "react-router-dom";
 import {BookingButton} from "../common/BookingButton";
 
@@ -13,12 +13,12 @@ export const Advertisement: React.FC = () => {
           <ul className="social-share__list list">
             <li className="social-share__item">
               <NavLink to="#" className="social-share__link">
-                <svg><use href={`${Sprite}#instagram`}/></svg>
+                <InstagramIcon/>
               </NavLink>
             </li>
             <li className="social-share__item">
               <NavLink to="#" className="social-share__link">
-                <svg><use href={`${Sprite}#facebook`}/></svg>
+                <FaceBookIcon/>
               </NavLink>
             </li>
           </ul>

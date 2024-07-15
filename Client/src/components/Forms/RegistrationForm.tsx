@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
+import { Field, Form, Formik, FormikHelpers} from "formik";
 // @ts-ignore
 import {
   isFileSizeValid,
@@ -19,13 +19,23 @@ import {registration} from "../../redux/Auth/auth-reducer";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
-      .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-        if (!value) return true
-        return isFileSizeValid([value], MAX_FILE_SIZE);
+      .test(
+          'fileSize',
+          'Max allowed size is 1024*1024',
+          (value) => {
+        if (value instanceof  File) {
+          return isFileSizeValid([value], MAX_FILE_SIZE);
+        }
+        return true;
       })
-      .test('fileType', 'Invalid file type', (value: File) => {
-        if (!value) return true
-        return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+      .test(
+          'fileType',
+          'Invalid file type',
+          (value) => {
+        if (value instanceof File) {
+          return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+        }
+        return true;
       }),
   displayName: Yup
       .string()
@@ -57,7 +67,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
 
   const [imageURL, setImageURL] = useState('');
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
@@ -72,7 +82,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
 
   const submit = async (
       values: RegistrationFormValues,
-      actions: FormikHelpers<FormikValues>
+      actions: FormikHelpers<RegistrationFormValues>
   ) => {
     await dispatch(registration(values));
     actions.setSubmitting(false);
@@ -115,9 +125,11 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                     name={'avatar'}
                     type={'file'}
                     value={undefined}
-                    onChange={(e) => {
-                      propsF.setFieldValue('avatar', e.currentTarget.files[0])
-                      handleOnChange(e)
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+                        propsF.setFieldValue('avatar', e.currentTarget.files[0]);
+                        handleOnChange(e);
+                      }
                     }}
                 />
             </FieldWrapper>
@@ -175,3 +187,5 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
     </Formik>
   )
 });
+
+RegistrationForm.displayName = 'RegistrationForm';

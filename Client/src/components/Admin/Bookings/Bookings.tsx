@@ -22,8 +22,8 @@ type PropsType = {
   filter: SearchFilterType;
   isStatusChanging?: Array<string>;
   isDeletingInProcess?: Array<string>;
-  accessError: string;
-  apiError: string;
+  accessError: string | null;
+  apiError: string | null;
   setCurrentPage: (page: number) => void;
   onFilterChanged: (filter: SearchFilterType) => void;
   changeStatus: (id: string, status: boolean) => void;
@@ -58,7 +58,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   setApiError,
 }) => {
 
-    let [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
+    const [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
 
     const closeModal = () => {
       setAddConsultationMode(false);
@@ -143,5 +143,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                 </>
           }
       </>
-    )
+    );
 });
+
+Bookings.displayName = 'Bookings';

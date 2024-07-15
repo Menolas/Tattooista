@@ -1,7 +1,7 @@
 import * as React from "react";
-import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import * as Yup from "yup";
-import {FaqType} from "../../types/Types";
+import {FaqType, UpdateFaqValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-    apiError: number | string;
+    apiError: string | null;
     faqItem?: FaqType;
     closeModal: () => void;
 }
@@ -35,7 +35,7 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
 
     const dispatch = useDispatch();
 
-    const submit = async (values, actions: FormikHelpers<FormikValues>) => {
+    const submit = async (values: UpdateFaqValues, actions: FormikHelpers<UpdateFaqValues>) => {
         let success;
         if (faqItem) {
             success = await dispatch(updateFaqItem(faqItem._id, values));
@@ -95,3 +95,5 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
         </Formik>
     )
 });
+
+UpdateFaqItemForm.displayName = 'UpdateFaqItemForm';

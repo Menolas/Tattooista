@@ -1,14 +1,16 @@
-import {API_URL} from "../../http";
 import * as React from "react";
 import {GalleryItemType} from "../../types/Types";
 import {MyCarousel} from "./MyCarousel";
+
+type SliderProps = {
+    GalleryImgUrl: string;
+};
 
 type PropsType = {
     isOpen: boolean;
     clientId?: string;
     gallery: Array<GalleryItemType> | Array<string>;
     activeIndex?: number;
-    fakeApi?: boolean;
     closeImg: () => void;
     imgUrl?: string | undefined;
 };
@@ -25,20 +27,17 @@ export const ImageFullView: React.FC<PropsType> = React.memo(({
     clientId,
     gallery,
     activeIndex= 0,
-    fakeApi,
     closeImg,
     imgUrl,
 }) => {
 
-    const sliders = gallery.map(item => {
-        let GalleryImgUrl = !fakeApi
-            ? clientId
-                ? `${imgUrl}${item}`
-                : `${imgUrl}${item.fileName}`
-            : `./uploads/gallery/${item.fileName}`;
+    const slides = gallery.map((item, index) => {
+        let GalleryImgUrl = "";
+        if (clientId && typeof item === 'string') GalleryImgUrl = `${imgUrl}${item}`;
+        if (!clientId && typeof item !== 'string') GalleryImgUrl = `${imgUrl}${item.fileName}`;
 
         return (
-            <Slider  GalleryImgUrl={ GalleryImgUrl}/>
+            <Slide key={index} GalleryImgUrl={GalleryImgUrl}/>
         )
     });
 
@@ -53,7 +52,7 @@ export const ImageFullView: React.FC<PropsType> = React.memo(({
             </button>
             <div className="image-full-view__inner-wrap gallery__large">
                 <MyCarousel
-                    items={sliders}
+                    items={slides}
                     responsive={responsive}
                     activeIndex={activeIndex}
                     controlsStrategy={"default"}
@@ -65,7 +64,7 @@ export const ImageFullView: React.FC<PropsType> = React.memo(({
     );
 });
 
-const Slider = ({GalleryImgUrl}) => {
+const Slide = ({GalleryImgUrl}: SliderProps) => {
     return (
         <div
             className={"image-full-view__img slider"}
@@ -73,3 +72,5 @@ const Slider = ({GalleryImgUrl}) => {
         >{''}</div>
     );
 };
+
+ImageFullView.displayName = 'ImageFullView';
