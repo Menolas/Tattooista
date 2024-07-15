@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import {ReactComponent as ArrowToTopIcon} from "../../assets/svg/arrow-to-top.svg";
 
 
 export const ScrollToTopButton: React.FC = () => {
@@ -34,9 +33,7 @@ export const ScrollToTopButton: React.FC = () => {
                         className={'scrollToTop__btn btn btn--light-bg btn--icon--light'}
                         onClick={handleScrollToTop}
                     >
-                        <svg>
-                            <use href={`${Sprite}#arrow-to-top`}/>
-                        </svg>
+                        <ArrowToTopIcon />
                     </button>
                 </div>
             }

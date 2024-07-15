@@ -6,7 +6,7 @@ type PropsType = {
     modalClasses?: string;
     modalTitle?: string;
     closeModal: () => void;
-    children: any;
+    children: React.ReactNode;
 }
 
 export const ModalPopUp: React.FC<PropsType> = React.memo(({
@@ -59,3 +59,5 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
     </div>
   );
 });
+
+ModalPopUp.displayName = 'ModalPopUp';

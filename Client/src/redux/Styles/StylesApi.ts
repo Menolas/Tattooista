@@ -18,7 +18,7 @@ type DeleteTattooStyleResponseType = CommonResponseFields;
 export const stylesApi = {
 
     async getStyles(
-        token: string | null,
+        token: string | null | undefined,
         isSlider?: boolean
     ) {
         const response = await instance.get<GetTattooStylesResponseType>(`tattooStyle/?&isSlider=${isSlider}`,

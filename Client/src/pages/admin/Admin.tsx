@@ -7,14 +7,24 @@ import {
     getUserSelector
 } from "../../redux/Auth/auth-selectors";
 import {ADMIN_BUTTONS_DATA} from "../../utils/constants";
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import {ReactComponent as AdminIcon} from "../../assets/svg/admin.svg";
 import {useEffect, useState} from "react";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {
     getSuccessModalSelector
 } from "../../redux/General/general-selectors";
 import {setSuccessModalAC} from "../../redux/General/general-reducer";
+
+interface ButtonProps {
+    btnText: string;
+    btnUrl: string;
+    subMenu?: SubMenuItemType[];
+}
+
+interface SubMenuItemType {
+    btnText: string;
+    btnUrl: string;
+}
 
 export const Admin: React.FC = () => {
 
@@ -39,18 +49,14 @@ export const Admin: React.FC = () => {
   }
 
   if (!isAuth) return <Navigate to='/login' />
-  if (isAuth && user.isActivated !== true) {
+  if (isAuth && user?.isActivated !== true) {
     return <Navigate to="/registration" />
   }
 
   const AdminButton = ({
     btn
   }: {
-      btn: {
-          btnText: string
-          btnUrl: string
-          subMenu?: any
-      }
+      btn: ButtonProps
   }) => {
       return (
         <li key={btn.btnText}>
@@ -66,7 +72,7 @@ export const Admin: React.FC = () => {
                 btn.subMenu &&
                 <ul className={"subMenu list"}>
                     {
-                        btn.subMenu.map(subMenuItem => {
+                        btn.subMenu.map((subMenuItem) => {
                             return (
                                 <li key={subMenuItem.btnUrl}>
                                     <NavLink
@@ -108,7 +114,7 @@ export const Admin: React.FC = () => {
             setIsMobileMenuOpen(true);
         }}
       >
-        <svg><use href={`${Sprite}#admin`} /></svg>
+        <AdminIcon />
       </button>
       <aside className={ isMobileMenuOpen ? "admin__left-panel show" : "admin__left-panel"}>
         <nav className={'admin__nav'}>

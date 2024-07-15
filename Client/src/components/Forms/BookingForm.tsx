@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import {phoneRegex} from "../../utils/validators";
 import * as Yup from "yup";
 import {BookConsultationFormValues} from "../../types/Types";
@@ -19,7 +19,8 @@ const options = [
   { value: "insta", label: "instagram" }
 ];
 
-// @ts-ignore
+type ContactField = 'email' | 'phone' | 'insta' | 'whatsapp' | 'messenger';
+
 const validationSchema = Yup.object().shape({
   fullName: Yup.string()
       .min(2, "Must be minimum longer two characters")
@@ -28,11 +29,11 @@ const validationSchema = Yup.object().shape({
   contact: Yup.string()
       .required("Please select a way to contact you"),
   email: Yup.string().when('contact', {
-        is: (contact) => contact === 'email',
+        is: (contact: string | undefined) => contact === 'email',
         then: () => Yup.string().required("Please, provide your email.").email("Email should have correct format")
       }),
   phone: Yup.string().when('contact', {
-        is: (contact) => contact === 'phone',
+        is: (contact: string | undefined) => contact === 'phone',
         then: () => Yup.string().required("Please, provide you phone number.")
             .min(8, "Phone number is too short - should be 8 chars minimum.")
             .matches(phoneRegex, "That does not look like phone number.")
@@ -45,7 +46,7 @@ const validationSchema = Yup.object().shape({
       .min(8, "Whatsapp number is too short - should be 8 chars minimum.")
       .matches(phoneRegex, "That does not look like whatsapp number")
       .when('contact', {
-        is: (contact) => contact === 'whatsapp',
+        is: (contact: string | undefined) => contact === 'whatsapp',
         then: () => Yup.string().required("Please, provide you whatsapp number.")
       }),
   message: Yup.string()
@@ -74,7 +75,7 @@ const initialValues: BookConsultationFormValues = {
 };
 
 type PropsType = {
-  apiError: string;
+  apiError: string | null;
   consentId: string;
   closeBookingModal?: () => void;
 };
@@ -86,14 +87,13 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
 }) => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   const [contactInput, setContactInput] = useState('');
 
   const dispatch = useDispatch();
 
   const submit = async (
       values: BookConsultationFormValues,
-      actions: FormikHelpers<FormikValues>
+      actions: FormikHelpers<BookConsultationFormValues>
   ) => {
     const success = await dispatch(addBooking(values));
     if (success && closeBookingModal) {
@@ -139,7 +139,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
               name={'fullName'}
               type={'text'}
               placeholder={'Your Full Name'}
-              value={propsF.values.bookingName}
+              value={propsF.values.fullName}
               onChange={propsF.handleChange}
             />
 
@@ -160,7 +160,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                     name={contactInput}
                     type={'text'}
                     placeholder={`Your ${contactInput}`}
-                    value={propsF.values.contactInput}
+                    value={propsF.values[contactInput as ContactField]}
                     onChange={propsF.handleChange}
                 />
             }
@@ -218,3 +218,5 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
     </Formik>
   )
 });
+
+BookingForm.displayName = 'BookingForm';

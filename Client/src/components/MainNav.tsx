@@ -16,7 +16,7 @@ export const MainNav: React.FC<PropsType> = React.memo(({
 }) => {
 
  const innerBlockRef = useRef<HTMLUListElement>(null);
- let [isMenuOpen, setIsMenuOpen] = useState(false);
+ const [isMenuOpen, setIsMenuOpen] = useState(false);
 
  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -84,3 +84,5 @@ export const MainNav: React.FC<PropsType> = React.memo(({
     </nav>
   );
 });
+
+MainNav.displayName = 'MainNav';

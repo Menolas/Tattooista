@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Field, Form, Formik, FormikHelpers} from "formik";
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import {ReactComponent as SearchIcon} from "../../assets/svg/search.svg";
 import {FormSelect} from "./formComponents/FormSelect";
 import {SearchFilterType, SelectOptionType} from "../../types/Types";
 
@@ -48,7 +47,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
     >
       {
         (propsF) => {
-          let {isSubmitting} = propsF
+          const {isSubmitting} = propsF
           return (
             <Form
               className={"form search-form"}
@@ -64,7 +63,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                     className={"btn btn--sm btn--transparent search-submit"}
                     type="submit" disabled={isSubmitting}
                 >
-                  <svg><use href={`${Sprite}#search`}/></svg>
+                  <SearchIcon/>
                 </button>
               </div>
               <FormSelect
@@ -79,3 +78,5 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
     </Formik>
   )
 });
+
+SearchFilterForm.displayName = "SearchFilterForm";

@@ -4,6 +4,10 @@ import { HashLink } from "react-router-hash-link";
 import {ADMIN, mainNavHashLinksData, socialLinksData, SUPER_ADMIN} from "../utils/constants";
 // @ts-ignore
 import Sprite from "../assets/svg/sprite.svg";
+import {ReactComponent as PhoneIcon} from "../assets/svg/phone.svg";
+import {ReactComponent as AdminIcon} from "../assets/svg/admin.svg";
+import {ReactComponent as LoginIcon} from "../assets/svg/login.svg";
+import {ReactComponent as LogOutIcon} from "../assets/svg/logout.svg";
 
 type PropsType = {
     isAuth: string | null
@@ -64,9 +68,7 @@ export const MobileMainMenu: React.FC<PropsType> = React.memo(({
                         to={'tel:+4745519015'}
                         onClick={ closeMenu }
                     >
-                        <svg>
-                            <use href={`${Sprite}#phone`}/>
-                        </svg>
+                        <PhoneIcon />
                         Call me
                     </NavLink>
                 </li>
@@ -76,9 +78,7 @@ export const MobileMainMenu: React.FC<PropsType> = React.memo(({
                             to={'/admin/bookedConsultations'}
                             onClick={ closeMenu }
                         >
-                            <svg>
-                                <use href={`${Sprite}#admin`}/>
-                            </svg>
+                            <AdminIcon />
                             Admin page
                         </NavLink>
                     </li>
@@ -93,9 +93,7 @@ export const MobileMainMenu: React.FC<PropsType> = React.memo(({
                                     logout();
                                 }}
                             >
-                                <svg>
-                                    <use href={`${Sprite}#logout`}/>
-                                </svg>
+                                <LogOutIcon />
                                 Log out
                             </NavLink>
                         </li>
@@ -106,7 +104,7 @@ export const MobileMainMenu: React.FC<PropsType> = React.memo(({
                                 to="/login"
                                 onClick={ closeMenu }
                             >
-                                <svg><use href={`${Sprite}#login`}/></svg>
+                                <LoginIcon />
                                 Log in
                             </NavLink>
                         </li>
@@ -116,3 +114,5 @@ export const MobileMainMenu: React.FC<PropsType> = React.memo(({
         </nav>
     )
 });
+
+MobileMainMenu.displayName = 'MobileMainMenu';

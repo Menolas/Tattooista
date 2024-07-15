@@ -14,7 +14,7 @@ import {archivedBookingsReducer} from "./ArchivedBookings/archived-bookings-redu
 import {archivedClientsReducer} from "./ArchivedClients/archived-clients-reducer";
 import {archivedGalleryReducer} from "./ArchivedGallery/archived-gallery-reducer";
 
-let rootReducer = combineReducers({
+const rootReducer = combineReducers({
   about: aboutReducer,
   services: servicesReducer,
   faq: faqReducer,
@@ -33,7 +33,6 @@ let rootReducer = combineReducers({
 type RootReducerType = typeof rootReducer; // (global-state: AppStateType) => AppStateType
 export type AppStateType = ReturnType<RootReducerType>;
 
-// @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunkMiddleware)));

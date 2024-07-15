@@ -9,7 +9,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
 import {
   getCurrentPageSelector,
-  getFakeApiSelector,
   getPageSizeSelector,
   getIsFetchingSelector,
   getIsDeletingInProcessSelector,
@@ -28,7 +27,6 @@ export const GalleryContainer: React.FC = () => {
   const isAuth = useSelector(getAuthSelector);
   const isFetching = useSelector(getIsFetchingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
-  const fakeApi = useSelector(getFakeApiSelector);
   const totalCount = useSelector(getTotalCountSelector);
   const pageSize = useSelector(getPageSizeSelector);
   const currentPage = useSelector(getCurrentPageSelector);
@@ -47,7 +45,7 @@ export const GalleryContainer: React.FC = () => {
 
   return (
       <>
-        { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+        { (isAuth === ADMIN || isAuth === SUPER_ADMIN) && activeStyle &&
           <Gallery
               isFetching={isFetching}
               activeStyle={activeStyle}
@@ -61,9 +59,8 @@ export const GalleryContainer: React.FC = () => {
               setPageSize={setGalleryPageSizeCallBack}
           />
         }
-        { (!isAuth || isAuth === USER) &&
+        { (!isAuth || isAuth === USER) && activeStyle &&
             <GalleryInfiniteScroll
-                fakeApi={fakeApi}
                 activeStyle={activeStyle}
                 pageSize={pageSize}
             />

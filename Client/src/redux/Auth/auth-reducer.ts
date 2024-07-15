@@ -2,7 +2,7 @@ import { authAPI } from "./authApi";
 import { ResultCodesEnum } from "../../utils/constants";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType } from "../redux-store";
-import {LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types";
+import {ApiErrorType, LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types";
 import { IUser } from "../../types/Types";
 import {getUserRole} from "../../utils/functions";
 import {
@@ -14,8 +14,8 @@ const SET_AUTH_API_ERROR = 'SET_AUTH_API_ERROR';
 const LOG_OUT = 'LOG_OUT';
 const LOG_IN = 'LOG_IN';
 
-let initialState = {
-  user: {} as IUser | null,
+const initialState = {
+  user: {} as IUser | null | undefined,
   roles: [] as Array<RoleType> | null,
   token: null as string | null | undefined,
   isAuth: null as string | null,
@@ -107,7 +107,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
     dispatch
 ) => {
   try {
-    let response = await authAPI.login(values);
+    const response = await authAPI.login(values);
     if(response.resultCode === ResultCodesEnum.Success) {
       dispatch(logInAC(
             response.userData.accessToken,
@@ -119,9 +119,10 @@ export const login = (values: LoginFormValues): ThunkType => async (
     } else {
       return false;
     }
-  } catch (e: any) {
-    console.log(e.response.data.message);
-    dispatch(setAuthApiErrorAC(e.response.data.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    console.log(error.response.data.message);
+    dispatch(setAuthApiErrorAC(error.response?.data?.message));
     return false;
   }
 }
@@ -147,7 +148,7 @@ export const registration = (
     values: RegistrationFormValues
 ): ThunkType => async (dispatch) => {
     try {
-      let response = await authAPI.registration(values);
+      const response = await authAPI.registration(values);
       if (response.resultCode === ResultCodesEnum.Success) {
         dispatch(logInAC(
             response.userData.accessToken,
@@ -160,9 +161,10 @@ export const registration = (
       } else {
         return false;
       }
-    } catch (e: any) {
-      dispatch(setAuthApiErrorAC(e.response.data.message));
-      console.log(e.response.data.message);
+    } catch (e) {
+      const error = e as ApiErrorType;
+      dispatch(setAuthApiErrorAC(error.response?.data?.message));
+      console.log(error);
       return false;
     }
 }
@@ -171,7 +173,7 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
   //TO_DO: add api error and error message for user
 
   try {
-    let response = await authAPI.checkAuth();
+    const response = await authAPI.checkAuth();
     if (response.resultCode === ResultCodesEnum.Success) {
       if (response.userData.isAuth === true) {
         const isAuth = getUserRole(response.userData.user.roles, response.userData.roles);
@@ -189,8 +191,9 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
     } else {
       return false;
     }
-  } catch (e: any) {
-    console.log(e.response?.data?.message);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    console.log(error.response?.data?.message);
     return false;
   }
 }

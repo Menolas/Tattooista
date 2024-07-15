@@ -3,9 +3,14 @@ import Select, { components } from "react-select";
 import * as React from "react";
 import {useState} from "react";
 
+type OptionType = {
+    value: string;
+    label: string;
+};
+
 type PropsType = {
     name: string;
-    options: any;
+    options: OptionType[];
     handleChange: any;
     placeholder?: string;
 }
@@ -22,7 +27,7 @@ export const FormSelect2: React.FC<PropsType> = ({
 }) => {
 
     const [field, meta, helpers] = useField(name);
-    let [menuIsOpen, setMenuIsOpen] = useState(false);
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
 
     return (
         <Select
@@ -38,11 +43,11 @@ export const FormSelect2: React.FC<PropsType> = ({
                 setMenuIsOpen(false)
             }}
             onChange={(selectedOption) => {
-                helpers.setValue(selectedOption.value);
-                handleChange(selectedOption.value);
+                helpers.setValue(selectedOption?.value);
+                handleChange(selectedOption?.value);
             }}
-            value={options.find((option) => option.value === field.value)}
+            value={options.find((option: OptionType) => option.value === field.value)}
             components={{ Input: CustomInput }}
         />
-    )
-}
+    );
+};

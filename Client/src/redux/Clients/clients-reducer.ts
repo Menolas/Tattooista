@@ -1,6 +1,6 @@
 import { clientsAPI } from "./clientsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {ClientType, SearchFilterType} from "../../types/Types";
+import {ApiErrorType, ClientType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -30,7 +30,7 @@ const ADD_CLIENT_SUCCESS = "Congratulation! You've just created a new client.";
 const UPDATE_CLIENT_SUCCESS = "Congratulation! You've just updated a client's info.";
 const UPDATE_CLIENT_GALLERY_SUCCESS = "You successfully updated client's gallery.";
 
-let initialState = {
+const initialState = {
   clients: [] as Array<ClientType>,
   total: 0 as number,
   pageSize: 5 as number,
@@ -41,7 +41,7 @@ let initialState = {
   filter: {
     term: '' as string | null,
     condition: "any" as string | null
-  },
+  } as SearchFilterType,
   profile: {} as ClientType,
   accessError: '' as string | undefined,
   clientsApiError: null as null | string,
@@ -311,11 +311,10 @@ export const getClients = (
   clientsFilter: SearchFilterType
 ): ThunkType => async (
     dispatch,
-    getState
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await clientsAPI.getClients(
+    const response = await clientsAPI.getClients(
       token,
       currentClientPage,
       clientsPageSize,
@@ -329,9 +328,9 @@ export const getClients = (
       return false;
     }
   } catch (e) {
-    // @ts-ignore
-    dispatch(setAccessErrorAC(e.response.data.message));
-    console.log(e);
+    const error = e as ApiErrorType;
+    dispatch(setAccessErrorAC(error.response?.data?.message));
+    console.log(error);
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -350,7 +349,7 @@ export const deleteClient = (
 ) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await clientsAPI.deleteClient(id);
+    const response = await clientsAPI.deleteClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteClientThunk(token, id, clients, currentPage, pageLimit, filter));
       return true;
@@ -372,7 +371,7 @@ export const deleteClientFromProfile = (
 ) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await clientsAPI.deleteClient(id);
+    const response = await clientsAPI.deleteClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteClientAC(id));
       return true;
@@ -391,7 +390,7 @@ export const addClient = (
     values: FormData,
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await clientsAPI.addClient(values);
+    const response = await clientsAPI.addClient(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addClientAC(response.client));
       dispatch(setSuccessModalAC(true, ADD_CLIENT_SUCCESS));
@@ -399,9 +398,10 @@ export const addClient = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response.data.message));
-    console.log(e)
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message));
+    console.log(error)
     return false;
   }
 };
@@ -412,7 +412,7 @@ export const editClient = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await clientsAPI.editClient(id, values);
+    const response = await clientsAPI.editClient(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(editClientAC(response.client));
       dispatch(setSuccessModalAC(true, UPDATE_CLIENT_SUCCESS));
@@ -420,8 +420,9 @@ export const editClient = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response.data.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -434,7 +435,7 @@ export const getClientProfile = (
 ) => {
   dispatch(setIsFetchingAC(true));
   try {
-    let response = await clientsAPI.getClientProfile(clientId);
+    const response = await clientsAPI.getClientProfile(clientId);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client));
       return true;
@@ -455,7 +456,7 @@ export const updateClientGallery = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))
-    let response = await clientsAPI.updateClientGallery(id, values);
+    const response = await clientsAPI.updateClientGallery(id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client));
       dispatch(editClientAC(response.client));
@@ -464,9 +465,10 @@ export const updateClientGallery = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message));
+    console.log(error);
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -479,7 +481,7 @@ export const deleteClientGalleryPicture = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingPicturesInProcessAC(true, picture));
-    let response = await clientsAPI.deleteClientGalleryPicture(id, picture);
+    const response = await clientsAPI.deleteClientGalleryPicture(id, picture);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client));
       dispatch(editClientAC(response.client));
@@ -506,7 +508,7 @@ export const archiveClient = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await clientsAPI.archiveClient(id);
+    const response = await clientsAPI.archiveClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteClientThunk(token, id, clients, currentPage, pageLimit, filter));
       dispatch(addArchivedClientAC(response.client));
@@ -515,9 +517,10 @@ export const archiveClient = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    console.log(e);
-    dispatch(setClientsApiErrorAC(e.response?.data?.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    console.log(error);
+    dispatch(setClientsApiErrorAC(error.response?.data?.message));
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
@@ -528,7 +531,7 @@ export const archiveClientFromProfile = (
     id: string
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await clientsAPI.archiveClient(id);
+    const response = await clientsAPI.archiveClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteClientAC(id));
       return true;

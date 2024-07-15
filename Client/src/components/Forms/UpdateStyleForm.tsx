@@ -1,11 +1,9 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import * as Yup from "yup";
 import {API_URL} from "../../http";
-// @ts-ignore
-import tattooMachine from "../../assets/img/tattoo-machine.webp";
-import {StyleType} from "../../types/Types";
+import {StyleType, UpdateStyleFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
@@ -15,6 +13,8 @@ import {
 } from "../../utils/validators";
 import {useDispatch} from "react-redux";
 import {addStyle, editStyle} from "../../redux/Styles/styles-reducer";
+import {DefaultAvatar} from "../common/DefaultAvatar";
+import tattooMachine from '../../assets/img/tattoo-machine.webp';
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     let schema = Yup.object().shape({
@@ -28,13 +28,23 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     if (!isEditing || hasNewFile) {
         schema = schema.concat(Yup.object().shape({
             wallPaper: Yup.mixed()
-                .test('fileSize', 'Max allowed size is 1024*1024', (value: File) => {
-                    if (!value) return true
-                    return isFileSizeValid([value], MAX_FILE_SIZE);
+                .test(
+                    'fileSize',
+                    'Max allowed size is 1024*1024',
+                    (value) => {
+                    if (value instanceof File) {
+                        return isFileSizeValid([value], MAX_FILE_SIZE);
+                    }
+                    return true
                 })
-                .test('fileType', 'Invalid file type', (value: File) => {
-                    if (!value) return true
-                    return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+                .test(
+                    'fileType',
+                    'Invalid file type',
+                    (value) => {
+                    if (value instanceof File) {
+                        return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+                    }
+                    return true;
                 }),
         }));
     }
@@ -44,7 +54,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 type PropsType = {
     apiError: null | string;
     isEditing: boolean;
-    style?: StyleType;
+    style?: StyleType | null;
     closeModal: () => void;
 }
 export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
@@ -60,13 +70,13 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
 
     const dispatch = useDispatch();
 
-    const handleOnChange = (event) => {
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
             const file = event.target.files[0];
             const fileReader = new FileReader();
             fileReader.onloadend = () => {
-                // @ts-ignore
+                // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
                 setImageURL(fileReader.result);
             }
             setHasNewFile(true);
@@ -76,7 +86,6 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
 
     useEffect(() => {
         if (isEditing) {
-            // Set initial values based on style
             setInitialValues({
                 wallPaper: style?.wallPaper || '',
                 value: style?.value || '',
@@ -92,25 +101,30 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
         }
     }, [style, isEditing]);
 
-    const [initialValues, setInitialValues] = useState({
+    const [initialValues, setInitialValues] = useState<UpdateStyleFormValues>({
         wallPaper: '',
         value: '',
         description: ''
     });
 
-    const submit = async (values, actions: FormikHelpers<FormikValues>) => {
-       const formData = new FormData();
-       for (let value in values) {
-           formData.append(value, values[value]);
-       }
+    const submit = async (values: UpdateStyleFormValues, actions: FormikHelpers<UpdateStyleFormValues>) => {
+        const formData = new FormData();
+        for (const key in values) {
+            const valueKey = key as keyof UpdateStyleFormValues;
+            const value = values[valueKey];
+            // Ensure value is not undefined and is either a string or a File object before appending
+            if (value !== undefined && (typeof value !== 'object' || value instanceof File)) {
+                formData.append(key, value);
+            }
+        }
        try {
            let success;
-           if(isEditing) {
+           if(isEditing && style) {
                success = await dispatch(editStyle(style._id, formData));
            } else {
                success = await dispatch(addStyle(formData));
            }
-           if (success ) { // Check the response here
+           if (success ) {
                closeModal();
            }
        } catch (error) {
@@ -132,14 +146,12 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
                     <Form className="form form--updateTattooStyle" encType={"multipart/form-data"}>
                         <FieldWrapper name={'wallPaper'} wrapperClass={'form__input-wrap--uploadFile'}>
                             <div className={"form__input-wrap--uploadFile-img"}>
-                                <img
-                                    src={imageURL ? imageURL
-                                            : isEditing && style.wallPaper
-                                            ? `${API_URL}/styleWallpapers/${style._id}/${style.wallPaper}`
-                                            : tattooMachine
-                                    }
-                                    alt="preview"
-                                />
+                                { imageURL
+                                    ? <img src={imageURL} alt="preview"/>
+                                    : isEditing && style?.wallPaper
+                                        ? <img src={`${API_URL}/styleWallpapers/${style._id}/${style.wallPaper}`} alt="preview"/>
+                                        : <DefaultAvatar src={tattooMachine}/>
+                                }
                                 <label className="btn btn--sm btn--dark-bg" htmlFor={"wallPaper"}>Pick File</label>
                             </div>
                             <Field
@@ -148,9 +160,11 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
                                 name={'wallPaper'}
                                 type={'file'}
                                 value={undefined}
-                                onChange={(e) => {
-                                    propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
-                                    handleOnChange(e);
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    if (e.currentTarget.files && e.currentTarget.files.length) {
+                                        propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
+                                        handleOnChange(e);
+                                    }
                                 }}
                             />
                         </FieldWrapper>
@@ -191,3 +205,5 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
         </Formik>
     )
 });
+
+UpdateStyleForm.displayName = 'UpdateStyleForm';

@@ -1,12 +1,11 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {FaqType} from "../../../types/Types";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
 import {Confirmation} from "../../common/Confirmation";
-import {ModalPopUp} from "../../common/ModalPopUp";
 
 type SetUpdateFaqItemDataType = React.Dispatch<React.SetStateAction<{
     isUpdateMode: boolean;
@@ -14,7 +13,7 @@ type SetUpdateFaqItemDataType = React.Dispatch<React.SetStateAction<{
 }>>;
 
 type PropsType = {
-  isAuth: string;
+  isAuth: string | null;
   item: FaqType;
   remove: (id: string) => void;
   setEditData: SetUpdateFaqItemDataType;
@@ -27,7 +26,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
     setEditData,
 }) => {
 
-    let [faqItemClasses, setFaqItemClasses] = useState('faq__item');
+    const [faqItemClasses, setFaqItemClasses] = useState('faq__item');
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [confirmationData, setConfirmationData] = useState<{
         needConfirmation: boolean,
@@ -92,7 +91,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                         setEditData({isUpdateMode: true, faqItem: item});
                     }}
                 >
-                    <svg><use href={`${Sprite}#edit`}/></svg>
+                    <EditIcon/>
                 </button>
                 <button
                     data-tooltip-id="faq-tooltip"
@@ -107,7 +106,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                         });
                     }}
                 >
-                    <svg><use href={`${Sprite}#trash`}/></svg>
+                    <TrashIcon/>
                 </button>
             </div>
           }
@@ -129,15 +128,18 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
         <Confirmation
           isOpen={confirmationData.needConfirmation}
           content={confirmationData.context}
-          confirm={() => confirmationData.cb()}
+          confirm={() => {
+              if (confirmationData.cb) {
+                  confirmationData.cb();
+              } else {
+                  console.error("Item ID is undefined or callback function is not provided.");
+              }
+          }}
           cancel={closeModal}
         />
         <Tooltip id="faq-tooltip" />
       </li>
-    )
-})
+    );
+});
 
-
-
-
-
+FaqItem.displayName = 'FaqItem';

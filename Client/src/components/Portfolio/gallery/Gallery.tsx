@@ -5,8 +5,9 @@ import {GalleryItemType, StyleType} from "../../../types/Types";
 import { ModalPopUp } from "../../common/ModalPopUp";
 import {API_URL} from "../../../http";
 import {Tooltip} from "react-tooltip";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
+import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {Paginator} from "../../common/Paginator";
 import {UpdateGalleryItemForm} from "../../Forms/UpdateGalleryItemForm";
 import {NothingToShow} from "../../common/NothingToShow";
@@ -48,7 +49,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const dispatch = useDispatch();
 
   useEffect(() => {
-      dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
+    dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
   }, [activeStyle, currentPage, pageSize]);
 
   const deleteGalleryItemCallBack = (itemId: string) => {
@@ -60,7 +61,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   }
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
-  const [galleryItem, setGalleryItem] = useState(null);
+  const [galleryItem, setGalleryItem] = useState<GalleryItemType | null>(null);
   const [editGalleryMode, setEditGalleryMode] = useState(false);
   const [confirmationData, setConfirmationData] = useState<{
     needConfirmation: boolean,
@@ -108,9 +109,11 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content="Edit gallery item"
                 className={"btn btn--icon"}
-                onClick={() => { setGalleryItem(item); }}
+                onClick={() => {
+                    setGalleryItem(item);
+                }}
             >
-                <svg><use href={`${Sprite}#edit`}/></svg>
+                <EditIcon/>
             </button>
             <button
                 data-tooltip-id="my-tooltip"
@@ -126,7 +129,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   });
                 }}
             >
-                <svg><use href={`${Sprite}#archive`}/></svg>
+                <ArchiveIcon/>
             </button>
             <button
                 data-tooltip-id="my-tooltip"
@@ -142,7 +145,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                   });
                 }}
             >
-                <svg><use href={`${Sprite}#trash`}/></svg>
+                <TrashIcon/>
             </button>
           </div>
         </li>
@@ -185,7 +188,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
            />
         }
         <ModalPopUp
-            isOpen={galleryItem || editGalleryMode}
+            isOpen={!!galleryItem || editGalleryMode}
             closeModal={closeGalleryItemEditModal}
             modalTitle={ galleryItem
                          ? 'Update tattoo styles for this image'
@@ -212,10 +215,18 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         <Confirmation
             isOpen={confirmationData.needConfirmation}
             content={confirmationData.context}
-            confirm={() => confirmationData.cb()}
+            confirm={() => {
+                if (confirmationData.cb) {
+                    confirmationData.cb();
+                } else {
+                    console.error("Item ID is undefined or callback function is not provided.");
+                }
+            }}
             cancel={closeModal}
         />
         <Tooltip id="my-tooltip" />
       </section>
   )
 });
+
+Gallery.displayName = 'Gallery';

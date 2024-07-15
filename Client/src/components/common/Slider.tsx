@@ -1,15 +1,24 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
-import 'swiper/css';
 import * as React from "react";
 import {useEffect, useRef} from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import SwiperCore from 'swiper';
+import { Swiper as SwiperClass } from 'swiper';
+
+interface SwiperBreakpointOptions {
+    slidesPerView?: number;
+    spaceBetween?: number;
+}
+
+type Breakpoints = {
+    [width: number]: SwiperBreakpointOptions;
+};
 
 type PropsType = {
     items: JSX.Element[];
     spaceBetween?: number;
     activeIndex?: number;
-    breakpoints?: any;
+    breakpoints?: Breakpoints;
 }
 export const Slider: React.FC<PropsType> = ({
     items,
@@ -18,7 +27,7 @@ export const Slider: React.FC<PropsType> = ({
     breakpoints,
  }) => {
 
-    const swiperRef = useRef(null);
+    const swiperRef = useRef<SwiperCore | null>(null);
 
     useEffect(() => {
         if (swiperRef.current) {
@@ -41,7 +50,7 @@ export const Slider: React.FC<PropsType> = ({
             onSlideChange={() => {
                 //console.log('slide change');
             }}
-            onSwiper={(swiper) => swiperRef.current = swiper}
+            onSwiper={(swiper: SwiperClass) => swiperRef.current = swiper}
             breakpoints={breakpoints}
         >
             {slides}

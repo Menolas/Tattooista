@@ -1,9 +1,10 @@
 import * as React from "react";
 import {LoginForm} from "../../components/Forms/LoginForm";
-import {Navigate} from "react-router";
+import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
 
 type PropsType = {
-  isUserActivated: boolean;
+  isUserActivated: boolean | undefined;
   isAuth: null | string;
   authApiError: null | string;
 }
@@ -13,6 +14,12 @@ export const Login: React.FC<PropsType> = React.memo(({
   isAuth,
   authApiError,
 }) => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuth && isUserActivated) navigate("/");
+  }, [isAuth , isUserActivated]);
 
   return (
     <div className="login page-block page-block--top container">
@@ -27,9 +34,8 @@ export const Login: React.FC<PropsType> = React.memo(({
       {isAuth && !isUserActivated &&
           <p>Please activate your account by link we sent to your email</p>
       }
-      {isAuth && isUserActivated &&
-          <Navigate to="/" />
-      }
     </div>
   )
 });
+
+Login.displayName = 'Login';

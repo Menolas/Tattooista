@@ -26,3 +26,5 @@ export const SuccessPopUp: React.FC<PropsType> = React.memo(({
         </ModalPopUp>
     );
 });
+
+SuccessPopUp.displayName = 'SuccessPopUp';

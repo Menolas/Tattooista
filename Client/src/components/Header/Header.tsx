@@ -3,12 +3,13 @@ import { NavLink } from "react-router-dom";
 import { SocialNav } from "../SocialNav";
 import { MainNav } from "../MainNav";
 import { Logo } from "../Logo";
-// @ts-ignore
-import Sprite from "../../assets/svg/sprite.svg";
+import {ReactComponent as PhoneIcon} from "../../assets/svg/phone.svg";
+import {ReactComponent as AdminIcon} from "../../assets/svg/admin.svg";
+import {ReactComponent as LoginIcon} from "../../assets/svg/login.svg";
+import {ReactComponent as LogOutIcon} from "../../assets/svg/logout.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
-import {useState} from "react";
 
 type PropsType = {
     isAuth: string | null;
@@ -43,9 +44,7 @@ export const Header: React.FC<PropsType> = React.memo(({
               data-tooltip-content="Call me"
               to={'tel:+4745519015'}
             >
-              <svg>
-                  <use href={`${Sprite}#phone`}/>
-              </svg>
+              <PhoneIcon />
                 Call me
             </NavLink>
             { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
@@ -55,9 +54,8 @@ export const Header: React.FC<PropsType> = React.memo(({
                     data-tooltip-content="Admin page"
                     to={'/admin/bookedConsultations'}
                 >
-                    <svg>
-                        <use href={`${Sprite}#admin`}/>
-                    </svg>
+                    <AdminIcon />
+                    Admin
                 </NavLink>
             }
             { isAuth
@@ -68,9 +66,7 @@ export const Header: React.FC<PropsType> = React.memo(({
                         to={'/'}
                         onClick={logout}
                     >
-                        <svg>
-                            <use href={`${Sprite}#logout`}/>
-                        </svg>
+                        <LogOutIcon />
                         Log Out
                     </NavLink>
                   )
@@ -80,7 +76,7 @@ export const Header: React.FC<PropsType> = React.memo(({
                         data-tooltip-content="Log in"
                         to={'/login'}
                     >
-                        <svg><use href={`${Sprite}#login`}/></svg>
+                        <LoginIcon />
                         Log In
                     </NavLink>
                 )
@@ -91,3 +87,5 @@ export const Header: React.FC<PropsType> = React.memo(({
     </header>
   );
 });
+
+Header.displayName = 'Header';

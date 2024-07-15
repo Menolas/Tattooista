@@ -20,7 +20,7 @@ type PropsType = {
     total: number;
     currentPage: number;
     pageLimit: number;
-    accessError: string;
+    accessError: string | null;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
     setFilter: (filter: SearchFilterType) => void;
@@ -47,7 +47,7 @@ export const Users: React.FC<PropsType> = React.memo(({
 
     const [addUserMode, setAddMode] = useState<boolean>(false);
     const [editUserMode, setEditMode] = useState<boolean>(false);
-    const [data, setData] = useState<UserType>(null);
+    const [data, setData] = useState<UserType | null>(null);
 
     useEffect(() => {
         if ((addUserMode || editUserMode) && apiError === null) {
@@ -133,5 +133,7 @@ export const Users: React.FC<PropsType> = React.memo(({
                 </>
             }
         </>
-    )
+    );
 });
+
+Users.displayName = 'Users';

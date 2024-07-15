@@ -23,7 +23,7 @@ export const Paginator: React.FC<PropsType> = React.memo(({
     setLimit(pageSize)
   }, [pageSize]);
 
-  let pagesCount: number = Math.ceil(totalCount / pageSize);
+  const pagesCount: number = Math.ceil(totalCount / pageSize);
   let pages = [];
   for (let i = 1; i <= pagesCount; i++) {
     pages.push(i);
@@ -96,3 +96,5 @@ export const Paginator: React.FC<PropsType> = React.memo(({
       </div>
   );
 });
+
+Paginator.displayName = 'Paginator';

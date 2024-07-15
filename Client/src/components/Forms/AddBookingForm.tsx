@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Form, Formik, FormikHelpers, FormikValues} from "formik";
+import {Form, Formik, FormikHelpers} from "formik";
 import * as Yup from 'yup';
 import {phoneRegex} from "../../utils/validators";
 import {AddConsultationFormValues} from "../../types/Types";
@@ -16,7 +16,12 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
       .email("Email should have correct format")
       .when(['phone', 'insta', 'messenger', 'whatsapp'], {
-        is: (phone, insta, messenger, whatsapp) =>
+        is: (
+            phone: string | undefined,
+            insta: string | undefined,
+            messenger: string | undefined,
+            whatsapp: string | undefined
+        ) =>
             !phone && !insta && !messenger && !whatsapp,
         then: () => Yup.string().required('At least one field must be filled'),
   }),
@@ -42,7 +47,7 @@ const initialValues: AddConsultationFormValues = {
 };
 
 type PropsType = {
-  apiError: number | string;
+  apiError: string | null;
   closeBookingModal: () => void;
 };
 
@@ -53,7 +58,7 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
 
   const dispatch = useDispatch();
 
-  const submit = async (values: AddConsultationFormValues, actions: FormikHelpers<FormikValues>) => {
+  const submit = async (values: AddConsultationFormValues, actions: FormikHelpers<AddConsultationFormValues>) => {
     const success = await dispatch(addBooking(values));
     const isSuccess = Boolean(success);
     if (isSuccess && closeBookingModal) {
@@ -69,7 +74,7 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
         onSubmit={submit}
       >
       {(propsF) => {
-        let {isSubmitting} = propsF
+        const {isSubmitting} = propsF
 
         return (
           <Form id="booking"
@@ -79,7 +84,7 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 name={'fullName'}
                 type={'text'}
                 placeholder={"Customer's Full Name"}
-                value={propsF.values.bookingName}
+                value={propsF.values.fullName}
                 onChange={propsF.handleChange}
             />
 
@@ -136,3 +141,5 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
       }}
     </Formik>
 )});
+
+AddBookingForm.displayName = 'AddBookingForm';

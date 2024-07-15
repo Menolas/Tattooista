@@ -23,14 +23,11 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
             if (event.key === "Enter") {
-                console.log(focusedButton + ' hit the key Enter!!!!!!!!!!');
                 event.preventDefault();
                 if (focusedButton === 'confirm') {
-                    console.log(focusedButton + ' hit the key Enter on confirm !!!!!!!!!!');
                     confirm();
                     cancel();
                 } else if (focusedButton === 'cancel') {
-                    console.log(focusedButton + ' hit the key Enter on cancel !!!!!!!!!!');
                     cancel();
                 }
             }
@@ -40,11 +37,9 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
                 if (document.activeElement === yesButtonRef.current) {
                     noButtonRef.current?.focus();
                     setFocusedButton('cancel');
-                    console.log('hit the key Tab on yes!!!!!!!!!!');
                 } else {
                     yesButtonRef.current?.focus();
                     setFocusedButton('confirm');
-                    console.log('hit the key Tab on no!!!!!!!!!!');
                 }
             }
         },
@@ -60,7 +55,6 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
 
     useEffect(() => {
         if (isOpen) {
-            console.log(focusedButton + ' focusedButton after modal opened !!!!!!!!!!');
             document.addEventListener("keydown", handleKeyDown);
             return () => {
                 document.removeEventListener("keydown", handleKeyDown);
@@ -97,3 +91,5 @@ export const Confirmation: React.FC<PropsType> = React.memo(({
         </ModalPopUp>
     );
 });
+
+Confirmation.displayName = 'Confirmation';

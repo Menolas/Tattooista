@@ -1,11 +1,10 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useEffect,} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
   getClients,
   setClientsCurrentPageAC,
   deleteClient,
-  updateClientGallery,
   deleteClientGalleryPicture,
   archiveClient,
   setPageSize,
@@ -48,7 +47,7 @@ export const ClientsContainer: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getClients(token, currentPage, pageSize, filter));
+    dispatch(getClients(token || "", currentPage, pageSize, filter));
 
   }, [dispatch, token, currentPage, pageSize, filter]);
 
@@ -71,7 +70,7 @@ export const ClientsContainer: React.FC = () => {
   const deleteClientCallBack = (
     clientId: string
   ) => {
-    dispatch(deleteClient(token, clientId, clients, currentPage, pageSize, filter));
+    dispatch(deleteClient(token || "", clientId, clients, currentPage, pageSize, filter));
   };
 
   const setPageLimitCallBack = (
@@ -80,16 +79,12 @@ export const ClientsContainer: React.FC = () => {
     dispatch(setPageSize(clientsPageSize));
   };
 
-  const updateClientGalleryCallBack = (clientId: string, values: FormData) => {
-    dispatch(updateClientGallery(clientId, values));
-  };
-
   const deleteClientGalleryPictureCallBack = (clientId: string, picture: string) => {
     dispatch(deleteClientGalleryPicture(clientId, picture));
   };
 
   const archiveClientCallBack = (clientId: string) => {
-    dispatch(archiveClient(token, clientId, clients, currentPage, pageSize, filter));
+    dispatch(archiveClient(token || "", clientId, clients, currentPage, pageSize, filter));
   };
 
   const setClientsApiErrorCallBack = () => {
@@ -117,7 +112,6 @@ export const ClientsContainer: React.FC = () => {
           onFilterChanged={onFilterChangedCallBack}
           remove={deleteClientCallBack}
           setPageLimit={setPageLimitCallBack}
-          updateGallery={updateClientGalleryCallBack}
           deleteGalleryItem={deleteClientGalleryPictureCallBack}
           archive={archiveClientCallBack}
           setClientsApiError={setClientsApiErrorCallBack}

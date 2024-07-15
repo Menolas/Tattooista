@@ -3,8 +3,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {About} from "./About";
 import {
     getPageSelector,
-    getFakeApiSelector,
-    getIsFetchingSelector, getIsEditingSelector,
+    getIsFetchingSelector,
+    getIsEditingSelector,
 } from "../../../redux/About/about-selectors";
 import {
     getAboutPage,
@@ -19,7 +19,6 @@ import {setApiErrorAC} from "../../../redux/General/general-reducer";
 export const AboutContainer = () => {
     const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
-    const fakeApi = useSelector(getFakeApiSelector);
     const page = useSelector(getPageSelector);
     const isFetching = useSelector(getIsFetchingSelector);
     const isEditing = useSelector(getIsEditingSelector);
@@ -32,11 +31,11 @@ export const AboutContainer = () => {
 
     const changeAboutPageVisibilityCallBack = (isActive: boolean) => {
         dispatch(changeAboutPageVisibility(isActive));
-    }
+    };
 
     const setApiErrorCallBack = () => {
         dispatch(setApiErrorAC(null));
-    }
+    };
 
     if  (isAuth || page?.isActive) {
         return (
@@ -44,15 +43,13 @@ export const AboutContainer = () => {
                 apiError={apiError}
                 isFetching={isFetching}
                 isEditing={isEditing}
-                fakeApi={fakeApi}
                 isAuth={isAuth}
                 page={page}
                 changeVisibility={changeAboutPageVisibilityCallBack}
                 setApiError={setApiErrorCallBack}
             />
-        )
+        );
     } else {
         return null;
     }
-
-}
+};

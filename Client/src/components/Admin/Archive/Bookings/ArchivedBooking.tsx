@@ -1,10 +1,11 @@
 import * as React from "react";
-// @ts-ignore
-import Sprite from "../../../../assets/svg/sprite.svg";
+import {ReactComponent as TrashIcon} from "../../../../assets/svg/trash.svg";
+import {ReactComponent as ArrowRotateLeftIcon} from "../../../../assets/svg/arrow-rotate-left.svg";
+import {ReactComponent as PhoneMissedIcon} from "../../../../assets/svg/phone-missed.svg";
+import {ReactComponent as PhoneIcon} from "../../../../assets/svg/phone.svg";
 import {ContactType, BookingType} from "../../../../types/Types";
 import {Tooltip} from "react-tooltip";
 import {useState} from "react";
-import {ModalPopUp} from "../../../common/ModalPopUp";
 import {Confirmation} from "../../../common/Confirmation";
 
 type PropsType = {
@@ -63,12 +64,8 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                     disabled={true}
                 >
                     {!data.status
-                        ? <svg>
-                            <use href={`${Sprite}#phone`}/>
-                        </svg>
-                        : <svg>
-                            <use href={`${Sprite}#phone-missed`}/>
-                        </svg>
+                        ? <PhoneIcon/>
+                        : <PhoneMissedIcon/>
                     }
                 </button>
                 <button
@@ -85,9 +82,7 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                         });
                     }}
                 >
-                    <svg>
-                        <use href={`${Sprite}#arrow-rotate-left`}/>
-                    </svg>
+                    <ArrowRotateLeftIcon/>
                 </button>
 
                 <button
@@ -104,9 +99,7 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                         });
                     }}
                 >
-                    <svg>
-                        <use href={`${Sprite}#trash`}/>
-                    </svg>
+                    <TrashIcon/>
                 </button>
             </div>
             <div className="admin__card-details">
@@ -119,10 +112,18 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
             <Confirmation
                 isOpen={confirmationData.needConfirmation}
                 content={confirmationData.context}
-                confirm={() => confirmationData.cb(confirmationData.itemId)}
+                confirm={() => {
+                    if (confirmationData.cb && confirmationData.itemId) {
+                        confirmationData.cb(confirmationData.itemId);
+                    } else {
+                        console.error("Item ID is undefined or callback function is not provided.");
+                    }
+                }}
                 cancel={closeModal}
             />
             <Tooltip id="my-tooltip" />
         </li>
     )
 });
+
+ArchivedBooking.displayName = 'ArchivedBooking';

@@ -1,14 +1,13 @@
 import * as React from "react";
-// @ts-ignore
-import avatar from "../../../../assets/img/fox.webp";
-// @ts-ignore
-import Sprite from "../../../../assets/svg/sprite.svg";
+import {ReactComponent as ArrowRotateLeftIcon} from "../../../../assets/svg/arrow-rotate-left.svg";
+import {ReactComponent as TrashIcon} from "../../../../assets/svg/trash.svg";
 import {ClientType, ContactType} from "../../../../types/Types";
 import { API_URL } from "../../../../http";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../../common/Confirmation";
 import {useState} from "react";
 import {ImageFullView} from "../../../common/ImageFullView";
+import {DefaultAvatar} from "../../../common/DefaultAvatar";
 
 type PropsType = {
   data: ClientType;
@@ -61,8 +60,6 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
       });
   }
 
-  const clientAvatar = data?.avatar ? `${API_URL}/archivedClients/${data?._id}/avatar/${data?.avatar}` : avatar;
-
   return (
     <li className="admin__card admin__card--avatar">
       <div className="admin__card-actions">
@@ -80,7 +77,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-          <svg><use href={`${Sprite}#arrow-rotate-left`}/></svg>
+          <ArrowRotateLeftIcon />
         </button>
         <button
             data-tooltip-id="my-tooltip"
@@ -96,16 +93,18 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
                 });
             }}
         >
-          <svg><use href={`${Sprite}#trash`}/></svg>
+            <TrashIcon />
         </button>
       </div>
       <div
-        //to={`/admin/profile?clientId=${data._id}`}
         className="admin__card-link">
         <div className={"admin__card-avatar"}>
-          <img src={clientAvatar} alt={""}/>
+            {data?.avatar
+                ? <img src={`${API_URL}/archivedClients/${data?._id}/avatar/${data?.avatar}`} alt={""}/>
+                : <DefaultAvatar/>
+            }
         </div>
-        <div className={"admin__card-details"}>
+          <div className={"admin__card-details"}>
           <div className={"admin__card-detail-item"}>
             <span className={"admin__card-data-type"}>Name:&nbsp;</span>
             <span className={"admin__card-data"}>{data?.fullName}</span>
@@ -137,14 +136,20 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
       <Confirmation
             isOpen={confirmationData.needConfirmation}
             content={confirmationData.context}
-            confirm={() => confirmationData.cb(confirmationData.itemId)}
+            confirm={() => {
+                if (confirmationData.cb && confirmationData.itemId) {
+                    confirmationData.cb(confirmationData.itemId);
+                } else {
+                    console.error("Item ID is undefined or callback function is not provided.");
+                }
+            }}
             cancel={closeModal}
       />
       { carouselData.isOpen &&
         <ImageFullView
             isOpen={carouselData.isOpen}
             clientId={data?._id}
-            gallery={data?.gallery}
+            gallery={data?.gallery || []}
             activeIndex={carouselData.activeIndex}
             closeImg={()=> setCarouselData({isOpen: false})}
             imgUrl={`${API_URL}/archivedClients/${data?._id}/doneTattooGallery/`}
@@ -152,5 +157,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
       }
       <Tooltip id="my-tooltip" />
     </li>
-  )
+  );
 });
+
+ArchivedClient.displayName = 'ArchivedClient';

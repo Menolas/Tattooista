@@ -10,8 +10,7 @@ import {Preloader} from "../../common/Preloader";
 type PropsType = {
   apiError: null | string;
   isFetching: boolean;
-  isDeletingInProcess: Array<string>;
-  isAuth: string;
+  isAuth: string | null;
   faq: Array<FaqType>;
   remove: (id: string) => void;
   setApiError: () => void;
@@ -20,7 +19,6 @@ type PropsType = {
 export const FaqItems: React.FC<PropsType> = React.memo(({
   apiError,
   isFetching,
-  isDeletingInProcess,
   isAuth,
   faq,
   remove,
@@ -94,3 +92,5 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
     </section>
   )
 });
+
+FaqItems.displayName = 'FaqItems';

@@ -1,6 +1,6 @@
 import { archivedClientsAPI } from "./archivedClientsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {ClientType, SearchFilterType} from "../../types/Types";
+import {ApiErrorType, ClientType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -23,7 +23,7 @@ const SET_ARCHIVED_CLIENT_API_ERROR = 'SET_ARCHIVED_CLIENT_API_ERROR';
 
 const RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS = "You successfully restored this client!";
 
-let initialState = {
+const initialState = {
   archivedClients: [] as Array<ClientType>,
   total: 0 as number,
   pageSize: 5 as number,
@@ -257,7 +257,7 @@ export const getArchivedClients = (
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await archivedClientsAPI.getArchivedClients(
+    const response = await archivedClientsAPI.getArchivedClients(
         currentPage,
         pageSize,
         filter
@@ -265,8 +265,9 @@ export const getArchivedClients = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedClients(response.clients, response.totalCount));
     }
-  } catch (e: any) {
-    dispatch(setAccessErrorAC(e.response?.data?.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setAccessErrorAC(error.response?.data?.message));
     console.log(e);
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -284,7 +285,7 @@ export const deleteArchivedClient = (
 ) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await archivedClientsAPI.deleteArchivedClient(id);
+    const response = await archivedClientsAPI.deleteArchivedClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, pageLimit, filter));
     }
@@ -304,15 +305,16 @@ export const reactivateClient = (
 ) : ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await archivedClientsAPI.reactivateClient(id);
+    const response = await archivedClientsAPI.reactivateClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, pageLimit, filter));
       dispatch(setArchivedClientsApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS));
     }
-  } catch (e: any) {
-    dispatch(setArchivedClientsApiErrorAC(e.response.data.message));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setArchivedClientsApiErrorAC(error.response?.data?.message));
+    console.log(error);
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

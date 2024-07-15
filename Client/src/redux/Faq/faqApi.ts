@@ -1,5 +1,5 @@
 import {instance} from "../../http";
-import {FaqType, CommonResponseFields} from "../../types/Types";
+import {FaqType, CommonResponseFields, UpdateFaqValues} from "../../types/Types";
 
 type GetFaqItemsResponseType = CommonResponseFields & {
     faqItems: Array<FaqType>
@@ -20,12 +20,12 @@ export const faqApi = {
         return response.data;
     },
 
-    async addFaqItem(values: FaqType) {
+    async addFaqItem(values: UpdateFaqValues) {
         const response = await instance.post<AddFaqItemResponseType>('faq', values);
         return response.data;
     },
 
-    async updateFaqItem(id: string, values: any) {
+    async updateFaqItem(id: string, values: UpdateFaqValues) {
         const response = await instance.post<UpdateFaqItemResponseType>(`faq/${id}`, values);
         return response.data;
     },

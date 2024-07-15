@@ -1,8 +1,9 @@
 import * as React from "react";
 import {useEffect, useState} from "react"
 import {PageType} from "../../../types/Types";
-// @ts-ignore
-import Sprite from "../../../assets/svg/sprite.svg";
+import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
+import {ReactComponent as EyeIcon} from "../../../assets/svg/eye.svg";
+import {ReactComponent as HideIcon} from "../../../assets/svg/hide.svg";
 import {API_URL} from "../../../http";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import { UpdateAboutPageForm } from "../../Forms/UpdateAboutPageForm";
@@ -17,8 +18,7 @@ type PropsType = {
     apiError: null | string;
     isFetching: boolean;
     isEditing: boolean;
-    fakeApi: boolean;
-    isAuth: string;
+    isAuth: string | null;
     page?: PageType;
     changeVisibility: (isActive: boolean) => void;
     setApiError: () => void;
@@ -28,7 +28,6 @@ export const About: React.FC<PropsType> = React.memo(({
      apiError,
      isFetching,
      isEditing,
-     fakeApi,
      isAuth,
      page,
      changeVisibility,
@@ -48,11 +47,11 @@ export const About: React.FC<PropsType> = React.memo(({
         }
     }, [apiError]);
 
-    const editModalTitle = 'Update "about" block'
+    const editModalTitle = 'Update "about" block';
 
-    const imgUrl = fakeApi
-        ? `url("./uploads/avatars/avatar.jpg")`
-        : page?.wallPaper ? `url("${API_URL}/pageWallpapers/${page._id}/${page.wallPaper}")` : `url("./uploads/avatars/avatar.jpg")`
+    const imgUrl = page?.wallPaper
+        ? `url("${API_URL}/pageWallpapers/${page._id}/${page.wallPaper}")`
+        : `url("./uploads/avatars/avatar.jpg")`;
 
     return (
         <section className="page-block about container" id="about">
@@ -67,12 +66,12 @@ export const About: React.FC<PropsType> = React.memo(({
                         }
                         className={"btn btn--icon"}
                         onClick={() => {
-                            changeVisibility(page.isActive);
+                            if (page) changeVisibility(page.isActive);
                         }}
                     >
                         {page?.isActive
-                                ? <svg><use href={`${Sprite}#hide`}/></svg>
-                                : <svg><use href={`${Sprite}#eye`}/></svg>
+                                ? <HideIcon />
+                                : <EyeIcon/>
                         }
                     </button>
                     <button
@@ -82,7 +81,7 @@ export const About: React.FC<PropsType> = React.memo(({
                         className={"btn btn--icon"}
                         onClick={() => setIsEditMode(true)}
                     >
-                        <svg><use href={`${Sprite}#edit`}/></svg>
+                        <EditIcon/>
                     </button>
                 </div>
             }
@@ -135,5 +134,7 @@ export const About: React.FC<PropsType> = React.memo(({
             </ModalPopUp>
             <Tooltip id="about-tooltip" />
         </section>
-    )
-})
+    );
+});
+
+About.displayName = 'About';

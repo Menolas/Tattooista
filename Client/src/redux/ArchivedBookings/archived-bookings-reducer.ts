@@ -1,6 +1,6 @@
 import {archivedBookingsApi} from "./archived-bookingsApi";
 import {ResultCodesEnum} from "../../utils/constants";
-import {BookingType, SearchFilterType} from "../../types/Types";
+import {ApiErrorType, BookingType, SearchFilterType} from "../../types/Types";
 import {AppStateType} from "../redux-store";
 import {ThunkAction} from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -23,7 +23,7 @@ const SET_BOOKING_API_ERROR = 'SET_BOOKING_API_ERROR';
 
 const RESTORE_BOOKING_FROM_ARCHIVE = "Congratulations! You just restored this consultation!";
 
-let initialState = {
+const initialState = {
   archivedBookings: [] as Array<BookingType>,
   totalCount: 0 as number,
   pageSize: 5 as number,
@@ -255,7 +255,7 @@ export const getArchivedBookings = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))
-    let response = await archivedBookingsApi.getArchivedBookings(
+    const response = await archivedBookingsApi.getArchivedBookings(
         token,
         currentPage,
         pageSize,
@@ -266,9 +266,9 @@ export const getArchivedBookings = (
       dispatch(setArchivedBookingsAC(response.bookings, response.totalCount));
     }
   } catch (e) {
-    // @ts-ignore
-    dispatch(setAccessErrorAC(e.response.data.message));
-    console.log(e);
+    const error = e as ApiErrorType;
+    dispatch(setAccessErrorAC(error.response?.data?.message));
+    console.log(error);
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -284,7 +284,7 @@ export const deleteArchivedBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await archivedBookingsApi.deleteArchivedBooking(id);
+    const response = await archivedBookingsApi.deleteArchivedBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
     }
@@ -305,7 +305,7 @@ export const reactivateBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await archivedBookingsApi.reactivateBooking(id);
+    const response = await archivedBookingsApi.reactivateBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(
           token,
@@ -318,8 +318,9 @@ export const reactivateBooking = (
       dispatch(setBookingApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_BOOKING_FROM_ARCHIVE));
     }
-  } catch (e: any) {
-    dispatch(setBookingApiErrorAC(e.response.data.message));
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setBookingApiErrorAC(error.response?.data?.message));
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

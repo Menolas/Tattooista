@@ -11,10 +11,17 @@ type PropsType = {
   fakeApi: boolean;
   isFetching: boolean;
   isDeletingInProcess: Array<string>;
-  isAuth: string;
+  isAuth: string | null;
   services: Array<ServiceType>;
   remove: (id: string) => void;
   setApiError: () => void;
+};
+
+export type UpdateServiceDataType = {
+    isUpdateMode: boolean;
+    isAdd?: boolean;
+    isEdit?: boolean;
+    service?: ServiceType | null;
 };
 
 export const Services: React.FC<PropsType> = React.memo(({
@@ -27,12 +34,7 @@ export const Services: React.FC<PropsType> = React.memo(({
   setApiError,
 }) => {
 
-  const [updateServiceData, setUpdateServiceData] = useState<{
-      isUpdateMode: boolean,
-      isAdd?: boolean,
-      isEdit?: boolean,
-      service?: ServiceType | null
-  }>({isUpdateMode: false});
+  const [updateServiceData, setUpdateServiceData] = useState<UpdateServiceDataType>({isUpdateMode: false});
 
   useEffect(() => {
     if (updateServiceData.isUpdateMode && apiError === null) {
@@ -43,9 +45,9 @@ export const Services: React.FC<PropsType> = React.memo(({
   const closeUpdateServiceModal = () => {
       setUpdateServiceData({
           isUpdateMode: false,
-          service: null,
           isAdd: false,
-          isEdit: false
+          isEdit: false,
+          service: null,
       });
       setApiError();
   };
@@ -96,7 +98,7 @@ export const Services: React.FC<PropsType> = React.memo(({
         closeModal={closeUpdateServiceModal}
       >
         {
-            updateServiceData.isUpdateMode &&
+            updateServiceData.isUpdateMode && updateServiceData.service !== null &&
             <UpdateServiceItemForm
                 apiError={apiError}
                 service={updateServiceData.service}
@@ -107,3 +109,5 @@ export const Services: React.FC<PropsType> = React.memo(({
     </section>
   )
 });
+
+Services.displayName = 'Services';

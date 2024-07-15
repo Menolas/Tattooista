@@ -6,12 +6,16 @@ import {API_URL} from "../../http";
 import {useDispatch} from "react-redux";
 import {updateGalleryItem} from "../../redux/Gallery/gallery-reducer";
 
+type InitialValuesType = {
+    [key: string]: boolean;
+};
+
 type PropsType = {
     activeStyleId: string;
     folder: string;
     galleryItem: GalleryItemType;
     styles: Array<StyleType>;
-    closeModal?: () => void;
+    closeModal: () => void;
 }
 
 export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
@@ -31,7 +35,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
         closeModal();
     }
 
-    let initialValues = {};
+    const initialValues: InitialValuesType = {};
     styles.forEach((style) => {
         initialValues[style._id] = galleryItem?.tattooStyles?.includes(style._id);
     });
@@ -42,7 +46,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
             onSubmit={submit}
         >
             {(propsF) => {
-                let {isSubmitting} = propsF;
+                const {isSubmitting} = propsF;
 
                 const tattooStyles = styles.map((style) => {
                         return (
@@ -88,9 +92,10 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
                             }
                         </button>
                     </Form>
-                )
-
+                );
             }}
         </Formik>
     )
 });
+
+UpdateGalleryItemForm.displayName = 'UpdateGalleryItemForm';

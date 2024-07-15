@@ -24,7 +24,7 @@ export const StylesContainer: React.FC = () => {
     const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcess);
     const styles = useSelector(getStylesSelector);
-    let activeStyle = useSelector(getActiveStyleSelector);
+    const activeStyle = useSelector(getActiveStyleSelector);
     const token = useSelector(getTokenSelector);
 
     const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { servicesApi } from "./servicesApi";
-import { ServiceType } from "../../types/Types";
+import {ApiErrorType, ServiceType} from "../../types/Types";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType } from "../redux-store";
 import { ResultCodesEnum } from "../../utils/constants";
@@ -21,7 +21,7 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCES
 const SERVICE_ADD_SUCCESS = "You successfully added a new SERVICE item";
 const SERVICE_UPDATE_SUCCESS = "You successfully updated a SERVICE item";
 
-let initialState = {
+const initialState = {
   services: [] as Array<ServiceType>,
   isFetching: false as boolean,
   fakeApi: false as boolean,
@@ -112,10 +112,10 @@ type ToggleIsDeletingInProcessAT = {
   id: string
 }
 
-const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
-    {
-      type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
-    });
+// const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
+//     {
+//       type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
+//     });
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
@@ -169,7 +169,7 @@ type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTyp
 export const getServices = (): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await servicesApi.getServices();
+    const response = await servicesApi.getServices();
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setServicesAC(response.services));
       return true;
@@ -199,9 +199,10 @@ export const editService = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
     return false;
   }
 }
@@ -218,9 +219,10 @@ export const addService = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'))
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'))
+    console.log(error);
     return false;
   }
 }

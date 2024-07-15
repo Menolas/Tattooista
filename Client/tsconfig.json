@@ -22,8 +22,12 @@
     "jsx": "preserve"
   },
   "include": [
+    "src/**/*.d.ts",
     "src/custom.d.ts",
     "src/**/*.ts",
-    "tests/**/*.ts"
+    "src/**/*",
+    "tests/**/*.ts",
+    "src/**/*.tsx",
+    "global.d.ts"
   ],
 }

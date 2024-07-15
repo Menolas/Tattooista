@@ -1,5 +1,5 @@
 import {stylesApi} from "./StylesApi";
-import {StyleType} from "../../types/Types";
+import {ApiErrorType, StyleType} from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ResultCodesEnum} from "../../utils/constants";
@@ -27,7 +27,7 @@ const SET_FAKE_API = 'SET_FAKE_API';
 const ADD_STYLE_SUCCESS = 'You successfully added a new Tattoo style to your gallery.';
 const UPDATE_STYLE_SUCCESS = 'You successfully updated Tattoo style in your gallery.';
 
-let initialState = {
+const initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   styles: [] as Array<StyleType>,
@@ -72,13 +72,14 @@ export const stylesReducer = (
         styles: action.styles,
       }
 
-    case DELETE_STYLE:
+    case DELETE_STYLE: {
       const updatedStyles = state.styles.filter(style => style._id !== action.id);
       return {
         ...state,
         styles: updatedStyles,
         activeStyle: updatedStyles[0],
-      }
+      };
+    }
 
     case ADD_STYLE:
       return {
@@ -210,14 +211,14 @@ export const setActiveStyle = (style: StyleType | null): ThunkType => async (
 }
 
 export const getStyles = (
-    token: string | null,
+    token: string | null | undefined,
     isSlider?: boolean
 ): ThunkType => async (
   dispatch
 ) => {
   dispatch(setIsFetchingAC(true));
   try {
-    let getStylesResponse = await stylesApi.getStyles(token, isSlider)
+    const getStylesResponse = await stylesApi.getStyles(token, isSlider)
     if (getStylesResponse.resultCode === ResultCodesEnum.Success) {
       dispatch(setFakeApiAC(false));
       dispatch(setStylesAC(getStylesResponse.tattooStyles));
@@ -241,7 +242,7 @@ export const addStyle = (values: FormData): ThunkType => async (
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    let response = await stylesApi.addStyle(values);
+    const response = await stylesApi.addStyle(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
@@ -249,9 +250,10 @@ export const addStyle = (values: FormData): ThunkType => async (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e.response?.data?.message);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -263,7 +265,7 @@ export const editStyle = (
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    let response = await stylesApi.editStyle(id, values)
+    const response = await stylesApi.editStyle(id, values)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, UPDATE_STYLE_SUCCESS));
@@ -271,9 +273,10 @@ export const editStyle = (
     } else {
       return false;
     }
-  } catch (e: any) {
-    dispatch(setApiErrorAC(e.response?.data?.message || 'An error occurred'));
-    console.log(e);
+  } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
+    console.log(error);
     return false;
   }
 }
@@ -281,7 +284,7 @@ export const editStyle = (
 export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    let response = await stylesApi.deleteStyle(id);
+    const response = await stylesApi.deleteStyle(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteStyleAC(id));
       return true;

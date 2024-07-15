@@ -32,3 +32,5 @@ export const MyCarousel: React.FC<MyCarouselProps> = React.memo(({
         />
     );
 });
+
+MyCarousel.displayName = 'MyCarousel';

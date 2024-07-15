@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ErrorMessage, Field} from "formik";
+import {ErrorMessage, Field, FieldProps} from "formik";
 import {ErrorMessageWrapper} from "./ErrorMessageWrapper";
 
 type PropsType = {
@@ -31,7 +31,7 @@ export const FieldComponent:React.FC<PropsType> = ({
                 onChange={onChange}
                 value={value}
             >
-                {({ field }) => (
+                {({field}: FieldProps) => (
                 <input
                     {...field}
                     type={type}
