@@ -2,12 +2,12 @@ import * as React from "react";
 import { NavLink } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import {ADMIN, mainNavHashLinksData, socialLinksData, SUPER_ADMIN} from "../utils/constants";
-// @ts-ignore
-import Sprite from "../assets/svg/sprite.svg";
 import {ReactComponent as PhoneIcon} from "../assets/svg/phone.svg";
 import {ReactComponent as AdminIcon} from "../assets/svg/admin.svg";
 import {ReactComponent as LoginIcon} from "../assets/svg/login.svg";
 import {ReactComponent as LogOutIcon} from "../assets/svg/logout.svg";
+import {ReactComponent as FaceBookIcon} from "../assets/svg/facebook.svg";
+import {ReactComponent as InstagramIcon} from "../assets/svg/instagram.svg";
 
 type PropsType = {
     isAuth: string | null
@@ -42,7 +42,10 @@ export const MobileMainMenu: React.FC<PropsType> = React.memo(({
                     target={"_blank"}
                     onClick={ closeMenu }
                 >
-                    <span><svg><use href={`${Sprite}#${item.icon}`}/></svg></span>
+                    {item.icon === "instagram"
+                        ? <InstagramIcon />
+                        : <FaceBookIcon />
+                    }
                     {item.text}
                 </NavLink>
             </li>

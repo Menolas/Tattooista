@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
                     Web Designer: Mariia Enhelke
               </NavLink>
           </div>
-          <div className={'main-footer__copyrights'}>@ Tattoo Studio "Adelaine Hobf"</div>
+          <div className={'main-footer__copyrights'}>@ Tattoo Studio &quot;Adelaine Hobf&quot;</div>
       </div>
     </footer>
   )

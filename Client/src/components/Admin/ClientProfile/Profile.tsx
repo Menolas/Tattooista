@@ -1,8 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-// @ts-ignore
-import avatar from "../../../assets/img/fox.webp";
 import {ClientType, ContactType} from "../../../types/Types";
 import {API_URL} from "../../../http";
 import {ModalPopUp} from "../../common/ModalPopUp";
@@ -15,6 +13,7 @@ import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
+import {DefaultAvatar} from "../../common/DefaultAvatar";
 
 type PropsType = {
   apiError: null | string;
@@ -47,7 +46,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
         }
     }, [apiError]);
 
-  //debugger
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
   const [carouselData, setCarouselData] = useState<{
@@ -66,23 +64,23 @@ export const Profile: React.FC<PropsType> = React.memo(({
     setEditClientMode(false);
     setEditGalleryMode(false);
       setConfirmationData({needConfirmation: false, context: ''});
-  }
+  };
 
   const deleteClientCallBack = () => {
       remove(data._id);
       navigate("/admin/clients");
-  }
+  };
 
   const archiveClientCallBack = () => {
       archive(data._id);
       navigate("/admin/clients");
-  }
+  };
 
   if (!data) {
     return <div>Sorry, we can not find such a client in data base</div>
   }
 
-  const profileContacts: ContactType = data.contacts
+  const profileContacts: ContactType = data.contacts;
 
   const contactsArray = profileContacts
       ? Object.keys(profileContacts).map(contact => {
@@ -95,11 +93,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
               )
              : null
         }) : <></>
-
-
-  const Avatar = data.avatar
-      ? `${API_URL}/clients/${data._id}/avatar/${data.avatar}`
-      : avatar;
 
   let profileGallery: JSX.Element[] = [];
 
@@ -172,9 +165,12 @@ export const Profile: React.FC<PropsType> = React.memo(({
       </div>
       <div className="admin__card-link">
         <div className="admin__card-avatar">
-          <img src={`${Avatar}`} alt={data.fullName} />
+            {!data?.avatar
+                ? <DefaultAvatar/>
+                : <img src={`${API_URL}/clients/${data._id}/avatar/${data.avatar}`} alt={data.fullName}/>
+            }
         </div>
-        <div className="admin__card-details">
+          <div className="admin__card-details">
           <div className={"admin__card-detail-item"}>
             <span className={"admin__card-data-type"}>Name:&nbsp;</span>
             <span className={"admin__card-data"}>{data.fullName}</span>

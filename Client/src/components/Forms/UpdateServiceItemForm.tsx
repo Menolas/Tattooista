@@ -44,8 +44,11 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
 
     const fileReader = new FileReader();
     fileReader.onloadend = () => {
-        // @ts-ignore
-        setImageURL(fileReader.result);
+        if (typeof fileReader.result === 'string') {
+            setImageURL(fileReader.result);
+        } else {
+            setImageURL('');
+        }
     }
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {

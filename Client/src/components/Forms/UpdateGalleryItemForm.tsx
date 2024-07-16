@@ -30,7 +30,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
     console.log('styles as string:', JSON.stringify(styles, null, 2));
     const dispatch = useDispatch();
 
-    const submit = async (values: any) => {
+    const submit = async (values: InitialValuesType) => {
         await dispatch(updateGalleryItem(galleryItem._id, values, activeStyleId));
         closeModal();
     }
