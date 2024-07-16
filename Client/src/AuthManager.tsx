@@ -1,14 +1,14 @@
 import React, {ReactNode,useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {checkAuth} from "../redux/Auth/auth-reducer";
-import {getAuthSelector, getUserSelector} from "../redux/Auth/auth-selectors";
+import {checkAuth} from "./redux/Auth/auth-reducer";
+import {getAuthSelector, getUserSelector} from "./redux/Auth/auth-selectors";
 
-interface SmoothScrollProps {
+interface AuthManagerProps {
     children: ReactNode;
 }
 
-export const SmoothScroll = ({children}: SmoothScrollProps) => {
+export const AuthManager = ({children}: AuthManagerProps) => {
 
     const isAuth = useSelector(getAuthSelector);
     const user = useSelector(getUserSelector);
