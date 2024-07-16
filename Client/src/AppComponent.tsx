@@ -5,7 +5,7 @@ import {Route, Routes, BrowserRouter } from "react-router-dom";
 import {store} from "./redux/redux-store";
 import {withRouter} from "./hoc/withRouter";
 import "./assets/scss/style.css";
-import {SmoothScroll} from "./utils/smoothScroll";
+import {AuthManager} from "./AuthManager";
 import {HeaderContainer} from "./components/Header/HeaderContainer";
 import {Contacts} from "./components/Contacts";
 import {Footer} from "./components/Footer/Footer";
@@ -30,7 +30,7 @@ import {MainWrap} from "./components/MainWrap";
 const App = () => {
 
     return (
-        <SmoothScroll>
+        <AuthManager>
             <React.Suspense fallback={<Preloader />}>
                 <HeaderContainer />
                 <MainWrap>
@@ -68,7 +68,7 @@ const App = () => {
                 <ScrollToTopButton/>
                 <Footer />
             </React.Suspense>
-        </SmoothScroll>
+        </AuthManager>
     );
 }
 
@@ -82,4 +82,4 @@ export const AhTattooistaApp = () => {
             </Provider>
         </BrowserRouter>
     );
-}
+};
