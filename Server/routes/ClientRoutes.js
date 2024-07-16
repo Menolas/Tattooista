@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path');
 const Client = require('../models/Client');
 const ArchivedClient = require('../models/ArchivedClient');
 const controller = require('../controllers/clientsController');
