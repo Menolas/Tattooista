@@ -283,7 +283,7 @@ class clientsController {
 
       if (res.client.gallery.length > 0) {
         archivedClient.gallery = [...res.client.gallery];
-        res.client.gallery.forEach((item, index) => {
+        res.client.gallery.forEach((item) => {
           const oldGalleryPath = `./uploads/clients/${res.client._id}/doneTattooGallery/${item}`;
           const newGalleryPath = `./uploads/archivedClients/${archivedClient._id}/doneTattooGallery/${item}`;
           if (fs.existsSync(oldGalleryPath)) {
@@ -340,7 +340,7 @@ class clientsController {
 
       if (res.client.gallery.length > 0) {
         newClient.gallery = [...res.client.gallery];
-        res.client.gallery.forEach((item, index) => {
+        res.client.gallery.forEach((item) => {
           const oldGalleryPath = `./uploads/archivedClients/${res.client._id}/doneTattooGallery/${item}`;
           const newGalleryPath = `./uploads/clients/${newClient._id}/doneTattooGallery/${item}`;
           moveOperations.push(new Promise((resolve, reject) => {

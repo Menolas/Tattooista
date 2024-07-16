@@ -3,18 +3,6 @@ const fs = require("fs");
 const generateFileRandomName = require("../utils/functions");
 const ServiceService = require("../services/serviceService");
 
-const getConditions = (reqBody) => {
-  const conditions = [];
-  if (reqBody.condition_0 !== "undefined") conditions.push(reqBody.condition_0.trim());
-  if (reqBody.condition_1 !== "undefined") conditions.push(reqBody.condition_1.trim());
-  if (reqBody.condition_2 !== "undefined") conditions.push(reqBody.condition_2.trim());
-  if (reqBody.condition_3 !== "undefined") conditions.push(reqBody.condition_3.trim());
-  if (reqBody.condition_4 !== "undefined") conditions.push(reqBody.condition_4.trim());
-  if (reqBody.condition_5 !== "undefined") conditions.push(reqBody.condition_5.trim());
-
-  return conditions;
-}
-
 class serviceController {
 
   async getServices(req, res) {

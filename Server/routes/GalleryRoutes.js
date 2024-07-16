@@ -1,4 +1,3 @@
-const express = require('express');
 const Router = require('express');
 const router = new Router();
 const GalleryItem = require('../models/GalleryItem');

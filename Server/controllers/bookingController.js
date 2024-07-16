@@ -1,5 +1,4 @@
 const Booking = require('../models/Booking');
-const Client = require("../models/Client");
 const ArchivedBooking = require("../models/ArchivedBooking");
 const BookingService = require('../services/bookingService');
 const mailService = require("../services/mailService");
