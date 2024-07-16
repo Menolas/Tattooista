@@ -1,7 +1,5 @@
 import * as React from "react";
 import {useState} from "react";
-// @ts-ignore
-import avatar from "../../../assets/img/fox.webp";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
@@ -14,6 +12,7 @@ import { Tooltip } from "react-tooltip";
 import { Confirmation } from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
+import {DefaultAvatar} from "../../common/DefaultAvatar";
 
 type PropsType = {
   data: ClientType;
@@ -75,8 +74,6 @@ export const Client: React.FC<PropsType> = React.memo(({
            : null
       })
   : null;
-
-  const clientAvatar = data.avatar ? `${API_URL}/clients/${data._id}/avatar/${data.avatar}` : avatar;
 
   return (
     <li className="admin__card admin__card--avatar">
@@ -141,7 +138,10 @@ export const Client: React.FC<PropsType> = React.memo(({
           className={"admin__card-link"}
       >
           <div className={"admin__card-avatar"}>
-            <img src={clientAvatar} alt={""}/>
+              {!data.avatar
+                  ? <DefaultAvatar/>
+                  : <img src={`${API_URL}/clients/${data._id}/avatar/${data.avatar}`} alt="preview"/>
+              }
           </div>
           <div className={"admin__card-details"}>
             <div className={"admin__card-detail-item"}>

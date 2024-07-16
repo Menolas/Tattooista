@@ -8,7 +8,7 @@ type PropsType = {
     placeholder: string;
     label?: string;
     value?: string;
-    onChange?: (e: any) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const FieldComponent:React.FC<PropsType> = ({
@@ -43,5 +43,5 @@ export const FieldComponent:React.FC<PropsType> = ({
                 {ErrorMessageWrapper}
             </ErrorMessage>
         </div>
-    )
-}
+    );
+};

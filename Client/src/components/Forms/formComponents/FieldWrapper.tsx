@@ -6,7 +6,7 @@ type PropsType = {
     wrapperClass?: string;
     name: string;
     label?: string;
-    children: any;
+    children: React.ReactNode;
 }
 
 export const FieldWrapper:React.FC<PropsType> = ({
@@ -25,5 +25,5 @@ export const FieldWrapper:React.FC<PropsType> = ({
                 {ErrorMessageWrapper}
             </ErrorMessage>
         </div>
-    )
+    );
 };

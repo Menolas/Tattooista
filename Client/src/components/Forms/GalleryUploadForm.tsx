@@ -49,23 +49,21 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   closeModal
 }) => {
 
-  const [imageURLS, setImageURLS] = useState([]);
+  const [imageURLS, setImageURLS] = useState<(string | ArrayBuffer | null)[]>([]);
 
   const dispatch = useDispatch();
 
   const handleOnFileUploadChange = (
       event: React.ChangeEvent<HTMLInputElement>,
-      setImageURLS: React.Dispatch<React.SetStateAction<never[]>>
+      setImageURLS: React.Dispatch<React.SetStateAction<(string | ArrayBuffer | null)[]>>
   ) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
       setImageURLS([]);
-      // @ts-expect-error
-      const files = [...event.target.files] || [];
+      const files = Array.from(event.target.files);
       files.forEach((item) => {
         const reader = new FileReader();
         reader.onloadend = () => {
-          // @ts-expect-error
           setImageURLS(_=>[..._,reader.result]);
         }
         reader.readAsDataURL(item);
@@ -128,12 +126,16 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 imageURLS &&
                   <ul className={"list gallery__uploadedImgPreviews"}>
                     {
-                      imageURLS?.map((item, index) => {
+                      imageURLS.filter(item => item !== null)
+                          .map((item, index) => {
                         return (
-                            <li className={"gallery__uploadedImgPreviews-item"} key={index}>
+                            <li
+                                className={"gallery__uploadedImgPreviews-item"}
+                                key={index}
+                            >
                               <img
                                   className="client-profile__gallery-image"
-                                  src={item}
+                                  src={item as string}
                                   alt="preview"
                                   height="50"
                               />

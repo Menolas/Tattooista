@@ -10,8 +10,8 @@ type OptionType = {
 
 type PropsType = {
     name: string;
-    options: any;
-    handleChange: any
+    options: OptionType[];
+    handleChange: (value: string) => void;
     placeholder?: string;
 }
 
@@ -38,11 +38,13 @@ export const FormSelect: React.FC<PropsType> = ({
             onMenuClose={() => {
                 setMenuIsOpen(false)
             }}
-            onChange={(selectedOption) => {
-                helpers.setValue(selectedOption.value);
-                handleChange(selectedOption.value);
+            onChange={(newValue) => {
+                if (newValue !== null) {
+                    helpers.setValue(newValue.value);
+                    handleChange(newValue.value);
+                }
             }}
             value={options.find((option: OptionType) => option.value === field.value)}
         />
-    )
-}
+    );
+};

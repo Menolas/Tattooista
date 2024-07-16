@@ -100,7 +100,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
       const file = event.target.files[0];
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        // @ts-ignore
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         setImageURL(fileReader.result);
       }
       setHasNewFile(true);

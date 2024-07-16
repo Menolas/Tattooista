@@ -1,6 +1,4 @@
 import * as React from "react";
-// @ts-ignore
-import avatar from "../../../assets/img/fox.webp";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import { UserType } from "../../../types/Types";
@@ -8,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { API_URL } from "../../../http";
 import { Confirmation } from "../../common/Confirmation";
 import {useState} from "react";
+import {DefaultAvatar} from "../../common/DefaultAvatar";
 
 type PropsType = {
     data: UserType;
@@ -31,7 +30,6 @@ export const User: React.FC<PropsType> = ({
         cb?: () => void,
         context: string
     }>({needConfirmation: false, context: ''});
-    const userAvatar = data.avatar ? `${API_URL}/users/${data._id}/avatar/${data.avatar}` : avatar;
 
     const closeModal = () => {
         setConfirmationData({needConfirmation: false, context: ''});
@@ -76,7 +74,10 @@ export const User: React.FC<PropsType> = ({
                 to={`/admin/profile?clientId=${data._id}`}
                 className="admin__card-link">
                 <div className={"admin__card-avatar"}>
-                    <img src={userAvatar} alt={""}/>
+                    {!data?.avatar
+                        ? <DefaultAvatar/>
+                        : <img src={`${API_URL}/users/${data._id}/avatar/${data.avatar}`} alt="preview"/>
+                    }
                 </div>
                 <div className={"admin__card-details"}>
                     <div className={"admin__card-detail-item"}>

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Field, Form, Formik, FormikHelpers} from "formik";
-// @ts-ignore
 import {
   isFileSizeValid,
   MAX_FILE_SIZE,
@@ -12,10 +11,9 @@ import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useState} from "react";
-// @ts-ignore
-import avatar from "../../assets/img/fox.webp";
 import {useDispatch} from "react-redux";
 import {registration} from "../../redux/Auth/auth-reducer";
+import {DefaultAvatar} from "../common/DefaultAvatar";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
@@ -73,8 +71,11 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
       const file = event.target.files[0];
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        // @ts-ignore
-        setImageURL(fileReader.result);
+        if (typeof fileReader.result === 'string') {
+          setImageURL(fileReader.result);
+        } else {
+          setImageURL('');
+        }
       }
       fileReader.readAsDataURL(file);
     }
@@ -112,12 +113,12 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 wrapperClass={'form__input-wrap--uploadFile'}
             >
                 <div className="form__avatar">
-                  <img
-                      src={ imageURL ? imageURL :  avatar }
-                      alt="preview"
-                  />
+                  {!imageURL
+                      ? <DefaultAvatar/>
+                      : <img src={imageURL} alt="preview"/>
+                  }
                 </div>
-                <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>Pick File</label>
+              <label className="btn btn--sm btn--dark-bg" htmlFor={"avatar"}>Pick File</label>
 
                 <Field
                     className="hidden"
