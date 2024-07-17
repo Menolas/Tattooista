@@ -24,7 +24,8 @@ const filesUploadingValidationSchema = Yup.object().shape({
                 if (!(value instanceof File)) return true
                 return isFileTypesValid([value], VALID_FILE_EXTENSIONS)
               })
-      ),
+      )
+      .min(1, "You must select at least one file"),
 });
 
 type FormValues = {
@@ -49,32 +50,43 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   closeModal
 }) => {
 
-  const [imageURLS, setImageURLS] = useState<(string | ArrayBuffer | null)[]>([]);
+  const [imageURLs, setImageURLs] = useState<{url: string | ArrayBuffer | null, file: File}[]>([]);
 
   const dispatch = useDispatch();
 
   const handleOnFileUploadChange = (
       event: React.ChangeEvent<HTMLInputElement>,
-      setImageURLS: React.Dispatch<React.SetStateAction<(string | ArrayBuffer | null)[]>>
+      //setImageURLS: React.Dispatch<React.SetStateAction<(string | ArrayBuffer | null)[]>>
   ) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
-      setImageURLS([]);
+      setImageURLs([]);
       const files = Array.from(event.target.files);
-      files.forEach((item) => {
+      files.forEach((file) => {
         const reader = new FileReader();
         reader.onloadend = () => {
-          setImageURLS(_=>[..._,reader.result]);
+          setImageURLs(prev =>[...prev, {url: reader.result, file}]);
         }
-        reader.readAsDataURL(item);
+        reader.readAsDataURL(file);
       });
     }
   };
 
-  const submit = async (values: FormValues) => {
+  const handleDeletePreview = (event: React.MouseEvent<HTMLButtonElement>, fileToDelete: File) => {
+    event.preventDefault();
+    setImageURLs(currentFiles => currentFiles.filter(({file}) => file !== fileToDelete));
+  };
+
+  const submit = async (values: FormValues, formikHelpers: any) => {
+    const { setSubmitting, setErrors } = formikHelpers;
+
+    if (imageURLs.length === 0 && (isEditPortfolio || client?.gallery?.length === 0)) {
+      setErrors({ gallery: "At least one file must be selected for upload." });
+      setSubmitting(false);
+      return;
+    }
     const formData = new FormData();
-    values['gallery'].forEach((file: File) => formData.append(file.name, file));
-    console.log(JSON.stringify(formData));
+    imageURLs.forEach(({file}) => formData.append(file.name, file));
     if (isEditPortfolio && styleID !== undefined) await dispatch(updateGallery(styleID, formData));
     if (!isEditPortfolio && client) await dispatch(updateClientGallery(client?._id, formData));
     closeModal();
@@ -123,19 +135,24 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 wrapperClass={'form__input-wrap--uploadFile'}
             >
               {
-                imageURLS &&
+                imageURLs &&
                   <ul className={"list gallery__uploadedImgPreviews"}>
                     {
-                      imageURLS.filter(item => item !== null)
-                          .map((item, index) => {
+                      imageURLs.map((item, index) => {
                         return (
                             <li
                                 className={"gallery__uploadedImgPreviews-item"}
                                 key={index}
                             >
+                              <button
+                                  className="btn"
+                                  onClick={(event) => handleDeletePreview(event, item.file)}
+                              >
+                                Delete
+                              </button>
                               <img
                                   className="client-profile__gallery-image"
-                                  src={item as string}
+                                  src={item.url as string}
                                   alt="preview"
                                   height="50"
                               />
@@ -156,7 +173,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 multiple
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   propsF.setFieldValue('gallery', Array.from(e.currentTarget.files || []))
-                  handleOnFileUploadChange(e, setImageURLS)
+                  handleOnFileUploadChange(e)
                 }}
               />
             </FieldWrapper>
