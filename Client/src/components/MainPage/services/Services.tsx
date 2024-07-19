@@ -8,7 +8,6 @@ import {Preloader} from "../../common/Preloader";
 
 type PropsType = {
   apiError: null | string;
-  fakeApi: boolean;
   isFetching: boolean;
   isDeletingInProcess: Array<string>;
   isAuth: string | null;
@@ -26,7 +25,6 @@ export type UpdateServiceDataType = {
 
 export const Services: React.FC<PropsType> = React.memo(({
   apiError,
-  fakeApi,
   isFetching,
   isAuth,
   services,
@@ -59,7 +57,6 @@ export const Services: React.FC<PropsType> = React.memo(({
     return (
       <ServiceItem
         key={item._id}
-        fakeApi={fakeApi}
         isAuth={isAuth}
         serviceIndex={i + 1}
         service={item}

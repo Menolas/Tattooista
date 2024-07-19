@@ -14,7 +14,6 @@ const SET_SERVICES = 'SET_SERVICES';
 const DELETE_SERVICE = 'DELETE_SERVICE';
 const ADD_SERVICE = 'ADD_SERVICE';
 const UPDATE_SERVICE = 'UPDATE_SERVICE';
-const SET_FAKE_API = 'SET_FAKE_API';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_CONSULTATION_DELETING_IN_PROCESS';
 
@@ -24,7 +23,6 @@ const SERVICE_UPDATE_SUCCESS = "You successfully updated a SERVICE item";
 const initialState = {
   services: [] as Array<ServiceType>,
   isFetching: false as boolean,
-  fakeApi: false as boolean,
   isDeletingInProcess: [] as Array<string>,
 }
 
@@ -49,12 +47,6 @@ export const servicesReducer = (
         isDeletingInProcess: action.isFetching
             ? [...state.isDeletingInProcess, action.id]
             : state.isDeletingInProcess.filter(id => id !== action.id)
-      }
-
-    case SET_FAKE_API:
-      return {
-        ...state,
-        fakeApi: action.fakeApi,
       }
 
     case SET_SERVICES:
@@ -92,30 +84,16 @@ export const servicesReducer = (
   }
 }
 
-type ActionsTypes = SetServicesAT | SetSuccessModalAT | SetApiErrorAT | SetFakeApiAT |
+type ActionsTypes = SetServicesAT | SetSuccessModalAT | SetApiErrorAT |
     ToggleIsDeletingInProcessAT | SetIsFetchingAT | DeleteServiceAT | AddServiceAT | UpdateServiceAT;
 
 // action creators
-
-type SetFakeApiAT = {
-  type: typeof SET_FAKE_API
-  fakeApi: boolean
-}
-
-const setFakeApiAC = (fakeApi: boolean): SetFakeApiAT => ({
-  type: SET_FAKE_API, fakeApi
-});
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
   isFetching: boolean,
   id: string
 }
-
-// const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
-//     {
-//       type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
-//     });
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING,
@@ -179,7 +157,6 @@ export const getServices = (): ThunkType => async (dispatch) => {
   } catch (e) {
     console.log(e);
     dispatch(setServicesAC(services));
-    dispatch(setFakeApiAC(true));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));

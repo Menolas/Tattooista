@@ -11,7 +11,6 @@ import {
   SetApiErrorAT} from "../General/general-reducer";
 
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
-const SET_FAKE_API = 'SET_FAKE_API';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_EDITING = 'TOGGLE_IS_EDITING';
 
@@ -22,7 +21,6 @@ const initialState = {
   page: {} as PageType,
   isFetching: false as boolean,
   isEditing: false as boolean,
-  fakeApi: false as boolean,
 }
 
 export type InitialStateType = typeof initialState;
@@ -52,12 +50,6 @@ export const aboutReducer = (
         page: action.page
       }
 
-    case SET_FAKE_API:
-      return {
-        ...state,
-        fakeApi: action.fakeApi,
-      }
-
     default: return {
       ...state
     }
@@ -65,7 +57,7 @@ export const aboutReducer = (
 }
 
 type ActionsTypes = SetAboutPageAT | SetSuccessModalAT | SetApiErrorAT
-    | SetFakeApiAT | SetIsFetchingAT | SetIsEditingAT;
+    | SetIsFetchingAT | SetIsEditingAT;
 
 // action creators
 
@@ -87,15 +79,6 @@ const setIsEditingAC = (isEditing: boolean): SetIsEditingAT => ({
   type: TOGGLE_IS_EDITING, isEditing
 });
 
-type SetFakeApiAT = {
-  type: typeof SET_FAKE_API
-  fakeApi: boolean
-}
-
-const setFakeApiAC = (fakeApi: boolean): SetFakeApiAT => ({
-  type: SET_FAKE_API, fakeApi
-});
-
 type SetAboutPageAT = {
   type: typeof SET_ABOUT_PAGE,
   page: PageType
@@ -114,12 +97,10 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
     dispatch(setIsFetchingAC(true));
     const response = await aboutApi.getAboutPage();
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFakeApiAC(false));
       dispatch(setAboutPageAC(response.page));
     }
   } catch (e) {
     console.log(e);
-    dispatch(setFakeApiAC(true));
     dispatch(setAboutPageAC(pages));
   } finally {
     dispatch(setIsFetchingAC(false));

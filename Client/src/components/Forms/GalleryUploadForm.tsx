@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
-import {Field, Form, Formik} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid } from "../../utils/validators";
 import {ReactComponent as TrashIcon} from "../../assets/svg/trash.svg";
 import {API_URL} from "../../http";
@@ -77,7 +77,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
     setImageURLs(currentFiles => currentFiles.filter(({file}) => file !== fileToDelete));
   };
 
-  const submit = async (values: FormValues, formikHelpers: any) => {
+  const submit = async (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
     const { setSubmitting, setErrors } = formikHelpers;
 
     if (imageURLs.length === 0 && (isEditPortfolio || client?.gallery?.length === 0)) {
@@ -92,7 +92,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
     closeModal();
   };
 
-  const initialValues = {
+  const initialValues: FormValues = {
     gallery: []
   };
 

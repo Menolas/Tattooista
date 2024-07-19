@@ -8,7 +8,6 @@ import {useEffect, useState} from "react";
 
 type PropsType = {
     activeStyle: StyleType | null;
-    fakeApi: boolean;
     pageSize: number;
     styles: Array<StyleType>;
     setActiveStyle: (style: StyleType) => void;
@@ -35,7 +34,6 @@ const responsive = {
 
 export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   activeStyle,
-  fakeApi,
   pageSize,
   styles,
   setActiveStyle,
@@ -51,9 +49,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   const slides = styles?.map((slide) => {
 
     if (slide.wallPaper) {
-        const wallpaperUrl = fakeApi
-            ? `./uploads/TattooStylesWallpapers/${slide.wallPaper}`
-            : `${API_URL}/styleWallpapers/${slide._id}/${slide.wallPaper}`;
+        const wallpaperUrl = `${API_URL}/styleWallpapers/${slide._id}/${slide.wallPaper}`;
 
         return (
             <div
