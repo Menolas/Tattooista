@@ -10,6 +10,7 @@ import {ClientType} from "../../types/Types";
 import {useDispatch} from "react-redux";
 import {updateClientGallery} from "../../redux/Clients/clients-reducer";
 import {updateGallery} from "../../redux/Gallery/gallery-reducer";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 
 const filesUploadingValidationSchema = Yup.object().shape({
   gallery: Yup.array()
@@ -33,6 +34,7 @@ type FormValues = {
 };
 
 type PropsType = {
+  apiError: null | string;
   styleID?: string;
   isEditPortfolio: boolean;
   client?: ClientType;
@@ -42,6 +44,7 @@ type PropsType = {
 }
 
 export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
+  apiError,
   styleID,
   isEditPortfolio,
   client,
@@ -87,9 +90,14 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
     }
     const formData = new FormData();
     imageURLs.forEach(({file}) => formData.append(file.name, file));
-    if (isEditPortfolio && styleID !== undefined) await dispatch(updateGallery(styleID, formData));
-    if (!isEditPortfolio && client) await dispatch(updateClientGallery(client?._id, formData));
-    closeModal();
+    let success;
+    if (isEditPortfolio && styleID !== undefined) {
+      success = await dispatch(updateGallery(styleID, formData));
+    } else if (client) {
+      success = await dispatch(updateClientGallery(client._id, formData));
+    }
+    if (success) closeModal();
+    setSubmitting(false);
   };
 
   const initialValues: FormValues = {
@@ -177,6 +185,9 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 }}
               />
             </FieldWrapper>
+            { !!apiError &&
+                <ApiErrorMessage message={apiError}/>
+            }
             <button
               type="submit"
               disabled={!propsF.dirty || propsF.isSubmitting}

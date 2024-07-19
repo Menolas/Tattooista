@@ -21,6 +21,7 @@ import {
 } from "../../../redux/Styles/styles-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ADMIN, SUPER_ADMIN, USER} from "../../../utils/constants";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const GalleryContainer: React.FC = () => {
 
@@ -37,10 +38,14 @@ export const GalleryContainer: React.FC = () => {
   const dispatch = useDispatch();
   const setPageCallBack = (page: number) => {
     dispatch(setCurrentGalleryPageAC(page));
-  }
+  };
 
   const setGalleryPageSizeCallBack = (pageSize: number) => {
     dispatch(setGalleryPageSizeAC(pageSize));
+  };
+
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(null));
   }
 
   return (
@@ -57,6 +62,7 @@ export const GalleryContainer: React.FC = () => {
               apiError={apiError}
               setPage={setPageCallBack}
               setPageSize={setGalleryPageSizeCallBack}
+              setApiError={setApiErrorCallBack}
           />
         }
         { (!isAuth || isAuth === USER) && activeStyle &&
