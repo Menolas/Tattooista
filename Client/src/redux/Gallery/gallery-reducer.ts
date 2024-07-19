@@ -20,7 +20,6 @@ const SET_GALLERY = 'SET_GALLERY';
 const UPDATE_GALLERY = 'UPDATE_GALLERY';
 const UPDATE_GALLERY_ITEM = 'UPDATE_GALLERY_ITEM';
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM';
-const SET_FAKE_API = 'SET_FAKE_API';
 
 const ADD_GALLERY_ITEMS_SUCCESS = 'You successfully added gallery images';
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
@@ -32,7 +31,6 @@ const initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   gallery: [] as GalleryItemType[],
-  fakeApi: false as boolean,
 }
 
 export type InitialStateType = typeof initialState;
@@ -83,7 +81,6 @@ export const galleryReducer = (
         ...state,
         gallery: action.gallery,
         totalCount: action.total,
-        fakeApi: action.fakeApi,
       }
 
     case UPDATE_GALLERY:
@@ -119,12 +116,6 @@ export const galleryReducer = (
         .filter((item): item is GalleryItemType => item !== null),
       }
 
-    case SET_FAKE_API:
-      return {
-        ...state,
-        fakeApi: action.fakeApi
-      }
-
     default: return {
       ...state
     }
@@ -133,14 +124,9 @@ export const galleryReducer = (
 
 type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
     SetGalleryPageSizeAT | SetCurrentGalleryPageAT | SetIsFetchingAT | SetGalleryAT
-    | UpdateGalleryAT | DeleteGalleryItemAT | UpdateGalleryItemAT | SetFakeApiAT;
+    | UpdateGalleryAT | DeleteGalleryItemAT | UpdateGalleryItemAT;
 
 // actions creators
-
-type SetFakeApiAT = {
-  type: typeof SET_FAKE_API
-  fakeApi: boolean
-}
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
@@ -184,11 +170,10 @@ type SetGalleryAT = {
   type: typeof SET_GALLERY,
   gallery: Array<GalleryItemType>,
   total: number,
-  fakeApi: boolean
 }
 
-const setGalleryAC = (gallery: Array<GalleryItemType>, total: number, fakeApi: boolean): SetGalleryAT => ({
-    type: SET_GALLERY, gallery, total, fakeApi
+const setGalleryAC = (gallery: Array<GalleryItemType>, total: number): SetGalleryAT => ({
+    type: SET_GALLERY, gallery, total
 });
 
 type UpdateGalleryAT = {
@@ -258,7 +243,7 @@ export const getGallery = (
   try {
     const response = await galleryApi.getGalleryItems(styleId, currentPage, pageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setGalleryAC(response.gallery, response.totalCount, false));
+      dispatch(setGalleryAC(response.gallery, response.totalCount));
       return true;
     } else {
       return false;
@@ -269,7 +254,7 @@ export const getGallery = (
     console.log(error);
     const galleryByStyle = gallery.filter(
         (item) => item.tattooStyles.includes(styleId));
-    dispatch(setGalleryAC(galleryByStyle, galleryByStyle.length, true));
+    dispatch(setGalleryAC(galleryByStyle, galleryByStyle.length));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));

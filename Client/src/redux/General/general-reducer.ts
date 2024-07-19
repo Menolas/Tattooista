@@ -2,7 +2,6 @@ const SET_API_ERROR = 'SET_API_ERROR';
 const SET_SUCCESS_MODAL = 'SET_SUCCESS_MODAL';
 
 const initialState = {
-  isFetching: false as boolean,
   apiError: null as null | string,
   successModal: {
     isSuccess: false as boolean,
@@ -10,15 +9,12 @@ const initialState = {
   }
 }
 
-export type SuccessModalType = typeof initialState.successModal
-
-export type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState;
 
 export const generalReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
-  //debugger
 
   switch (action.type) {
 

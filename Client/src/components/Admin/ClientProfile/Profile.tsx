@@ -209,6 +209,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
       >
           {  editGalleryMode &&
               <GalleryUploadForm
+                  apiError={apiError}
                   isEditPortfolio={false}
                   client={data}
                   isDeletingPicturesInProcess={isDeletingPicturesInProcess}

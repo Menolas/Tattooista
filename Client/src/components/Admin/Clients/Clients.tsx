@@ -81,6 +81,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
       .map(client => {
         return (
             <Client
+                apiError={clientsApiError}
                 key={client._id}
                 data={client}
                 isDeletingInProcess={isDeletingInProcess}
@@ -150,11 +151,11 @@ export const Clients: React.FC<PropsType> = React.memo(({
                           />
                       }
                   </ModalPopUp>
-                  <ApiErrorMessageModal
-                      isOpen={!!clientsApiError}
-                      error={clientsApiError}
-                      closeModal={setClientsApiError}
-                  />
+                  {/*<ApiErrorMessageModal*/}
+                  {/*    isOpen={!!clientsApiError}*/}
+                  {/*    error={clientsApiError}*/}
+                  {/*    closeModal={setClientsApiError}*/}
+                  {/*/>*/}
               </>
           }
       </>

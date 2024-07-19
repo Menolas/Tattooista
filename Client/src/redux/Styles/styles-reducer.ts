@@ -22,7 +22,6 @@ const UPDATE_STYLE = 'UPDATE_STYLE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ACTIVE_STYLE = 'SET_ACTIVE_STYLE';
-const SET_FAKE_API = 'SET_FAKE_API';
 
 const ADD_STYLE_SUCCESS = 'You successfully added a new Tattoo style to your gallery.';
 const UPDATE_STYLE_SUCCESS = 'You successfully updated Tattoo style in your gallery.';
@@ -32,7 +31,6 @@ const initialState = {
   isDeletingInProcess: [] as Array<string>,
   styles: [] as Array<StyleType>,
   activeStyle: null as StyleType | null,
-  fakeApi: false as boolean,
 }
 
 export type InitialStateType = typeof initialState;
@@ -107,12 +105,6 @@ export const stylesReducer = (
         activeStyle: action.style,
       }
 
-    case SET_FAKE_API:
-      return {
-        ...state,
-        fakeApi: action.fakeApi,
-      }
-
     default: return {
       ...state,
     }
@@ -121,18 +113,9 @@ export const stylesReducer = (
 
 type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
     SetStylesAT | DeleteStyleAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT |
-    SetFakeApiAT | LogInAT | AddStyleAT | UpdateStyleAT | SetCurrentGalleryPageAT;
+    LogInAT | AddStyleAT | UpdateStyleAT | SetCurrentGalleryPageAT;
 
 // actions creators
-
-type SetFakeApiAT = {
-  type: typeof SET_FAKE_API
-  fakeApi: boolean
-}
-
-const setFakeApiAC = (fakeApi: boolean): SetFakeApiAT => ({
-  type: SET_FAKE_API, fakeApi
-});
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
@@ -220,7 +203,6 @@ export const getStyles = (
   try {
     const getStylesResponse = await stylesApi.getStyles(token, isSlider)
     if (getStylesResponse.resultCode === ResultCodesEnum.Success) {
-      dispatch(setFakeApiAC(false));
       dispatch(setStylesAC(getStylesResponse.tattooStyles));
       return true;
     } else {
@@ -230,7 +212,6 @@ export const getStyles = (
     console.log(e);
     await dispatch(checkAuth());
     dispatch(setStylesAC(tattooStyles));
-    dispatch(setFakeApiAC(true));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));

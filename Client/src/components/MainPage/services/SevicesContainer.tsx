@@ -3,7 +3,6 @@ import {Services} from "./Services";
 import {
     getServicesSelector,
     getIsFetchingSelector,
-    getFakeApiSelector,
     getIsDeletingInProcessSelector,
 } from "../../../redux/Services/services-selectors";
 import {
@@ -22,7 +21,6 @@ export const ServicesContainer = () => {
     const services = useSelector(getServicesSelector);
     const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
-    const fakeApi = useSelector(getFakeApiSelector);
 
     const dispatch = useDispatch();
 
@@ -41,7 +39,6 @@ export const ServicesContainer = () => {
     return (
         <Services
             apiError={apiError}
-            fakeApi={fakeApi}
             isFetching={isFetching}
             isDeletingInProcess={isDeletingInProcess}
             isAuth={isAuth}

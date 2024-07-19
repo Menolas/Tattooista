@@ -15,6 +15,7 @@ import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {DefaultAvatar} from "../../common/DefaultAvatar";
 
 type PropsType = {
+  apiError: null | string;
   data: ClientType;
   isDeletingInProcess: Array<string>;
   isDeletingPicturesInProcess: Array<string>;
@@ -26,6 +27,7 @@ type PropsType = {
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
+  apiError,
   data,
   isDeletingInProcess,
   isDeletingPicturesInProcess,
@@ -191,6 +193,7 @@ export const Client: React.FC<PropsType> = React.memo(({
       >
         {editGalleryMode &&
             <GalleryUploadForm
+                apiError={apiError}
                 isEditPortfolio={false}
                 client={data}
                 isDeletingPicturesInProcess={isDeletingPicturesInProcess}

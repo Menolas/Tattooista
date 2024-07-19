@@ -10,7 +10,6 @@ import {Confirmation} from "../../common/Confirmation";
 import {UpdateServiceDataType} from "./Services";
 
 type PropsType = {
-    fakeApi: boolean;
     isAuth: string | null;
     serviceIndex: number;
     service: ServiceType;
@@ -19,7 +18,6 @@ type PropsType = {
 };
 
 export const ServiceItem: React.FC<PropsType> = React.memo(({
-    fakeApi,
     isAuth,
     serviceIndex,
     service,
@@ -41,15 +39,13 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
 
     const closeModal = () => {
         setConfirmationData({needConfirmation: false, context: ''});
-    }
+    };
 
     const removeCallBack = () => {
         remove(service._id);
-    }
+    };
 
-    const wallPaperUrl = !fakeApi && service.wallPaper
-        ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
-        : 'url("./uploads/ServicesWallpapers/service.jpg")';
+    const wallPaperUrl = `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`;
 
     return (
         <li className="services__item">

@@ -17,6 +17,7 @@ import {Confirmation} from "../../common/Confirmation";
 import {useDispatch, useSelector} from "react-redux";
 import {archiveGalleryItem, deleteGalleryItem, getGallery} from "../../../redux/Gallery/gallery-reducer";
 import {getGallerySelector} from "../../../redux/Gallery/gallery-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 type PropsType = {
   isFetching: boolean;
@@ -29,6 +30,7 @@ type PropsType = {
   apiError: null | string;
   setPage: (page: number) => void;
   setPageSize: (limit: number) => void;
+  setApiError: () => void;
 }
 
 export const Gallery: React.FC<PropsType> = React.memo(({
@@ -42,6 +44,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   apiError,
   setPage,
   setPageSize,
+  setApiError,
 }) => {
 
   const gallery = useSelector(getGallerySelector);
@@ -72,20 +75,21 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 
   const openEditGalleryForm = () => {
     setEditGalleryMode(true);
-  }
+  };
 
   const closeEditGalleryForm = () => {
     setEditGalleryMode(false);
-  }
+    setApiError();
+  };
 
   const closeGalleryItemEditModal = () => {
     setGalleryItem(null);
     setEditGalleryMode(false);
-  }
+  };
 
   const closeModal = () => {
     setConfirmationData({needConfirmation: false, context: ''});
-  }
+  };
 
   const GalleryItemsArray = gallery?.map((item, index) => {
     const GalleryImgUrl = `${API_URL}/gallery/${item.fileName}`;
@@ -189,7 +193,10 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         }
         <ModalPopUp
             isOpen={!!galleryItem || editGalleryMode}
-            closeModal={closeGalleryItemEditModal}
+            closeModal={() => {
+                closeGalleryItemEditModal();
+                closeEditGalleryForm();
+            }}
             modalTitle={ galleryItem
                          ? 'Update tattoo styles for this image'
                          : `Update you gallery for ${activeStyle?.value}`
@@ -206,6 +213,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           }
           {  editGalleryMode &&
               <GalleryUploadForm
+                  apiError={apiError}
                   styleID={activeStyle._id}
                   isEditPortfolio={true}
                   closeModal={closeEditGalleryForm}

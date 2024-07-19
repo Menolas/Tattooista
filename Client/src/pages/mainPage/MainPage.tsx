@@ -22,8 +22,8 @@ import {
 } from "../../redux/Gallery/gallery-selectors";
 import {
     getStylesSelector,
-    getFakeApiSelector,
-    getIsFetchingSelector, getActiveStyleSelector,
+    getIsFetchingSelector,
+    getActiveStyleSelector,
 } from "../../redux/Styles/styles-selectors";
 import {
   getApiErrorSelector,
@@ -44,7 +44,6 @@ export const MainPage: React.FC = () => {
   const styles = useSelector(getStylesSelector);
   const successModal = useSelector(getSuccessModalSelector);
   const apiError = useSelector(getApiErrorSelector);
-  const fakeApi = useSelector(getFakeApiSelector);
   const token = useSelector(getTokenSelector);
   const isFetching = useSelector(getIsFetchingSelector);
   const activeStyle = useSelector(getActiveStyleSelector);
@@ -92,7 +91,6 @@ export const MainPage: React.FC = () => {
                 : (
                     <PortfolioSlider
                         activeStyle={activeStyle}
-                        fakeApi={fakeApi}
                         pageSize={pageSize}
                         setActiveStyle={setActiveStyleCallBack}
                         styles={styles}
