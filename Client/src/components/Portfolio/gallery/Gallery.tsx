@@ -70,10 +70,6 @@ export const Gallery: React.FC<PropsType> = React.memo(({
     context: string
   }>({needConfirmation: false, context: ''});
 
-  const openEditGalleryForm = () => {
-    setEditGalleryMode(true);
-  };
-
   const closeEditGalleryForm = () => {
     setEditGalleryMode(false);
     setApiError();
@@ -165,7 +161,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
           />
           <button
               className={"btn btn--light-bg btn--sm add-btn"}
-              onClick={openEditGalleryForm}
+              onClick={() => setEditGalleryMode(true)}
           >
               Add Tattoos
           </button>
@@ -190,14 +186,14 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         }
         <ModalPopUp
             isOpen={!!galleryItem || editGalleryMode}
+            modalTitle={ galleryItem
+                ? 'Update tattoo styles for this image'
+                : `Update you gallery for ${activeStyle?.value}`
+            }
             closeModal={() => {
                 closeGalleryItemEditModal();
                 closeEditGalleryForm();
             }}
-            modalTitle={ galleryItem
-                         ? 'Update tattoo styles for this image'
-                         : `Update you gallery for ${activeStyle?.value}`
-            }
         >
           {  galleryItem &&
               <UpdateGalleryItemForm
@@ -231,7 +227,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         />
         <Tooltip id="my-tooltip" />
       </section>
-  )
+  );
 });
 
 Gallery.displayName = 'Gallery';

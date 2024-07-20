@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
@@ -13,7 +13,6 @@ import { Confirmation } from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {DefaultAvatar} from "../../common/DefaultAvatar";
-import {setClientsApiErrorAC} from "../../../redux/Clients/clients-reducer";
 
 type PropsType = {
   apiError: null | string;
@@ -54,9 +53,15 @@ export const Client: React.FC<PropsType> = React.memo(({
   }>({needConfirmation: false, context: ''});
 
   console.log(apiError + " apiError in client component!!!!!!");
+  console.log(editGalleryMode + " editGalleryMode in client component!!!!!!");
 
   const closeModal = () => {
     setConfirmationData({needConfirmation: false, context: ''});
+    setApiError();
+  };
+
+  const closeEditGalleryForm = () => {
+    setEditGalleryMode(false);
     setApiError();
   };
 
@@ -195,10 +200,7 @@ export const Client: React.FC<PropsType> = React.memo(({
       <ModalPopUp
             isOpen={editGalleryMode}
             modalTitle={'Edit Client Gallery'}
-            closeModal={() => {
-                setEditGalleryMode(false);
-                setApiError();
-            }}
+            closeModal={closeEditGalleryForm}
       >
         {editGalleryMode &&
             <GalleryUploadForm
@@ -207,10 +209,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                 client={data}
                 isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 deleteClientGalleryPicture={deleteGalleryItem}
-                closeModal={() => {
-                    setEditGalleryMode(false);
-                    setApiError();
-                }}
+                closeModal={closeEditGalleryForm}
             />
         }
       </ModalPopUp>

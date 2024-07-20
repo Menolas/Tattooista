@@ -119,7 +119,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
     messenger: data?.contacts?.messenger ?? '',
     phone: data?.contacts?.phone ?? '',
     whatsapp: data?.contacts?.whatsapp ?? ''
-  }
+  };
 
   const submit = async (values: AddClientFormValues, actions: FormikHelpers<AddClientFormValues>) => {
     const formData = new FormData();
@@ -142,7 +142,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
         closeModal();
     }
     actions.setSubmitting(false);
-  }
+  };
 
   return (
     <Formik

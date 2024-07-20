@@ -104,7 +104,6 @@ class galleryController {
   }
 
   async deleteGalleryItem(req, res) {
-
     const results = {};
     try {
       await fs.unlink(`./uploads/gallery/${res.galleryItem.fileName}`, e => {

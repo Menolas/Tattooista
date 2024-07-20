@@ -60,7 +60,6 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
 
   const handleOnFileUploadChange = (
       event: React.ChangeEvent<HTMLInputElement>,
-      //setImageURLS: React.Dispatch<React.SetStateAction<(string | ArrayBuffer | null)[]>>
   ) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
@@ -96,9 +95,9 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
       success = await dispatch(updateGallery(styleID, formData));
     } else if (client) {
       success = await dispatch(updateClientGallery(client._id, formData));
+      console.log(success + " closing th e modal!!!");
     }
     if (success) {
-      console.log(success + " closing th e modal!!!")
       closeModal();
     }
     setSubmitting(false);
