@@ -31,7 +31,7 @@ type PropsType = {
     apiError: null | string;
     service?: ServiceType;
     closeModal: () => void;
-}
+};
 export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
     apiError,
     service,
@@ -49,7 +49,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
         } else {
             setImageURL('');
         }
-    }
+    };
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -57,7 +57,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
             const file = event.target.files[0];
             fileReader.readAsDataURL(file);
         }
-    }
+    };
 
     const initialValues: UpdateServiceFormValues = {
         wallPaper: service?.wallPaper ?? '',
@@ -68,7 +68,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
         condition_3: service?.conditions[3] ?? '',
         condition_4: service?.conditions[4] ?? '',
         condition_5: service?.conditions[5] ?? '',
-    }
+    };
 
     const submit = async (values: UpdateServiceFormValues, actions: FormikHelpers<UpdateServiceFormValues>) => {
         // Check if picture is a File object
@@ -106,7 +106,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
             console.error('Error submitting form:', error);
         }
         actions.setSubmitting(false);
-    }
+    };
 
     return (
         <Formik
@@ -215,12 +215,11 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                                 : 'SUBMIT'
                             }
                         </button>
-
                     </Form>
-                )
+                );
             }}
         </Formik>
-    )
+    );
 });
 
 UpdateServiceItemForm.displayName = 'UpdateServiceItemForm';

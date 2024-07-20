@@ -22,7 +22,7 @@ type PropsType = {
     apiError: string | null;
     faqItem?: FaqType;
     closeModal: () => void;
-}
+};
 export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
   apiError,
   faqItem,
@@ -90,10 +90,10 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
                             }
                         </button>
                     </Form>
-                )
+                );
             }}
         </Formik>
-    )
+    );
 });
 
 UpdateFaqItemForm.displayName = 'UpdateFaqItemForm';

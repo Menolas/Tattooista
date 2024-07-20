@@ -6,18 +6,18 @@ import {SearchFilterType, SelectOptionType} from "../../types/Types";
 
 const handleChange = () => {
   console.log("HandleChange!!!");
-}
+};
 
 type FormType = {
   term: string;
   condition: string;
-}
+};
 
 type PropsType = {
   options: Array<SelectOptionType>;
   filter: SearchFilterType;
   onFilterChanged: (filter: SearchFilterType) => void;
-}
+};
 
 export const SearchFilterForm: React.FC<PropsType> = React.memo(({
   options,
@@ -72,11 +72,11 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                   handleChange={handleChange}
               />
             </Form>
-          )
+          );
         }
       }
     </Formik>
-  )
+  );
 });
 
 SearchFilterForm.displayName = "SearchFilterForm";

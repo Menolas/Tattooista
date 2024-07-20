@@ -48,6 +48,6 @@ export const getClientsApiErrorSelector = (state: AppStateType) => {
     return state.clients.clientsApiError;
 };
 
-export const getAccessErrorSelector = (state: AppStateType) => {
-  return state.clients.accessError;
-};
+// export const getAccessErrorSelector = (state: AppStateType) => {
+//   return state.clients.accessError;
+// };

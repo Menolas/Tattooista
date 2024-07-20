@@ -55,7 +55,7 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
   authApiError: string | null;
-}
+};
 
 export const RegistrationForm: React.FC<PropsType> = React.memo(({
   authApiError,
@@ -79,7 +79,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
       }
       fileReader.readAsDataURL(file);
     }
-  }
+  };
 
   const submit = async (
       values: RegistrationFormValues,
@@ -95,7 +95,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
     email: '',
     password: '',
     consent: false,
-  }
+  };
 
   return (
     <Formik
@@ -183,10 +183,10 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
               }
             </button>
           </Form>
-        )
+        );
       }}
     </Formik>
-  )
+  );
 });
 
 RegistrationForm.displayName = 'RegistrationForm';
