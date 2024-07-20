@@ -5,54 +5,54 @@ import {instance} from "../../http";
 type DeleteUserResponseType = CommonResponseFields;
 
 type GetUsersResponseType = CommonResponseFields & {
-    users: Array<UserType>,
-    totalCount: number
+    users: Array<UserType>;
+    totalCount: number;
 }
 
 type GetRolesResponseType = CommonResponseFields & {
-    roles: Array<RoleType>
+    roles: Array<RoleType>;
 }
 
 type UpdateUserResponseType = CommonResponseFields & {
-    user: UserType
+    user: UserType;
 }
 
 type AddUserResponseType = UpdateUserResponseType;
 
 export const usersAPI = {
 
-    getRoles() {
-        return instance.get<GetRolesResponseType>('users/roles')
+    async getRoles() {
+        return await instance.get<GetRolesResponseType>('users/roles')
             .then(response => response.data);
     },
 
-    getUsers(
+    async getUsers(
         token: string,
         currentPage = 1,
         pageSize = 5,
         filter: SearchFilterType
     ) {
-        return instance.get<GetUsersResponseType>(
+        return await instance.get<GetUsersResponseType>(
             `users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`,
             { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
                 .then(response => response.data);
     },
 
-    deleteUser(userId: string) {
-        return instance.delete<DeleteUserResponseType>(`users/${userId}`)
+    async deleteUser(userId: string) {
+        return await instance.delete<DeleteUserResponseType>(`users/${userId}`)
             .then(response => response.data);
     },
 
-    updateUser(
+    async updateUser(
         userId: string,
         values: FormData
     ) {
-        return instance.post<UpdateUserResponseType>(`users/edit/${userId}`, values)
+        return await instance.post<UpdateUserResponseType>(`users/edit/${userId}`, values)
             .then(response => response.data);
     },
 
-    addUser(values: FormData) {
-        return instance.post<AddUserResponseType>('users', values)
+    async addUser(values: FormData) {
+        return await instance.post<AddUserResponseType>('users', values)
             .then(response => response.data);
-    }
-}
+    },
+};

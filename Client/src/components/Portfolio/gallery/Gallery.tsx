@@ -17,7 +17,6 @@ import {Confirmation} from "../../common/Confirmation";
 import {useDispatch, useSelector} from "react-redux";
 import {archiveGalleryItem, deleteGalleryItem, getGallery} from "../../../redux/Gallery/gallery-reducer";
 import {getGallerySelector} from "../../../redux/Gallery/gallery-selectors";
-import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 type PropsType = {
   isFetching: boolean;
@@ -46,9 +45,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   setPageSize,
   setApiError,
 }) => {
-
   const gallery = useSelector(getGallerySelector);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

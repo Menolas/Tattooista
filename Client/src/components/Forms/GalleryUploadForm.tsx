@@ -56,6 +56,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   const [imageURLs, setImageURLs] = useState<{url: string | ArrayBuffer | null, file: File}[]>([]);
 
   const dispatch = useDispatch();
+  console.log(apiError + " apiError");
 
   const handleOnFileUploadChange = (
       event: React.ChangeEvent<HTMLInputElement>,
@@ -96,7 +97,10 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
     } else if (client) {
       success = await dispatch(updateClientGallery(client._id, formData));
     }
-    if (success) closeModal();
+    if (success) {
+      console.log(success + " closing th e modal!!!")
+      closeModal();
+    }
     setSubmitting(false);
   };
 
@@ -154,7 +158,9 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                             >
                               <button
                                   className="btn"
-                                  onClick={(event) => handleDeletePreview(event, item.file)}
+                                  onClick={(event) => {
+                                    handleDeletePreview(event, item.file);
+                                  }}
                               >
                                 Delete
                               </button>
@@ -180,8 +186,8 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                 value={undefined}
                 multiple
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  propsF.setFieldValue('gallery', Array.from(e.currentTarget.files || []))
-                  handleOnFileUploadChange(e)
+                  propsF.setFieldValue('gallery', Array.from(e.currentTarget.files || []));
+                  handleOnFileUploadChange(e);
                 }}
               />
             </FieldWrapper>

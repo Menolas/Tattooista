@@ -5,11 +5,11 @@ import {instance} from "../../http";
 type GetTattooStylesResponseType = CommonResponseFields & {
     tattooStyles: Array<StyleType>;
     noStyleLength: number;
-}
+};
 
 type AddTattooStylesResponseType = CommonResponseFields & {
-    tattooStyle: StyleType
-}
+    tattooStyle: StyleType;
+};
 
 type EditTattooStyleResponseType = AddTattooStylesResponseType;
 
@@ -46,4 +46,4 @@ export const stylesApi = {
         const response = await instance.delete<DeleteTattooStyleResponseType>(`tattooStyle/${id}`);
         return response.data;
     },
-}
+};

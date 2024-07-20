@@ -82,31 +82,32 @@ export const servicesReducer = (
       ...state
     }
   }
-}
+};
 
 type ActionsTypes = SetServicesAT | SetSuccessModalAT | SetApiErrorAT |
-    ToggleIsDeletingInProcessAT | SetIsFetchingAT | DeleteServiceAT | AddServiceAT | UpdateServiceAT;
+    ToggleIsDeletingInProcessAT | SetIsFetchingAT | DeleteServiceAT |
+    AddServiceAT | UpdateServiceAT;
 
 // action creators
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
-}
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
+};
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
   type: TOGGLE_IS_FETCHING, isFetching
 });
 
 type SetServicesAT = {
-  type: typeof SET_SERVICES,
-  services: Array<ServiceType>
+  type: typeof SET_SERVICES;
+  services: Array<ServiceType>;
 };
 
 const setServicesAC = (services: Array<ServiceType>): SetServicesAT => ({
@@ -114,8 +115,8 @@ const setServicesAC = (services: Array<ServiceType>): SetServicesAT => ({
 });
 
 type DeleteServiceAT = {
-    type: typeof DELETE_SERVICE,
-    id: string,
+    type: typeof DELETE_SERVICE;
+    id: string;
 };
 
 const deleteServiceAC = (id: string): DeleteServiceAT => ({
@@ -123,8 +124,8 @@ const deleteServiceAC = (id: string): DeleteServiceAT => ({
 });
 
 type AddServiceAT = {
-    type: typeof ADD_SERVICE,
-    service: ServiceType
+    type: typeof ADD_SERVICE;
+    service: ServiceType;
 };
 
 const addServiceAC = (service: ServiceType): AddServiceAT => ({
@@ -132,8 +133,8 @@ const addServiceAC = (service: ServiceType): AddServiceAT => ({
 });
 
 type UpdateServiceAT = {
-    type: typeof UPDATE_SERVICE,
-    service: ServiceType
+    type: typeof UPDATE_SERVICE;
+    service: ServiceType;
 };
 
 const updateServiceAC = (service: ServiceType): UpdateServiceAT => ({
@@ -142,7 +143,7 @@ const updateServiceAC = (service: ServiceType): UpdateServiceAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 export const getServices = (): ThunkType => async (dispatch) => {
   try {
@@ -161,7 +162,7 @@ export const getServices = (): ThunkType => async (dispatch) => {
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const editService = (
     id: string,
@@ -182,7 +183,7 @@ export const editService = (
     console.log(error);
     return false;
   }
-}
+};
 
 export const addService = (
     values: FormData
@@ -202,7 +203,7 @@ export const addService = (
     console.log(error);
     return false;
   }
-}
+};
 
 export const deleteService = (
     id: string
@@ -219,4 +220,4 @@ export const deleteService = (
     console.log(e);
     return false;
   }
-}
+};

@@ -38,4 +38,4 @@ export const archivedBookingsApi = {
     return await instance.get<ReactivateBookingResponseType>(`bookings/reactivate/${id}`)
         .then(response => response.data);
   }
-}
+};

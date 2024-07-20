@@ -1,53 +1,43 @@
 import {instance} from "../../http";
 import {GalleryItemType, CommonResponseFields} from "../../types/Types";
 
-type AdminUpdateGalleryResponseType = CommonResponseFields & {
-    gallery: Array<GalleryItemType>
-}
-
-type DeleteGalleryItemResponseType = CommonResponseFields
+type DeleteGalleryItemResponseType = CommonResponseFields;
 
 type GetGalleryItemsResponseType = CommonResponseFields & {
-    gallery: Array<GalleryItemType>
-    totalCount: number
+    gallery: Array<GalleryItemType>;
+    totalCount: number;
 }
 
 type UpdateArchiveGalleryItemResponseType = CommonResponseFields & {
-    archivedGalleryItem: GalleryItemType
+    archivedGalleryItem: GalleryItemType;
 }
 
-type ReactivateArchivedGalleryItemResponseType = CommonResponseFields
+type ReactivateArchivedGalleryItemResponseType = CommonResponseFields;
 
 export const archivedGalleryApi = {
 
-    getArchivedGalleryItems(
+    async getArchivedGalleryItems(
         currentPage: number,
         pageSize: number
     ) {
-        return instance.get<GetGalleryItemsResponseType>(`gallery/archive?&page=${currentPage}&limit=${pageSize}`)
+        return await instance.get<GetGalleryItemsResponseType>(`gallery/archive?&page=${currentPage}&limit=${pageSize}`)
             .then(response => response.data);
     },
 
-    deleteArchivedGalleryItem(
+    async deleteArchivedGalleryItem(
         itemId: string
     ) {
-        return instance.delete<DeleteGalleryItemResponseType>(`gallery/archive/${itemId}`)
+        return await instance.delete<DeleteGalleryItemResponseType>(`gallery/archive/${itemId}`)
             .then(response => response.data);
     },
 
-    adminUpdateGallery(style: string, gallery: FormData) {
-        return instance.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
-          gallery
-        ).then(response => response.data);
-    },
-
-    updateArchiveGalleryItem(id: string, values: object) {
-        return instance.patch<UpdateArchiveGalleryItemResponseType>(`gallery/updateArchivedGalleryItem/${id}`, {values})
+    async updateArchiveGalleryItem(id: string, values: object) {
+        return await instance.patch<UpdateArchiveGalleryItemResponseType>(`gallery/updateArchivedGalleryItem/${id}`, {values})
             .then(response => response.data);
     },
 
-    reactivateArchivedGalleryItem(id: string) {
-        return instance.get<ReactivateArchivedGalleryItemResponseType>(`gallery/reactivate/${id}`)
+    async reactivateArchivedGalleryItem(id: string) {
+        return await instance.get<ReactivateArchivedGalleryItemResponseType>(`gallery/reactivate/${id}`)
             .then(response => response.data);
     }
-}
+};

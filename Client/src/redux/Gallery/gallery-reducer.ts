@@ -129,9 +129,9 @@ type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModa
 // actions creators
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
 }
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
@@ -140,65 +140,65 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
 });
 
 type SetGalleryPageSizeAT = {
-  type: typeof SET_PAGE_SIZE
-  pageSize: number
-}
+  type: typeof SET_PAGE_SIZE;
+  pageSize: number;
+};
 
 export const setGalleryPageSizeAC = (pageSize: number): SetGalleryPageSizeAT => ({
     type: SET_PAGE_SIZE, pageSize
 });
 
 export type SetCurrentGalleryPageAT = {
-  type: typeof SET_CURRENT_PAGE,
-  page: number
-}
+  type: typeof SET_CURRENT_PAGE;
+  page: number;
+};
 
 export const setCurrentGalleryPageAC = (page: number): SetCurrentGalleryPageAT => ({
     type: SET_CURRENT_PAGE, page
 });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
 });
 
 type SetGalleryAT = {
-  type: typeof SET_GALLERY,
-  gallery: Array<GalleryItemType>,
-  total: number,
-}
+  type: typeof SET_GALLERY;
+  gallery: Array<GalleryItemType>;
+  total: number;
+};
 
 const setGalleryAC = (gallery: Array<GalleryItemType>, total: number): SetGalleryAT => ({
     type: SET_GALLERY, gallery, total
 });
 
 type UpdateGalleryAT = {
-  type: typeof UPDATE_GALLERY,
-  gallery: Array<GalleryItemType>
-}
+  type: typeof UPDATE_GALLERY;
+  gallery: Array<GalleryItemType>;
+};
 
 const updateGalleryAC = (gallery: Array<GalleryItemType>): UpdateGalleryAT => ({
   type: UPDATE_GALLERY, gallery
 });
 
 type DeleteGalleryItemAT = {
-  type: typeof DELETE_GALLERY_ITEM,
-  itemId: string
-}
+  type: typeof DELETE_GALLERY_ITEM;
+  itemId: string;
+};
 
 const deleteGalleryItemAC = (itemId: string): DeleteGalleryItemAT => ({
   type: DELETE_GALLERY_ITEM, itemId
 });
 
 type UpdateGalleryItemAT = {
-  type: typeof UPDATE_GALLERY_ITEM,
-  galleryItem: GalleryItemType,
-  isInGallery: boolean
-}
+  type: typeof UPDATE_GALLERY_ITEM;
+  galleryItem: GalleryItemType;
+  isInGallery: boolean;
+};
 
 const updateGalleryItemAC = (
     galleryItem: GalleryItemType,
@@ -209,7 +209,7 @@ const updateGalleryItemAC = (
 
 //thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 const deleteGalleryItemThunk = (
     id: string,

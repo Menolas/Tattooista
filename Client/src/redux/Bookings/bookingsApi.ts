@@ -22,7 +22,7 @@ type ChangeBookingStatusResponseType = CommonResponseFields & {
 };
 
 type AddBookingResponseType = CommonResponseFields & {
-  booking: BookingType
+  booking: BookingType;
 };
 
 type ArchiveBookingResponseType = AddBookingResponseType;
@@ -69,4 +69,4 @@ export const bookingsApi = {
     return await instance.get<ArchiveBookingResponseType>(`bookings/archive/${id}`)
         .then(response => response.data);
   },
-}
+};

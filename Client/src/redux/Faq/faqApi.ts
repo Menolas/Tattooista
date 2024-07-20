@@ -2,11 +2,11 @@ import {instance} from "../../http";
 import {FaqType, CommonResponseFields, UpdateFaqValues} from "../../types/Types";
 
 type GetFaqItemsResponseType = CommonResponseFields & {
-    faqItems: Array<FaqType>
+    faqItems: Array<FaqType>;
 };
 
 type UpdateFaqItemResponseType = CommonResponseFields & {
-    faqItem: FaqType
+    faqItem: FaqType;
 };
 
 type AddFaqItemResponseType = UpdateFaqItemResponseType;

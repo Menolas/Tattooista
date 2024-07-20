@@ -61,12 +61,12 @@ export const authReducer = (
 }
 
 type ActionsTypes = SetAuthApiErrorAT | SetSuccessModalAT |
-     LogOutAT | LogInAT
+     LogOutAT | LogInAT;
 
 // actions creators
 
 type LogOutAT = {
-    type: typeof LOG_OUT
+    type: typeof LOG_OUT;
 };
 
 const logOutAC = (): LogOutAT => ({
@@ -74,12 +74,12 @@ const logOutAC = (): LogOutAT => ({
 });
 
 export type LogInAT = {
-    type: typeof LOG_IN
-    token: string | null
-    user: IUser | null
-    isAuth: string | null
-    roles: Array<RoleType> | null
-}
+    type: typeof LOG_IN;
+    token: string | null;
+    user: IUser | null;
+    isAuth: string | null;
+    roles: Array<RoleType> | null;
+};
 
 const logInAC = (
  token: null | string,
@@ -91,8 +91,8 @@ const logInAC = (
 });
 
 type SetAuthApiErrorAT = {
-    type: typeof SET_AUTH_API_ERROR
-    error: null | string
+    type: typeof SET_AUTH_API_ERROR;
+    error: null | string;
 };
 
 const setAuthApiErrorAC = (error: null | string): SetAuthApiErrorAT => ({
@@ -101,7 +101,7 @@ const setAuthApiErrorAC = (error: null | string): SetAuthApiErrorAT => ({
 
 //thunks
 
-export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 export const login = (values: LoginFormValues): ThunkType => async (
     dispatch
@@ -125,7 +125,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
     dispatch(setAuthApiErrorAC(error.response?.data?.message));
     return false;
   }
-}
+};
 
 export const logout = (): ThunkType => async (
     dispatch
@@ -142,7 +142,7 @@ export const logout = (): ThunkType => async (
     console.log(e);
     return false;
   }
-}
+};
 
 export const registration = (
     values: RegistrationFormValues
@@ -167,7 +167,7 @@ export const registration = (
       console.log(error);
       return false;
     }
-}
+};
 
 export const checkAuth = ():ThunkType => async (dispatch) => {
   //TO_DO: add api error and error message for user
@@ -196,4 +196,4 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
     console.log(error.response?.data?.message);
     return false;
   }
-}
+};

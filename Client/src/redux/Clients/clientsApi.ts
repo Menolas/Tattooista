@@ -5,12 +5,12 @@ import {instance} from "../../http";
 type DeleteClientResponseType = CommonResponseFields;
 
 type GetClientsResponseType = CommonResponseFields & {
-    clients: Array<ClientType>,
-    totalCount: number
+    clients: Array<ClientType>;
+    totalCount: number;
 };
 
 type UpdateClientResponseType = CommonResponseFields & {
-  client: ClientType
+  client: ClientType;
 };
 
 type ArchiveClientResponseType = UpdateClientResponseType;
@@ -79,4 +79,4 @@ export const clientsAPI = {
       return await instance.post<ArchiveClientResponseType>(`clients/archive/${clientId}`)
           .then(response => response.data);
   },
-}
+};

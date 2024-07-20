@@ -118,10 +118,10 @@ type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
 // actions creators
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
-}
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
+};
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
     {
@@ -129,53 +129,54 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
 });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
 });
 
 type SetStylesAT = {
-  type: typeof SET_STYLES,
-  styles: Array<StyleType>
-}
+  type: typeof SET_STYLES;
+  styles: Array<StyleType>;
+};
 
 const setStylesAC = (styles: Array<StyleType>): SetStylesAT => ({
     type: SET_STYLES, styles
 });
 
 type DeleteStyleAT = {
-  type: typeof DELETE_STYLE,
-  id: string
-}
+  type: typeof DELETE_STYLE;
+  id: string;
+};
 
 const deleteStyleAC = (id: string): DeleteStyleAT => ({
     type: DELETE_STYLE, id
 });
 
 type AddStyleAT = {
-  type: typeof ADD_STYLE,
-  style: StyleType
-}
+  type: typeof ADD_STYLE;
+  style: StyleType;
+};
 
 export const addStyleAC = (style: StyleType): AddStyleAT => ({
     type: ADD_STYLE, style
 });
 
 type UpdateStyleAT = {
-    type: typeof UPDATE_STYLE, style: StyleType
-}
+    type: typeof UPDATE_STYLE;
+    style: StyleType;
+};
 
 export const updateStyleAC = (style: StyleType): UpdateStyleAT => ({
     type: UPDATE_STYLE, style
 });
 
 type SetActiveStyleAT = {
-  type: typeof SET_ACTIVE_STYLE,
-  style: StyleType | null
-}
+  type: typeof SET_ACTIVE_STYLE;
+  style: StyleType | null;
+};
 
 export const setActiveStyleAC = (style: StyleType | null): SetActiveStyleAT => ({
     type: SET_ACTIVE_STYLE, style
@@ -183,7 +184,7 @@ export const setActiveStyleAC = (style: StyleType | null): SetActiveStyleAT => (
 
 //thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 export const setActiveStyle = (style: StyleType | null): ThunkType => async (
     dispatch
@@ -191,7 +192,7 @@ export const setActiveStyle = (style: StyleType | null): ThunkType => async (
   dispatch(setActiveStyleAC(style));
   dispatch(setCurrentGalleryPageAC(1));
   return true;
-}
+};
 
 export const getStyles = (
     token: string | null | undefined,
@@ -216,7 +217,7 @@ export const getStyles = (
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const addStyle = (values: FormData): ThunkType => async (
     dispatch
@@ -239,7 +240,7 @@ export const addStyle = (values: FormData): ThunkType => async (
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const editStyle = (
     id: string,
@@ -260,7 +261,7 @@ export const editStyle = (
     console.log(error);
     return false;
   }
-}
+};
 
 export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
   try {
@@ -278,4 +279,4 @@ export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};
