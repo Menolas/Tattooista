@@ -3582,5 +3582,22 @@ input[type=checkbox][value=true] + label .checkbox::after {
     transform: translate(100%, 0);
   }
 }
+.api-error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.api-error img {
+  width: 100px;
+  height: auto;
+}
+
+@media (min-width: 500px) {
+  .api-error img {
+    width: 300px;
+  }
+}
 
 /*# sourceMappingURL=style.css.map */

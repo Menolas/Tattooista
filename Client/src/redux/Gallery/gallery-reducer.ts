@@ -244,6 +244,7 @@ export const getGallery = (
     const response = await galleryApi.getGalleryItems(styleId, currentPage, pageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setGalleryAC(response.gallery, response.totalCount));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;
@@ -271,7 +272,7 @@ export const updateGallery = (
     const response = await galleryApi.adminUpdateGallery(tattooStyle, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryAC(response.gallery));
-      setApiErrorAC(null);
+      dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, ADD_GALLERY_ITEMS_SUCCESS));
       return true;
     } else {

@@ -9,10 +9,12 @@ import {getGallery} from "../../../redux/Gallery/gallery-reducer";
 import {galleryApi} from "../../../redux/Gallery/GalleryApi";
 import {useDispatch, useSelector} from "react-redux";
 import {getGallerySelector, getTotalCountSelector} from "../../../redux/Gallery/gallery-selectors";
+import {ApiError} from "../../common/ApiError";
 
 type PropsType = {
   activeStyle: StyleType;
   pageSize: number;
+  apiError: null | string;
 }
 
 type ErrorType = {
@@ -22,7 +24,9 @@ type ErrorType = {
 export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   pageSize,
   activeStyle,
+  apiError,
 }) => {
+
 
   const gallery = useSelector(getGallerySelector);
   const totalCount = useSelector(getTotalCountSelector);
@@ -84,7 +88,10 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isLoading, items, totalCount]);
 
-  const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});
+  const [carouselData, setCarouselData] = useState<{
+    isOpen: boolean,
+    activeIndex?: number
+  }>({isOpen: false});
 
   const GalleryItemsArray = items?.map((item, index) => {
     const GalleryImgUrl = `${API_URL}/gallery/${item.fileName}`;
@@ -109,7 +116,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
 
   return (
       <section className="gallery page-block container" ref={galleryRef}>
-        { items.length > 0
+        { items && items.length > 0
           ? (
               <>
                 <ul className="gallery__list list">
@@ -119,10 +126,12 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
                 {error && <p>Error: {error.message}</p>}
               </>
             )
-          : <NothingToShow/>
+          : apiError
+            ? <ApiError />
+            : <NothingToShow/>
         }
-        {  carouselData.isOpen &&
-           <ImageFullView
+        {carouselData.isOpen &&
+            <ImageFullView
               isOpen={carouselData.isOpen}
               gallery={items}
               activeIndex={carouselData.activeIndex}
@@ -131,7 +140,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
            />
         }
       </section>
-  )
+  );
 });
 
 GalleryInfiniteScroll.displayName = 'GalleryInfiniteScroll';
