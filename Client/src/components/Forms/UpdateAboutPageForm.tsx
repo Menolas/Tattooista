@@ -38,7 +38,7 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
         } else {
             setImageURL('');
         }
-    }
+    };
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -46,13 +46,13 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
             const file = event.target.files[0];
             fileReader.readAsDataURL(file);
         }
-    }
+    };
 
     const initialValues: UpdateAboutPageFormValues = {
         aboutPageWallPaper: data && data.wallPaper ? data.wallPaper : '',
         aboutPageTitle: data && data.title ? data.title : '',
         aboutPageContent: data && data.content ? data.content : '',
-    }
+    };
 
     const submit = async (
         values: UpdateAboutPageFormValues,
@@ -87,7 +87,7 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
             console.error('Error submitting form:', error);
         }
         actions.setSubmitting(false);
-    }
+    };
 
     return (
         <Formik
@@ -160,10 +160,10 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
                             }
                         </button>
                     </Form>
-                )
+                );
             }}
         </Formik>
-    )
+    );
 });
 
 UpdateAboutPageForm.displayName = 'UpdateAboutPageForm';

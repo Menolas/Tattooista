@@ -100,7 +100,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
       closeBookingModal();
     }
     actions.setSubmitting(false);
-  }
+  };
 
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
@@ -213,10 +213,10 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 }
             </button>
           </Form>
-        )
+        );
       }}
     </Formik>
-  )
+  );
 });
 
 BookingForm.displayName = 'BookingForm';

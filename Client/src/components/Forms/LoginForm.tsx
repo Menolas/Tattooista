@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
   isAuth: null | string;
   authApiError: null | string;
-}
+};
 
 export const LoginForm: React.FC<PropsType> = React.memo(({
   isAuth,
@@ -43,12 +43,12 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
   const submit = async (values: LoginFormValues, actions: FormikHelpers<LoginFormValues>) => {
     await dispatch(login(values));
     actions.setSubmitting(false);
-  }
+  };
 
   const initialValues: LoginFormValues = {
       email: '',
       password: ''
-  }
+  };
 
   return (
     <Formik
@@ -97,10 +97,10 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
               Need registration?
             </NavLink>
           </Form>
-        )
+        );
       }}
     </Formik>
-  )
+  );
 });
 
 LoginForm.displayName = 'LoginForm';

@@ -49,14 +49,14 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
         }));
     }
     return schema;
-}
+};
 
 type PropsType = {
     apiError: null | string;
     isEditing: boolean;
     style?: StyleType | null;
     closeModal: () => void;
-}
+};
 export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
     apiError,
     isEditing,
@@ -76,13 +76,16 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
             const file = event.target.files[0];
             const fileReader = new FileReader();
             fileReader.onloadend = () => {
-                // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-                setImageURL(fileReader.result);
+                if (typeof fileReader.result === 'string') {
+                    setImageURL(fileReader.result);
+                } else {
+                    setImageURL('');
+                }
             }
             setHasNewFile(true);
             fileReader.readAsDataURL(file);
         }
-    }
+    };
 
     useEffect(() => {
         if (isEditing) {
@@ -131,7 +134,7 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
            console.error('Error submitting form:', error);
        }
        actions.setSubmitting(false);
-    }
+    };
 
     return (
         <Formik
@@ -200,10 +203,10 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
                             }
                         </button>
                     </Form>
-                )
+                );
             }}
         </Formik>
-    )
+    );
 });
 
 UpdateStyleForm.displayName = 'UpdateStyleForm';

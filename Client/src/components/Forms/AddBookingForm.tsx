@@ -65,7 +65,7 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
       closeBookingModal();
     }
     actions.setSubmitting(false);
-  }
+  };
 
   return (
     <Formik
@@ -137,9 +137,10 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 }
             </button>
           </Form>
-        )
+        );
       }}
     </Formik>
-)});
+  );
+});
 
 AddBookingForm.displayName = 'AddBookingForm';

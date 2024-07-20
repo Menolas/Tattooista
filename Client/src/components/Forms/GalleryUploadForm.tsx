@@ -41,7 +41,7 @@ type PropsType = {
   isDeletingPicturesInProcess?: Array<string>;
   closeModal: () => void;
   deleteClientGalleryPicture?: (clientId: string, picture: string) => void;
-}
+};
 
 export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   apiError,

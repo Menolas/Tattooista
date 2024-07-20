@@ -79,7 +79,7 @@ type PropsType = {
   isEditing: boolean;
   data: ClientType | null;
   closeModal: () => void;
-}
+};
 
 export const UpdateClientForm: React.FC<PropsType> = React.memo(({
   apiError,
@@ -100,13 +100,16 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
       const file = event.target.files[0];
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-        setImageURL(fileReader.result);
+        if (typeof fileReader.result === 'string') {
+          setImageURL(fileReader.result);
+        } else {
+          setImageURL('');
+        }
       }
       setHasNewFile(true);
       fileReader.readAsDataURL(file);
     }
-  }
+  };
 
   const initialValues: AddClientFormValues = {
     avatar: data?.avatar ?? '',
@@ -240,10 +243,10 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
               }
             </button>
           </Form>
-        )
+        );
       }}
     </Formik>
-  )
+  );
 });
 
 UpdateClientForm.displayName = 'UpdateClientForm';

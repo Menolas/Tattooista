@@ -55,9 +55,11 @@ export const Clients: React.FC<PropsType> = React.memo(({
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [client, setClient] = useState<ClientType | null>(null);
+  console.log(apiError + " clientsApiError in clients component!!!!!!");
 
   useEffect(() => {
     if ((addClientMode || editClientMode) && apiError === null) {
+        console.log(apiError + " clientsApiError in clients useEffect component!!!!!!");
         closeModal();
     }
   }, [apiError]);
@@ -72,8 +74,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
   const modalTitleAddClient = 'ADD CLIENT';
   const modalTitleUpdateClient = 'EDIT CLIENT';
   const modalUpdateGalleryTitle = 'Update Gallery';
-
-  console.log(apiError + " clientsApiError in clients component!!!!!!");
 
   const clientsElements = clients
       .map(client => {

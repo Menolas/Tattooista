@@ -16,7 +16,7 @@ type PropsType = {
     galleryItem: GalleryItemType;
     styles: Array<StyleType>;
     closeModal: () => void;
-}
+};
 
 export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
     activeStyleId,
@@ -95,7 +95,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
                 );
             }}
         </Formik>
-    )
+    );
 });
 
 UpdateGalleryItemForm.displayName = 'UpdateGalleryItemForm';

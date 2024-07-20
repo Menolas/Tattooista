@@ -57,7 +57,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     }));
   }
   return schema;
-}
+};
 
 type PropsType = {
   apiError: string | null;
@@ -65,7 +65,7 @@ type PropsType = {
   roles: Array<RoleType>;
   data?: UserType | null;
   closeModal: () => void;
-}
+};
 
 export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   apiError,
@@ -87,8 +87,11 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
       const file = event.target.files[0];
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-        setImageURL(fileReader.result);
+        if (typeof fileReader.result === 'string') {
+          setImageURL(fileReader.result);
+        } else {
+          setImageURL('');
+        }
       }
       setHasNewFile(true);
       fileReader.readAsDataURL(file);
@@ -112,7 +115,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     email: data?.email ?? '',
     password: '',
     roles: rolesInitialValues,
-  }
+  };
 
   const submit = async (values: UpdateUserFormValues, actions: FormikHelpers<UpdateUserFormValues>) => {
     const formData = new FormData();
@@ -141,7 +144,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
       closeModal();
     }
     actions.setSubmitting(false);
-  }
+  };
 
   return (
     <Formik
@@ -239,10 +242,10 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
               }
             </button>
           </Form>
-        )
+        );
       }}
     </Formik>
-  )
+  );
 });
 
 UpdateUserForm.displayName = 'UpdateUserForm';
