@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
@@ -7,43 +7,35 @@ import {ReactComponent as ImageUserIcon} from "../../../assets/svg/images-user.s
 import { NavLink } from "react-router-dom";
 import { ClientType, ContactType } from "../../../types/Types";
 import { API_URL } from "../../../http";
-import { ModalPopUp } from "../../common/ModalPopUp";
 import { Tooltip } from "react-tooltip";
 import { Confirmation } from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
-import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {DefaultAvatar} from "../../common/DefaultAvatar";
 
 type PropsType = {
-  apiError: null | string;
   data: ClientType;
   isDeletingInProcess: Array<string>;
-  isDeletingPicturesInProcess: Array<string>;
   remove: (clientId: string) => void;
   archive: (clientId: string) => void;
   setData: (client: ClientType) => void;
   setEditClientMode: (mode: boolean) => void;
-  deleteGalleryItem: (clientId: string, picture: string) => void;
+  setEditGalleryMode: (mode: boolean) => void;
   setApiError: () => void;
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
-  apiError,
   data,
   isDeletingInProcess,
-  isDeletingPicturesInProcess,
   remove,
   archive,
   setData,
   setEditClientMode,
-  deleteGalleryItem,
+  setEditGalleryMode,
   setApiError,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{
       isOpen: boolean, activeIndex?: number}>({isOpen: false});
-
-  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
 
   const [confirmationData, setConfirmationData] = useState<{
     needConfirmation: boolean,
@@ -52,16 +44,8 @@ export const Client: React.FC<PropsType> = React.memo(({
     context: string
   }>({needConfirmation: false, context: ''});
 
-  console.log(apiError + " apiError in client component!!!!!!");
-  console.log(editGalleryMode + " editGalleryMode in client component!!!!!!");
-
   const closeModal = () => {
     setConfirmationData({needConfirmation: false, context: ''});
-    setApiError();
-  };
-
-  const closeEditGalleryForm = () => {
-    setEditGalleryMode(false);
     setApiError();
   };
 
@@ -197,22 +181,6 @@ export const Client: React.FC<PropsType> = React.memo(({
         }}
         cancel={closeModal}
       />
-      <ModalPopUp
-            isOpen={editGalleryMode}
-            modalTitle={'Edit Client Gallery'}
-            closeModal={closeEditGalleryForm}
-      >
-        {editGalleryMode &&
-            <GalleryUploadForm
-                apiError={apiError}
-                isEditPortfolio={false}
-                client={data}
-                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                deleteClientGalleryPicture={deleteGalleryItem}
-                closeModal={closeEditGalleryForm}
-            />
-        }
-      </ModalPopUp>
       {  carouselData.isOpen &&
         <ImageFullView
             isOpen={carouselData.isOpen}

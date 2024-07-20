@@ -213,7 +213,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
                   isEditPortfolio={false}
                   client={data}
                   isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                  deleteClientGalleryPicture={deleteGalleryItem}
                   closeModal={closeModal}
               />
           }

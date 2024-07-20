@@ -11,6 +11,7 @@ import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {clientFilterSelectOptions} from "../../../utils/constants";
 import {Navigate} from "react-router";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
+import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 
 type PropsType = {
   apiError: null | string;
@@ -51,22 +52,25 @@ export const Clients: React.FC<PropsType> = React.memo(({
     archive,
     setApiError,
 }) => {
-
+  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [client, setClient] = useState<ClientType | null>(null);
-  console.log(apiError + " clientsApiError in clients component!!!!!!");
 
   useEffect(() => {
-    if ((addClientMode || editClientMode) && apiError === null) {
-        console.log(apiError + " clientsApiError in clients useEffect component!!!!!!");
+    if ((addClientMode || editClientMode || editGalleryMode) && apiError === null) {
         closeModal();
     }
   }, [apiError]);
 
+  const refreshClientData = (updatedClient: ClientType | null) => {
+      setClient(updatedClient);
+  };
+
   const closeModal = () => {
     setAddClientMode(false);
     setEditClientMode(false);
+    setEditGalleryMode(false);
     setClient(null);
     setApiError();
   }
@@ -79,16 +83,14 @@ export const Clients: React.FC<PropsType> = React.memo(({
       .map(client => {
         return (
             <Client
-                apiError={apiError}
                 key={client._id}
                 data={client}
                 isDeletingInProcess={isDeletingInProcess}
-                isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 remove={remove}
                 archive={archive}
                 setData={setClient}
                 setEditClientMode={setEditClientMode}
-                deleteGalleryItem={deleteGalleryItem}
+                setEditGalleryMode={setEditGalleryMode}
                 setApiError={setApiError}
             />
         )
@@ -133,7 +135,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                               : <NothingToShow/>
                   }
                   <ModalPopUp
-                      isOpen={addClientMode || editClientMode}
+                      isOpen={addClientMode || editClientMode || editGalleryMode}
                       modalTitle={ addClientMode
                           ? modalTitleAddClient
                           : editClientMode
@@ -146,6 +148,16 @@ export const Clients: React.FC<PropsType> = React.memo(({
                               apiError={apiError}
                               isEditing={editClientMode}
                               data={client}
+                              closeModal={closeModal}
+                          />
+                      }
+                      {editGalleryMode &&
+                          <GalleryUploadForm
+                              apiError={apiError}
+                              isEditPortfolio={false}
+                              client={client}
+                              refreshClientData={refreshClientData}
+                              isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                               closeModal={closeModal}
                           />
                       }
