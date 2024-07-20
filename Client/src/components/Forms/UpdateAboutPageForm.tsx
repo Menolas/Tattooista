@@ -31,7 +31,7 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
 
     const [imageURL, setImageURL] = useState('')
 
-    const fileReader = new FileReader()
+    const fileReader = new FileReader();
     fileReader.onloadend = () => {
         if (typeof fileReader.result === 'string') {
             setImageURL(fileReader.result);

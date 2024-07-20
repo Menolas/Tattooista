@@ -214,7 +214,7 @@ class clientsController {
     const files = req.files;
     const results = {};
     try {
-      for (let key in fles) {
+      for (let key in files) {
 
         const fileNewName = generateFileRandomName(files[key].name);
         newGallery.push(fileNewName);

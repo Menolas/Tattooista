@@ -495,7 +495,6 @@ export const deleteClientGalleryPicture = (
       return false;
     }
   } catch (e) {
-    dispatch(toggleIsDeletingPicturesInProcessAC(false, picture));
     console.log(e);
     return false;
   } finally {

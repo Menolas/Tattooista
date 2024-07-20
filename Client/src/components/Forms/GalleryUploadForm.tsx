@@ -8,7 +8,7 @@ import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
 import {ClientType} from "../../types/Types";
 import {useDispatch} from "react-redux";
-import {updateClientGallery} from "../../redux/Clients/clients-reducer";
+import {deleteClientGalleryPicture, updateClientGallery} from "../../redux/Clients/clients-reducer";
 import {updateGallery} from "../../redux/Gallery/gallery-reducer";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 
@@ -37,10 +37,10 @@ type PropsType = {
   apiError: null | string;
   styleID?: string;
   isEditPortfolio: boolean;
-  client?: ClientType;
+  client?: ClientType | null;
   isDeletingPicturesInProcess?: Array<string>;
+  refreshClientData?: (updatedClient: ClientType | null) => void;
   closeModal: () => void;
-  deleteClientGalleryPicture?: (clientId: string, picture: string) => void;
 };
 
 export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
@@ -49,18 +49,15 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   isEditPortfolio,
   client,
   isDeletingPicturesInProcess,
-  deleteClientGalleryPicture,
+  refreshClientData,
   closeModal
 }) => {
-
   const [imageURLs, setImageURLs] = useState<{url: string | ArrayBuffer | null, file: File}[]>([]);
 
   const dispatch = useDispatch();
-  console.log(apiError + " apiError");
 
   const handleOnFileUploadChange = (
       event: React.ChangeEvent<HTMLInputElement>,
-      //setImageURLS: React.Dispatch<React.SetStateAction<(string | ArrayBuffer | null)[]>>
   ) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
@@ -98,7 +95,6 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
       success = await dispatch(updateClientGallery(client._id, formData));
     }
     if (success) {
-      console.log(success + " closing th e modal!!!")
       closeModal();
     }
     setSubmitting(false);
@@ -127,30 +123,34 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                             <button
                                 className={"btn btn--icon btn--icon--light"}
                                 disabled={isDeletingPicturesInProcess?.some(id => id === item)}
-                                onClick={(event) => {
+                                onClick={async (event) => {
                                   event.preventDefault();
-                                  deleteClientGalleryPicture?.(client._id, item);
+                                  if (client?.gallery && deleteClientGalleryPicture) {
+                                    let success = await dispatch(deleteClientGalleryPicture(client._id, item));
+                                    if (success && refreshClientData) {
+                                      const updatedGallery = client.gallery.filter(picture => picture !== item);
+                                      const updatedClient = {...client, gallery: updatedGallery};
+                                      refreshClientData(updatedClient);
+                                    }
+                                  }
                                 }}
                             >
                               <TrashIcon />
                             </button>
                             <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
                           </li>
-                      )
+                      );
                     })
                   }
                 </ul>
             }
-
             <FieldWrapper
                 name={'gallery'}
                 wrapperClass={'form__input-wrap--uploadFile'}
             >
-              {
-                imageURLs &&
+              {imageURLs &&
                   <ul className={"list gallery__uploadedImgPreviews"}>
-                    {
-                      imageURLs.map((item, index) => {
+                    {imageURLs.map((item, index) => {
                         return (
                             <li
                                 className={"gallery__uploadedImgPreviews-item"}
@@ -161,9 +161,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                   onClick={(event) => {
                                     handleDeletePreview(event, item.file);
                                   }}
-                              >
-                                Delete
-                              </button>
+                              >Delete</button>
                               <img
                                   className="client-profile__gallery-image"
                                   src={item.url as string}
