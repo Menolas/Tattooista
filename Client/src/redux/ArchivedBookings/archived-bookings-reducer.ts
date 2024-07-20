@@ -132,35 +132,35 @@ type ActionsTypes = SetSuccessModalAT | SetPageSizeAT |
 // actions creators
 
 type SetBookingApiErrorAT = {
-  type: typeof SET_BOOKING_API_ERROR
-  error: string | null
-}
+  type: typeof SET_BOOKING_API_ERROR;
+  error: string | null;
+};
 
 export const setBookingApiErrorAC = (error: string | null): SetBookingApiErrorAT => ({
   type: SET_BOOKING_API_ERROR, error
 });
 
 type SetAccessErrorAT = {
-  type: typeof SET_ACCESS_ERROR
-  error: string | null
-}
+  type: typeof SET_ACCESS_ERROR;
+  error: string | null;
+};
 
 export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
 });
 
 type SetPageSizeAT = {
-  type: typeof SET_PAGE_SIZE
-  pageSize: number
-}
+  type: typeof SET_PAGE_SIZE;
+  pageSize: number;
+};
 
 export const setPageSizeAC = (pageSize: number): SetPageSizeAT => ({
   type: SET_PAGE_SIZE, pageSize
 });
 
 type SetFilterAT = {
-  type: typeof SET_FILTER
-  filter: SearchFilterType
+  type: typeof SET_FILTER;
+  filter: SearchFilterType;
 };
 
 export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
@@ -168,8 +168,8 @@ export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
 });
 
 type SetArchivedBookingsAT = {
-  type: typeof SET_ARCHIVED_BOOKINGS,
-  archivedBookings: Array<BookingType>,
+  type: typeof SET_ARCHIVED_BOOKINGS;
+  archivedBookings: Array<BookingType>;
   total: number
 };
 
@@ -178,8 +178,8 @@ const setArchivedBookingsAC = (archivedBookings: Array<BookingType>, total: numb
 });
 
 export type AddArchivedBookingAT = {
-    type: typeof ADD_ARCHIVED_BOOKING,
-    booking: BookingType
+    type: typeof ADD_ARCHIVED_BOOKING;
+    booking: BookingType;
 };
 
 export const addArchivedBookingAC = (booking: BookingType): AddArchivedBookingAT => ({
@@ -187,8 +187,8 @@ export const addArchivedBookingAC = (booking: BookingType): AddArchivedBookingAT
 });
 
 type SetCurrentPageAT = {
-  type: typeof SET_CURRENT_PAGE,
-  currentPage: number
+  type: typeof SET_CURRENT_PAGE;
+  currentPage: number;
 };
 
 export const setArchiveBookingsCurrentPageAC = (currentPage: number): SetCurrentPageAT => ({
@@ -196,28 +196,28 @@ export const setArchiveBookingsCurrentPageAC = (currentPage: number): SetCurrent
 });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
   });
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
-}
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
+};
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
 });
 
 type DeleteArchivedConsultationAT = {
-  type: typeof DELETE_ARCHIVED_BOOKING
-  id: string
-}
+  type: typeof DELETE_ARCHIVED_BOOKING;
+  id: string;
+};
 
 export const deleteArchivedBookingAC = (id: string): DeleteArchivedConsultationAT => ({
   type: DELETE_ARCHIVED_BOOKING, id
@@ -225,7 +225,7 @@ export const deleteArchivedBookingAC = (id: string): DeleteArchivedConsultationA
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
 
 const deleteArchivedBookingThunk = (
     token: string,
@@ -245,7 +245,7 @@ const deleteArchivedBookingThunk = (
     dispatch(deleteArchivedBookingAC(id));
     dispatch(setArchiveBookingsCurrentPageAC(newPage));
   }
-}
+};
 
 export const getArchivedBookings = (
     token: string,
@@ -272,7 +272,7 @@ export const getArchivedBookings = (
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const deleteArchivedBooking = (
     token: string,
@@ -293,7 +293,7 @@ export const deleteArchivedBooking = (
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};
 
 export const reactivateBooking = (
     token: string,
@@ -324,4 +324,4 @@ export const reactivateBooking = (
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};

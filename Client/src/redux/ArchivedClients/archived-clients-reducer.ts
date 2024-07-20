@@ -133,36 +133,36 @@ type ActionsTypes = SetPageSizeAT | SetFilterAT |
 // actions creators
 
 type setArchivedClientsApiErrorAT = {
-    type: typeof SET_ARCHIVED_CLIENT_API_ERROR
-    error: string | null
-}
+    type: typeof SET_ARCHIVED_CLIENT_API_ERROR;
+    error: string | null;
+};
 
 export const setArchivedClientsApiErrorAC = (error: string | null): setArchivedClientsApiErrorAT => ({
     type: SET_ARCHIVED_CLIENT_API_ERROR, error
 });
 
 type SetAccessErrorAT = {
-  type: typeof SET_ACCESS_ERROR
-  error: string | undefined
-}
+  type: typeof SET_ACCESS_ERROR;
+  error: string | undefined;
+};
 
 export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
 });
 
 type SetFilterAT = {
-  type: typeof SET_FILTER
-  filter: SearchFilterType
-}
+  type: typeof SET_FILTER;
+  filter: SearchFilterType;
+};
 
 export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
   type: SET_FILTER, filter
 });
 
 type SetPageSizeAT = {
-  type: typeof SET_PAGE_SIZE
-  pageSize: number
-}
+  type: typeof SET_PAGE_SIZE;
+  pageSize: number;
+};
 
 export const setPageSize = (pageSize: number): SetPageSizeAT => ({
   type: SET_PAGE_SIZE, pageSize
@@ -170,18 +170,18 @@ export const setPageSize = (pageSize: number): SetPageSizeAT => ({
 
 
 type SetArchivedClientsAT = {
-  type: typeof SET_ARCHIVED_CLIENTS,
-  clients: Array<ClientType>,
-  total: number
-}
+  type: typeof SET_ARCHIVED_CLIENTS;
+  clients: Array<ClientType>;
+  total: number;
+};
 
 const setArchivedClients = (clients: Array<ClientType>, total: number): SetArchivedClientsAT => ({
   type: SET_ARCHIVED_CLIENTS, clients, total
 });
 
 export type AddArchivedClientAT = {
-    type: typeof ADD_ARCHIVED_CLIENT,
-    client: ClientType
+    type: typeof ADD_ARCHIVED_CLIENT;
+    client: ClientType;
 };
 
 export const addArchivedClientAC = (client: ClientType): AddArchivedClientAT => ({
@@ -189,37 +189,37 @@ export const addArchivedClientAC = (client: ClientType): AddArchivedClientAT => 
 });
 
 type SetCurrentPageAT = {
-  type: typeof SET_CURRENT_PAGE,
-  page: number
-}
+  type: typeof SET_CURRENT_PAGE;
+  page: number;
+};
 
 export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
   type: SET_CURRENT_PAGE, page
 });
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
-}
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
+};
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
   type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
 });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean,
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
   type: TOGGLE_IS_FETCHING, isFetching,
 });
 
 type DeleteArchivedClientAT = {
-  type: typeof DELETE_ARCHIVED_CLIENT,
-  clientId: string
-}
+  type: typeof DELETE_ARCHIVED_CLIENT;
+  clientId: string;
+};
 
 const deleteArchivedClientAC = (clientId: string): DeleteArchivedClientAT => ({
   type: DELETE_ARCHIVED_CLIENT, clientId
@@ -227,7 +227,7 @@ const deleteArchivedClientAC = (clientId: string): DeleteArchivedClientAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
 
 const deleteArchivedClientThunk = (
     id: string,
@@ -246,7 +246,7 @@ const deleteArchivedClientThunk = (
     dispatch(deleteArchivedClientAC(id));
     dispatch(setCurrentPageAC(newPage));
   }
-}
+};
 
 export const getArchivedClients = (
     currentPage: number,
@@ -272,7 +272,7 @@ export const getArchivedClients = (
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const deleteArchivedClient = (
     id: string,
@@ -294,7 +294,7 @@ export const deleteArchivedClient = (
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};
 
 export const reactivateClient = (
     id: string,
@@ -318,4 +318,4 @@ export const reactivateClient = (
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};

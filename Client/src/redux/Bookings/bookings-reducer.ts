@@ -182,85 +182,85 @@ export const setPageSizeAC = (pageSize: number): SetPageSizeAT => ({
 });
 
 type SetFilterAT = {
-  type: typeof  SET_FILTER
-  filter: SearchFilterType
-}
+  type: typeof  SET_FILTER;
+  filter: SearchFilterType;
+};
 
 export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
     type: SET_FILTER, filter
   });
 
 type SetBookingsAT = {
-  type: typeof SET_BOOKINGS,
-  bookings: Array<BookingType>,
-  total: number,
-}
+  type: typeof SET_BOOKINGS;
+  bookings: Array<BookingType>;
+  total: number;
+};
 
 const setBookingsAC = (bookings: Array<BookingType>, total: number): SetBookingsAT => ({
       type: SET_BOOKINGS, bookings, total
 });
 
 type SetCurrentPageAT = {
-  type: typeof SET_CURRENT_PAGE,
-  page: number
-}
+  type: typeof SET_CURRENT_PAGE;
+  page: number;
+};
 
 export const setCurrentPageAC = (page: number): SetCurrentPageAT => ({
       type: SET_CURRENT_PAGE, page
 });
 
 type ChangeStatusAT = {
-  type: typeof SET_STATUS,
-  id: string,
-  status: boolean
-}
+  type: typeof SET_STATUS;
+  id: string;
+  status: boolean;
+};
 
 const changeStatusAC = (id: string, status: boolean): ChangeStatusAT => ({
     type: SET_STATUS, id, status
   });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching
   });
 
 type ToggleIsStatusChangingAT = {
-  type: typeof TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS,
-  isFetching: boolean,
-  id: string
-}
+  type: typeof TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS;
+  isFetching: boolean;
+  id: string;
+};
 
 const toggleIsStatusChangingAC = (isFetching: boolean, id: string): ToggleIsStatusChangingAT => ({
     type: TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS, isFetching, id
   });
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
-}
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
+};
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
   });
 
 type DeleteBookingAT = {
-  type: typeof DELETE_BOOKING,
-  id: string
-}
+  type: typeof DELETE_BOOKING;
+  id: string;
+};
 
 const deleteBookingAC = (id: string): DeleteBookingAT => ({
     type: DELETE_BOOKING, id
 });
 
 type AddBookingAT = {
-  type: typeof ADD_BOOKING,
-  consultation: BookingType
-}
+  type: typeof ADD_BOOKING;
+  consultation: BookingType;
+};
 
 const addBookingAC = (consultation: BookingType): AddBookingAT => ({
     type: ADD_BOOKING, consultation
@@ -268,7 +268,7 @@ const addBookingAC = (consultation: BookingType): AddBookingAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 const deleteBookingThunk = (
     token: string | null,

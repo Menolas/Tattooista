@@ -40,7 +40,7 @@ const initialState = {
         condition: 'any'
     } as SearchFilterType,
     accessError: null as string | null,
-}
+};
 
 export type InitialStateType = typeof initialState;
 
@@ -129,7 +129,7 @@ export const usersReducer = (
 
         default: return state
     }
-}
+};
 
 type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
      SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
@@ -139,45 +139,45 @@ type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
 //actions creators
 
 type SetAccessErrorAT = {
-    type: typeof SET_ACCESS_ERROR
-    error: string | null
-}
+    type: typeof SET_ACCESS_ERROR;
+    error: string | null;
+};
 
 export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
     type: SET_ACCESS_ERROR, error
 });
 
 type AddUserAT = {
-    type: typeof ADD_USER,
-    user: UserType
-}
+    type: typeof ADD_USER;
+    user: UserType;
+};
 
 const addUserAC = (user: UserType): AddUserAT => ({
         type: ADD_USER, user
 });
 
 type SetUsersFilterAT = {
-    type: typeof SET_FILTER
-    filter: SearchFilterType
-}
+    type: typeof SET_FILTER;
+    filter: SearchFilterType;
+};
 
 export const setUsersFilterAC = (filter: SearchFilterType): SetUsersFilterAT => ({
         type: SET_FILTER, filter
 });
 
 type SetUsersAT = {
-    type: typeof SET_USERS
-    users: Array<UserType>
-    total: number
-}
+    type: typeof SET_USERS;
+    users: Array<UserType>;
+    total: number;
+};
 
 export const setUsersAC = (users: Array<UserType>, total: number): SetUsersAT => ({
     type: SET_USERS, users, total
 });
 
 type ToggleIsFetchingAT = {
-    type: typeof TOGGLE_IS_FETCHING,
-    isFetching: boolean,
+    type: typeof TOGGLE_IS_FETCHING;
+    isFetching: boolean;
 }
 
 const toggleIsFetchingAC = (isFetching: boolean): ToggleIsFetchingAT => ({
@@ -185,61 +185,61 @@ const toggleIsFetchingAC = (isFetching: boolean): ToggleIsFetchingAT => ({
 });
 
 type SetUsersCurrentPageAT = {
-    type: typeof SET_CURRENT_PAGE,
-    page: number
-}
+    type: typeof SET_CURRENT_PAGE;
+    page: number;
+};
 
 export const setCurrentPageAC = (page: number): SetUsersCurrentPageAT => ({
     type: SET_CURRENT_PAGE, page
 });
 
 type SetPageLimitAT = {
-    type: typeof SET_PAGE_LIMIT,
-    pageLimit: number
-}
+    type: typeof SET_PAGE_LIMIT;
+    pageLimit: number;
+};
 
 export const setPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
     type: SET_PAGE_LIMIT, pageLimit
 });
 
 type DeleteUserAT = {
-    type: typeof DELETE_USER,
-    userId: string
-}
+    type: typeof DELETE_USER;
+    userId: string;
+};
 
 const deleteUserAC = (userId: string): DeleteUserAT => ({
     type: DELETE_USER, userId
 });
 
 type ToggleIsDeletingInProcessAT = {
-    type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-    isFetching: boolean,
-    id: string
-}
+    type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+    isFetching: boolean;
+    id: string;
+};
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
 });
 
 type SetRolesAT = {
-    type: typeof SET_ROLES,
-    roles: Array<RoleType>
-}
+    type: typeof SET_ROLES;
+    roles: Array<RoleType>;
+};
 
 const setRolesAC = (roles: Array<RoleType>): SetRolesAT => ({
     type: SET_ROLES, roles
 });
 
 type EditUserAT = {
-    type: typeof EDIT_USER,
-    user: UserType
-}
+    type: typeof EDIT_USER;
+    user: UserType;
+};
 
 const editUserAC = (user: UserType): EditUserAT => ({
     type: EDIT_USER, user
 });
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 export const getRoles = (): ThunkType => async (dispatch) => {
     try {
@@ -257,7 +257,7 @@ export const getRoles = (): ThunkType => async (dispatch) => {
     } finally {
         dispatch(toggleIsFetchingAC(false));
     }
-}
+};
 
 export const getUsers = (
     token: string,
@@ -288,7 +288,7 @@ export const getUsers = (
     } finally {
         dispatch(toggleIsFetchingAC(false));
     }
-}
+};
 
 const deleteUserThunk = (
     token: string,
@@ -309,7 +309,7 @@ const deleteUserThunk = (
         dispatch(setCurrentPageAC(newPage));
     }
     return true;
-}
+};
 
 export const deleteUser = (
     token: string,
@@ -336,7 +336,7 @@ export const deleteUser = (
     } finally {
         dispatch(toggleIsDeletingInProcessAC(false, id));
     }
-}
+};
 
 export const updateUser = (
     id: string,
@@ -359,8 +359,7 @@ export const updateUser = (
     } finally {
         dispatch(toggleIsFetchingAC(false));
     }
-
-}
+};
 
 export const addUser = (
     values: FormData,
@@ -379,4 +378,4 @@ export const addUser = (
         dispatch(setApiErrorAC(error.response.data.message));
         return false;
     }
-}
+};

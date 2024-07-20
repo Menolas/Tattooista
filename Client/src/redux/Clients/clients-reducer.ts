@@ -8,8 +8,7 @@ import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
-  setApiErrorAC,
-  SetApiErrorAT} from "../General/general-reducer";
+} from "../General/general-reducer";
 import {addArchivedClientAC, AddArchivedClientAT} from "../ArchivedClients/archived-clients-reducer";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
@@ -47,7 +46,7 @@ const initialState = {
   clientsApiError: null as null | string,
 };
 
-export type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState;
 
 export const clientsReducer = (
     state = initialState,
@@ -149,9 +148,9 @@ export const clientsReducer = (
 
     default: return state
   }
-}
+};
 
-type ActionsTypes = SetApiErrorAT | SetClientsPageSizeAT | SetFilterAT |
+type ActionsTypes = SetClientsPageSizeAT | SetFilterAT |
     SetClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
     ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT | DeleteClientAT | EditClientAT |
     AddClientAT | SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT | SetClientApiErrorAT
@@ -160,8 +159,8 @@ type ActionsTypes = SetApiErrorAT | SetClientsPageSizeAT | SetFilterAT |
 // actions creators
 
 type SetClientApiErrorAT = {
-    type: typeof SET_CLIENTS_API_ERROR
-    error: string | null
+    type: typeof SET_CLIENTS_API_ERROR;
+    error: string | null;
 };
 
 export const setClientsApiErrorAC = (error: string | null): SetClientApiErrorAT => ({
@@ -169,9 +168,9 @@ export const setClientsApiErrorAC = (error: string | null): SetClientApiErrorAT 
 });
 
 type SetAccessErrorAT = {
-  type: typeof SET_ACCESS_ERROR
-  error: string | undefined
-}
+  type: typeof SET_ACCESS_ERROR;
+  error: string | undefined;
+};
 
 export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
@@ -196,9 +195,9 @@ export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
 });
 
 type SetClientsAT = {
-  type: typeof SET_CLIENTS,
-  clients: Array<ClientType>
-  total: number
+  type: typeof SET_CLIENTS;
+  clients: Array<ClientType>;
+  total: number;
 };
 
 const setClientsAC = (clients: Array<ClientType>, total: number): SetClientsAT => ({
@@ -206,8 +205,8 @@ const setClientsAC = (clients: Array<ClientType>, total: number): SetClientsAT =
 });
 
 type SetCurrentPageAT = {
-  type: typeof SET_CURRENT_PAGE,
-  page: number
+  type: typeof SET_CURRENT_PAGE;
+  page: number;
 };
 
 export const setClientsCurrentPageAC = (page: number): SetCurrentPageAT => ({
@@ -215,9 +214,9 @@ export const setClientsCurrentPageAC = (page: number): SetCurrentPageAT => ({
 });
 
 type ToggleIsDeletingPicturesInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_PICTURES_IN_PROCESS
-  isFetching: boolean,
-  id: string
+  type: typeof TOGGLE_IS_DELETING_PICTURES_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
 };
 
 const toggleIsDeletingPicturesInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingPicturesInProcessAT  => ({
@@ -225,9 +224,9 @@ const toggleIsDeletingPicturesInProcessAC = (isFetching: boolean, id: string): T
 });
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
 };
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
@@ -235,8 +234,8 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
 });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean,
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
 };
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
@@ -244,8 +243,8 @@ const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
 });
 
 type DeleteClientAT = {
-  type: typeof DELETE_CLIENT,
-  clientId: string
+  type: typeof DELETE_CLIENT;
+  clientId: string;
 };
 
 const deleteClientAC = (clientId: string): DeleteClientAT => ({
@@ -253,8 +252,8 @@ const deleteClientAC = (clientId: string): DeleteClientAT => ({
 });
 
 type EditClientAT = {
-  type: typeof EDIT_CLIENT,
-  client: ClientType
+  type: typeof EDIT_CLIENT;
+  client: ClientType;
 };
 
 const editClientAC = (client: ClientType): EditClientAT => ({
@@ -262,8 +261,8 @@ const editClientAC = (client: ClientType): EditClientAT => ({
 });
 
 type AddClientAT = {
-  type: typeof ADD_CLIENT,
-  client: ClientType
+  type: typeof ADD_CLIENT;
+  client: ClientType;
 };
 
 const addClientAC = (client: ClientType): AddClientAT => ({
@@ -271,8 +270,8 @@ const addClientAC = (client: ClientType): AddClientAT => ({
 });
 
 type SetClientProfileAT = {
-  type: typeof SET_CLIENT_PROFILE,
-  profile: ClientType
+  type: typeof SET_CLIENT_PROFILE;
+  profile: ClientType;
 }
 
 const setClientProfile = (profile: ClientType): SetClientProfileAT => ({
@@ -281,7 +280,7 @@ const setClientProfile = (profile: ClientType): SetClientProfileAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 const deleteClientThunk = (
     token: string,
@@ -352,11 +351,14 @@ export const deleteClient = (
     const response = await clientsAPI.deleteClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteClientThunk(token, id, clients, currentPage, pageLimit, filter));
+      dispatch(setClientsApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setClientsApiErrorAC(error.response?.data?.message));
     console.log(e);
     return false;
   } finally {
@@ -394,13 +396,14 @@ export const addClient = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addClientAC(response.client));
       dispatch(setSuccessModalAC(true, ADD_CLIENT_SUCCESS));
+      dispatch(setClientsApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setApiErrorAC(error.response?.data?.message));
+    dispatch(setClientsApiErrorAC(error.response?.data?.message));
     console.log(error)
     return false;
   }
@@ -416,13 +419,14 @@ export const editClient = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(editClientAC(response.client));
       dispatch(setSuccessModalAC(true, UPDATE_CLIENT_SUCCESS));
+      dispatch(setClientsApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setApiErrorAC(error.response?.data?.message));
+    dispatch(setClientsApiErrorAC(error.response?.data?.message));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -460,6 +464,7 @@ export const updateClientGallery = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setClientProfile(response.client));
       dispatch(editClientAC(response.client));
+      dispatch(setClientsApiErrorAC(null));
       dispatch(setSuccessModalAC(true, UPDATE_CLIENT_GALLERY_SUCCESS));
       return true;
     } else {
@@ -467,7 +472,7 @@ export const updateClientGallery = (
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setApiErrorAC(error.response?.data?.message));
+    dispatch(setClientsApiErrorAC(error.response?.data?.message));
     console.log(error);
     return false;
   } finally {
@@ -534,12 +539,15 @@ export const archiveClientFromProfile = (
     const response = await clientsAPI.archiveClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteClientAC(id));
+      dispatch(setClientsApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
-    console.log(e);
+    const error = e as ApiErrorType;
+    console.log(error);
+    dispatch(setClientsApiErrorAC(error.response?.data?.message));
     return false;
   }
 };

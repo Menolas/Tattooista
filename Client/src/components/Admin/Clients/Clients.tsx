@@ -13,7 +13,6 @@ import {Navigate} from "react-router";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 
 type PropsType = {
-  clientsApiError: null | string;
   apiError: null | string;
   isFetching: boolean;
   totalCount: number;
@@ -30,12 +29,10 @@ type PropsType = {
   setPageLimit: (clientsPageSize: number) => void;
   deleteGalleryItem: (clientId: string, picture: string) => void;
   archive: (clientId: string) => void;
-  setClientsApiError: () => void;
   setApiError: () => void;
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
-    clientsApiError,
     apiError,
     isFetching,
     totalCount,
@@ -52,7 +49,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setPageLimit,
     deleteGalleryItem,
     archive,
-    setClientsApiError,
     setApiError,
 }) => {
 
@@ -77,11 +73,13 @@ export const Clients: React.FC<PropsType> = React.memo(({
   const modalTitleUpdateClient = 'EDIT CLIENT';
   const modalUpdateGalleryTitle = 'Update Gallery';
 
+  console.log(apiError + " clientsApiError in clients component!!!!!!");
+
   const clientsElements = clients
       .map(client => {
         return (
             <Client
-                apiError={clientsApiError}
+                apiError={apiError}
                 key={client._id}
                 data={client}
                 isDeletingInProcess={isDeletingInProcess}
@@ -91,6 +89,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 setData={setClient}
                 setEditClientMode={setEditClientMode}
                 deleteGalleryItem={deleteGalleryItem}
+                setApiError={setApiError}
             />
         )
       });

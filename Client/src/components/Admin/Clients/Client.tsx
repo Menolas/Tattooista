@@ -13,6 +13,7 @@ import { Confirmation } from "../../common/Confirmation";
 import {ImageFullView} from "../../common/ImageFullView";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {DefaultAvatar} from "../../common/DefaultAvatar";
+import {setClientsApiErrorAC} from "../../../redux/Clients/clients-reducer";
 
 type PropsType = {
   apiError: null | string;
@@ -24,6 +25,7 @@ type PropsType = {
   setData: (client: ClientType) => void;
   setEditClientMode: (mode: boolean) => void;
   deleteGalleryItem: (clientId: string, picture: string) => void;
+  setApiError: () => void;
 }
 
 export const Client: React.FC<PropsType> = React.memo(({
@@ -36,6 +38,7 @@ export const Client: React.FC<PropsType> = React.memo(({
   setData,
   setEditClientMode,
   deleteGalleryItem,
+  setApiError,
 }) => {
 
   const [carouselData, setCarouselData] = useState<{
@@ -50,17 +53,20 @@ export const Client: React.FC<PropsType> = React.memo(({
     context: string
   }>({needConfirmation: false, context: ''});
 
+  console.log(apiError + " apiError in client component!!!!!!");
+
   const closeModal = () => {
     setConfirmationData({needConfirmation: false, context: ''});
-  }
+    setApiError();
+  };
 
   const archiveCallBack = () => {
       archive(data._id);
-  }
+  };
 
   const removeCallBack = () => {
       remove(data._id);
-  }
+  };
 
   const clientContacts: ContactType = data.contacts;
 
@@ -189,7 +195,10 @@ export const Client: React.FC<PropsType> = React.memo(({
       <ModalPopUp
             isOpen={editGalleryMode}
             modalTitle={'Edit Client Gallery'}
-            closeModal={() => {setEditGalleryMode(false);}}
+            closeModal={() => {
+                setEditGalleryMode(false);
+                setApiError();
+            }}
       >
         {editGalleryMode &&
             <GalleryUploadForm
@@ -198,7 +207,10 @@ export const Client: React.FC<PropsType> = React.memo(({
                 client={data}
                 isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                 deleteClientGalleryPicture={deleteGalleryItem}
-                closeModal={() => {setEditGalleryMode(false);}}
+                closeModal={() => {
+                    setEditGalleryMode(false);
+                    setApiError();
+                }}
             />
         }
       </ModalPopUp>

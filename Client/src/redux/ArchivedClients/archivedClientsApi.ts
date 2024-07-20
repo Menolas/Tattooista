@@ -6,31 +6,31 @@ type DeleteClientResponseType = CommonResponseFields;
 type ReactivateClientResponseType = CommonResponseFields;
 
 type GetClientsResponseType = CommonResponseFields & {
-    clients: Array<ClientType>,
-    totalCount: number
-}
+    clients: Array<ClientType>;
+    totalCount: number;
+};
 
 export const archivedClientsAPI = {
 
-  getArchivedClients(
+    async getArchivedClients(
       currentPage = 1,
       pageSize = 5,
       filter: SearchFilterType
   ) {
-      return instance.get<GetClientsResponseType>(
+      return await instance.get<GetClientsResponseType>(
           `clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)
           .then(response => response.data);
   },
 
-  deleteArchivedClient(clientId: string) {
-    return instance.delete<DeleteClientResponseType>(`clients/archive/${clientId}`)
+    async deleteArchivedClient(clientId: string) {
+    return await instance.delete<DeleteClientResponseType>(`clients/archive/${clientId}`)
         .then(response => response.data);
   },
 
-  reactivateClient(
+    async reactivateClient(
     clientId: string
   ) {
-    return instance.get<ReactivateClientResponseType>(`clients/archive/${clientId}`)
+    return await instance.get<ReactivateClientResponseType>(`clients/archive/${clientId}`)
         .then(response => response.data);
   }
-}
+};

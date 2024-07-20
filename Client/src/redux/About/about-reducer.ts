@@ -62,26 +62,26 @@ type ActionsTypes = SetAboutPageAT | SetSuccessModalAT | SetApiErrorAT
 // action creators
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
   type: TOGGLE_IS_FETCHING, isFetching
 });
 
 type SetIsEditingAT = {
-  type: typeof TOGGLE_IS_EDITING,
-  isEditing: boolean
-}
+  type: typeof TOGGLE_IS_EDITING;
+  isEditing: boolean;
+};
 
 const setIsEditingAC = (isEditing: boolean): SetIsEditingAT => ({
   type: TOGGLE_IS_EDITING, isEditing
 });
 
 type SetAboutPageAT = {
-  type: typeof SET_ABOUT_PAGE,
-  page: PageType
+  type: typeof SET_ABOUT_PAGE;
+  page: PageType;
 };
 
 const setAboutPageAC = (page: PageType): SetAboutPageAT => ({
@@ -90,7 +90,7 @@ const setAboutPageAC = (page: PageType): SetAboutPageAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<GetPagesResponseType | null> | Promise<void>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<GetPagesResponseType | null> | Promise<void>, AppStateType, unknown, ActionsTypes>;
 
 export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {
@@ -105,7 +105,7 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const editAboutPage = (
   FormData: FormData
@@ -129,8 +129,8 @@ export const editAboutPage = (
     dispatch(setIsFetchingAC(false));
     dispatch(setIsEditingAC(false));
   }
-  return apiResponse; // Return the response
-}
+  return apiResponse;
+};
 
 export const changeAboutPageVisibility = (
     isActive: boolean
@@ -143,4 +143,4 @@ export const changeAboutPageVisibility = (
   } catch (e) {
     console.log(e);
   }
-}
+};

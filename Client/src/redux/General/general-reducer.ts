@@ -37,25 +37,25 @@ export const generalReducer = (
       ...state
     }
   }
-}
+};
 
 type ActionsTypes = SetApiErrorAT | SetSuccessModalAT;
 
 // action creators
 
 export type SetSuccessModalAT = {
-  type: typeof SET_SUCCESS_MODAL
-  isSuccess: boolean
-  text: string
-}
+  type: typeof SET_SUCCESS_MODAL;
+  isSuccess: boolean;
+  text: string;
+};
 
 export const setSuccessModalAC = (isSuccess: boolean, text: string): SetSuccessModalAT => ({
   type: SET_SUCCESS_MODAL, isSuccess, text
 });
 
 export type SetApiErrorAT = {
-  type: typeof  SET_API_ERROR
-  error: null | string
+  type: typeof  SET_API_ERROR;
+  error: null | string;
 };
 
 export const setApiErrorAC = (error: null | string): SetApiErrorAT  => ({

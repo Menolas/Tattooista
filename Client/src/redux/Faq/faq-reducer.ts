@@ -90,27 +90,27 @@ type ActionsTypes = SetApiErrorAT | SetFaqItemsAT | SetSuccessModalAT |
 // action creators
 
 type DeleteFaqItemAT = {
-    type: typeof DELETE_FAQ_ITEM,
-    id: string,
-}
+    type: typeof DELETE_FAQ_ITEM;
+    id: string;
+};
 
 const deleteFaqItemAC = (id: string): DeleteFaqItemAT => ({
     type: DELETE_FAQ_ITEM, id
 });
 
 type UpdateFaqItemAT = {
-  type: typeof UPDATE_FAQ_ITEM,
-  id: string,
-  item: FaqType
-}
+  type: typeof UPDATE_FAQ_ITEM;
+  id: string;
+  item: FaqType;
+};
 
 const updateFaqItemAC = (id: string, item: FaqType): UpdateFaqItemAT => ({
   type: UPDATE_FAQ_ITEM, id, item
 });
 
 type AddFaqItemAT = {
-  type: typeof ADD_FAQ_ITEM,
-  item: FaqType
+  type: typeof ADD_FAQ_ITEM;
+  item: FaqType;
 };
 
 const addFaqItemAC = (item: FaqType): AddFaqItemAT => ({
@@ -118,27 +118,23 @@ const addFaqItemAC = (item: FaqType): AddFaqItemAT => ({
 });
 
 type ToggleIsDeletingInProcessAT = {
-  type: typeof TOGGLE_IS_DELETING_IN_PROCESS,
-  isFetching: boolean,
-  id: string
+  type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
+  isFetching: boolean;
+  id: string;
 }
-
-// const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
-//   type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
-// });
 
 type SetIsFetchingAT = {
-  type: typeof TOGGLE_IS_FETCHING,
-  isFetching: boolean
-}
+  type: typeof TOGGLE_IS_FETCHING;
+  isFetching: boolean;
+};
 
 const setIsFetchingAC = (isFetching: boolean): SetIsFetchingAT => ({
   type: TOGGLE_IS_FETCHING, isFetching
 });
 
 type SetFaqItemsAT = {
-  type: typeof SET_FAQ_ITEMS,
-  faqItems: Array<FaqType>
+  type: typeof SET_FAQ_ITEMS;
+  faqItems: Array<FaqType>;
 };
 
 const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => ({
@@ -147,7 +143,7 @@ const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>
+type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 
 export const getFaqItems = (): ThunkType => async (
     dispatch
@@ -168,7 +164,7 @@ export const getFaqItems = (): ThunkType => async (
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
 
 export const addFaqItem = (values: UpdateFaqValues): ThunkType => async (dispatch) => {
   try {
@@ -186,7 +182,7 @@ export const addFaqItem = (values: UpdateFaqValues): ThunkType => async (dispatc
     console.log(error);
     return false;
   }
-}
+};
 
 export const updateFaqItem = (id: string, values: UpdateFaqValues): ThunkType => async (dispatch) => {
   try {
@@ -204,7 +200,7 @@ export const updateFaqItem = (id: string, values: UpdateFaqValues): ThunkType =>
     console.log(error);
     return false;
   }
-}
+};
 
 export const deleteFaqItem = (id: string): ThunkType => async (dispatch) => {
   try {
@@ -219,4 +215,4 @@ export const deleteFaqItem = (id: string): ThunkType => async (dispatch) => {
     console.log(e);
     return false;
   }
-}
+};
