@@ -69,6 +69,7 @@ export const GalleryContainer: React.FC = () => {
             <GalleryInfiniteScroll
                 activeStyle={activeStyle}
                 pageSize={pageSize}
+                apiError={apiError}
             />
         }
       </>

@@ -17,6 +17,7 @@ import {Confirmation} from "../../common/Confirmation";
 import {useDispatch, useSelector} from "react-redux";
 import {archiveGalleryItem, deleteGalleryItem, getGallery} from "../../../redux/Gallery/gallery-reducer";
 import {getGallerySelector} from "../../../redux/Gallery/gallery-selectors";
+import {ApiError} from "../../common/ApiError";
 
 type PropsType = {
   isFetching: boolean;
@@ -173,7 +174,8 @@ export const Gallery: React.FC<PropsType> = React.memo(({
                 </ul>
             )
           : apiError
-                ? <p>{apiError}</p> : <NothingToShow/>
+                ? <ApiError message={apiError} />
+                : <NothingToShow/>
         }
         {  carouselData.isOpen &&
            <ImageFullView
