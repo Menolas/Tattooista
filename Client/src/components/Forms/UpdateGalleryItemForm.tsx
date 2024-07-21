@@ -1,16 +1,18 @@
 import * as React from "react";
-import {Field, Form, Formik} from "formik";
+import {Field, Form, Formik, FormikHelpers} from "formik";
 import { GalleryItemType, StyleType} from "../../types/Types";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {API_URL} from "../../http";
 import {useDispatch} from "react-redux";
 import {updateGalleryItem} from "../../redux/Gallery/gallery-reducer";
+import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 
 type InitialValuesType = {
     [key: string]: boolean;
 };
 
 type PropsType = {
+    apiError: null | string;
     activeStyleId: string;
     folder: string;
     galleryItem: GalleryItemType;
@@ -19,6 +21,7 @@ type PropsType = {
 };
 
 export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
+    apiError,
     activeStyleId,
     folder,
     galleryItem,
@@ -30,10 +33,12 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
     console.log('styles as string:', JSON.stringify(styles, null, 2));
     const dispatch = useDispatch();
 
-    const submit = async (values: InitialValuesType) => {
-        await dispatch(updateGalleryItem(galleryItem._id, values, activeStyleId));
-        closeModal();
-    }
+    const submit = async (values: InitialValuesType, formikHelpers: FormikHelpers<InitialValuesType>) => {
+        const { setSubmitting } = formikHelpers;
+        let success = await dispatch(updateGalleryItem(galleryItem._id, values, activeStyleId));
+        if (success) closeModal();
+        setSubmitting(false);
+    };
 
     const initialValues: InitialValuesType = {};
     styles.forEach((style) => {
@@ -81,6 +86,9 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
 
                         </div>
                         {tattooStyles}
+                        { !!apiError &&
+                            <ApiErrorMessage message={apiError}/>
+                        }
                         <button
                             type="submit"
                             disabled={!propsF.dirty || isSubmitting}

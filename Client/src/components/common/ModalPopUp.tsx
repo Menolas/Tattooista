@@ -16,51 +16,45 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
     closeModal,
     children,
 }) => {
+  const classNames = `modal-wrap ${modalClasses} ${isOpen ? 'open' : ''}`;
+  const innerBlockRef = useRef<HTMLDivElement>(null);
 
-    const classNames = `modal-wrap ${modalClasses} ${isOpen ? 'open' : ''}`;
-
-    const innerBlockRef = useRef<HTMLDivElement>(null);
-
-    const handleKeyDown = useCallback(
-        (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                event.preventDefault();
-                closeModal();
-            }
-        },
-        []
-    );
-
-    useEffect(() => {
-        if (isOpen) {
-            document.addEventListener("keydown", handleKeyDown);
-            return () => {
-                document.removeEventListener("keydown", handleKeyDown);
-            };
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            closeModal();
         }
-    }, [isOpen, handleKeyDown]);
+    }, []);
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (innerBlockRef.current && !innerBlockRef.current.contains(event.target as Node)) {
-                closeModal();
-            }
-        };
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-
-        // Cleanup the event listener on component unmount
+  useEffect(() => {
+    if (isOpen) {
+        document.addEventListener("keydown", handleKeyDown);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [isOpen, closeModal]);
-
-    if (!isOpen) {
-        return null;
     }
+  }, [isOpen, handleKeyDown]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (innerBlockRef.current && !innerBlockRef.current.contains(event.target as Node)) {
+            closeModal();
+        }
+    };
+    if (isOpen) {
+        document.addEventListener('mousedown', handleClickOutside);
+    } else {
+        document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, closeModal]);
+
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className={classNames}>

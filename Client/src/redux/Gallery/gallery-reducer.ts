@@ -350,6 +350,7 @@ export const updateGalleryItem = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryItemAC(response.galleryItem, values[activeStyleId]));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;

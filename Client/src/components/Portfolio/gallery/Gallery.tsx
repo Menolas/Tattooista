@@ -79,6 +79,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   const closeGalleryItemEditModal = () => {
     setGalleryItem(null);
     setEditGalleryMode(false);
+    setApiError();
   };
 
   const closeModal = () => {
@@ -199,6 +200,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
         >
           {  galleryItem &&
               <UpdateGalleryItemForm
+                  apiError={apiError}
                   folder={'gallery'}
                   galleryItem={galleryItem}
                   styles={styles}

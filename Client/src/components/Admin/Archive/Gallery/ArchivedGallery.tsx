@@ -32,6 +32,7 @@ import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Preloader} from "../../../common/Preloader";
 import {ImageFullView} from "../../../common/ImageFullView";
 import {GalleryItemType} from "../../../../types/Types";
+import {getApiErrorSelector} from "../../../../redux/General/general-selectors";
 
 export const ArchivedGallery: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -43,6 +44,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
     const styles = useSelector(getStylesSelector);
     const token = useSelector(getTokenSelector);
     const activeStyle = useSelector(getActiveStyleSelector);
+    const apiError = useSelector(getApiErrorSelector);
 
     const dispatch = useDispatch();
 
@@ -185,6 +187,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                 {
                     editGalleryItem &&
                     <UpdateGalleryItemForm
+                        apiError={apiError}
                         folder={'archivedGallery'}
                         galleryItem={editGalleryItem}
                         styles={styles}
