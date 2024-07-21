@@ -62,7 +62,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
           })
           .test(
               'fileType',
-              'Invalid file type',
+              'Invalid file type. Must be jpg, gif, png, jpeg, svg, webp.',
               (value) => {
             if (value instanceof File) {
               return isFileTypesValid([value], VALID_FILE_EXTENSIONS);

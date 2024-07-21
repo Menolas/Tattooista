@@ -61,7 +61,9 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
         if (values.aboutPageWallPaper instanceof File) {
             const isValidFile = validateFile(values.aboutPageWallPaper);
             if (!isValidFile) {
-                actions.setFieldError('aboutPageWallPaper', 'Invalid file');
+                actions.setFieldError(
+                    'aboutPageWallPaper',
+                    'Invalid file: max allowed size is 1024kb and allowed types are: jpg, jpeg, png, web, gif.');
                 return;
             } else {
                 actions.setFieldError('aboutPageWallPaper', '');
