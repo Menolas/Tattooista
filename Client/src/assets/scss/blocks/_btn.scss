@@ -93,9 +93,7 @@
 }
 
 .btn--icon:disabled {
-  svg {
-    fill: $disabled;
-  }
+  opacity: 0.4;
 }
 
 .btn--icon--light {

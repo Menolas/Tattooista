@@ -332,8 +332,6 @@ input[type="checkbox"][value="true"] +label .checkbox::after {
   }
 
   .form__input-wrap--checkbox {
-    margin-bottom: 0;
-    margin-top: 24px;
 
     label {
       padding-left: 36px;

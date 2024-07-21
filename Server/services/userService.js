@@ -18,8 +18,9 @@ class UserService {
             throw ApiError.BadRequest(`The user with email ${email} already exist`);
         }
         const hashPassword = await bcrypt.hash(password, 3);
-        const userRole = await Role.findOne({value: "USER"});
         const activationLink = uuid.v4();
+        const userRole = await Role.findOne({value: "USER"});
+
         let user = await UserModel.create({
             displayName,
             email,
@@ -27,7 +28,6 @@ class UserService {
             roles: [userRole._id],
             activationLink
         });
-
         await mailService.sendActivationMail(email, `${process.env.API_URL}/auth/activate/${activationLink}`);
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
@@ -41,6 +41,23 @@ class UserService {
                 avatar: userDto.avatar
             },
             roles: await Role.find()
+        }
+    }
+
+    async editUser(displayName, email, userId) {
+        const displayNameCandidate = await  UserModel.findOne({
+            displayName: displayName,
+            _id: {$ne: userId}
+        });
+        if (displayNameCandidate) {
+            throw ApiError.BadRequest(`The user with Display Name ${displayName} already exist`);
+        }
+        const emailCandidate = await  UserModel.findOne({
+            email: email,
+            _id: {$ne: userId}
+        });
+        if (emailCandidate) {
+            throw ApiError.BadRequest(`The user with email ${email} already exist`);
         }
     }
 

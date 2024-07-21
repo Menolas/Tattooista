@@ -281,8 +281,8 @@ img {
   border-color: #080808;
 }
 
-.btn--icon:disabled svg {
-  fill: #888;
+.btn--icon:disabled {
+  opacity: 0.4;
 }
 
 .btn--icon--light svg {
@@ -2898,10 +2898,6 @@ input[type=checkbox][value=true] + label .checkbox::after {
   }
   .form__input-wrap {
     margin-bottom: 2rem;
-  }
-  .form__input-wrap--checkbox {
-    margin-bottom: 0;
-    margin-top: 24px;
   }
   .form__input-wrap--checkbox label {
     padding-left: 36px;

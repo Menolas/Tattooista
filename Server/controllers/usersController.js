@@ -3,13 +3,14 @@ const Role = require("../models/Role");
 const fs = require("fs");
 const generateFileRandomName = require("../utils/functions");
 const userService = require('../services/userService');
+const uuid = require("uuid");
+const mailService = require("../services/mailService");
+const bcrypt = require("bcrypt");
 
 class usersController {
 
     async getRoles(req, res) {
-
         const results = {};
-
         try {
             results.resultCode = 0;
             results.roles = await Role.find();
@@ -30,31 +31,32 @@ class usersController {
         const term = req.query.term;
         let users = [];
         const results = {};
-
         try {
-            if (!role) {
-                if (!term) {
-                    users = await User.find().sort({createdAt: -1}).populate('roles');
-                } else if (term) {
-                    users = await User.find({
-                        displayName: {
-                            $regex: term,
-                            $options: 'i'
-                        }
-                    }).sort({createdAt: -1}).populate('roles');
-                }
+            let query = {};
+            let searchConditions = [];
+            if (term) {
+                const regexSearch = { $regex: term, $options: 'i' };
+                searchConditions = [
+                    { fullName: regexSearch },
+                    { email: regexSearch },
+                ];
             }
-
             if (role) {
                 const userRole = await Role.findOne({ value: role });
-                const roleId = userRole._id;
-                if (!term) {
-                    users = await User.find({roles: roleId}).sort({createdAt: -1}).populate('roles');
-                } else if (term) {
-                    users = await  User.find({roles: roleId, displayName: {$regex: term, $options: 'i'}}).sort({createdAt: -1}).populate('roles');
+                if (userRole) {
+                    query.roles = userRole._id;
                 }
             }
-
+            if (searchConditions.length > 0) {
+                if (Object.keys(query).length > 0) {
+                    // If there's already a gallery condition in the query, combine using $and
+                    query = { $and: [ { $or: searchConditions }, query ] };
+                } else {
+                    // If only term conditions are present, use $or
+                    query = { $or: searchConditions };
+                }
+            }
+            users = await User.find(query).sort({ createdAt: -1 }).populate('roles');
             results.resultCode = 0;
             results.totalCount = users.length;
             results.users = users.slice(startIndex, endIndex);
@@ -68,7 +70,6 @@ class usersController {
 
     async deleteUser(req, res) {
         const results = {};
-
         try {
             if (res.user.avatar) {
                 await fs.unlink(`./uploads/users/${res.user._id}/avatar/${res.user.avatar}`, e => {
@@ -78,7 +79,6 @@ class usersController {
                     if (e) console.log(e);
                 })
             }
-
             await res.user.remove();
             results.resultCode = 0;
             res.json(results);
@@ -90,38 +90,43 @@ class usersController {
     }
 
     async updateUser(req, res) {
-        res.user.displayName = req.body.displayName;
-        res.user.email = req.body.email;
-
-        const roleIds = req.body.roles.match(/[a-f\d]{24}/g);
-
-        if (roleIds === "" || roleIds === null) {
-            const userRole = await Role.findOne({value: "USER"});
-            res.user.roles = [userRole._id];
-        } else {
-            res.user.roles = roleIds;
-        }
-
-        await res.user.populate('roles');
-
-        if (req.files && req.files.avatar) {
-            if (res.user.avatar) {
-                await fs.unlink(`./uploads/users/${res.user._id}/avatar/${res.user.avatar}`, e => {
-                    if (e) console.log(e);
-                })
-            }
-
-            const file = req.files.avatar;
-            const newFileName = generateFileRandomName(file.name);
-            await file.mv(`./uploads/users/${res.user._id}/avatar/${newFileName}`, e => {
-                if (e) console.log(e);
-            })
-            res.user.avatar = newFileName;
-        }
-
+        const displayName = req.body.displayName.trim();
+        const email = req.body.email;
+        const password = req.body.password;
         const results = {};
-
         try {
+            await userService.editUser(displayName, email, res.user._id);
+            const hashPassword = await bcrypt.hash(password, 3);
+            if (res.user.email !== email) {
+                res.user.activationLink = uuid.v4();
+                await mailService.sendActivationMail(email, `${process.env.API_URL}/auth/activate/${res.user.activationLink}`);
+                res.user.isActivated = false;
+            }
+            res.user.displayName = displayName;
+            res.user.email = email;
+            res.user.password = hashPassword;
+            const roleIds = req.body.roles.match(/[a-f\d]{24}/g);
+            if (roleIds === "" || roleIds === null) {
+                const userRole = await Role.findOne({value: "USER"});
+                res.user.roles = [userRole._id];
+            } else {
+                res.user.roles = roleIds;
+            }
+            await res.user.populate('roles');
+            if (req.files && req.files.avatar) {
+                if (res.user.avatar) {
+                    await fs.unlink(`./uploads/users/${res.user._id}/avatar/${res.user.avatar}`, e => {
+                        if (e) console.log(e);
+                    });
+                }
+                const file = req.files.avatar;
+                const newFileName = generateFileRandomName(file.name);
+                await file.mv(`./uploads/users/${res.user._id}/avatar/${newFileName}`, e => {
+                    if (e) console.log(e);
+                });
+                res.user.avatar = newFileName;
+            }
+            await res.user.populate('roles');
             results.user = await res.user.save();
             results.resultCode = 0;
             res.json(results);
@@ -133,7 +138,6 @@ class usersController {
     }
 
     async addUser (req, res) {
-
         const results = {};
         try {
             const displayName = req.body.displayName.trim();
@@ -149,7 +153,6 @@ class usersController {
             } else {
                 user.roles = roleIds;
             }
-            await user.populate('roles');
 
             if (req.files && req.files.avatar) {
                 const file = req.files.avatar;
@@ -159,11 +162,11 @@ class usersController {
                     if (e) console.log(e);
                 })
                 user.avatar = newFileName;
-                await user.save();
             }
 
+            await user.populate('roles');
             results.resultCode = 0;
-            results.user = user;
+            results.user = await user.save();
             return res.json(results);
         } catch (e) {
             results.resultCode = 1;
