@@ -121,7 +121,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                       return (
                           <li className={"client-gallery__item"} key={i}>
                             <button
-                                className={"btn btn--icon btn--icon--light"}
+                                className={"btn btn--icon btn--icon--light close-button"}
                                 disabled={isDeletingPicturesInProcess?.some(id => id === item)}
                                 onClick={async (event) => {
                                   event.preventDefault();
@@ -134,9 +134,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                     }
                                   }
                                 }}
-                            >
-                              <TrashIcon />
-                            </button>
+                            ></button>
                             <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
                           </li>
                       );
@@ -157,11 +155,11 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                 key={index}
                             >
                               <button
-                                  className="btn"
+                                  className="btn btn--icon close-button"
                                   onClick={(event) => {
                                     handleDeletePreview(event, item.file);
                                   }}
-                              >Delete</button>
+                              ></button>
                               <img
                                   className="client-profile__gallery-image"
                                   src={item.url as string}
