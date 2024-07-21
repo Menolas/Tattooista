@@ -1,5 +1,5 @@
 import {useField} from "formik";
-import Select from "react-select";
+import Select, { components, InputProps } from "react-select";
 import * as React from "react";
 import {useState} from "react";
 
@@ -14,6 +14,10 @@ type PropsType = {
     handleChange: (value: string) => void;
     placeholder?: string;
 }
+
+const CustomInput = (props: InputProps<OptionType>) => (
+    <components.Input {...props} autoComplete="nope" />
+);
 
 export const FormSelect: React.FC<PropsType> = ({
     name,
@@ -39,12 +43,14 @@ export const FormSelect: React.FC<PropsType> = ({
                 setMenuIsOpen(false)
             }}
             onChange={(newValue) => {
-                if (newValue !== null) {
-                    helpers.setValue(newValue.value);
-                    handleChange(newValue.value);
+                if (newValue && !Array.isArray(newValue)) {
+                    const option = newValue as OptionType; // Cast newValue to OptionType
+                    helpers.setValue(option.value);
+                    handleChange(option.value);
                 }
             }}
             value={options.find((option: OptionType) => option.value === field.value)}
+            components={{ Input: CustomInput }}
         />
     );
 };
