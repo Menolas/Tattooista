@@ -25,8 +25,12 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
     const dispatch = useDispatch();
 
     const validationSchema = Yup.object().shape({
-        aboutPageTitle: Yup.string(),
-        aboutPageContent: Yup.string(),
+        aboutPageTitle: Yup.string()
+            .min(2, 'Title is too short - should be 2 chars minimum.')
+            .required("Page title is a required field"),
+        aboutPageContent: Yup.string()
+            .min(20, 'content is too short - should be 20 chars minimum.')
+            .required("Page content is a required field"),
     });
 
     const [imageURL, setImageURL] = useState('')
@@ -61,7 +65,9 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
         if (values.aboutPageWallPaper instanceof File) {
             const isValidFile = validateFile(values.aboutPageWallPaper);
             if (!isValidFile) {
-                actions.setFieldError('aboutPageWallPaper', 'Invalid file');
+                actions.setFieldError(
+                    'aboutPageWallPaper',
+                    'Invalid file: max allowed size is 1024kb and allowed types are: jpg, jpeg, png, web, gif.');
                 return;
             } else {
                 actions.setFieldError('aboutPageWallPaper', '');

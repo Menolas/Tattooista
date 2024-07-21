@@ -1,8 +1,8 @@
 import * as React from "react";
 import {Field, Form, Formik, FormikHelpers} from "formik";
 import {ReactComponent as SearchIcon} from "../../assets/svg/search.svg";
-import {FormSelect} from "./formComponents/FormSelect";
 import {SearchFilterType, SelectOptionType} from "../../types/Types";
+import {FormSelect} from "./formComponents/FormSelect";
 
 const handleChange = () => {
   console.log("HandleChange!!!");

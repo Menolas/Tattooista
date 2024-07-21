@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useRef} from "react";
+import {useCallback, useEffect, useRef} from "react";
 
 type PropsType = {
     isOpen: boolean;
@@ -20,6 +20,25 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
     const classNames = `modal-wrap ${modalClasses} ${isOpen ? 'open' : ''}`;
 
     const innerBlockRef = useRef<HTMLDivElement>(null);
+
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                closeModal();
+            }
+        },
+        []
+    );
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener("keydown", handleKeyDown);
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [isOpen, handleKeyDown]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

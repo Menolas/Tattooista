@@ -7,7 +7,7 @@ import {FieldComponent} from "./formComponents/FieldComponent";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useEffect, useState, useRef,} from "react";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
-import {FormSelect2} from "./formComponents/FormSelect2";
+import {FormSelect} from "./formComponents/FormSelect";
 import {useDispatch} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 
@@ -147,7 +147,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                 wrapperClass={'booking__input-wrap'}
                 name={"contact"}
             >
-              <FormSelect2
+              <FormSelect
                   name="contact"
                   options={options}
                   handleChange={handleChange}

@@ -1,6 +1,7 @@
 import * as React from "react";
 import {ConfettiContainer} from "./Confetti";
 import {ModalPopUp} from "./ModalPopUp";
+import {useCallback, useEffect} from "react";
 
 type PropsType = {
     isOpen: boolean;
@@ -13,6 +14,26 @@ export const SuccessPopUp: React.FC<PropsType> = React.memo(({
    content,
    closeModal,
 }) => {
+
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                closeModal();
+            }
+        },
+        []
+    );
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener("keydown", handleKeyDown);
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [isOpen, handleKeyDown]);
+
     return (
         <ModalPopUp isOpen={isOpen} closeModal={closeModal}>
             <ConfettiContainer />
