@@ -1,6 +1,7 @@
 import * as React from "react";
 import {GalleryItemType} from "../../types/Types";
 import {MyCarousel} from "./MyCarousel";
+import {useCallback, useEffect, useRef} from "react";
 
 type SliderProps = {
     GalleryImgUrl: string;
@@ -41,12 +42,31 @@ export const ImageFullView: React.FC<PropsType> = React.memo(({
         )
     });
 
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === "Escape" || event.key === "Enter") {
+                event.preventDefault();
+                closeImg();
+            }
+        },
+        []
+    );
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener("keydown", handleKeyDown);
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [isOpen, handleKeyDown]);
+
     return (
         <div className={ !isOpen ? "image-full-view gallery__large-wrap modal-wrap" : "image-full-view gallery__large-wrap modal-wrap open" }
         >
             <button
                 className="closing-btn image-full-view__closing-btn gallery__item-close-btn"
-                onClick={() => { closeImg() }}
+                onClick={closeImg}
             >
                 <span>{''}</span>
             </button>

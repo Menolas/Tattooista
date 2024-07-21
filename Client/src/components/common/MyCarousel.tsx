@@ -29,6 +29,7 @@ export const MyCarousel: React.FC<MyCarouselProps> = React.memo(({
             activeIndex={activeIndex}
             disableDotsControls={disableDotsControls}
             syncStateOnPropsUpdate={true}
+            keyboardNavigation={true}
         />
     );
 });

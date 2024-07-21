@@ -57,8 +57,8 @@ export const ArchivedBooking: React.FC<PropsType> = React.memo(({
                 <button
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content={!data.status
-                        ? "This potential customer wasn't contacted"
-                        : "This potential customer already contacted"
+                        ? "This potential customer wasn't contacted. You can change this consultation request status when it will be restored from archive."
+                        : "This potential customer already contacted. You can change this consultation request status when it will be restored from archive."
                     }
                     className={"btn btn--icon"}
                     disabled={true}

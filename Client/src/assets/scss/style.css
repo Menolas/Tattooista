@@ -281,8 +281,8 @@ img {
   border-color: #080808;
 }
 
-.btn--icon:disabled svg {
-  fill: #888;
+.btn--icon:disabled {
+  opacity: 0.4;
 }
 
 .btn--icon--light svg {
@@ -1889,11 +1889,16 @@ img {
 }
 
 .gallery__uploadedImgPreviews-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
   width: 100px;
-  height: 100px;
+  height: auto;
   overflow: hidden;
 }
 .gallery__uploadedImgPreviews-item img {
+  height: 100px;
   object-fit: cover;
 }
 .gallery__uploadedImgPreviews-item:hover img {
@@ -2727,7 +2732,8 @@ label[for=concent] {
 
 .form__input-wrap--uploadFile-img {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 1rem;
   width: 100%;
   height: 180px;
@@ -2864,7 +2870,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 .form--galleryUpload .client-gallery__item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
   width: 100px;
   overflow: hidden;
@@ -2886,6 +2892,12 @@ input[type=checkbox][value=true] + label .checkbox::after {
   transform: rotate(180deg) !important;
 }
 
+@media (min-width: 600px) {
+  .form__input-wrap--uploadFile-img {
+    flex-direction: row;
+    align-items: center;
+  }
+}
 @media (min-width: 990px) {
   input::placeholder,
   textarea::placeholder {
@@ -2898,10 +2910,6 @@ input[type=checkbox][value=true] + label .checkbox::after {
   }
   .form__input-wrap {
     margin-bottom: 2rem;
-  }
-  .form__input-wrap--checkbox {
-    margin-bottom: 0;
-    margin-top: 24px;
   }
   .form__input-wrap--checkbox label {
     padding-left: 36px;
