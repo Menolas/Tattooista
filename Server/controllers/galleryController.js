@@ -39,15 +39,15 @@ class galleryController {
     const results = {};
     const styles = req.body.values;
     res.galleryItem.tattooStyles = [];
-    for (let key in styles) {
-      if (styles[key]) {
-        const style = await TattooStyle.findOne({_id: key});
-        const styleId = style._id;
-        res.galleryItem.tattooStyles.push(styleId);
-      }
-    }
 
     try {
+      for (let key in styles) {
+        if (styles[key]) {
+          const style = await TattooStyle.findOne({_id: key});
+          const styleId = style._id;
+          res.galleryItem.tattooStyles.push(styleId);
+        }
+      }
       results.galleryItem = await res.galleryItem.save();
       results.resultCode = 0;
       res.json(results);
