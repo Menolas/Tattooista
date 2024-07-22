@@ -210,7 +210,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
             />
             <Tooltip id="my-tooltip" />
         </>
-    )
+    );
 });
 
 ArchivedGallery.displayName = 'ArchivedGallery';

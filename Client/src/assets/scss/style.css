@@ -398,6 +398,7 @@ img {
 .logo {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
   width: 40px;
   height: 50px;
 }
@@ -537,7 +538,7 @@ img {
     gap: 12px;
   }
   .main-header .main-nav {
-    margin: 0 80px;
+    margin: 0 auto;
   }
   .main-header .social-nav {
     display: block;
@@ -578,6 +579,11 @@ img {
   .main-header__btn {
     height: 60px;
     font-size: 20px;
+  }
+}
+@media (min-width: 1200px) {
+  .main-header .main-nav {
+    margin: 0 80px;
   }
 }
 .main-nav {

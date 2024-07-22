@@ -26,6 +26,8 @@ import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
 import {SearchFilterType} from "../../../types/Types";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -40,6 +42,7 @@ export const ClientsContainer: React.FC = () => {
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
   const clientsApiError = useSelector(getClientsApiErrorSelector);
+  const apiError = useSelector(getApiErrorSelector);
 
   const dispatch = useDispatch();
 
@@ -88,9 +91,14 @@ export const ClientsContainer: React.FC = () => {
     dispatch(setClientsApiErrorAC(null));
   };
 
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(null));
+  };
+
   return (
       <Clients
-          apiError={clientsApiError}
+          apiError={apiError}
+          clientsApiError={clientsApiError}
           isFetching={isFetching}
           totalCount={totalCount}
           currentPage={currentPage}
@@ -104,9 +112,9 @@ export const ClientsContainer: React.FC = () => {
           onFilterChanged={onFilterChangedCallBack}
           remove={deleteClientCallBack}
           setPageLimit={setPageLimitCallBack}
-          deleteGalleryItem={deleteClientGalleryPictureCallBack}
           archive={archiveClientCallBack}
-          setApiError={setClientsApiErrorCallBack}
+          setApiError={setApiErrorCallBack}
+          setClientsApiError={setClientsApiErrorCallBack}
       />
-  )
-}
+  );
+};

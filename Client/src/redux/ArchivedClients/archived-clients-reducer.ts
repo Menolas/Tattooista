@@ -123,7 +123,7 @@ export const archivedClientsReducer = (
     default: return state
 
   }
-}
+};
 
 type ActionsTypes = SetPageSizeAT | SetFilterAT |
     SetArchivedClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
@@ -288,8 +288,11 @@ export const deleteArchivedClient = (
     const response = await archivedClientsAPI.deleteArchivedClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, pageLimit, filter));
+      dispatch(setArchivedClientsApiErrorAC(null));
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setArchivedClientsApiErrorAC(error.response?.data?.message));
     console.log(e);
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));

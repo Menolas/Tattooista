@@ -125,5 +125,5 @@ export const BookingsContainer: React.FC = () => {
         setBookingApiError={setBookingApiErrorCallBack}
         setApiError={setApiErrorCallBack}
       />
-  )
+  );
 };

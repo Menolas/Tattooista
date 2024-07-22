@@ -244,21 +244,20 @@ class clientsController {
   }
 
   async archiveClient(req, res) {
-    const archivedClient = new ArchivedClient({
-      fullName: res.client.fullName,
-      contacts: {
-        email: res.client.contacts.email,
-        insta: res.client.contacts.insta,
-        phone: res.client.contacts.phone,
-        whatsapp: res.client.contacts.whatsapp,
-        messenger: res.client.contacts.messenger
-      },
-      gallery: []
-    });
-
     const results = {};
 
     try {
+      const archivedClient = new ArchivedClient({
+        fullName: res.client.fullName,
+        contacts: {
+          email: res.client.contacts.email,
+          insta: res.client.contacts.insta,
+          phone: res.client.contacts.phone,
+          whatsapp: res.client.contacts.whatsapp,
+          messenger: res.client.contacts.messenger
+        },
+        gallery: []
+      });
       const moveOperations = [];
 
       if (res.client.avatar) {
@@ -353,7 +352,6 @@ class clientsController {
       }
 
       await Promise.all(moveOperations);
-
       await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, (err) => {
         if (err) {
           console.log(err);

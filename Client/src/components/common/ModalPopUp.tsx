@@ -29,10 +29,14 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
 
   useEffect(() => {
     if (isOpen) {
+        document.body.style.overflow = 'hidden';
         document.addEventListener("keydown", handleKeyDown);
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
+            document.body.style.overflow = '';
         };
+    } else {
+        document.body.style.overflow = '';
     }
   }, [isOpen, handleKeyDown]);
 

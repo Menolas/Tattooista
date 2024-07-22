@@ -8,6 +8,8 @@ import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT,
 } from "../General/general-reducer";
 import {addArchivedClientAC, AddArchivedClientAT} from "../ArchivedClients/archived-clients-reducer";
 
@@ -154,7 +156,7 @@ type ActionsTypes = SetClientsPageSizeAT | SetFilterAT |
     SetClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
     ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT | DeleteClientAT | EditClientAT |
     AddClientAT | SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT | SetClientApiErrorAT
-    | AddArchivedClientAT;
+    | AddArchivedClientAT | SetApiErrorAT;
 
 // actions creators
 
@@ -272,7 +274,7 @@ const addClientAC = (client: ClientType): AddClientAT => ({
 type SetClientProfileAT = {
   type: typeof SET_CLIENT_PROFILE;
   profile: ClientType;
-}
+};
 
 const setClientProfile = (profile: ClientType): SetClientProfileAT => ({
   type: SET_CLIENT_PROFILE, profile
@@ -351,14 +353,14 @@ export const deleteClient = (
     const response = await clientsAPI.deleteClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteClientThunk(token, id, clients, currentPage, pageLimit, filter));
-      dispatch(setClientsApiErrorAC(null));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setClientsApiErrorAC(error.response?.data?.message));
+    dispatch(setApiErrorAC(error.response?.data?.message));
     console.log(e);
     return false;
   } finally {
@@ -376,11 +378,14 @@ export const deleteClientFromProfile = (
     const response = await clientsAPI.deleteClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteClientAC(id));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message));
     console.log(e);
     return false;
   } finally {
@@ -516,15 +521,15 @@ export const archiveClient = (
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteClientThunk(token, id, clients, currentPage, pageLimit, filter));
       dispatch(addArchivedClientAC(response.client));
-      dispatch(setClientsApiErrorAC(null));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message));
     console.log(error);
-    dispatch(setClientsApiErrorAC(error.response?.data?.message));
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
@@ -538,7 +543,7 @@ export const archiveClientFromProfile = (
     const response = await clientsAPI.archiveClient(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteClientAC(id));
-      dispatch(setClientsApiErrorAC(null));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;
@@ -546,7 +551,7 @@ export const archiveClientFromProfile = (
   } catch (e) {
     const error = e as ApiErrorType;
     console.log(error);
-    dispatch(setClientsApiErrorAC(error.response?.data?.message));
+    dispatch(setApiErrorAC(error.response?.data?.message));
     return false;
   }
 };
