@@ -19,7 +19,7 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_ARCHIVED_BOOKING = 'DELETE_ARCHIVED_BOOKING';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
-const SET_BOOKING_API_ERROR = 'SET_BOOKING_API_ERROR';
+const SET_ARCHIVED_BOOKING_API_ERROR = 'SET_ARCHIVED_BOOKING_API_ERROR';
 
 const RESTORE_BOOKING_FROM_ARCHIVE = "Congratulations! You just restored this consultation!";
 
@@ -35,7 +35,7 @@ const initialState = {
     condition: 'any',
   } as SearchFilterType,
   accessError: null as null | string,
-  bookingApiError: null as null | string,
+  archivedBookingApiError: null as null | string,
 }
 
 export type InitialStateType = typeof initialState;
@@ -114,10 +114,10 @@ export const archivedBookingsReducer = (
         accessError: action.error,
       }
 
-    case SET_BOOKING_API_ERROR:
+    case SET_ARCHIVED_BOOKING_API_ERROR:
       return {
         ...state,
-        bookingApiError: action.error,
+        archivedBookingApiError: action.error,
       }
 
     default: return state
@@ -127,17 +127,17 @@ export const archivedBookingsReducer = (
 type ActionsTypes = SetSuccessModalAT | SetPageSizeAT |
     SetFilterAT | SetArchivedBookingsAT | SetCurrentPageAT | SetIsFetchingAT
     | ToggleIsDeletingInProcessAT | DeleteArchivedConsultationAT | SetAccessErrorAT
-    | SetBookingApiErrorAT | AddArchivedBookingAT;
+    | SetArchivedBookingApiErrorAT | AddArchivedBookingAT;
 
 // actions creators
 
-type SetBookingApiErrorAT = {
-  type: typeof SET_BOOKING_API_ERROR;
+type SetArchivedBookingApiErrorAT = {
+  type: typeof SET_ARCHIVED_BOOKING_API_ERROR;
   error: string | null;
 };
 
-export const setBookingApiErrorAC = (error: string | null): SetBookingApiErrorAT => ({
-  type: SET_BOOKING_API_ERROR, error
+export const setArchivedBookingApiErrorAC = (error: string | null): SetArchivedBookingApiErrorAT => ({
+  type: SET_ARCHIVED_BOOKING_API_ERROR, error
 });
 
 type SetAccessErrorAT = {
@@ -287,8 +287,11 @@ export const deleteArchivedBooking = (
     const response = await archivedBookingsApi.deleteArchivedBooking(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
+      dispatch(setArchivedBookingApiErrorAC(null));
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setArchivedBookingApiErrorAC(error.response?.data?.message));
     console.log(e);
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
@@ -315,12 +318,12 @@ export const reactivateBooking = (
           pageLimit,
           filter,
       ));
-      dispatch(setBookingApiErrorAC(null));
+      dispatch(setArchivedBookingApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_BOOKING_FROM_ARCHIVE));
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setBookingApiErrorAC(error.response?.data?.message));
+    dispatch(setArchivedBookingApiErrorAC(error.response?.data?.message));
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

@@ -101,7 +101,6 @@ class bookingController {
   }
 
   async createBooking(req, res) {
-
     const results = {};
 
     try {

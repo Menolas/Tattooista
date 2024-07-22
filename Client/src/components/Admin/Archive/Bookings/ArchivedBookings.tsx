@@ -10,7 +10,7 @@ import {
     reactivateBooking,
     setFilterAC,
     setPageSizeAC,
-    setArchiveBookingsCurrentPageAC, setBookingApiErrorAC,
+    setArchiveBookingsCurrentPageAC, setArchivedBookingApiErrorAC,
 } from "../../../../redux/ArchivedBookings/archived-bookings-reducer";
 import {
     getFilterSelector,
@@ -94,7 +94,7 @@ export const ArchivedBookings: React.FC = React.memo(() => {
     }
 
     const setApiErrorCallBack = () => {
-        dispatch(setBookingApiErrorAC(null));
+        dispatch(setArchivedBookingApiErrorAC(null));
     }
 
     const archivedConsultationsArray = archivedBookings

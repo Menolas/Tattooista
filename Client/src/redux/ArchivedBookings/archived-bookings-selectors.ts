@@ -37,5 +37,5 @@ export const getAccessErrorSelector = (state: AppStateType) => {
 }
 
 export const getArchivedBookingApiErrorSelector = (state: AppStateType) => {
-  return state.archivedBookings.bookingApiError;
+  return state.archivedBookings.archivedBookingApiError;
 }
