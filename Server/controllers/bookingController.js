@@ -38,10 +38,8 @@ class bookingController {
       }
 
       bookings = await Booking.find(query).sort({ createdAt: -1 });
-
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
-
       results.resultCode = 0;
       results.totalCount = bookings.length;
       results.bookings = bookings.slice(startIndex, endIndex);
@@ -151,9 +149,9 @@ class bookingController {
   }
 
   async changeBookingStatus(req, res) {
-    res.booking.status = !req.body.status;
     const results = {};
     try {
+      res.booking.status = !req.body.status;
       await res.booking.save();
       results.status = res.booking.status;
       results.resultCode = 0;
@@ -166,9 +164,7 @@ class bookingController {
   }
 
   async bookingToClient(req, res) {
-
     const results = {};
-
     try {
       const client = await BookingService.bookingToClient(res.booking);
       await client.save();
@@ -183,21 +179,20 @@ class bookingController {
   }
 
   async archiveBooking(req, res) {
-    const archivedBooking = new ArchivedBooking({
-      fullName: res.booking.fullName,
-      contacts: {
-        email: res.booking.contacts.email,
-        insta: res.booking.contacts.insta,
-        phone: res.booking.contacts.phone,
-        whatsapp: res.booking.contacts.whatsapp,
-        messenger: res.booking.contacts.messenger
-      },
-      message: res.booking.message,
-    });
-
     const results = {};
 
     try {
+      const archivedBooking = new ArchivedBooking({
+        fullName: res.booking.fullName,
+        contacts: {
+          email: res.booking.contacts.email,
+          insta: res.booking.contacts.insta,
+          phone: res.booking.contacts.phone,
+          whatsapp: res.booking.contacts.whatsapp,
+          messenger: res.booking.contacts.messenger
+        },
+        message: res.booking.message,
+      });
       await res.booking.remove();
       results.resultCode = 0;
       results.booking = await archivedBooking.save();

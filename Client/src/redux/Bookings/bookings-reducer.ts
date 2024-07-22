@@ -334,11 +334,14 @@ export const changeStatus = (
     const response = await bookingsApi.changeConsultationStatus(id, status);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(changeStatusAC(id, response.status));
+      dispatch(setBookingApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setBookingApiErrorAC(error.response?.data?.message));
     console.log(e);
     return false;
   } finally {
@@ -359,11 +362,14 @@ export const deleteBooking = (
     const response = await bookingsApi.deleteConsultation(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
+      dispatch(setBookingApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setBookingApiErrorAC(error.response?.data?.message));
     console.log(e);
     return false;
   } finally {
@@ -439,10 +445,10 @@ export const archiveBooking = (
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    console.log(error);
     dispatch(setBookingApiErrorAC(error.response?.data?.message));
+    console.log(error);
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
-}
+};

@@ -528,9 +528,8 @@ export const archiveClient = (
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    console.log()
-    console.log(error);
     dispatch(setApiErrorAC(error.response?.data?.message));
+    console.log(error);
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));

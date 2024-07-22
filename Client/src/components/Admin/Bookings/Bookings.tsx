@@ -136,9 +136,9 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                       />
                   </ModalPopUp>
                   <ApiErrorMessageModal
-                        isOpen={!!bookingApiError}
-                        error={bookingApiError}
-                        closeModal={setBookingApiError}
+                      isOpen={!!bookingApiError}
+                      error={bookingApiError}
+                      closeModal={setBookingApiError}
                   />
                 </>
           }
