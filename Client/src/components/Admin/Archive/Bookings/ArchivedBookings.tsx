@@ -38,7 +38,6 @@ export const ArchivedBookings: React.FC = React.memo(() => {
     const totalCount = useSelector(getTotalCountSelector);
     const pageSize = useSelector(getPageSizeSelector);
     const currentPage = useSelector(getCurrentPageSelector);
-    console.log(currentPage + " currentPage out of effect!!!!!!!!!!!!!!")
     const filter = useSelector(getFilterSelector);
     const token = useSelector(getTokenSelector);
     const accessError = useSelector(getAccessErrorSelector);
@@ -47,8 +46,6 @@ export const ArchivedBookings: React.FC = React.memo(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("Fetching archived bookings...");
-        console.log(currentPage + " currentPage inside of effect!!!!!!!!!!!!!!")
         dispatch(getArchivedBookings(token || "", currentPage, pageSize, filter));
     }, [token, currentPage, pageSize, filter, dispatch]);
 
@@ -149,7 +146,7 @@ export const ArchivedBookings: React.FC = React.memo(() => {
                 </>
             }
         </>
-    )
+    );
 });
 
 ArchivedBookings.displayName = 'ArchivedBookings';

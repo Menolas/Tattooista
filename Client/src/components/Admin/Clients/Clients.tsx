@@ -15,6 +15,7 @@ import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 
 type PropsType = {
   apiError: null | string;
+  clientsApiError: null | string;
   isFetching: boolean;
   totalCount: number;
   currentPage: number;
@@ -28,13 +29,14 @@ type PropsType = {
   onFilterChanged: (filter: SearchFilterType) => void;
   remove: (clientId: string) => void;
   setPageLimit: (clientsPageSize: number) => void;
-  deleteGalleryItem: (clientId: string, picture: string) => void;
   archive: (clientId: string) => void;
   setApiError: () => void;
+  setClientsApiError: () => void;
 }
 
 export const Clients: React.FC<PropsType> = React.memo(({
     apiError,
+    clientsApiError,
     isFetching,
     totalCount,
     currentPage,
@@ -48,9 +50,9 @@ export const Clients: React.FC<PropsType> = React.memo(({
     onFilterChanged,
     remove,
     setPageLimit,
-    deleteGalleryItem,
     archive,
     setApiError,
+    setClientsApiError,
 }) => {
   const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
   const [addClientMode, setAddClientMode] = useState<boolean>(false);
@@ -58,10 +60,10 @@ export const Clients: React.FC<PropsType> = React.memo(({
   const [client, setClient] = useState<ClientType | null>(null);
 
   useEffect(() => {
-    if ((addClientMode || editClientMode || editGalleryMode) && apiError === null) {
+    if ((addClientMode || editClientMode || editGalleryMode) && clientsApiError === null) {
         closeModal();
     }
-  }, [apiError]);
+  }, [clientsApiError]);
 
   const refreshClientData = (updatedClient: ClientType | null) => {
       setClient(updatedClient);
@@ -72,7 +74,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setEditClientMode(false);
     setEditGalleryMode(false);
     setClient(null);
-    setApiError();
+    setClientsApiError();
   }
 
   const modalTitleAddClient = 'ADD CLIENT';
@@ -91,7 +93,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 setData={setClient}
                 setEditClientMode={setEditClientMode}
                 setEditGalleryMode={setEditGalleryMode}
-                setApiError={setApiError}
+                setApiError={setClientsApiError}
             />
         )
       });
@@ -136,16 +138,16 @@ export const Clients: React.FC<PropsType> = React.memo(({
                   }
                   <ModalPopUp
                       isOpen={addClientMode || editClientMode || editGalleryMode}
-                      modalTitle={ addClientMode
+                      modalTitle={addClientMode
                           ? modalTitleAddClient
                           : editClientMode
                               ? modalTitleUpdateClient
-                              : modalUpdateGalleryTitle }
+                              : modalUpdateGalleryTitle}
                       closeModal={closeModal}
                   >
                       { (editClientMode || addClientMode) &&
                           < UpdateClientForm
-                              apiError={apiError}
+                              apiError={clientsApiError}
                               isEditing={editClientMode}
                               data={client}
                               closeModal={closeModal}
@@ -153,7 +155,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                       }
                       {editGalleryMode &&
                           <GalleryUploadForm
-                              apiError={apiError}
+                              apiError={clientsApiError}
                               isEditPortfolio={false}
                               client={client}
                               refreshClientData={refreshClientData}
@@ -162,11 +164,11 @@ export const Clients: React.FC<PropsType> = React.memo(({
                           />
                       }
                   </ModalPopUp>
-                  {/*<ApiErrorMessageModal*/}
-                  {/*    isOpen={!!clientsApiError}*/}
-                  {/*    error={clientsApiError}*/}
-                  {/*    closeModal={setClientsApiError}*/}
-                  {/*/>*/}
+                  <ApiErrorMessageModal
+                      isOpen={!!apiError}
+                      error={apiError}
+                      closeModal={setApiError}
+                  />
               </>
           }
       </>

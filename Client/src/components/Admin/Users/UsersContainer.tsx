@@ -82,5 +82,5 @@ export const UsersContainer: React.FC = () => {
             remove={removeCallBack}
             setApiError={setApiErrorCallBack}
         />
-    )
-}
+    );
+};

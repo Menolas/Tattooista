@@ -57,5 +57,5 @@ export const ProfileContainer: React.FC = () => {
       deleteGalleryItem={deleteClientGalleryPictureCallBack}
       archive={archiveClientCallBack}
     />
-  )
+  );
 };

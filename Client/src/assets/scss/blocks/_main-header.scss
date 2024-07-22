@@ -63,7 +63,7 @@
     }
 
     .main-nav {
-      margin: 0 80px;
+      margin: 0 auto;
     }
 
     .social-nav {
@@ -107,5 +107,13 @@
   .main-header__btn {
     height: 60px;
     font-size: 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .main-header {
+    .main-nav {
+      margin: 0 80px;
+    }
   }
 }
