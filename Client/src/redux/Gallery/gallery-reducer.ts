@@ -20,6 +20,7 @@ const SET_GALLERY = 'SET_GALLERY';
 const UPDATE_GALLERY = 'UPDATE_GALLERY';
 const UPDATE_GALLERY_ITEM = 'UPDATE_GALLERY_ITEM';
 const DELETE_GALLERY_ITEM = 'DELETE_GALLERY_ITEM';
+const SET_GALLERY_API_ERROR = 'SET_GALLERY_API_ERROR';
 
 const ADD_GALLERY_ITEMS_SUCCESS = 'You successfully added gallery images';
 const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
@@ -31,6 +32,7 @@ const initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   gallery: [] as GalleryItemType[],
+  galleryApiError: null as null | string,
 }
 
 export type InitialStateType = typeof initialState;
@@ -116,6 +118,12 @@ export const galleryReducer = (
         .filter((item): item is GalleryItemType => item !== null),
       }
 
+    case SET_GALLERY_API_ERROR:
+      return {
+        ...state,
+        galleryApiError: action.error
+      }
+
     default: return {
       ...state
     }
@@ -124,15 +132,25 @@ export const galleryReducer = (
 
 type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
     SetGalleryPageSizeAT | SetCurrentGalleryPageAT | SetIsFetchingAT | SetGalleryAT
-    | UpdateGalleryAT | DeleteGalleryItemAT | UpdateGalleryItemAT;
+    | UpdateGalleryAT | DeleteGalleryItemAT | UpdateGalleryItemAT | SetGalleryApiErrorAT;
 
 // actions creators
+
+type SetGalleryApiErrorAT = {
+  type: typeof SET_GALLERY_API_ERROR;
+  error: string | null;
+};
+
+export const setGalleryApiErrorAC = (error: string | null): SetGalleryApiErrorAT => ({
+    type: SET_GALLERY_API_ERROR, error
+});
+
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
   isFetching: boolean;
   id: string;
-}
+};
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => (
     {
@@ -300,11 +318,14 @@ export const deleteGalleryItem = (
     const response = await galleryApi.deleteGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
+      dispatch(setGalleryApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setGalleryApiErrorAC(error.response?.data?.message));
     console.log(e);
     return  false;
   } finally {
@@ -324,11 +345,14 @@ export const archiveGalleryItem = (
     const response = await galleryApi.archiveGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
+      dispatch(setGalleryApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setGalleryApiErrorAC(error.response?.data?.message));
     console.log(e);
     return false;
   } finally {

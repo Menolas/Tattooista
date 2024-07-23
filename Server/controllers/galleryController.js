@@ -161,23 +161,22 @@ class galleryController {
   }
 
   async archiveGalleryItem(req, res) {
-    const styles = res.galleryItem.tattooStyles;
-    styles.map( async (style) => {
-      const trueStyle = await TattooStyle.findOne({_id: style});
-      if (trueStyle) return trueStyle._id;
-      else return null;
-    }).filter(style => style !== null);
-    const archivedGalleryItem = new ArchivedGalleryItem({
-      fileName: res.galleryItem.fileName,
-      tattooStyles: styles,
-    });
-
-    const oldPath = `./uploads/gallery/${res.galleryItem.fileName}`;
-    const newPath = `./uploads/archivedGallery/${res.galleryItem.fileName}`;
-
     const results = {};
 
     try {
+      const styles = res.galleryItem.tattooStyles;
+      styles.map( async (style) => {
+        const trueStyle = await TattooStyle.findOne({_id: style});
+        if (trueStyle) return trueStyle._id;
+        else return null;
+      }).filter(style => style !== null);
+      const archivedGalleryItem = new ArchivedGalleryItem({
+        fileName: res.galleryItem.fileName,
+        tattooStyles: styles,
+      });
+      const oldPath = `./uploads/gallery/${res.galleryItem.fileName}`;
+      const newPath = `./uploads/archivedGallery/${res.galleryItem.fileName}`;
+
       mv(oldPath, newPath, { mkdirp: true },function (e) {
         if (e) console.log(e);
       });
