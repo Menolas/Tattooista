@@ -229,8 +229,11 @@ export const deleteArchivedGalleryItem = (
     const response = await archivedGalleryApi.deleteArchivedGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, pageLimit));
+      dispatch(setApiErrorAC(null));
     }
   } catch (e) {
+    const error = e as ApiErrorType;
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
     console.log(e);
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
@@ -248,27 +251,12 @@ export const reactivateArchivedGalleryItem = (
     const response = await archivedGalleryApi.reactivateArchivedGalleryItem(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, pageLimit));
+      dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_GALLERY_ITEM_FROM_ARCHIVE));
     }
   } catch (e) {
-    console.log(e);
-  } finally {
-    dispatch(toggleIsDeletingInProcessAC(false, id));
-  }
-};
-
-export const updateArchivedGalleryItem = (id: string, values: object): ThunkType => async (dispatch) => {
-  try {
-    dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await archivedGalleryApi.updateArchiveGalleryItem(id, values);
-    if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(updateArchivedGalleryItemAC(response.archivedGalleryItem));
-      dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));
-      dispatch(setApiErrorAC(null));
-    }
-  } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setApiErrorAC(error.response?.data?.message));
+    dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
     console.log(e);
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));

@@ -192,23 +192,22 @@ class galleryController {
   }
 
   async reactivateGalleryItem(req, res) {
-    const styles = res.archivedGalleryItem.tattooStyles;
-    styles.map( async (style) => {
-      const trueStyle = await TattooStyle.findOne({_id: style});
-      if (trueStyle) return trueStyle._id;
-      else return null;
-    }).filter(style => style !== null);
-    const galleryItem = new GalleryItem({
-      fileName: res.archivedGalleryItem.fileName,
-      tattooStyles: styles,
-    });
-
     const results = {};
-
-    const oldPath = `./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`;
-    const newPath = `./uploads/gallery/${res.archivedGalleryItem.fileName}`;
-
     try {
+      const styles = res.archivedGalleryItem.tattooStyles;
+      styles.map( async (style) => {
+        const trueStyle = await TattooStyle.findOne({_id: style});
+        if (trueStyle) return trueStyle._id;
+        else return null;
+      }).filter(style => style !== null);
+      const galleryItem = new GalleryItem({
+        fileName: res.archivedGalleryItem.fileName,
+        tattooStyles: styles,
+      });
+
+      const oldPath = `./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`;
+      const newPath = `./uploads/gallery/${res.archivedGalleryItem.fileName}`;
+
       mv(oldPath, newPath, { mkdirp: true },function (e) {
         if (e) console.log(e);
       })
@@ -224,13 +223,12 @@ class galleryController {
   }
 
   async deleteArchivedGalleryItem(req, res) {
-
     const results = {};
 
     try {
       await fs.unlink(`./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`, e => {
         if (e) {
-          return res.status(400).send(e);
+          res.status(400).send(e);
         }
       });
       await res.archivedGalleryItem.remove();
