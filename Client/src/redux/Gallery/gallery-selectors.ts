@@ -23,3 +23,7 @@ export const getTotalCountSelector = (state: AppStateType) => {
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {
   return state.gallery.isDeletingInProcess;
 };
+
+export const getGalleryApiErrorSelector = (state: AppStateType) => {
+  return state.gallery.galleryApiError;
+}

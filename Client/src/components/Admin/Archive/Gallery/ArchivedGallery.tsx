@@ -9,7 +9,7 @@ import {
     getIsDeletingInProcessSelector,
     getTotalArchivedGalleryItemsCountSelector
 } from "../../../../redux/ArchivedGallery/archived-gallery-selectors";
-import {getActiveStyleSelector, getStylesSelector,} from "../../../../redux/Styles/styles-selectors";
+import {getStylesSelector,} from "../../../../redux/Styles/styles-selectors";
 import {Paginator} from "../../../common/Paginator";
 import {
     deleteArchivedGalleryItem,
@@ -20,19 +20,17 @@ import {
 } from "../../../../redux/ArchivedGallery/archived-gallery-reducer";
 import {getStyles,} from "../../../../redux/Styles/styles-reducer";
 import { API_URL } from "../../../../http";
-import {ReactComponent as EditIcon} from "../../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../../assets/svg/trash.svg";
 import {ReactComponent as ArrowRotateLeftIcon} from "../../../../assets/svg/arrow-rotate-left.svg";
 import {NothingToShow} from "../../../common/NothingToShow";
-import {ModalPopUp} from "../../../common/ModalPopUp";
-import {UpdateGalleryItemForm} from "../../../Forms/UpdateGalleryItemForm";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../../common/Confirmation";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {Preloader} from "../../../common/Preloader";
 import {ImageFullView} from "../../../common/ImageFullView";
-import {GalleryItemType} from "../../../../types/Types";
 import {getApiErrorSelector} from "../../../../redux/General/general-selectors";
+import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
+import {setApiErrorAC} from "../../../../redux/General/general-reducer";
 
 export const ArchivedGallery: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -43,7 +41,6 @@ export const ArchivedGallery: React.FC = React.memo(() => {
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const styles = useSelector(getStylesSelector);
     const token = useSelector(getTokenSelector);
-    const activeStyle = useSelector(getActiveStyleSelector);
     const apiError = useSelector(getApiErrorSelector);
 
     const dispatch = useDispatch();
@@ -65,27 +62,26 @@ export const ArchivedGallery: React.FC = React.memo(() => {
 
     const closeModal = () => {
         setConfirmationData({needConfirmation: false, context: ''});
-    }
+    };
 
     const onPageChangedCallBack = (page: number) => {
         dispatch(setCurrentPageAC(page));
-    }
+    };
 
     const setPageSizeACCallBack = (archivedGalleryPageSize: number) => {
         dispatch(setPageSizeAC(archivedGalleryPageSize));
-    }
+    };
 
     const deleteArchivedGalleryItemCallBack = (itemId: string) => {
         dispatch(deleteArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
-    }
+    };
 
     const reactivateArchivedGalleryItemCallBack = (itemId: string) => {
         dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
-    }
+    };
 
-    const [ editGalleryItem, setEditGalleryItem ] = useState<GalleryItemType | null>(null);
-    const closeGalleryItemEditModal = () => {
-        setEditGalleryItem(null);
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(null));
     }
 
     const galleryItems = archivedGallery.map((item, index) => {
@@ -104,16 +100,6 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                     {''}
                 </div>
                 <div className={"gallery__item-actions"}>
-                    <button
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Edit archived gallery item"
-                        className={"btn btn--icon"}
-                        onClick={() => {
-                            setEditGalleryItem(item);
-                        }}
-                    >
-                        <EditIcon/>
-                    </button>
                     <button
                         data-tooltip-id="my-tooltip"
                         data-tooltip-content="Restore archived gallery item"
@@ -179,23 +165,6 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                     imgUrl={`${API_URL}/archivedGallery/`}
                 />
             }
-            <ModalPopUp
-                isOpen={!!editGalleryItem}
-                closeModal={closeGalleryItemEditModal}
-                modalTitle={'Update tattoo styles for this image'}
-            >
-                {
-                    editGalleryItem &&
-                    <UpdateGalleryItemForm
-                        apiError={apiError}
-                        folder={'archivedGallery'}
-                        galleryItem={editGalleryItem}
-                        styles={styles}
-                        activeStyleId={activeStyle?._id || ''}
-                        closeModal={closeGalleryItemEditModal}
-                    />
-                }
-            </ModalPopUp>
             <Confirmation
                 isOpen={confirmationData.needConfirmation}
                 content={confirmationData.context}
@@ -208,6 +177,14 @@ export const ArchivedGallery: React.FC = React.memo(() => {
                 }}
                 cancel={closeModal}
             />
+            {
+                apiError &&
+                <ApiErrorMessageModal
+                    isOpen={!!apiError}
+                    error={apiError}
+                    closeModal={setApiErrorCallBack}
+                />
+            }
             <Tooltip id="my-tooltip" />
         </>
     );

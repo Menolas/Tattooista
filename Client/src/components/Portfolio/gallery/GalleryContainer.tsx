@@ -2,7 +2,7 @@ import * as React from "react";
 import {Gallery} from "./Gallery";
 import {GalleryInfiniteScroll} from "./GalleryInfiniteScroll";
 import {
-  setCurrentGalleryPageAC,
+  setCurrentGalleryPageAC, setGalleryApiErrorAC,
   setGalleryPageSizeAC,
 } from "../../../redux/Gallery/gallery-reducer";
 import {useDispatch, useSelector} from "react-redux";
@@ -12,7 +12,7 @@ import {
   getPageSizeSelector,
   getIsFetchingSelector,
   getIsDeletingInProcessSelector,
-  getTotalCountSelector
+  getTotalCountSelector, getGalleryApiErrorSelector
 } from "../../../redux/Gallery/gallery-selectors";
 
 import {
@@ -22,6 +22,7 @@ import {
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ADMIN, SUPER_ADMIN, USER} from "../../../utils/constants";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
+import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 
 export const GalleryContainer: React.FC = () => {
 
@@ -34,6 +35,7 @@ export const GalleryContainer: React.FC = () => {
   const styles = useSelector(getStylesSelector);
   const activeStyle = useSelector(getActiveStyleSelector);
   const apiError = useSelector(getApiErrorSelector);
+  const galleryApiError = useSelector(getGalleryApiErrorSelector);
 
   const dispatch = useDispatch();
   const setPageCallBack = (page: number) => {
@@ -46,7 +48,11 @@ export const GalleryContainer: React.FC = () => {
 
   const setApiErrorCallBack = () => {
     dispatch(setApiErrorAC(null));
-  }
+  };
+
+  const setGalleryApiErrorCallBack = () => {
+    dispatch(setGalleryApiErrorAC(null));
+  };
 
   return (
       <>
@@ -70,6 +76,13 @@ export const GalleryContainer: React.FC = () => {
                 activeStyle={activeStyle}
                 pageSize={pageSize}
                 apiError={apiError}
+            />
+        }
+        { galleryApiError &&
+            <ApiErrorMessageModal
+                isOpen={!!galleryApiError}
+                error={galleryApiError}
+                closeModal={setGalleryApiErrorCallBack}
             />
         }
       </>
