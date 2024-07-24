@@ -19,9 +19,8 @@ type PropsType = {
   apiError: null | string;
   data: ClientType;
   isDeletingPicturesInProcess: Array<string>;
-  remove: (clientId: string) => void;
-  deleteGalleryItem: (clientId: string, picture: string) => void;
-  archive: (id: string) => void;
+  remove: () => void;
+  archive: () => void;
 }
 
 export const Profile: React.FC<PropsType> = React.memo(({
@@ -29,7 +28,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
     data,
     isDeletingPicturesInProcess,
     remove,
-    deleteGalleryItem,
     archive,
 }) => {
     const navigate = useNavigate();
@@ -64,16 +62,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
     setEditClientMode(false);
     setEditGalleryMode(false);
       setConfirmationData({needConfirmation: false, context: ''});
-  };
-
-  const deleteClientCallBack = () => {
-      remove(data._id);
-      navigate("/admin/clients");
-  };
-
-  const archiveClientCallBack = () => {
-      archive(data._id);
-      navigate("/admin/clients");
   };
 
   if (!data) {
@@ -112,7 +100,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
           });
   }
 
-
   return (
     <div className="admin__card admin__card--avatar profile">
       <div className="admin__card-actions">
@@ -141,7 +128,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
                     needConfirmation: true,
                     itemId: data._id,
                     context: 'Are you sure? You about to archive this client.',
-                    cb: archiveClientCallBack
+                    cb: archive
                 });
             }}
         >
@@ -156,7 +143,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
                     needConfirmation: true,
                     itemId: data._id,
                     context: 'Are you sure? You about to delete this client FOREVER along with all data...',
-                    cb: deleteClientCallBack
+                    cb: remove
                 });
             }}
         >
