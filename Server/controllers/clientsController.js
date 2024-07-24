@@ -41,10 +41,8 @@ class clientsController {
 
       if (searchConditions.length > 0) {
         if (Object.keys(query).length > 0) {
-          // If there's already a gallery condition in the query, combine using $and
           query = { $and: [ { $or: searchConditions }, query ] };
         } else {
-          // If only term conditions are present, use $or
           query = { $or: searchConditions };
         }
       }
@@ -300,12 +298,12 @@ class clientsController {
 
       await Promise.all(moveOperations);
 
-      await fs.rm(`./uploads/clients/${res.client._id}`, { recursive:true }, (err) => {
-        if (err) {
-          console.log(err);
-          throw err;
-        }
-      });
+      const clientDirPath = `./uploads/clients/${res.client._id}`;
+      if (fs.existsSync(clientDirPath)) {
+        await fs.promises.rm(clientDirPath, { recursive: true });
+      } else {
+        console.log(`Directory not found: ${clientDirPath}`);
+      }
 
       await res.client.remove();
       results.resultCode = 0;
