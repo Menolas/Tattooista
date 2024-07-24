@@ -21,6 +21,7 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ROLES = 'SET_ROLES';
 const EDIT_USER = 'EDIT_USER';
 const ADD_USER = 'ADD_USER';
+const SET_USERS_API_ERROR = 'SET_USERS_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 
 const UPDATE_USER_SUCCESS = 'You successfully updated user info!';
@@ -39,6 +40,7 @@ const initialState = {
         term: '',
         condition: 'any'
     } as SearchFilterType,
+    usersApiError: null as string | null,
     accessError: null as string | null,
 };
 
@@ -121,6 +123,12 @@ export const usersReducer = (
                 totalCount: state.totalCount + 1,
             }
 
+        case SET_USERS_API_ERROR:
+            return {
+                ...state,
+                usersApiError: action.error
+            }
+
         case SET_ACCESS_ERROR:
             return {
                 ...state,
@@ -134,9 +142,18 @@ export const usersReducer = (
 type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
      SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
     ToggleIsDeletingInProcessAT | SetRolesAT | EditUserAT | AddUserAT
-    | SetAccessErrorAT | SetSuccessModalAT | SetApiErrorAT;
+    | SetAccessErrorAT | SetSuccessModalAT | SetApiErrorAT | SetUsersApiErrorAT;
 
 //actions creators
+
+type SetUsersApiErrorAT = {
+    type: typeof SET_USERS_API_ERROR;
+    error: string | null;
+};
+
+export const setUsersApiErrorAC = (error: string | null): SetUsersApiErrorAT => ({
+    type: SET_USERS_API_ERROR, error
+});
 
 type SetAccessErrorAT = {
     type: typeof SET_ACCESS_ERROR;
@@ -326,11 +343,14 @@ export const deleteUser = (
         const response = await usersAPI.deleteUser(id);
         if (response.resultCode === ResultCodesEnum.Success) {
             await dispatch(deleteUserThunk(token, id, users, currentPage, pageLimit, filter));
+            dispatch(setUsersApiErrorAC(null));
             return true;
         } else {
             return false;
         }
     } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setUsersApiErrorAC(error.response?.data?.message));
         console.log(e);
         return false;
     } finally {
@@ -347,6 +367,7 @@ export const updateUser = (
         const response = await usersAPI.updateUser(id, values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(editUserAC(response.user));
+            dispatch(setApiErrorAC(null));
             dispatch(setSuccessModalAC(true, UPDATE_USER_SUCCESS));
             return true;
         } else {
@@ -354,7 +375,7 @@ export const updateUser = (
         }
     } catch (e) {
         const error = e as ApiErrorType;
-        dispatch(setApiErrorAC(error.response.data.message));
+        dispatch(setApiErrorAC(error.response?.data?.message));
         return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
@@ -368,6 +389,7 @@ export const addUser = (
         const response = await usersAPI.addUser(values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addUserAC(response.user));
+            dispatch(setApiErrorAC(null));
             dispatch(setSuccessModalAC(true, ADD_USER_SUCCESS));
             return true;
         } else {
@@ -375,7 +397,7 @@ export const addUser = (
         }
     } catch (e) {
         const error = e as ApiErrorType;
-        dispatch(setApiErrorAC(error.response.data.message));
+        dispatch(setApiErrorAC(error.response?.data?.message));
         return false;
     }
 };
