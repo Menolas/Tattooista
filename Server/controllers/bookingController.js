@@ -179,22 +179,13 @@ class bookingController {
 
   async archiveBooking(req, res) {
     const results = {};
+    console.log(res.booking + " res booking!!!!!!!!!!!!")
 
     try {
-      const archivedBooking = new ArchivedBooking({
-        fullName: res.booking.fullName,
-        contacts: {
-          email: res.booking.contacts.email,
-          insta: res.booking.contacts.insta,
-          phone: res.booking.contacts.phone,
-          whatsapp: res.booking.contacts.whatsapp,
-          messenger: res.booking.contacts.messenger
-        },
-        message: res.booking.message,
-      });
+      const newArchivedBooking = await BookingService.archiveBooking(res.booking);
       await res.booking.remove();
       results.resultCode = 0;
-      results.booking = await archivedBooking.save();
+      results.booking = await newArchivedBooking.save();
       res.status(201).json(results);
 
     } catch (e) {

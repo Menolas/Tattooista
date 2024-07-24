@@ -371,6 +371,7 @@ class clientsController {
     const results = {};
 
     try {
+      await res.client.remove();
       if (res.client.avatar) {
         await fs.unlink(`./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`, e => {
           if (e) console.log(e);
@@ -397,7 +398,6 @@ class clientsController {
           if (e) console.log(e);
         });
       }
-      await res.client.remove();
       results.resultCode = 0;
       res.json(results);
     } catch (e) {
