@@ -85,7 +85,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   consentId,
   closeBookingModal,
 }) => {
-
+  const formRef = React.useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [contactInput, setContactInput] = useState('');
 
@@ -129,10 +129,19 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
           propsF.setFieldValue('whatsapp', '');
           propsF.setFieldValue('messenger', '');
           setContactInput(input);
-        }
+        };
+
+        const handleEnterClick = (event: React.KeyboardEvent) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            propsF.handleSubmit();
+          }
+        };
 
         return (
-          <Form id="booking"
+          <Form
+            ref={formRef}
+            id="booking"
             className="form booking__form"
           >
             <FieldComponent
@@ -141,6 +150,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
               placeholder={'Your Full Name'}
               value={propsF.values.fullName}
               onChange={propsF.handleChange}
+              onKeyDown={handleEnterClick}
             />
 
             <FieldWrapper
@@ -152,6 +162,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   options={options}
                   handleChange={handleChange}
                   placeholder={'Choose the way you want me to contact you'}
+                  onKeyDown={handleEnterClick}
               />
             </FieldWrapper>
 
@@ -162,6 +173,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                     placeholder={`Your ${contactInput}`}
                     value={propsF.values[contactInput as ContactField]}
                     onChange={propsF.handleChange}
+                    onKeyDown={handleEnterClick}
                 />
             }
             <FieldWrapper
@@ -179,6 +191,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                     adjustTextareaHeight();
                   }}
                   innerRef={textareaRef}
+                  onKeyDown={handleEnterClick}
               />
             </FieldWrapper>
             <FieldWrapper
@@ -193,6 +206,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     propsF.setFieldValue('consent', e.target.checked);
                   }}
+                  onKeyDown={handleEnterClick}
               />
               <label htmlFor={consentId}>
                 <span className="checkbox">{''}</span>

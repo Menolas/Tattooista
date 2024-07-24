@@ -9,6 +9,7 @@ type PropsType = {
     label?: string;
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
 export const FieldComponent:React.FC<PropsType> = ({
@@ -17,7 +18,8 @@ export const FieldComponent:React.FC<PropsType> = ({
    placeholder,
    label,
    onChange,
-   value
+   value,
+   onKeyDown,
 }) => {
     return (
         <div className="form__input-wrap">
@@ -36,6 +38,9 @@ export const FieldComponent:React.FC<PropsType> = ({
                     {...field}
                     type={type}
                     placeholder={placeholder}
+                    onKeyDown={(event) => {
+                        if (onKeyDown) onKeyDown(event);
+                    }}
                 />
                 )}
             </Field>

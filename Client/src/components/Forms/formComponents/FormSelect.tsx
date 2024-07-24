@@ -13,6 +13,7 @@ type PropsType = {
     options: OptionType[];
     handleChange: (value: string) => void;
     placeholder?: string;
+    onKeyDown: (event: React.KeyboardEvent) => void;
 }
 
 const CustomInput = (props: InputProps<OptionType>) => (
@@ -24,6 +25,7 @@ export const FormSelect: React.FC<PropsType> = ({
     options,
     handleChange,
     placeholder,
+    onKeyDown,
 }) => {
 
     const [field, meta, helpers] = useField(name);
@@ -51,6 +53,9 @@ export const FormSelect: React.FC<PropsType> = ({
             }}
             value={options.find((option: OptionType) => option.value === field.value)}
             components={{ Input: CustomInput }}
+            onKeyDown={(event) => {
+                onKeyDown(event)
+            }}
         />
     );
 };
