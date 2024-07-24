@@ -22,12 +22,16 @@ export const getIsFetching = (state: AppStateType) => {
 
 export const getFiletSelector = (state: AppStateType) => {
     return state.users.filter;
-}
+};
 
 export const getRolesSelector = (state: AppStateType) => {
     return state.users.roles;
-}
+};
+
+export const getUsersApiErrorSelector = (state: AppStateType) => {
+    return state.users.usersApiError;
+};
 
 export const getAccessErrorSelector = (state: AppStateType) => {
     return state.users.accessError;
-}
+};

@@ -9,6 +9,7 @@ import {
     setCurrentPageAC,
     setUsersFilterAC,
     setPageLimitAC,
+    setUsersApiErrorAC,
 } from "../../../redux/Users/users-reducer";
 import {
     getRolesSelector,
@@ -19,11 +20,13 @@ import {
     getUsersSelector,
     getTotalCountSelector,
     getAccessErrorSelector,
+    getUsersApiErrorSelector,
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../types/Types";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
+import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 
 export const UsersContainer: React.FC = () => {
 
@@ -37,6 +40,7 @@ export const UsersContainer: React.FC = () => {
     const filter = useSelector(getFiletSelector);
     const accessError = useSelector(getAccessErrorSelector);
     const apiError = useSelector(getApiErrorSelector);
+    const usersApiError = useSelector(getUsersApiErrorSelector);
 
     const dispatch = useDispatch();
 
@@ -65,22 +69,35 @@ export const UsersContainer: React.FC = () => {
         dispatch(setApiErrorAC(null));
     };
 
+    const setUsersApiErrorCallBack = () => {
+        dispatch(setUsersApiErrorAC(null));
+    };
+
     return (
-        <Users
-            apiError={apiError}
-            roles={roles}
-            users={users}
-            filter={filter}
-            isFetching={isFetching}
-            total={total}
-            currentPage={currentPage}
-            pageLimit={pageLimit}
-            accessError={accessError}
-            setPageLimit={setPageLimitCallBack}
-            setCurrentPage={setCurrentPageCallBack}
-            setFilter={setFilterCallBack}
-            remove={removeCallBack}
-            setApiError={setApiErrorCallBack}
-        />
+        <>
+            <Users
+                apiError={apiError}
+                roles={roles}
+                users={users}
+                filter={filter}
+                isFetching={isFetching}
+                total={total}
+                currentPage={currentPage}
+                pageLimit={pageLimit}
+                accessError={accessError}
+                setPageLimit={setPageLimitCallBack}
+                setCurrentPage={setCurrentPageCallBack}
+                setFilter={setFilterCallBack}
+                remove={removeCallBack}
+                setApiError={setApiErrorCallBack}
+            />
+            {usersApiError &&
+                <ApiErrorMessageModal
+                    isOpen={!!usersApiError}
+                    error={usersApiError}
+                    closeModal={setUsersApiErrorCallBack}
+                />
+            }
+        </>
     );
 };
