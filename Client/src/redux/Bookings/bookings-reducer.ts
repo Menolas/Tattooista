@@ -384,6 +384,7 @@ export const addBooking = (
     const response = await bookingsApi.addConsultation(values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookingAC(response.booking));
+      dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
       return true;
     } else {
