@@ -7,6 +7,7 @@ import {FieldComponent} from "./formComponents/FieldComponent";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useDispatch} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
+import {handleEnterClick} from "../../utils/functions";
 
 const validationSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -74,7 +75,7 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
         onSubmit={submit}
       >
       {(propsF) => {
-        const {isSubmitting} = propsF
+        const {isSubmitting} = propsF;
 
         return (
           <Form id="booking"
@@ -86,6 +87,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 placeholder={"Customer's Full Name"}
                 value={propsF.values.fullName}
                 onChange={propsF.handleChange}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
 
             <FieldComponent
@@ -94,6 +98,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Email'}
                 onChange={propsF.handleChange}
                 value={propsF.values.email}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'phone'}
@@ -101,6 +108,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Phone'}
                 onChange={propsF.handleChange}
                 value={propsF.values.phone}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'insta'}
@@ -108,6 +118,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Instagram'}
                 onChange={propsF.handleChange}
                 value={propsF.values.insta}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'messenger'}
@@ -115,6 +128,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Messenger'}
                 onChange={propsF.handleChange}
                 value={propsF.values.messenger}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'whatsapp'}
@@ -122,6 +138,9 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Whatsapp'}
                 onChange={propsF.handleChange}
                 value={propsF.values.whatsapp}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             { apiError  !== '' &&
                 <ApiErrorMessage message={apiError}/>

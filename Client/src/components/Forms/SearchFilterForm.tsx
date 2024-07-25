@@ -1,12 +1,9 @@
 import * as React from "react";
-import {Field, Form, Formik, FormikHelpers} from "formik";
-import {ReactComponent as SearchIcon} from "../../assets/svg/search.svg";
-import {SearchFilterType, SelectOptionType} from "../../types/Types";
-import {FormSelect} from "./formComponents/FormSelect";
-
-const handleChange = () => {
-  console.log("HandleChange!!!");
-};
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { ReactComponent as SearchIcon } from "../../assets/svg/search.svg";
+import { SearchFilterType, SelectOptionType } from "../../types/Types";
+import { FormSelect } from "./formComponents/FormSelect";
+import {handleEnterClick} from "../../utils/functions";
 
 type FormType = {
   term: string;
@@ -20,10 +17,12 @@ type PropsType = {
 };
 
 export const SearchFilterForm: React.FC<PropsType> = React.memo(({
-  options,
-  filter,
-  onFilterChanged
+ options,
+ filter,
+ onFilterChanged
 }) => {
+  const formRef = React.useRef<HTMLFormElement>(null);
+
   const submit = (values: FormType, formikHelpers: FormikHelpers<FormType>) => {
     const filter: SearchFilterType = {
       term: values.term,
@@ -32,7 +31,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
     onFilterChanged(filter);
     formikHelpers.setSubmitting(false);
     formikHelpers.resetForm();
-  }
+  };
 
   const initialValues = {
     term: filter.term,
@@ -40,17 +39,17 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
   };
 
   return (
-    <Formik
-      enableReinitialize
-      initialValues={initialValues}
-      onSubmit={submit}
-    >
-      {
-        (propsF) => {
-          const {isSubmitting} = propsF
+      <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          onSubmit={submit}
+      >
+        {({ isSubmitting, handleSubmit }) => {
+
           return (
             <Form
-              className={"form search-form"}
+                ref={formRef}
+                className={"form search-form"}
             >
               <div className={'search-form__search-wrap'}>
                 <Field
@@ -58,24 +57,27 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                     type="text"
                     name="term"
                     placeholder={"Search..."}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      handleEnterClick(event, handleSubmit)
+                    }}
                 />
                 <button
                     className={"btn btn--sm btn--transparent search-submit"}
                     type="submit" disabled={isSubmitting}
                 >
-                  <SearchIcon/>
+                  <SearchIcon />
                 </button>
               </div>
               <FormSelect
                   name="condition"
                   options={options}
-                  handleChange={handleChange}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, handleSubmit)
+                  }}
               />
             </Form>
-          );
-        }
-      }
-    </Formik>
+        )}}
+      </Formik>
   );
 });
 

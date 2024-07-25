@@ -88,7 +88,6 @@ label[for="concent"] {
 
   .css-qbdosj-Input {
     padding: 0;
-    //height: 32px;
   }
   div[class$="MenuList"] > div[class$="ni-option"] {
     background-color: #f6f6f6;
@@ -240,12 +239,6 @@ input[type="checkbox"][value="true"] +label .checkbox::after {
   font-size: 20px;
   font-weight: 600;
   text-transform: none;
-
-  //&::before {
-  //  @include element-style(2px, 50%, $dark);
-  //  left: 0;
-  //  bottom: 0;
-  //}
 }
 
 .form__error {

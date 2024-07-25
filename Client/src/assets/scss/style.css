@@ -3241,9 +3241,9 @@ input[type=checkbox][value=true] + label .checkbox::after {
   border: 2px solid #fafafa;
 }
 .search-form .search-input::placeholder {
-  color: #fafafa;
+  color: #6F6D6D;
   font-size: 18px !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
 }
 
 @media (min-width: 900px) {

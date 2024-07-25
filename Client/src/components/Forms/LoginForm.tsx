@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import {ADMIN, SUPER_ADMIN, USER} from "../../utils/constants";
 import {useDispatch} from "react-redux";
 import {login} from "../../redux/Auth/auth-reducer";
+import {handleEnterClick} from "../../utils/functions";
 
 const validationSchema = Yup.object().shape({
   email: Yup
@@ -71,6 +72,9 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                 label={'Email'}
                 value={propsF.values.email}
                 onChange={propsF.handleChange}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'password'}
@@ -79,6 +83,9 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                 label={'Password'}
                 value={propsF.values.password}
                 onChange={propsF.handleChange}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             { authApiError &&
                 <ApiErrorMessage message={authApiError}/>

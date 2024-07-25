@@ -10,6 +10,7 @@ import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {FormSelect} from "./formComponents/FormSelect";
 import {useDispatch} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
+import {handleEnterClick} from "../../utils/functions";
 
 const options = [
   { value: "email", label: "email" },
@@ -85,12 +86,10 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   consentId,
   closeBookingModal,
 }) => {
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [contactInput, setContactInput] = useState('');
 
   const dispatch = useDispatch();
-
   const submit = async (
       values: BookConsultationFormValues,
       actions: FormikHelpers<BookConsultationFormValues>
@@ -129,10 +128,11 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
           propsF.setFieldValue('whatsapp', '');
           propsF.setFieldValue('messenger', '');
           setContactInput(input);
-        }
+        };
 
         return (
-          <Form id="booking"
+          <Form
+            id="booking"
             className="form booking__form"
           >
             <FieldComponent
@@ -141,6 +141,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
               placeholder={'Your Full Name'}
               value={propsF.values.fullName}
               onChange={propsF.handleChange}
+              onKeyDown={(event: React.KeyboardEvent) => {
+                handleEnterClick(event, propsF.handleSubmit)
+              }}
             />
 
             <FieldWrapper
@@ -152,6 +155,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   options={options}
                   handleChange={handleChange}
                   placeholder={'Choose the way you want me to contact you'}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, propsF.handleSubmit)
+                  }}
               />
             </FieldWrapper>
 
@@ -162,6 +168,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                     placeholder={`Your ${contactInput}`}
                     value={propsF.values[contactInput as ContactField]}
                     onChange={propsF.handleChange}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      handleEnterClick(event, propsF.handleSubmit)
+                    }}
                 />
             }
             <FieldWrapper
@@ -179,6 +188,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                     adjustTextareaHeight();
                   }}
                   innerRef={textareaRef}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, propsF.handleSubmit)
+                  }}
               />
             </FieldWrapper>
             <FieldWrapper
@@ -192,6 +204,9 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
                   checked={propsF.values.consent}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     propsF.setFieldValue('consent', e.target.checked);
+                  }}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, propsF.handleSubmit)
                   }}
               />
               <label htmlFor={consentId}>
