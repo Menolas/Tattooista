@@ -10,6 +10,7 @@ import {
     addFaqItem,
     updateFaqItem,
 } from "../../redux/Faq/faq-reducer";
+import {handleEnterClick} from "../../utils/functions";
 
 const validationSchema = Yup.object().shape({
     question: Yup.string()
@@ -63,6 +64,9 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"FAQ Question"}
                             value={propsF.values.question}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldWrapper
@@ -75,6 +79,9 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
                                 placeholder={"FAQ Answer"}
                                 value={propsF.values.answer}
                                 onChange={propsF.handleChange}
+                                onKeyDown={(event: React.KeyboardEvent) => {
+                                    handleEnterClick(event, propsF.handleSubmit)
+                                }}
                             />
                         </FieldWrapper>
                         { !!apiError &&

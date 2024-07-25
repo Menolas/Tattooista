@@ -1,5 +1,6 @@
 import {ADMIN, SUPER_ADMIN, USER} from "./constants";
 import {RoleType} from "../types/Types";
+import * as React from "react";
 
 export const getNewPage = (currentPage:number) => {
     if (currentPage > 1) {
@@ -26,3 +27,10 @@ export const getUserRole = (uRoles: Array<string>, roles: Array<RoleType>) => {
 
     return userRole
 }
+
+export const handleEnterClick = (event: React.KeyboardEvent, handleSubmit: () => void) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSubmit();
+    }
+};

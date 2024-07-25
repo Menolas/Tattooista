@@ -17,6 +17,7 @@ import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {useDispatch} from "react-redux";
 import {editClient, addClient} from "../../redux/Clients/clients-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
+import {handleEnterClick} from "../../utils/functions";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -157,7 +158,12 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
         return (
           <Form className="form form--updateClient" encType={"multipart/form-data"}>
             <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
-              <div className="form__input-wrap--uploadFile-img">
+              <div
+                  className="form__input-wrap--uploadFile-img"
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, propsF.handleSubmit)
+                  }}
+              >
                 { !imageURL
                     ? !data?.avatar
                         ? <DefaultAvatar/>
@@ -180,6 +186,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                     handleOnChange(e);
                   }
                 }}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
               />
             </FieldWrapper>
             <FieldComponent
@@ -189,6 +198,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 label={'Full Name'}
                 onChange={propsF.handleChange}
                 value={propsF.values.fullName}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'email'}
@@ -197,6 +209,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 label={'Email'}
                 onChange={propsF.handleChange}
                 value={propsF.values.email ?? ''}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'phone'}
@@ -205,6 +220,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 label={'Phone'}
                 onChange={propsF.handleChange}
                 value={propsF.values.phone ?? ''}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'insta'}
@@ -213,6 +231,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 label={'Instagram'}
                 onChange={propsF.handleChange}
                 value={propsF.values.insta ?? ''}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'messenger'}
@@ -221,6 +242,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 label={'Messenger'}
                 onChange={propsF.handleChange}
                 value={propsF.values.messenger ?? ''}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'whatsapp'}
@@ -229,6 +253,9 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
                 label={'Whatsapp'}
                 onChange={propsF.handleChange}
                 value={propsF.values.whatsapp ?? ''}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             { !!apiError &&
                 <ApiErrorMessage message={apiError}/>

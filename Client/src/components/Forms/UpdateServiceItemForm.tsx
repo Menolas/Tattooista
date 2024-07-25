@@ -15,6 +15,7 @@ import {
     addService,
     editService,
 } from "../../redux/Services/services-reducer";
+import {handleEnterClick} from "../../utils/functions";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -144,7 +145,10 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                                     if (e.currentTarget.files && e.currentTarget.files.length) {
                                         propsF.setFieldValue('wallPaper', e.currentTarget.files[0]);
                                         handleOnChange(e);
-                                    };
+                                    }
+                                }}
+                                onKeyDown={(event: React.KeyboardEvent) => {
+                                    handleEnterClick(event, propsF.handleSubmit)
                                 }}
                             />
                         </FieldWrapper>
@@ -154,6 +158,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Service Title"}
                             value={propsF.values.title}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldComponent
@@ -162,6 +169,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Service condition"}
                             value={propsF.values.condition_0}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldComponent
@@ -170,6 +180,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Service condition"}
                             value={propsF.values.condition_1}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldComponent
@@ -178,6 +191,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Service condition"}
                             value={propsF.values.condition_2}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldComponent
@@ -186,6 +202,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Service condition"}
                             value={propsF.values.condition_3}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldComponent
@@ -194,6 +213,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Service condition"}
                             value={propsF.values.condition_4}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldComponent
@@ -202,6 +224,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Service condition"}
                             value={propsF.values.condition_5}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
                         { !!apiError &&
                             <ApiErrorMessage message={apiError}/>

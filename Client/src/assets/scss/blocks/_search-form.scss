@@ -100,9 +100,9 @@
     }
 
     &::placeholder {
-      color: $light-text;
+      color: $placeholder;
       font-size: 18px !important;
-      font-weight: 600 !important;
+      font-weight: 500 !important;
     }
   }
 }

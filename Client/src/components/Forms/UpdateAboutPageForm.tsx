@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import {validateFile} from "../../utils/validators";
 import {useDispatch} from "react-redux";
 import {editAboutPage} from "../../redux/About/about-reducer";
+import {handleEnterClick} from "../../utils/functions";
 
 type PropsType = {
     apiError: null | string;
@@ -132,6 +133,9 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
                                         handleOnChange(e);
                                     }
                                 }}
+                                onKeyDown={(event: React.KeyboardEvent) => {
+                                    handleEnterClick(event, propsF.handleSubmit)
+                                }}
                             />
                         </FieldWrapper>
                         <FieldComponent
@@ -140,6 +144,9 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
                             placeholder={"Block Title"}
                             value={propsF.values.aboutPageTitle}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
 
                         <FieldWrapper
@@ -151,7 +158,11 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
                                 rows={6}
                                 placeholder={'Describe this Tattoo style'}
                                 onChange={propsF.handleChange}
-                                value={propsF.values.aboutPageContent}/>
+                                value={propsF.values.aboutPageContent}
+                                onKeyDown={(event: React.KeyboardEvent) => {
+                                    handleEnterClick(event, propsF.handleSubmit)
+                                }}
+                            />
                         </FieldWrapper>
                         { !!apiError &&
                             <ApiErrorMessage message={apiError}/>

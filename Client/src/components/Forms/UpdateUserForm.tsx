@@ -19,6 +19,7 @@ import {
   addUser,
 } from "../../redux/Users/users-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
+import {handleEnterClick} from "../../utils/functions";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -171,6 +172,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       propsF.setFieldValue(`roles.${role._id}`, e.target.checked);
                     }}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      handleEnterClick(event, propsF.handleSubmit)
+                    }}
                 />
                 <label htmlFor={role._id}>
                   <span className="checkbox">{''}</span>
@@ -204,6 +208,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                       handleOnChange(e);
                     }
                   }}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, propsF.handleSubmit)
+                  }}
               />
             </FieldWrapper>
             <FieldComponent
@@ -212,6 +219,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Full Name'}
                 onChange={propsF.handleChange}
                 value={propsF.values.displayName}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'email'}
@@ -219,6 +229,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Email'}
                 onChange={propsF.handleChange}
                 value={propsF.values.email}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'password'}
@@ -227,6 +240,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                 label={'Password'}
                 onChange={propsF.handleChange}
                 value={propsF.values.password}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             { rolesFields }
             { !!apiError &&

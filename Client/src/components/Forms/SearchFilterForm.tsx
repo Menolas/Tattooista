@@ -3,10 +3,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { ReactComponent as SearchIcon } from "../../assets/svg/search.svg";
 import { SearchFilterType, SelectOptionType } from "../../types/Types";
 import { FormSelect } from "./formComponents/FormSelect";
-
-const handleChange = () => {
-  console.log("HandleChange!!!");
-};
+import {handleEnterClick} from "../../utils/functions";
 
 type FormType = {
   term: string;
@@ -48,18 +45,11 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
           onSubmit={submit}
       >
         {({ isSubmitting, handleSubmit }) => {
-          const handleEnterClick = (event: React.KeyboardEvent) => {
-            if (event.key === 'Enter') {
-              event.preventDefault();
-              handleSubmit();
-            }
-          };
 
           return (
             <Form
                 ref={formRef}
                 className={"form search-form"}
-                onKeyDown={handleEnterClick}
             >
               <div className={'search-form__search-wrap'}>
                 <Field
@@ -67,6 +57,9 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                     type="text"
                     name="term"
                     placeholder={"Search..."}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      handleEnterClick(event, handleSubmit)
+                    }}
                 />
                 <button
                     className={"btn btn--sm btn--transparent search-submit"}
@@ -78,8 +71,9 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
               <FormSelect
                   name="condition"
                   options={options}
-                  handleChange={handleChange}
-                  onKeyDown={handleEnterClick}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, handleSubmit)
+                  }}
               />
             </Form>
         )}}

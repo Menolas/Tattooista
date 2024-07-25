@@ -14,6 +14,7 @@ import {useState} from "react";
 import {useDispatch} from "react-redux";
 import {registration} from "../../redux/Auth/auth-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
+import {handleEnterClick} from "../../utils/functions";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
@@ -132,6 +133,9 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                         handleOnChange(e);
                       }
                     }}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      handleEnterClick(event, propsF.handleSubmit)
+                    }}
                 />
             </FieldWrapper>
             <FieldComponent
@@ -140,6 +144,9 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Your display name'}
                 value={propsF.values.displayName}
                 onChange={propsF.handleChange}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'email'}
@@ -147,6 +154,9 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Your email'}
                 value={propsF.values.email}
                 onChange={propsF.handleChange}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldComponent
                 name={'password'}
@@ -154,6 +164,9 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 placeholder={'Password'}
                 value={propsF.values.password}
                 onChange={propsF.handleChange}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  handleEnterClick(event, propsF.handleSubmit)
+                }}
             />
             <FieldWrapper
                 wrapperClass={'form__input-wrap--checkbox'}
@@ -163,6 +176,9 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                   type="checkbox"
                   name="consent"
                   id="consent"
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    handleEnterClick(event, propsF.handleSubmit)
+                  }}
               />
               <label htmlFor="consent">
                 <span className="checkbox">{''}</span>

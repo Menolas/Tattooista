@@ -15,6 +15,7 @@ import {useDispatch} from "react-redux";
 import {addStyle, editStyle} from "../../redux/Styles/styles-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import tattooMachine from '../../assets/img/tattoo-machine.webp';
+import {handleEnterClick} from "../../utils/functions";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     let schema = Yup.object().shape({
@@ -169,6 +170,9 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
                                         handleOnChange(e);
                                     }
                                 }}
+                                onKeyDown={(event: React.KeyboardEvent) => {
+                                    handleEnterClick(event, propsF.handleSubmit)
+                                }}
                             />
                         </FieldWrapper>
                         <FieldComponent
@@ -177,6 +181,9 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
                             placeholder={"Tattoo style name"}
                             value={propsF.values.value}
                             onChange={propsF.handleChange}
+                            onKeyDown={(event: React.KeyboardEvent) => {
+                                handleEnterClick(event, propsF.handleSubmit)
+                            }}
                         />
                         <FieldWrapper
                             name={"description"}
@@ -187,7 +194,11 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
                                 rows={5}
                                 placeholder={'Describe this Tattoo style'}
                                 onChange={propsF.handleChange}
-                                value={propsF.values.description}/>
+                                value={propsF.values.description}
+                                onKeyDown={(event: React.KeyboardEvent) => {
+                                    handleEnterClick(event, propsF.handleSubmit)
+                                }}
+                            />
 
                         </FieldWrapper>
                         { !!apiError &&
