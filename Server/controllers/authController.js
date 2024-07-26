@@ -59,7 +59,7 @@ class AuthController {
     try {
       const activationLink = req.params.link;
       await userService.activate(activationLink);
-      return res.redirect(process.env.CLIENT_URL);
+      return res.redirect(process.env.ACTIVATE_URL);
     } catch(e) {
       results.resultCode = 1;
       results.message = e.message;

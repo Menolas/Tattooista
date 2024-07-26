@@ -106,12 +106,12 @@ class galleryController {
   async deleteGalleryItem(req, res) {
     const results = {};
     try {
+      await res.galleryItem.remove();
       await fs.unlink(`./uploads/gallery/${res.galleryItem.fileName}`, e => {
         if (e) {
           console.log(e);
         }
       });
-      await res.galleryItem.remove();
       results.resultCode = 0;
       res.json(results);
     } catch (e) {
@@ -177,7 +177,7 @@ class galleryController {
       const oldPath = `./uploads/gallery/${res.galleryItem.fileName}`;
       const newPath = `./uploads/archivedGallery/${res.galleryItem.fileName}`;
 
-      mv(oldPath, newPath, { mkdirp: true },function (e) {
+      await mv(oldPath, newPath, { mkdirp: true },function (e) {
         if (e) console.log(e);
       });
       await archivedGalleryItem.save();
@@ -208,9 +208,9 @@ class galleryController {
       const oldPath = `./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`;
       const newPath = `./uploads/gallery/${res.archivedGalleryItem.fileName}`;
 
-      mv(oldPath, newPath, { mkdirp: true },function (e) {
+      await mv(oldPath, newPath, { mkdirp: true },function (e) {
         if (e) console.log(e);
-      })
+      });
       await galleryItem.save();
       await res.archivedGalleryItem.remove();
       results.resultCode = 0;
@@ -226,12 +226,12 @@ class galleryController {
     const results = {};
 
     try {
+      await res.archivedGalleryItem.remove();
       await fs.unlink(`./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`, e => {
         if (e) {
           res.status(400).send(e);
         }
       });
-      await res.archivedGalleryItem.remove();
       results.resultCode = 0
       res.json(results);
     } catch (e) {
