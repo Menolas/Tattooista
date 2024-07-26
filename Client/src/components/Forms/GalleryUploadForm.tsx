@@ -114,38 +114,43 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
           <Form className="form form--galleryUpload" encType={"multipart/form-data"}>
             {
                 client?.gallery &&
-                <ul className={"list client-gallery"}>
-                  {
-                    client.gallery.map((item, i) => {
-                      return (
-                          <li className={"client-gallery__item"} key={i}>
-                            <button
-                                className={"btn btn--icon btn--icon--light close-button"}
-                                disabled={isDeletingPicturesInProcess?.some(id => id === item)}
-                                onClick={async (event) => {
-                                  event.preventDefault();
-                                  if (client?.gallery && deleteClientGalleryPicture) {
-                                    let success = await dispatch(deleteClientGalleryPicture(client._id, item));
-                                    if (success && refreshClientData) {
-                                      const updatedGallery = client.gallery.filter(picture => picture !== item);
-                                      const updatedClient = {...client, gallery: updatedGallery};
-                                      refreshClientData(updatedClient);
+                <div>
+                  <h4>Existed client gallery</h4>
+                  <ul className={"list client-gallery"}>
+                    {
+                      client.gallery.map((item, i) => {
+                        return (
+                            <li className={"client-gallery__item"} key={i}>
+                              <button
+                                  className={"btn btn--icon btn--icon--light close-button"}
+                                  disabled={isDeletingPicturesInProcess?.some(id => id === item)}
+                                  onClick={async (event) => {
+                                    event.preventDefault();
+                                    if (client?.gallery && deleteClientGalleryPicture) {
+                                      let success = await dispatch(deleteClientGalleryPicture(client._id, item));
+                                      if (success && refreshClientData) {
+                                        const updatedGallery = client.gallery.filter(picture => picture !== item);
+                                        const updatedClient = {...client, gallery: updatedGallery};
+                                        refreshClientData(updatedClient);
+                                      }
                                     }
-                                  }
-                                }}
-                            ></button>
-                            <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
-                          </li>
-                      );
-                    })
-                  }
-                </ul>
+                                  }}
+                              ></button>
+                              <img src={`${API_URL}/clients/${client._id}/doneTattooGallery/${item}`} alt={''}/>
+                            </li>
+                        );
+                      })
+                    }
+                  </ul>
+                </div>
             }
             <FieldWrapper
                 name={'gallery'}
                 wrapperClass={'form__input-wrap--uploadFile'}
             >
-              {imageURLs &&
+              {(imageURLs.length > 0) &&
+                <div>
+                  <h4>Pictures to be uploaded</h4>
                   <ul className={"list gallery__uploadedImgPreviews"}>
                     {imageURLs.map((item, index) => {
                         return (
@@ -166,10 +171,11 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                   height="50"
                               />
                             </li>
-                        )
+                        );
                       })
                     }
                   </ul>
+                </div>
               }
               <label className="btn btn--sm btn--dark-bg" htmlFor={"gallery"}>Pick File</label>
               <Field
