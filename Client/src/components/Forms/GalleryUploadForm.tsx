@@ -2,7 +2,6 @@ import * as React from "react";
 import {useState} from "react";
 import {Field, Form, Formik, FormikHelpers} from "formik";
 import {MAX_FILE_SIZE, VALID_FILE_EXTENSIONS, isFileSizeValid, isFileTypesValid } from "../../utils/validators";
-import {ReactComponent as TrashIcon} from "../../assets/svg/trash.svg";
 import {API_URL} from "../../http";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
