@@ -5,14 +5,18 @@ import {
   setCurrentGalleryPageAC, setGalleryApiErrorAC,
   setGalleryPageSizeAC,
 } from "../../../redux/Gallery/gallery-reducer";
+import {setActiveStyleAC} from "../../../redux/Styles/styles-reducer";
 import {useDispatch, useSelector} from "react-redux";
+import { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
 import {
   getCurrentPageSelector,
   getPageSizeSelector,
   getIsFetchingSelector,
-  getIsDeletingInProcessSelector,
-  getTotalCountSelector, getGalleryApiErrorSelector
+  getTotalCountSelector,
+  getGalleryApiErrorSelector,
+  getIsGalleryItemDeletingInProcessSelector,
 } from "../../../redux/Gallery/gallery-selectors";
 
 import {
@@ -25,10 +29,9 @@ import {setApiErrorAC} from "../../../redux/General/general-reducer";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 
 export const GalleryContainer: React.FC = () => {
-
   const isAuth = useSelector(getAuthSelector);
   const isFetching = useSelector(getIsFetchingSelector);
-  const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
+  const isDeletingInProcess = useSelector(getIsGalleryItemDeletingInProcessSelector);
   const totalCount = useSelector(getTotalCountSelector);
   const pageSize = useSelector(getPageSizeSelector);
   const currentPage = useSelector(getCurrentPageSelector);
@@ -38,6 +41,7 @@ export const GalleryContainer: React.FC = () => {
   const galleryApiError = useSelector(getGalleryApiErrorSelector);
 
   const dispatch = useDispatch();
+
   const setPageCallBack = (page: number) => {
     dispatch(setCurrentGalleryPageAC(page));
   };

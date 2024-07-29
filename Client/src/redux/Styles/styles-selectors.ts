@@ -12,6 +12,6 @@ export const getActiveStyleSelector = (state: AppStateType) => {
   return state.styles.activeStyle;
 };
 
-export const getIsDeletingInProcess = (state: AppStateType) => {
+export const getIsStyleDeletingInProcess = (state: AppStateType) => {
   return state.styles.isDeletingInProcess;
 };

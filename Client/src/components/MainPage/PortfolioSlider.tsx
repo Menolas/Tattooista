@@ -57,7 +57,7 @@ export const PortfolioSlider: React.FC<PropsType> = React.memo(({
                 key={slide._id}
             >
                 <NavLink
-                    to={`/portfolio?&style=${slide.value}&page=1&limit=${pageSize}`}
+                    to={`/portfolio/${slide._id}`}
                     className="portfolio-slider__link"
                     style={{backgroundImage: `url(${wallpaperUrl})`}}
                     onClick={() => {

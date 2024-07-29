@@ -93,7 +93,12 @@ export const Styles: React.FC<PropsType> = React.memo(({
   const stylesArray = styles
     ?.map((item) => {
         return (
-            <Style key={item._id} activeStyle={activeStyle} item={item} resetActiveStyle={resetActiveStyle} />
+            <Style
+                key={item._id}
+                activeStyle={activeStyle}
+                item={item}
+                resetActiveStyle={resetActiveStyle}
+            />
         )
     });
 
@@ -191,7 +196,11 @@ const Style = ({activeStyle, item, resetActiveStyle}: {
 }) => {
   return (
       <div
-          className={`tattoo-style__item btn btn--sm ${activeStyle?._id === item._id ? 'btn--light-bg' : 'btn--transparent'}`}
+          className={
+              `tattoo-style__item btn btn--sm ${activeStyle?._id === item._id 
+                  ? 'btn--light-bg' 
+                  : 'btn--transparent'}`
+          }
           onClick={() => resetActiveStyle(item)}
       >
         {item.value}

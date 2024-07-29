@@ -20,7 +20,7 @@ export const getTotalCountSelector = (state: AppStateType) => {
   return state.gallery.totalCount;
 };
 
-export const getIsDeletingInProcessSelector = (state: AppStateType) => {
+export const getIsGalleryItemDeletingInProcessSelector = (state: AppStateType) => {
   return state.gallery.isDeletingInProcess;
 };
 

@@ -12,7 +12,7 @@ import {
     getIsFetchingSelector,
     getActiveStyleSelector,
     getStylesSelector,
-    getIsDeletingInProcess,
+    getIsStyleDeletingInProcess,
 } from "../../../redux/Styles/styles-selectors";
 import {Styles} from "./Styles";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
@@ -22,7 +22,7 @@ export const StylesContainer: React.FC = () => {
     const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
     const isFetching = useSelector(getIsFetchingSelector);
-    const isDeletingInProcess = useSelector(getIsDeletingInProcess);
+    const isDeletingInProcess = useSelector(getIsStyleDeletingInProcess);
     const styles = useSelector(getStylesSelector);
     const activeStyle = useSelector(getActiveStyleSelector);
     const token = useSelector(getTokenSelector);
