@@ -12,7 +12,7 @@ import {
     getIsFetchingSelector,
     getActiveStyleSelector,
     getStylesSelector,
-    getIsDeletingInProcess,
+    getIsStyleDeletingInProcess,
 } from "../../../redux/Styles/styles-selectors";
 import {Styles} from "./Styles";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
@@ -22,25 +22,25 @@ export const StylesContainer: React.FC = () => {
     const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
     const isFetching = useSelector(getIsFetchingSelector);
-    const isDeletingInProcess = useSelector(getIsDeletingInProcess);
+    const isDeletingInProcess = useSelector(getIsStyleDeletingInProcess);
     const styles = useSelector(getStylesSelector);
     const activeStyle = useSelector(getActiveStyleSelector);
     const token = useSelector(getTokenSelector);
 
     const dispatch = useDispatch();
 
-    const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
-
-    useEffect(() => {
-        if (!hasFetchedStyles) {
-            dispatch(getStyles(token, false)).then(() => {
-                if (styles.length > 0 && !activeStyle?._id) {
-                    dispatch(setActiveStyle(styles[0]));
-                }
-                setHasFetchedStyles(true);
-            });
-        }
-    }, [dispatch, token, hasFetchedStyles, styles]);
+    // const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
+    //
+    // useEffect(() => {
+    //     if (!hasFetchedStyles) {
+    //         dispatch(getStyles(token, false)).then(() => {
+    //             if (styles.length > 0 && !activeStyle?._id) {
+    //                 dispatch(setActiveStyle(styles[0]));
+    //             }
+    //             setHasFetchedStyles(true);
+    //         });
+    //     }
+    // }, [dispatch, token, hasFetchedStyles, styles]);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(setActiveStyle(style));

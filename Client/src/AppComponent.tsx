@@ -24,7 +24,7 @@ import {UsersContainer} from "./components/Admin/Users/UsersContainer";
 import {NotFound} from "./components/404-page";
 import {NoAccess} from "./components/NoAccess";
 import {MainPage} from "./pages/mainPage/MainPage";
-import {Portfolio} from "./pages/portfolio/Portfolio";
+import {PortfolioContainer} from "./pages/portfolio/PortfolioContainer";
 import {MainWrap} from "./components/MainWrap";
 
 const App = () => {
@@ -41,8 +41,8 @@ const App = () => {
                                element={<RegistrationContainer />} />
                         <Route path={`login`}
                                element={<LoginContainer />} />
-                        <Route path={`portfolio`}
-                               element={<Portfolio />} />
+                        <Route path={`portfolio/:activeStyleParam?`}
+                               element={<PortfolioContainer />} />
                         <Route path={`admin`}
                                element={<Admin />}>
                             <Route path={`bookedConsultations`}

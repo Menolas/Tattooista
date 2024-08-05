@@ -5,6 +5,7 @@ import {logout} from "../../redux/Auth/auth-reducer";
 import { Header } from "./Header";
 import {getAuthSelector} from "../../redux/Auth/auth-selectors";
 import {useLocation} from "react-router-dom";
+import {getActiveStyleSelector} from "../../redux/Styles/styles-selectors";
 
 export const HeaderContainer: React.FC = () => {
 
@@ -13,6 +14,7 @@ export const HeaderContainer: React.FC = () => {
   const [headerClasses, setHeaderClasses] = useState('');
   const location = useLocation();
   const [pageLocation, setPageLocation] = useState(location.pathname);
+  const activeStyle = useSelector(getActiveStyleSelector);
 
   useEffect(() => {
 
@@ -39,5 +41,6 @@ export const HeaderContainer: React.FC = () => {
       isAuth={isAuth}
       headerClasses={headerClasses}
       logout={logoutCallBack}
+      activeStyle={activeStyle}
   />
 }

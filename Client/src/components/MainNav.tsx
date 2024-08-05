@@ -4,15 +4,18 @@ import { HashLink } from "react-router-hash-link";
 import { mainNavHashLinksData } from "../utils/constants";
 import {MobileMainMenu} from "./MobileMainMenu";
 import {useEffect, useRef, useState} from "react";
+import {StyleType} from "../types/Types";
 
 type PropsType = {
   isAuth: string | null;
   logout: () => void;
+  activeStyle: StyleType | null;
 };
 
 export const MainNav: React.FC<PropsType> = React.memo(({
     isAuth,
     logout,
+    activeStyle,
 }) => {
 
  const innerBlockRef = useRef<HTMLUListElement>(null);
@@ -69,7 +72,7 @@ export const MainNav: React.FC<PropsType> = React.memo(({
       <ul className="list main-nav__list main-nav--ls">
         <li className="main-nav__item">
           <NavLink
-              to={`portfolio`}
+              to={`portfolio/${activeStyle?._id}`}
               className="main-nav__link"
               onClick={(event) => {
                   event.stopPropagation();
