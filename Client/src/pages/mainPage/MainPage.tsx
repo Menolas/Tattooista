@@ -66,6 +66,11 @@ export const MainPage: React.FC = () => {
     dispatch(getStyles(token, true));
   }, []);
 
+useEffect(() => {
+    console.log('styles 1 ', styles[0]);
+    dispatch(setActiveStyle(styles[0]));
+}, [styles]);
+
   useEffect(() => {
     if (successModal.isSuccess) {
         setTimeout( () => {

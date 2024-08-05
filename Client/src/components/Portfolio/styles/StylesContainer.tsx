@@ -29,18 +29,18 @@ export const StylesContainer: React.FC = () => {
 
     const dispatch = useDispatch();
 
-    const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
-
-    useEffect(() => {
-        if (!hasFetchedStyles) {
-            dispatch(getStyles(token, false)).then(() => {
-                if (styles.length > 0 && !activeStyle?._id) {
-                    dispatch(setActiveStyle(styles[0]));
-                }
-                setHasFetchedStyles(true);
-            });
-        }
-    }, [dispatch, token, hasFetchedStyles, styles]);
+    // const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
+    //
+    // useEffect(() => {
+    //     if (!hasFetchedStyles) {
+    //         dispatch(getStyles(token, false)).then(() => {
+    //             if (styles.length > 0 && !activeStyle?._id) {
+    //                 dispatch(setActiveStyle(styles[0]));
+    //             }
+    //             setHasFetchedStyles(true);
+    //         });
+    //     }
+    // }, [dispatch, token, hasFetchedStyles, styles]);
 
     const resetActiveStyleCallBack = (style: StyleType) => {
         dispatch(setActiveStyle(style));

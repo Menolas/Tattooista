@@ -55,18 +55,18 @@ export const PortfolioContainer: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
+    //const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
 
-    useEffect(() => {
-        if (!hasFetchedStyles) {
-            dispatch(getStyles(token, false)).then(() => {
-                if (styles.length > 0 && !activeStyle?._id) {
-                    dispatch(setActiveStyle(styles[0]));
-                }
-                setHasFetchedStyles(true);
-            });
-        }
-    }, [dispatch, token, hasFetchedStyles, styles]);
+    // useEffect(() => {
+    //     if (!hasFetchedStyles) {
+    //         dispatch(getStyles(token, false)).then(() => {
+    //             if (styles.length > 0 && !activeStyle?._id) {
+    //                 dispatch(setActiveStyle(styles[0]));
+    //             }
+    //             setHasFetchedStyles(true);
+    //         });
+    //     }
+    // }, [dispatch, token, hasFetchedStyles, styles]);
 
     useEffect(() => {
         if (!activeStyleParam) {
@@ -76,16 +76,16 @@ export const PortfolioContainer: React.FC = () => {
                 activeStyleParam = activeStyle._id;
                 navigate(`/portfolio/${activeStyle._id}`);
             } else {
+                console.log("no parameter and no active style!!!!!!!!!!!!")
                 activeStyleParam = styles[0]?._id;
                 dispatch(setActiveStyleAC(styles[0]));
                 navigate(`/portfolio/${styles[0]._id}`);
             }
         }
         if (activeStyleParam && activeStyleParam !== activeStyle?._id) {
-            const style = styles.find(style => style._id === activeStyleParam);
-            if (style) dispatch(setActiveStyleAC(style));
-        } else if (activeStyle && !activeStyleParam) {
-            navigate(`/portfolio/${activeStyle._id}`);
+            console.log("activeStyleParam we have and it is not equal to the activeStyle", activeStyleParam)
+            activeStyleParam = activeStyle?._id;
+            navigate(`/portfolio/${activeStyleParam}`);
         }
     }, [activeStyleParam, activeStyle, dispatch, navigate]);
 

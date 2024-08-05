@@ -10,17 +10,20 @@ import {ReactComponent as LogOutIcon} from "../../assets/svg/logout.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
+import {StyleType} from "../../types/Types";
 
 type PropsType = {
     isAuth: string | null;
     headerClasses: string | null;
     logout: () => void;
+    activeStyle: StyleType | null;
 }
 
 export const Header: React.FC<PropsType> = React.memo(({
   isAuth,
   headerClasses,
   logout,
+  activeStyle,
 }) => {
 
   return (
@@ -29,6 +32,7 @@ export const Header: React.FC<PropsType> = React.memo(({
       <MainNav
           isAuth={isAuth}
           logout={logout}
+          activeStyle={activeStyle}
       />
       <SocialNav />
       <div className={'main-header__right'}>
