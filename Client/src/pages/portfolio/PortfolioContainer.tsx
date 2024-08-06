@@ -55,39 +55,36 @@ export const PortfolioContainer: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    //const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
-
-    // useEffect(() => {
-    //     if (!hasFetchedStyles) {
-    //         dispatch(getStyles(token, false)).then(() => {
-    //             if (styles.length > 0 && !activeStyle?._id) {
-    //                 dispatch(setActiveStyle(styles[0]));
-    //             }
-    //             setHasFetchedStyles(true);
-    //         });
-    //     }
-    // }, [dispatch, token, hasFetchedStyles, styles]);
+    const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
 
     useEffect(() => {
-        if (!activeStyleParam) {
-            console.log("no parameter!!!!!!!!!!!!")
-            if (activeStyle) {
-                console.log("no parameter but we have an active style!!!!!!!!!!!!")
-                activeStyleParam = activeStyle._id;
-                navigate(`/portfolio/${activeStyle._id}`);
-            } else {
-                console.log("no parameter and no active style!!!!!!!!!!!!")
-                activeStyleParam = styles[0]?._id;
-                dispatch(setActiveStyleAC(styles[0]));
+        if (!hasFetchedStyles) {
+            dispatch(getStyles(token, false)).then(() => {
+                setHasFetchedStyles(true);
+            });
+        }
+    }, [dispatch, token, hasFetchedStyles]);
+
+    useEffect(() => {
+        if (hasFetchedStyles) {
+            if (activeStyleParam) {
+                const style = styles.find(style => style._id === activeStyleParam);
+                if (style) {
+                    dispatch(setActiveStyleAC(style));
+                } else if (styles.length > 0) {
+                    navigate(`/portfolio/${styles[0]._id}`);
+                }
+            } else if (styles.length > 0) {
                 navigate(`/portfolio/${styles[0]._id}`);
             }
         }
-        if (activeStyleParam && activeStyleParam !== activeStyle?._id) {
-            console.log("activeStyleParam we have and it is not equal to the activeStyle", activeStyleParam)
-            activeStyleParam = activeStyle?._id;
-            navigate(`/portfolio/${activeStyleParam}`);
+    }, [activeStyleParam, styles, hasFetchedStyles, dispatch, navigate]);
+
+    useEffect(() => {
+        if (activeStyle && activeStyle._id !== activeStyleParam) {
+            navigate(`/portfolio/${activeStyle._id}`);
         }
-    }, [activeStyleParam, activeStyle, dispatch, navigate]);
+    }, [activeStyle, activeStyleParam, navigate]);
 
     useEffect(() => {
         if (successModal.isSuccess) {
