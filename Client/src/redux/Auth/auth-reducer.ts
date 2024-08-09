@@ -13,12 +13,14 @@ import {
 const SET_AUTH_API_ERROR = 'SET_AUTH_API_ERROR';
 const LOG_OUT = 'LOG_OUT';
 const LOG_IN = 'LOG_IN';
+const SET_FROM = 'SET_FROM';
 
 const initialState = {
   user: {} as IUser | null | undefined,
   roles: [] as Array<RoleType> | null,
   token: null as string | null | undefined,
   isAuth: null as string | null,
+  from: null as string | null,
   authApiError: null as null | string,
 }
 
@@ -61,9 +63,18 @@ export const authReducer = (
 }
 
 type ActionsTypes = SetAuthApiErrorAT | SetSuccessModalAT |
-     LogOutAT | LogInAT;
+     LogOutAT | LogInAT | SetFromAT;
 
 // actions creators
+
+type SetFromAT = {
+    type: typeof SET_FROM;
+    from: string | null;
+};
+
+export const setFromAC = (from: string | null): SetFromAT => ({
+    type: SET_FROM, from
+});
 
 type LogOutAT = {
     type: typeof LOG_OUT;

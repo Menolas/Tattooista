@@ -16,6 +16,10 @@ export const getAuthApiErrorSelector = (state: AppStateType) => {
   return state.auth.authApiError
 }
 
+export  const getFromSelector = (state: AppStateType) => {
+    return state.auth.from
+}
+
 export const getRolesSelector = (state: AppStateType) => {
   return state.auth.roles
 }

@@ -15,12 +15,6 @@ export const Login: React.FC<PropsType> = React.memo(({
   authApiError,
 }) => {
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuth && isUserActivated) navigate("/");
-  }, [isAuth , isUserActivated]);
-
   return (
     <div className="login page-block page-block--top container">
       {!isAuth &&
