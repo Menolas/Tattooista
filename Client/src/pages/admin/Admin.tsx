@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Navigate, NavLink} from "react-router-dom";
+import {Navigate, NavLink, useLocation, useNavigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -14,6 +14,7 @@ import {
     getSuccessModalSelector
 } from "../../redux/General/general-selectors";
 import {setSuccessModalAC} from "../../redux/General/general-reducer";
+import {setFromAC} from "../../redux/Auth/auth-reducer";
 
 interface ButtonProps {
     btnText: string;
@@ -33,6 +34,17 @@ export const Admin: React.FC = () => {
   const user = useSelector(getUserSelector);
 
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuth) {
+        dispatch(setFromAC(location.pathname));
+        navigate('/login');
+    } else if (isAuth && user?.isActivated !== true) {
+        navigate('/registration');
+    }
+  }, [isAuth, location.pathname]);
 
   useEffect(() => {
     if (successModal.isSuccess) {
@@ -46,11 +58,6 @@ export const Admin: React.FC = () => {
 
   const setSuccessModalCallBack = () => {
     dispatch(setSuccessModalAC(false, ''));
-  }
-
-  if (!isAuth) return <Navigate to='/login' />
-  if (isAuth && user?.isActivated !== true) {
-    return <Navigate to="/registration" />
   }
 
   const AdminButton = ({
