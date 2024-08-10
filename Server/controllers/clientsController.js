@@ -471,6 +471,21 @@ class clientsController {
       res.status(500).json(results);
     }
   }
+
+  async toggleFavourite(req, res) {
+    const results = {};
+
+    try {
+      res.client.isFavourite = !res.client.isFavourite;
+      results.client = await res.client.save();
+      results.resultCode = 0;
+      res.json(results);
+    } catch (e) {
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(500).json(results);
+    }
+  }
 }
 
 module.exports = new clientsController();

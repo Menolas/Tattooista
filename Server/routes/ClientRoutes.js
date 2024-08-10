@@ -33,6 +33,10 @@ router.delete('/archive/:id', getArchivedClient, controller.deleteArchivedClient
 
 router.post('/edit/:id', getClient, controller.editClient);
 
+// toggle favourite
+
+router.patch('/favourite/:id', getClient, controller.toggleFavourite);
+
 // archive client
 
 router.post('/archive/:id', getClient, controller.archiveClient);

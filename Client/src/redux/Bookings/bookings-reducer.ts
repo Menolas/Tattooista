@@ -142,6 +142,7 @@ export const bookingsReducer = (
         bookingApiError: action.error
       }
 
+
     default: return state
   }
 }
@@ -325,13 +326,11 @@ export const getBookings = (
 }
 
 export const changeStatus = (
-  id: string,
-  status: boolean
+  id: string
 ): ThunkType => async (dispatch) => {
-
   try {
     dispatch(toggleIsStatusChangingAC(true, id));
-    const response = await bookingsApi.changeConsultationStatus(id, status);
+    const response = await bookingsApi.changeConsultationStatus(id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(changeStatusAC(id, response.status));
       dispatch(setBookingApiErrorAC(null));

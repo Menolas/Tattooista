@@ -65,6 +65,13 @@ export const clientsAPI = {
         .then(response => response.data);
   },
 
+  async toggleIsFavorite(
+    clientId: string
+  ) {
+    return await instance.post<UpdateClientResponseType>(`clients/favorite/${clientId}`)
+        .then(response => response.data);
+  },
+
   async deleteClientGalleryPicture(
       clientId: string,
       picture: string
