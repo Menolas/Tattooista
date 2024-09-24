@@ -26,6 +26,8 @@ const SET_CLIENT_PROFILE = 'SET_CLIENT_PROFILE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_CLIENTS_API_ERROR = 'SET_CLIENTS_API_ERROR';
+const TOGGLE_IS_FAVOURITE = 'TOGGLE_IS_FAVOURITE';
+const TOGGLE_IS_FAVOURITE_CHANGING = 'TOGGLE_IS_FAVOURITE_CHANGING';
 
 const ADD_CLIENT_SUCCESS = "Congratulation! You've just created a new client.";
 const UPDATE_CLIENT_SUCCESS = "Congratulation! You've just updated a client's info.";
@@ -39,6 +41,7 @@ const initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   isDeletingPicturesInProcess: [] as Array<string>,
+  isFavouriteChangingInProcess: [] as Array<string>,
   filter: {
     term: '' as string | null,
     condition: "any" as string | null
@@ -136,6 +139,14 @@ export const clientsReducer = (
             : state.isDeletingPicturesInProcess.filter(id => id !== action.id)
       }
 
+    case TOGGLE_IS_FAVOURITE_CHANGING:
+      return {
+        ...state,
+        isFavouriteChangingInProcess: action.isFavouriteChanging
+          ? [...state.isFavouriteChangingInProcess, action.id]
+          : state.isFavouriteChangingInProcess.filter(id => id !== action.id)
+      }
+
     case SET_ACCESS_ERROR:
       return {
         ...state,
@@ -148,6 +159,17 @@ export const clientsReducer = (
         clientsApiError: action.error
       }
 
+    case TOGGLE_IS_FAVOURITE:
+      return {
+        ...state,
+        clients: state.clients.map(client => {
+          if (client._id === action.id) {
+            return {...client, isFavourite: action.isFavourite}
+          }
+          return client
+        })
+      }
+
     default: return state
   }
 };
@@ -156,9 +178,29 @@ type ActionsTypes = SetClientsPageSizeAT | SetFilterAT |
     SetClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
     ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT | DeleteClientAT | EditClientAT |
     AddClientAT | SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT | SetClientApiErrorAT
-    | AddArchivedClientAT | SetApiErrorAT;
+    | AddArchivedClientAT | SetApiErrorAT | SetIsFavouriteAT | SetIsFavouriteChangingAT;
 
 // actions creators
+
+type SetIsFavouriteChangingAT = {
+    type: typeof TOGGLE_IS_FAVOURITE_CHANGING;
+    id: string;
+    isFavouriteChanging: boolean;
+};
+
+const setIsFavouriteChangingAC = (id: string, isFavouriteChanging: boolean): SetIsFavouriteChangingAT => ({
+  type: TOGGLE_IS_FAVOURITE_CHANGING, id, isFavouriteChanging
+});
+
+type SetIsFavouriteAT = {
+  type: typeof TOGGLE_IS_FAVOURITE;
+  id: string;
+  isFavourite: boolean;
+};
+
+export const setIsFavouriteAC = (id: string, isFavourite: boolean): SetIsFavouriteAT => ({
+  type: TOGGLE_IS_FAVOURITE, id, isFavourite
+});
 
 type SetClientApiErrorAT = {
     type: typeof SET_CLIENTS_API_ERROR;
@@ -335,6 +377,29 @@ export const getClients = (
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
+  }
+};
+
+export const toggleFavourite = (
+    token: string,
+    id: string,
+): ThunkType => async (
+    dispatch
+) => {
+  try {
+    dispatch(setIsFavouriteChangingAC(id, true));
+    const response = await clientsAPI.toggleIsFavorite(id);
+    if (response.resultCode === ResultCodesEnum.Success) {
+      dispatch(setIsFavouriteAC(id, response.client.isFavourite));
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    console.log(e);
+    return false;
+  } finally {
+    dispatch(setIsFavouriteChangingAC(id, false));
   }
 };
 

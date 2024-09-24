@@ -4,6 +4,8 @@ import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
 import {ReactComponent as ImageUserIcon} from "../../../assets/svg/images-user.svg";
+import {ReactComponent as Star} from "../../../assets/svg/star.svg";
+import {ReactComponent as StarFilled} from "../../../assets/svg/star-filled.svg";
 import { NavLink } from "react-router-dom";
 import { ClientType, ContactType } from "../../../types/Types";
 import { API_URL } from "../../../http";
@@ -134,6 +136,13 @@ export const Client: React.FC<PropsType> = React.memo(({
           to={`/admin/profile?clientId=${data._id}`}
           className={"admin__card-link"}
       >
+          <button
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Mark as favorite"
+              className={"btn btn--icon"}
+          >
+              { data.isFavourite ? <Star/> : <StarFilled/> }
+          </button>
           <div className={"admin__card-avatar"}>
               {!data.avatar
                   ? <DefaultAvatar/>

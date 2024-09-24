@@ -34,6 +34,7 @@ export type ContactsType = {
 export type ClientType = {
     _id: string;
     fullName: string;
+    isFavourite: boolean;
     createdAt?: Date;
     contacts: ContactType;
     avatar?: File | string;

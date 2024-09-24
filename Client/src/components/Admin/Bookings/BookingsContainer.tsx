@@ -67,9 +67,8 @@ export const BookingsContainer: React.FC = () => {
 
   const changeStatusCallBack = (
     id: string,
-    status: boolean
   ) => {
-    dispatch(changeStatus(id, status));
+    dispatch(changeStatus(id));
   };
 
   const removeCallBack = (

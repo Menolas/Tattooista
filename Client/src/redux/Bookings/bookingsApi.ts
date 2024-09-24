@@ -41,8 +41,8 @@ export const bookingsApi = {
     ).then(response => response.data);
   },
 
-  async changeConsultationStatus(id: string, status: boolean) {
-    return await instance.patch<ChangeBookingStatusResponseType>(`bookings/status/${id}`, {status: status})
+  async changeConsultationStatus(id: string) {
+    return await instance.patch<ChangeBookingStatusResponseType>(`bookings/status/${id}`)
       .then(response => response.data);
   },
 
