@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Field, Form, Formik, FormikHelpers} from "formik";
@@ -33,7 +35,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
                     'fileSize',
                     'Max allowed size is 1024*1024',
                     (value) => {
-                    if (value instanceof File) {
+                    if (value && typeof value === 'object' && value instanceof File) {
                         return isFileSizeValid([value], MAX_FILE_SIZE);
                     }
                     return true
@@ -42,7 +44,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
                     'fileType',
                     'Invalid file type',
                     (value) => {
-                    if (value instanceof File) {
+                    if (value && typeof value === 'object' && value instanceof File) {
                         return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
                     }
                     return true;
@@ -118,6 +120,7 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
             const value = values[valueKey];
 
             if (value !== undefined && value !== null) {
+                // @ts-ignore
                 if (typeof value === 'object' || value instanceof File) {
                     formData.append(key, value);
                 }
