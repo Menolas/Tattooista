@@ -1,7 +1,7 @@
 import axios, {CreateAxiosDefaults} from "axios";
 import {IUser} from "../types/Types";
 
-export const API_URL = `http://localhost:3030`;
+export const API_URL = process.env.API_URL;
 
 export interface AuthResponse {
     accessToken: string
