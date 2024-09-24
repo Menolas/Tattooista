@@ -18,7 +18,7 @@ const UPDATE_ARCHIVED_GALLERY_ITEM = 'UPDATE_ARCHIVED_GALLERY_ITEM';
 const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY';
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM';
 
-const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
+//const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
 const RESTORE_GALLERY_ITEM_FROM_ARCHIVE = 'You successfully restored gallery image';
 
 const initialState = {
@@ -174,9 +174,9 @@ type UpdateArchivedGalleryItemAT = {
   archivedGalleryItem: GalleryItemType;
 };
 
-const updateArchivedGalleryItemAC = (archivedGalleryItem: GalleryItemType): UpdateArchivedGalleryItemAT => ({
-  type: UPDATE_ARCHIVED_GALLERY_ITEM, archivedGalleryItem
-});
+// const updateArchivedGalleryItemAC = (archivedGalleryItem: GalleryItemType): UpdateArchivedGalleryItemAT => ({
+//   type: UPDATE_ARCHIVED_GALLERY_ITEM, archivedGalleryItem
+// });
 
 
 //thunks

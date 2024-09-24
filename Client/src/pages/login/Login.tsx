@@ -1,7 +1,5 @@
 import * as React from "react";
 import {LoginForm} from "../../components/Forms/LoginForm";
-import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
 
 type PropsType = {
   isUserActivated: boolean | undefined;
