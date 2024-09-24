@@ -99,7 +99,7 @@ class usersController {
             const hashPassword = await bcrypt.hash(password, 3);
             if (res.user.email !== email) {
                 res.user.activationLink = uuid.v4();
-                await mailService.sendActivationMail(email, `${process.env.API_URL}/auth/activate/${res.user.activationLink}`);
+                await mailService.sendActivationMail(email, `${process.env.CLIENT_URL}/auth/activate/${res.user.activationLink}`);
                 res.user.isActivated = false;
             }
             res.user.displayName = displayName;

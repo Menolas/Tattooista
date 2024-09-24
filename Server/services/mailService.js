@@ -17,7 +17,7 @@ class MailService {
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
-            subject: 'Account activation on ' + process.env.API_URL,
+            subject: 'Account activation on ' + process.env.CLIENT_URL,
             text: '',
             html:
                 `
@@ -52,7 +52,7 @@ class MailService {
             html:
                 `
                      <div>
-                         <img src="${process.env.API_URL}/logo.ico" alt="Logo" style="width: 100px; height: auto;">
+                         <img src="${process.env.CLIENT_URL}/logo.ico" alt="Logo" style="width: 100px; height: auto;">
                          <h1>You have a new request for consultation</h1>
                          <div>
                              ${bookingInfo()}

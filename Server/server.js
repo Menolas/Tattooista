@@ -18,7 +18,7 @@ const faqRouter = require('./routes/FaqRoutes');
 const serviceRouter = require('./routes/ServiceRoutes');
 const pagesRouter = require('./routes/PagesRoutes');
 const usersRouter = require('./routes/UsersRoutes');
-//const rateLimit = require("express-rate-limit");
+const rateLimit = require("express-rate-limit");
 
 mongoose.set('strictQuery', false);
 
@@ -30,6 +30,15 @@ app.use(cors({
 }));
 app.use(fileUpload({createParentPath: true,}));
 app.use('/', express.static(__dirname + '/uploads'));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
+
+//Routes
 app.use('/bookings/', bookingRouter);
 app.use('/clients/', clientRouter);
 app.use('/auth/', authRouter);
@@ -39,12 +48,8 @@ app.use('/faq/', faqRouter);
 app.use('/services/', serviceRouter);
 app.use('/pages/', pagesRouter);
 app.use('/users/', usersRouter);
-app.use(errorMiddleware);
 
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100 // limit each IP to 100 requests per windowMs
-// });
+app.use(errorMiddleware);
 
 const start = async () => {
   try {
@@ -62,5 +67,3 @@ const start = async () => {
 }
 
 start();
-
-

@@ -140,6 +140,10 @@ export const Client: React.FC<PropsType> = React.memo(({
               data-tooltip-id="my-tooltip"
               data-tooltip-content="Mark as favorite"
               className={"btn btn--icon"}
+              onClick={(event) => {
+                  event.stopPropagation();
+                  console.log("hey")
+              }}
           >
               { data.isFavourite ? <Star/> : <StarFilled/> }
           </button>

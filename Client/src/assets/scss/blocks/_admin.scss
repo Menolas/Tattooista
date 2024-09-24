@@ -161,6 +161,7 @@
 .admin__card-link {
   @include link-style;
   display: flex;
+  align-items: flex-start;
   gap: 1rem;
   width: 100%;
   height: 100%;
