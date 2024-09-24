@@ -22,7 +22,7 @@ export const AuthManager = ({children}: AuthManagerProps) => {
         if (isAuth && !user?.isActivated) navigate("registration");
         dispatch(checkAuth());
 
-    }, [location.pathname, isAuth, user?.isActivated]);
+    }, [location.pathname, isAuth, user?.isActivated, dispatch, navigate]);
 
     return (
         <div className={"app"}>

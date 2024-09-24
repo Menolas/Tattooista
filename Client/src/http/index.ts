@@ -1,7 +1,7 @@
 import axios, {CreateAxiosDefaults} from "axios";
 import {IUser} from "../types/Types";
 
-export const API_URL = process.env.API_URL;
+export const API_URL = process.env.REACT_APP_API_URL;
 
 export interface AuthResponse {
     accessToken: string
