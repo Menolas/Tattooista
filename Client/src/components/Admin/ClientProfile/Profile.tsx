@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {ClientType, ContactType} from "../../../types/Types";
 import {API_URL} from "../../../http";
 import {ModalPopUp} from "../../common/ModalPopUp";
@@ -30,23 +30,12 @@ export const Profile: React.FC<PropsType> = React.memo(({
     remove,
     archive,
 }) => {
-    const navigate = useNavigate();
 
     const { clientId } = useParams();
 
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [clientId]);
-
-    useEffect(() => {
-        if (editClientMode && apiError === null) {
-            setEditClientMode(false);
-        }
-    }, [apiError]);
-
-  const [editClientMode, setEditClientMode] = useState<boolean>(false);
-  const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
-  const [carouselData, setCarouselData] = useState<{
+    const [editClientMode, setEditClientMode] = useState<boolean>(false);
+    const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
+    const [carouselData, setCarouselData] = useState<{
         isOpen: boolean, activeIndex?: number}>({isOpen: false});
 
     const [confirmationData, setConfirmationData] = useState<{
@@ -56,7 +45,17 @@ export const Profile: React.FC<PropsType> = React.memo(({
         context: string
     }>({needConfirmation: false, context: ''});
 
-  const modalTitle = 'EDIT CLIENT';
+    const modalTitle = 'EDIT CLIENT';
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [clientId]);
+
+    useEffect(() => {
+        if (editClientMode && apiError === null) {
+            setEditClientMode(false);
+        }
+    }, [apiError, editClientMode]);
 
   const closeModal = () => {
     setEditClientMode(false);

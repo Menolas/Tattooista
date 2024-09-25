@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import { Preloader } from "../../common/Preloader";
 import {GalleryItemType, StyleType} from "../../../types/Types";
 import {API_URL} from "../../../http";
@@ -62,7 +62,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
     }
   };
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (galleryRef.current) {
       const rect = galleryRef.current.getBoundingClientRect();
       const isAtBottom = rect.bottom <= window.innerHeight;
@@ -71,13 +71,13 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
         fetchData();
       }
     }
-  };
+  }, [isLoading, items, totalCount, fetchData]);
 
   useEffect(() => {
     setItems([]);
     setPage(1);
     dispatch(getGallery(activeStyle?._id, 1, pageSize));
-  }, [activeStyle, dispatch]);
+  }, [activeStyle, dispatch, pageSize]);
 
   useEffect(() => {
     setItems(gallery);
@@ -86,7 +86,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isLoading, items, totalCount]);
+  }, [isLoading, items, totalCount, handleScroll]);
 
   const [carouselData, setCarouselData] = useState<{
     isOpen: boolean,

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react"
+import {useCallback, useEffect, useState} from "react"
 import {PageType} from "../../../types/Types";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as EyeIcon} from "../../../assets/svg/eye.svg";
@@ -36,16 +36,16 @@ export const About: React.FC<PropsType> = React.memo(({
 
     const [isEditMode, setIsEditMode] = useState(false);
 
-    const closeEditModal = () => {
+    const closeEditModal = useCallback(() => {
         setIsEditMode(false);
         setApiError();
-    }
+    }, [setApiError]);
 
     useEffect(() => {
         if (isEditMode && apiError === null) {
             closeEditModal();
         }
-    }, [apiError]);
+    }, [apiError, closeEditModal, isEditMode]);
 
     const editModalTitle = 'Update "about" block';
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {ServiceType} from "../../../types/Types";
 import {ServiceItem} from "./ServiceItem";
 import {ModalPopUp} from "../../common/ModalPopUp";
@@ -34,21 +34,21 @@ export const Services: React.FC<PropsType> = React.memo(({
 
   const [updateServiceData, setUpdateServiceData] = useState<UpdateServiceDataType>({isUpdateMode: false});
 
+  const closeUpdateServiceModal = useCallback(() => {
+    setUpdateServiceData({
+        isUpdateMode: false,
+        isAdd: false,
+        isEdit: false,
+        service: null,
+    });
+    setApiError();
+  }, [setApiError]);
+
   useEffect(() => {
     if (updateServiceData.isUpdateMode && apiError === null) {
         closeUpdateServiceModal();
     }
-  }, [apiError]);
-
-  const closeUpdateServiceModal = () => {
-      setUpdateServiceData({
-          isUpdateMode: false,
-          isAdd: false,
-          isEdit: false,
-          service: null,
-      });
-      setApiError();
-  };
+  }, [apiError, closeUpdateServiceModal , updateServiceData.isUpdateMode]);
 
   const updateServiceModalTitle = 'Update "Services" block';
   const addServiceModalTitle = 'Add a new Service';

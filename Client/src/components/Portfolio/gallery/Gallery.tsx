@@ -51,7 +51,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 
   useEffect(() => {
     dispatch(getGallery(activeStyle?._id, currentPage, pageSize))
-  }, [activeStyle, currentPage, pageSize]);
+  }, [activeStyle, currentPage, pageSize, dispatch]);
 
   const deleteGalleryItemCallBack = (itemId: string) => {
     dispatch(deleteGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));

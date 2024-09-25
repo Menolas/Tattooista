@@ -1,7 +1,7 @@
 import * as React from "react";
 import {GalleryItemType} from "../../types/Types";
 import {MyCarousel} from "./MyCarousel";
-import {useCallback, useEffect, useRef} from "react";
+import {useCallback, useEffect,} from "react";
 
 type SliderProps = {
     GalleryImgUrl: string;
@@ -48,9 +48,7 @@ export const ImageFullView: React.FC<PropsType> = React.memo(({
                 event.preventDefault();
                 closeImg();
             }
-        },
-        []
-    );
+        }, [closeImg]);
 
     useEffect(() => {
         if (isOpen) {

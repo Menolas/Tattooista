@@ -6,7 +6,7 @@ import {
     StyleType
 } from "../../types/Types";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import {
   setSuccessModalAC,
 } from "../../redux/General/general-reducer";
@@ -64,12 +64,12 @@ export const MainPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(getStyles(token, true));
-  }, []);
+  }, [dispatch, token]);
 
 useEffect(() => {
     console.log('styles 1 ', styles[0]);
     dispatch(setActiveStyle(styles[0]));
-}, [styles]);
+}, [dispatch, styles]);
 
   useEffect(() => {
     if (successModal.isSuccess) {
@@ -77,15 +77,15 @@ useEffect(() => {
           dispatch(setSuccessModalAC(false, ''));;
         }, 3000);
     }
-  }, [successModal]);
+  }, [dispatch, successModal]);
 
   const setActiveStyleCallBack = (style: StyleType) => {
     dispatch(setActiveStyle(style));
   }
 
-  const setSuccessModalCallBack = () => {
+  const setSuccessModalCallBack = useCallback(() => {
     dispatch(setSuccessModalAC(false, ''));
-  }
+  }, [dispatch]);
 
   return (
     <>

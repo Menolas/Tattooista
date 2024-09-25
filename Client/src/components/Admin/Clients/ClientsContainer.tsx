@@ -5,7 +5,6 @@ import {
   getClients,
   setClientsCurrentPageAC,
   deleteClient,
-  deleteClientGalleryPicture,
   archiveClient,
   setPageSize,
   setFilterAC,
@@ -77,10 +76,6 @@ export const ClientsContainer: React.FC = () => {
     clientsPageSize: number
   ) => {
     dispatch(setPageSize(clientsPageSize));
-  };
-
-  const deleteClientGalleryPictureCallBack = (clientId: string, picture: string) => {
-    dispatch(deleteClientGalleryPicture(clientId, picture));
   };
 
   const archiveClientCallBack = (clientId: string) => {

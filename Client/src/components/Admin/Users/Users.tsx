@@ -6,7 +6,7 @@ import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
 import { usersFilterSelectOptions } from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 import {Navigate} from "react-router";
@@ -49,18 +49,18 @@ export const Users: React.FC<PropsType> = React.memo(({
     const [editUserMode, setEditMode] = useState<boolean>(false);
     const [data, setData] = useState<UserType | null>(null);
 
-    useEffect(() => {
-        if ((addUserMode || editUserMode) && apiError === null) {
-            closeModal();
-        }
-    }, [apiError]);
-
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         setAddMode(false);
         setEditMode(false);
         setData(null);
         setApiError();
-    }
+    }, [setApiError]);
+
+    useEffect(() => {
+        if ((addUserMode || editUserMode) && apiError === null) {
+            closeModal();
+        }
+    }, [apiError, addUserMode, editUserMode, closeModal]);
 
     const addUserModalTitle = 'ADD USER';
     const editUserModalTitle = 'Edit USER';

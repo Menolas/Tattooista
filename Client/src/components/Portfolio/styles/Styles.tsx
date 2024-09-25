@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
 import {StyleType} from "../../../types/Types";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
@@ -59,6 +59,13 @@ export const Styles: React.FC<PropsType> = React.memo(({
   }>({needConfirmation: false, context: ''});
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const closeModal = useCallback(() => {
+    setAddMode(false);
+    setEditMode(false);
+    setStyle(null);
+    setApiError();
+  }, [setApiError]);
+
   useEffect(() => {
     const newActiveIndex = styles.findIndex(style => style._id === activeStyle?._id);
     setActiveIndex(newActiveIndex);
@@ -68,14 +75,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
     if ((editMode || addMode) && apiError === null) {
       closeModal();
     }
-  }, [apiError]);
-
-  const closeModal = () => {
-    setAddMode(false);
-    setEditMode(false);
-    setStyle(null);
-    setApiError();
-  }
+  }, [apiError, addMode, closeModal, editMode]);
 
   const closeConfirmationModalCallBack = () => {
     setConfirmationData({needConfirmation: false, context: ''});

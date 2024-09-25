@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import { Client } from "./Client";
 import { Paginator } from "../../common/Paginator";
 import { ModalPopUp } from "../../common/ModalPopUp";
@@ -59,23 +59,23 @@ export const Clients: React.FC<PropsType> = React.memo(({
   const [editClientMode, setEditClientMode] = useState<boolean>(false);
   const [client, setClient] = useState<ClientType | null>(null);
 
-  useEffect(() => {
-    if ((addClientMode || editClientMode || editGalleryMode) && clientsApiError === null) {
-        closeModal();
-    }
-  }, [clientsApiError]);
-
-  const refreshClientData = (updatedClient: ClientType | null) => {
-      setClient(updatedClient);
-  };
-
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setAddClientMode(false);
     setEditClientMode(false);
     setEditGalleryMode(false);
     setClient(null);
     setClientsApiError();
-  }
+  }, [setClientsApiError]);
+
+  useEffect(() => {
+    if ((addClientMode || editClientMode || editGalleryMode) && clientsApiError === null) {
+        closeModal();
+    }
+  }, [clientsApiError, addClientMode, closeModal, editClientMode, editGalleryMode]);
+
+  const refreshClientData = (updatedClient: ClientType | null) => {
+      setClient(updatedClient);
+  };
 
   const modalTitleAddClient = 'ADD CLIENT';
   const modalTitleUpdateClient = 'EDIT CLIENT';
