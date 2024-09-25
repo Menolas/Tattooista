@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import { Navigate } from "react-router";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
@@ -60,16 +60,16 @@ export const Bookings: React.FC<PropsType> = React.memo(({
 
     const [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
       setAddConsultationMode(false);
-      setApiError()
-    }
+      setApiError();
+    }, [setApiError]);
 
     useEffect(() => {
       if (addConsultationMode && apiError === null) {
         closeModal();
       }
-    }, [apiError]);
+    }, [apiError, addConsultationMode, closeModal]);
 
 
   const modalTitle = 'Add a Consultation';

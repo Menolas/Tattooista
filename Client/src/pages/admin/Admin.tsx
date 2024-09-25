@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Navigate, NavLink, useLocation, useNavigate} from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -8,7 +8,7 @@ import {
 } from "../../redux/Auth/auth-selectors";
 import {ADMIN_BUTTONS_DATA} from "../../utils/constants";
 import {ReactComponent as AdminIcon} from "../../assets/svg/admin.svg";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {
     getSuccessModalSelector
@@ -37,6 +37,10 @@ export const Admin: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const setSuccessModalCallBack = useCallback(() => {
+    dispatch(setSuccessModalAC(false, ''));
+  }, [dispatch]);
+
   useEffect(() => {
     if (!isAuth) {
         dispatch(setFromAC(location.pathname));
@@ -44,7 +48,7 @@ export const Admin: React.FC = () => {
     } else if (isAuth && user?.isActivated !== true) {
         navigate('/registration');
     }
-  }, [isAuth, location.pathname]);
+  }, [dispatch, navigate, isAuth, user?.isActivated, location.pathname]);
 
   useEffect(() => {
     if (successModal.isSuccess) {
@@ -52,13 +56,9 @@ export const Admin: React.FC = () => {
             setSuccessModalCallBack();
         }, 3000);
     }
-  }, [successModal]);
+  }, [setSuccessModalCallBack, successModal]);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const setSuccessModalCallBack = () => {
-    dispatch(setSuccessModalAC(false, ''));
-  }
 
   const AdminButton = ({
     btn

@@ -47,11 +47,11 @@ export const BookingsContainer: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBookings(token || "", currentPage, pageSize, filter));
-  }, [token, currentPage, pageSize, filter]);
+  }, [token, currentPage, pageSize, filter, dispatch]);
 
   useEffect(() => {
     dispatch(setCurrentPageAC(1));
-  }, [filter]);
+  }, [filter, dispatch]);
 
   const setCurrentPageCallBack = (
     page: number

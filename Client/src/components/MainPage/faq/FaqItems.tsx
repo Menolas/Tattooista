@@ -35,7 +35,7 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
       setUpdateFaqItemData({isUpdateMode: false});
       setAddFaqItemMode(false);
     }
-  }, [apiError]);
+  }, [apiError, addFaqItemMode, updateFaqItemData.isUpdateMode]);
 
   const updateFaqItemModalTitle = 'Update FAQ';
   const addFaqItemTitle = 'Add FAQ';

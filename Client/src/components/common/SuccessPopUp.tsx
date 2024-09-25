@@ -15,15 +15,12 @@ export const SuccessPopUp: React.FC<PropsType> = React.memo(({
    closeModal,
 }) => {
 
-    const handleKeyDown = useCallback(
-        (event: KeyboardEvent) => {
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
             if (event.key === "Enter") {
                 event.preventDefault();
                 closeModal();
             }
-        },
-        []
-    );
+        }, [closeModal]);
 
     useEffect(() => {
         if (isOpen) {

@@ -25,7 +25,7 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
             event.preventDefault();
             closeModal();
         }
-    }, []);
+    }, [closeModal]);
 
   useEffect(() => {
     if (isOpen) {

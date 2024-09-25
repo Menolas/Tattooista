@@ -13,6 +13,7 @@ export const isFileSizeValid = (files: Array<File>, maxSize: number): boolean =>
             if (fileSize > maxSize) {
                 valid = false
             }
+            return file;
         });
     }
     return valid;
@@ -25,6 +26,7 @@ export function isFileTypesValid(files: Array<File>, authorizedExtensions: Array
             if (!authorizedExtensions.includes(file.type)) {
                 valid = false;
             }
+            return file;
         });
     }
     return valid;

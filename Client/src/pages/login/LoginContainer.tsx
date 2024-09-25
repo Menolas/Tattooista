@@ -28,7 +28,7 @@ export const LoginContainer: React.FC = () => {
         navigate("/");
       }
     }
-  }, [isAuth , user?.isActivated]);
+  }, [from, navigate, isAuth , user?.isActivated]);
 
   return (
     <Login

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {ModalPopUp} from "./ModalPopUp";
 import {BookingForm} from "../Forms/BookingForm";
 import * as React from "react";
@@ -22,23 +22,9 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
     const successModal = useSelector(getSuccessModalSelector);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (successModal.isSuccess) {
-            setTimeout( () => {
-                dispatch(setSuccessModalAC(false, ''));
-            }, 3000);
-        }
-    }, [successModal]);
-
-    useEffect(() => {
-        if (bookingModal && apiError === null) {
-            closeBookingModal();
-        }
-    }, [apiError]);
-
-    const setSuccessModalCallBack = () => {
+    const setSuccessModalCallBack = useCallback(() => {
         dispatch(setSuccessModalAC(false, ''));
-    }
+    }, [dispatch]);
 
     const [bookingModal, setBookingModal] = useState(false);
 
@@ -46,12 +32,26 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
 
     const showBookConsultationModal = () => {
         setBookingModal(true);
-    }
+    };
 
-    const closeBookingModal = () => {
+    const closeBookingModal = useCallback(() => {
         setBookingModal(false);
         dispatch(setApiErrorAC(null));
-    }
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                dispatch(setSuccessModalAC(false, ''));
+            }, 3000);
+        }
+    }, [successModal, dispatch]);
+
+    useEffect(() => {
+        if (bookingModal && apiError === null) {
+            closeBookingModal();
+        }
+    }, [apiError, bookingModal, closeBookingModal]);
 
     return (
         <div className={'bookingBtnBlock'}>

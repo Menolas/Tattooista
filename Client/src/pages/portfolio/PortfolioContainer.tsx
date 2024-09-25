@@ -1,6 +1,6 @@
 import * as React from "react";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     getApiErrorSelector,
@@ -55,6 +55,34 @@ export const PortfolioContainer: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const resetActiveStyleCallBack = (style: StyleType) => {
+        dispatch(setActiveStyle(style));
+    };
+
+    const removeStyleCallBack = (id: string) => {
+        dispatch(deleteStyle(id));
+    };
+
+    const setPageCallBack = (page: number) => {
+        dispatch(setCurrentGalleryPageAC(page));
+    };
+
+    const setGalleryPageSizeCallBack = (pageSize: number) => {
+        dispatch(setGalleryPageSizeAC(pageSize));
+    };
+
+    const setApiErrorCallBack = () => {
+        dispatch(setApiErrorAC(null));
+    };
+
+    const setGalleryApiErrorCallBack = () => {
+        dispatch(setGalleryApiErrorAC(null));
+    };
+
+    const setSuccessModalCallBack = useCallback(() => {
+        dispatch(setSuccessModalAC(false, ''));
+    }, [dispatch]);
+
     const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
 
     useEffect(() => {
@@ -92,35 +120,7 @@ export const PortfolioContainer: React.FC = () => {
                 setSuccessModalCallBack();
             }, 3000);
         }
-    }, [successModal]);
-
-    const resetActiveStyleCallBack = (style: StyleType) => {
-        dispatch(setActiveStyle(style));
-    };
-
-    const removeStyleCallBack = (id: string) => {
-        dispatch(deleteStyle(id));
-    };
-
-    const setPageCallBack = (page: number) => {
-        dispatch(setCurrentGalleryPageAC(page));
-    };
-
-    const setGalleryPageSizeCallBack = (pageSize: number) => {
-        dispatch(setGalleryPageSizeAC(pageSize));
-    };
-
-    const setApiErrorCallBack = () => {
-        dispatch(setApiErrorAC(null));
-    };
-
-    const setGalleryApiErrorCallBack = () => {
-        dispatch(setGalleryApiErrorAC(null));
-    };
-
-    const setSuccessModalCallBack = () => {
-        dispatch(setSuccessModalAC(false, ''));
-    };
+    }, [successModal, setSuccessModalCallBack]);
 
     return (
         <div>

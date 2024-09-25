@@ -32,11 +32,11 @@ export const ProfileContainer: React.FC = () => {
     if (urlParams.get('clientId')) actualId = urlParams.get('clientId');
     if (actualId) dispatch(getClientProfile(actualId));
 
-  }, []);
+  }, [dispatch, profile?._id]);
 
   useEffect(() => {
     if(profile) navigate(`?clientId=${profile._id}`)
-  }, [profile]);
+  }, [profile, navigate]);
 
   const setApiErrorCallBack = () => {
     dispatch(setApiErrorAC(null));
