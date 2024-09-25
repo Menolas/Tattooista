@@ -56,6 +56,7 @@ export const FormSelect: React.FC<PropsType> = ({
             onKeyDown={(event) => {
                 onKeyDown(event)
             }}
+            classNamePrefix={meta.touched && meta.error ? "has-error" : ""}
         />
     );
 };

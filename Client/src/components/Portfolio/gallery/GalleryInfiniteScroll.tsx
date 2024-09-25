@@ -39,7 +39,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ErrorType | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
 
     if (items.length >= totalCount) {
       return;
@@ -60,7 +60,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeStyle, items, totalCount, page, pageSize]);
 
   const handleScroll = useCallback(() => {
     if (galleryRef.current) {
