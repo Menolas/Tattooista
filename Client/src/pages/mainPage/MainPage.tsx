@@ -67,7 +67,6 @@ export const MainPage: React.FC = () => {
   }, [dispatch, token]);
 
 useEffect(() => {
-    console.log('styles 1 ', styles[0]);
     dispatch(setActiveStyle(styles[0]));
 }, [dispatch, styles]);
 
