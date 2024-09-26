@@ -51,13 +51,12 @@ class MailService {
             text: '',
             html:
                 `
+                 <div>
+                     <h1>You have a new request for consultation</h1>
                      <div>
-                         <img src="${process.env.CLIENT_URL}/logo.ico" alt="Logo" style="width: 100px; height: auto;">
-                         <h1>You have a new request for consultation</h1>
-                         <div>
-                             ${bookingInfo()}
-                         </div>
+                         ${bookingInfo()}
                      </div>
+                 </div>
                 `
         });
     }
