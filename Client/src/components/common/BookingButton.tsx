@@ -31,10 +31,13 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
     const modalTitle = 'FILL THE FORM AND WE WILL CONTACT YOU SOON';
 
     const showBookConsultationModal = () => {
+        console.log("showBookConsultationModal called");
         setBookingModal(true);
+        console.log("bookingModal state after setBookingModal(true):", bookingModal);
     };
 
     const closeBookingModal = useCallback(() => {
+        console.log("closeBookingModal called");
         setBookingModal(false);
         dispatch(setApiErrorAC(null));
     }, [dispatch]);
@@ -47,11 +50,11 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
         }
     }, [successModal, dispatch]);
 
-    useEffect(() => {
-        if (bookingModal && apiError === null) {
-            closeBookingModal();
-        }
-    }, [apiError, bookingModal, closeBookingModal]);
+    // useEffect(() => {
+    //     if (bookingModal && apiError === null) {
+    //         closeBookingModal();
+    //     }
+    // }, [apiError, bookingModal, closeBookingModal]);
 
     return (
         <div className={'bookingBtnBlock'}>

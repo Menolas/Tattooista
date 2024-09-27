@@ -50,7 +50,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
             dispatch(getStyles(token));
         }
         dispatch(getArchivedGallery(currentPage, pageSize));
-    }, [currentPage, pageSize, dispatch, token, styles]);
+    }, [currentPage, pageSize, dispatch, token, styles.length]);
 
     const [confirmationData, setConfirmationData] = useState<{
         needConfirmation: boolean,
