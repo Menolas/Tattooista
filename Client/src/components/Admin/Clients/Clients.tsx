@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import { Client } from "./Client";
 import { Paginator } from "../../common/Paginator";
 import { ModalPopUp } from "../../common/ModalPopUp";
