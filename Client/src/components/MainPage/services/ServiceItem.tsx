@@ -45,7 +45,9 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
         remove(service._id);
     };
 
-    const wallPaperUrl = `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`;
+    const wallPaperUrl = service.wallPaper
+        ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
+        : "./uploads/ServicesWallpapers/service.jpg";
 
     return (
         <li className="services__item">
