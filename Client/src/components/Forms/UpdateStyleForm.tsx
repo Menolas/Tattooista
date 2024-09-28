@@ -119,11 +119,10 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
             const valueKey = key as keyof UpdateStyleFormValues;
             const value = values[valueKey];
 
-            if (value !== undefined && value !== null) {
-                // @ts-ignore
-                if (typeof value === 'object' || value instanceof File) {
-                    formData.append(key, value);
-                }
+            if (value instanceof File) {
+                formData.append(valueKey, value);
+            } else if (typeof value === 'string') {
+                formData.append(valueKey, value);
             }
         }
        try {

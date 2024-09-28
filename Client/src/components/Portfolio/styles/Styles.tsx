@@ -71,11 +71,11 @@ export const Styles: React.FC<PropsType> = React.memo(({
     setActiveIndex(newActiveIndex);
   }, [activeStyle, styles]);
 
-  useEffect(() => {
-    if ((editMode || addMode) && apiError === null) {
-      closeModal();
-    }
-  }, [apiError, addMode, closeModal, editMode]);
+  // useEffect(() => {
+  //   if ((editMode || addMode) && apiError === null) {
+  //     closeModal();
+  //   }
+  // }, [apiError, addMode, closeModal, editMode]);
 
   const closeConfirmationModalCallBack = () => {
     setConfirmationData({needConfirmation: false, context: ''});

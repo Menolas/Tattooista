@@ -92,6 +92,7 @@ class stylesController {
 
   async updateTattooStyle(req, res) {
     const results = {};
+    console.log(req.body);
 
     try {
       const updatedStyle = await StyleService.editStyle(res.tattooStyle, req.body);

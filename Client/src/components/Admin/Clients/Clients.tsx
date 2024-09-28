@@ -67,11 +67,11 @@ export const Clients: React.FC<PropsType> = React.memo(({
     setClientsApiError();
   }, [setClientsApiError]);
 
-  useEffect(() => {
-    if ((addClientMode || editClientMode || editGalleryMode) && clientsApiError === null) {
-        closeModal();
-    }
-  }, [clientsApiError, addClientMode, closeModal, editClientMode, editGalleryMode]);
+  // useEffect(() => {
+  //   if ((addClientMode || editClientMode || editGalleryMode) && clientsApiError === null) {
+  //       closeModal();
+  //   }
+  // }, [clientsApiError, addClientMode, closeModal, editClientMode, editGalleryMode]);
 
   const refreshClientData = (updatedClient: ClientType | null) => {
       setClient(updatedClient);

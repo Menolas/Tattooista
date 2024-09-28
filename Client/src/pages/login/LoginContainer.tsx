@@ -16,7 +16,6 @@ export const LoginContainer: React.FC = () => {
   const authApiError = useSelector(getAuthApiErrorSelector);
   const user = useSelector(getUserSelector);
   const from = useSelector(getFromSelector);
-  console.log('from', from);
 
   const navigate = useNavigate();
 
