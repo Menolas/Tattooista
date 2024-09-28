@@ -1142,9 +1142,6 @@ img {
 }
 
 @media (min-width: 990px) {
-  .services {
-    padding-bottom: 180px;
-  }
   .services__list {
     column-gap: 8%;
     row-gap: 88px;
