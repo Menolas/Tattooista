@@ -30,12 +30,12 @@ export const FaqItems: React.FC<PropsType> = React.memo(({
     isUpdateMode: boolean, faqItem?: FaqType
   }>({isUpdateMode: false});
 
-  useEffect(() => {
-    if ((updateFaqItemData.isUpdateMode || addFaqItemMode) && apiError === null) {
-      setUpdateFaqItemData({isUpdateMode: false});
-      setAddFaqItemMode(false);
-    }
-  }, [apiError, addFaqItemMode, updateFaqItemData.isUpdateMode]);
+  // useEffect(() => {
+  //   if ((updateFaqItemData.isUpdateMode || addFaqItemMode) && apiError === null) {
+  //     setUpdateFaqItemData({isUpdateMode: false});
+  //     setAddFaqItemMode(false);
+  //   }
+  // }, [apiError, addFaqItemMode, updateFaqItemData.isUpdateMode]);
 
   const updateFaqItemModalTitle = 'Update FAQ';
   const addFaqItemTitle = 'Add FAQ';

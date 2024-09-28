@@ -44,11 +44,11 @@ export const Services: React.FC<PropsType> = React.memo(({
     setApiError();
   }, [setApiError]);
 
-  useEffect(() => {
-    if (updateServiceData.isUpdateMode && apiError === null) {
-        closeUpdateServiceModal();
-    }
-  }, [apiError, closeUpdateServiceModal , updateServiceData.isUpdateMode]);
+  // useEffect(() => {
+  //   if (updateServiceData.isUpdateMode && apiError === null) {
+  //       closeUpdateServiceModal();
+  //   }
+  // }, [apiError, closeUpdateServiceModal , updateServiceData.isUpdateMode]);
 
   const updateServiceModalTitle = 'Update "Services" block';
   const addServiceModalTitle = 'Add a new Service';
