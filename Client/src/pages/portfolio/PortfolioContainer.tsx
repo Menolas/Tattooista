@@ -87,6 +87,7 @@ export const PortfolioContainer: React.FC = () => {
 
     useEffect(() => {
         if (!hasFetchedStyles) {
+            console.log('!hasFetchedStyles fetching styles');
             dispatch(getStyles(token, false)).then(() => {
                 setHasFetchedStyles(true);
             });
@@ -95,6 +96,7 @@ export const PortfolioContainer: React.FC = () => {
 
     useEffect(() => {
         if (hasFetchedStyles) {
+            console.log('hasFetchedStyles fetching styles');
             if (activeStyleParam) {
                 const style = styles.find(style => style._id === activeStyleParam);
                 if (style) {
@@ -106,7 +108,7 @@ export const PortfolioContainer: React.FC = () => {
                 navigate(`/portfolio/${styles[0]._id}`);
             }
         }
-    }, [activeStyleParam, styles, hasFetchedStyles, dispatch, navigate]);
+    }, [activeStyleParam, hasFetchedStyles, dispatch, navigate]);
 
     useEffect(() => {
         if (activeStyle && activeStyle._id !== activeStyleParam) {

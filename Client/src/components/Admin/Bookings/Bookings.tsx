@@ -65,11 +65,11 @@ export const Bookings: React.FC<PropsType> = React.memo(({
       setApiError();
     }, [setApiError]);
 
-    useEffect(() => {
-      if (addConsultationMode && apiError === null) {
-        closeModal();
-      }
-    }, [apiError, addConsultationMode, closeModal]);
+    // useEffect(() => {
+    //   if (addConsultationMode && apiError === null) {
+    //     closeModal();
+    //   }
+    // }, [apiError, addConsultationMode, closeModal]);
 
 
   const modalTitle = 'Add a Consultation';
