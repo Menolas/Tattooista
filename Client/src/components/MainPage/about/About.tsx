@@ -41,11 +41,11 @@ export const About: React.FC<PropsType> = React.memo(({
         setApiError();
     }, [setApiError]);
 
-    useEffect(() => {
-        if (isEditMode && apiError === null) {
-            closeEditModal();
-        }
-    }, [apiError, closeEditModal, isEditMode]);
+    // useEffect(() => {
+    //     if (isEditMode && apiError === null) {
+    //         closeEditModal();
+    //     }
+    // }, [apiError, closeEditModal, isEditMode]);
 
     const editModalTitle = 'Update "about" block';
 
