@@ -23,15 +23,23 @@
     bottom: 0;
     background-image: linear-gradient(0deg, rgba(8,8,8,1) 0%, rgba(8,8,8,0) 100%);
   }
+
+  .container {
+    position: relative;
+    min-height: 700px;
+  }
 }
 
 .faq__list {
-  position: relative;
+  position: absolute;
+  top: 72px;
+  left: 50%;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 100%;
+  width: calc(100% - 2rem);
   z-index: 1;
+  transform: translate(-50%, 0);
 }
 
 .faq__item {
@@ -109,8 +117,15 @@
 }
 
 @media (min-width: 990px) {
+  .faq {
+    padding-bottom: 100px;
+    .container {
+      min-height: 800px;
+    }
+  }
 
   .faq__list {
+    top: 164px;
     width: 1000px;
   }
 
