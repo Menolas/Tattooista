@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Helmet } from 'react-helmet';
 import { MainOffer } from "../../components/MainPage/MainOffer";
 import { PortfolioSlider } from "../../components/MainPage/PortfolioSlider";
 import { Booking } from "../../components/MainPage/Booking";
@@ -37,9 +38,11 @@ import {AboutContainer} from "../../components/MainPage/about/AboutContainer";
 import {ServicesContainer} from "../../components/MainPage/services/SevicesContainer";
 import {FaqContainer} from "../../components/MainPage/faq/FaqContainer";
 import {Preloader} from "../../components/common/Preloader";
+import {WEB_APP_DESCRIPTION, WEB_APP_TITLE} from "../../utils/constants";
 
 export const MainPage: React.FC = () => {
 
+  const baseURL = process.env.REACT_APP_PUBLIC_URL;
   const pageSize = useSelector(getPageSizeSelector);
   const styles = useSelector(getStylesSelector);
   const successModal = useSelector(getSuccessModalSelector);
@@ -88,6 +91,18 @@ useEffect(() => {
 
   return (
     <>
+    <Helmet>
+        <title>{WEB_APP_TITLE}</title>
+        <meta name="description" content={`${WEB_APP_DESCRIPTION}`} />
+        <meta property="og:url" content={`${baseURL}/`} />
+        <meta property="og:title" content={`${WEB_APP_TITLE}`} />
+        <meta property="og:description" content={`${WEB_APP_DESCRIPTION}`} />
+        <meta property="og:image" content={`${baseURL}/uploads/facebookFlyer.png`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${WEB_APP_TITLE}`} />
+        <meta name="twitter:description" content={`${WEB_APP_DESCRIPTION}`} />
+        <meta name="twitter:image" content={`${baseURL}/uploads/instagramFlyer.png`} />
+    </Helmet>
       <MainOffer />
         {
             isFetching

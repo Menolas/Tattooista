@@ -1,3 +1,5 @@
+export const WEB_APP_TITLE = "Tattoo Artist Adeline Hobf";
+export const WEB_APP_DESCRIPTION = "Ah Tattooista is a custom tattoo studio where creativity meets skin. Explore unique designs, detailed craftsmanship, and book your consultation today."
 export const ACTIVE_TATTOO_STYLE_FALLBACK = "650349d7f56daad5f49df4e9";
 
 export const mainNavHashLinksData = [
