@@ -104,87 +104,89 @@ export const Styles: React.FC<PropsType> = React.memo(({
 
   return (
     <section className="tattoo-style page-block container">
+        <div className="container">
 
-        { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-          <button
-              className={"btn btn--sm btn--light-bg"}
-              onClick={() => {setAddMode(true)}}
-          >
-              Add a Tattoo Style
-          </button>
-        }
+            { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+              <button
+                  className={"btn btn--sm btn--light-bg"}
+                  onClick={() => {setAddMode(true)}}
+              >
+                  Add a Tattoo Style
+              </button>
+            }
 
-        <div className="tattoo-style__item-content">
-          { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
-              <div className={"tattoo-style__item-actions"}>
-                <button
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="Edit tattoo style"
-                    className={"btn btn--icon"}
-                    onClick={() => {
-                      setEditMode(true);
-                      setStyle(activeStyle);
-                    }}
-                >
-                  <EditIcon/>
-                </button>
-                { !activeStyle?.nonStyle &&
+            <div className="tattoo-style__item-content">
+              { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
+                  <div className={"tattoo-style__item-actions"}>
                     <button
                         data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Delete tattoo style"
+                        data-tooltip-content="Edit tattoo style"
                         className={"btn btn--icon"}
-                        disabled={isDeletingInProcess?.some(id => id === activeStyle?._id)}
                         onClick={() => {
-                          setConfirmationData({
-                            needConfirmation: true,
-                            itemId: activeStyle?._id,
-                            context: 'Are you sure? You about to delete this tattoo style along with all images.',
-                            cb: removeCallBack
-                          });
+                          setEditMode(true);
+                          setStyle(activeStyle);
                         }}
                     >
-                      <TrashIcon/>
+                      <EditIcon/>
                     </button>
-                }
-              </div>
-          }
-          {!isFetching
-              ? <div>
-                  <h1 className={'tattoo-style__title page-block__title'}>{activeStyle?.value}</h1>
-                  <div className={'tattoo-style__text'}>
-                    {activeStyle ? activeStyle.description : "---"}
+                    { !activeStyle?.nonStyle &&
+                        <button
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Delete tattoo style"
+                            className={"btn btn--icon"}
+                            disabled={isDeletingInProcess?.some(id => id === activeStyle?._id)}
+                            onClick={() => {
+                              setConfirmationData({
+                                needConfirmation: true,
+                                itemId: activeStyle?._id,
+                                context: 'Are you sure? You about to delete this tattoo style along with all images.',
+                                cb: removeCallBack
+                              });
+                            }}
+                        >
+                          <TrashIcon/>
+                        </button>
+                    }
                   </div>
-                </div>
-              : <Preloader />
-          }
+              }
+              {!isFetching
+                  ? <div>
+                      <h1 className={'tattoo-style__title page-block__title'}>{activeStyle?.value}</h1>
+                      <div className={'tattoo-style__text'}>
+                        {activeStyle ? activeStyle.description : "---"}
+                      </div>
+                    </div>
+                  : <Preloader />
+              }
+            </div>
+            <Advertisement/>
+            <Slider
+                items={stylesArray}
+                activeIndex={activeIndex}
+                breakpoints={responsive}
+            />
+            <ModalPopUp
+                isOpen={addMode || editMode}
+                modalTitle={'Update tattoo styles'}
+                closeModal={closeModal}
+            >
+              {
+                  <UpdateStyleForm
+                      apiError={apiError}
+                      isEditing={editMode}
+                      style={style}
+                      closeModal={closeModal}
+                  />
+              }
+            </ModalPopUp>
+            <Confirmation
+                isOpen={confirmationData.needConfirmation}
+                content={confirmationData.context}
+                confirm={() => confirmationData.cb ? confirmationData.cb() : undefined}
+                cancel={closeConfirmationModalCallBack}
+            />
+            <Tooltip id="my-tooltip" />
         </div>
-        <Advertisement/>
-        <Slider
-            items={stylesArray}
-            activeIndex={activeIndex}
-            breakpoints={responsive}
-        />
-        <ModalPopUp
-            isOpen={addMode || editMode}
-            modalTitle={'Update tattoo styles'}
-            closeModal={closeModal}
-        >
-          {
-              <UpdateStyleForm
-                  apiError={apiError}
-                  isEditing={editMode}
-                  style={style}
-                  closeModal={closeModal}
-              />
-          }
-        </ModalPopUp>
-        <Confirmation
-            isOpen={confirmationData.needConfirmation}
-            content={confirmationData.context}
-            confirm={() => confirmationData.cb ? confirmationData.cb() : undefined}
-            cancel={closeConfirmationModalCallBack}
-        />
-        <Tooltip id="my-tooltip" />
     </section>
   )
 });

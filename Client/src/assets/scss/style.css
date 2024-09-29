@@ -1207,14 +1207,21 @@ img {
   bottom: 0;
   background-image: linear-gradient(0deg, rgb(8, 8, 8) 0%, rgba(8, 8, 8, 0) 100%);
 }
+.faq .container {
+  position: relative;
+  min-height: 700px;
+}
 
 .faq__list {
-  position: relative;
+  position: absolute;
+  top: 72px;
+  left: 50%;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 100%;
+  width: calc(100% - 2rem);
   z-index: 1;
+  transform: translate(-50%, 0);
 }
 
 .faq__item {
@@ -1290,7 +1297,14 @@ img {
 }
 
 @media (min-width: 990px) {
+  .faq {
+    padding-bottom: 100px;
+  }
+  .faq .container {
+    min-height: 800px;
+  }
   .faq__list {
+    top: 164px;
     width: 1000px;
   }
   .faq__item {
