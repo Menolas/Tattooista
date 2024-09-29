@@ -23,7 +23,7 @@ export const Advertisement: React.FC = () => {
           <h3 className={'page-block__title-secondary'}>Share this page:</h3>
           <ul className="social-share__list list">
             <ShareButton socialLink={InstagramLink} icon=<InstagramIcon/> isInstagram={true}/>
-            <ShareButton socialLink={FacebookLink} icon=<FaceBookIcon/> handleClick={handleShareCallBack} />
+            <ShareButton socialLink={FacebookLink} icon=<FaceBookIcon/> />
             <ShareButton socialLink={LinkedinLink} icon=<LinkedinIcon/> handleClick={handleShareCallBack} />
             <ShareButton socialLink={TwitterLink} icon=<TwitterIcon/> handleClick={handleShareCallBack} />
           </ul>
