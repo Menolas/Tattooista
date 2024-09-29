@@ -15,14 +15,14 @@ export const Advertisement: React.FC = () => {
   const TwitterLink = `https://twitter.com/intent/tweet?url`;
   const handleShareCallBack = () => {
     handleShare('portfolio');
-  }
+  };
 
   return (
     <section className="advertisement">
       <div className="social-share">
           <h3 className={'page-block__title-secondary'}>Share this page:</h3>
           <ul className="social-share__list list">
-            <ShareButton socialLink={InstagramLink} icon=<InstagramIcon/> handleClick={handleShareCallBack}/>
+            <ShareButton socialLink={InstagramLink} icon=<InstagramIcon/> isInstagram={true}/>
             <ShareButton socialLink={FacebookLink} icon=<FaceBookIcon/> handleClick={handleShareCallBack} />
             <ShareButton socialLink={LinkedinLink} icon=<LinkedinIcon/> handleClick={handleShareCallBack} />
             <ShareButton socialLink={TwitterLink} icon=<TwitterIcon/> handleClick={handleShareCallBack} />

@@ -48,3 +48,13 @@ export const handleShare = (pageUrl: string) => {
         alert('Sharing is not supported in your browser.');
     }
 };
+
+export const copyToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href)
+        .then(() => {
+            alert("Page URL copied to clipboard!");
+        })
+        .catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+};
