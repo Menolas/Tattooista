@@ -14,7 +14,7 @@ import {
     getIsStyleDeletingInProcess,
     getStylesSelector
 } from "../../redux/Styles/styles-selectors";
-import {ADMIN, SUPER_ADMIN, USER} from "../../utils/constants";
+import {ADMIN, SUPER_ADMIN, USER, WEB_APP_DESCRIPTION, WEB_APP_TITLE} from "../../utils/constants";
 import {Gallery} from "../../components/Portfolio/gallery/Gallery";
 import {GalleryInfiniteScroll} from "../../components/Portfolio/gallery/GalleryInfiniteScroll";
 import {ApiErrorMessageModal} from "../../components/common/ApiErrorMessageModal";
@@ -32,8 +32,10 @@ import {
 } from "../../redux/Gallery/gallery-reducer";
 import {Styles} from "../../components/Portfolio/styles/Styles";
 import {StyleType} from "../../types/Types";
+import {Helmet} from "react-helmet";
 
 export const PortfolioContainer: React.FC = () => {
+    const baseURL = process.env.REACT_APP_PUBLIC_URL;
     const isAuth = useSelector(getAuthSelector);
     const token = useSelector(getTokenSelector);
     const isFetching = useSelector(getIsFetchingSelector);
@@ -123,7 +125,19 @@ export const PortfolioContainer: React.FC = () => {
     }, [successModal, setSuccessModalCallBack]);
 
     return (
-        <div>
+        <>
+            <Helmet>
+                <title>{WEB_APP_TITLE}</title>
+                <meta name="description" content={`${WEB_APP_DESCRIPTION}`} />
+                <meta property="og:url" content={`${baseURL}/`} />
+                <meta property="og:title" content={`${WEB_APP_TITLE}`} />
+                <meta property="og:description" content={`${WEB_APP_DESCRIPTION}`} />
+                <meta property="og:image" content={`${baseURL}/uploads/facebookFlyer.png`} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={`${WEB_APP_TITLE}`} />
+                <meta name="twitter:description" content={`${WEB_APP_DESCRIPTION}`} />
+                <meta name="twitter:image" content={`${baseURL}/uploads/instagramFlyer.png`} />
+            </Helmet>
             <Styles
                 apiError={apiError}
                 isAuth={isAuth}
@@ -169,6 +183,6 @@ export const PortfolioContainer: React.FC = () => {
                 closeModal={setSuccessModalCallBack}
                 content={successModal.successText}
             />
-        </div>
+        </>
     );
 };
