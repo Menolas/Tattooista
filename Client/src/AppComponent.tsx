@@ -76,7 +76,7 @@ const AppContainer = compose(withRouter)(App);
 
 export const AhTattooistaApp = () => {
     return (
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <BrowserRouter basename='/'>
             <Provider store={store}>
                 <AppContainer />
             </Provider>
