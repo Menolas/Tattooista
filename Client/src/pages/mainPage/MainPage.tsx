@@ -91,18 +91,6 @@ useEffect(() => {
 
   return (
     <>
-    <Helmet>
-        <title>{WEB_APP_TITLE}</title>
-        <meta name="description" content={`${WEB_APP_DESCRIPTION}`} />
-        <meta property="og:url" content={`${baseURL}/`} />
-        <meta property="og:title" content={`${WEB_APP_TITLE}`} />
-        <meta property="og:description" content={`${WEB_APP_DESCRIPTION}`} />
-        <meta property="og:image" content={`${baseURL}/uploads/facebookFlyer.png`} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${WEB_APP_TITLE}`} />
-        <meta name="twitter:description" content={`${WEB_APP_DESCRIPTION}`} />
-        <meta name="twitter:image" content={`${baseURL}/uploads/instagramFlyer.png`} />
-    </Helmet>
       <MainOffer />
         {
             isFetching
