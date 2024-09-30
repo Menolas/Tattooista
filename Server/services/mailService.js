@@ -51,8 +51,10 @@ class MailService {
             text: '',
             html:
                 `
-                 <div>
-                     <div><img src="${process.env.SERVER_URL}/logo.png" alt="" width="100" height="100"/></div>
+                 <div style="background-color: #080808; color: #afafaf; padding: 2rem;">
+                     <div style="text-align: center;">
+                         <img src="${process.env.SERVER_URL}/logo.png" alt="" width="100" height="100" style="object-fit: contain;"/>
+                     </div>
                      <h1 style="text-align: center;">You have a new request for consultation</h1>
                      <div>
                          ${bookingInfo()}
