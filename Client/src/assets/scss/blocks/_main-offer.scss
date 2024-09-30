@@ -23,19 +23,27 @@
     background-image: linear-gradient(0deg, rgba(8,8,8,1) 0%, rgba(8,8,8,0) 100%);
   }
 
-  .booking-btn {
+  .bookingBtnBlock {
     position: absolute;
     bottom: 0;
     left: 50%;
+    max-width: calc(100% - 2rem);
+    transform: translate(-50%, 70%);
+    z-index: 9;
+  }
+  .booking-btn {
+    //position: absolute;
+    //bottom: 0;
+    //left: 50%;
+    //max-width: calc(100% - 2rem);
+    //transform: translate(-50%, 70%);
+    z-index: 9;
     padding: 0 38px;
     height: 60px;
-    max-width: calc(100% - 2rem);
     font-size: 20px;
     font-weight: 600;
     color: $light-text;
     border-color: $light;
-    transform: translate(-50%, 70%);
-    z-index: 9;
   }
 }
 
@@ -108,6 +116,13 @@
 
     &::before {
       height: 187px;
+    }
+
+    .bookingBtnBlock {
+      position: relative;
+      bottom: unset;
+      left: unset;
+      transform: none;
     }
 
     .booking-btn {

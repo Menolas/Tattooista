@@ -67,7 +67,7 @@ const initialValues: BookConsultationFormValues = {
   messenger: '',
   message: 'Hey there,\n' +
       '\n' +
-      'I\'ve got a burning question about getting a tattoo and would love to get some insights from your awesome team. Do tattoos hurt more than the existential dread of knowing we\'re all just fleeting shadows in a vast, indifferent universe?\n' +
+      'I\'ve got a burning question about getting a tattoo. Do tattoos hurt more than the existential dread of knowing we\'re all just fleeting shadows in a vast, indifferent universe?\n' +
       '\n' +
       'Looking forward to your reply before my soul turns to dust.\n' +
       '\n' +
