@@ -24,8 +24,8 @@ export const Advertisement: React.FC = () => {
           <ul className="social-share__list list">
             <ShareButton socialLink={InstagramLink} icon=<InstagramIcon/> isInstagram={true}/>
             <ShareButton socialLink={FacebookLink} icon=<FaceBookIcon/> />
-            <ShareButton socialLink={LinkedinLink} icon=<LinkedinIcon/> handleClick={handleShareCallBack} />
-            <ShareButton socialLink={TwitterLink} icon=<TwitterIcon/> handleClick={handleShareCallBack} />
+            <ShareButton socialLink={LinkedinLink} icon=<LinkedinIcon/> />
+            <ShareButton socialLink={TwitterLink} icon=<TwitterIcon/> />
           </ul>
       </div>
       <BookingButton
