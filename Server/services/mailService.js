@@ -52,7 +52,8 @@ class MailService {
             html:
                 `
                  <div>
-                     <h1>You have a new request for consultation</h1>
+                     <div><img src="${process.env.SERVER_URL}/logo.png" alt="" width="100" height="100"/></div>
+                     <h1 style="text-align: center;">You have a new request for consultation</h1>
                      <div>
                          ${bookingInfo()}
                      </div>
