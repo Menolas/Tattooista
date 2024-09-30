@@ -27,7 +27,7 @@ class MailService {
                      </div>
                      <h1 style="text-align: center;">Congratulations! Now you are belong to the circle of chosens.</h1>
                      <p style="text-align: center;">Activate you account with one click</p>
-                     <a href=${link}>${link}</a>
+                     <a style="color: #fafafa;" href=${link}>${link}</a>
                  </div>
                  `
         });
