@@ -15,7 +15,7 @@ import {Slider} from "../../common/Slider";
 
 const responsive = {
   0: {
-    slidesPerView: 3,
+    slidesPerView: 2,
   },
   900: {
     slidesPerView: 4,
@@ -103,7 +103,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
     });
 
   return (
-    <section className="tattoo-style page-block container">
+    <section className="tattoo-style page-block">
         <div className="container">
 
             { (isAuth === ADMIN || isAuth === SUPER_ADMIN) &&
@@ -205,7 +205,7 @@ const Style = ({activeStyle, item, resetActiveStyle}: {
           }
           onClick={() => resetActiveStyle(item)}
       >
-        {item.value}
+          <span>{item.value}</span>
       </div>
   );
 };

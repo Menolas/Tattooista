@@ -774,19 +774,22 @@ img {
   right: 0;
   background-image: linear-gradient(0deg, rgb(8, 8, 8) 0%, rgba(8, 8, 8, 0) 100%);
 }
-.main-offer .booking-btn {
+.main-offer .bookingBtnBlock {
   position: absolute;
   bottom: 0;
   left: 50%;
+  max-width: calc(100% - 2rem);
+  transform: translate(-50%, 70%);
+  z-index: 9;
+}
+.main-offer .booking-btn {
+  z-index: 9;
   padding: 0 38px;
   height: 60px;
-  max-width: calc(100% - 2rem);
   font-size: 20px;
   font-weight: 600;
   color: #fafafa;
   border-color: #fafafa;
-  transform: translate(-50%, 70%);
-  z-index: 9;
 }
 
 .main-offer__content-wrap {
@@ -856,6 +859,12 @@ img {
   }
   .main-offer::before {
     height: 187px;
+  }
+  .main-offer .bookingBtnBlock {
+    position: relative;
+    bottom: unset;
+    left: unset;
+    transform: none;
   }
   .main-offer .booking-btn {
     position: static;
@@ -1637,7 +1646,10 @@ img {
 }
 .tattoo-style .tattoo-style__title {
   margin-bottom: 1rem;
-  font-size: 40px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 36px;
   text-align: center;
   text-transform: uppercase;
 }
@@ -1719,16 +1731,24 @@ img {
   width: unset !important;
 }
 .tattoo-style .tattoo-style__item {
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem;
+  max-width: 100%;
   font-size: 18px;
   font-weight: 600;
-  text-transform: capitalize;
+  overflow: hidden;
   color: #fafafa;
   border-color: #fafafa;
   cursor: pointer;
 }
 .tattoo-style .tattoo-style__item.btn--light-bg {
   color: #080808;
+}
+.tattoo-style .tattoo-style__item span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: capitalize;
 }
 .tattoo-style .tattoo-style__item-content {
   display: flex;
@@ -1767,6 +1787,7 @@ img {
     max-width: 1317px;
   }
   .tattoo-style.page-block .tattoo-style__item {
+    padding: 0.5rem 1.5rem;
     display: block;
     max-width: 100%;
     text-align: center;
@@ -2063,10 +2084,12 @@ img {
   padding: 60px 36px;
   width: 100%;
   max-width: 615px;
+  max-height: 90svh;
   background-image: url("../img/form-background.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-color: #fafafa;
+  overflow: auto;
 }
 
 .modal__header {

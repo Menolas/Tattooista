@@ -25,10 +25,12 @@
   padding: 60px 36px;
   width: 100%;
   max-width: 615px;
+  max-height: 90svh;
   background-image: url("../img/form-background.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-color: $light;
+  overflow: auto;
 }
 
 .modal__header {
