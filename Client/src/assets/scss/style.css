@@ -3470,7 +3470,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 }
 .read-more .read-more__button.expanded {
   margin-left: auto;
-  transform: translate(0, 200%);
+  transform: translate(2rem, 0);
 }
 
 .image-full-view .image-full-view__inner-wrap {
