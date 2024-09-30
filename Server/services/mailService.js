@@ -21,10 +21,14 @@ class MailService {
             text: '',
             html:
                 `
-                     <div>
-                         <h1>Activate you account with one click</h1>
-                         <a href=${link}>${link}</a>
+                 <div style="background-color: #080808; color: #fafafa; padding: 2rem;">
+                     <div style="text-align: center;">
+                         <img src="${process.env.SERVER_URL}/logo.png" alt="" width="100" height="100" style="object-fit: contain;"/>
                      </div>
+                     <h1 style="text-align: center;">Congratulations! Now you are belong to the circle of chosens.</h1>
+                     <p style="text-align: center;">Activate you account with one click</p>
+                     <a href=${link}>${link}</a>
+                 </div>
                  `
         });
     }
@@ -51,7 +55,7 @@ class MailService {
             text: '',
             html:
                 `
-                 <div style="background-color: #080808; color: #afafaf; padding: 2rem;">
+                 <div style="background-color: #080808; color: #fafafa; padding: 2rem;">
                      <div style="text-align: center;">
                          <img src="${process.env.SERVER_URL}/logo.png" alt="" width="100" height="100" style="object-fit: contain;"/>
                      </div>
