@@ -26,6 +26,7 @@ import {NoAccess} from "./components/NoAccess";
 import {MainPage} from "./pages/mainPage/MainPage";
 import {PortfolioContainer} from "./pages/portfolio/PortfolioContainer";
 import {MainWrap} from "./components/MainWrap";
+import {BookingProfileContainer} from "./components/Admin/BookingProfile/BookingProfileContainer";
 
 const App = () => {
 
@@ -51,6 +52,8 @@ const App = () => {
                                    element={<ClientsContainer />} />
                             <Route path={`profile`}
                                    element={<ProfileContainer />} />
+                            <Route path={`bookingProfile`}
+                                   element={<BookingProfileContainer />} />
                             <Route path={`archivedClients`}
                                    element={<ArchivedClients />} />
                             <Route path={`archivedConsultations`}

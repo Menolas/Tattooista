@@ -41,6 +41,11 @@ export const bookingsApi = {
     ).then(response => response.data);
   },
 
+  async getBookingProfile(bookingId: string) {
+    return await instance.get<AddBookingResponseType>(`bookings/${bookingId}`)
+        .then(response => response.data);
+  },
+
   async changeConsultationStatus(id: string) {
     return await instance.patch<ChangeBookingStatusResponseType>(`bookings/status/${id}`)
       .then(response => response.data);

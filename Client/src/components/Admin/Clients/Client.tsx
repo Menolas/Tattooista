@@ -142,7 +142,6 @@ export const Client: React.FC<PropsType> = React.memo(({
               className={"btn btn--icon"}
               onClick={(event) => {
                   event.stopPropagation();
-                  console.log("hey")
               }}
           >
               { data.isFavourite ? <Star/> : <StarFilled/> }

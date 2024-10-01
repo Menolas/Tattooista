@@ -32,6 +32,7 @@ const DELETE_BOOKING = 'DELETE_BOOKING';
 const ADD_BOOKING = 'ADD_BOOKING';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_BOOKING_API_ERROR = 'SET_BOOKING_API_ERROR';
+const SET_BOOKING_PROFILE = 'SET_BOOKING_PROFILE';
 
 const BOOKING_SUCCESS = "Congratulation! You've just submitted new request for consultation.";
 const BOOKING_INTO_CLIENT_SUCCESS = "Congratulation! You've just created a client from a consultation request.";
@@ -48,6 +49,7 @@ const initialState = {
     term: '' as string | null,
     condition: 'any' as string | null
   } as SearchFilterType,
+  bookingProfile: {} as BookingType,
   accessError: null as string | null,
   bookingApiError: null as null | string,
 };
@@ -60,6 +62,12 @@ export const bookingsReducer = (
 ): InitialStateType => {
 
   switch (action.type) {
+    case SET_BOOKING_PROFILE:
+      return {
+        ...state,
+        bookingProfile: action.bookingProfile
+      }
+
     case SET_PAGE_SIZE:
       return {
         ...state,
@@ -151,9 +159,18 @@ type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
      SetFilterAT | SetBookingsAT | SetCurrentPageAT |
      ChangeStatusAT | SetIsFetchingAT |
     ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT | DeleteBookingAT |
-    AddBookingAT | SetAccessErrorAT | SetBookingApiErrorAT | AddArchivedBookingAT;
+    AddBookingAT | SetAccessErrorAT | SetBookingApiErrorAT | AddArchivedBookingAT |
+    SetBookingProfileAT;
 
 // actions creators
+type SetBookingProfileAT = {
+    type: typeof SET_BOOKING_PROFILE;
+    bookingProfile: BookingType;
+};
+
+export const setBookingProfileAC = (bookingProfile: BookingType): SetBookingProfileAT => ({
+    type: SET_BOOKING_PROFILE, bookingProfile
+});
 
 type SetBookingApiErrorAT = {
   type: typeof SET_BOOKING_API_ERROR;
@@ -323,7 +340,30 @@ export const getBookings = (
   } finally {
     dispatch(setIsFetchingAC(false));
   }
-}
+};
+
+export const getBookingProfile = (
+    bookingId: string
+): ThunkType => async (dispatch) => {
+    try {
+        dispatch(setIsFetchingAC(true));
+        const response = await bookingsApi.getBookingProfile(bookingId);
+        if (response.resultCode === ResultCodesEnum.Success) {
+        dispatch(setBookingProfileAC(response.booking));
+        dispatch(setBookingApiErrorAC(null));
+        return true;
+        } else {
+        return false;
+        }
+    } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setBookingApiErrorAC(error.response?.data?.message));
+        console.log(e);
+        return false;
+    } finally {
+        dispatch(setIsFetchingAC(false));
+    }
+};
 
 export const changeStatus = (
   id: string

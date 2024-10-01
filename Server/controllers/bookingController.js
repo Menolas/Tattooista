@@ -52,6 +52,19 @@ class bookingController {
     }
   }
 
+  async getBooking(req, res) {
+    const results = {};
+    try {
+      results.resultCode = 0;
+      results.booking = res.booking;
+      res.json(results);
+    } catch (e) {
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
+    }
+  }
+
   async getArchivedBookings (req, res) {
     let page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);

@@ -32,7 +32,7 @@ export const ProfileContainer: React.FC = () => {
     if (urlParams.get('clientId')) actualId = urlParams.get('clientId');
     if (actualId) dispatch(getClientProfile(actualId));
 
-  }, [dispatch, profile?._id]);
+  }, [dispatch]);
 
   useEffect(() => {
     if(profile) navigate(`?clientId=${profile._id}`)
