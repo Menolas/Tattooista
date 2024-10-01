@@ -9,9 +9,10 @@ import {Tooltip} from "react-tooltip";
 import {useState} from "react";
 import {Confirmation} from "../../common/Confirmation";
 import {ReadMore} from "../../common/ReadMore";
+import {NavLink} from "react-router-dom";
 
 type PropsType = {
-  consultation: BookingType;
+  data: BookingType;
   isDeletingInProcess?: Array<string>;
   isStatusChanging?: Array<string>;
   changeStatus: (id: string, status: boolean) => void;
@@ -21,7 +22,7 @@ type PropsType = {
 }
 
 export const Booking: React.FC<PropsType> = React.memo(({
-    consultation,
+    data,
     isDeletingInProcess,
     isStatusChanging,
     changeStatus,
@@ -42,24 +43,24 @@ export const Booking: React.FC<PropsType> = React.memo(({
     }
 
     const removeCallBack = () => {
-        remove(consultation._id);
+        remove(data._id);
     }
 
     const turnBookingToClientCallBack = () => {
-        turnBookingToClient(consultation._id,);
+        turnBookingToClient(data._id,);
     }
 
     const archiveCallBack = () => {
-        archive(consultation._id);
+        archive(data._id);
     }
 
-    const bookingContacts = consultation?.contacts
-        ? Object.keys(consultation?.contacts).map(contact => {
-            return consultation.contacts[contact]
+    const bookingContacts = data?.contacts
+        ? Object.keys(data?.contacts).map(contact => {
+            return data.contacts[contact]
                 ? (
                     <div key={contact} className={"admin__card-detail-item"}>
                         <span className={"admin__card-data-type"}>{contact}:&nbsp;</span>
-                        <span className={"admin__card-data"}>{consultation.contacts[contact]}</span>
+                        <span className={"admin__card-data"}>{data.contacts[contact]}</span>
                     </div>
                 )
                 : null;
@@ -71,15 +72,15 @@ export const Booking: React.FC<PropsType> = React.memo(({
       <div className={"admin__card-actions"}>
         <button
             data-tooltip-id="my-tooltip"
-            data-tooltip-content={ !consultation.status
+            data-tooltip-content={ !data.status
                 ? "Mark consultation as contacted"
                 : "Mark consultation as not contacted"
             }
             className={"btn btn--icon"}
-            disabled={ isStatusChanging?.some(id => id === consultation._id) }
-            onClick={() => {changeStatus(consultation._id, consultation.status || false)}}
+            disabled={ isStatusChanging?.some(id => id === data._id) }
+            onClick={() => {changeStatus(data._id, data.status || false)}}
         >
-            { !consultation.status
+            { !data.status
                 ? <PhoneIcon />
                 : <PhoneMissedIcon />
             }
@@ -88,11 +89,11 @@ export const Booking: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Create client from consultation"
             className={"btn btn--icon"}
-            disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+            disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
                 setConfirmationData({
                     needConfirmation: true,
-                    itemId: consultation._id,
+                    itemId: data._id,
                     context: 'Are you sure? You about to turn this consultation into client.',
                     cb: turnBookingToClientCallBack
                 });
@@ -104,11 +105,11 @@ export const Booking: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Move consultation to archive"
             className={"btn btn--icon"}
-            disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+            disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
                 setConfirmationData({
                     needConfirmation: true,
-                    itemId: consultation._id,
+                    itemId: data._id,
                     context: 'Are you sure? You about to archive this consultation.',
                     cb: archiveCallBack
                 });
@@ -120,11 +121,11 @@ export const Booking: React.FC<PropsType> = React.memo(({
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Delete consultation"
             className={"btn btn--icon"}
-            disabled={isDeletingInProcess?.some(id => id === consultation._id)}
+            disabled={isDeletingInProcess?.some(id => id === data._id)}
             onClick={() => {
                 setConfirmationData({
                     needConfirmation: true,
-                    itemId: consultation._id,
+                    itemId: data._id,
                     context: 'Are you sure? You about to delete this consultation FOREVER along with  all the data...',
                     cb: removeCallBack
                 });
@@ -133,26 +134,31 @@ export const Booking: React.FC<PropsType> = React.memo(({
             <TrashIcon />
         </button>
       </div>
-      <div className={"admin__card-details"}>
-        <>
-            <div className={"admin__card-detail-item"}>
-              <span className={"admin__card-data-type"}>Name:&nbsp;</span>
-              <span className={"admin__card-data"}>{consultation.fullName}</span>
-            </div>
-            <div className={"admin__card-detail-item"}>
-                <span className={"admin__card-data-type"}>Created:&nbsp;</span>
-                <span className={"admin__card-data"}>
-                    {consultation.createdAt?.split('T')[0] + ' (' + consultation.createdAt?.split('T')[1].split('.')[0] + ')'}
-                </span>
-            </div>
-            { bookingContacts }
-        </>
-      </div>
+      <NavLink
+        to={`/admin/bookingProfile?bookingId=${data._id}`}
+        className={"admin__card-link"}
+      >
+          <div className={"admin__card-details"}>
+            <>
+                <div className={"admin__card-detail-item"}>
+                  <span className={"admin__card-data-type"}>Name:&nbsp;</span>
+                  <span className={"admin__card-data"}>{data.fullName}</span>
+                </div>
+                <div className={"admin__card-detail-item"}>
+                    <span className={"admin__card-data-type"}>Created:&nbsp;</span>
+                    <span className={"admin__card-data"}>
+                        {data.createdAt?.split('T')[0] + ' (' + data.createdAt?.split('T')[1].split('.')[0] + ')'}
+                    </span>
+                </div>
+                { bookingContacts }
+            </>
+          </div>
+      </NavLink>
       {
-        consultation.message &&
+        data.message &&
         <div className={"admin__card-detail-item admin__card-detail-item--message"}>
             <span className={"admin__card-data-type"}>Message:&nbsp;</span>
-            <ReadMore id={'message'} text={consultation.message} amountOfWords={6} />
+            <ReadMore id={'message'} text={data.message} amountOfWords={6} />
         </div>
       }
       <Confirmation

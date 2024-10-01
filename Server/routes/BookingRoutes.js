@@ -12,6 +12,10 @@ router.get('/', roleMiddleware(["ADMIN"]), controller.getBookings );
 
 router.get('/archive', roleMiddleware(["ADMIN"]), controller.getArchivedBookings);
 
+//getting one booking
+
+router.get('/:id', getBooking, controller.getBooking);
+
 // Creating one
 router.post('/', controller.createBooking);
 

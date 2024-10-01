@@ -34,6 +34,7 @@ class MailService {
     }
 
     async sendNewBookingConsultationMail(to, booking) {
+        const link = `${process.env.CLIENT_URL}/admin/bookingProfile?bookingId=${booking._id}`;
         const bookingInfo = () => {
             let contactsInfo = '';
             for (const contactType in booking.contacts) {
@@ -62,6 +63,10 @@ class MailService {
                      <h1 style="text-align: center;">You have a new request for consultation</h1>
                      <div>
                          ${bookingInfo()}
+                     </div>
+                     <div>
+                         <span>Link to this consultation:</span>
+                         <a style="color: #fafafa;" href=${link}>${link}</a>
                      </div>
                  </div>
                 `

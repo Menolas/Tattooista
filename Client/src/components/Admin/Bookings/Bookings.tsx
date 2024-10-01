@@ -78,7 +78,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
       return (
         <Booking
           key={consultation._id}
-          consultation={consultation}
+          data={consultation}
           isStatusChanging={isStatusChanging}
           changeStatus={changeStatus}
           isDeletingInProcess={isDeletingInProcess}

@@ -42,3 +42,7 @@ export const getAccessErrorSelector = (state: AppStateType) => {
 export const getBookingApiErrorSelector = (state: AppStateType) => {
   return state.bookings.bookingApiError;
 };
+
+export const getBookingProfileSelector = (state: AppStateType) => {
+  return state.bookings.bookingProfile;
+}

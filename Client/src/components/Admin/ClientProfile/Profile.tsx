@@ -60,7 +60,7 @@ export const Profile: React.FC<PropsType> = React.memo(({
   const closeModal = () => {
     setEditClientMode(false);
     setEditGalleryMode(false);
-      setConfirmationData({needConfirmation: false, context: ''});
+    setConfirmationData({needConfirmation: false, context: ''});
   };
 
   if (!data) {
