@@ -161,9 +161,10 @@ class bookingController {
   }
 
   async changeBookingStatus(req, res) {
+    console.log("status change!!!!!!!!")
     const results = {};
     try {
-      res.booking.status = !req.body.status;
+      res.booking.status = !res.booking.status;
       await res.booking.save();
       results.status = res.booking.status;
       results.resultCode = 0;

@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {
   getClientProfile,
   deleteClientFromProfile,
-  archiveClientFromProfile,
+  archiveClientFromProfile, toggleFavourite,
 } from "../../../redux/Clients/clients-reducer";
 import { Profile } from "./Profile";
 import {
@@ -15,13 +15,16 @@ import {
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector);
+  console.log(profile + " profile!!!!!!!!!!!!!!!")
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
   const apiError = useSelector(getApiErrorSelector);
   const clientApiError = useSelector(getClientsApiErrorSelector);
+  const token = useSelector(getTokenSelector);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,37 +34,38 @@ export const ProfileContainer: React.FC = () => {
     let actualId: string | null = profile?._id;
     if (urlParams.get('clientId')) actualId = urlParams.get('clientId');
     if (actualId) dispatch(getClientProfile(actualId));
-
   }, [dispatch]);
 
   useEffect(() => {
-    if(profile) navigate(`?clientId=${profile._id}`)
+    if(profile) navigate(`?clientId=${profile._id}`);
   }, [profile, navigate]);
 
   const setApiErrorCallBack = () => {
     dispatch(setApiErrorAC(null));
   };
 
+  const toggleIsFavouriteCallBack = (id:string) => {
+    dispatch(toggleFavourite(token, id));
+  }
+
   const deleteClientCallBack = async () => {
     let success = await dispatch(deleteClientFromProfile(profile._id));
-    if (success) {
-      navigate("/admin/clients");
-    }
+    if (success) navigate("/admin/clients");
   };
 
   const archiveClientCallBack = async () => {
     let success = await dispatch(archiveClientFromProfile(profile._id));
-    if (success) {
-        navigate("/admin/clients");
-    }
+    if (success) navigate("/admin/clients");
   };
 
   return (
     <>
       <Profile
+        key={profile._id + profile.isFavourite}
         apiError={clientApiError}
         data={profile}
         isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+        toggleIsFavourite={toggleIsFavouriteCallBack}
         remove={deleteClientCallBack}
         archive={archiveClientCallBack}
       />

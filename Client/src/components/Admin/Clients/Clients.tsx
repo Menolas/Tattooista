@@ -4,14 +4,14 @@ import { Client } from "./Client";
 import { Paginator } from "../../common/Paginator";
 import { ModalPopUp } from "../../common/ModalPopUp";
 import { UpdateClientForm } from "../../Forms/UpdateClientForm";
-import {ClientType, SearchFilterType} from "../../../types/Types";
+import {ClientsSearchFilterType, ClientType} from "../../../types/Types";
 import {NothingToShow} from "../../common/NothingToShow";
 import {Preloader} from "../../common/Preloader";
-import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {clientFilterSelectOptions} from "../../../utils/constants";
 import {Navigate} from "react-router";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
+import {ClientsSearchFilterForm} from "../../Forms/ClientsSearchFilterForm";
 
 type PropsType = {
   apiError: null | string;
@@ -22,11 +22,12 @@ type PropsType = {
   pageSize: number;
   accessError: string | null;
   clients: Array<ClientType>;
-  clientsFilter: SearchFilterType;
+  clientsFilter: ClientsSearchFilterType;
   isDeletingInProcess: Array<string>;
   isDeletingPicturesInProcess: Array<string>;
   onPageChanged: (page: number) => void;
-  onFilterChanged: (filter: SearchFilterType) => void;
+  onFilterChanged: (filter: ClientsSearchFilterType) => void;
+  toggleIsFavourite: (id: string) => void;
   remove: (clientId: string) => void;
   setPageLimit: (clientsPageSize: number) => void;
   archive: (clientId: string) => void;
@@ -48,6 +49,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     isDeletingPicturesInProcess,
     onPageChanged,
     onFilterChanged,
+    toggleIsFavourite,
     remove,
     setPageLimit,
     archive,
@@ -88,6 +90,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 key={client._id}
                 data={client}
                 isDeletingInProcess={isDeletingInProcess}
+                toggleIsFavourite={toggleIsFavourite}
                 remove={remove}
                 archive={archive}
                 setData={setClient}
@@ -104,7 +107,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
               ? <Navigate to="/noAccess"/>
               : <>
                   <div className="admin__cards-header">
-                      <SearchFilterForm
+                      <ClientsSearchFilterForm
                           options={clientFilterSelectOptions}
                           filter={clientsFilter}
                           onFilterChanged={onFilterChanged}

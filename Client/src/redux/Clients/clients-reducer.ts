@@ -1,6 +1,6 @@
 import { clientsAPI } from "./clientsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {ApiErrorType, ClientType, SearchFilterType} from "../../types/Types";
+import {ApiErrorType, ClientsSearchFilterType, ClientType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -44,8 +44,9 @@ const initialState = {
   isFavouriteChangingInProcess: [] as Array<string>,
   filter: {
     term: '' as string | null,
-    condition: "any" as string | null
-  } as SearchFilterType,
+    condition: "any" as string | null,
+    isFavourite: "any" as string | null,
+  } as ClientsSearchFilterType,
   profile: {} as ClientType,
   accessError: '' as string | undefined,
   clientsApiError: null as null | string,
@@ -162,12 +163,11 @@ export const clientsReducer = (
     case TOGGLE_IS_FAVOURITE:
       return {
         ...state,
-        clients: state.clients.map(client => {
-          if (client._id === action.id) {
-            return {...client, isFavourite: action.isFavourite}
-          }
-          return client
-        })
+        clients: state.clients.map(client =>
+          client._id === action.client._id
+            ? { ...action.client }
+            : client
+        ),
       }
 
     default: return state
@@ -194,12 +194,11 @@ const setIsFavouriteChangingAC = (id: string, isFavouriteChanging: boolean): Set
 
 type SetIsFavouriteAT = {
   type: typeof TOGGLE_IS_FAVOURITE;
-  id: string;
-  isFavourite: boolean;
+  client: ClientType;
 };
 
-export const setIsFavouriteAC = (id: string, isFavourite: boolean): SetIsFavouriteAT => ({
-  type: TOGGLE_IS_FAVOURITE, id, isFavourite
+export const setIsFavouriteAC = (client: ClientType): SetIsFavouriteAT => ({
+  type: TOGGLE_IS_FAVOURITE, client
 });
 
 type SetClientApiErrorAT = {
@@ -231,10 +230,10 @@ export const setPageSize = (clientsPageSize: number): SetClientsPageSizeAT => ({
 
 type SetFilterAT = {
   type: typeof SET_FILTER;
-  filter: SearchFilterType;
+  filter: ClientsSearchFilterType;
 };
 
-export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
+export const setFilterAC = (filter: ClientsSearchFilterType): SetFilterAT => ({
     type: SET_FILTER, filter
 });
 
@@ -381,7 +380,7 @@ export const getClients = (
 };
 
 export const toggleFavourite = (
-    token: string,
+    token: string | null | undefined,
     id: string,
 ): ThunkType => async (
     dispatch
@@ -390,7 +389,8 @@ export const toggleFavourite = (
     dispatch(setIsFavouriteChangingAC(id, true));
     const response = await clientsAPI.toggleIsFavorite(id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setIsFavouriteAC(id, response.client.isFavourite));
+      dispatch(setClientProfile(response.client));
+      dispatch(setIsFavouriteAC(response.client));
       return true;
     } else {
       return false;

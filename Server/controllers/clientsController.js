@@ -473,6 +473,7 @@ class clientsController {
   }
 
   async toggleFavourite(req, res) {
+    console.log("toggling!!!!")
     const results = {};
 
     try {

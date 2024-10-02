@@ -9,6 +9,8 @@ import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {ReactComponent as ArchiveIcon} from "../../../assets/svg/archive.svg";
 import {ReactComponent as ImageUserIcon} from "../../../assets/svg/images-user.svg";
+import {ReactComponent as Star} from "../../../assets/svg/star.svg";
+import {ReactComponent as StarFilled} from "../../../assets/svg/star-filled.svg";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
@@ -19,14 +21,16 @@ type PropsType = {
   apiError: null | string;
   data: ClientType;
   isDeletingPicturesInProcess: Array<string>;
+  toggleIsFavourite: (id: string) => void;
   remove: () => void;
   archive: () => void;
 }
 
-export const Profile: React.FC<PropsType> = React.memo(({
+export const Profile: React.FC<PropsType> = ({
     apiError,
     data,
     isDeletingPicturesInProcess,
+    toggleIsFavourite,
     remove,
     archive,
 }) => {
@@ -51,11 +55,11 @@ export const Profile: React.FC<PropsType> = React.memo(({
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [clientId]);
 
-    useEffect(() => {
-        if (editClientMode && apiError === null) {
-            setEditClientMode(false);
-        }
-    }, [apiError, editClientMode]);
+    // useEffect(() => {
+    //     if (editClientMode && apiError === null) {
+    //         setEditClientMode(false);
+    //     }
+    // }, [apiError, editClientMode]);
 
   const closeModal = () => {
     setEditClientMode(false);
@@ -101,64 +105,79 @@ export const Profile: React.FC<PropsType> = React.memo(({
 
   return (
     <div className="admin__card admin__card--avatar profile">
-      <div className="admin__card-actions">
-        <button
-            data-tooltip-id="profile-tooltip"
-            data-tooltip-content="Edit client info"
-            className="btn btn--icon"
-            onClick={() => { setEditClientMode(true) }}
-        >
-          <EditIcon />
-        </button>
-        <button
-            data-tooltip-id="profile-tooltip"
-            data-tooltip-content="Edit client's tattoos gallery"
-            className="btn btn--icon"
-            onClick={() => { setEditGalleryMode(true); }}
-        >
-          <ImageUserIcon />
-        </button>
-        <button
-            data-tooltip-id="profile-tooltip"
-            data-tooltip-content="Move client to archive client"
-            className={"btn btn--icon"}
-            onClick={() => {
-                setConfirmationData({
-                    needConfirmation: true,
-                    itemId: data._id,
-                    context: 'Are you sure? You about to archive this client.',
-                    cb: archive
-                });
-            }}
-        >
-          <ArchiveIcon />
-        </button>
-        <button
-            data-tooltip-id="profile-tooltip"
-            data-tooltip-content="Delete client"
-            className="btn btn--icon"
-            onClick={() => {
-                setConfirmationData({
-                    needConfirmation: true,
-                    itemId: data._id,
-                    context: 'Are you sure? You about to delete this client FOREVER along with all data...',
-                    cb: remove
-                });
-            }}
-        >
-          <TrashIcon />
-        </button>
-      </div>
-      <div className="admin__card-link">
-        <div className="admin__card-avatar">
-            {!data?.avatar
-                ? <DefaultAvatar/>
-                : <img src={`${API_URL}/clients/${data._id}/avatar/${data.avatar}`} alt={data.fullName}/>
-            }
+        <div className="admin__card-actions">
+            <button
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Mark as favorite"
+                className={"btn btn--icon"}
+                onClick={(event) => {
+                    event.stopPropagation();
+                    toggleIsFavourite(data._id);
+                }}
+            >
+                {data.isFavourite ? <StarFilled/> : <Star/>}
+            </button>
+            <button
+                data-tooltip-id="profile-tooltip"
+                data-tooltip-content="Edit client info"
+                className="btn btn--icon"
+                onClick={() => {
+                    setEditClientMode(true)
+                }}
+            >
+                <EditIcon/>
+            </button>
+            <button
+                data-tooltip-id="profile-tooltip"
+                data-tooltip-content="Edit client's tattoos gallery"
+                className="btn btn--icon"
+                onClick={() => {
+                    setEditGalleryMode(true);
+                }}
+            >
+                <ImageUserIcon/>
+            </button>
+            <button
+                data-tooltip-id="profile-tooltip"
+                data-tooltip-content="Move client to archive client"
+                className={"btn btn--icon"}
+                onClick={() => {
+                    setConfirmationData({
+                        needConfirmation: true,
+                        itemId: data._id,
+                        context: 'Are you sure? You about to archive this client.',
+                        cb: archive
+                    });
+                }}
+            >
+                <ArchiveIcon/>
+            </button>
+            <button
+                data-tooltip-id="profile-tooltip"
+                data-tooltip-content="Delete client"
+                className="btn btn--icon"
+                onClick={() => {
+                    setConfirmationData({
+                        needConfirmation: true,
+                        itemId: data._id,
+                        context: 'Are you sure? You about to delete this client FOREVER along with all data...',
+                        cb: remove
+                    });
+                }}
+            >
+                <TrashIcon/>
+            </button>
         </div>
-          <div className="admin__card-details">
-          <div className={"admin__card-detail-item"}>
-            <span className={"admin__card-data-type"}>Name:&nbsp;</span>
+        <div className="admin__card-link">
+            <div className="admin__card-avatar">
+                {!data?.avatar
+                    ? <DefaultAvatar/>
+                    : <img src={`${API_URL}/clients/${data._id}/avatar/${data.avatar}`} alt={data.fullName}/>
+                }
+            </div>
+            <div className="admin__card-details">
+                <div className={"admin__card-detail-item"}>
+                    <span className={"admin__card-data-type"}>Name:&nbsp;</span>
             <span className={"admin__card-data"}>{data.fullName}</span>
           </div>
           { contactsArray }
@@ -228,6 +247,6 @@ export const Profile: React.FC<PropsType> = React.memo(({
       <Tooltip id="profile-tooltip" />
     </div>
   );
-});
+};
 
 Profile.displayName = 'Profile';
