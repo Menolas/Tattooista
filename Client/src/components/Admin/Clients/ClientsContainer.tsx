@@ -19,7 +19,7 @@ import {
   getClientsFilterSelector,
   getClientsPageSizeSelector,
   getIsDeletingPicturesInProcessSelector,
-  getClientsApiErrorSelector,
+  getClientsApiErrorSelector, getClientsIsFavouriteChangingInProcessSelector,
 } from "../../../redux/Clients/clients-selectors";
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
@@ -38,6 +38,7 @@ export const ClientsContainer: React.FC = () => {
   const filter = useSelector(getClientsFilterSelector);
   const isDeletingInProcess = useSelector(getIsClientDeletingInProcessSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector);
+  const isFavouriteChangingInProcess = useSelector(getClientsIsFavouriteChangingInProcessSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAccessErrorSelector);
   const clientsApiError = useSelector(getClientsApiErrorSelector);
@@ -106,6 +107,7 @@ export const ClientsContainer: React.FC = () => {
           clientsFilter={filter}
           isDeletingInProcess={isDeletingInProcess}
           isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+          isFavouriteChangingInProcess={isFavouriteChangingInProcess}
           accessError={accessError}
           onPageChanged={setCurrentPageCallBack}
           onFilterChanged={onFilterChangedCallBack}

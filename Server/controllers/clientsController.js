@@ -14,6 +14,8 @@ class clientsController {
     const endIndex = page * limit;
     const gallery = req.query.gallery;
     const term = req.query.term;
+    const isFavourite = req.query.isFavourite;
+    console.log(isFavourite + " general isFavourite!!!!!!!!!!!")
     let clients = [];
     const results = {};
 
@@ -37,6 +39,11 @@ class clientsController {
         query.gallery = { $exists: true, $not: { $size: 0 } };
       } else if (gallery === 'false') {
         query.$or = [{ gallery: { $exists: true, $size: 0 } }, { gallery: { $exists: false } }];
+      }
+
+      if (isFavourite === 'true') {
+        console.log("isFavourite!!!!!!!!!!!")
+        query = { ...query, isFavourite: true };
       }
 
       if (searchConditions.length > 0) {
@@ -473,7 +480,6 @@ class clientsController {
   }
 
   async toggleFavourite(req, res) {
-    console.log("toggling!!!!")
     const results = {};
 
     try {

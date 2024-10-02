@@ -331,7 +331,7 @@ const deleteClientThunk = (
     clients: Array<ClientType>,
     currentPage: number,
     pageLimit: number,
-    filter: SearchFilterType
+    filter: ClientsSearchFilterType
 ): ThunkType => async (dispatch) => {
   if (clients.length > 1) {
     dispatch(deleteClientAC(id));
@@ -350,7 +350,7 @@ export const getClients = (
   token: string | null,
   currentClientPage: number,
   clientsPageSize: number,
-  clientsFilter: SearchFilterType
+  clientsFilter: ClientsSearchFilterType
 ): ThunkType => async (
     dispatch,
 ) => {
@@ -409,7 +409,7 @@ export const deleteClient = (
     clients: Array<ClientType>,
     currentPage: number,
     pageLimit: number,
-    filter: SearchFilterType
+    filter: ClientsSearchFilterType
 ): ThunkType => async (
     dispatch
 ) => {
@@ -578,7 +578,7 @@ export const archiveClient = (
     clients: Array<ClientType>,
     currentPage: number,
     pageLimit: number,
-    filter: SearchFilterType
+    filter: ClientsSearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));

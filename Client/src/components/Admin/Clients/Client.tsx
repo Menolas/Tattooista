@@ -17,6 +17,7 @@ import {DefaultAvatar} from "../../common/DefaultAvatar";
 type PropsType = {
   data: ClientType;
   isDeletingInProcess: Array<string>;
+  isFavouriteChangingInProcess: Array<string>;
   toggleIsFavourite: (id: string) => void;
   remove: (clientId: string) => void;
   archive: (clientId: string) => void;
@@ -29,6 +30,7 @@ type PropsType = {
 export const Client: React.FC<PropsType> = React.memo(({
   data,
   isDeletingInProcess,
+  isFavouriteChangingInProcess,
   toggleIsFavourite,
   remove,
   archive,
@@ -83,6 +85,7 @@ export const Client: React.FC<PropsType> = React.memo(({
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Mark as favorite"
                   className={"btn btn--icon"}
+                  disabled={isFavouriteChangingInProcess?.some(id => id === data._id)}
                   onClick={(event) => {
                       event.stopPropagation();
                       toggleIsFavourite(data._id);

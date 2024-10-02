@@ -6,6 +6,7 @@ type PropsType = {
     socialLink: string;
     icon: React.ReactElement;
     isInstagram?: boolean;
+    tooltipText: string;
     handleClick?: () => void;
 };
 
@@ -13,6 +14,7 @@ export const ShareButton: React.FC<PropsType> = ({
  icon,
  socialLink,
  isInstagram,
+ tooltipText,
  handleClick,
 }) => {
 
@@ -25,6 +27,8 @@ export const ShareButton: React.FC<PropsType> = ({
             <NavLink
                 to={linkUrl}
                 className="social-share__link"
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content={tooltipText}
                 target="_blank"
                 onClick={() => {
                     isInstagram && copyToClipboard();

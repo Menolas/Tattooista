@@ -1,5 +1,5 @@
 import {AxiosRequestConfig} from "axios";
-import {ClientType, SearchFilterType, CommonResponseFields} from "../../types/Types";
+import {ClientType, SearchFilterType, CommonResponseFields, ClientsSearchFilterType} from "../../types/Types";
 import {instance} from "../../http";
 
 type DeleteClientResponseType = CommonResponseFields;
@@ -25,10 +25,10 @@ export const clientsAPI = {
     token: string | null,
     currentPage = 1,
     pageSize = 5,
-    filter: SearchFilterType
+    filter: ClientsSearchFilterType
   ) {
     return await instance.get<GetClientsResponseType>(
-        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
+        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
             .then(response => response.data);
   },

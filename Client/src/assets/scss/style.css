@@ -542,6 +542,7 @@ img {
   }
   .main-header .social-nav {
     display: block;
+    margin-right: 1rem;
   }
   .main-header .social-nav .social-nav__list {
     column-gap: 20px;
@@ -3205,7 +3206,14 @@ input[type=checkbox][value=true] + label .checkbox::after {
   background-image: url("../svg/star.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: 50px 50px;
+  cursor: pointer;
+}
+.search-form .isFavourite:hover {
+  border: 2px solid #fafafa;
+}
+.search-form input[name=isFavourite]:checked + .isFavourite {
+  background-image: url("../svg/star-filled.svg");
 }
 .search-form .search-submit {
   border: none;
@@ -3217,7 +3225,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 .search-form .select-block {
   flex: 0 0 auto;
   min-width: 200px;
-  height: 66px;
+  height: 41px;
   background-color: transparent;
   border: 2px solid #fafafa;
 }
@@ -3295,6 +3303,9 @@ input[type=checkbox][value=true] + label .checkbox::after {
   }
   .search-form .search-input::placeholder {
     font-size: 26px !important;
+  }
+  .search-form .select-block {
+    height: 66px;
   }
   .search-form .search-submit svg {
     width: 40px;
