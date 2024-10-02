@@ -3191,6 +3191,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 .search-form {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
   width: 100%;
 }
@@ -3198,22 +3199,25 @@ input[type=checkbox][value=true] + label .checkbox::after {
   position: relative;
   flex: 1 1 auto;
 }
+.search-form .isFavourite {
+  width: 56px;
+  height: 56px;
+  background-image: url("../svg/star.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
 .search-form .search-submit {
-  position: absolute;
-  right: 2px;
-  top: 2px;
-  bottom: 2px;
-  height: calc(100% - 4px);
-  padding: 0 1rem;
   border: none;
 }
 .search-form .search-submit svg {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
 }
 .search-form .select-block {
   flex: 0 0 auto;
   min-width: 200px;
+  height: 66px;
   background-color: transparent;
   border: 2px solid #fafafa;
 }
@@ -3291,9 +3295,6 @@ input[type=checkbox][value=true] + label .checkbox::after {
   }
   .search-form .search-input::placeholder {
     font-size: 26px !important;
-  }
-  .search-form .search-submit {
-    padding: 0 20px;
   }
   .search-form .search-submit svg {
     width: 40px;

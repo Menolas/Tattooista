@@ -68,7 +68,7 @@ export const clientsAPI = {
   async toggleIsFavorite(
     clientId: string
   ) {
-    return await instance.post<UpdateClientResponseType>(`clients/favorite/${clientId}`)
+    return await instance.patch<UpdateClientResponseType>(`clients/favourite/${clientId}`)
         .then(response => response.data);
   },
 

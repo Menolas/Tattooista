@@ -99,7 +99,7 @@ export const bookingsReducer = (
         ...state,
         bookings: state.bookings.map(booking => {
           if (booking._id === action.id) {
-            return { ...booking, status: action.status }
+            return { ...booking, status: !booking.status }
           }
           return booking
         })
