@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { ReactComponent as SearchIcon } from "../../assets/svg/search.svg";
-//import {ReactComponent as Star} from "../../../assets/svg/star.svg";
-import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
 import { ClientsSearchFilterType, SelectOptionType } from "../../types/Types";
 import { FormSelect } from "./formComponents/FormSelect";
 import {handleEnterClick} from "../../utils/functions";
@@ -68,21 +66,19 @@ export const ClientsSearchFilterForm: React.FC<PropsType> = React.memo(({
                       handleEnterClick(event, handleSubmit)
                     }}
                 />
-                <label htmlFor="isFavourite" className="isFavourite">
-                  <Field
-                      type="checkbox"
-                      name="isFavourite"
-                      id="isFavourite"
-                      checked={values.isFavourite}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setFieldValue('consent', e.target.checked);
-                      }}
-                      onKeyDown={(event: React.KeyboardEvent) => {
-                        handleEnterClick(event, handleSubmit)
-                      }}
-                  />
-                  <StarFilled/>
-                </label>
+                <Field
+                    type="checkbox"
+                    name="isFavourite"
+                    id="isFavourite"
+                    checked={values.isFavourite}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFieldValue('isFavourite', e.target.checked);
+                    }}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      handleEnterClick(event, handleSubmit)
+                    }}
+                />
+                <label htmlFor="isFavourite" className="isFavourite"></label>
                 <button
                     className={"btn btn--icon btn--sm btn--transparent search-submit"}
                     type="submit" disabled={isSubmitting}

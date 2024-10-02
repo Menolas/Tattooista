@@ -16,7 +16,16 @@
     background-image: url("../svg/star.svg");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: 50px 50px;
+    cursor: pointer;
+
+    &:hover {
+      border: $light-border;
+    }
+  }
+
+  input[name="isFavourite"]:checked + .isFavourite {
+    background-image: url("../svg/star-filled.svg");
   }
 
   .search-submit {
@@ -30,7 +39,7 @@
   .select-block {
     flex: 0 0 auto;
     min-width: 200px;
-    height: 66px;
+    height: 41px;
     background-color: transparent;
     border: $light-border;
 
@@ -122,6 +131,10 @@
       &::placeholder {
         font-size: 26px !important;
       }
+    }
+
+    .select-block {
+      height: 66px;
     }
 
     .search-submit {

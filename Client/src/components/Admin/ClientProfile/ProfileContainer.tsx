@@ -9,7 +9,7 @@ import {
 } from "../../../redux/Clients/clients-reducer";
 import { Profile } from "./Profile";
 import {
-  getClientProfileSelector, getClientsApiErrorSelector,
+  getClientProfileSelector, getClientsApiErrorSelector, getClientsIsFavouriteChangingInProcessSelector,
   getIsDeletingPicturesInProcess,
 } from "../../../redux/Clients/clients-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
@@ -20,8 +20,8 @@ import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector);
-  console.log(profile + " profile!!!!!!!!!!!!!!!")
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
+  const isFavouriteChangingInProcess = useSelector(getClientsIsFavouriteChangingInProcessSelector);
   const apiError = useSelector(getApiErrorSelector);
   const clientApiError = useSelector(getClientsApiErrorSelector);
   const token = useSelector(getTokenSelector);
@@ -65,6 +65,7 @@ export const ProfileContainer: React.FC = () => {
         apiError={clientApiError}
         data={profile}
         isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+        isFavouriteChangingInProcess={isFavouriteChangingInProcess}
         toggleIsFavourite={toggleIsFavouriteCallBack}
         remove={deleteClientCallBack}
         archive={archiveClientCallBack}

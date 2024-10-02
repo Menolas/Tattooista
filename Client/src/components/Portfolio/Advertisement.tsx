@@ -22,10 +22,27 @@ export const Advertisement: React.FC = () => {
       <div className="social-share">
           <h3 className={'page-block__title-secondary'}>Share this page:</h3>
           <ul className="social-share__list list">
-            <ShareButton socialLink={InstagramLink} icon=<InstagramIcon/> isInstagram={true}/>
-            <ShareButton socialLink={FacebookLink} icon=<FaceBookIcon/> />
-            <ShareButton socialLink={LinkedinLink} icon=<LinkedinIcon/> />
-            <ShareButton socialLink={TwitterLink} icon=<TwitterIcon/> />
+            <ShareButton
+                tooltipText={'Copy link and Share on Instagram'}
+                socialLink={InstagramLink}
+                icon=<InstagramIcon/>
+                isInstagram={true}
+            />
+            <ShareButton
+                tooltipText={'Share on Facebook'}
+                socialLink={FacebookLink}
+                icon=<FaceBookIcon/>
+            />
+            <ShareButton
+                tooltipText={'Share on Linkedin'}
+                socialLink={LinkedinLink}
+                icon=<LinkedinIcon/>
+            />
+            <ShareButton
+                tooltipText={'Share on Twitter'}
+                socialLink={TwitterLink}
+                icon=<TwitterIcon/>
+            />
           </ul>
       </div>
       <BookingButton

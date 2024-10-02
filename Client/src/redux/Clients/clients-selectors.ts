@@ -48,6 +48,10 @@ export const getClientsApiErrorSelector = (state: AppStateType) => {
     return state.clients.clientsApiError;
 };
 
+export const getClientsIsFavouriteChangingInProcessSelector = (state: AppStateType) => {
+  return state.clients.isFavouriteChangingInProcess;
+};
+
 // export const getAccessErrorSelector = (state: AppStateType) => {
 //   return state.clients.accessError;
 // };

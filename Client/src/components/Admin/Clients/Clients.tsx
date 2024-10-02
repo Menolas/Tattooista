@@ -25,6 +25,7 @@ type PropsType = {
   clientsFilter: ClientsSearchFilterType;
   isDeletingInProcess: Array<string>;
   isDeletingPicturesInProcess: Array<string>;
+  isFavouriteChangingInProcess: Array<string>;
   onPageChanged: (page: number) => void;
   onFilterChanged: (filter: ClientsSearchFilterType) => void;
   toggleIsFavourite: (id: string) => void;
@@ -47,6 +48,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
     clientsFilter,
     isDeletingInProcess,
     isDeletingPicturesInProcess,
+    isFavouriteChangingInProcess,
     onPageChanged,
     onFilterChanged,
     toggleIsFavourite,
@@ -90,6 +92,7 @@ export const Clients: React.FC<PropsType> = React.memo(({
                 key={client._id}
                 data={client}
                 isDeletingInProcess={isDeletingInProcess}
+                isFavouriteChangingInProcess={isFavouriteChangingInProcess}
                 toggleIsFavourite={toggleIsFavourite}
                 remove={remove}
                 archive={archive}

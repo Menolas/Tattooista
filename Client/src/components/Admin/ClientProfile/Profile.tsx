@@ -21,6 +21,7 @@ type PropsType = {
   apiError: null | string;
   data: ClientType;
   isDeletingPicturesInProcess: Array<string>;
+  isFavouriteChangingInProcess: Array<string>;
   toggleIsFavourite: (id: string) => void;
   remove: () => void;
   archive: () => void;
@@ -30,6 +31,7 @@ export const Profile: React.FC<PropsType> = ({
     apiError,
     data,
     isDeletingPicturesInProcess,
+    isFavouriteChangingInProcess,
     toggleIsFavourite,
     remove,
     archive,
@@ -110,6 +112,7 @@ export const Profile: React.FC<PropsType> = ({
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content="Mark as favorite"
                 className={"btn btn--icon"}
+                disabled={isFavouriteChangingInProcess?.some(id => id === data._id)}
                 onClick={(event) => {
                     event.stopPropagation();
                     toggleIsFavourite(data._id);
