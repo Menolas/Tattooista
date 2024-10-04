@@ -95,7 +95,6 @@ useEffect(() => {
                 : (
                     <PortfolioSlider
                         activeStyle={activeStyle}
-                        pageSize={pageSize}
                         setActiveStyle={setActiveStyleCallBack}
                         styles={styles}
                     />

@@ -47,7 +47,7 @@ export const BookingsContainer: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBookings(token || "", currentPage, pageSize, filter));
-  }, [token, currentPage, pageSize, filter, dispatch]);
+  }, [dispatch, token, currentPage, pageSize, filter, bookings.length ]);
 
   useEffect(() => {
     dispatch(setCurrentPageAC(1));

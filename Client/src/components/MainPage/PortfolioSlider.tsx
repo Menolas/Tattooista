@@ -8,7 +8,6 @@ import {useEffect, useState} from "react";
 
 type PropsType = {
     activeStyle: StyleType | null;
-    pageSize: number;
     styles: Array<StyleType>;
     setActiveStyle: (style: StyleType) => void;
 }
@@ -34,7 +33,6 @@ const responsive = {
 
 export const PortfolioSlider: React.FC<PropsType> = React.memo(({
   activeStyle,
-  pageSize,
   styles,
   setActiveStyle,
 }) => {

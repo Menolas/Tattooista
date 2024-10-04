@@ -15,7 +15,7 @@ import {Slider} from "../../common/Slider";
 
 const responsive = {
   0: {
-    slidesPerView: 2,
+    slidesPerView: 3,
   },
   900: {
     slidesPerView: 4,
@@ -79,7 +79,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
 
   const closeConfirmationModalCallBack = () => {
     setConfirmationData({needConfirmation: false, context: ''});
-  }
+  };
 
   const removeCallBack = () => {
     if (activeStyle && activeStyle._id) {
@@ -88,7 +88,7 @@ export const Styles: React.FC<PropsType> = React.memo(({
       // Handle the case where activeStyle or activeStyle._id is undefined
       console.error("Attempted to remove an undefined style");
     }
-  }
+  };
 
   const stylesArray = styles
     ?.map((item) => {
