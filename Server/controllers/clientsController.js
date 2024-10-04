@@ -15,7 +15,6 @@ class clientsController {
     const gallery = req.query.gallery;
     const term = req.query.term;
     const isFavourite = req.query.isFavourite;
-    console.log(isFavourite + " general isFavourite!!!!!!!!!!!")
     let clients = [];
     const results = {};
 
@@ -42,7 +41,6 @@ class clientsController {
       }
 
       if (isFavourite === 'true') {
-        console.log("isFavourite!!!!!!!!!!!")
         query = { ...query, isFavourite: true };
       }
 

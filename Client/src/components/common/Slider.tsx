@@ -2,8 +2,10 @@ import * as React from "react";
 import {useEffect, useRef} from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import 'swiper/css/navigation';
 import SwiperCore from 'swiper';
 import { Swiper as SwiperClass } from 'swiper';
+import { Navigation } from 'swiper/modules';
 
 interface SwiperBreakpointOptions {
     slidesPerView?: number;
@@ -44,16 +46,21 @@ export const Slider: React.FC<PropsType> = ({
     });
 
     return (
-        <Swiper
-            spaceBetween={spaceBetween}
-            slidesPerView={6}
-            onSlideChange={() => {
-                //console.log('slide change');
-            }}
-            onSwiper={(swiper: SwiperClass) => swiperRef.current = swiper}
-            breakpoints={breakpoints}
-        >
-            {slides}
-        </Swiper>
+        <div className="swiper-wrap">
+            <Swiper
+                spaceBetween={spaceBetween}
+                slidesPerView={6}
+                navigation={true}
+                modules={[Navigation]}
+                pagination={{ clickable: true }}
+                onSlideChange={() => {
+                    //console.log('slide change');
+                }}
+                onSwiper={(swiper: SwiperClass) => swiperRef.current = swiper}
+                breakpoints={breakpoints}
+            >
+                {slides}
+            </Swiper>
+        </div>
     );
 };

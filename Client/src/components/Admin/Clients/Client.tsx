@@ -83,7 +83,7 @@ export const Client: React.FC<PropsType> = React.memo(({
           <div className="admin__card-actions">
               <button
                   data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Mark as favorite"
+                  data-tooltip-content={data.isFavourite ? "Remove from favourite" : "Mark as favorite"}
                   className={"btn btn--icon"}
                   disabled={isFavouriteChangingInProcess?.some(id => id === data._id)}
                   onClick={(event) => {

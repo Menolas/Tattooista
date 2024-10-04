@@ -3660,5 +3660,26 @@ input[type=checkbox][value=true] + label .checkbox::after {
     width: 300px;
   }
 }
+.swiper-wrap {
+  position: relative;
+  padding: 0 3rem;
+}
+.swiper-wrap .swiper {
+  position: static;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  top: auto;
+  color: #fafafa !important;
+}
+
+.swiper-button-prev {
+  left: 0 !important;
+}
+
+.swiper-button-next {
+  right: 0 !important;
+}
 
 /*# sourceMappingURL=style.css.map */

@@ -8,7 +8,8 @@ import {
   archiveClient,
   setPageSize,
   setFilterAC,
-  setClientsApiErrorAC, setIsFavouriteAC, toggleFavourite,
+  setClientsApiErrorAC,
+  toggleFavourite,
 } from "../../../redux/Clients/clients-reducer";
 import {
   getClientsIsFetching,
@@ -24,7 +25,7 @@ import {
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
-import {ClientsSearchFilterType, SearchFilterType} from "../../../types/Types";
+import {ClientsSearchFilterType} from "../../../types/Types";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
@@ -49,7 +50,7 @@ export const ClientsContainer: React.FC = () => {
   useEffect(() => {
     dispatch(getClients(token || "", currentPage, pageSize, filter));
 
-  }, [dispatch, token, currentPage, pageSize, filter]);
+  }, [dispatch, token, currentPage, pageSize, filter, clients.length]);
 
   useEffect(() => {
     dispatch(setClientsCurrentPageAC(1));
