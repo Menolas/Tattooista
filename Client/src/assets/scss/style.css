@@ -3662,7 +3662,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 }
 .swiper-wrap {
   position: relative;
-  padding: 0 3rem;
+  padding: 0 0 3rem;
 }
 .swiper-wrap .swiper {
   position: static;
@@ -3670,16 +3670,47 @@ input[type=checkbox][value=true] + label .checkbox::after {
 
 .swiper-button-next,
 .swiper-button-prev {
-  top: auto;
+  top: auto !important;
+  bottom: 0;
+  margin-top: 0 !important;
   color: #fafafa !important;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 1.5rem !important;
 }
 
 .swiper-button-prev {
   left: 0 !important;
+  justify-content: flex-start !important;
 }
 
 .swiper-button-next {
   right: 0 !important;
+  justify-content: flex-end !important;
+}
+
+@media (min-width: 600px) {
+  .swiper-wrap {
+    padding: 0 3rem;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    bottom: unset;
+    top: var(--swiper-navigation-top-offset, 50%) !important;
+    margin-top: calc(0px - var(--swiper-navigation-size) / 2) !important;
+    color: #fafafa !important;
+  }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: var(--swiper-navigation-size) !important;
+  }
+  .swiper-button-prev {
+    left: 0 !important;
+  }
+  .swiper-button-next {
+    right: 0 !important;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
