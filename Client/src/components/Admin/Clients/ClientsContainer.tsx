@@ -25,7 +25,7 @@ import {
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
-import {ClientsSearchFilterType} from "../../../types/Types";
+import {SearchFilterType} from "../../../types/Types";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
@@ -63,7 +63,7 @@ export const ClientsContainer: React.FC = () => {
   };
 
   const onFilterChangedCallBack = (
-    filter: ClientsSearchFilterType
+    filter: SearchFilterType
   ) => {
     dispatch(setFilterAC(filter));
   };

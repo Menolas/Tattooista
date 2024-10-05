@@ -15,11 +15,9 @@ type PropsType = {
 const responsive = {
     0: {
         items: 1,
-        itemsFit: 'contain',
     },
     600: {
         items: 2,
-        itemsFit: 'contain',
     },
     900: {
         items: 3,

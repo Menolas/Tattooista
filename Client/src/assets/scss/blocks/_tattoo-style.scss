@@ -132,6 +132,13 @@
     cursor: pointer;
     &.btn--light-bg {
       color: $dark-text;
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: $dark-text !important;
+        background-color: $light !important;
+      }
     }
 
     span {

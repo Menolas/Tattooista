@@ -5,7 +5,6 @@ import {ReactComponent as LinkedinIcon} from "../../assets/svg/linkedin.svg";
 import {ReactComponent as TwitterIcon} from "../../assets/svg/twitter.svg";
 import {BookingButton} from "../common/BookingButton";
 import {ShareButton} from "./ShareButton";
-import {handleShare} from "../../utils/functions";
 
 export const Advertisement: React.FC = () => {
 
@@ -13,9 +12,6 @@ export const Advertisement: React.FC = () => {
   const InstagramLink = 'https://www.instagram.com/';
   const LinkedinLink = `https://www.linkedin.com/sharing/share-offsite/?url`;
   const TwitterLink = `https://twitter.com/intent/tweet?url`;
-  const handleShareCallBack = () => {
-    handleShare('portfolio');
-  };
 
   return (
     <section className="advertisement">
