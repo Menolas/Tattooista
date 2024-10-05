@@ -23,14 +23,6 @@ export interface ContactType {
     [key: string]: string;
 }
 
-// export type ContactsType = {
-//     email: string | undefined;
-//     insta: string | undefined;
-//     messenger: string | undefined;
-//     phone: string | undefined;
-//     whatsapp: string | undefined;
-// }
-
 export type ClientType = {
     _id: string;
     fullName: string;
@@ -182,12 +174,7 @@ export type SelectOptionType = {
 export type SearchFilterType = {
     term: string;
     condition: string;
-}
-
-export type ClientsSearchFilterType = {
-    term: string;
-    condition: string;
-    isFavourite: string;
+    isFavourite?: string;
 }
 
 export type CommonResponseFields = {

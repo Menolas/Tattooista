@@ -1,6 +1,6 @@
 import { clientsAPI } from "./clientsApi";
 import { ResultCodesEnum } from "../../utils/constants";
-import {ApiErrorType, ClientsSearchFilterType, ClientType, SearchFilterType} from "../../types/Types";
+import {ApiErrorType, ClientType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import type {} from "redux-thunk/extend-redux";
@@ -46,7 +46,7 @@ const initialState = {
     term: '' as string | null,
     condition: "any" as string | null,
     isFavourite: "any" as string | null,
-  } as ClientsSearchFilterType,
+  } as SearchFilterType,
   profile: {} as ClientType,
   accessError: '' as string | undefined,
   clientsApiError: null as null | string,
@@ -230,10 +230,10 @@ export const setPageSize = (clientsPageSize: number): SetClientsPageSizeAT => ({
 
 type SetFilterAT = {
   type: typeof SET_FILTER;
-  filter: ClientsSearchFilterType;
+  filter: SearchFilterType;
 };
 
-export const setFilterAC = (filter: ClientsSearchFilterType): SetFilterAT => ({
+export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
     type: SET_FILTER, filter
 });
 
@@ -331,7 +331,7 @@ const deleteClientThunk = (
     clients: Array<ClientType>,
     currentPage: number,
     pageLimit: number,
-    filter: ClientsSearchFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   if (clients.length > 1) {
     dispatch(deleteClientAC(id));
@@ -350,7 +350,7 @@ export const getClients = (
   token: string | null,
   currentClientPage: number,
   clientsPageSize: number,
-  clientsFilter: ClientsSearchFilterType
+  clientsFilter: SearchFilterType
 ): ThunkType => async (
     dispatch,
 ) => {
@@ -409,7 +409,7 @@ export const deleteClient = (
     clients: Array<ClientType>,
     currentPage: number,
     pageLimit: number,
-    filter: ClientsSearchFilterType
+    filter: SearchFilterType
 ): ThunkType => async (
     dispatch
 ) => {
@@ -578,7 +578,7 @@ export const archiveClient = (
     clients: Array<ClientType>,
     currentPage: number,
     pageLimit: number,
-    filter: ClientsSearchFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));

@@ -8,15 +8,24 @@
   .search-form__search-wrap {
     position: relative;
     flex: 1 1 auto;
+
+    svg {
+      position: absolute;
+      top: 50%;
+      right: 0.7rem;
+      width: 26px;
+      height: 26px;
+      transform: translate(0, -50%);
+    }
   }
 
   .isFavourite {
-    width: 56px;
-    height: 56px;
+    width: 41px;
+    height: 41px;
     background-image: url("../svg/star.svg");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 50px 50px;
+    background-size: 34px;
     cursor: pointer;
 
     &:hover {
@@ -133,12 +142,19 @@
       }
     }
 
+    .search-form__search-wrap {
+      svg {
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
     .select-block {
       height: 66px;
     }
 
     .search-submit {
-
       svg {
         width: 40px;
         height: 40px;
@@ -152,6 +168,12 @@
           font-size: 25px !important;
         }
       }
+    }
+
+    .isFavourite {
+      width: 56px;
+      height: 56px;
+      background-size: 50px 50px;
     }
   }
 }

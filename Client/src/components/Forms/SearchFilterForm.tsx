@@ -1,32 +1,31 @@
 import * as React from "react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { ReactComponent as SearchIcon } from "../../assets/svg/search.svg";
+import { ReactComponent as FilterIcon } from "../../assets/svg/filter.svg";
 import { SearchFilterType, SelectOptionType } from "../../types/Types";
 import { FormSelect } from "./formComponents/FormSelect";
 import {handleEnterClick} from "../../utils/functions";
 
-type FormType = {
-  term: string;
-  condition: string;
-};
-
 type PropsType = {
+  isFavourite?: boolean;
   options: Array<SelectOptionType>;
   filter: SearchFilterType;
   onFilterChanged: (filter: SearchFilterType) => void;
 };
 
 export const SearchFilterForm: React.FC<PropsType> = React.memo(({
+ isFavourite,
  options,
  filter,
  onFilterChanged
 }) => {
   const formRef = React.useRef<HTMLFormElement>(null);
 
-  const submit = (values: FormType, formikHelpers: FormikHelpers<FormType>) => {
+  const submit = (values: { term: string; condition: string; isFavourite: string }, formikHelpers: FormikHelpers<{ term: string; condition: string; isFavourite: string }>) => {
     const filter: SearchFilterType = {
       term: values.term,
-      condition: values.condition
+      condition: values.condition,
+      isFavourite: values.isFavourite
     };
     onFilterChanged(filter);
     formikHelpers.setSubmitting(false);
@@ -35,7 +34,8 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
 
   const initialValues = {
     term: filter.term,
-    condition: filter.condition
+    condition: filter.condition,
+    isFavourite: filter.isFavourite || ""
   };
 
   return (
@@ -44,7 +44,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
           initialValues={initialValues}
           onSubmit={submit}
       >
-        {({ isSubmitting, handleSubmit }) => {
+        {({ values, isSubmitting, handleSubmit, setFieldValue }) => {
 
           return (
               <Form
@@ -61,6 +61,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                         handleEnterClick(event, handleSubmit)
                       }}
                   />
+                  <SearchIcon/>
                 </div>
                 <FormSelect
                     name="condition"
@@ -69,11 +70,35 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                       handleEnterClick(event, handleSubmit)
                     }}
                 />
+                {isFavourite && (
+                    <>
+                      <Field
+                          type="checkbox"
+                          name="isFavourite"
+                          id="isFavourite"
+                          checked={values.isFavourite}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setFieldValue('isFavourite', e.target.checked);
+                          }}
+                          onKeyDown={(event: React.KeyboardEvent) => {
+                            handleEnterClick(event, handleSubmit)
+                          }}
+                      />
+                      <label
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content="Click to show only favourite clients"
+                          htmlFor="isFavourite"
+                          className="isFavourite"></label>
+                    </>
+                  )
+                }
                 <button
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Filter Clients"
                     className={"btn btn--sm btn--transparent search-submit"}
                     type="submit" disabled={isSubmitting}
                 >
-                  <SearchIcon/>
+                  <FilterIcon/>
                 </button>
               </Form>
           )

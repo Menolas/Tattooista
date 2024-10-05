@@ -212,11 +212,11 @@ img {
   background-color: transparent;
   transition: all 0.3s ease;
 }
-.btn--transparent:hover {
+.btn--transparent:hover:not(.closing-btn) {
   background-color: #fafafa;
   color: #080808 !important;
 }
-.btn--transparent:hover svg {
+.btn--transparent:hover:not(.closing-btn) svg {
   fill: #080808;
 }
 
@@ -1744,6 +1744,10 @@ img {
 .tattoo-style .tattoo-style__item.btn--light-bg {
   color: #080808;
 }
+.tattoo-style .tattoo-style__item.btn--light-bg:hover, .tattoo-style .tattoo-style__item.btn--light-bg:focus, .tattoo-style .tattoo-style__item.btn--light-bg:active {
+  color: #080808 !important;
+  background-color: #fafafa !important;
+}
 .tattoo-style .tattoo-style__item span {
   max-width: 100%;
   overflow: hidden;
@@ -2422,10 +2426,10 @@ img {
   background-color: #fafafa;
 }
 .pagination .pagination__pageLimitButton {
-  padding: 0 9px;
-  height: 32px;
+  padding: 5px 12px;
+  height: 44px;
   max-width: 60px;
-  min-width: 60px;
+  min-width: 42px;
   font-size: 20px;
   font-weight: 600;
   color: #080808;
@@ -2997,12 +3001,11 @@ input[type=checkbox][value=true] + label .checkbox::after {
 
 .portfolio-slider .alice-carousel .alice-carousel__wrapper {
   max-width: 100%;
-  height: 300px;
+  height: 400px;
 }
 .portfolio-slider .alice-carousel .alice-carousel__wrapper .alice-carousel__stage li.alice-carousel__stage-item {
   flex-shrink: 0;
   padding: 5px;
-  width: 200px !important;
 }
 .portfolio-slider .alice-carousel .alice-carousel__wrapper .alice-carousel__stage li.alice-carousel__stage-item div.slider-item {
   position: relative;
@@ -3200,13 +3203,21 @@ input[type=checkbox][value=true] + label .checkbox::after {
   position: relative;
   flex: 1 1 auto;
 }
+.search-form .search-form__search-wrap svg {
+  position: absolute;
+  top: 50%;
+  right: 0.7rem;
+  width: 26px;
+  height: 26px;
+  transform: translate(0, -50%);
+}
 .search-form .isFavourite {
-  width: 56px;
-  height: 56px;
+  width: 41px;
+  height: 41px;
   background-image: url("../svg/star.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 50px 50px;
+  background-size: 34px;
   cursor: pointer;
 }
 .search-form .isFavourite:hover {
@@ -3304,6 +3315,11 @@ input[type=checkbox][value=true] + label .checkbox::after {
   .search-form .search-input::placeholder {
     font-size: 26px !important;
   }
+  .search-form .search-form__search-wrap svg {
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+  }
   .search-form .select-block {
     height: 66px;
   }
@@ -3313,6 +3329,11 @@ input[type=checkbox][value=true] + label .checkbox::after {
   }
   .search-form .select-block div[class*=-ValueContainer] div[class*=-placeholder] {
     font-size: 25px !important;
+  }
+  .search-form .isFavourite {
+    width: 56px;
+    height: 56px;
+    background-size: 50px 50px;
   }
 }
 .confetti {
