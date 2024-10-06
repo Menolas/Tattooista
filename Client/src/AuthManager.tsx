@@ -1,4 +1,4 @@
-import React, {ReactNode,useEffect} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {checkAuth} from "./redux/Auth/auth-reducer";
@@ -15,13 +15,12 @@ export const AuthManager = ({children}: AuthManagerProps) => {
 
     const location = useLocation();
     const navigate = useNavigate();
-
     const dispatch = useDispatch();
 
     useEffect( () => {
+        console.log("authManager useEffect");
         if (isAuth && !user?.isActivated) navigate("registration");
-        dispatch(checkAuth());
-
+        if (!isAuth) dispatch(checkAuth());
     }, [location.pathname, isAuth, user?.isActivated, dispatch, navigate]);
 
     return (

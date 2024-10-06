@@ -18,9 +18,7 @@ export const HeaderContainer: React.FC = () => {
   const activeStyle = useSelector(getActiveStyleSelector);
 
   useEffect(() => {
-
     const pathArray = pageLocation.split('/');
-
     if (pathArray[1] === 'portfolio') {
       setHeaderClasses('main-header--portfolio');
     } else if (pathArray[1] === 'admin') {
