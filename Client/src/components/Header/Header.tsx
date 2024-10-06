@@ -11,9 +11,13 @@ import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
 import {StyleType} from "../../types/Types";
+import {useState} from "react";
+import {ModalPopUp} from "../common/ModalPopUp";
+import {LoginForm} from "../Forms/LoginForm";
 
 type PropsType = {
     isAuth: string | null;
+    authApiError: null | string;
     headerClasses: string | null;
     logout: () => void;
     activeStyle: StyleType | null;
@@ -21,10 +25,17 @@ type PropsType = {
 
 export const Header: React.FC<PropsType> = React.memo(({
   isAuth,
+  authApiError,
   headerClasses,
   logout,
   activeStyle,
 }) => {
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  const closeLoginModal = () => {
+    setIsLogin(false);
+  }
 
   return (
     <header className = { 'main-header ' + headerClasses }>
@@ -64,29 +75,39 @@ export const Header: React.FC<PropsType> = React.memo(({
             }
             { isAuth
                 ? (
-                    <NavLink
+                    <button
+                        className={"btn btn--transparent"}
                         data-tooltip-id="my-tooltip"
                         data-tooltip-content="Log out"
-                        to={'/'}
                         onClick={logout}
                     >
                         <LogOutIcon />
                         Log Out
-                    </NavLink>
+                    </button>
                   )
                 : (
-                    <NavLink
+                    <button
+                        className={"btn btn--transparent"}
                         data-tooltip-id="my-tooltip"
                         data-tooltip-content="Log in"
-                        to={'/login'}
+                        onClick={() => setIsLogin(true)}
                     >
                         <LoginIcon />
                         Log In
-                    </NavLink>
+                    </button>
                 )
             }
           </nav>
       </div>
+      <ModalPopUp
+          isOpen={isLogin}
+          closeModal={closeLoginModal}
+      >
+          <LoginForm
+              authApiError={authApiError}
+              closeModal={closeLoginModal}
+          />
+      </ModalPopUp>
       <Tooltip id="my-tooltip" />
     </header>
   );

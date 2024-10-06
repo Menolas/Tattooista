@@ -13,7 +13,6 @@ import {Admin} from "./pages/admin/Admin";
 import {BookingsContainer} from "./components/Admin/Bookings/BookingsContainer";
 import {ClientsContainer} from "./components/Admin/Clients/ClientsContainer";
 import {ProfileContainer} from "./components/Admin/ClientProfile/ProfileContainer";
-import {LoginContainer} from "./pages/login/LoginContainer";
 import {Preloader} from "./components/common/Preloader";
 import {ArchivedClients} from "./components/Admin/Archive/Clients/ArchivedClients";
 import {ArchivedBookings} from "./components/Admin/Archive/Bookings/ArchivedBookings";
@@ -40,8 +39,6 @@ const App = () => {
                                element={<MainPage key={Math.random()}/>} />
                         <Route path={`registration`}
                                element={<RegistrationContainer />} />
-                        <Route path={`login`}
-                               element={<LoginContainer />} />
                         <Route path={`portfolio/:activeStyleParam?`}
                                element={<PortfolioContainer />} />
                         <Route path={`admin`}

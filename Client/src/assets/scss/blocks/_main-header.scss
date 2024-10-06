@@ -44,10 +44,6 @@
   font-size: 12px;
 }
 
-.admin-nav a:hover svg {
-  transform: scale(1.2);
-}
-
 @media (min-width: 990px) {
 
   .main-header {
@@ -90,11 +86,18 @@
       align-items: center;
       gap: 40px;
       margin-left: auto;
-      a {
+      a, button.btn {
         @include link-style;
         display: flex;
         align-items: center;
         gap: 1rem;
+        padding: 0;
+        color: $light-text;
+        font-weight: 400;
+      }
+
+      button.btn {
+        border: none;
       }
 
       svg {
@@ -109,6 +112,19 @@
     height: 60px;
     font-size: 20px;
   }
+
+  .main-header__right .admin-nav {
+    a, button.btn {
+      background-color: transparent !important;
+      color: $light-text !important;
+      &:hover {
+        svg {
+          fill: $light-text !important;
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
 }
 
 @media (min-width: 1200px) {
@@ -118,3 +134,4 @@
     }
   }
 }
+
