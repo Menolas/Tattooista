@@ -42,11 +42,13 @@ export const Admin: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isAuth) {
+    if (!isAuth || isAuth === "USER") {
         dispatch(setFromAC(location.pathname));
-        navigate('/login');
+        navigate('/noAccess');
     } else if (isAuth && user?.isActivated !== true) {
         navigate('/registration');
+    } else if (isAuth === "ADMIN" || isAuth === "SUPER_ADMIN" ) {
+        //navigate('/admin/bookedConsultations');
     }
   }, [dispatch, navigate, isAuth, user?.isActivated, location.pathname]);
 

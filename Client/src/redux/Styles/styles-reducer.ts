@@ -211,8 +211,8 @@ export const getStyles = (
     }
   } catch (e) {
     console.log(e);
-    await dispatch(checkAuth());
-    dispatch(setStylesAC(tattooStyles));
+    //await dispatch(checkAuth());
+    //dispatch(setStylesAC(tattooStyles));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));

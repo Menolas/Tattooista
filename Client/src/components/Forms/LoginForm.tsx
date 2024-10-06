@@ -22,28 +22,23 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
-  isAuth: null | string;
   authApiError: null | string;
+  closeModal: () => void;
 };
 
 export const LoginForm: React.FC<PropsType> = React.memo(({
-  isAuth,
   authApiError,
+  closeModal,
 }) => {
 
   const dispatch = useDispatch();
 
-  if (isAuth === ADMIN || isAuth === SUPER_ADMIN) {
-    return <Navigate to="/admin/bookedConsultations" />
-  }
-
-  if (isAuth === USER) {
-    return <Navigate to="/" />
-  }
-
   const submit = async (values: LoginFormValues, actions: FormikHelpers<LoginFormValues>) => {
-    await dispatch(login(values));
-    actions.setSubmitting(false);
+    const success = await dispatch(login(values));
+    if (success) {
+      actions.setSubmitting(false);
+      closeModal();
+    }
   };
 
   const initialValues: LoginFormValues = {

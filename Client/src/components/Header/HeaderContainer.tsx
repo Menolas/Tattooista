@@ -3,13 +3,14 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../redux/Auth/auth-reducer";
 import { Header } from "./Header";
-import {getAuthSelector} from "../../redux/Auth/auth-selectors";
+import {getAuthApiErrorSelector, getAuthSelector} from "../../redux/Auth/auth-selectors";
 import {useLocation} from "react-router-dom";
 import {getActiveStyleSelector} from "../../redux/Styles/styles-selectors";
 
 export const HeaderContainer: React.FC = () => {
 
   const isAuth = useSelector(getAuthSelector);
+  const authApiError = useSelector(getAuthApiErrorSelector);
   const dispatch = useDispatch();
   const [headerClasses, setHeaderClasses] = useState('');
   const location = useLocation();
@@ -39,6 +40,7 @@ export const HeaderContainer: React.FC = () => {
 
   return <Header
       isAuth={isAuth}
+      authApiError={authApiError}
       headerClasses={headerClasses}
       logout={logoutCallBack}
       activeStyle={activeStyle}
