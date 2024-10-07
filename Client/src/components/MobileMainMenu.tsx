@@ -10,13 +10,15 @@ import {ReactComponent as FaceBookIcon} from "../assets/svg/facebook.svg";
 import {ReactComponent as InstagramIcon} from "../assets/svg/instagram.svg";
 
 type PropsType = {
-    isAuth: string | null
-    logout: () => void
-    closeMenu: () => void
+    isAuth: string | null;
+    login: () => void;
+    logout: () => void;
+    closeMenu: () => void;
 }
 
 export const MobileMainMenu: React.FC<PropsType> = React.memo(({
     isAuth,
+    login,
     logout,
     closeMenu
 }) => {
@@ -103,13 +105,16 @@ export const MobileMainMenu: React.FC<PropsType> = React.memo(({
                     )
                     : (
                         <li className={'mobile-main-menu__item'} key={'Log in'}>
-                            <NavLink
-                                to="/login"
-                                onClick={ closeMenu }
+                            <button
+                                className={"btn btn--transparent"}
+                                onClick={ () => {
+                                    login();
+                                    closeMenu();
+                                }}
                             >
                                 <LoginIcon />
                                 Log in
-                            </NavLink>
+                            </button>
                         </li>
                     )
                 }

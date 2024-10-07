@@ -22,7 +22,7 @@
 
 .modal-wrap__inner-block {
   position: relative;
-  padding: 60px 36px;
+  padding: 2rem 1.5rem;
   width: 100%;
   max-width: 615px;
   max-height: 90svh;
@@ -50,7 +50,7 @@
   margin-left: auto;
   width: 30px;
   height: 30px;
-  transform: translate(50%, -100%);
+  //transform: translate(50%, -100%);
 
   &::before,
   &::after {

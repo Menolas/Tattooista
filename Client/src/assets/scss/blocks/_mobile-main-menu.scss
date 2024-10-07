@@ -33,12 +33,16 @@
   }
 
   .mobile-main-menu__item {
-    a {
+    a, button.btn {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem 0;
       font-size: 20px;
+      color: $light-text;
+      font-weight: 400;
+    }
+    a {
       text-decoration: none;
     }
 

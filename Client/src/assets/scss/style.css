@@ -2100,7 +2100,7 @@ img {
 
 .modal-wrap__inner-block {
   position: relative;
-  padding: 60px 36px;
+  padding: 2rem 1.5rem;
   width: 100%;
   max-width: 615px;
   max-height: 90svh;
@@ -2128,7 +2128,6 @@ img {
   margin-left: auto;
   width: 30px;
   height: 30px;
-  transform: translate(50%, -100%);
 }
 .modal-wrap__close-btn::before, .modal-wrap__close-btn::after {
   bottom: 14px;
@@ -3497,12 +3496,16 @@ input[type=checkbox][value=true] + label .checkbox::after {
   row-gap: 1rem;
   z-index: 10;
 }
-.mobile-main-menu .mobile-main-menu__item a {
+.mobile-main-menu .mobile-main-menu__item a, .mobile-main-menu .mobile-main-menu__item button.btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0;
   font-size: 20px;
+  color: #fafafa;
+  font-weight: 400;
+}
+.mobile-main-menu .mobile-main-menu__item a {
   text-decoration: none;
 }
 .mobile-main-menu .mobile-main-menu__item svg {
