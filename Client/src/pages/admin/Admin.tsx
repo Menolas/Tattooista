@@ -3,10 +3,10 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getAuthSelector,
+    getAuthSelector, getFromSelector,
     getUserSelector
 } from "../../redux/Auth/auth-selectors";
-import {ADMIN_BUTTONS_DATA} from "../../utils/constants";
+import {ADMIN, ADMIN_BUTTONS_DATA, SUPER_ADMIN} from "../../utils/constants";
 import {ReactComponent as AdminIcon} from "../../assets/svg/admin.svg";
 import {useCallback, useEffect, useState} from "react";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
@@ -32,6 +32,7 @@ export const Admin: React.FC = () => {
   const successModal = useSelector(getSuccessModalSelector);
   const isAuth = useSelector(getAuthSelector);
   const user = useSelector(getUserSelector);
+  const from = useSelector(getFromSelector);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -44,11 +45,13 @@ export const Admin: React.FC = () => {
   useEffect(() => {
     if (!isAuth || isAuth === "USER") {
         dispatch(setFromAC(location.pathname));
+        console.log(location.pathname + " location.pathname in admin!!!!!!!!!!!")
         navigate('/noAccess');
     } else if (isAuth && user?.isActivated !== true) {
         navigate('/registration');
-    } else if (isAuth === "ADMIN" || isAuth === "SUPER_ADMIN" ) {
-        //navigate('/admin/bookedConsultations');
+    } else if (isAuth === ADMIN || isAuth === SUPER_ADMIN ) {
+        console.log(from + " from - admin!!!!!!!!!!!")
+        if (from) navigate(from);
     }
   }, [dispatch, navigate, isAuth, user?.isActivated, location.pathname]);
 

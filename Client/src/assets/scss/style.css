@@ -274,14 +274,14 @@ img {
   width: 24px;
   height: 24px;
 }
-.btn--icon:hover {
+.btn--icon:hover:not(.faq__item-handle) {
   background-color: #fafafa !important;
   color: #080808 !important;
 }
-.btn--icon:hover svg {
+.btn--icon:hover:not(.faq__item-handle) svg {
   fill: #080808;
 }
-.btn--icon:hover span::before {
+.btn--icon:hover:not(.faq__item-handle) span::before {
   border-color: #080808;
 }
 
@@ -3253,6 +3253,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
   height: 41px;
   background-color: transparent;
   border: 2px solid #fafafa;
+  cursor: pointer;
 }
 .search-form .select-block div[class*=-control] {
   height: 100%;

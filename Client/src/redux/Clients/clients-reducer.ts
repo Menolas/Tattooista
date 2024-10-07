@@ -45,7 +45,7 @@ const initialState = {
   filter: {
     term: '' as string | null,
     condition: "any" as string | null,
-    isFavourite: "any" as string | null,
+    isFavourite: false as boolean,
   } as SearchFilterType,
   profile: {} as ClientType,
   accessError: '' as string | undefined,

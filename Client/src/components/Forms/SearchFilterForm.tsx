@@ -21,7 +21,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
 }) => {
   const formRef = React.useRef<HTMLFormElement>(null);
 
-  const submit = (values: { term: string; condition: string; isFavourite: string }, formikHelpers: FormikHelpers<{ term: string; condition: string; isFavourite: string }>) => {
+  const submit = (values: { term: string; condition: string; isFavourite: boolean }, formikHelpers: FormikHelpers<{ term: string; condition: string; isFavourite: boolean }>) => {
     const filter: SearchFilterType = {
       term: values.term,
       condition: values.condition,
@@ -35,7 +35,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
   const initialValues = {
     term: filter.term,
     condition: filter.condition,
-    isFavourite: filter.isFavourite || ""
+    isFavourite: false
   };
 
   return (

@@ -16,6 +16,7 @@ export const HeaderContainer: React.FC = () => {
   const location = useLocation();
   const [pageLocation, setPageLocation] = useState(location.pathname);
   const activeStyle = useSelector(getActiveStyleSelector);
+  console.log(isAuth + " isAuth - headerContainer");
 
   useEffect(() => {
     const pathArray = pageLocation.split('/');
