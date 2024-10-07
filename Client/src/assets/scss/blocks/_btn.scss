@@ -78,7 +78,7 @@
     height: 24px;
   }
 
-  &:hover {
+  &:hover:not(.faq__item-handle) {
     background-color: $light !important;
     color: $dark-text !important;
 

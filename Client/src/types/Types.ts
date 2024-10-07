@@ -174,7 +174,7 @@ export type SelectOptionType = {
 export type SearchFilterType = {
     term: string;
     condition: string;
-    isFavourite?: string;
+    isFavourite?: boolean;
 }
 
 export type CommonResponseFields = {

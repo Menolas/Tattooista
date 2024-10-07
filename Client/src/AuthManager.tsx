@@ -18,7 +18,7 @@ export const AuthManager = ({children}: AuthManagerProps) => {
     const dispatch = useDispatch();
 
     useEffect( () => {
-        console.log("authManager useEffect");
+        console.log(isAuth + " isAuth - authManager");
         if (isAuth && !user?.isActivated) navigate("registration");
         if (!isAuth) dispatch(checkAuth());
     }, [location.pathname, isAuth, user?.isActivated, dispatch, navigate]);

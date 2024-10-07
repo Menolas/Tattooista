@@ -181,7 +181,6 @@ export const registration = (
 };
 
 export const checkAuth = ():ThunkType => async (dispatch) => {
-  //TO_DO: add api error and error message for user
 
   try {
     const response = await authAPI.checkAuth();
