@@ -8,12 +8,14 @@ import {StyleType} from "../types/Types";
 
 type PropsType = {
   isAuth: string | null;
+  login: () => void;
   logout: () => void;
   activeStyle: StyleType | null;
 };
 
 export const MainNav: React.FC<PropsType> = React.memo(({
     isAuth,
+    login,
     logout,
     activeStyle,
 }) => {
@@ -66,6 +68,7 @@ export const MainNav: React.FC<PropsType> = React.memo(({
       </div>
       <MobileMainMenu
           isAuth={isAuth}
+          login={login}
           logout={logout}
           closeMenu={() => setIsMenuOpen(false)}
       />

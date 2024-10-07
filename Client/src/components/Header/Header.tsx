@@ -33,9 +33,13 @@ export const Header: React.FC<PropsType> = React.memo(({
 
   const [isLogin, setIsLogin] = useState(false);
 
+  const openLoginModal = () => {
+      setIsLogin(true);
+  };
+
   const closeLoginModal = () => {
     setIsLogin(false);
-  }
+  };
 
   return (
     <header className = { 'main-header ' + headerClasses }>
@@ -43,6 +47,7 @@ export const Header: React.FC<PropsType> = React.memo(({
       <MainNav
           isAuth={isAuth}
           logout={logout}
+          login={openLoginModal}
           activeStyle={activeStyle}
       />
       <SocialNav />

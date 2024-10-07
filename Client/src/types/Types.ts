@@ -186,7 +186,6 @@ export interface ApiErrorType {
     response: {
         data: {
             message: string;
-            // Include other properties as needed
         };
         status?: number;
     };
