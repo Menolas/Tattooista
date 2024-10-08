@@ -112,39 +112,34 @@ export const ArchivedBookings: React.FC = React.memo(() => {
 
     return (
         <>
-            { accessError
-                ? <Navigate to="/noAccess"/>
-                : <>
-                    <div className="admin__cards-header">
-                        <SearchFilterForm
-                            options={bookingFilterSelectOptions}
-                            filter={filter}
-                            onFilterChanged={onFilterChangeCallBack}
-                        />
-                        <Paginator
-                            totalCount={totalCount}
-                            pageSize={pageSize}
-                            currentPage={currentPage}
-                            onPageChanged={onPageChangedCallBack}
-                            setPageLimit={setPageSizeCallBack}
-                        />
-                    </div>
-                    {isFetching
-                        ? <Preloader/>
-                        : totalCount && totalCount > 0
-                            ? (
-                                <ul className="admin__cards-list list">
-                                    {archivedConsultationsArray}
-                                </ul>
-                            ) : <NothingToShow/>
-                    }
-                    <ApiErrorMessageModal
-                      isOpen={!!archivedBookingApiError}
-                      error={archivedBookingApiError}
-                      closeModal={setApiErrorCallBack}
-                    />
-                </>
+            <div className="admin__cards-header">
+                <SearchFilterForm
+                    options={bookingFilterSelectOptions}
+                    filter={filter}
+                    onFilterChanged={onFilterChangeCallBack}
+                />
+                <Paginator
+                    totalCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChanged={onPageChangedCallBack}
+                    setPageLimit={setPageSizeCallBack}
+                />
+            </div>
+            {isFetching
+                ? <Preloader/>
+                : totalCount && totalCount > 0
+                    ? (
+                        <ul className="admin__cards-list list">
+                            {archivedConsultationsArray}
+                        </ul>
+                    ) : <NothingToShow/>
             }
+            <ApiErrorMessageModal
+              isOpen={!!archivedBookingApiError}
+              error={archivedBookingApiError}
+              closeModal={setApiErrorCallBack}
+            />
         </>
     );
 });

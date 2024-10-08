@@ -44,15 +44,10 @@ export const Admin: React.FC = () => {
 
   useEffect(() => {
     if (!isAuth || isAuth === "USER") {
+        console.log(location.pathname + " location.pathname - admin");
         dispatch(setFromAC(location.pathname));
-        console.log(location.pathname + " location.pathname in admin!!!!!!!!!!!")
         navigate('/noAccess');
-    } else if (isAuth && user?.isActivated !== true) {
-        navigate('/registration');
-    } else if (isAuth === ADMIN || isAuth === SUPER_ADMIN ) {
-        console.log(from + " from - admin!!!!!!!!!!!")
-        if (from) navigate(from);
-    }
+    } else if (isAuth && !user?.isActivated) navigate('/registration');
   }, [dispatch, navigate, isAuth, user?.isActivated, location.pathname]);
 
   useEffect(() => {

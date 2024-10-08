@@ -106,78 +106,73 @@ export const Clients: React.FC<PropsType> = React.memo(({
 
   return (
       <>
-          {(accessError && accessError !== '')
-              ? <Navigate to="/noAccess"/>
-              : <>
-                  <div className="admin__cards-header">
-                      <SearchFilterForm
-                          isFavourite={true}
-                          options={clientFilterSelectOptions}
-                          filter={clientsFilter}
-                          onFilterChanged={onFilterChanged}
-                      />
-                      <button
-                          className="btn btn--bg btn--light-bg add-btn"
-                          onClick={() => {
-                              setAddClientMode(true);
-                          }}
-                      >
-                          Add Client
-                      </button>
-                      <Paginator
-                          totalCount={totalCount}
-                          pageSize={pageSize}
-                          currentPage={currentPage}
-                          onPageChanged={onPageChanged}
-                          setPageLimit={setPageLimit}
-                      />
-                  </div>
-                  {
-                      isFetching
-                          ? <Preloader/>
-                          : totalCount && totalCount > 0
-                              ? (
-                                  <ul className="admin__cards-list list">
-                                      {clientsElements}
-                                  </ul>
-                              )
-                              : <NothingToShow/>
-                  }
-                  <ModalPopUp
-                      isOpen={addClientMode || editClientMode || editGalleryMode}
-                      modalTitle={addClientMode
-                          ? modalTitleAddClient
-                          : editClientMode
-                              ? modalTitleUpdateClient
-                              : modalUpdateGalleryTitle}
-                      closeModal={closeModal}
-                  >
-                      { (editClientMode || addClientMode) &&
-                          < UpdateClientForm
-                              apiError={clientsApiError}
-                              isEditing={editClientMode}
-                              data={client}
-                              closeModal={closeModal}
-                          />
-                      }
-                      {editGalleryMode &&
-                          <GalleryUploadForm
-                              apiError={clientsApiError}
-                              isEditPortfolio={false}
-                              client={client}
-                              refreshClientData={refreshClientData}
-                              isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-                              closeModal={closeModal}
-                          />
-                      }
-                  </ModalPopUp>
-                  <ApiErrorMessageModal
-                      isOpen={!!apiError}
-                      error={apiError}
-                      closeModal={setApiError}
-                  />
-              </>
+          <div className="admin__cards-header">
+              <SearchFilterForm
+                  isFavourite={true}
+                  options={clientFilterSelectOptions}
+                  filter={clientsFilter}
+                  onFilterChanged={onFilterChanged}
+              />
+              <button
+                  className="btn btn--bg btn--light-bg add-btn"
+                  onClick={() => {
+                      setAddClientMode(true);
+                  }}
+              >
+                  Add Client
+              </button>
+              <Paginator
+                  totalCount={totalCount}
+                  pageSize={pageSize}
+                  currentPage={currentPage}
+                  onPageChanged={onPageChanged}
+                  setPageLimit={setPageLimit}
+              />
+          </div>
+          {
+              isFetching
+                  ? <Preloader/>
+                  : totalCount && totalCount > 0
+                      ? (
+                          <ul className="admin__cards-list list">
+                              {clientsElements}
+                          </ul>
+                      )
+                      : <NothingToShow/>
           }
+          <ModalPopUp
+              isOpen={addClientMode || editClientMode || editGalleryMode}
+              modalTitle={addClientMode
+                  ? modalTitleAddClient
+                  : editClientMode
+                      ? modalTitleUpdateClient
+                      : modalUpdateGalleryTitle}
+              closeModal={closeModal}
+          >
+              { (editClientMode || addClientMode) &&
+                  < UpdateClientForm
+                      apiError={clientsApiError}
+                      isEditing={editClientMode}
+                      data={client}
+                      closeModal={closeModal}
+                  />
+              }
+              {editGalleryMode &&
+                  <GalleryUploadForm
+                      apiError={clientsApiError}
+                      isEditPortfolio={false}
+                      client={client}
+                      refreshClientData={refreshClientData}
+                      isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+                      closeModal={closeModal}
+                  />
+              }
+          </ModalPopUp>
+          <ApiErrorMessageModal
+              isOpen={!!apiError}
+              error={apiError}
+              closeModal={setApiError}
+          />
       </>
   );
 });

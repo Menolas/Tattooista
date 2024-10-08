@@ -3,8 +3,8 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../redux/Auth/auth-reducer";
 import { Header } from "./Header";
-import {getAuthApiErrorSelector, getAuthSelector} from "../../redux/Auth/auth-selectors";
-import {useLocation} from "react-router-dom";
+import {getAuthApiErrorSelector, getAuthSelector, getFromSelector} from "../../redux/Auth/auth-selectors";
+import {useLocation, useNavigate} from "react-router-dom";
 import {getActiveStyleSelector} from "../../redux/Styles/styles-selectors";
 
 export const HeaderContainer: React.FC = () => {
@@ -16,7 +16,8 @@ export const HeaderContainer: React.FC = () => {
   const location = useLocation();
   const [pageLocation, setPageLocation] = useState(location.pathname);
   const activeStyle = useSelector(getActiveStyleSelector);
-  console.log(isAuth + " isAuth - headerContainer");
+  const from = useSelector(getFromSelector);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const pathArray = pageLocation.split('/');

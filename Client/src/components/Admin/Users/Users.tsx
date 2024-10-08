@@ -79,59 +79,54 @@ export const Users: React.FC<PropsType> = React.memo(({
 
     return (
         <>
-            {(accessError && accessError !== '')
-                ? <Navigate to="/noAccess"/>
-                : <>
-                    <div className="admin__cards-header">
-                        <SearchFilterForm
-                            options={usersFilterSelectOptions}
-                            filter={filter}
-                            onFilterChanged={setFilter}
-                        />
-                        <button
-                            className="btn btn--bg btn--light-bg add-btn"
-                            onClick={() => {
-                                setAddMode(true)
-                            }}
-                        >
-                            Add User
-                        </button>
-                        <Paginator
-                            totalCount={total}
-                            pageSize={pageLimit}
-                            currentPage={currentPage}
-                            onPageChanged={setCurrentPage}
-                            setPageLimit={setPageLimit}
-                        />
-                    </div>
-                    {
-                        isFetching
-                            ? <Preloader/>
-                            : total && total > 0
-                                ? (
-                                    <ul className="admin__cards-list list">
-                                        {usersElements}
-                                    </ul>
-                                )
-                                : <NothingToShow/>
-                    }
-                    <ModalPopUp
-                        isOpen={addUserMode || editUserMode}
-                        modalTitle={addUserMode ? addUserModalTitle : editUserModalTitle}
-                        closeModal={closeModal}
-                    >
-                        {(addUserMode || editUserMode) &&
-                            <UpdateUserForm
-                                apiError={apiError}
-                                isEditing={editUserMode}
-                                data={data}
-                                roles={roles}
-                                closeModal={closeModal}
-                            />
-                        }
-                    </ModalPopUp>
-                </>
+            <div className="admin__cards-header">
+                <SearchFilterForm
+                    options={usersFilterSelectOptions}
+                    filter={filter}
+                    onFilterChanged={setFilter}
+                />
+                <button
+                    className="btn btn--bg btn--light-bg add-btn"
+                    onClick={() => {
+                        setAddMode(true)
+                    }}
+                >
+                    Add User
+                </button>
+                <Paginator
+                    totalCount={total}
+                    pageSize={pageLimit}
+                    currentPage={currentPage}
+                    onPageChanged={setCurrentPage}
+                    setPageLimit={setPageLimit}
+                />
+            </div>
+            {
+                isFetching
+                    ? <Preloader/>
+                    : total && total > 0
+                        ? (
+                            <ul className="admin__cards-list list">
+                                {usersElements}
+                            </ul>
+                        )
+                        : <NothingToShow/>
             }
+            <ModalPopUp
+                isOpen={addUserMode || editUserMode}
+                modalTitle={addUserMode ? addUserModalTitle : editUserModalTitle}
+                closeModal={closeModal}
+            >
+                {(addUserMode || editUserMode) &&
+                    <UpdateUserForm
+                        apiError={apiError}
+                        isEditing={editUserMode}
+                        data={data}
+                        roles={roles}
+                        closeModal={closeModal}
+                    />
+                }
+            </ModalPopUp>
         </>
     );
 });
