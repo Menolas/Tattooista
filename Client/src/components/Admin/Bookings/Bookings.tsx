@@ -91,57 +91,52 @@ export const Bookings: React.FC<PropsType> = React.memo(({
 
     return (
       <>
-          { (accessError && accessError !== '')
-              ? <Navigate to="/noAccess" />
-              : <>
-                  <div className="admin__cards-header">
-                      <SearchFilterForm
-                          options={bookingFilterSelectOptions}
-                          filter={filter}
-                          onFilterChanged={onFilterChanged}
-                      />
-                      <button
-                          className="btn btn--bg btn--light-bg add-btn"
-                          onClick={() => {setAddConsultationMode(true)}}
-                      >
-                          Add a consultation
-                      </button>
-                      <Paginator
-                          totalCount={totalCount}
-                          pageSize={pageSize}
-                          currentPage={currentPage}
-                          onPageChanged={setCurrentPage}
-                          setPageLimit={setPageLimit}
-                      />
-                  </div>
-                  {
-                      isFetching
-                          ? <Preloader />
-                          : totalCount && totalCount > 0
-                              ? (
-                                  <ul className="admin__cards-list list">
-                                      { bookedConsultationsArray }
-                                  </ul>
-                              )
-                              : <NothingToShow/>
-                  }
-                  <ModalPopUp
-                      isOpen={addConsultationMode}
-                      modalTitle={modalTitle}
-                      closeModal={closeModal}
-                  >
-                      <AddBookingForm
-                          apiError={apiError}
-                          closeBookingModal={closeModal}
-                      />
-                  </ModalPopUp>
-                  <ApiErrorMessageModal
-                      isOpen={!!bookingApiError}
-                      error={bookingApiError}
-                      closeModal={setBookingApiError}
-                  />
-                </>
-          }
+        <div className="admin__cards-header">
+            <SearchFilterForm
+                options={bookingFilterSelectOptions}
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+            />
+            <button
+                className="btn btn--bg btn--light-bg add-btn"
+                onClick={() => {setAddConsultationMode(true)}}
+            >
+                Add a consultation
+            </button>
+            <Paginator
+                totalCount={totalCount}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChanged={setCurrentPage}
+                setPageLimit={setPageLimit}
+            />
+        </div>
+        {
+            isFetching
+                ? <Preloader />
+                : totalCount && totalCount > 0
+                    ? (
+                        <ul className="admin__cards-list list">
+                            { bookedConsultationsArray }
+                        </ul>
+                    )
+                    : <NothingToShow/>
+        }
+        <ModalPopUp
+            isOpen={addConsultationMode}
+            modalTitle={modalTitle}
+            closeModal={closeModal}
+        >
+            <AddBookingForm
+                apiError={apiError}
+                closeBookingModal={closeModal}
+            />
+        </ModalPopUp>
+        <ApiErrorMessageModal
+            isOpen={!!bookingApiError}
+            error={bookingApiError}
+            closeModal={setBookingApiError}
+        />
       </>
     );
 });
