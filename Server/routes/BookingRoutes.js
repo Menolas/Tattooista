@@ -4,13 +4,14 @@ const Booking = require('../models/Booking');
 const ArchivedBooking = require('../models/ArchivedBooking');
 const controller = require('../controllers/bookingController');
 const roleMiddleware = require('../middlewares/roleMiddleware');
+const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 // Getting bookings
-router.get('/', roleMiddleware(["ADMIN"]), controller.getBookings );
+router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getBookings );
 
 // getting archived bookings
 
-router.get('/archive', roleMiddleware(["ADMIN"]), controller.getArchivedBookings);
+router.get('/archive', roleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getArchivedBookings);
 
 //getting one booking
 
@@ -52,7 +53,7 @@ async function getBooking(req, res, next) {
     return res.status(500).json({ message: err.message });
   }
   res.booking = booking;
-  next()
+  next();
 }
 
 async function getArchivedBooking(req, res, next) {

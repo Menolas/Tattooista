@@ -61,7 +61,7 @@ export const ArchivedClient: React.FC<PropsType> = React.memo(({
   }
 
   return (
-    <li className="admin__card admin__card--avatar">
+    <li key={data?._id} className="admin__card admin__card--avatar">
       <div className="admin__card-actions">
         <button
             data-tooltip-id="my-tooltip"

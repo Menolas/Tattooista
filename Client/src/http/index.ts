@@ -1,4 +1,4 @@
-import axios, {CreateAxiosDefaults} from "axios";
+import axios from "axios";
 import {IUser} from "../types/Types";
 
 export const API_URL = process.env.REACT_APP_API_URL;
@@ -8,11 +8,6 @@ export interface AuthResponse {
     refreshToken: string
     user: IUser
 }
-
-export const instance = axios.create({
-    withCredentials: true,
-    baseURL: API_URL
-} as CreateAxiosDefaults);
 
 const $api = axios.create({
     withCredentials: true,

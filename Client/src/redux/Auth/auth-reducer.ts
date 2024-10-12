@@ -55,8 +55,14 @@ export const authReducer = (
     case SET_AUTH_API_ERROR:
       return {
         ...state,
-        authApiError: action.error
+        authApiError: action.error,
       }
+
+    case "SET_FROM":
+        return {
+            ...state,
+            from: action.from
+        }
 
     default: return state
   }
@@ -203,7 +209,9 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    console.log(error.response?.data?.message);
+    dispatch(logOutAC());
+    dispatch(setAuthApiErrorAC(error.response?.data?.message));
+    console.log(error);
     return false;
   }
 };

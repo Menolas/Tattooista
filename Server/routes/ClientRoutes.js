@@ -3,10 +3,10 @@ const router = express.Router();
 const Client = require('../models/Client');
 const ArchivedClient = require('../models/ArchivedClient');
 const controller = require('../controllers/clientsController');
-const roleMiddleware = require("../middlewares/roleMiddleware");
+const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 // Getting all
-router.get('/', roleMiddleware(["ADMIN"]), controller.getClients);
+router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getClients);
 
 // get archived clients
 router.get('/archive', controller.getArchivedClients);

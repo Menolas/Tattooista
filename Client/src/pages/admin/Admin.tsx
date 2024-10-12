@@ -3,10 +3,9 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getAuthSelector, getFromSelector,
-    getUserSelector
+    getAuthSelector,
 } from "../../redux/Auth/auth-selectors";
-import {ADMIN, ADMIN_BUTTONS_DATA, SUPER_ADMIN} from "../../utils/constants";
+import { ADMIN_BUTTONS_DATA, } from "../../utils/constants";
 import {ReactComponent as AdminIcon} from "../../assets/svg/admin.svg";
 import {useCallback, useEffect, useState} from "react";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
@@ -31,8 +30,6 @@ export const Admin: React.FC = () => {
 
   const successModal = useSelector(getSuccessModalSelector);
   const isAuth = useSelector(getAuthSelector);
-  const user = useSelector(getUserSelector);
-  const from = useSelector(getFromSelector);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -44,11 +41,10 @@ export const Admin: React.FC = () => {
 
   useEffect(() => {
     if (!isAuth || isAuth === "USER") {
-        console.log(location.pathname + " location.pathname - admin");
         dispatch(setFromAC(location.pathname));
         navigate('/noAccess');
-    } else if (isAuth && !user?.isActivated) navigate('/registration');
-  }, [dispatch, navigate, isAuth, user?.isActivated, location.pathname]);
+    }
+  }, [dispatch, navigate, isAuth, location.pathname]);
 
   useEffect(() => {
     if (successModal.isSuccess) {

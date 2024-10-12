@@ -1,6 +1,6 @@
 import {AxiosRequestConfig} from "axios";
 import {ClientType, SearchFilterType, CommonResponseFields,} from "../../types/Types";
-import {instance} from "../../http";
+import $api from "../../http";
 
 type DeleteClientResponseType = CommonResponseFields;
 
@@ -27,33 +27,32 @@ export const clientsAPI = {
     pageSize = 5,
     filter: SearchFilterType
   ) {
-    return await instance.get<GetClientsResponseType>(
+    return await $api.get<GetClientsResponseType>(
         `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`,
         { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
             .then(response => response.data);
   },
 
   async getClientProfile(clientId: string) {
-    return await instance.get<GetClientProfileResponseType>(`clients/${clientId}`)
+    return await $api.get<GetClientProfileResponseType>(`clients/${clientId}`)
         .then(response => response.data);
   },
 
   async updateClientGallery(clientId: string, values: FormData) {
-    return await instance.post<UpdateClientResponseType>(`clients/updateGallery/${clientId}`,
+    return await $api.post<UpdateClientResponseType>(`clients/updateGallery/${clientId}`,
         values
     ).then(response => response.data);
   },
 
   async deleteClient(clientId: string) {
-    return await instance.delete<DeleteClientResponseType>(`clients/${clientId}`)
+    return await $api.delete<DeleteClientResponseType>(`clients/${clientId}`)
         .then(response => response.data);
   },
 
   async addClient(
     values: FormData,
-    //values: AddClientFormValues
   ) {
-    return await instance.post<UpdateClientResponseType>('clients', values)
+    return await $api.post<UpdateClientResponseType>('clients', values)
       .then(response => response.data)
   },
 
@@ -61,14 +60,14 @@ export const clientsAPI = {
     clientId: string,
     values: FormData,
   ) {
-     return await instance.post<UpdateClientResponseType>(`clients/edit/${clientId}`, values)
+     return await $api.post<UpdateClientResponseType>(`clients/edit/${clientId}`, values)
         .then(response => response.data);
   },
 
   async toggleIsFavorite(
     clientId: string
   ) {
-    return await instance.patch<UpdateClientResponseType>(`clients/favourite/${clientId}`)
+    return await $api.patch<UpdateClientResponseType>(`clients/favourite/${clientId}`)
         .then(response => response.data);
   },
 
@@ -76,14 +75,14 @@ export const clientsAPI = {
       clientId: string,
       picture: string
   ) {
-      return await instance.delete<DeleteClientGalleryPictureResponseType>(`clients/updateGallery/${clientId}?&picture=${picture}`)
+      return await $api.delete<DeleteClientGalleryPictureResponseType>(`clients/updateGallery/${clientId}?&picture=${picture}`)
           .then(response => response.data);
   },
 
   async archiveClient(
       clientId: string
   ) {
-      return await instance.post<ArchiveClientResponseType>(`clients/archive/${clientId}`)
+      return await $api.post<ArchiveClientResponseType>(`clients/archive/${clientId}`)
           .then(response => response.data);
   },
 };

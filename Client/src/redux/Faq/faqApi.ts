@@ -1,4 +1,4 @@
-import {instance} from "../../http";
+import $api from "../../http";
 import {FaqType, CommonResponseFields, UpdateFaqValues} from "../../types/Types";
 
 type GetFaqItemsResponseType = CommonResponseFields & {
@@ -16,22 +16,22 @@ type DeleteFaqItemResponseType = CommonResponseFields;
 export const faqApi = {
 
     async getFaqItems() {
-        const response = await instance.get<GetFaqItemsResponseType>('faq/');
+        const response = await $api.get<GetFaqItemsResponseType>('faq/');
         return response.data;
     },
 
     async addFaqItem(values: UpdateFaqValues) {
-        const response = await instance.post<AddFaqItemResponseType>('faq', values);
+        const response = await $api.post<AddFaqItemResponseType>('faq', values);
         return response.data;
     },
 
     async updateFaqItem(id: string, values: UpdateFaqValues) {
-        const response = await instance.post<UpdateFaqItemResponseType>(`faq/${id}`, values);
+        const response = await $api.post<UpdateFaqItemResponseType>(`faq/${id}`, values);
         return response.data;
     },
 
     async deleteFaqItem(id: string) {
-        const response = await instance.delete<DeleteFaqItemResponseType>(`faq/${id}`);
+        const response = await $api.delete<DeleteFaqItemResponseType>(`faq/${id}`);
         return response.data;
     },
 };

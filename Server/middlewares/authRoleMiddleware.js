@@ -34,6 +34,7 @@ module.exports = function (roles) {
         if (timeToExpire < expirationThreshold) {
           const {refreshToken} = req.cookies;
           const userData = await userService.refresh(refreshToken);
+          console.log(refreshToken + " refreshToken !!!!!!!!!!!")
           if (userData) {
             console.log("jwt refreshing !!!!!!!!!!!")
             req.userData = userData;

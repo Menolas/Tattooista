@@ -1,4 +1,4 @@
-import {instance} from "../../http";
+import $api from "../../http";
 import {PageType, CommonResponseFields} from "../../types/Types";
 
 export type GetPagesResponseType = CommonResponseFields & {
@@ -12,17 +12,17 @@ type ChangeAboutPageVisibilityResponseType = GetPagesResponseType;
 export const aboutApi = {
 
     async getAboutPage() {
-        return await instance.get<GetPagesResponseType>('pages/about')
+        return await $api.get<GetPagesResponseType>('pages/about')
             .then(response => response.data);
     },
 
     async editAboutPage(values: FormData) {
-        return await instance.post<EditAboutPageResponseType>(`pages/about`, values)
+        return await $api.post<EditAboutPageResponseType>(`pages/about`, values)
             .then(response => response.data);
     },
 
     async changeAboutPageVisibility(isActive: boolean) {
-        return await instance.patch<ChangeAboutPageVisibilityResponseType>(`pages/visibility/about`, {isActive: isActive})
+        return await $api.patch<ChangeAboutPageVisibilityResponseType>(`pages/visibility/about`, {isActive: isActive})
             .then(response => response.data);
     },
 };
