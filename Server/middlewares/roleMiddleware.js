@@ -18,6 +18,7 @@ module.exports = function (roles) {
         if (err) {
           const results = {};
           if (err.name === 'TokenExpiredError') {
+            console.log("we are here!!!!!")
             results.resultCode = 2;
             results.message = 'Token expired';
           } else {

@@ -1,5 +1,5 @@
 import {GalleryItemType, CommonResponseFields} from "../../types/Types";
-import {instance} from "../../http";
+import $api from "../../http";
 import {ACTIVE_TATTOO_STYLE_FALLBACK} from "../../utils/constants";
 
 type AdminUpdateGalleryResponseType = CommonResponseFields & {
@@ -26,7 +26,7 @@ export const galleryApi = {
       currentPage: number,
       pageSize: number
     ) {
-        return await instance.get<GetGalleryItemsResponseType>(
+        return await $api.get<GetGalleryItemsResponseType>(
             `gallery?&style=${style}&page=${currentPage}&limit=${pageSize}`
         )
             .then(response => response.data);
@@ -35,23 +35,23 @@ export const galleryApi = {
     async deleteGalleryItem(
       itemId: string
     ) {
-        return await instance.delete<DeleteGalleryItemResponseType>(`gallery/${itemId}`)
+        return await $api.delete<DeleteGalleryItemResponseType>(`gallery/${itemId}`)
           .then(response => response.data);
     },
 
     async adminUpdateGallery(style: string, gallery: FormData) {
-        return await instance.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
+        return await $api.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
           gallery
         ).then(response => response.data);
     },
 
     async archiveGalleryItem(id: string) {
-        return await instance.post<ArchiveGalleryItemResponseType>(`gallery/archive/${id}`)
+        return await $api.post<ArchiveGalleryItemResponseType>(`gallery/archive/${id}`)
             .then(response => response.data);
     },
 
     async updateGalleryItem(id: string, values: object) {
-        return await instance.patch<UpdateGalleryItemResponseType>(`gallery/updateGalleryItem/${id}`, {values})
+        return await $api.patch<UpdateGalleryItemResponseType>(`gallery/updateGalleryItem/${id}`, {values})
             .then(response => response.data);
     },
 };

@@ -1,6 +1,6 @@
 import {AxiosRequestConfig} from "axios";
 import {StyleType, CommonResponseFields} from "../../types/Types";
-import {instance} from "../../http";
+import $api from "../../http";
 
 type GetTattooStylesResponseType = CommonResponseFields & {
     tattooStyles: Array<StyleType>;
@@ -21,7 +21,7 @@ export const stylesApi = {
         token: string | null | undefined,
         isSlider?: boolean
     ) {
-        const response = await instance.get<GetTattooStylesResponseType>(`tattooStyle/?&isSlider=${isSlider}`,
+        const response = await $api.get<GetTattooStylesResponseType>(`tattooStyle/?&isSlider=${isSlider}`,
             {headers: {Authorization: `Bearer ${token}`}} as AxiosRequestConfig
         );
         return response.data;
@@ -30,7 +30,7 @@ export const stylesApi = {
     async addStyle(
         values: FormData
     ) {
-        const response = await instance.post<AddTattooStylesResponseType>('tattooStyle/', values);
+        const response = await $api.post<AddTattooStylesResponseType>('tattooStyle/', values);
         return response.data;
     },
 
@@ -38,12 +38,12 @@ export const stylesApi = {
         id: string,
         values: FormData
     ) {
-        const response = await instance.post<EditTattooStyleResponseType>(`tattooStyle/${id}`, values);
+        const response = await $api.post<EditTattooStyleResponseType>(`tattooStyle/${id}`, values);
         return response.data;
     },
 
     async deleteStyle(id: string) {
-        const response = await instance.delete<DeleteTattooStyleResponseType>(`tattooStyle/${id}`);
+        const response = await $api.delete<DeleteTattooStyleResponseType>(`tattooStyle/${id}`);
         return response.data;
     },
 };

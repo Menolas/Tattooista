@@ -48,7 +48,7 @@ const initialState = {
     isFavourite: false as boolean,
   } as SearchFilterType,
   profile: {} as ClientType,
-  accessError: '' as string | undefined,
+  accessError: null as null | string,
   clientsApiError: null as null | string,
 };
 
@@ -212,10 +212,10 @@ export const setClientsApiErrorAC = (error: string | null): SetClientApiErrorAT 
 
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR;
-  error: string | undefined;
+  error: null | string;
 };
 
-export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+export const setAccessErrorAC = (error: null | string): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
 });
 
@@ -363,7 +363,7 @@ export const getClients = (
       clientsFilter
     )
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setAccessErrorAC(''));
+      dispatch(setAccessErrorAC(null));
       dispatch(setClientsAC(response.clients, response.totalCount));
       return true;
     } else {

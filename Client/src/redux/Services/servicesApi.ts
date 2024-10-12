@@ -1,6 +1,6 @@
 import {ServiceType} from "../../types/Types";
-import {instance} from "../../http";
 import {CommonResponseFields} from "../../types/Types";
+import $api from "../../http";
 
 type GetServicesResponseType = CommonResponseFields & {
     services: Array<ServiceType>;
@@ -17,7 +17,7 @@ type DeleteServiceResponseType = CommonResponseFields;
 export const servicesApi = {
 
     async getServices() {
-        return await instance.get<GetServicesResponseType>('services/')
+        return await $api.get<GetServicesResponseType>('services/')
             .then(response => response.data)
     },
 
@@ -25,19 +25,19 @@ export const servicesApi = {
         id: string,
         values: FormData
     ) {
-        return await instance.post<EditServiceResponseType>(`services/${id}`, values)
+        return await $api.post<EditServiceResponseType>(`services/${id}`, values)
             .then(response => response.data);
     },
 
     async addService(values: FormData) {
-        return await instance.post<AddServiceResponseType>('services/', values)
+        return await $api.post<AddServiceResponseType>('services/', values)
             .then(response => response.data);
     },
 
     async deleteService(
         id: string
     ) {
-        return await instance.delete<DeleteServiceResponseType>(`services/${id}`)
+        return await $api.delete<DeleteServiceResponseType>(`services/${id}`)
             .then(response => response.data);
     },
 };

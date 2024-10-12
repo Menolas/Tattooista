@@ -1,4 +1,4 @@
-import {instance} from "../../http";
+import $api from "../../http";
 import {ClientType, SearchFilterType, CommonResponseFields} from "../../types/Types";
 
 type DeleteClientResponseType = CommonResponseFields;
@@ -17,20 +17,20 @@ export const archivedClientsAPI = {
       pageSize = 5,
       filter: SearchFilterType
   ) {
-      return await instance.get<GetClientsResponseType>(
+      return await $api.get<GetClientsResponseType>(
           `clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)
           .then(response => response.data);
   },
 
     async deleteArchivedClient(clientId: string) {
-    return await instance.delete<DeleteClientResponseType>(`clients/archive/${clientId}`)
+    return await $api.delete<DeleteClientResponseType>(`clients/archive/${clientId}`)
         .then(response => response.data);
   },
 
     async reactivateClient(
     clientId: string
   ) {
-    return await instance.get<ReactivateClientResponseType>(`clients/archive/${clientId}`)
+    return await $api.get<ReactivateClientResponseType>(`clients/archive/${clientId}`)
         .then(response => response.data);
   }
 };

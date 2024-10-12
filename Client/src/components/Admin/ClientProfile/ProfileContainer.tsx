@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {
   getClientProfile,
   deleteClientFromProfile,
@@ -15,11 +15,13 @@ import {
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {setFromAC} from "../../../redux/Auth/auth-reducer";
 
 export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector);
+  const isAuth = useSelector(getAuthSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
   const isFavouriteChangingInProcess = useSelector(getClientsIsFavouriteChangingInProcessSelector);
   const apiError = useSelector(getApiErrorSelector);
@@ -46,7 +48,7 @@ export const ProfileContainer: React.FC = () => {
 
   const toggleIsFavouriteCallBack = (id:string) => {
     dispatch(toggleFavourite(token, id));
-  }
+  };
 
   const deleteClientCallBack = async () => {
     let success = await dispatch(deleteClientFromProfile(profile._id));

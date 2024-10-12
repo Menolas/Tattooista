@@ -1,6 +1,6 @@
 import {AxiosRequestConfig} from "axios";
 import {RoleType, SearchFilterType, UserType, CommonResponseFields} from "../../types/Types";
-import {instance} from "../../http";
+import $api from "../../http";
 
 type DeleteUserResponseType = CommonResponseFields;
 
@@ -22,7 +22,7 @@ type AddUserResponseType = UpdateUserResponseType;
 export const usersAPI = {
 
     async getRoles() {
-        return await instance.get<GetRolesResponseType>('users/roles')
+        return await $api.get<GetRolesResponseType>('users/roles')
             .then(response => response.data);
     },
 
@@ -32,14 +32,14 @@ export const usersAPI = {
         pageSize = 5,
         filter: SearchFilterType
     ) {
-        return await instance.get<GetUsersResponseType>(
+        return await $api.get<GetUsersResponseType>(
             `users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`,
             { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
                 .then(response => response.data);
     },
 
     async deleteUser(userId: string) {
-        return await instance.delete<DeleteUserResponseType>(`users/${userId}`)
+        return await $api.delete<DeleteUserResponseType>(`users/${userId}`)
             .then(response => response.data);
     },
 
@@ -47,12 +47,12 @@ export const usersAPI = {
         userId: string,
         values: FormData
     ) {
-        return await instance.post<UpdateUserResponseType>(`users/edit/${userId}`, values)
+        return await $api.post<UpdateUserResponseType>(`users/edit/${userId}`, values)
             .then(response => response.data);
     },
 
     async addUser(values: FormData) {
-        return await instance.post<AddUserResponseType>('users', values)
+        return await $api.post<AddUserResponseType>('users', values)
             .then(response => response.data);
     },
 };
