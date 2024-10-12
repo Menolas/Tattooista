@@ -9,7 +9,6 @@ import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {useCallback, useEffect, useState} from "react";
 import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
-import {Navigate} from "react-router";
 
 type PropsType = {
     apiError: null | string;
@@ -37,7 +36,6 @@ export const Users: React.FC<PropsType> = React.memo(({
    total,
    currentPage,
    pageLimit,
-   accessError,
    setPageLimit,
    setCurrentPage,
    setFilter,
@@ -56,11 +54,11 @@ export const Users: React.FC<PropsType> = React.memo(({
         setApiError();
     }, [setApiError]);
 
-    useEffect(() => {
-        if ((addUserMode || editUserMode) && apiError === null) {
-            closeModal();
-        }
-    }, [apiError, addUserMode, editUserMode, closeModal]);
+    // useEffect(() => {
+    //     if ((addUserMode || editUserMode) && apiError === null) {
+    //         closeModal();
+    //     }
+    // }, [apiError, addUserMode, editUserMode, closeModal]);
 
     const addUserModalTitle = 'ADD USER';
     const editUserModalTitle = 'Edit USER';

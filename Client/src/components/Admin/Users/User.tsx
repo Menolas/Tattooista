@@ -70,8 +70,7 @@ export const User: React.FC<PropsType> = ({
                     <TrashIcon/>
                 </button>
             </div>
-            <NavLink
-                to={`/admin/profile?clientId=${data._id}`}
+            <div
                 className="admin__card-link">
                 <div className={"admin__card-avatar"}>
                     {!data?.avatar
@@ -96,7 +95,7 @@ export const User: React.FC<PropsType> = ({
                         }
                     </div>
                 </div>
-            </NavLink>
+            </div>
             <Confirmation
                 isOpen={confirmationData.needConfirmation}
                 content={confirmationData.context}

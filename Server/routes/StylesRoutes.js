@@ -4,11 +4,8 @@ const TattooStyle = require('../models/TattooStyle');
 const controller = require('../controllers/stylesController');
 const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
-//getting all tattooStyles for any user
-router.get('/', controller.getTattooStyles);
-
-//getting all tattooStyles for admin
-router.get('/adminTattooStyles', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles);
+//getting all tattooStyles
+router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles);
 
 // Deleting one
 router.delete('/:id', getTattooStyle, controller.deleteTattooStyle);
