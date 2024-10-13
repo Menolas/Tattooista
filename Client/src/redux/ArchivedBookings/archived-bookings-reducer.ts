@@ -228,7 +228,7 @@ export const deleteArchivedBookingAC = (id: string): DeleteArchivedConsultationA
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
 
 const deleteArchivedBookingThunk = (
-    token: string,
+    token: string | null,
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
@@ -248,7 +248,7 @@ const deleteArchivedBookingThunk = (
 };
 
 export const getArchivedBookings = (
-    token: string,
+    token: string | null,
     currentPage: number,
     pageSize: number,
     filter: SearchFilterType
@@ -275,7 +275,7 @@ export const getArchivedBookings = (
 };
 
 export const deleteArchivedBooking = (
-    token: string,
+    token: string | null,
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
@@ -284,7 +284,7 @@ export const deleteArchivedBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await archivedBookingsApi.deleteArchivedBooking(id);
+    const response = await archivedBookingsApi.deleteArchivedBooking(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setArchivedBookingApiErrorAC(null));
@@ -299,7 +299,7 @@ export const deleteArchivedBooking = (
 };
 
 export const reactivateBooking = (
-    token: string,
+    token: string | null,
     id: string,
     bookings: Array<BookingType>,
     currentPage: number,
@@ -308,7 +308,7 @@ export const reactivateBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await archivedBookingsApi.reactivateBooking(id);
+    const response = await archivedBookingsApi.reactivateBooking(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(
           token,

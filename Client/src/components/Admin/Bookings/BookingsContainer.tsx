@@ -46,7 +46,7 @@ export const BookingsContainer: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBookings(token || "", currentPage, pageSize, filter));
+    dispatch(getBookings(token, currentPage, pageSize, filter));
   }, [dispatch, token, currentPage, pageSize, filter, bookings.length ]);
 
   useEffect(() => {
@@ -68,19 +68,20 @@ export const BookingsContainer: React.FC = () => {
   const changeStatusCallBack = (
     id: string,
   ) => {
-    dispatch(changeStatus(id));
+    console.log(token + "token from changeStatusCallback")
+    dispatch(changeStatus(token, id));
   };
 
   const removeCallBack = (
       id: string,
   ) => {
-    dispatch(deleteBooking(token || "", id, bookings, currentPage, pageSize, filter));
+    dispatch(deleteBooking(token, id, bookings, currentPage, pageSize, filter));
   };
 
   const turnBookingToClientCallBack = (
     id: string,
   ) => {
-    dispatch(turnBookingToClient(token || "", id, bookings, currentPage, pageSize, filter));
+    dispatch(turnBookingToClient(token, id, bookings, currentPage, pageSize, filter));
   };
 
   const setPageSizeCallBack = (
@@ -90,7 +91,7 @@ export const BookingsContainer: React.FC = () => {
   };
 
   const archiveCallBack = (id: string) => {
-    dispatch(archiveBooking(token || "", id, bookings, currentPage, pageSize, filter));
+    dispatch(archiveBooking(token, id, bookings, currentPage, pageSize, filter));
   };
 
   const setBookingApiErrorCallBack = () => {

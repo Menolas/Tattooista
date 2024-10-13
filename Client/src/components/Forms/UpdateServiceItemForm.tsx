@@ -10,12 +10,13 @@ import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {
     validateFile
 } from "../../utils/validators";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     addService,
     editService,
 } from "../../redux/Services/services-reducer";
 import {handleEnterClick} from "../../utils/functions";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -38,7 +39,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
     service,
     closeModal,
 }) => {
-
+    const token = useSelector(getTokenSelector);
     const [imageURL, setImageURL] = useState('');
 
     const dispatch = useDispatch();
@@ -96,9 +97,9 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
         let success;
         try {
             if (service) {
-                success = await dispatch(editService(service._id, formData));
+                success = await dispatch(editService(token, service._id, formData));
             } else {
-                success = await dispatch(addService(formData));
+                success = await dispatch(addService(token, formData));
             }
             if (success) {
                 closeModal();

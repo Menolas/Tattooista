@@ -16,22 +16,45 @@ type DeleteFaqItemResponseType = CommonResponseFields;
 export const faqApi = {
 
     async getFaqItems() {
-        const response = await $api.get<GetFaqItemsResponseType>('faq/');
-        return response.data;
+        return  await $api.get<GetFaqItemsResponseType>('faq/')
+            .then(response => response.data);
     },
 
-    async addFaqItem(values: UpdateFaqValues) {
-        const response = await $api.post<AddFaqItemResponseType>('faq', values);
-        return response.data;
+    async addFaqItem(
+        token: string | null,
+        values: UpdateFaqValues
+    ) {
+        return await $api.post<AddFaqItemResponseType>(
+            'faq',
+            values,
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+            .then(response => response.data);
     },
 
-    async updateFaqItem(id: string, values: UpdateFaqValues) {
-        const response = await $api.post<UpdateFaqItemResponseType>(`faq/${id}`, values);
-        return response.data;
+    async updateFaqItem(
+        token: string | null,
+        id: string,
+        values: UpdateFaqValues
+    ) {
+        return await $api.post<UpdateFaqItemResponseType>(
+            `faq/${id}`,
+            values,
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+            .then(response => response.data);
+
     },
 
-    async deleteFaqItem(id: string) {
-        const response = await $api.delete<DeleteFaqItemResponseType>(`faq/${id}`);
-        return response.data;
+    async deleteFaqItem(
+        token: string | null,
+        id: string
+    ) {
+        return $api.delete<DeleteFaqItemResponseType>(
+            `faq/${id}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+            .then(response => response.data);
+
     },
 };

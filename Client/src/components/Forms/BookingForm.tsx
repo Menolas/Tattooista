@@ -8,9 +8,10 @@ import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useEffect, useState, useRef,} from "react";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {FormSelect} from "./formComponents/FormSelect";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {handleEnterClick} from "../../utils/functions";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 const options = [
   { value: "email", label: "email" },
@@ -86,6 +87,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   consentId,
   closeBookingModal,
 }) => {
+  const token = useSelector(getTokenSelector);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [contactInput, setContactInput] = useState('');
 
@@ -94,7 +96,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
       values: BookConsultationFormValues,
       actions: FormikHelpers<BookConsultationFormValues>
   ) => {
-    const success = await dispatch(addBooking(values));
+    const success = await dispatch(addBooking(token,false, values));
     if (success && closeBookingModal) {
       closeBookingModal();
     }

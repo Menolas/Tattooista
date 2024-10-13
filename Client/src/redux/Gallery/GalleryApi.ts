@@ -33,25 +33,48 @@ export const galleryApi = {
     },
 
     async deleteGalleryItem(
+        token: string | null,
       itemId: string
     ) {
-        return await $api.delete<DeleteGalleryItemResponseType>(`gallery/${itemId}`)
+        return await $api.delete<DeleteGalleryItemResponseType>(
+            `gallery/${itemId}`,
+            {headers: {Authorization: `Bearer ${token}`}}
+        )
           .then(response => response.data);
     },
 
-    async adminUpdateGallery(style: string, gallery: FormData) {
-        return await $api.post<AdminUpdateGalleryResponseType>(`gallery/${style}`,
-          gallery
+    async adminUpdateGallery(
+        token: string | null,
+        style: string,
+        gallery: FormData
+    ) {
+        return await $api.post<AdminUpdateGalleryResponseType>(
+            `gallery/${style}`,
+            gallery,
+            {headers: {Authorization: `Bearer ${token}`}}
         ).then(response => response.data);
     },
 
-    async archiveGalleryItem(id: string) {
-        return await $api.post<ArchiveGalleryItemResponseType>(`gallery/archive/${id}`)
+    async archiveGalleryItem(
+        token: string | null,
+        id: string) {
+        return await $api.get<ArchiveGalleryItemResponseType>(
+            `gallery/archive/${id}`,
+            {headers: {Authorization: `Bearer ${token}`}}
+        )
             .then(response => response.data);
     },
 
-    async updateGalleryItem(id: string, values: object) {
-        return await $api.patch<UpdateGalleryItemResponseType>(`gallery/updateGalleryItem/${id}`, {values})
+    async updateGalleryItem(
+        token: string | null,
+        id: string,
+        values: object
+    ) {
+        return await $api.patch<UpdateGalleryItemResponseType>(
+            `gallery/updateGalleryItem/${id}`,
+            {values},
+            {headers: {Authorization: `Bearer ${token}`}}
+        )
             .then(response => response.data);
     },
 };

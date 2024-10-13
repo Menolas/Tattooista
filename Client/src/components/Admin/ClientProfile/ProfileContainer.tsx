@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {
   getClientProfile,
   deleteClientFromProfile,
@@ -16,12 +16,10 @@ import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
-import {setFromAC} from "../../../redux/Auth/auth-reducer";
 
 export const ProfileContainer: React.FC = () => {
 
   const profile = useSelector(getClientProfileSelector);
-  const isAuth = useSelector(getAuthSelector);
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcess);
   const isFavouriteChangingInProcess = useSelector(getClientsIsFavouriteChangingInProcessSelector);
   const apiError = useSelector(getApiErrorSelector);
@@ -35,7 +33,7 @@ export const ProfileContainer: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     let actualId: string | null = profile?._id;
     if (urlParams.get('clientId')) actualId = urlParams.get('clientId');
-    if (actualId) dispatch(getClientProfile(actualId));
+    if (actualId) dispatch(getClientProfile(token, actualId));
   }, [dispatch]);
 
   useEffect(() => {
@@ -51,12 +49,12 @@ export const ProfileContainer: React.FC = () => {
   };
 
   const deleteClientCallBack = async () => {
-    let success = await dispatch(deleteClientFromProfile(profile._id));
+    let success = await dispatch(deleteClientFromProfile(token, profile._id));
     if (success) navigate("/admin/clients");
   };
 
   const archiveClientCallBack = async () => {
-    let success = await dispatch(archiveClientFromProfile(profile._id));
+    let success = await dispatch(archiveClientFromProfile(token, profile._id));
     if (success) navigate("/admin/clients");
   };
 

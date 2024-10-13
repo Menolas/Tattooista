@@ -165,11 +165,12 @@ export const getServices = (): ThunkType => async (dispatch) => {
 };
 
 export const editService = (
+    token: string | null,
     id: string,
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await servicesApi.editService(id, values);
+    const response = await servicesApi.editService(token, id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateServiceAC(response.service));
       dispatch(setSuccessModalAC(true, SERVICE_UPDATE_SUCCESS));
@@ -186,10 +187,11 @@ export const editService = (
 };
 
 export const addService = (
+    token: string | null,
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await servicesApi.addService(values);
+    const response = await servicesApi.addService(token, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addServiceAC(response.service));
       dispatch(setSuccessModalAC(true, SERVICE_ADD_SUCCESS));
@@ -206,10 +208,11 @@ export const addService = (
 };
 
 export const deleteService = (
+    token: string | null,
     id: string
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await servicesApi.deleteService(id);
+    const response = await servicesApi.deleteService(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteServiceAC(id));
       return true;

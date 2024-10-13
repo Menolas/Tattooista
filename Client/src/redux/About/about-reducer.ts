@@ -108,13 +108,14 @@ export const getAboutPage = (): ThunkType => async (dispatch) => {
 };
 
 export const editAboutPage = (
+    token: string | null,
   FormData: FormData
 ): ThunkType => async (dispatch) => {
   let apiResponse = null;
   try {
     dispatch(setIsEditingAC(true));
     dispatch(setIsFetchingAC(true));
-    const response = await aboutApi.editAboutPage(FormData);
+    const response = await aboutApi.editAboutPage(token, FormData);
     apiResponse = response;
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setApiErrorAC(null));
@@ -133,10 +134,11 @@ export const editAboutPage = (
 };
 
 export const changeAboutPageVisibility = (
+    token: string | null,
     isActive: boolean
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await aboutApi.changeAboutPageVisibility(isActive);
+    const response = await aboutApi.changeAboutPageVisibility(token, isActive);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAboutPageAC(response.page));
     }

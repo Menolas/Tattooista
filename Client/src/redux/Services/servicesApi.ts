@@ -22,22 +22,38 @@ export const servicesApi = {
     },
 
     async editService(
+        token: string | null,
         id: string,
         values: FormData
     ) {
-        return await $api.post<EditServiceResponseType>(`services/${id}`, values)
+        return await $api.post<EditServiceResponseType>(
+            `services/${id}`,
+            values,
+            {headers: {Authorization: `Bearer ${token}`}}
+        )
             .then(response => response.data);
     },
 
-    async addService(values: FormData) {
-        return await $api.post<AddServiceResponseType>('services/', values)
+    async addService(
+        token: string | null,
+        values: FormData
+    ) {
+        return await $api.post<AddServiceResponseType>(
+            'services/',
+            values,
+            {headers: {Authorization: `Bearer ${token}`}}
+        )
             .then(response => response.data);
     },
 
     async deleteService(
+        token: string | null,
         id: string
     ) {
-        return await $api.delete<DeleteServiceResponseType>(`services/${id}`)
+        return await $api.delete<DeleteServiceResponseType>(
+            `services/${id}`,
+            {headers: {Authorization: `Bearer ${token}`}}
+        )
             .then(response => response.data);
     },
 };

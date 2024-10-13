@@ -37,6 +37,10 @@ class stylesController {
   }
 
   async deleteTattooStyle(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       await fs.unlink(`./uploads/styleWallpapers/${res.tattooStyle._id}/${res.tattooStyle.wallPaper}`, err => {
@@ -61,6 +65,10 @@ class stylesController {
   }
 
   async addTattooStyle(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -91,6 +99,10 @@ class stylesController {
   }
 
   async updateTattooStyle(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     console.log(req.body);
 

@@ -1,4 +1,3 @@
-import {AxiosRequestConfig} from "axios";
 import {
   AddConsultationFormValues,
   BookingType,
@@ -37,41 +36,75 @@ export const bookingsApi = {
   ) {
     return await $api.get<GetBookingsResponseType>(
         `bookings?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&status=${filter.condition}`,
-        { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig
+        { headers: { Authorization: `Bearer ${token}` } }
     ).then(response => response.data);
   },
 
-  async getBookingProfile(bookingId: string) {
-    return await $api.get<AddBookingResponseType>(`bookings/${bookingId}`)
+  async getBookingProfile(
+      token: string | null,
+      bookingId: string
+  ) {
+    return await $api.get<AddBookingResponseType>(
+        `bookings/${bookingId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+        )
         .then(response => response.data);
   },
 
-  async changeConsultationStatus(id: string) {
-    return await $api.patch<ChangeBookingStatusResponseType>(`bookings/status/${id}`)
+  async changeConsultationStatus(
+      token: string | null,
+      id: string) {
+    console.log(token + " change satatus api!!!!!!!!!!!!!!!!!!")
+    return await $api.patch<ChangeBookingStatusResponseType>(
+        `bookings/status/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
       .then(response => response.data);
   },
 
-  async deleteConsultation(id: string) {
-    return await $api.delete<DeleteBookingResponseType>(`bookings/${id}`)
+  async deleteConsultation(
+      token: string | null,
+      id: string) {
+    return await $api.delete<DeleteBookingResponseType>(
+        `bookings/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
       .then(response => response.data);
   },
 
-  async addConsultation(values: AddConsultationFormValues | BookConsultationFormValues) {
-    return await $api.post<AddBookingResponseType>(`bookings`, values)
+  async addConsultation(
+      token: string | null,
+      isAdmin: boolean,
+      values: AddConsultationFormValues | BookConsultationFormValues
+  ) {
+    return await $api.post<AddBookingResponseType>(
+        `bookings?&isAdmin=${isAdmin}`,
+        values,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   },
 
   async turnBookingToClient(
+    token: string | null,
     id: string,
   ) {
-    return await $api.get<TurnBookingToClientResponseType>(`bookings/bookingToClient/${id}`)
+    return await $api.get<TurnBookingToClientResponseType>(
+        `bookings/bookingToClient/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   },
 
   async archiveBooking(
+      token: string | null,
       id: string,
   ) {
-    return await $api.get<ArchiveBookingResponseType>(`bookings/archive/${id}`)
+    return await $api.get<ArchiveBookingResponseType>(
+        `bookings/archive/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   },
 };

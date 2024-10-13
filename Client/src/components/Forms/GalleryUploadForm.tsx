@@ -6,10 +6,11 @@ import {API_URL} from "../../http";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import * as Yup from "yup";
 import {ClientType} from "../../types/Types";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {deleteClientGalleryPicture, updateClientGallery} from "../../redux/Clients/clients-reducer";
 import {updateGallery} from "../../redux/Gallery/gallery-reducer";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 const filesUploadingValidationSchema = Yup.object().shape({
   gallery: Yup.array()
@@ -51,6 +52,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   refreshClientData,
   closeModal
 }) => {
+  const token = useSelector(getTokenSelector);
   const [imageURLs, setImageURLs] = useState<{url: string | ArrayBuffer | null, file: File}[]>([]);
 
   const dispatch = useDispatch();
@@ -89,9 +91,9 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
     imageURLs.forEach(({file}) => formData.append(file.name, file));
     let success;
     if (isEditPortfolio && styleID !== undefined) {
-      success = await dispatch(updateGallery(styleID, formData));
+      success = await dispatch(updateGallery(token, styleID, formData));
     } else if (client) {
-      success = await dispatch(updateClientGallery(client._id, formData));
+      success = await dispatch(updateClientGallery(token, client._id, formData));
     }
     if (success) {
       closeModal();
@@ -127,7 +129,7 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                   onClick={async (event) => {
                                     event.preventDefault();
                                     if (client?.gallery && deleteClientGalleryPicture) {
-                                      let success = await dispatch(deleteClientGalleryPicture(client._id, item));
+                                      let success = await dispatch(deleteClientGalleryPicture(token, client._id, item));
                                       if (success && refreshClientData) {
                                         const updatedGallery = client.gallery.filter(picture => picture !== item);
                                         const updatedClient = {...client, gallery: updatedGallery};

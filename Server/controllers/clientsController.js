@@ -8,6 +8,10 @@ const ClientService = require('../services/clientService');
 class clientsController {
 
   async getClients(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const startIndex = (page - 1) * limit;
@@ -64,6 +68,10 @@ class clientsController {
   }
 
   async getArchivedClients(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const startIndex = (page - 1) * limit;
@@ -119,6 +127,10 @@ class clientsController {
   }
 
   async getClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       results.client = res.client;
@@ -132,6 +144,10 @@ class clientsController {
   }
 
   async addClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       const client = await ClientService.addClient(req.body);
@@ -161,6 +177,10 @@ class clientsController {
   }
 
   async editClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     if (!req.body) {
       return res.status(400).send({
         message: "Data to update can not be empty!"
@@ -207,6 +227,10 @@ class clientsController {
   }
 
   async updateClientGallery(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     if (!req.files) {
       return res.status(400).send({
         message: "Data to update can not be empty!"
@@ -247,6 +271,10 @@ class clientsController {
   }
 
   async archiveClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -322,6 +350,10 @@ class clientsController {
   }
 
   async reactivateClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -373,6 +405,10 @@ class clientsController {
   }
 
   async deleteClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -413,6 +449,10 @@ class clientsController {
   }
 
   async deleteArchivedClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -453,6 +493,10 @@ class clientsController {
   }
 
   async deleteClientGalleryPicture(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     const picture = req.query.picture;
 
@@ -478,6 +522,10 @@ class clientsController {
   }
 
   async toggleFavourite(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {

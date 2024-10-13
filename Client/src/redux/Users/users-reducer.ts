@@ -277,7 +277,7 @@ export const getRoles = (): ThunkType => async (dispatch) => {
 };
 
 export const getUsers = (
-    token: string,
+    token: string | null,
     currentPage: number,
     pageLimit: number,
     filter: SearchFilterType
@@ -308,7 +308,7 @@ export const getUsers = (
 };
 
 const deleteUserThunk = (
-    token: string,
+    token: string | null,
     id: string,
     users: Array<UserType>,
     currentPage: number,
@@ -329,7 +329,7 @@ const deleteUserThunk = (
 };
 
 export const deleteUser = (
-    token: string,
+    token: string | null,
     id: string,
     users: Array<UserType>,
     currentPage: number,
@@ -340,7 +340,7 @@ export const deleteUser = (
 ) => {
     try {
         dispatch(toggleIsDeletingInProcessAC(true, id));
-        const response = await usersAPI.deleteUser(id);
+        const response = await usersAPI.deleteUser(token, id);
         if (response.resultCode === ResultCodesEnum.Success) {
             await dispatch(deleteUserThunk(token, id, users, currentPage, pageLimit, filter));
             dispatch(setUsersApiErrorAC(null));
@@ -359,12 +359,13 @@ export const deleteUser = (
 };
 
 export const updateUser = (
+    token: string | null,
     id: string,
     values: FormData
 ): ThunkType => async (dispatch) => {
     try {
         dispatch(toggleIsFetchingAC(true));
-        const response = await usersAPI.updateUser(id, values);
+        const response = await usersAPI.updateUser(token, id, values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(editUserAC(response.user));
             dispatch(setApiErrorAC(null));
@@ -383,10 +384,11 @@ export const updateUser = (
 };
 
 export const addUser = (
+    token: string | null,
     values: FormData,
 ): ThunkType => async (dispatch) => {
     try {
-        const response = await usersAPI.addUser(values);
+        const response = await usersAPI.addUser(token, values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addUserAC(response.user));
             dispatch(setApiErrorAC(null));

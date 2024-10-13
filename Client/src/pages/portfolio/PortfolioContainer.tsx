@@ -60,7 +60,7 @@ export const PortfolioContainer: React.FC = () => {
     };
 
     const removeStyleCallBack = (id: string) => {
-        dispatch(deleteStyle(id));
+        dispatch(deleteStyle(token, id));
     };
 
     const setPageCallBack = (page: number) => {

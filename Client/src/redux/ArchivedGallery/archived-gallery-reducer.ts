@@ -184,6 +184,7 @@ type UpdateArchivedGalleryItemAT = {
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
 
 const deleteArchivedGalleryItemThunk = (
+    token: string | null,
     id: string,
     archivedGallery: Array<GalleryItemType>,
     currentPage: number,
@@ -194,7 +195,7 @@ const deleteArchivedGalleryItemThunk = (
   } else {
     const newPage = getNewPage(currentPage);
     if (currentPage === newPage) {
-      await dispatch(getArchivedGallery(newPage, pageLimit));
+      await dispatch(getArchivedGallery(token, newPage, pageLimit));
     }
     dispatch(deleteArchivedGalleryItemAC(id));
     dispatch(setCurrentPageAC(newPage));
@@ -202,12 +203,13 @@ const deleteArchivedGalleryItemThunk = (
 };
 
 export const getArchivedGallery = (
+    token: string | null,
     currentArchivedGalleryPage: number,
     archivedGalleryPageSize: number,
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(setIsFetchingAC(true))
-    const response = await archivedGalleryApi.getArchivedGalleryItems(currentArchivedGalleryPage, archivedGalleryPageSize)
+    const response = await archivedGalleryApi.getArchivedGalleryItems(token, currentArchivedGalleryPage, archivedGalleryPageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedGalleryAC(response.gallery, response.totalCount));
     }
@@ -219,6 +221,7 @@ export const getArchivedGallery = (
 };
 
 export const deleteArchivedGalleryItem = (
+    token: string | null,
     id: string,
     gallery: Array<GalleryItemType>,
     currentPage: number,
@@ -226,9 +229,9 @@ export const deleteArchivedGalleryItem = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await archivedGalleryApi.deleteArchivedGalleryItem(id);
+    const response = await archivedGalleryApi.deleteArchivedGalleryItem(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, pageLimit));
+      await dispatch(deleteArchivedGalleryItemThunk(token, id, gallery, currentPage, pageLimit));
       dispatch(setApiErrorAC(null));
     }
   } catch (e) {
@@ -241,6 +244,7 @@ export const deleteArchivedGalleryItem = (
 };
 
 export const reactivateArchivedGalleryItem = (
+    token: string | null,
     id: string,
     gallery: Array<GalleryItemType>,
     currentPage: number,
@@ -248,9 +252,9 @@ export const reactivateArchivedGalleryItem = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await archivedGalleryApi.reactivateArchivedGalleryItem(id);
+    const response = await archivedGalleryApi.reactivateArchivedGalleryItem(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedGalleryItemThunk(id, gallery, currentPage, pageLimit));
+      await dispatch(deleteArchivedGalleryItemThunk(token, id, gallery, currentPage, pageLimit));
       dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_GALLERY_ITEM_FROM_ARCHIVE));
     }

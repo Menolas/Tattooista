@@ -13,11 +13,12 @@ import {
     isFileSizeValid, isFileTypesValid,
     MAX_FILE_SIZE, VALID_FILE_EXTENSIONS,
 } from "../../utils/validators";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addStyle, editStyle} from "../../redux/Styles/styles-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import tattooMachine from '../../assets/img/tattoo-machine.webp';
 import {handleEnterClick} from "../../utils/functions";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
     let schema = Yup.object().shape({
@@ -66,7 +67,7 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
     style,
     closeModal,
 }) => {
-
+    const token = useSelector(getTokenSelector);
     const [hasNewFile, setHasNewFile] = useState(false);
     const validationSchema = getValidationSchema(isEditing, hasNewFile);
     const [imageURL, setImageURL] = useState('');
@@ -128,9 +129,9 @@ export const UpdateStyleForm: React.FC<PropsType> = React.memo(({
        try {
            let success;
            if(isEditing && style) {
-               success = await dispatch(editStyle(style._id, formData));
+               success = await dispatch(editStyle(token, style._id, formData));
            } else {
-               success = await dispatch(addStyle(formData));
+               success = await dispatch(addStyle(token, formData));
            }
            if (success ) {
                closeModal();

@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {archiveGalleryItem, deleteGalleryItem, getGallery} from "../../../redux/Gallery/gallery-reducer";
 import {getGallerySelector} from "../../../redux/Gallery/gallery-selectors";
 import {ApiError} from "../../common/ApiError";
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 type PropsType = {
   isFetching: boolean;
@@ -46,6 +47,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   setPageSize,
   setApiError,
 }) => {
+  const token = useSelector(getTokenSelector);
   const gallery = useSelector(getGallerySelector);
   const dispatch = useDispatch();
 
@@ -54,11 +56,11 @@ export const Gallery: React.FC<PropsType> = React.memo(({
   }, [activeStyle?._id, currentPage, pageSize, dispatch]);
 
   const deleteGalleryItemCallBack = (itemId: string) => {
-    dispatch(deleteGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
+    dispatch(deleteGalleryItem(token, itemId, gallery, currentPage, pageSize, activeStyle));
   };
 
   const archiveGalleryItemCallBack = (itemId: string) => {
-    dispatch(archiveGalleryItem(itemId, gallery, currentPage, pageSize, activeStyle));
+    dispatch(archiveGalleryItem(token, itemId, gallery, currentPage, pageSize, activeStyle));
   }
 
   const [carouselData, setCarouselData] = useState<{ isOpen: boolean, activeIndex?: number }>({isOpen: false});

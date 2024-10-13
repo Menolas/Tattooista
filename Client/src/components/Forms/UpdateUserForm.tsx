@@ -13,13 +13,14 @@ import {API_URL} from "../../http";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import * as Yup from "yup";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
   updateUser,
   addUser,
 } from "../../redux/Users/users-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import {handleEnterClick} from "../../utils/functions";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -75,7 +76,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   data,
   closeModal,
 }) => {
-
+  const token = useSelector(getTokenSelector);
   const [hasNewFile, setHasNewFile] = useState(false);
   const validationSchema = getValidationSchema(isEditing, hasNewFile);
   const [imageURL, setImageURL] = useState('');
@@ -137,9 +138,9 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
     let success;
     if (isEditing && data) {
-      success = await dispatch(updateUser(data._id, formData));
+      success = await dispatch(updateUser(token, data._id, formData));
     } else {
-      success = await dispatch(addUser(formData));
+      success = await dispatch(addUser(token, formData));
     }
     if (success) {
       closeModal();

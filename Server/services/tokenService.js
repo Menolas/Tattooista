@@ -22,6 +22,7 @@ class TokenService {
     }
 
     async removeToken(refreshToken) {
+        console.log("token removed!!!!!!!!!!!!!!!!!!!!")
         return tokenModel.deleteOne({refreshToken});
     }
 

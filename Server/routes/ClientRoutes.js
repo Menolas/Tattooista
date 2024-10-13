@@ -9,41 +9,37 @@ const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getClients);
 
 // get archived clients
-router.get('/archive', controller.getArchivedClients);
+router.get('/archive', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getArchivedClients);
 
 // Getting one
-router.get('/:id', getClient, controller.getClient);
+router.get('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getClient, controller.getClient);
 
 // Creating one
-router.post('/', controller.addClient);
+router.post('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.addClient);
 
 // update client tattoo gallery
-router.post('/updateGallery/:id', getClient, controller.updateClientGallery);
+router.post('/updateGallery/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getClient, controller.updateClientGallery);
 
 // delete picture from client gallery
-router.delete('/updateGallery/:id', getClient, controller.deleteClientGalleryPicture);
+router.delete('/updateGallery/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getClient, controller.deleteClientGalleryPicture);
 
 // delete client
-router.delete('/:id', getClient, controller.deleteClient);
+router.delete('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getClient, controller.deleteClient);
 
 // delete archived client
-router.delete('/archive/:id', getArchivedClient, controller.deleteArchivedClient);
+router.delete('/archive/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getArchivedClient, controller.deleteArchivedClient);
 
 // edit client
-
-router.post('/edit/:id', getClient, controller.editClient);
+router.post('/edit/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getClient, controller.editClient);
 
 // toggle favourite
-
-router.patch('/favourite/:id', getClient, controller.toggleFavourite);
+router.patch('/favourite/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]),getClient, controller.toggleFavourite);
 
 // archive client
-
-router.post('/archive/:id', getClient, controller.archiveClient);
+router.get('/archive/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getClient, controller.archiveClient);
 
 // reactivate client from archive
-
-router.get('/archive/:id', getArchivedClient, controller.reactivateClient);
+router.get('/reactivate/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getArchivedClient, controller.reactivateClient);
 
 async function getClient(req, res, next) {
   let client;

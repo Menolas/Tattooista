@@ -49,7 +49,7 @@ export const ArchivedGallery: React.FC = React.memo(() => {
         if (styles.length === 0) {
             dispatch(getStyles(token));
         }
-        dispatch(getArchivedGallery(currentPage, pageSize));
+        dispatch(getArchivedGallery(token, currentPage, pageSize));
     }, [currentPage, pageSize, dispatch, token, styles.length]);
 
     const [confirmationData, setConfirmationData] = useState<{
@@ -73,11 +73,11 @@ export const ArchivedGallery: React.FC = React.memo(() => {
     };
 
     const deleteArchivedGalleryItemCallBack = (itemId: string) => {
-        dispatch(deleteArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
+        dispatch(deleteArchivedGalleryItem(token, itemId, archivedGallery, currentPage, pageSize));
     };
 
     const reactivateArchivedGalleryItemCallBack = (itemId: string) => {
-        dispatch(reactivateArchivedGalleryItem(itemId, archivedGallery, currentPage, pageSize));
+        dispatch(reactivateArchivedGalleryItem(token, itemId, archivedGallery, currentPage, pageSize));
     };
 
     const setApiErrorCallBack = () => {

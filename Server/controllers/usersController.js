@@ -23,6 +23,10 @@ class usersController {
     }
 
     async getUsers(req, res) {
+        if (!req.hasRole) {
+            return res.status(403).json({ message: "You don't have permission" });
+        }
+
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
         const startIndex = (page - 1) * limit;
@@ -69,6 +73,10 @@ class usersController {
     }
 
     async deleteUser(req, res) {
+        if (!req.hasRole) {
+            return res.status(403).json({ message: "You don't have permission" });
+        }
+
         const results = {};
         try {
             if (res.user.avatar) {
@@ -90,6 +98,10 @@ class usersController {
     }
 
     async updateUser(req, res) {
+        if (!req.hasRole) {
+            return res.status(403).json({ message: "You don't have permission" });
+        }
+
         const displayName = req.body.displayName.trim();
         const email = req.body.email;
         const password = req.body.password;
@@ -138,6 +150,10 @@ class usersController {
     }
 
     async addUser (req, res) {
+        if (!req.hasRole) {
+            return res.status(403).json({ message: "You don't have permission" });
+        }
+
         const results = {};
         try {
             const displayName = req.body.displayName.trim();

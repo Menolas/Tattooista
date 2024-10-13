@@ -3,39 +3,34 @@ const router = new Router();
 const GalleryItem = require('../models/GalleryItem');
 const ArchivedGalleryItem = require('../models/ArchivedGalleryItem');
 const controller = require('../controllers/galleryController');
+const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 //getting all gallery items
 router.get('/', controller.getGalleryItems);
 
 //updating gallery item
-
-router.patch('/updateGalleryItem/:id', getGalleryItem, controller.updateGalleryItem);
+router.patch('/updateGalleryItem/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getGalleryItem, controller.updateGalleryItem);
 
 // getting all archived gallery items
-
-router.get('/archive/', controller.getArchivedGalleryItems);
+router.get('/archive/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getArchivedGalleryItems);
 
 //adding gallery items
-router.post('/:style', controller.addGalleryItems);
+router.post('/:style', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.addGalleryItems);
 
 // Deleting one gallery item
-router.delete('/:id', getGalleryItem, controller.deleteGalleryItem);
+router.delete('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getGalleryItem, controller.deleteGalleryItem);
 
 // delete archived gallery item
-
-router.delete('/archive/:id', getArchivedGalleryItem, controller.deleteArchivedGalleryItem);
+router.delete('/archive/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getArchivedGalleryItem, controller.deleteArchivedGalleryItem);
 
 // archiving gallery item
-
-router.post('/archive/:id', getGalleryItem, controller.archiveGalleryItem);
+router.get('/archive/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getGalleryItem, controller.archiveGalleryItem);
 
 // reactivating gallery item
-
-router.get('/reactivate/:id', getArchivedGalleryItem, controller.reactivateGalleryItem);
+router.get('/reactivate/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getArchivedGalleryItem, controller.reactivateGalleryItem);
 
 //updating archived gallery item
-
-router.patch('/updateArchivedGalleryItem/:id', getArchivedGalleryItem, controller.updateArchivedGalleryItem);
+router.patch('/updateArchivedGalleryItem/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getArchivedGalleryItem, controller.updateArchivedGalleryItem);
 
 async function getGalleryItem(req, res, next) {
   let galleryItem;
