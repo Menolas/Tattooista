@@ -11,12 +11,13 @@ import {
     changeAboutPageVisibility,
 } from "../../../redux/About/about-reducer";
 import {useEffect} from "react";
-import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
+import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 
 export const AboutContainer = () => {
+    const token = useSelector(getTokenSelector);
     const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
     const page = useSelector(getPageSelector);
@@ -30,7 +31,7 @@ export const AboutContainer = () => {
     }, [dispatch]);
 
     const changeAboutPageVisibilityCallBack = (isActive: boolean) => {
-        dispatch(changeAboutPageVisibility(isActive));
+        dispatch(changeAboutPageVisibility(token, isActive));
     };
 
     const setApiErrorCallBack = () => {

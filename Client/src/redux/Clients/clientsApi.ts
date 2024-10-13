@@ -1,4 +1,3 @@
-import {AxiosRequestConfig} from "axios";
 import {ClientType, SearchFilterType, CommonResponseFields,} from "../../types/Types";
 import $api from "../../http";
 
@@ -29,60 +28,98 @@ export const clientsAPI = {
   ) {
     return await $api.get<GetClientsResponseType>(
         `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`,
-        { headers: { Authorization: `Bearer ${token}` } } as AxiosRequestConfig)
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
             .then(response => response.data);
   },
 
-  async getClientProfile(clientId: string) {
-    return await $api.get<GetClientProfileResponseType>(`clients/${clientId}`)
+  async getClientProfile(
+      token: string | null,
+      clientId: string) {
+    return await $api.get<GetClientProfileResponseType>(
+        `clients/${clientId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   },
 
-  async updateClientGallery(clientId: string, values: FormData) {
-    return await $api.post<UpdateClientResponseType>(`clients/updateGallery/${clientId}`,
-        values
+  async updateClientGallery(
+      token: string | null, clientId: string,
+      values: FormData) {
+    return await $api.post<UpdateClientResponseType>(
+        `clients/updateGallery/${clientId}`,
+        values,
+        { headers: { Authorization: `Bearer ${token}` } }
     ).then(response => response.data);
   },
 
-  async deleteClient(clientId: string) {
-    return await $api.delete<DeleteClientResponseType>(`clients/${clientId}`)
+  async deleteClient(
+      token: string | null,
+      clientId: string) {
+    return await $api.delete<DeleteClientResponseType>(
+        `clients/${clientId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   },
 
   async addClient(
+    token: string | null,
     values: FormData,
   ) {
-    return await $api.post<UpdateClientResponseType>('clients', values)
+    return await $api.post<UpdateClientResponseType>(
+        'clients',
+        values,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
       .then(response => response.data)
   },
 
   async editClient(
+    token: string | null,
     clientId: string,
     values: FormData,
   ) {
-     return await $api.post<UpdateClientResponseType>(`clients/edit/${clientId}`, values)
+     return await $api.post<UpdateClientResponseType>(
+         `clients/edit/${clientId}`,
+         values,
+         { headers: { Authorization: `Bearer ${token}` } }
+     )
         .then(response => response.data);
   },
 
   async toggleIsFavorite(
+    token: string | null,
     clientId: string
   ) {
-    return await $api.patch<UpdateClientResponseType>(`clients/favourite/${clientId}`)
+    return await $api.patch<UpdateClientResponseType>(
+        `clients/favourite/${clientId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   },
 
   async deleteClientGalleryPicture(
+      token: string | null,
       clientId: string,
       picture: string
   ) {
-      return await $api.delete<DeleteClientGalleryPictureResponseType>(`clients/updateGallery/${clientId}?&picture=${picture}`)
+      return await $api.delete<DeleteClientGalleryPictureResponseType>(
+          `clients/updateGallery/${clientId}?&picture=${picture}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+      )
           .then(response => response.data);
   },
 
   async archiveClient(
+      token: string | null,
       clientId: string
   ) {
-      return await $api.post<ArchiveClientResponseType>(`clients/archive/${clientId}`)
+      return await $api.get<ArchiveClientResponseType>(
+          `clients/archive/${clientId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+      )
           .then(response => response.data);
   },
 };

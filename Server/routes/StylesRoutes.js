@@ -8,13 +8,13 @@ const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles);
 
 // Deleting one
-router.delete('/:id', getTattooStyle, controller.deleteTattooStyle);
+router.delete('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getTattooStyle, controller.deleteTattooStyle);
 
 // Creating category (tattooStyle)
-router.post('/', controller.addTattooStyle);
+router.post('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.addTattooStyle);
 
 // updating category
-router.post('/:id', getTattooStyle, controller.updateTattooStyle);
+router.post('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getTattooStyle, controller.updateTattooStyle);
 
 async function getTattooStyle(req, res, next) {
   let tattooStyle;

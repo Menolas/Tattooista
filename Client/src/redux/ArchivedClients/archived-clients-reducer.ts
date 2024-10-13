@@ -230,6 +230,7 @@ const deleteArchivedClientAC = (clientId: string): DeleteArchivedClientAT => ({
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
 
 const deleteArchivedClientThunk = (
+    token: string | null,
     id: string,
     archivedClients: Array<ClientType>,
     currentPage: number,
@@ -241,7 +242,7 @@ const deleteArchivedClientThunk = (
   } else {
     const newPage = getNewPage(currentPage);
     if (currentPage === newPage) {
-      await dispatch(getArchivedClients(newPage, pageLimit, filter));
+      await dispatch(getArchivedClients(token, newPage, pageLimit, filter));
     }
     dispatch(deleteArchivedClientAC(id));
     dispatch(setCurrentPageAC(newPage));
@@ -249,6 +250,7 @@ const deleteArchivedClientThunk = (
 };
 
 export const getArchivedClients = (
+    token: string | null,
     currentPage: number,
     pageSize: number,
     filter: SearchFilterType
@@ -258,6 +260,7 @@ export const getArchivedClients = (
   try {
     dispatch(setIsFetchingAC(true));
     const response = await archivedClientsAPI.getArchivedClients(
+        token,
         currentPage,
         pageSize,
         filter
@@ -275,6 +278,7 @@ export const getArchivedClients = (
 };
 
 export const deleteArchivedClient = (
+    token: string | null,
     id: string,
     archivedClients: Array<ClientType>,
     currentPage: number,
@@ -285,9 +289,9 @@ export const deleteArchivedClient = (
 ) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await archivedClientsAPI.deleteArchivedClient(id);
+    const response = await archivedClientsAPI.deleteArchivedClient(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, pageLimit, filter));
+      await dispatch(deleteArchivedClientThunk(token, id, archivedClients, currentPage, pageLimit, filter));
       dispatch(setArchivedClientsApiErrorAC(null));
     }
   } catch (e) {
@@ -300,6 +304,7 @@ export const deleteArchivedClient = (
 };
 
 export const reactivateClient = (
+    token: string | null,
     id: string,
     archivedClients: Array<ClientType>,
     currentPage: number,
@@ -308,9 +313,9 @@ export const reactivateClient = (
 ) : ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await archivedClientsAPI.reactivateClient(id);
+    const response = await archivedClientsAPI.reactivateClient(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
-      await dispatch(deleteArchivedClientThunk(id, archivedClients, currentPage, pageLimit, filter));
+      await dispatch(deleteArchivedClientThunk(token, id, archivedClients, currentPage, pageLimit, filter));
       dispatch(setArchivedClientsApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS));
     }

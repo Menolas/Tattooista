@@ -27,6 +27,7 @@ import {clientFilterSelectOptions} from "../../../../utils/constants";
 import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
 import {SearchFilterType} from "../../../../types/Types";
 import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
+import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 
 export const ArchivedClients: React.FC = React.memo(() => {
     const isFetching = useSelector(getClientsIsFetching);
@@ -37,12 +38,13 @@ export const ArchivedClients: React.FC = React.memo(() => {
     const currentPage = useSelector(getCurrentArchivedClientsPageSelector);
     const filter = useSelector(getArchivedClientsFilter);
     const archivedClientsApiError = useSelector(getArchivedClientsApiErrorSelector);
+    const token = useSelector(getTokenSelector);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getArchivedClients(currentPage, pageSize, filter));
-    }, [dispatch, currentPage, pageSize, filter]);
+        dispatch(getArchivedClients(token, currentPage, pageSize, filter));
+    }, [token, dispatch, currentPage, pageSize, filter]);
 
     const onPageChangedCallBack = (
         page: number
@@ -66,6 +68,7 @@ export const ArchivedClients: React.FC = React.memo(() => {
         clientId: string
     ) => {
         dispatch(deleteArchivedClient(
+            token,
             clientId,
             archivedClients,
             currentPage,
@@ -78,6 +81,7 @@ export const ArchivedClients: React.FC = React.memo(() => {
         clientId: string
     ) => {
         dispatch(reactivateClient(
+            token,
             clientId,
             archivedClients,
             currentPage,

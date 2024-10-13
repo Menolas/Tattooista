@@ -2,18 +2,19 @@ const Router = require('express');
 const router = new Router();
 const FaqItem = require('../models/FaqItem');
 const controller = require('../controllers/faqController');
+const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 // getting all items
 router.get('/', controller.getFaqItems);
 
 // adding faq item
-router.post('/', controller.addFaqItem);
+router.post('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.addFaqItem);
 
 // updating faqItem
-router.post('/:id', getFaqItem, controller.updateFaqItem);
+router.post('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getFaqItem, controller.updateFaqItem);
 
 // deleting faqItem
-router.delete('/:id', getFaqItem, controller.deleteFaqItem);
+router.delete('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getFaqItem, controller.deleteFaqItem);
 
 async function getFaqItem(req, res, next) {
     let faqItem;

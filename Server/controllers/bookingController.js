@@ -6,7 +6,11 @@ const mailService = require("../services/mailService");
 class bookingController {
 
   async getBookings (req, res) {
-    let page = parseInt(req.query.page);
+    if (!req.hasRole) {
+        return res.status(403).json({ message: "You don't have permission" });
+    }
+
+    const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const status = req.query.status;
     const term = req.query.term;
@@ -53,6 +57,10 @@ class bookingController {
   }
 
   async getBooking(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       results.resultCode = 0;
@@ -66,6 +74,10 @@ class bookingController {
   }
 
   async getArchivedBookings (req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     let page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const startIndex = (page - 1) * limit;
@@ -114,6 +126,11 @@ class bookingController {
   }
 
   async createBooking(req, res) {
+    console.log(req.query.isAdmin + " isAdmin")
+    if (!req.query.isAdmin && !req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -131,6 +148,9 @@ class bookingController {
   }
 
   async reactivateBooking(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
     const results = {};
 
     try {
@@ -148,6 +168,10 @@ class bookingController {
   }
 
   async deleteBooking(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       await res.booking.remove();
@@ -161,6 +185,10 @@ class bookingController {
   }
 
   async changeBookingStatus(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       res.booking.status = !res.booking.status;
@@ -176,6 +204,10 @@ class bookingController {
   }
 
   async bookingToClient(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       const client = await BookingService.bookingToClient(res.booking);
@@ -191,8 +223,10 @@ class bookingController {
   }
 
   async archiveBooking(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
     const results = {};
-    console.log(res.booking + " res booking!!!!!!!!!!!!")
 
     try {
       const newArchivedBooking = await BookingService.archiveBooking(res.booking);

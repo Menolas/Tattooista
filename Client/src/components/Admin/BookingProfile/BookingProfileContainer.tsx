@@ -36,7 +36,7 @@ export const BookingProfileContainer: React.FC = () => {
     const bookingIdFromUrl = urlParams.get('bookingId');
 
     if (bookingIdFromUrl && (!bookingProfile || bookingProfile._id !== bookingIdFromUrl)) {
-      dispatch(getBookingProfile(bookingIdFromUrl));
+      dispatch(getBookingProfile(token, bookingIdFromUrl));
     }
   }, [dispatch]);
 
@@ -44,7 +44,6 @@ export const BookingProfileContainer: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const bookingIdFromUrl = urlParams.get('bookingId');
 
-    // Only navigate if the URL is missing the bookingId or the bookingId in the URL is different from the current bookingProfile._id
     if (bookingProfile && bookingProfile._id !== bookingIdFromUrl) {
       navigate(`?bookingId=${bookingProfile._id}`);
     }
@@ -56,7 +55,7 @@ export const BookingProfileContainer: React.FC = () => {
 
   const deleteBookingCallBack = async () => {
     let success = await dispatch(deleteBooking(
-        token || "",
+        token,
         bookingProfile._id,
         bookings,
         currentPage,
@@ -70,7 +69,7 @@ export const BookingProfileContainer: React.FC = () => {
 
   const archiveBookingCallBack = async () => {
     let success = await dispatch(archiveBooking(
-        token || "",
+        token,
         bookingProfile._id,
         bookings,
         currentPage,

@@ -2,21 +2,19 @@ const Router = require('express');
 const router = new Router();
 const Service = require('../models/Service');
 const controller = require('../controllers/serviceController');
+const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 //getting all services
 router.get('/', controller.getServices);
 
 // add service
-
-router.post('/', controller.addService);
+router.post('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.addService);
 
 // update service
-
-router.post('/:id', getService, controller.updateService);
+router.post('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getService, controller.updateService);
 
 // delete service
-
-router.delete('/:id', getService, controller.deleteService);
+router.delete('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getService, controller.deleteService);
 
 async function getService(req, res, next) {
   let service;

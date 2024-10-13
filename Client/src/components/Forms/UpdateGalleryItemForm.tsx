@@ -3,9 +3,10 @@ import {Field, Form, Formik, FormikHelpers} from "formik";
 import { GalleryItemType, StyleType} from "../../types/Types";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {API_URL} from "../../http";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateGalleryItem} from "../../redux/Gallery/gallery-reducer";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 type InitialValuesType = {
     [key: string]: boolean;
@@ -29,13 +30,12 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
     closeModal
 }) => {
 
-    console.log('galleryItem.tattooStyles as string:', JSON.stringify(galleryItem.tattooStyles, null, 2));
-    console.log('styles as string:', JSON.stringify(styles, null, 2));
+    const token = useSelector(getTokenSelector);
     const dispatch = useDispatch();
 
     const submit = async (values: InitialValuesType, formikHelpers: FormikHelpers<InitialValuesType>) => {
         const { setSubmitting } = formikHelpers;
-        let success = await dispatch(updateGalleryItem(galleryItem._id, values, activeStyleId));
+        let success = await dispatch(updateGalleryItem(token, galleryItem._id, values, activeStyleId));
         if (success) closeModal();
         setSubmitting(false);
     };

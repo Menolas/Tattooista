@@ -15,6 +15,10 @@ class faqController {
   }
 
   async addFaqItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -30,6 +34,10 @@ class faqController {
   }
 
   async updateFaqItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -53,6 +61,10 @@ class faqController {
   }
 
   async deleteFaqItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {

@@ -17,6 +17,10 @@ class serviceController {
   }
 
   async updateService(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -45,6 +49,10 @@ class serviceController {
   }
 
   async addService(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     console.log(JSON.stringify(req.body) + "controller service from request")
 
@@ -69,6 +77,10 @@ class serviceController {
   }
 
   async deleteService(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {

@@ -8,9 +8,10 @@ import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import * as Yup from "yup";
 import {validateFile} from "../../utils/validators";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {editAboutPage} from "../../redux/About/about-reducer";
 import {handleEnterClick} from "../../utils/functions";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 type PropsType = {
     apiError: null | string;
@@ -23,6 +24,7 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
     data,
     closeModal
 }) => {
+    const token = useSelector(getTokenSelector);
     const dispatch = useDispatch();
 
     const validationSchema = Yup.object().shape({
@@ -85,7 +87,7 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
             }
         });
         try {
-            const response = await dispatch(editAboutPage(formData));
+            const response = await dispatch(editAboutPage(token, formData));
             if (!response || response.message) { // Check the response here
                 throw new Error('Error submitting form');
             }

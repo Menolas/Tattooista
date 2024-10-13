@@ -18,8 +18,11 @@ class PagesController {
   }
 
   async updateAboutPage(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
-    console.log(JSON.stringify(req.body))
     try {
       const page = await Page.findOne({name: 'about'});
       page.title = req.body.aboutPageTitle.trim();
@@ -49,6 +52,10 @@ class PagesController {
   }
 
   async changeAboutPageVisibility(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     try {
       const page = await Page.findOne({name: 'about'});
 

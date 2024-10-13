@@ -281,13 +281,14 @@ export const getGallery = (
 };
 
 export const updateGallery = (
+    token: string | null,
   tattooStyle: string,
   values: FormData
 ): ThunkType => async (dispatch) => {
 
   try {
     dispatch(setIsFetchingAC(true));
-    const response = await galleryApi.adminUpdateGallery(tattooStyle, values);
+    const response = await galleryApi.adminUpdateGallery(token, tattooStyle, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryAC(response.gallery));
       dispatch(setApiErrorAC(null));
@@ -307,6 +308,7 @@ export const updateGallery = (
 };
 
 export const deleteGalleryItem = (
+    token: string | null,
   id: string,
   gallery: Array<GalleryItemType>,
   currentPage: number,
@@ -315,7 +317,7 @@ export const deleteGalleryItem = (
 ): ThunkType => async (dispatch) => {
   dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
-    const response = await galleryApi.deleteGalleryItem(id);
+    const response = await galleryApi.deleteGalleryItem(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
       dispatch(setGalleryApiErrorAC(null));
@@ -334,6 +336,7 @@ export const deleteGalleryItem = (
 };
 
 export const archiveGalleryItem = (
+    token: string | null,
     id: string,
     gallery: Array<GalleryItemType>,
     currentPage: number,
@@ -342,7 +345,7 @@ export const archiveGalleryItem = (
 ): ThunkType => async (dispatch) => {
   dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
-    const response = await galleryApi.archiveGalleryItem(id);
+    const response = await galleryApi.archiveGalleryItem(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteGalleryItemThunk(id, style._id, gallery, currentPage, pageLimit));
       dispatch(setGalleryApiErrorAC(null));
@@ -365,12 +368,13 @@ type ValuesType = {
 };
 
 export const updateGalleryItem = (
+    token: string | null,
     id: string,
     values: ValuesType,
     activeStyleId: string,
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await galleryApi.updateGalleryItem(id, values);
+    const response = await galleryApi.updateGalleryItem(token, id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateGalleryItemAC(response.galleryItem, values[activeStyleId]));
       dispatch(setSuccessModalAC(true, EDIT_GALLERY_ITEM_SUCCESS));

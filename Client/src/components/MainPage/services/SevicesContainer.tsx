@@ -11,12 +11,13 @@ import {
 } from "../../../redux/Services/services-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
+import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const ServicesContainer = () => {
     const apiError = useSelector(getApiErrorSelector);
+    const token = useSelector(getTokenSelector);
     const isAuth = useSelector(getAuthSelector);
     const services = useSelector(getServicesSelector);
     const isFetching = useSelector(getIsFetchingSelector);
@@ -29,7 +30,7 @@ export const ServicesContainer = () => {
     }, [dispatch]);
 
     const removeCallBack = (id: string) => {
-        dispatch(deleteService(id));
+        dispatch(deleteService(token, id));
     }
 
     const setApiErrorCallBack = () => {

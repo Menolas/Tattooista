@@ -36,6 +36,10 @@ class galleryController {
   }
 
   async updateGalleryItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     const styles = req.body.values;
     res.galleryItem.tattooStyles = [];
@@ -59,6 +63,10 @@ class galleryController {
   }
 
   async updateArchivedGalleryItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     const styles = req.body.values;
     res.archivedGalleryItem.tattooStyles = [];
@@ -82,6 +90,10 @@ class galleryController {
   }
 
   async getArchivedGalleryItems(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const startIndex = (page - 1) * limit;
@@ -104,6 +116,10 @@ class galleryController {
   }
 
   async deleteGalleryItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       await res.galleryItem.remove();
@@ -122,6 +138,10 @@ class galleryController {
   }
 
   async addGalleryItems(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const style = await TattooStyle.findOne({_id: req.params.style});
     const styleId = style._id;
     const files = req.files;
@@ -161,6 +181,10 @@ class galleryController {
   }
 
   async archiveGalleryItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {
@@ -192,6 +216,10 @@ class galleryController {
   }
 
   async reactivateGalleryItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
     try {
       const styles = res.archivedGalleryItem.tattooStyles;
@@ -223,6 +251,10 @@ class galleryController {
   }
 
   async deleteArchivedGalleryItem(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
     const results = {};
 
     try {

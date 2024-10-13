@@ -343,11 +343,12 @@ export const getBookings = (
 };
 
 export const getBookingProfile = (
+    token: string | null,
     bookingId: string
 ): ThunkType => async (dispatch) => {
     try {
         dispatch(setIsFetchingAC(true));
-        const response = await bookingsApi.getBookingProfile(bookingId);
+        const response = await bookingsApi.getBookingProfile(token, bookingId);
         if (response.resultCode === ResultCodesEnum.Success) {
         dispatch(setBookingProfileAC(response.booking));
         dispatch(setBookingApiErrorAC(null));
@@ -366,11 +367,12 @@ export const getBookingProfile = (
 };
 
 export const changeStatus = (
+  token: string | null,
   id: string
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsStatusChangingAC(true, id));
-    const response = await bookingsApi.changeConsultationStatus(id);
+    const response = await bookingsApi.changeConsultationStatus(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(changeStatusAC(id, response.status));
       dispatch(setBookingApiErrorAC(null));
@@ -398,7 +400,7 @@ export const deleteBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await bookingsApi.deleteConsultation(id);
+    const response = await bookingsApi.deleteConsultation(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setBookingApiErrorAC(null));
@@ -417,10 +419,12 @@ export const deleteBooking = (
 }
 
 export const addBooking = (
+  token: string | null,
+  isAdmin: boolean,
   values: AddConsultationFormValues | BookConsultationFormValues,
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await bookingsApi.addConsultation(values);
+    const response = await bookingsApi.addConsultation(token, isAdmin, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookingAC(response.booking));
       dispatch(setApiErrorAC(null));
@@ -446,7 +450,7 @@ export const turnBookingToClient = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await bookingsApi.turnBookingToClient(id);
+    const response = await bookingsApi.turnBookingToClient(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setBookingApiErrorAC(null));
@@ -474,7 +478,7 @@ export const archiveBooking = (
 ): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await bookingsApi.archiveBooking(id);
+    const response = await bookingsApi.archiveBooking(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(addArchivedBookingAC(response.booking));

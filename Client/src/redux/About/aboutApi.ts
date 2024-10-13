@@ -16,13 +16,27 @@ export const aboutApi = {
             .then(response => response.data);
     },
 
-    async editAboutPage(values: FormData) {
-        return await $api.post<EditAboutPageResponseType>(`pages/about`, values)
+    async editAboutPage(
+        token: string | null,
+        values: FormData
+    ) {
+        return await $api.post<EditAboutPageResponseType>(
+            `pages/about`,
+            values,
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
             .then(response => response.data);
     },
 
-    async changeAboutPageVisibility(isActive: boolean) {
-        return await $api.patch<ChangeAboutPageVisibilityResponseType>(`pages/visibility/about`, {isActive: isActive})
+    async changeAboutPageVisibility(
+        token: string | null,
+        isActive: boolean
+    ) {
+        return await $api.patch<ChangeAboutPageVisibilityResponseType>(
+            `pages/visibility/about`,
+            {isActive: isActive},
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
             .then(response => response.data);
     },
 };

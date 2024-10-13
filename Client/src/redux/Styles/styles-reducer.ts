@@ -12,8 +12,7 @@ import {
   SetCurrentGalleryPageAT,
   setCurrentGalleryPageAC,
 } from "../Gallery/gallery-reducer";
-import {checkAuth, LogInAT} from "../Auth/auth-reducer";
-import {tattooStyles} from "../../data/StylesData";
+import {LogInAT} from "../Auth/auth-reducer";
 
 const SET_STYLES = 'SET_STYLES';
 const DELETE_STYLE = 'DELETE_STYLE';
@@ -195,7 +194,7 @@ export const setActiveStyle = (style: StyleType | null): ThunkType => async (
 };
 
 export const getStyles = (
-    token: string | null | undefined,
+    token: string | null,
     isSlider?: boolean
 ): ThunkType => async (
   dispatch
@@ -211,20 +210,18 @@ export const getStyles = (
     }
   } catch (e) {
     console.log(e);
-    //await dispatch(checkAuth());
-    //dispatch(setStylesAC(tattooStyles));
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
 };
 
-export const addStyle = (values: FormData): ThunkType => async (
+export const addStyle = (token: string | null, values: FormData): ThunkType => async (
     dispatch
 ) => {
   try {
     dispatch(setIsFetchingAC(true));
-    const response = await stylesApi.addStyle(values);
+    const response = await stylesApi.addStyle(token, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, ADD_STYLE_SUCCESS));
@@ -243,11 +240,12 @@ export const addStyle = (values: FormData): ThunkType => async (
 };
 
 export const editStyle = (
+    token: string | null,
     id: string,
     values: FormData
 ): ThunkType => async (dispatch) => {
   try {
-    const response = await stylesApi.editStyle(id, values)
+    const response = await stylesApi.editStyle(token, id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateStyleAC(response.tattooStyle));
       dispatch(setSuccessModalAC(true, UPDATE_STYLE_SUCCESS));
@@ -263,10 +261,13 @@ export const editStyle = (
   }
 };
 
-export const deleteStyle = (id: string): ThunkType => async (dispatch) => {
+export const deleteStyle = (
+    token: string | null,
+    id: string
+): ThunkType => async (dispatch) => {
   try {
     dispatch(toggleIsDeletingInProcessAC(true, id));
-    const response = await stylesApi.deleteStyle(id);
+    const response = await stylesApi.deleteStyle(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteStyleAC(id));
       return true;

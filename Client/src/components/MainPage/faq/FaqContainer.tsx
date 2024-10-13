@@ -8,7 +8,7 @@ import {
     deleteFaqItem,
     getFaqItems,
 } from "../../../redux/Faq/faq-reducer";
-import {getAuthSelector} from "../../../redux/Auth/auth-selectors";
+import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {
     useDispatch,
     useSelector
@@ -18,7 +18,7 @@ import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const FaqContainer = () => {
-
+    const token = useSelector(getTokenSelector);
     const apiError = useSelector(getApiErrorSelector);
     const isAuth = useSelector(getAuthSelector);
     const faq = useSelector(getFaqItemsSelector);
@@ -31,7 +31,7 @@ export const FaqContainer = () => {
     }, [dispatch]);
 
     const removeCallBack = (id: string) => {
-        dispatch(deleteFaqItem(id));
+        dispatch(deleteFaqItem(token, id));
     }
 
     const setApiErrorCallBack = () => {

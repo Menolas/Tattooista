@@ -13,24 +13,37 @@ type GetClientsResponseType = CommonResponseFields & {
 export const archivedClientsAPI = {
 
     async getArchivedClients(
+      token: string | null,
       currentPage = 1,
       pageSize = 5,
       filter: SearchFilterType
   ) {
       return await $api.get<GetClientsResponseType>(
-          `clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`)
+          `clients/archive?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+      )
           .then(response => response.data);
   },
 
-    async deleteArchivedClient(clientId: string) {
-    return await $api.delete<DeleteClientResponseType>(`clients/archive/${clientId}`)
+    async deleteArchivedClient(
+        token: string | null,
+        clientId: string
+    ) {
+    return await $api.delete<DeleteClientResponseType>(
+        `clients/archive/${clientId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   },
 
     async reactivateClient(
-    clientId: string
+        token: string | null,
+        clientId: string
   ) {
-    return await $api.get<ReactivateClientResponseType>(`clients/archive/${clientId}`)
+    return await $api.get<ReactivateClientResponseType>(
+        `clients/reactivate/${clientId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    )
         .then(response => response.data);
   }
 };

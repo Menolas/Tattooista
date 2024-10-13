@@ -166,9 +166,12 @@ export const getFaqItems = (): ThunkType => async (
   }
 };
 
-export const addFaqItem = (values: UpdateFaqValues): ThunkType => async (dispatch) => {
+export const addFaqItem = (
+    token: string | null,
+    values: UpdateFaqValues
+): ThunkType => async (dispatch) => {
   try {
-    const response = await faqApi.addFaqItem(values);
+    const response = await faqApi.addFaqItem(token, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addFaqItemAC(response.faqItem));
       dispatch(setSuccessModalAC(true, FAQ_ADD_SUCCESS));
@@ -184,9 +187,13 @@ export const addFaqItem = (values: UpdateFaqValues): ThunkType => async (dispatc
   }
 };
 
-export const updateFaqItem = (id: string, values: UpdateFaqValues): ThunkType => async (dispatch) => {
+export const updateFaqItem = (
+    token: string | null,
+    id: string,
+    values: UpdateFaqValues
+): ThunkType => async (dispatch) => {
   try {
-    const response = await faqApi.updateFaqItem(id, values);
+    const response = await faqApi.updateFaqItem(token, id, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(updateFaqItemAC(id, response.faqItem));
       dispatch(setSuccessModalAC(true, FAQ_UPDATE_SUCCESS));
@@ -202,9 +209,12 @@ export const updateFaqItem = (id: string, values: UpdateFaqValues): ThunkType =>
   }
 };
 
-export const deleteFaqItem = (id: string): ThunkType => async (dispatch) => {
+export const deleteFaqItem = (
+    token: string | null,
+    id: string
+): ThunkType => async (dispatch) => {
   try {
-    const response = await faqApi.deleteFaqItem(id);
+    const response = await faqApi.deleteFaqItem(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(deleteFaqItemAC(id));
       return true;

@@ -5,12 +5,13 @@ import {FaqType, UpdateFaqValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     addFaqItem,
     updateFaqItem,
 } from "../../redux/Faq/faq-reducer";
 import {handleEnterClick} from "../../utils/functions";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 const validationSchema = Yup.object().shape({
     question: Yup.string()
@@ -29,6 +30,7 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
   faqItem,
   closeModal,
 }) => {
+    const token = useSelector(getTokenSelector);
     const initialValues = {
         question: faqItem?.question ?? '',
         answer: faqItem?.answer ?? '',
@@ -39,9 +41,9 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
     const submit = async (values: UpdateFaqValues, actions: FormikHelpers<UpdateFaqValues>) => {
         let success;
         if (faqItem) {
-            success = await dispatch(updateFaqItem(faqItem._id, values));
+            success = await dispatch(updateFaqItem(token, faqItem._id, values));
         } else {
-            success = await dispatch(addFaqItem(values));
+            success = await dispatch(addFaqItem(token, values));
         }
         if (success) {
             closeModal();

@@ -5,9 +5,10 @@ import {phoneRegex} from "../../utils/validators";
 import {AddConsultationFormValues} from "../../types/Types";
 import {FieldComponent} from "./formComponents/FieldComponent";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {handleEnterClick} from "../../utils/functions";
+import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 
 const validationSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -56,11 +57,11 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
   apiError,
   closeBookingModal,
 }) => {
-
+  const token = useSelector(getTokenSelector);
   const dispatch = useDispatch();
 
   const submit = async (values: AddConsultationFormValues, actions: FormikHelpers<AddConsultationFormValues>) => {
-    const success = await dispatch(addBooking(values));
+    const success = await dispatch(addBooking(token,true, values));
     if (success && closeBookingModal) {
       closeBookingModal();
     }

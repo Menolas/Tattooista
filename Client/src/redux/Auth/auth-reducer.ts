@@ -18,7 +18,7 @@ const SET_FROM = 'SET_FROM';
 const initialState = {
   user: {} as IUser | null | undefined,
   roles: [] as Array<RoleType> | null,
-  token: null as string | null | undefined,
+  token: null as string | null,
   isAuth: null as string | null,
   from: null as string | null,
   authApiError: null as null | string,
