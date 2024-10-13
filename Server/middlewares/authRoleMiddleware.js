@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userService = require('../services/userService');
+const tokenService = require('../services/tokenService');
 const Role = require("../models/Role");
 
 module.exports = function (roles) {
@@ -17,50 +18,35 @@ module.exports = function (roles) {
     }
 
     try {
-      jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
-        if (err) {
-          const results = {};
-          results.resultCode = 1;
-          results.message = err.message;
-          res.status(401).json(results);
+      const data = tokenService.validateAccessToken(token);
+
+      if (!data) {
+        const {refreshToken} = req.cookies;
+        const userData = await userService.refresh(refreshToken);
+        if (userData) {
+          req.userData = userData;
+        } else {
+          res.status(401).json({ message: "Failed to refresh access token" });
           return;
         }
+      }
 
-        const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-        const { exp } = decoded; // Expiration time of the token
-        const expirationThreshold = 60 * 5; // Threshold: 5 minutes
-        const timeToExpire = exp - currentTime;
-
-        if (timeToExpire < expirationThreshold) {
-          const {refreshToken} = req.cookies;
-          const userData = await userService.refresh(refreshToken);
-          console.log(refreshToken + " refreshToken !!!!!!!!!!!")
-          if (userData) {
-            console.log("jwt refreshing !!!!!!!!!!!")
-            req.userData = userData;
-          } else {
-            console.log("Failed to refresh access token !!!!!!!!!!!")
-            res.status(401).json({ message: "Failed to refresh access token" });
-            return;
-          }
-        }
-        const userRoles = decoded?.roles;
-        const roleObjectPromises = roles.map(async role => {
-          const roleObject = await Role.findOne({ value: role });
-          return roleObject._id;
-        });
-        const roleIds = await Promise.all(roleObjectPromises);
-        let hasRole = false;
-        userRoles?.forEach(role => {
-          roleIds.forEach(roleId => {
-            if (roleId.toString() === role) {
-              hasRole = true;
-            }
-          });
-        });
-        req.hasRole = hasRole;
-        next();
+      const userRoles = data?.roles;
+      const roleObjectPromises = roles.map(async role => {
+        const roleObject = await Role.findOne({ value: role });
+        return roleObject._id;
       });
+      const roleIds = await Promise.all(roleObjectPromises);
+      let hasRole = false;
+      userRoles?.forEach(role => {
+        roleIds.forEach(roleId => {
+          if (roleId.toString() === role) {
+            hasRole = true;
+          }
+        });
+      });
+      req.hasRole = hasRole;
+      next();
 
     } catch (e) {
       console.log(e);
