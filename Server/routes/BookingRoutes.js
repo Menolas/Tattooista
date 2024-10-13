@@ -3,7 +3,6 @@ const router = new Router();
 const Booking = require('../models/Booking');
 const ArchivedBooking = require('../models/ArchivedBooking');
 const controller = require('../controllers/bookingController');
-const roleMiddleware = require('../middlewares/roleMiddleware');
 const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 // Getting bookings
@@ -11,7 +10,7 @@ router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getBooki
 
 // getting archived bookings
 
-router.get('/archive', roleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getArchivedBookings);
+router.get('/archive', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getArchivedBookings);
 
 //getting one booking
 
