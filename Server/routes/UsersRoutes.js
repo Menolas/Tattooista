@@ -1,14 +1,14 @@
 const Router = require("express");
 const router = new Router();
 const controller = require("../controllers/usersController");
-const roleMiddleware = require('../middlewares/roleMiddleware');
+const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 const User = require("../models/User");
 
 //getting roles
 router.get('/roles', controller.getRoles);
 
 //Getting users
-router.get('/', roleMiddleware(["SUPERADMIN"]), controller.getUsers);
+router.get('/', authRoleMiddleware(["SUPERADMIN"]), controller.getUsers);
 //router.get('/users', authMiddleware, authController.getUsers)
 
 // delete user
