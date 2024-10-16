@@ -48,7 +48,6 @@ export const ClientsContainer: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(token + " token in clients container");
     dispatch(getClients(token || "", currentPage, pageSize, filter));
 
   }, [dispatch, token, currentPage, pageSize, filter, clients.length]);
