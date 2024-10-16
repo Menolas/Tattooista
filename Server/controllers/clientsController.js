@@ -271,6 +271,7 @@ class clientsController {
   }
 
   async archiveClient(req, res) {
+    console.log("archiving client - controller!!!!!!!!!!!")
     if (!req.hasRole) {
       return res.status(403).json({ message: "You don't have permission" });
     }
@@ -292,6 +293,7 @@ class clientsController {
       const moveOperations = [];
 
       if (res.client.avatar) {
+        console.log("archive client and client had an avatar!!!!!!!!!!!!!!")
         const oldPath = `./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`;
         const newPath = `./uploads/archivedClients/${archivedClient._id}/avatar/${res.client.avatar}`;
         if (fs.existsSync(oldPath)) {
@@ -312,6 +314,7 @@ class clientsController {
       }
 
       if (res.client.gallery.length > 0) {
+        console.log("archive client and client had an gallery!!!!!!!!!!!!!!")
         archivedClient.gallery = [...res.client.gallery];
         res.client.gallery.forEach((item) => {
           const oldGalleryPath = `./uploads/clients/${res.client._id}/doneTattooGallery/${item}`;
@@ -350,6 +353,7 @@ class clientsController {
   }
 
   async reactivateClient(req, res) {
+    console.log("we are here")
     if (!req.hasRole) {
       return res.status(403).json({ message: "You don't have permission" });
     }
@@ -361,6 +365,7 @@ class clientsController {
       const moveOperations = [];
 
       if (res.client.avatar) {
+        console.log("the client has avatar!!!!!!!!!!!!!")
         const oldPath = `./uploads/archivedClients/${res.client._id}/avatar/${res.client.avatar}`;
         const newPath = `./uploads/clients/${newClient._id}/avatar/${res.client.avatar}`;
         moveOperations.push(new Promise((resolve, reject) => {
@@ -387,12 +392,13 @@ class clientsController {
       }
 
       await Promise.all(moveOperations);
-      await fs.rm(`./uploads/archivedClients/${res.client._id}`, { recursive:true }, (err) => {
-        if (err) {
-          console.log(err);
-          throw err;
-        }
-      });
+      const archivedClientDirPath = `./uploads/archivedClients/${res.client._id}`;
+      if (fs.existsSync(archivedClientDirPath)) {
+        await fs.promises.rm(archivedClientDirPath, { recursive:true });
+      } else {
+        console.log(`Directory not found: ${archivedClientDirPath}`);
+      }
+
       await res.client.remove();
       results.resultCode = 0;
       results.client = await newClient.save();

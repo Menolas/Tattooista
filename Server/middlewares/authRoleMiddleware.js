@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-const userService = require('../services/userService');
 const tokenService = require('../services/tokenService');
 const Role = require("../models/Role");
 
@@ -12,7 +10,6 @@ module.exports = function (roles) {
 
     let token = req.headers.authorization?.split(' ')[1];
     if (!token || token === 'null') {
-      console.log(token + " we are here !!! -!token || token === 'null'")
       req.hasRole = false;
       next();
       return;
@@ -32,12 +29,10 @@ module.exports = function (roles) {
 
       if (!data) {
         const {refreshToken} = req.cookies;
-        console.log(refreshToken + " refreshToken on refresh token")
         const userData = await tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
         if (userData && tokenFromDb) {
           userRoles = userData.roles;
-          console.log(JSON.stringify(userData) + " userRoles on refresh token")
         } else {
           res.status(401).json({ message: "Failed to refresh access token" });
           return;
