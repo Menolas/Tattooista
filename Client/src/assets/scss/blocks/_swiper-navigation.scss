@@ -4,6 +4,10 @@
 
   .swiper {
     position: static;
+
+    .swiper-wrapper {
+      z-index: 0;
+    }
   }
 }
 
@@ -13,6 +17,7 @@
   bottom: 0;
   margin-top: 0 !important;
   color: $light-text !important;
+  z-index: 0 !important;
 
   &::after {
     font-size: 1.5rem !important;

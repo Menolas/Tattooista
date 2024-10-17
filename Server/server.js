@@ -25,9 +25,9 @@ mongoose.set('strictQuery', false);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
+  origin: process.env.CLIENT_URL,
   credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  origin: process.env.CLIENT_URL
 }));
 app.use(fileUpload({createParentPath: true,}));
 app.use('/', express.static(__dirname + '/uploads'));
