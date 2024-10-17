@@ -54,7 +54,6 @@ export const bookingsApi = {
   async changeConsultationStatus(
       token: string | null,
       id: string) {
-    console.log(token + " change satatus api!!!!!!!!!!!!!!!!!!")
     return await $api.patch<ChangeBookingStatusResponseType>(
         `bookings/status/${id}`,
         {},

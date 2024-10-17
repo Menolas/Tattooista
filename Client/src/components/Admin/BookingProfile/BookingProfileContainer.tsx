@@ -5,12 +5,15 @@ import {useNavigate} from "react-router-dom";
 import {
   getBookingProfile,
   deleteBooking,
-  archiveBooking,
+  archiveBooking, changeStatus, turnBookingToClient,
 } from "../../../redux/Bookings/bookings-reducer";
 import { BookingProfile } from "./BookingProfile";
 import {
   getBookingProfileSelector,
-  getBookingApiErrorSelector, getCurrentPageSelector, getPageSizeSelector, getBookingsSelector, getFilterSelector,
+  getCurrentPageSelector,
+  getPageSizeSelector,
+  getBookingsSelector,
+  getFilterSelector, getIsDeletingInProcessSelector, getIsStatusChangingSelector,
 } from "../../../redux/Bookings/bookings-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
@@ -26,7 +29,8 @@ export const BookingProfileContainer: React.FC = () => {
   const filter = useSelector(getFilterSelector);
   const bookingProfile = useSelector(getBookingProfileSelector);
   const apiError = useSelector(getApiErrorSelector);
-  const bookingApiError = useSelector(getBookingApiErrorSelector);
+  const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
+  const isStatusChanging = useSelector(getIsStatusChangingSelector);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,6 +71,26 @@ export const BookingProfileContainer: React.FC = () => {
     }
   };
 
+  const turnBookingToClientCallBack = async () => {
+    let success = await dispatch(turnBookingToClient(
+        token,
+        bookingProfile._id,
+        bookings,
+        currentPage,
+        pageSize,
+        filter
+    ));
+    if (success) {
+      navigate("/admin/bookedConsultations");
+    }
+  }
+
+  const changeStatusCallBack = async () => {
+    dispatch(changeStatus(token, bookingProfile._id));
+    dispatch(getBookingProfile(token, bookingProfile._id));
+    console.log(JSON.stringify(bookingProfile));
+  }
+
   const archiveBookingCallBack = async () => {
     let success = await dispatch(archiveBooking(
         token,
@@ -84,8 +108,11 @@ export const BookingProfileContainer: React.FC = () => {
   return (
     <>
       <BookingProfile
-        apiError={bookingApiError}
         data={bookingProfile}
+        isDeletingInProcess={isDeletingInProcess}
+        isStatusChanging={isStatusChanging}
+        changeStatus={changeStatusCallBack}
+        turnBookingToClient={turnBookingToClientCallBack}
         remove={deleteBookingCallBack}
         archive={archiveBookingCallBack}
       />

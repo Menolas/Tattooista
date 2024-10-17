@@ -50,10 +50,12 @@ export const ClientsContainer: React.FC = () => {
   useEffect(() => {
     dispatch(getClients(token || "", currentPage, pageSize, filter));
 
-  }, [dispatch, token, currentPage, pageSize, filter, clients.length]);
+  }, [dispatch, token, currentPage, pageSize, filter]);
 
   useEffect(() => {
-    dispatch(setClientsCurrentPageAC(1));
+    if (currentPage !== 1) {
+      dispatch(setClientsCurrentPageAC(1));
+    }
   }, [dispatch, filter]);
 
   const setCurrentPageCallBack = (

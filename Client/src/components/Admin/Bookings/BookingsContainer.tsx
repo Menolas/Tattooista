@@ -47,10 +47,12 @@ export const BookingsContainer: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBookings(token, currentPage, pageSize, filter));
-  }, [dispatch, token, currentPage, pageSize, filter, bookings.length ]);
+  }, [dispatch, token, currentPage, pageSize, filter]);
 
   useEffect(() => {
-    dispatch(setCurrentPageAC(1));
+    if (currentPage !== 1) {
+      dispatch(setCurrentPageAC(1));
+    }
   }, [filter, dispatch]);
 
   const setCurrentPageCallBack = (
@@ -68,7 +70,6 @@ export const BookingsContainer: React.FC = () => {
   const changeStatusCallBack = (
     id: string,
   ) => {
-    console.log(token + "token from changeStatusCallback")
     dispatch(changeStatus(token, id));
   };
 
