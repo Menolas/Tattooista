@@ -39,6 +39,7 @@ export const Profile: React.FC<PropsType> = ({
 
     const { clientId } = useParams();
 
+    const [client, setClient] = useState<ClientType | null>(null);
     const [editClientMode, setEditClientMode] = useState<boolean>(false);
     const [editGalleryMode, setEditGalleryMode] = useState<boolean>(false);
     const [carouselData, setCarouselData] = useState<{
@@ -67,6 +68,11 @@ export const Profile: React.FC<PropsType> = ({
     setEditClientMode(false);
     setEditGalleryMode(false);
     setConfirmationData({needConfirmation: false, context: ''});
+    setClient(null);
+  };
+
+  const refreshClientData = (updatedClient: ClientType | null) => {
+      setClient(updatedClient);
   };
 
   if (!data) {
@@ -220,6 +226,7 @@ export const Profile: React.FC<PropsType> = ({
                   apiError={apiError}
                   isEditPortfolio={false}
                   client={data}
+                  refreshClientData={refreshClientData}
                   isDeletingPicturesInProcess={isDeletingPicturesInProcess}
                   closeModal={closeModal}
               />
