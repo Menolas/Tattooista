@@ -15,7 +15,7 @@ import {
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
-import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 
 export const ProfileContainer: React.FC = () => {
 

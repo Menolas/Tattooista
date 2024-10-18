@@ -30,7 +30,7 @@ export type ClientType = {
     createdAt?: Date;
     contacts: ContactType;
     avatar?: File | string;
-    gallery?: Array<string>;
+    gallery: Array<string>;
 }
 
 export type BookingType = {

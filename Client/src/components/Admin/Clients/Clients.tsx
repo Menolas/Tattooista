@@ -8,7 +8,6 @@ import {SearchFilterType, ClientType} from "../../../types/Types";
 import {NothingToShow} from "../../common/NothingToShow";
 import {Preloader} from "../../common/Preloader";
 import {clientFilterSelectOptions} from "../../../utils/constants";
-import {Navigate} from "react-router";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {GalleryUploadForm} from "../../Forms/GalleryUploadForm";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
