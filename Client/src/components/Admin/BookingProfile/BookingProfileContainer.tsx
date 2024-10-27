@@ -87,14 +87,8 @@ export const BookingProfileContainer: React.FC = () => {
 
   const changeStatusCallBack = async () => {
     try {
-      // Await the dispatch of the changeStatus action to ensure it completes first
       await dispatch(changeStatus(token, bookingProfile._id));
-
-      // Once the status change is successful, fetch the updated booking profile
       await dispatch(getBookingProfile(token, bookingProfile._id));
-
-      // Optional: You can still log the updated profile
-      console.log(JSON.stringify(bookingProfile));
     } catch (error) {
       console.log('Error changing status and fetching updated booking:', error);
     }
