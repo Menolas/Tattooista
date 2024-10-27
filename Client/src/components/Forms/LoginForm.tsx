@@ -46,6 +46,7 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
 
   return (
     <Formik
+        key={authApiError}
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={submit}

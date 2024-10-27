@@ -100,22 +100,16 @@ class UserService {
 
     async refresh(refreshToken) {
         if (!refreshToken) {
-            return {
-                isAuth: false
-            }
+            throw ApiError.BadRequest('no refresh token');
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
         if (!userData || !tokenFromDb) {
-            return {
-                isAuth: false
-            }
+            throw ApiError.BadRequest('could not validate refresh token or it was not found in db');
         }
         const user = await UserModel.findById(userData.id);
         if (!user) {
-            return {
-                isAuth: false
-            }
+            throw ApiError.BadRequest('no such user');
         }
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
@@ -132,7 +126,6 @@ class UserService {
             roles: await Role.find()
         }
     }
-
 }
 
 module.exports = new UserService();

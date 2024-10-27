@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import { SocialNav } from "../SocialNav";
 import { MainNav } from "../MainNav";
 import { Logo } from "../Logo";
@@ -11,35 +11,39 @@ import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
 import {StyleType} from "../../types/Types";
-import {useState} from "react";
+import {useEffect} from "react";
 import {ModalPopUp} from "../common/ModalPopUp";
 import {LoginForm} from "../Forms/LoginForm";
 
 type PropsType = {
+    isLogin: boolean;
     isAuth: string | null;
-    authApiError: null | string;
+    loginError: null | string;
     headerClasses: string | null;
+    needReLogin: boolean;
     logout: () => void;
+    closeLoginModal: () => void;
+    openLoginModal: () => void;
     activeStyle: StyleType | null;
 }
 
 export const Header: React.FC<PropsType> = React.memo(({
+  isLogin,
   isAuth,
-  authApiError,
+  loginError,
   headerClasses,
+  needReLogin,
   logout,
+  closeLoginModal,
+  openLoginModal,
   activeStyle,
 }) => {
 
-  const [isLogin, setIsLogin] = useState(false);
-
-  const openLoginModal = () => {
-      setIsLogin(true);
-  };
-
-  const closeLoginModal = () => {
-    setIsLogin(false);
-  };
+    useEffect(() => {
+        if (needReLogin) {
+            openLoginModal();
+        }
+    }, [needReLogin]);
 
   return (
     <header className = { 'main-header ' + headerClasses }>
@@ -95,7 +99,7 @@ export const Header: React.FC<PropsType> = React.memo(({
                         className={"btn btn--transparent"}
                         data-tooltip-id="my-tooltip"
                         data-tooltip-content="Log in"
-                        onClick={() => setIsLogin(true)}
+                        onClick={openLoginModal}
                     >
                         <LoginIcon />
                         Log In
@@ -109,7 +113,7 @@ export const Header: React.FC<PropsType> = React.memo(({
           closeModal={closeLoginModal}
       >
           <LoginForm
-              authApiError={authApiError}
+              authApiError={loginError}
               closeModal={closeLoginModal}
           />
       </ModalPopUp>

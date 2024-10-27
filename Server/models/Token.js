@@ -6,10 +6,12 @@ const TokenSchema = new Schema({
         ref: 'User',
     },
 
-    refreshToken: {
-        type: String,
-        required: true,
-    }
-})
+    refreshTokens: [
+        {
+            type: String,
+            required: true,
+        }
+    ]
+});
 
 module.exports = model('Token', TokenSchema);

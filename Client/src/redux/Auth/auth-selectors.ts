@@ -14,12 +14,20 @@ export const getUserSelector = (state: AppStateType) => {
 
 export const getAuthApiErrorSelector = (state: AppStateType) => {
   return state.auth.authApiError
-}
+};
+
+export const getLoginErrorSelector = (state: AppStateType) => {
+  return state.auth.loginError
+};
 
 export  const getFromSelector = (state: AppStateType) => {
     return state.auth.from
-}
+};
 
 export const getRolesSelector = (state: AppStateType) => {
   return state.auth.roles
-}
+};
+
+export const getNeedReLoginSelector = (state: AppStateType) => {
+  return state.auth.needReLogin
+};

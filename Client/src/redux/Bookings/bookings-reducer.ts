@@ -8,7 +8,7 @@ import {
 } from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
-import type {} from "redux-thunk/extend-redux";
+//import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
@@ -19,6 +19,7 @@ import {
   addArchivedBookingAC,
   AddArchivedBookingAT,
 } from "../ArchivedBookings/archived-bookings-reducer";
+import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
 
 const SET_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
 const SET_FILTER = 'SET_BOOKINGS_FILTER';
@@ -160,7 +161,7 @@ type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
      ChangeStatusAT | SetIsFetchingAT |
     ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT | DeleteBookingAT |
     AddBookingAT | SetAccessErrorAT | SetBookingApiErrorAT | AddArchivedBookingAT |
-    SetBookingProfileAT;
+    SetBookingProfileAT | SetNeedReLoginAT;
 
 // actions creators
 type SetBookingProfileAT = {
@@ -329,8 +330,11 @@ export const getBookings = (
       dispatch(setAccessErrorAC(''));
       dispatch(setBookingsAC(response.bookings, response.totalCount));
       return true;
-    } else {
+    } else if (response.resultCode === ResultCodesEnum.Error && !response.refresh) {
+      dispatch(setNeedReLoginAC(true));
       return false;
+    } else {
+        return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;

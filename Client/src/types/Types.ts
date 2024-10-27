@@ -180,6 +180,7 @@ export type SearchFilterType = {
 export type CommonResponseFields = {
     resultCode: number;
     message?: string;
+    refresh?: boolean;
 }
 
 export interface ApiErrorType {

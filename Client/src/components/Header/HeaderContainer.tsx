@@ -1,23 +1,26 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {logout} from "../../redux/Auth/auth-reducer";
+import {logout, setLoginErrorAC, setNeedReLoginAC} from "../../redux/Auth/auth-reducer";
 import { Header } from "./Header";
-import {getAuthApiErrorSelector, getAuthSelector, getFromSelector} from "../../redux/Auth/auth-selectors";
-import {useLocation, useNavigate} from "react-router-dom";
+import {
+  getAuthSelector, getLoginErrorSelector, getNeedReLoginSelector
+} from "../../redux/Auth/auth-selectors";
+import {useLocation,} from "react-router-dom";
 import {getActiveStyleSelector} from "../../redux/Styles/styles-selectors";
 
 export const HeaderContainer: React.FC = () => {
 
   const isAuth = useSelector(getAuthSelector);
-  const authApiError = useSelector(getAuthApiErrorSelector);
+  const loginError = useSelector(getLoginErrorSelector);
+  const needReLogin = useSelector(getNeedReLoginSelector);
   const dispatch = useDispatch();
   const [headerClasses, setHeaderClasses] = useState('');
   const location = useLocation();
   const [pageLocation, setPageLocation] = useState(location.pathname);
   const activeStyle = useSelector(getActiveStyleSelector);
-  const from = useSelector(getFromSelector);
-  const navigate = useNavigate();
+
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     const pathArray = pageLocation.split('/');
@@ -38,11 +41,29 @@ export const HeaderContainer: React.FC = () => {
     dispatch(logout());
   }
 
+  const closeLoginModal = () => {
+    if (!needReLogin) setIsLogin(false);
+    dispatch(setLoginErrorAC(null));
+    if (needReLogin) {
+      logout();
+      setIsLogin(false);
+      dispatch(setNeedReLoginAC(false));
+    }
+  }
+
+  const openLoginModal = () => {
+    setIsLogin(true);
+  };
+
   return <Header
+      isLogin={isLogin}
       isAuth={isAuth}
-      authApiError={authApiError}
+      loginError={loginError}
       headerClasses={headerClasses}
+      needReLogin={needReLogin}
       logout={logoutCallBack}
+      closeLoginModal={closeLoginModal}
+      openLoginModal={openLoginModal}
       activeStyle={activeStyle}
   />
 }

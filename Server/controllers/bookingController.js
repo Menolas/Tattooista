@@ -6,6 +6,8 @@ const mailService = require("../services/mailService");
 class bookingController {
 
   async getBookings (req, res) {
+    const results = {};
+
     if (!req.hasRole) {
         return res.status(403).json({ message: "You don't have permission" });
     }
@@ -15,7 +17,6 @@ class bookingController {
     const status = req.query.status;
     const term = req.query.term;
     let bookings = [];
-    const results = {};
 
     try {
       let query = {};
@@ -49,10 +50,8 @@ class bookingController {
       results.bookings = bookings.slice(startIndex, endIndex);
       res.json(results);
     } catch (e) {
-      results.resultCode = 1;
-      results.message = e.message;
       console.log(e);
-      res.status(400).json(results);
+      res.status(400).json({ message: "Server error" });
     }
   }
 
