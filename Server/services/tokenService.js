@@ -15,19 +15,20 @@ class TokenService {
     async saveToken(userId, refreshToken) {
         const tokenData = await tokenModel.findOne({user: userId});
         if (tokenData) {
-            tokenData.refreshToken = refreshToken;
+            tokenData.refreshTokens.push(refreshToken);
             return tokenData.save();
         }
-        return await tokenModel.create({user: userId, refreshToken});
+        return await tokenModel.create({user: userId, refreshTokens: [refreshToken]});
     }
 
     async removeToken(refreshToken) {
-        console.log("token removed!!!!!!!!!!!!!!!!!!!!")
-        return tokenModel.deleteOne({refreshToken});
+        return tokenModel.updateOne(
+            {refreshTokens: refreshToken},
+            {$pull: {refreshTokens: refreshToken}});
     }
 
     async findToken(refreshToken) {
-        return tokenModel.findOne({refreshToken});
+        return tokenModel.findOne({refreshTokens: refreshToken});
     }
 
     validateAccessToken(token) {

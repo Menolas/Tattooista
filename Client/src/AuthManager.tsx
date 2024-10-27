@@ -9,7 +9,6 @@ interface AuthManagerProps {
 }
 
 export const AuthManager = ({children}: AuthManagerProps) => {
-
     const isAuth = useSelector(getAuthSelector);
     const user = useSelector(getUserSelector);
     const from = useSelector(getFromSelector);
@@ -19,35 +18,43 @@ export const AuthManager = ({children}: AuthManagerProps) => {
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(true);
+    const [hasToken, setHasToken] = useState(false);
 
     useEffect(() => {
-        if (!isAuth) {
+        const tokenExists = !!localStorage.getItem('refreshToken');
+        console.log(localStorage.getItem('refreshToken') + " refreshtoken!!!!!!!!!!!!")
+        console.log(tokenExists + " tokenExists!!!!!!!!!!!!")
+        setHasToken(tokenExists);
+    }, []);
+
+    useEffect(() => {
+        if (!isAuth && hasToken) {
             dispatch(checkAuth())
-                .finally(() => setLoading(false)); // Once auth check is done, set loading to false
+                .finally(() => setLoading(false));
         } else {
             setLoading(false);
         }
-    }, [isAuth, dispatch]);
+    }, [isAuth, hasToken, dispatch]);
 
     useEffect(() => {
         if (!loading) {
             if (isAuth && !user?.isActivated) {
-                navigate("registration"); // Navigate to registration if user is not activated
+                navigate("registration");
             } else if (isAuth && user?.isActivated && from) {
-                navigate(from); // Navigate to the previously saved location
-                dispatch(setFromAC(null)); // Clear the "from" state after navigation
+                navigate(from);
+                dispatch(setFromAC(null));
             }
         }
     }, [isAuth, user?.isActivated, from, navigate, dispatch, loading]);
 
     useEffect(() => {
         if (location.pathname !== '/login') {
-            dispatch(setFromAC(location.pathname)); // Save the current route for redirection after login
+            dispatch(setFromAC(location.pathname));
         }
     }, [location.pathname, isAuth, dispatch]);
 
     if (loading) {
-        return <div>Loading...</div>; // Optionally show a loading state while auth is being checked
+        return <div>Loading...</div>;
     }
 
     return (

@@ -14,6 +14,8 @@ const SET_AUTH_API_ERROR = 'SET_AUTH_API_ERROR';
 const LOG_OUT = 'LOG_OUT';
 const LOG_IN = 'LOG_IN';
 const SET_FROM = 'SET_FROM';
+const SET_NEED_RELOGIN = 'SET_NEED_RELOGIN';
+const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
 
 const initialState = {
   user: {} as IUser | null | undefined,
@@ -22,6 +24,8 @@ const initialState = {
   isAuth: null as string | null,
   from: null as string | null,
   authApiError: null as null | string,
+  needReLogin: false as boolean,
+  loginError: null as null | string,
 }
 
 export type InitialStateType = typeof initialState;
@@ -40,7 +44,9 @@ export const authReducer = (
         user: action.user,
         isAuth: action.isAuth,
         roles: action.roles,
+        loginError: null,
         authApiError: null,
+        needReLogin: false
       }
 
     case LOG_OUT:
@@ -58,20 +64,41 @@ export const authReducer = (
         authApiError: action.error,
       }
 
-    case "SET_FROM":
+    case SET_FROM:
         return {
             ...state,
             from: action.from
         }
 
-    default: return state
+    case SET_NEED_RELOGIN:
+        return {
+            ...state,
+            needReLogin: action.needReLogin
+        }
+
+      case SET_LOGIN_ERROR:
+          return {
+              ...state,
+              loginError: action.loginError
+          }
+
+      default: return state
   }
 }
 
 type ActionsTypes = SetAuthApiErrorAT | SetSuccessModalAT |
-     LogOutAT | LogInAT | SetFromAT;
+     LogOutAT | LogInAT | SetFromAT | SetNeedReLoginAT | SetLoginErrorAT;
 
 // actions creators
+
+export type SetNeedReLoginAT = {
+    type: typeof SET_NEED_RELOGIN;
+    needReLogin: boolean;
+};
+
+export const setNeedReLoginAC = (needReLogin: boolean): SetNeedReLoginAT => ({
+    type: SET_NEED_RELOGIN, needReLogin
+});
 
 type SetFromAT = {
     type: typeof SET_FROM;
@@ -112,8 +139,17 @@ type SetAuthApiErrorAT = {
     error: null | string;
 };
 
-const setAuthApiErrorAC = (error: null | string): SetAuthApiErrorAT => ({
+export const setAuthApiErrorAC = (error: null | string): SetAuthApiErrorAT => ({
     type: SET_AUTH_API_ERROR, error
+});
+
+type SetLoginErrorAT = {
+    type: typeof SET_LOGIN_ERROR;
+    loginError: null | string;
+};
+
+export const setLoginErrorAC = (loginError: null | string): SetLoginErrorAT => ({
+    type: SET_LOGIN_ERROR, loginError
 });
 
 //thunks
@@ -132,6 +168,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
             getUserRole(response.userData.user.roles, response.userData.roles),
             response.userData.roles
       ));
+      localStorage.setItem('refreshToken', response.userData.refreshToken);
       return true;
     } else {
       return false;
@@ -139,7 +176,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
   } catch (e) {
     const error = e as ApiErrorType;
     console.log(error.response.data.message);
-    dispatch(setAuthApiErrorAC(error.response?.data?.message));
+    dispatch(setLoginErrorAC(error.response?.data?.message));
     return false;
   }
 };
@@ -151,6 +188,7 @@ export const logout = (): ThunkType => async (
     const response = await authAPI.logout();
      if(response.resultCode === ResultCodesEnum.Success) {
        dispatch(logOutAC());
+       localStorage.removeItem('refreshToken');
        return true;
      } else {
        return false;
@@ -190,8 +228,7 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
 
   try {
     const response = await authAPI.checkAuth();
-    if (response.resultCode === ResultCodesEnum.Success) {
-      if (response.userData.isAuth === true) {
+    if (response.resultCode === ResultCodesEnum.Success && response.userData.isAuth === true) {
         const isAuth = getUserRole(response.userData.user.roles, response.userData.roles);
         dispatch(logInAC(
             response.userData.accessToken,
@@ -199,10 +236,6 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
             isAuth,
             response.userData.roles
         ));
-      }
-      if (response.userData.isAuth === false) {
-        dispatch(logOutAC());
-      }
       return true;
     } else {
       return false;
@@ -210,6 +243,7 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
   } catch (e) {
     const error = e as ApiErrorType;
     dispatch(logOutAC());
+    dispatch(setNeedReLoginAC(true));
     dispatch(setAuthApiErrorAC(error.response?.data?.message));
     console.log(error);
     return false;

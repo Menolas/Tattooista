@@ -31,10 +31,8 @@ class AuthController {
       results.userData = userData;
       return res.json(results);
     } catch(e) {
-      results.resultCode = 1;
-      results.message = e.message;
       console.log(e);
-      res.status(400).json(results);
+      return res.status(400).json({ message: e.message });
     }
   }
 
@@ -47,24 +45,19 @@ class AuthController {
       results.resultCode = 0;
       return res.json(results);
     } catch(e) {
-      results.resultCode = 1;
-      results.message = e.message;
       console.log(e);
-      res.status(400).json(results);
+      return res.status(400).json({ message: "Server error" });
     }
   }
 
   async activate(req, res) {
-    const results = {};
     try {
       const activationLink = req.params.link;
       await userService.activate(activationLink);
       return res.redirect(`${process.env.ACTIVATE_URL}/login`);
     } catch(e) {
-      results.resultCode = 1;
-      results.message = e.message;
       console.log(e);
-      res.status(400).json(results);
+      return res.status(400).json({ message: "Server error" });
     }
   }
 
@@ -82,10 +75,8 @@ class AuthController {
         return res.json(results);
       }
     } catch(e) {
-      results.resultCode = 1;
-      results.message = e.message;
       console.log(e);
-      res.status(400).json(results);
+      return res.status(400).json({ message: "Server error" });
     }
   }
 }

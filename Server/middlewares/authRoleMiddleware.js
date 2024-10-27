@@ -4,6 +4,7 @@ const Role = require("../models/Role");
 module.exports = function (roles) {
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
+      req.hasRole = false;
       next();
       return;
     }
@@ -34,8 +35,7 @@ module.exports = function (roles) {
         if (userData && tokenFromDb) {
           userRoles = userData.roles;
         } else {
-          res.status(401).json({ message: "Failed to refresh access token" });
-          return;
+          return res.status(401).json({ message: "Failed to refresh access token" });
         }
       }
 
@@ -51,8 +51,7 @@ module.exports = function (roles) {
 
     } catch (e) {
       console.log(e);
-      req.hasRole = false;
-      next();
+      return res.status(500).json({ message: "Server Error" });
     }
   }
 }
