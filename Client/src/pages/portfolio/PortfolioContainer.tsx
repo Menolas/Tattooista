@@ -86,6 +86,10 @@ export const PortfolioContainer: React.FC = () => {
     const [hasFetchedStyles, setHasFetchedStyles] = useState(false);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         if (!hasFetchedStyles) {
             dispatch(getStyles(token, false)).then(() => {
                 setHasFetchedStyles(true);
