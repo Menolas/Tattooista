@@ -22,8 +22,6 @@ export const AuthManager = ({children}: AuthManagerProps) => {
 
     useEffect(() => {
         const tokenExists = !!localStorage.getItem('refreshToken');
-        console.log(localStorage.getItem('refreshToken') + " refreshtoken!!!!!!!!!!!!")
-        console.log(tokenExists + " tokenExists!!!!!!!!!!!!")
         setHasToken(tokenExists);
     }, []);
 
