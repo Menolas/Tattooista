@@ -42,7 +42,6 @@ export const Clients: React.FC<PropsType> = React.memo(({
     totalCount,
     currentPage,
     pageSize,
-    accessError,
     clients,
     clientsFilter,
     isDeletingInProcess,

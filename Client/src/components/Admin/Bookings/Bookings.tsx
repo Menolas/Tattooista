@@ -1,6 +1,5 @@
 import * as React from "react";
 import {useCallback, useState} from "react";
-import { Navigate } from "react-router";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
 import {BookingType, SearchFilterType} from "../../../types/Types";
@@ -45,7 +44,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   filter,
   isStatusChanging,
   isDeletingInProcess,
-  accessError,
   apiError,
   setCurrentPage,
   onFilterChanged,

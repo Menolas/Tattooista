@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import {ServiceType} from "../../../types/Types";
 import {ServiceItem} from "./ServiceItem";
 import {ModalPopUp} from "../../common/ModalPopUp";

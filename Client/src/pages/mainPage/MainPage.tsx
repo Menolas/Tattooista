@@ -17,9 +17,7 @@ import {
 import {
     getTokenSelector
 } from "../../redux/Auth/auth-selectors";
-import {
-  getPageSizeSelector,
-} from "../../redux/Gallery/gallery-selectors";
+
 import {
     getStylesSelector,
     getIsFetchingSelector,
@@ -40,7 +38,6 @@ import {Preloader} from "../../components/common/Preloader";
 
 export const MainPage: React.FC = () => {
 
-  const pageSize = useSelector(getPageSizeSelector);
   const styles = useSelector(getStylesSelector);
   const successModal = useSelector(getSuccessModalSelector);
   const apiError = useSelector(getApiErrorSelector);
@@ -73,7 +70,7 @@ useEffect(() => {
   useEffect(() => {
     if (successModal.isSuccess) {
         setTimeout( () => {
-          dispatch(setSuccessModalAC(false, ''));;
+          dispatch(setSuccessModalAC(false, ''));
         }, 3000);
     }
   }, [dispatch, successModal]);
