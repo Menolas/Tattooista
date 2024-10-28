@@ -2,7 +2,6 @@ import * as React from "react";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import { UserType } from "../../../types/Types";
-import { NavLink } from "react-router-dom";
 import { API_URL } from "../../../http";
 import { Confirmation } from "../../common/Confirmation";
 import {useState} from "react";

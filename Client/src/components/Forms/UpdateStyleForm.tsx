@@ -1,5 +1,3 @@
-/// <reference lib="dom" />
-
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Field, Form, Formik, FormikHelpers} from "formik";

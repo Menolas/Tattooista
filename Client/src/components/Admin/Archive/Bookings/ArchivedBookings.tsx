@@ -20,14 +20,12 @@ import {
     getIsFetchingSelector,
     getTotalCountSelector,
     getIsDeletingInProcessSelector,
-    getAccessErrorSelector,
     getArchivedBookingApiErrorSelector,
 } from "../../../../redux/ArchivedBookings/archived-bookings-selectors";
 import {ArchivedBooking} from "./ArchivedBooking";
 import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
 import {bookingFilterSelectOptions} from "../../../../utils/constants";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
-import {Navigate} from "react-router";
 import {SearchFilterType} from "../../../../types/Types";
 import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
 
@@ -40,7 +38,6 @@ export const ArchivedBookings: React.FC = React.memo(() => {
     const currentPage = useSelector(getCurrentPageSelector);
     const filter = useSelector(getFilterSelector);
     const token = useSelector(getTokenSelector);
-    const accessError = useSelector(getAccessErrorSelector);
     const archivedBookingApiError = useSelector(getArchivedBookingApiErrorSelector);
 
     const dispatch = useDispatch();

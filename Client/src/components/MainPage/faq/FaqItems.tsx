@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import { FaqType } from "../../../types/Types";
 import { FaqItem } from "./FaqItem";
 import {ModalPopUp} from "../../common/ModalPopUp";

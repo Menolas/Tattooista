@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useEffect, useState} from "react"
+import {useCallback, useState} from "react"
 import {PageType} from "../../../types/Types";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as EyeIcon} from "../../../assets/svg/eye.svg";

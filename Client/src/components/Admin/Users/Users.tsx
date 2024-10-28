@@ -6,7 +6,7 @@ import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
 import { usersFilterSelectOptions } from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 

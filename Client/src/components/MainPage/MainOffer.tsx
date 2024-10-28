@@ -1,7 +1,5 @@
 import * as React from "react";
 import {BookingButton} from "../common/BookingButton";
-
-
 export const MainOffer: React.FC = () => {
 
   return (
