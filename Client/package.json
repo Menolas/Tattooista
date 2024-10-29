@@ -95,6 +95,5 @@
     "eslint-plugin-react": "^7.34.3",
     "globals": "^15.8.0",
     "typescript-eslint": "^7.16.0"
-  },
-  "proxy": "https://outstanding-unity-production.up.railway.app"
+  }
 }
