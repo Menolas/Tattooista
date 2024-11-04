@@ -85,7 +85,6 @@ export const Styles: React.FC<PropsType> = React.memo(({
     if (activeStyle && activeStyle._id) {
       remove(activeStyle._id);
     } else {
-      // Handle the case where activeStyle or activeStyle._id is undefined
       console.error("Attempted to remove an undefined style");
     }
   };

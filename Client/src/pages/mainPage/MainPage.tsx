@@ -35,6 +35,7 @@ import {AboutContainer} from "../../components/MainPage/about/AboutContainer";
 import {ServicesContainer} from "../../components/MainPage/services/SevicesContainer";
 import {FaqContainer} from "../../components/MainPage/faq/FaqContainer";
 import {Preloader} from "../../components/common/Preloader";
+import {Advertisement} from "../../components/Portfolio/Advertisement";
 
 export const MainPage: React.FC = () => {
 
@@ -86,6 +87,7 @@ useEffect(() => {
   return (
     <>
       <MainOffer />
+      <Advertisement/>
         {
             isFetching
                 ? <Preloader />

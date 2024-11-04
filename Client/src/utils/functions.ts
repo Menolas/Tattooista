@@ -35,24 +35,10 @@ export const handleEnterClick = (event: React.KeyboardEvent, handleSubmit: () =>
     }
 };
 
-// export const handleShare = (pageUrl: string) => {
-//     if (navigator.share) {
-//         navigator.share({
-//             title: WEB_APP_TITLE,
-//             text: 'Check out this awesome page!',
-//             url: `${process.env.REACT_APP_PUBLIC_URL}/${pageUrl}`,
-//         })
-//             .then(() => console.log('Successfully shared!'))
-//             .catch((error) => console.error('Something went wrong', error));
-//     } else {
-//         alert('Sharing is not supported in your browser.');
-//     }
-// };
-
 export const copyToClipboard = () => {
     navigator.clipboard.writeText(window.location.href)
         .then(() => {
-            alert("Page URL copied to clipboard!");
+            //alert("Page URL copied to clipboard!");
         })
         .catch(err => {
             console.error('Failed to copy: ', err);

@@ -41,9 +41,6 @@ export const Advertisement: React.FC = () => {
             />
           </ul>
       </div>
-      <BookingButton
-          consentId={"consentAdvertisement"}
-      />
     </section>
   );
 };
