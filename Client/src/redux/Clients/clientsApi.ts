@@ -1,4 +1,8 @@
-import {ClientType, SearchFilterType, CommonResponseFields,} from "../../types/Types";
+import {
+  ClientType,
+  SearchFilterType,
+  CommonResponseFields,
+} from "../../types/Types";
 import $api from "../../http";
 
 type DeleteClientResponseType = CommonResponseFields;
@@ -26,11 +30,13 @@ export const clientsAPI = {
     pageSize = 5,
     filter: SearchFilterType
   ) {
+    console.log('filter', filter);
+    console.log(`Request URL: http://localhost:3030/clients?page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`);
+
     return await $api.get<GetClientsResponseType>(
-        `clients?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`,
+        `clients/all?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-            .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async getClientProfile(
@@ -39,8 +45,7 @@ export const clientsAPI = {
     return await $api.get<GetClientProfileResponseType>(
         `clients/${clientId}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-        .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async updateClientGallery(
@@ -59,8 +64,7 @@ export const clientsAPI = {
     return await $api.delete<DeleteClientResponseType>(
         `clients/${clientId}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-        .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async addClient(
@@ -71,8 +75,7 @@ export const clientsAPI = {
         'clients',
         values,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-      .then(response => response.data)
+    ).then(response => response.data)
   },
 
   async editClient(
@@ -84,8 +87,7 @@ export const clientsAPI = {
          `clients/edit/${clientId}`,
          values,
          { headers: { Authorization: `Bearer ${token}` } }
-     )
-        .then(response => response.data);
+     ).then(response => response.data);
   },
 
   async toggleIsFavorite(
@@ -96,8 +98,7 @@ export const clientsAPI = {
         `clients/favourite/${clientId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-        .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async deleteClientGalleryPicture(
@@ -108,8 +109,7 @@ export const clientsAPI = {
       return await $api.delete<DeleteClientGalleryPictureResponseType>(
           `clients/updateGallery/${clientId}?&picture=${picture}`,
           { headers: { Authorization: `Bearer ${token}` } }
-      )
-          .then(response => response.data);
+      ).then(response => response.data);
   },
 
   async archiveClient(
@@ -119,7 +119,6 @@ export const clientsAPI = {
       return await $api.get<ArchiveClientResponseType>(
           `clients/archive/${clientId}`,
           { headers: { Authorization: `Bearer ${token}` } }
-      )
-          .then(response => response.data);
+      ).then(response => response.data);
   },
 };

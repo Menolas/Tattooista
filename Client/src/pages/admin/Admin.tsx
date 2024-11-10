@@ -1,5 +1,5 @@
 import * as React from "react";
-import {NavLink, useLocation, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -13,7 +13,6 @@ import {
     getSuccessModalSelector
 } from "../../redux/General/general-selectors";
 import {setSuccessModalAC} from "../../redux/General/general-reducer";
-import {setFromAC} from "../../redux/Auth/auth-reducer";
 
 interface ButtonProps {
     btnText: string;
@@ -32,19 +31,17 @@ export const Admin: React.FC = () => {
   const isAuth = useSelector(getAuthSelector);
 
   const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
 
   const setSuccessModalCallBack = useCallback(() => {
     dispatch(setSuccessModalAC(false, ''));
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!isAuth || isAuth === "USER") {
-        dispatch(setFromAC(location.pathname));
-        navigate('/noAccess');
-    }
-  }, [dispatch, navigate, isAuth, location.pathname]);
+  // useEffect(() => {
+  //   if (!isAuth || isAuth === "USER") {
+  //       dispatch(setFromAC(location.pathname));
+  //       navigate('/noAccess');
+  //   }
+  // }, [dispatch, navigate, isAuth, location.pathname]);
 
   useEffect(() => {
     if (successModal.isSuccess) {
