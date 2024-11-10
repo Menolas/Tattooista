@@ -8,7 +8,6 @@ import {
 } from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
-//import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,

@@ -2,6 +2,7 @@ const tokenService = require('../services/tokenService');
 const Role = require("../models/Role");
 
 module.exports = function (roles) {
+  console.log("hit middleware!!");
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
       req.hasRole = false;
@@ -9,12 +10,9 @@ module.exports = function (roles) {
       return;
     }
 
-    let token = req.headers.authorization?.split(' ')[1];
-    if (!token || token === 'null') {
-      req.hasRole = false;
-      next();
-      return;
-    }
+    let token = req.headers.authorization
+        ? req.headers.authorization?.split(' ')[1]
+        :  null;
 
     const roleObjectPromises = roles.map(async role => {
       const roleObject = await Role.findOne({ value: role });
@@ -25,17 +23,30 @@ module.exports = function (roles) {
     let userRoles = [];
 
     try {
-      const data = tokenService.validateAccessToken(token);
-      if (data) userRoles = data?.roles;
+      if(token) {
+        const data = tokenService.validateAccessToken(token);
+        if (data) {
+          userRoles = data.roles;
+        } else {
+          token = null;
+        }
+      }
 
-      if (!data) {
-        const {refreshToken} = req.cookies;
+      if (!token || token === 'null') {
+        const { refreshToken } = req.cookies;
+
+        if (!refreshToken) {
+          console.log("No tokens available");
+          req.hasRole = false;
+          return res.status(401).json({ message: "Access denied, no valid tokens found" });
+        }
+
         const userData = await tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
         if (userData && tokenFromDb) {
           userRoles = userData.roles;
         } else {
-          return res.status(401).json({ message: "Failed to refresh access token" });
+          return res.status(401).json({ message: "Failed to validate refresh token" });
         }
       }
 
