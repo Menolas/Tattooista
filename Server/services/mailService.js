@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const {sign} = require("jsonwebtoken");
 class MailService {
 
     constructor() {
@@ -10,7 +11,6 @@ class MailService {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASSWORD
             }
-
         });
     }
     async sendActivationMail(to, link) {
@@ -34,7 +34,13 @@ class MailService {
     }
 
     async sendNewBookingConsultationMail(to, booking) {
-        const link = `${process.env.CLIENT_URL}/admin/bookingProfile?bookingId=${booking._id}`;
+        const tempToken = sign(
+            { bookingId: booking._id },
+            process.env.TEMP_TOKEN_SECRET,
+            { expiresIn: '48h' }
+        );
+
+        const link = `${process.env.CLIENT_URL}/admin/bookingProfile?bookingId=${booking._id}&tempToken=${tempToken}`;
         const bookingInfo = () => {
             let contactsInfo = '';
             for (const contactType in booking.contacts) {

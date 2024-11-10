@@ -35,7 +35,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
   const initialValues = {
     term: filter.term,
     condition: filter.condition,
-    isFavourite: false
+    isFavourite: filter.isFavourite ?? false
   };
 
   return (

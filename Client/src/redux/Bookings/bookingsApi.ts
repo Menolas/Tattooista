@@ -47,8 +47,7 @@ export const bookingsApi = {
     return await $api.get<AddBookingResponseType>(
         `bookings/${bookingId}`,
         { headers: { Authorization: `Bearer ${token}` } }
-        )
-        .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async changeConsultationStatus(
@@ -58,8 +57,7 @@ export const bookingsApi = {
         `bookings/status/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-      .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async deleteConsultation(
@@ -68,8 +66,7 @@ export const bookingsApi = {
     return await $api.delete<DeleteBookingResponseType>(
         `bookings/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-      .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async addConsultation(
@@ -81,8 +78,7 @@ export const bookingsApi = {
         `bookings?&isAdmin=${isAdmin}`,
         values,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-        .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async turnBookingToClient(
@@ -92,8 +88,7 @@ export const bookingsApi = {
     return await $api.get<TurnBookingToClientResponseType>(
         `bookings/bookingToClient/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-        .then(response => response.data);
+    ).then(response => response.data);
   },
 
   async archiveBooking(
@@ -103,7 +98,6 @@ export const bookingsApi = {
     return await $api.get<ArchiveBookingResponseType>(
         `bookings/archive/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    )
-        .then(response => response.data);
+    ).then(response => response.data);
   },
 };

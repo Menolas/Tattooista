@@ -6,7 +6,7 @@ const controller = require('../controllers/clientsController');
 const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
 
 // Getting all
-router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getClients);
+router.get('/all', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getClients);
 
 // get archived clients
 router.get('/archive', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getArchivedClients);
