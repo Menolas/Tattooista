@@ -9,6 +9,7 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {AnyAction} from "redux";
 
 const SET_ABOUT_PAGE = 'SET_ABOUT_PAGE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -56,8 +57,12 @@ export const aboutReducer = (
   }
 }
 
-type ActionsTypes = SetAboutPageAT | SetSuccessModalAT | SetApiErrorAT
-    | SetIsFetchingAT | SetIsEditingAT;
+type ActionsTypes =
+    | SetAboutPageAT
+    | SetSuccessModalAT
+    | SetApiErrorAT
+    | SetIsFetchingAT
+    | SetIsEditingAT;
 
 // action creators
 
@@ -90,7 +95,8 @@ const setAboutPageAC = (page: PageType): SetAboutPageAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<GetPagesResponseType | null> | Promise<void>, AppStateType, unknown, ActionsTypes>;
+//type ThunkType = ThunkAction<Promise<GetPagesResponseType | null> | Promise<void>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<GetPagesResponseType | null> | Promise<void>, AppStateType, unknown, AnyAction>;
 
 export const getAboutPage = (): ThunkType => async (dispatch) => {
   try {

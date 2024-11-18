@@ -1,5 +1,5 @@
-import { applyMiddleware, combineReducers, createStore, compose } from "redux";
-import thunkMiddleware from "redux-thunk";
+import {applyMiddleware, combineReducers, createStore, compose, AnyAction} from "redux";
+import thunkMiddleware , { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { galleryReducer } from "./Gallery/gallery-reducer";
 import { generalReducer } from "./General/general-reducer";
 import { bookingsReducer } from "./Bookings/bookings-reducer";
@@ -13,6 +13,8 @@ import {faqReducer} from "./Faq/faq-reducer";
 import {archivedBookingsReducer} from "./ArchivedBookings/archived-bookings-reducer";
 import {archivedClientsReducer} from "./ArchivedClients/archived-clients-reducer";
 import {archivedGalleryReducer} from "./ArchivedGallery/archived-gallery-reducer";
+
+export type AppDispatch = ThunkDispatch<AppStateType, unknown, AnyAction>;
 
 const rootReducer = combineReducers({
   about: aboutReducer,

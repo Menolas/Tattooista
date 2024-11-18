@@ -19,6 +19,7 @@ import {archiveGalleryItem, deleteGalleryItem, getGallery} from "../../../redux/
 import {getGallerySelector} from "../../../redux/Gallery/gallery-selectors";
 import {ApiError} from "../../common/ApiError";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../../redux/redux-store";
 
 type PropsType = {
   isFetching: boolean;
@@ -49,7 +50,7 @@ export const Gallery: React.FC<PropsType> = React.memo(({
 }) => {
   const token = useSelector(getTokenSelector);
   const gallery = useSelector(getGallerySelector);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(getGallery(activeStyle?._id, currentPage, pageSize));

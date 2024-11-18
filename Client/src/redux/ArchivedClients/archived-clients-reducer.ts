@@ -3,12 +3,13 @@ import { ResultCodesEnum } from "../../utils/constants";
 import {ApiErrorType, ClientType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
-//import type {} from "redux-thunk/extend-redux";
+import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
 import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
 } from "../General/general-reducer";
+import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_ARCHIVED_CLIENTS = 'SET_ARCHIVED_CLIENTS';
@@ -34,7 +35,7 @@ const initialState = {
     term: '',
     condition: "any"
   } as SearchFilterType,
-  accessError: '' as string | undefined,
+  accessError: null as null | string,
   archivedClientsApiError: null as null | string,
 }
 
@@ -125,10 +126,19 @@ export const archivedClientsReducer = (
   }
 };
 
-type ActionsTypes = SetPageSizeAT | SetFilterAT |
-    SetArchivedClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
-    SetIsFetchingAT | DeleteArchivedClientAT | SetAccessErrorAT | SetSuccessModalAT
-    | setArchivedClientsApiErrorAT | AddArchivedClientAT;
+type ActionsTypes =
+    | SetPageSizeAT
+    | SetFilterAT
+    | SetArchivedClientsAT
+    | SetCurrentPageAT
+    | ToggleIsDeletingInProcessAT
+    | SetIsFetchingAT
+    | DeleteArchivedClientAT
+    | SetAccessErrorAT
+    | SetSuccessModalAT
+    | setArchivedClientsApiErrorAT
+    | AddArchivedClientAT
+    | SetNeedReLoginAT;
 
 // actions creators
 
@@ -143,10 +153,10 @@ export const setArchivedClientsApiErrorAC = (error: string | null): setArchivedC
 
 type SetAccessErrorAT = {
   type: typeof SET_ACCESS_ERROR;
-  error: string | undefined;
+  error: string | null;
 };
 
-export const setAccessErrorAC = (error: string | undefined): SetAccessErrorAT => ({
+export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
   type: SET_ACCESS_ERROR, error
 });
 
@@ -227,7 +237,8 @@ const deleteArchivedClientAC = (clientId: string): DeleteArchivedClientAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
+//export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 const deleteArchivedClientThunk = (
     token: string | null,
@@ -247,6 +258,7 @@ const deleteArchivedClientThunk = (
     dispatch(deleteArchivedClientAC(id));
     dispatch(setCurrentPageAC(newPage));
   }
+  return true;
 };
 
 export const getArchivedClients = (
@@ -267,11 +279,19 @@ export const getArchivedClients = (
     )
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedClients(response.clients, response.totalCount));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setAccessErrorAC(error.response?.data?.message));
-    console.log(e);
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      dispatch(setAccessErrorAC(error.response.data.message));
+      dispatch(setNeedReLoginAC(true));
+    } else {
+      console.log(error);
+    }
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -293,11 +313,15 @@ export const deleteArchivedClient = (
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedClientThunk(token, id, archivedClients, currentPage, pageLimit, filter));
       dispatch(setArchivedClientsApiErrorAC(null));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
     dispatch(setArchivedClientsApiErrorAC(error.response?.data?.message));
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -318,11 +342,15 @@ export const reactivateClient = (
       await dispatch(deleteArchivedClientThunk(token, id, archivedClients, currentPage, pageLimit, filter));
       dispatch(setArchivedClientsApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_CLIENT_FROM_ARCHIVE_SUCCESS));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
     dispatch(setArchivedClientsApiErrorAC(error.response?.data?.message));
     console.log(error);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

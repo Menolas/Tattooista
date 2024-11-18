@@ -9,6 +9,7 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {AnyAction} from "redux";
 
 const SET_SERVICES = 'SET_SERVICES';
 const DELETE_SERVICE = 'DELETE_SERVICE';
@@ -32,7 +33,6 @@ export const servicesReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
-  //debugger
 
   switch (action.type) {
     case TOGGLE_IS_FETCHING:
@@ -84,9 +84,15 @@ export const servicesReducer = (
   }
 };
 
-type ActionsTypes = SetServicesAT | SetSuccessModalAT | SetApiErrorAT |
-    ToggleIsDeletingInProcessAT | SetIsFetchingAT | DeleteServiceAT |
-    AddServiceAT | UpdateServiceAT;
+type ActionsTypes =
+    | SetServicesAT
+    | SetSuccessModalAT
+    | SetApiErrorAT
+    | ToggleIsDeletingInProcessAT
+    | SetIsFetchingAT
+    | DeleteServiceAT
+    | AddServiceAT
+    | UpdateServiceAT;
 
 // action creators
 
@@ -95,6 +101,11 @@ type ToggleIsDeletingInProcessAT = {
   isFetching: boolean;
   id: string;
 };
+
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
+    type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
+});
+
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING;
@@ -143,7 +154,8 @@ const updateServiceAC = (service: ServiceType): UpdateServiceAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 export const getServices = (): ThunkType => async (dispatch) => {
   try {
@@ -211,6 +223,7 @@ export const deleteService = (
     token: string | null,
     id: string
 ): ThunkType => async (dispatch) => {
+  dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
     const response = await servicesApi.deleteService(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
@@ -222,5 +235,7 @@ export const deleteService = (
   } catch (e) {
     console.log(e);
     return false;
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 };

@@ -21,8 +21,6 @@ type PropsType = {
   filter: SearchFilterType;
   isStatusChanging?: Array<string>;
   isDeletingInProcess?: Array<string>;
-  accessError: string | null;
-  apiError: string | null;
   setCurrentPage: (page: number) => void;
   onFilterChanged: (filter: SearchFilterType) => void;
   changeStatus: (id: string, status: boolean) => void;
@@ -31,7 +29,6 @@ type PropsType = {
   setPageLimit: (pageSize: number) => void;
   archive: (id: string) => void;
   setBookingApiError: () => void;
-  setApiError: () => void;
 }
 
 export const Bookings: React.FC<PropsType> = React.memo(({
@@ -44,7 +41,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   filter,
   isStatusChanging,
   isDeletingInProcess,
-  apiError,
   setCurrentPage,
   onFilterChanged,
   changeStatus,
@@ -53,15 +49,14 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   setPageLimit,
   archive,
   setBookingApiError,
-  setApiError,
 }) => {
 
   const [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
 
   const closeModal = useCallback(() => {
       setAddConsultationMode(false);
-      setApiError();
-  }, [setApiError]);
+      setBookingApiError();
+  }, [setBookingApiError]);
 
   // useEffect(() => {
   //   if (addConsultationMode && apiError === null) {
@@ -126,7 +121,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
             closeModal={closeModal}
         >
             <AddBookingForm
-                apiError={apiError}
+                apiError={bookingApiError}
                 closeBookingModal={closeModal}
             />
         </ModalPopUp>

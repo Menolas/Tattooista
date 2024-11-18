@@ -1,7 +1,7 @@
 import { authAPI } from "./authApi";
 import { ResultCodesEnum } from "../../utils/constants";
 import { ThunkAction } from "redux-thunk";
-import { AppStateType } from "../redux-store";
+import {AppStateType} from "../redux-store";
 import {ApiErrorType, LoginFormValues, RegistrationFormValues, RoleType} from "../../types/Types";
 import { IUser } from "../../types/Types";
 import {getUserRole} from "../../utils/functions";
@@ -9,6 +9,7 @@ import {
   setSuccessModalAC,
   SetSuccessModalAT,
 } from "../General/general-reducer";
+import {AnyAction} from "redux";
 
 const SET_AUTH_API_ERROR = 'SET_AUTH_API_ERROR';
 const LOG_OUT = 'LOG_OUT';
@@ -86,8 +87,14 @@ export const authReducer = (
   }
 }
 
-type ActionsTypes = SetAuthApiErrorAT | SetSuccessModalAT |
-     LogOutAT | LogInAT | SetFromAT | SetNeedReLoginAT | SetLoginErrorAT;
+type ActionsTypes =
+    | SetAuthApiErrorAT
+    | SetSuccessModalAT
+    | LogOutAT
+    | LogInAT
+    | SetFromAT
+    | SetNeedReLoginAT
+    | SetLoginErrorAT;
 
 // actions creators
 
@@ -154,7 +161,8 @@ export const setLoginErrorAC = (loginError: null | string): SetLoginErrorAT => (
 
 //thunks
 
-export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 export const login = (values: LoginFormValues): ThunkType => async (
     dispatch

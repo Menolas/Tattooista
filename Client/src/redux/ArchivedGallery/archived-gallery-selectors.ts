@@ -23,3 +23,7 @@ export const getTotalArchivedGalleryItemsCountSelector = (state: AppStateType) =
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {
   return state.archivedGallery.isDeletingInProcess;
 }
+
+export const getArchivedGalleryAccessErrorSelector = (state: AppStateType) => {
+  return state.archivedGallery.accessError;
+}

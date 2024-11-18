@@ -1,4 +1,3 @@
-import type {} from "redux-thunk/extend-redux";
 import {RoleType, SearchFilterType, UserType, ApiErrorType} from "../../types/Types";
 import { ResultCodesEnum } from "../../utils/constants";
 import { AppStateType } from "../redux-store";
@@ -10,6 +9,8 @@ import {
     SetSuccessModalAT,
     setApiErrorAC,
     SetApiErrorAT} from "../General/general-reducer";
+import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
+import {AnyAction} from "redux";
 
 const SET_USERS = 'SET_USERS';
 const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
@@ -139,10 +140,22 @@ export const usersReducer = (
     }
 };
 
-type ActionsTypes = SetUsersFilterAT | SetUsersAT | ToggleIsFetchingAT |
-     SetUsersCurrentPageAT | SetPageLimitAT | DeleteUserAT |
-    ToggleIsDeletingInProcessAT | SetRolesAT | EditUserAT | AddUserAT
-    | SetAccessErrorAT | SetSuccessModalAT | SetApiErrorAT | SetUsersApiErrorAT;
+type ActionsTypes =
+    | SetUsersFilterAT
+    | SetUsersAT
+    | ToggleIsFetchingAT
+    | SetUsersCurrentPageAT
+    | SetPageLimitAT
+    | DeleteUserAT
+    | ToggleIsDeletingInProcessAT
+    | SetRolesAT
+    | EditUserAT
+    | AddUserAT
+    | SetAccessErrorAT
+    | SetSuccessModalAT
+    | SetApiErrorAT
+    | SetUsersApiErrorAT
+    | SetNeedReLoginAT;
 
 //actions creators
 
@@ -256,7 +269,8 @@ const editUserAC = (user: UserType): EditUserAT => ({
     type: EDIT_USER, user
 });
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 export const getRoles = (): ThunkType => async (dispatch) => {
     try {
@@ -299,8 +313,12 @@ export const getUsers = (
         }
     } catch (e) {
         const error = e as ApiErrorType;
-        dispatch(setAccessErrorAC(error.response.data.message));
-        console.log(error);
+        if (error.response?.status === 403 || error.response?.status === 401) {
+            dispatch(setAccessErrorAC(error.response.data.message));
+            dispatch(setNeedReLoginAC(true));
+        } else {
+            console.log(error);
+        }
         return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));

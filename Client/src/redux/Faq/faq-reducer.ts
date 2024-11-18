@@ -9,6 +9,7 @@ import {
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {AnyAction} from "redux";
 
 const SET_FAQ_ITEMS = 'SET_FAQ_ITEMS';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -84,8 +85,15 @@ export const faqReducer = (
   }
 }
 
-type ActionsTypes = SetApiErrorAT | SetFaqItemsAT | SetSuccessModalAT |
-    ToggleIsDeletingInProcessAT | SetIsFetchingAT | DeleteFaqItemAT | UpdateFaqItemAT | AddFaqItemAT;
+type ActionsTypes =
+    | SetApiErrorAT
+    | SetFaqItemsAT
+    | SetSuccessModalAT
+    | ToggleIsDeletingInProcessAT
+    | SetIsFetchingAT
+    | DeleteFaqItemAT
+    | UpdateFaqItemAT
+    | AddFaqItemAT;
 
 // action creators
 
@@ -121,7 +129,12 @@ type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
   isFetching: boolean;
   id: string;
-}
+};
+
+const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
+  type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
+});
+
 
 type SetIsFetchingAT = {
   type: typeof TOGGLE_IS_FETCHING;
@@ -143,7 +156,8 @@ const setFaqItems = (faqItems: Array<FaqType>): SetFaqItemsAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 export const getFaqItems = (): ThunkType => async (
     dispatch
@@ -213,6 +227,7 @@ export const deleteFaqItem = (
     token: string | null,
     id: string
 ): ThunkType => async (dispatch) => {
+  dispatch(toggleIsDeletingInProcessAC(true, id));
   try {
     const response = await faqApi.deleteFaqItem(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
@@ -224,5 +239,7 @@ export const deleteFaqItem = (
   } catch (e) {
     console.log(e);
     return false;
+  } finally {
+    dispatch(toggleIsDeletingInProcessAC(false, id));
   }
 };

@@ -16,6 +16,7 @@ import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../../redux/redux-store";
 
 export const ProfileContainer: React.FC = () => {
 
@@ -26,7 +27,7 @@ export const ProfileContainer: React.FC = () => {
   const clientApiError = useSelector(getClientsApiErrorSelector);
   const token = useSelector(getTokenSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   useEffect(() => {

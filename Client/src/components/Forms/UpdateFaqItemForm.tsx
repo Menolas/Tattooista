@@ -12,6 +12,7 @@ import {
 } from "../../redux/Faq/faq-reducer";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 const validationSchema = Yup.object().shape({
     question: Yup.string()
@@ -36,7 +37,7 @@ export const UpdateFaqItemForm: React.FC<PropsType> = React.memo(({
         answer: faqItem?.answer ?? '',
     };
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const submit = async (values: UpdateFaqValues, actions: FormikHelpers<UpdateFaqValues>) => {
         let success;
