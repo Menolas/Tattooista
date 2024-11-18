@@ -35,7 +35,7 @@ export const getFilterSelector = (state: AppStateType) => {
   return state.bookings.filter;
 };
 
-export const getAccessErrorSelector = (state: AppStateType) => {
+export const getBookingAccessErrorSelector = (state: AppStateType) => {
   return state.bookings.accessError;
 };
 

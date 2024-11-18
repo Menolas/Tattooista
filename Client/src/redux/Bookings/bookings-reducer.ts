@@ -12,13 +12,13 @@ import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
-  setApiErrorAC,
-  SetApiErrorAT} from "../General/general-reducer";
+} from "../General/general-reducer";
 import {
   addArchivedBookingAC,
   AddArchivedBookingAT,
 } from "../ArchivedBookings/archived-bookings-reducer";
 import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
+import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
 const SET_FILTER = 'SET_BOOKINGS_FILTER';
@@ -150,17 +150,27 @@ export const bookingsReducer = (
         bookingApiError: action.error
       }
 
-
     default: return state
   }
 }
 
-type ActionsTypes = SetApiErrorAT | SetSuccessModalAT | SetPageSizeAT |
-     SetFilterAT | SetBookingsAT | SetCurrentPageAT |
-     ChangeStatusAT | SetIsFetchingAT |
-    ToggleIsStatusChangingAT | ToggleIsDeletingInProcessAT | DeleteBookingAT |
-    AddBookingAT | SetAccessErrorAT | SetBookingApiErrorAT | AddArchivedBookingAT |
-    SetBookingProfileAT | SetNeedReLoginAT;
+type ActionsTypes =
+    | SetSuccessModalAT
+    | SetPageSizeAT
+    | SetFilterAT
+    | SetBookingsAT
+    | SetCurrentPageAT
+    | ChangeStatusAT
+    | SetIsFetchingAT
+    | ToggleIsStatusChangingAT
+    | ToggleIsDeletingInProcessAT
+    | DeleteBookingAT
+    | AddBookingAT
+    | SetAccessErrorAT
+    | SetBookingApiErrorAT
+    | AddArchivedBookingAT
+    | SetBookingProfileAT
+    | SetNeedReLoginAT;
 
 // actions creators
 type SetBookingProfileAT = {
@@ -264,7 +274,7 @@ type ToggleIsDeletingInProcessAT = {
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
-  });
+});
 
 type DeleteBookingAT = {
   type: typeof DELETE_BOOKING;
@@ -286,7 +296,8 @@ const addBookingAC = (consultation: BookingType): AddBookingAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 const deleteBookingThunk = (
     token: string | null,
@@ -326,7 +337,7 @@ export const getBookings = (
       filter
     );
     if (response.resultCode === ResultCodesEnum.Success) {
-      dispatch(setAccessErrorAC(''));
+      dispatch(setAccessErrorAC(null));
       dispatch(setBookingsAC(response.bookings, response.totalCount));
       return true;
     } else if (response.resultCode === ResultCodesEnum.Error && !response.refresh) {
@@ -337,8 +348,12 @@ export const getBookings = (
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setAccessErrorAC(error.response?.data?.message));
-    console.log(error);
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      dispatch(setAccessErrorAC(error.response.data.message));
+      dispatch(setNeedReLoginAC(true));
+    } else {
+      console.log(error);
+    }
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));
@@ -361,8 +376,12 @@ export const getBookingProfile = (
         }
     } catch (e) {
         const error = e as ApiErrorType;
-        dispatch(setBookingApiErrorAC(error.response?.data?.message));
-        console.log(e);
+        if (error.response?.status === 403 || error.response?.status === 401) {
+          dispatch(setAccessErrorAC(error.response.data.message));
+          dispatch(setNeedReLoginAC(true));
+        } else {
+          console.log(error);
+        }
         return false;
     } finally {
         dispatch(setIsFetchingAC(false));
@@ -430,7 +449,7 @@ export const addBooking = (
     const response = await bookingsApi.addConsultation(token, isAdmin, values);
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(addBookingAC(response.booking));
-      dispatch(setApiErrorAC(null));
+      dispatch(setBookingApiErrorAC(null));
       dispatch(setSuccessModalAC(true, BOOKING_SUCCESS));
       return true;
     } else {
@@ -438,7 +457,7 @@ export const addBooking = (
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setApiErrorAC(error.response?.data?.message));
+    dispatch(setBookingApiErrorAC(error.response?.data?.message));
     return false;
   }
 }

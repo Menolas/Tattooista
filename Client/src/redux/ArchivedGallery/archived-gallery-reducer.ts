@@ -4,11 +4,13 @@ import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ResultCodesEnum} from "../../utils/constants";
 import {getNewPage} from "../../utils/functions";
+import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
   setApiErrorAC,
   SetApiErrorAT} from "../General/general-reducer";
+import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
@@ -17,8 +19,8 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const UPDATE_ARCHIVED_GALLERY_ITEM = 'UPDATE_ARCHIVED_GALLERY_ITEM';
 const SET_ARCHIVED_GALLERY = 'SET_ARCHIVED_GALLERY';
 const DELETE_ARCHIVED_GALLERY_ITEM = 'DELETE_ARCHIVED_GALLERY_ITEM';
+const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 
-//const EDIT_GALLERY_ITEM_SUCCESS = 'You successfully edited gallery image';
 const RESTORE_GALLERY_ITEM_FROM_ARCHIVE = 'You successfully restored gallery image';
 
 const initialState = {
@@ -28,6 +30,7 @@ const initialState = {
   isFetching: false as boolean,
   isDeletingInProcess: [] as Array<string>,
   archivedGallery: [] as Array<GalleryItemType>,
+  accessError: null as null | string,
 }
 
 export type InitialStateType = typeof initialState;
@@ -99,18 +102,41 @@ export const archivedGalleryReducer = (
         })
       }
 
+    case SET_ACCESS_ERROR:
+      return {
+        ...state,
+        accessError: action.error
+      }
+
     default: return {
       ...state
     }
   }
 }
 
-type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT |
-    SetSuccessModalAT | SetPageSizeAT | SetCurrentPageAT | SetIsFetchingAT
-    | SetArchivedGalleryAT | DeleteArchivedGalleryItemAT |
-    UpdateArchivedGalleryItemAT;
+type ActionsTypes =
+    | SetApiErrorAT
+    | ToggleIsDeletingInProcessAT
+    | SetSuccessModalAT
+    | SetPageSizeAT
+    | SetCurrentPageAT
+    | SetIsFetchingAT
+    | SetArchivedGalleryAT
+    | DeleteArchivedGalleryItemAT
+    | UpdateArchivedGalleryItemAT
+    | SetNeedReLoginAT
+    | SetAccessErrorAT;
 
 // actions creators
+
+type SetAccessErrorAT = {
+  type: typeof SET_ACCESS_ERROR;
+  error: string | null;
+};
+
+export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
+  type: SET_ACCESS_ERROR, error
+});
 
 type ToggleIsDeletingInProcessAT = {
   type: typeof TOGGLE_IS_DELETING_IN_PROCESS;
@@ -174,14 +200,10 @@ type UpdateArchivedGalleryItemAT = {
   archivedGalleryItem: GalleryItemType;
 };
 
-// const updateArchivedGalleryItemAC = (archivedGalleryItem: GalleryItemType): UpdateArchivedGalleryItemAT => ({
-//   type: UPDATE_ARCHIVED_GALLERY_ITEM, archivedGalleryItem
-// });
-
-
 //thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
+//export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 const deleteArchivedGalleryItemThunk = (
     token: string | null,
@@ -200,6 +222,7 @@ const deleteArchivedGalleryItemThunk = (
     dispatch(deleteArchivedGalleryItemAC(id));
     dispatch(setCurrentPageAC(newPage));
   }
+  return true;
 };
 
 export const getArchivedGallery = (
@@ -212,9 +235,19 @@ export const getArchivedGallery = (
     const response = await archivedGalleryApi.getArchivedGalleryItems(token, currentArchivedGalleryPage, archivedGalleryPageSize)
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setArchivedGalleryAC(response.gallery, response.totalCount));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
-    console.log(e);
+    const error = e as ApiErrorType;
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      dispatch(setAccessErrorAC(error.response.data.message));
+      dispatch(setNeedReLoginAC(true));
+    } else {
+      console.log(error);
+    }
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -233,11 +266,15 @@ export const deleteArchivedGalleryItem = (
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedGalleryItemThunk(token, id, gallery, currentPage, pageLimit));
       dispatch(setApiErrorAC(null));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
     dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -257,11 +294,15 @@ export const reactivateArchivedGalleryItem = (
       await dispatch(deleteArchivedGalleryItemThunk(token, id, gallery, currentPage, pageLimit));
       dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_GALLERY_ITEM_FROM_ARCHIVE));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
     dispatch(setApiErrorAC(error.response?.data?.message || 'An error occurred'));
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

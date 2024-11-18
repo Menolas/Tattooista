@@ -10,6 +10,7 @@ import {galleryApi} from "../../../redux/Gallery/GalleryApi";
 import {useDispatch, useSelector} from "react-redux";
 import {getGallerySelector, getTotalCountSelector} from "../../../redux/Gallery/gallery-selectors";
 import {ApiError} from "../../common/ApiError";
+import {AppDispatch} from "../../../redux/redux-store";
 
 type PropsType = {
   activeStyle: StyleType;
@@ -32,7 +33,7 @@ export const GalleryInfiniteScroll: React.FC<PropsType> = React.memo(({
   const totalCount = useSelector(getTotalCountSelector);
   const galleryRef = React.useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [items, setItems] = useState<GalleryItemType[]>([]);
   const [page, setPage] = useState(1);

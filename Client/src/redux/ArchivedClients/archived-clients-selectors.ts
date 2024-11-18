@@ -32,7 +32,7 @@ export const getArchivedClientsFilter = (state: AppStateType) => {
   return state.archivedClients.filter;
 }
 
-export const getAccessErrorSelector = (state: AppStateType) => {
+export const getArchivedClientsAccessErrorSelector = (state: AppStateType) => {
   return state.archivedClients.accessError;
 }
 

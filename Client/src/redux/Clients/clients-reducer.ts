@@ -3,7 +3,6 @@ import { ResultCodesEnum } from "../../utils/constants";
 import {ApiErrorType, ClientType, SearchFilterType} from "../../types/Types";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
-//import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
@@ -12,6 +11,8 @@ import {
   SetApiErrorAT,
 } from "../General/general-reducer";
 import {addArchivedClientAC, AddArchivedClientAT} from "../ArchivedClients/archived-clients-reducer";
+import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
+import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_FILTER = 'SET_FILTER';
@@ -174,11 +175,26 @@ export const clientsReducer = (
   }
 };
 
-type ActionsTypes = SetClientsPageSizeAT | SetFilterAT |
-    SetClientsAT | SetCurrentPageAT | ToggleIsDeletingInProcessAT |
-    ToggleIsDeletingPicturesInProcessAT | SetIsFetchingAT | DeleteClientAT | EditClientAT |
-    AddClientAT | SetClientProfileAT | SetAccessErrorAT | SetSuccessModalAT | SetClientApiErrorAT
-    | AddArchivedClientAT | SetApiErrorAT | SetIsFavouriteAT | SetIsFavouriteChangingAT;
+type ActionsTypes =
+    | SetClientsPageSizeAT
+    | SetFilterAT
+    | SetClientsAT
+    | SetCurrentPageAT
+    | ToggleIsDeletingInProcessAT
+    | ToggleIsDeletingPicturesInProcessAT
+    | SetIsFetchingAT
+    | DeleteClientAT
+    | EditClientAT
+    | AddClientAT
+    | SetClientProfileAT
+    | SetAccessErrorAT
+    | SetSuccessModalAT
+    | SetClientApiErrorAT
+    | AddArchivedClientAT
+    | SetApiErrorAT
+    | SetIsFavouriteAT
+    | SetIsFavouriteChangingAT
+    | SetNeedReLoginAT;
 
 // actions creators
 
@@ -323,7 +339,8 @@ const setClientProfile = (profile: ClientType): SetClientProfileAT => ({
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 const deleteClientThunk = (
     token: string | null,
@@ -371,8 +388,12 @@ export const getClients = (
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setAccessErrorAC(error.response?.data?.message));
-    console.log(error);
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      dispatch(setAccessErrorAC(error.response.data.message));
+      dispatch(setNeedReLoginAC(true));
+    } else {
+      console.log(error);
+    }
     return false;
   } finally {
     dispatch(setIsFetchingAC(false));

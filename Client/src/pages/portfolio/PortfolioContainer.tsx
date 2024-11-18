@@ -32,6 +32,7 @@ import {
 } from "../../redux/Gallery/gallery-reducer";
 import {Styles} from "../../components/Portfolio/styles/Styles";
 import {StyleType} from "../../types/Types";
+import {AppDispatch} from "../../redux/redux-store";
 
 export const PortfolioContainer: React.FC = () => {
     const isAuth = useSelector(getAuthSelector);
@@ -52,7 +53,7 @@ export const PortfolioContainer: React.FC = () => {
     const galleryApiError = useSelector(getGalleryApiErrorSelector);
 
     const successModal = useSelector(getSuccessModalSelector);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     const resetActiveStyleCallBack = (style: StyleType) => {

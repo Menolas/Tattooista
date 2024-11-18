@@ -36,6 +36,7 @@ import {ServicesContainer} from "../../components/MainPage/services/SevicesConta
 import {FaqContainer} from "../../components/MainPage/faq/FaqContainer";
 import {Preloader} from "../../components/common/Preloader";
 import {Advertisement} from "../../components/Portfolio/Advertisement";
+import {AppDispatch} from "../../redux/redux-store";
 
 export const MainPage: React.FC = () => {
 
@@ -46,7 +47,7 @@ export const MainPage: React.FC = () => {
   const isFetching = useSelector(getIsFetchingSelector);
   const activeStyle = useSelector(getActiveStyleSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     // Check if the URL contains a hash

@@ -2,8 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es5",
-    "typeRoots": [
-      "./.", "./node_modules/@types"],
+    "typeRoots": ["./node_modules/@types"],
     "lib": [
       "dom",
       "dom.iterable",
@@ -24,11 +23,9 @@
   },
   "include": [
     "src/**/*.d.ts",
-    "src/custom.d.ts",
     "src/**/*.ts",
-    "src/**/*",
-    "tests/**/*.ts",
     "src/**/*.tsx",
+    "tests/**/*.ts",
     "global.d.ts"
   ],
 }

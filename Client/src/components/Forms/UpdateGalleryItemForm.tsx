@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateGalleryItem} from "../../redux/Gallery/gallery-reducer";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 type InitialValuesType = {
     [key: string]: boolean;
@@ -31,7 +32,7 @@ export const UpdateGalleryItemForm: React.FC<PropsType> = React.memo(({
 }) => {
 
     const token = useSelector(getTokenSelector);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const submit = async (values: InitialValuesType, formikHelpers: FormikHelpers<InitialValuesType>) => {
         const { setSubmitting } = formikHelpers;

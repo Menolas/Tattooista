@@ -20,14 +20,17 @@ import {
   getClientsFilterSelector,
   getClientsPageSizeSelector,
   getIsDeletingPicturesInProcessSelector,
-  getClientsApiErrorSelector, getClientsIsFavouriteChangingInProcessSelector,
+  getClientsApiErrorSelector,
+  getClientsAccessErrorSelector,
+  getClientsIsFavouriteChangingInProcessSelector,
 } from "../../../redux/Clients/clients-selectors";
 import { Clients } from "./Clients";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
-import {getAccessErrorSelector} from "../../../redux/Bookings/bookings-selectors";
 import {SearchFilterType} from "../../../types/Types";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
+import {useNavigate} from "react-router-dom";
+import {AppDispatch} from "../../../redux/redux-store";
 
 export const ClientsContainer: React.FC = () => {
 
@@ -41,11 +44,12 @@ export const ClientsContainer: React.FC = () => {
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector);
   const isFavouriteChangingInProcess = useSelector(getClientsIsFavouriteChangingInProcessSelector);
   const token = useSelector(getTokenSelector);
-  const accessError = useSelector(getAccessErrorSelector);
+  const accessError = useSelector(getClientsAccessErrorSelector);
   const clientsApiError = useSelector(getClientsApiErrorSelector);
   const apiError = useSelector(getApiErrorSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getClients(token || "", currentPage, pageSize, filter));
@@ -57,6 +61,12 @@ export const ClientsContainer: React.FC = () => {
       dispatch(setClientsCurrentPageAC(1));
     }
   }, [dispatch, filter]);
+
+  useEffect(() => {
+    if (accessError) {
+      navigate("/noAccess");
+    }
+  }, [accessError]);
 
   const setCurrentPageCallBack = (
     page: number

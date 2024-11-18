@@ -32,6 +32,6 @@ export const getUsersApiErrorSelector = (state: AppStateType) => {
     return state.users.usersApiError;
 };
 
-export const getAccessErrorSelector = (state: AppStateType) => {
+export const getUsersAccessErrorSelector = (state: AppStateType) => {
     return state.users.accessError;
 };

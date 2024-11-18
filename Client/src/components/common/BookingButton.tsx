@@ -9,6 +9,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {getApiErrorSelector, getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {SuccessPopUp} from "./SuccessPopUp";
+import {AppDispatch} from "../../redux/redux-store";
 
 type PropsType = {
     consentId: string;
@@ -20,7 +21,7 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
 
     const apiError = useSelector(getApiErrorSelector);
     const successModal = useSelector(getSuccessModalSelector);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const setSuccessModalCallBack = useCallback(() => {
         dispatch(setSuccessModalAC(false, ''));

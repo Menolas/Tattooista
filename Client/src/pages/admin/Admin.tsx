@@ -13,6 +13,7 @@ import {
     getSuccessModalSelector
 } from "../../redux/General/general-selectors";
 import {setSuccessModalAC} from "../../redux/General/general-reducer";
+import {AppDispatch} from "../../redux/redux-store";
 
 interface ButtonProps {
     btnText: string;
@@ -30,7 +31,7 @@ export const Admin: React.FC = () => {
   const successModal = useSelector(getSuccessModalSelector);
   const isAuth = useSelector(getAuthSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const setSuccessModalCallBack = useCallback(() => {
     dispatch(setSuccessModalAC(false, ''));

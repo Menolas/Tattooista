@@ -15,6 +15,7 @@ import {useDispatch} from "react-redux";
 import {registration} from "../../redux/Auth/auth-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import {handleEnterClick} from "../../utils/functions";
+import {AppDispatch} from "../../redux/redux-store";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
@@ -62,7 +63,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
   authApiError,
 }) => {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [imageURL, setImageURL] = useState('');
 

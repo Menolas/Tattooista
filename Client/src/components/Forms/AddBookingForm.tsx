@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 const validationSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -58,7 +59,7 @@ export const AddBookingForm: React.FC<PropsType> = React.memo(({
   closeBookingModal,
 }) => {
   const token = useSelector(getTokenSelector);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const submit = async (values: AddConsultationFormValues, actions: FormikHelpers<AddConsultationFormValues>) => {
     const success = await dispatch(addBooking(token,true, values));

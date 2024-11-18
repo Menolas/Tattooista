@@ -3,9 +3,10 @@ const router = new Router();
 const TattooStyle = require('../models/TattooStyle');
 const controller = require('../controllers/stylesController');
 const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
+const notStrictAuthRoleMiddleware = require('../middlewares/notStrictAuthRoleMiddleware');
 
 //getting all tattooStyles
-router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles);
+router.get('/', notStrictAuthRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getTattooStyles);
 
 // Deleting one
 router.delete('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getTattooStyle, controller.deleteTattooStyle);

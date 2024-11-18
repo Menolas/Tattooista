@@ -17,6 +17,7 @@ import {
 } from "../../redux/Services/services-reducer";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -42,7 +43,7 @@ export const UpdateServiceItemForm: React.FC<PropsType> = React.memo(({
     const token = useSelector(getTokenSelector);
     const [imageURL, setImageURL] = useState('');
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const fileReader = new FileReader();
     fileReader.onloadend = () => {

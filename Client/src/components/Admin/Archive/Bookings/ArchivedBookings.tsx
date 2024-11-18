@@ -21,6 +21,7 @@ import {
     getTotalCountSelector,
     getIsDeletingInProcessSelector,
     getArchivedBookingApiErrorSelector,
+    getArchivedBookingsAccessErrorSelector,
 } from "../../../../redux/ArchivedBookings/archived-bookings-selectors";
 import {ArchivedBooking} from "./ArchivedBooking";
 import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
@@ -28,6 +29,8 @@ import {bookingFilterSelectOptions} from "../../../../utils/constants";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../../types/Types";
 import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
+import {useNavigate} from "react-router-dom";
+import {AppDispatch} from "../../../../redux/redux-store";
 
 export const ArchivedBookings: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -39,12 +42,20 @@ export const ArchivedBookings: React.FC = React.memo(() => {
     const filter = useSelector(getFilterSelector);
     const token = useSelector(getTokenSelector);
     const archivedBookingApiError = useSelector(getArchivedBookingApiErrorSelector);
+    const accessError = useSelector(getArchivedBookingsAccessErrorSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getArchivedBookings(token || "", currentPage, pageSize, filter));
     }, [token, currentPage, pageSize, filter, dispatch]);
+
+    useEffect(() => {
+        if (accessError) {
+            navigate("/noAccess");
+        }
+    }, [accessError]);
 
     const onPageChangedCallBack = (
         page: number

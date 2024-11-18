@@ -11,6 +11,7 @@ import { deleteClientGalleryPicture, updateClientGallery } from "../../redux/Cli
 import { updateGallery } from "../../redux/Gallery/gallery-reducer";
 import { ApiErrorMessage } from "./formComponents/ApiErrorMessage";
 import { getTokenSelector } from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 type FormValues = {
   gallery: File[];
@@ -35,13 +36,11 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   refreshClientData,
   closeModal,
 }) => {
-  console.log(isEditPortfolio + " before submit isEditPortfolio1!!!!!!!!!!");
 
   const token = useSelector(getTokenSelector);
   const [isGalleryModified, setIsGalleryModified] = useState(false);
   const [imageURLs, setImageURLs] = useState<{ url: string | ArrayBuffer | null, file: File }[]>([]);
-  const dispatch = useDispatch();
-  console.log(isGalleryModified + " before submit isGalleryModified1!!!!!!!!!!");
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();

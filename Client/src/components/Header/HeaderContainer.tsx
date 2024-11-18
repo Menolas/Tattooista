@@ -8,19 +8,20 @@ import {
 } from "../../redux/Auth/auth-selectors";
 import {useLocation,} from "react-router-dom";
 import {getActiveStyleSelector} from "../../redux/Styles/styles-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 export const HeaderContainer: React.FC = () => {
 
   const isAuth = useSelector(getAuthSelector);
   const loginError = useSelector(getLoginErrorSelector);
   const needReLogin = useSelector(getNeedReLoginSelector);
-  const dispatch = useDispatch();
+  const activeStyle = useSelector(getActiveStyleSelector);
   const [headerClasses, setHeaderClasses] = useState('');
   const location = useLocation();
   const [pageLocation, setPageLocation] = useState(location.pathname);
-  const activeStyle = useSelector(getActiveStyleSelector);
-
   const [isLogin, setIsLogin] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const pathArray = pageLocation.split('/');

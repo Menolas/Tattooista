@@ -12,6 +12,7 @@ import {
 import {NothingToShow} from "../../../common/NothingToShow";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    getArchivedClientsAccessErrorSelector,
     getArchivedClientsApiErrorSelector,
     getArchivedClientsFilter,
     getArchivedClientsPageSize,
@@ -28,6 +29,8 @@ import {SearchFilterForm} from "../../../Forms/SearchFilterForm";
 import {SearchFilterType} from "../../../../types/Types";
 import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
 import {getTokenSelector} from "../../../../redux/Auth/auth-selectors";
+import {useNavigate} from "react-router-dom";
+import {AppDispatch} from "../../../../redux/redux-store";
 
 export const ArchivedClients: React.FC = React.memo(() => {
     const isFetching = useSelector(getClientsIsFetching);
@@ -39,12 +42,20 @@ export const ArchivedClients: React.FC = React.memo(() => {
     const filter = useSelector(getArchivedClientsFilter);
     const archivedClientsApiError = useSelector(getArchivedClientsApiErrorSelector);
     const token = useSelector(getTokenSelector);
+    const accessError = useSelector(getArchivedClientsAccessErrorSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getArchivedClients(token, currentPage, pageSize, filter));
     }, [token, dispatch, currentPage, pageSize, filter]);
+
+    useEffect(() => {
+        if (accessError) {
+            navigate("/noAccess");
+        }
+    }, [accessError]);
 
     const onPageChangedCallBack = (
         page: number
