@@ -19,6 +19,7 @@ import {editClient, addClient} from "../../redux/Clients/clients-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -94,7 +95,7 @@ export const UpdateClientForm: React.FC<PropsType> = React.memo(({
   const validationSchema = getValidationSchema(isEditing, hasNewFile);
   const [imageURL, setImageURL] = useState('');
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();

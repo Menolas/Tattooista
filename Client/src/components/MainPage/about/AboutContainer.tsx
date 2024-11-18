@@ -14,6 +14,7 @@ import {useEffect} from "react";
 import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
+import {AppDispatch} from "../../../redux/redux-store";
 
 
 export const AboutContainer = () => {
@@ -24,7 +25,7 @@ export const AboutContainer = () => {
     const isFetching = useSelector(getIsFetchingSelector);
     const isEditing = useSelector(getIsEditingSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         dispatch(getAboutPage());

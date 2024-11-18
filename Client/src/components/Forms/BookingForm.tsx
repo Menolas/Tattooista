@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 const options = [
   { value: "email", label: "email" },
@@ -91,7 +92,7 @@ export const BookingForm: React.FC<PropsType> = React.memo(({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [contactInput, setContactInput] = useState('');
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const submit = async (
       values: BookConsultationFormValues,
       actions: FormikHelpers<BookConsultationFormValues>

@@ -16,6 +16,7 @@ import {
 import {useEffect} from "react";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
+import {AppDispatch} from "../../../redux/redux-store";
 
 export const FaqContainer = () => {
     const token = useSelector(getTokenSelector);
@@ -24,7 +25,7 @@ export const FaqContainer = () => {
     const faq = useSelector(getFaqItemsSelector);
     const isFetching = useSelector(getIsFetchingSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         dispatch(getFaqItems());

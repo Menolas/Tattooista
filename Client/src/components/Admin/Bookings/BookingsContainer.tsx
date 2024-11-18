@@ -20,13 +20,14 @@ import {
   getFilterSelector,
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
-  getAccessErrorSelector, getBookingApiErrorSelector
+  getBookingAccessErrorSelector,
+  getBookingApiErrorSelector,
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
 import {SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
-import {getApiErrorSelector} from "../../../redux/General/general-selectors";
-import {setApiErrorAC} from "../../../redux/General/general-reducer";
+import {useNavigate} from "react-router-dom";
+import {AppDispatch} from "../../../redux/redux-store";
 
 export const BookingsContainer: React.FC = () => {
 
@@ -39,11 +40,11 @@ export const BookingsContainer: React.FC = () => {
   const isStatusChanging = useSelector(getIsStatusChangingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const token = useSelector(getTokenSelector);
-  const accessError = useSelector(getAccessErrorSelector);
-  const apiError = useSelector(getApiErrorSelector);
+  const accessError = useSelector(getBookingAccessErrorSelector);
   const bookingApiError = useSelector(getBookingApiErrorSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getBookings(token, currentPage, pageSize, filter));
@@ -54,6 +55,12 @@ export const BookingsContainer: React.FC = () => {
       dispatch(setCurrentPageAC(1));
     }
   }, [filter, dispatch]);
+
+  useEffect(() => {
+    if (accessError) {
+      navigate("/noAccess");
+    }
+  }, [accessError]);
 
   const setCurrentPageCallBack = (
     page: number
@@ -99,10 +106,6 @@ export const BookingsContainer: React.FC = () => {
     dispatch(setBookingApiErrorAC(null));
   };
 
-  const setApiErrorCallBack = () => {
-    dispatch(setApiErrorAC(null));
-  }
-
   return (
       <Bookings
         bookingApiError={bookingApiError}
@@ -114,8 +117,6 @@ export const BookingsContainer: React.FC = () => {
         filter={filter}
         isStatusChanging={isStatusChanging}
         isDeletingInProcess={isDeletingInProcess}
-        accessError={accessError}
-        apiError={apiError}
         setCurrentPage={setCurrentPageCallBack}
         onFilterChanged={onFilterChangedCallBack}
         changeStatus={changeStatusCallBack}
@@ -124,7 +125,6 @@ export const BookingsContainer: React.FC = () => {
         setPageLimit={setPageSizeCallBack}
         archive={archiveCallBack}
         setBookingApiError={setBookingApiErrorCallBack}
-        setApiError={setApiErrorCallBack}
       />
   );
 };

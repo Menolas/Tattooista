@@ -39,7 +39,9 @@ export const generalReducer = (
   }
 };
 
-type ActionsTypes = SetApiErrorAT | SetSuccessModalAT;
+type ActionsTypes =
+    | SetApiErrorAT
+    | SetSuccessModalAT;
 
 // action creators
 

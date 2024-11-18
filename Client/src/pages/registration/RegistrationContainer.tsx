@@ -12,6 +12,7 @@ import {
 } from "../../redux/Auth/auth-selectors";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useCallback, useEffect} from "react";
+import {AppDispatch} from "../../redux/redux-store";
 
 export const RegistrationContainer: React.FC = () => {
 
@@ -20,7 +21,7 @@ export const RegistrationContainer: React.FC = () => {
     const successModal = useSelector(getSuccessModalSelector);
     const authApiError = useSelector(getAuthApiErrorSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const setSuccessModalCallBack = useCallback(() => {
         dispatch(setSuccessModalAC(false, ''));

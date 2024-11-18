@@ -11,6 +11,7 @@ import {
   setApiErrorAC,
   SetApiErrorAT
 } from "../General/general-reducer";
+import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
@@ -130,9 +131,18 @@ export const galleryReducer = (
   }
 }
 
-type ActionsTypes = SetApiErrorAT | ToggleIsDeletingInProcessAT | SetSuccessModalAT |
-    SetGalleryPageSizeAT | SetCurrentGalleryPageAT | SetIsFetchingAT | SetGalleryAT
-    | UpdateGalleryAT | DeleteGalleryItemAT | UpdateGalleryItemAT | SetGalleryApiErrorAT;
+type ActionsTypes =
+    | SetApiErrorAT
+    | ToggleIsDeletingInProcessAT
+    | SetSuccessModalAT
+    | SetGalleryPageSizeAT
+    | SetCurrentGalleryPageAT
+    | SetIsFetchingAT
+    | SetGalleryAT
+    | UpdateGalleryAT
+    | DeleteGalleryItemAT
+    | UpdateGalleryItemAT
+    | SetGalleryApiErrorAT;
 
 // actions creators
 
@@ -227,7 +237,8 @@ const updateGalleryItemAC = (
 
 //thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 const deleteGalleryItemThunk = (
     id: string,

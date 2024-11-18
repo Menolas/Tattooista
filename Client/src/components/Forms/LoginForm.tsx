@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login} from "../../redux/Auth/auth-reducer";
 import {handleEnterClick} from "../../utils/functions";
+import {AppDispatch} from "../../redux/redux-store";
 
 const validationSchema = Yup.object().shape({
   email: Yup
@@ -29,7 +30,7 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
   closeModal,
 }) => {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const submit = async (values: LoginFormValues, actions: FormikHelpers<LoginFormValues>) => {
     const success = await dispatch(login(values));

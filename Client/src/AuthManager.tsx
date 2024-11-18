@@ -3,6 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {checkAuth, setFromAC} from "./redux/Auth/auth-reducer";
 import {getAuthSelector, getFromSelector, getUserSelector} from "./redux/Auth/auth-selectors";
+import {AppDispatch} from "./redux/redux-store";
 
 interface AuthManagerProps {
     children: ReactNode;
@@ -15,7 +16,7 @@ export const AuthManager = ({children}: AuthManagerProps) => {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const [loading, setLoading] = useState(true);
     const [hasToken, setHasToken] = useState(false);

@@ -3,12 +3,13 @@ import {ResultCodesEnum} from "../../utils/constants";
 import {ApiErrorType, BookingType, SearchFilterType} from "../../types/Types";
 import {AppStateType} from "../redux-store";
 import {ThunkAction} from "redux-thunk";
-import type {} from "redux-thunk/extend-redux";
 import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
 } from "../General/general-reducer";
+import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
+import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_FILTER = 'SET_FILTER';
@@ -124,10 +125,19 @@ export const archivedBookingsReducer = (
   }
 }
 
-type ActionsTypes = SetSuccessModalAT | SetPageSizeAT |
-    SetFilterAT | SetArchivedBookingsAT | SetCurrentPageAT | SetIsFetchingAT
-    | ToggleIsDeletingInProcessAT | DeleteArchivedConsultationAT | SetAccessErrorAT
-    | SetArchivedBookingApiErrorAT | AddArchivedBookingAT;
+type ActionsTypes =
+    | SetSuccessModalAT
+    | SetPageSizeAT
+    | SetFilterAT
+    | SetArchivedBookingsAT
+    | SetCurrentPageAT
+    | SetIsFetchingAT
+    | ToggleIsDeletingInProcessAT
+    | DeleteArchivedConsultationAT
+    | SetAccessErrorAT
+    | SetArchivedBookingApiErrorAT
+    | AddArchivedBookingAT
+    | SetNeedReLoginAT;
 
 // actions creators
 
@@ -225,7 +235,8 @@ export const deleteArchivedBookingAC = (id: string): DeleteArchivedConsultationA
 
 // thunks
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
+//export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 const deleteArchivedBookingThunk = (
     token: string | null,
@@ -245,6 +256,7 @@ const deleteArchivedBookingThunk = (
     dispatch(deleteArchivedBookingAC(id));
     dispatch(setArchiveBookingsCurrentPageAC(newPage));
   }
+  return true;
 };
 
 export const getArchivedBookings = (
@@ -254,7 +266,8 @@ export const getArchivedBookings = (
     filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
   try {
-    dispatch(setIsFetchingAC(true))
+    //dispatch(setIsFetchingAC(true));
+    (dispatch as any)(setIsFetchingAC(true));
     const response = await archivedBookingsApi.getArchivedBookings(
         token,
         currentPage,
@@ -264,11 +277,19 @@ export const getArchivedBookings = (
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(''));
       dispatch(setArchivedBookingsAC(response.bookings, response.totalCount));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setAccessErrorAC(error.response?.data?.message));
-    console.log(error);
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      dispatch(setAccessErrorAC(error.response.data.message));
+      dispatch(setNeedReLoginAC(true));
+    } else {
+      console.log(error);
+    }
+    return false;
   } finally {
     dispatch(setIsFetchingAC(false));
   }
@@ -288,11 +309,15 @@ export const deleteArchivedBooking = (
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteArchivedBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(setArchivedBookingApiErrorAC(null));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
     dispatch(setArchivedBookingApiErrorAC(error.response?.data?.message));
     console.log(e);
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }
@@ -320,10 +345,14 @@ export const reactivateBooking = (
       ));
       dispatch(setArchivedBookingApiErrorAC(null));
       dispatch(setSuccessModalAC(true, RESTORE_BOOKING_FROM_ARCHIVE));
+      return true;
+    } else {
+      return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
     dispatch(setArchivedBookingApiErrorAC(error.response?.data?.message));
+    return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
   }

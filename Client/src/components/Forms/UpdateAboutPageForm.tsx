@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {editAboutPage} from "../../redux/About/about-reducer";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {AppDispatch} from "../../redux/redux-store";
 
 type PropsType = {
     apiError: null | string;
@@ -25,7 +26,7 @@ export const UpdateAboutPageForm: React.FC<PropsType> =  React.memo(({
     closeModal
 }) => {
     const token = useSelector(getTokenSelector);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const validationSchema = Yup.object().shape({
         aboutPageTitle: Yup.string()

@@ -7,7 +7,8 @@ import {
     getArchivedGallerySelector,
     getCurrentArchivedGalleryPageSelector,
     getIsDeletingInProcessSelector,
-    getTotalArchivedGalleryItemsCountSelector
+    getTotalArchivedGalleryItemsCountSelector,
+    getArchivedGalleryAccessErrorSelector,
 } from "../../../../redux/ArchivedGallery/archived-gallery-selectors";
 import {getStylesSelector,} from "../../../../redux/Styles/styles-selectors";
 import {Paginator} from "../../../common/Paginator";
@@ -31,6 +32,8 @@ import {ImageFullView} from "../../../common/ImageFullView";
 import {getApiErrorSelector} from "../../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../../redux/General/general-reducer";
+import {useNavigate} from "react-router-dom";
+import {AppDispatch} from "../../../../redux/redux-store";
 
 export const ArchivedGallery: React.FC = React.memo(() => {
     const isFetching = useSelector(getIsFetchingSelector);
@@ -42,15 +45,25 @@ export const ArchivedGallery: React.FC = React.memo(() => {
     const styles = useSelector(getStylesSelector);
     const token = useSelector(getTokenSelector);
     const apiError = useSelector(getApiErrorSelector);
+    const accessError = useSelector(getArchivedGalleryAccessErrorSelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (styles.length === 0) {
-            dispatch(getStyles(token));
+        if (accessError) {
+            navigate("/noAccess");
         }
-        dispatch(getArchivedGallery(token, currentPage, pageSize));
-    }, [currentPage, pageSize, dispatch, token, styles.length]);
+    }, [accessError]);
+
+    useEffect(() => {
+        if (!accessError) {
+            if (styles.length === 0) dispatch(getStyles(token));
+
+            dispatch(getArchivedGallery(token, currentPage, pageSize));
+        }
+
+    }, [accessError, currentPage, pageSize, dispatch, token, styles.length]);
 
     const [confirmationData, setConfirmationData] = useState<{
         needConfirmation: boolean,

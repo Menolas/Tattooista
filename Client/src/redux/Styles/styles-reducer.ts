@@ -13,6 +13,7 @@ import {
   setCurrentGalleryPageAC,
 } from "../Gallery/gallery-reducer";
 import {LogInAT} from "../Auth/auth-reducer";
+import {AnyAction} from "redux";
 
 const SET_STYLES = 'SET_STYLES';
 const DELETE_STYLE = 'DELETE_STYLE';
@@ -110,9 +111,18 @@ export const stylesReducer = (
   }
 }
 
-type ActionsTypes = ToggleIsDeletingInProcessAT | SetIsFetchingAT |
-    SetStylesAT | DeleteStyleAT | SetActiveStyleAT | SetSuccessModalAT | SetApiErrorAT |
-    LogInAT | AddStyleAT | UpdateStyleAT | SetCurrentGalleryPageAT;
+type ActionsTypes =
+    | ToggleIsDeletingInProcessAT
+    | SetIsFetchingAT
+    | SetStylesAT
+    | DeleteStyleAT
+    | SetActiveStyleAT
+    | SetSuccessModalAT
+    | SetApiErrorAT
+    | LogInAT
+    | AddStyleAT
+    | UpdateStyleAT
+    | SetCurrentGalleryPageAT;
 
 // actions creators
 
@@ -183,7 +193,8 @@ export const setActiveStyleAC = (style: StyleType | null): SetActiveStyleAT => (
 
 //thunks
 
-type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+//type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 export const setActiveStyle = (style: StyleType | null): ThunkType => async (
     dispatch
