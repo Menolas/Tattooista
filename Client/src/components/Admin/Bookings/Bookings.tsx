@@ -9,9 +9,11 @@ import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {bookingFilterSelectOptions} from "../../../utils/constants";
+import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 
 type PropsType = {
   bookingApiError: null | string;
+  apiError: null | string;
   isFetching: boolean;
   totalCount: number;
   currentPage: number;
@@ -28,10 +30,12 @@ type PropsType = {
   setPageLimit: (pageSize: number) => void;
   archive: (id: string) => void;
   setBookingApiError: () => void;
+  setApiError: () => void;
 }
 
 export const Bookings: React.FC<PropsType> = React.memo(({
   bookingApiError,
+  apiError,
   isFetching,
   totalCount,
   currentPage,
@@ -48,6 +52,7 @@ export const Bookings: React.FC<PropsType> = React.memo(({
   setPageLimit,
   archive,
   setBookingApiError,
+  setApiError,
 }) => {
 
   const [addConsultationMode, setAddConsultationMode] = useState<boolean>(false);
@@ -124,6 +129,11 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                 closeBookingModal={closeModal}
             />
         </ModalPopUp>
+        <ApiErrorMessageModal
+          isOpen={!!apiError}
+          error={apiError}
+          closeModal={setApiError}
+        />
       </>
     );
 });
