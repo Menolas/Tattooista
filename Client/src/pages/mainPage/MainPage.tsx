@@ -24,7 +24,6 @@ import {
     getActiveStyleSelector,
 } from "../../redux/Styles/styles-selectors";
 import {
-  getApiErrorSelector,
   getSuccessModalSelector
 } from "../../redux/General/general-selectors";
 import {
@@ -42,7 +41,6 @@ export const MainPage: React.FC = () => {
 
   const styles = useSelector(getStylesSelector);
   const successModal = useSelector(getSuccessModalSelector);
-  const apiError = useSelector(getApiErrorSelector);
   const token = useSelector(getTokenSelector);
   const isFetching = useSelector(getIsFetchingSelector);
   const activeStyle = useSelector(getActiveStyleSelector);
@@ -103,7 +101,6 @@ export const MainPage: React.FC = () => {
       <ServicesContainer />
       <FaqContainer />
       <Booking
-          apiError={apiError}
           consentId="consent3"
       />
       <SuccessPopUp
