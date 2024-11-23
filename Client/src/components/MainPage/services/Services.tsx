@@ -26,6 +26,7 @@ export type UpdateServiceDataType = {
 export const Services: React.FC<PropsType> = React.memo(({
   apiError,
   isFetching,
+  isDeletingInProcess,
   isAuth,
   services,
   remove,
@@ -59,7 +60,8 @@ export const Services: React.FC<PropsType> = React.memo(({
         key={item._id}
         isAuth={isAuth}
         serviceIndex={i + 1}
-        service={item}
+        data={item}
+        isDeletingInProcess={isDeletingInProcess}
         remove={remove}
         setUpdateServiceData={setUpdateServiceData}
       />

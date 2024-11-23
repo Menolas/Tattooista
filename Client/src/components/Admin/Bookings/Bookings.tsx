@@ -17,10 +17,10 @@ type PropsType = {
   totalCount: number;
   currentPage: number;
   pageSize: number;
-  bookings?: Array<BookingType>;
+  bookings: Array<BookingType>;
   filter: SearchFilterType;
-  isStatusChanging?: Array<string>;
-  isDeletingInProcess?: Array<string>;
+  isStatusChanging: Array<string>;
+  isDeletingInProcess: Array<string>;
   setCurrentPage: (page: number) => void;
   onFilterChanged: (filter: SearchFilterType) => void;
   changeStatus: (id: string, status: boolean) => void;
