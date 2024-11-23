@@ -271,29 +271,17 @@ class clientsController {
   }
 
   async archiveClient(req, res) {
-    console.log("archiving client - controller!!!!!!!!!!!")
     if (!req.hasRole) {
       return res.status(403).json({ message: "You don't have permission" });
     }
 
     const results = {};
-
     try {
-      const archivedClient = new ArchivedClient({
-        fullName: res.client.fullName,
-        contacts: {
-          email: res.client.contacts.email,
-          insta: res.client.contacts.insta,
-          phone: res.client.contacts.phone,
-          whatsapp: res.client.contacts.whatsapp,
-          messenger: res.client.contacts.messenger
-        },
-        gallery: []
-      });
+      const archivedClient = await ClientService.archiveClient(res.client);
       const moveOperations = [];
 
       if (res.client.avatar) {
-        console.log("archive client and client had an avatar!!!!!!!!!!!!!!")
+        console.log(res.client.avatar + " client avatar!!!!!!!!!!!!!!!!!!!!!");
         const oldPath = `./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`;
         const newPath = `./uploads/archivedClients/${archivedClient._id}/avatar/${res.client.avatar}`;
         if (fs.existsSync(oldPath)) {
@@ -314,7 +302,6 @@ class clientsController {
       }
 
       if (res.client.gallery.length > 0) {
-        console.log("archive client and client had an gallery!!!!!!!!!!!!!!")
         archivedClient.gallery = [...res.client.gallery];
         res.client.gallery.forEach((item) => {
           const oldGalleryPath = `./uploads/clients/${res.client._id}/doneTattooGallery/${item}`;

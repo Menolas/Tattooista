@@ -1,8 +1,8 @@
 const Client = require("../models/Client");
+const ArchivedClient = require("../models/ArchivedClient");
 const ApiError = require("../exeptions/apiErrors");
 class ClientService {
     async addClient(client) {
-        console.log(JSON.stringify(client) + "client!!!!!!!!!!!!");
         if (client.email) {
             const emailCandidate = await  Client.findOne({
                 'contacts.email': client.email
@@ -117,6 +117,47 @@ class ClientService {
             gallery: []
         });
 
+    }
+
+    async archiveClient(client) {
+        if (client.contacts.email) {
+            const emailCandidate = await  ArchivedClient.findOne({
+                'contacts.email': client.contacts.email
+            });
+            if (emailCandidate) {
+                throw ApiError.BadRequest(`Archived Client with email ${client.contacts.email} already exist`);
+            }
+        }
+
+        if (client.contacts.phone) {
+            const phoneCandidate = await  ArchivedClient.findOne({
+                'contacts.phone': client.contacts.phone
+            });
+            if (phoneCandidate) {
+                throw ApiError.BadRequest(`Archived Client with phone ${client.contacts.phone} already exist`);
+            }
+        }
+
+        if (client.contacts.whatsapp) {
+            const whatsappCandidate = await  ArchivedClient.findOne({
+                'contacts.whatsapp': client.contacts.whatsapp
+            });
+            if (whatsappCandidate) {
+                throw ApiError.BadRequest(`Archived Client with whatsapp ${client.contacts.whatsapp} already exist`);
+            }
+        }
+
+        return await ArchivedClient.create({
+            fullName: client.fullName.trim(),
+            contacts: {
+                email: client.contacts.email,
+                insta: client.contacts.insta?.trim(),
+                phone: client.contacts.phone,
+                whatsapp: client.contacts.whatsapp,
+                messenger: client.contacts.messenger?.trim()
+            },
+            gallery: []
+        });
     }
 }
 
