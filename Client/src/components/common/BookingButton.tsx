@@ -7,7 +7,7 @@ import {
     setSuccessModalAC
 } from "../../redux/General/general-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {getApiErrorSelector, getSuccessModalSelector} from "../../redux/General/general-selectors";
+import {getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {SuccessPopUp} from "./SuccessPopUp";
 import {AppDispatch} from "../../redux/redux-store";
 
@@ -18,8 +18,6 @@ type PropsType = {
 export const BookingButton: React.FC<PropsType> = React.memo(({
     consentId = 'consent',
 }) => {
-
-    const apiError = useSelector(getApiErrorSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -71,7 +69,6 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
             >
                 { bookingModal &&
                     <BookingForm
-                        apiError={apiError}
                         consentId={consentId}
                         closeBookingModal={closeBookingModal}
                     />

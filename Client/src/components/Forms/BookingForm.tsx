@@ -13,6 +13,7 @@ import {addBooking} from "../../redux/Bookings/bookings-reducer";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector} from "../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../redux/redux-store";
+import {getBookingApiErrorSelector} from "../../redux/Bookings/bookings-selectors";
 
 const options = [
   { value: "email", label: "email" },
@@ -78,17 +79,16 @@ const initialValues: BookConsultationFormValues = {
 };
 
 type PropsType = {
-  apiError: string | null;
   consentId: string;
   closeBookingModal?: () => void;
 };
 
 export const BookingForm: React.FC<PropsType> = React.memo(({
-  apiError,
   consentId,
   closeBookingModal,
 }) => {
   const token = useSelector(getTokenSelector);
+  const apiError = useSelector(getBookingApiErrorSelector);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [contactInput, setContactInput] = useState('');
 

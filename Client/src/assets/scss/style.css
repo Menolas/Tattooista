@@ -795,7 +795,7 @@ img {
   left: 50%;
   max-width: calc(100% - 2rem);
   transform: translate(-50%, 70%);
-  z-index: 0;
+  z-index: 1;
 }
 .main-offer .booking-btn {
   padding: 0 38px;
@@ -2113,7 +2113,7 @@ img {
   position: relative;
   padding: 2rem 1.5rem;
   width: 100%;
-  max-width: 615px;
+  max-width: 700px;
   max-height: 90svh;
   background-image: url("../img/form-background.png");
   background-repeat: no-repeat;
@@ -2148,7 +2148,7 @@ img {
 @media (min-width: 990px) {
   .modal-wrap__inner-block {
     padding: 80px 60px 60px;
-    width: 615px;
+    width: 700px;
     max-height: calc(100vh - 60px);
   }
   .modal-wrap__inner-block .form {

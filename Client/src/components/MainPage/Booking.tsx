@@ -2,12 +2,10 @@ import * as React from "react";
 import {BookingForm} from "../Forms/BookingForm";
 
 type PropsType = {
-  apiError: string | null;
   consentId: string;
 }
 
 export const Booking: React.FC<PropsType> = React.memo(({
-    apiError,
     consentId,
 }) => {
 
@@ -17,7 +15,6 @@ export const Booking: React.FC<PropsType> = React.memo(({
       <div className = "booking__content">
         <div className = "booking__form-page-wrap">
           <BookingForm
-              apiError={apiError}
               consentId={consentId}
           />
         </div>
