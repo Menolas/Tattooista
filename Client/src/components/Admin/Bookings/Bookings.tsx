@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
 import {BookingType, SearchFilterType} from "../../../types/Types";
@@ -9,7 +9,6 @@ import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {bookingFilterSelectOptions} from "../../../utils/constants";
-import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 
 type PropsType = {
   bookingApiError: null | string;
@@ -58,11 +57,11 @@ export const Bookings: React.FC<PropsType> = React.memo(({
       setBookingApiError();
   }, [setBookingApiError]);
 
-  // useEffect(() => {
-  //   if (addConsultationMode && apiError === null) {
-  //     closeModal();
-  //   }
-  // }, [apiError, addConsultationMode, closeModal]);
+  useEffect(() => {
+    if (addConsultationMode && bookingApiError === null) {
+      closeModal();
+    }
+  }, [bookingApiError]);
 
 
   const modalTitle = 'Add a Consultation';
@@ -125,11 +124,6 @@ export const Bookings: React.FC<PropsType> = React.memo(({
                 closeBookingModal={closeModal}
             />
         </ModalPopUp>
-        <ApiErrorMessageModal
-            isOpen={!!bookingApiError}
-            error={bookingApiError}
-            closeModal={setBookingApiError}
-        />
       </>
     );
 });
