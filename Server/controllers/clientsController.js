@@ -281,7 +281,6 @@ class clientsController {
       const moveOperations = [];
 
       if (res.client.avatar) {
-        console.log(res.client.avatar + " client avatar!!!!!!!!!!!!!!!!!!!!!");
         const oldPath = `./uploads/clients/${res.client._id}/avatar/${res.client.avatar}`;
         const newPath = `./uploads/archivedClients/${archivedClient._id}/avatar/${res.client.avatar}`;
         if (fs.existsSync(oldPath)) {
