@@ -10,6 +10,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {SuccessPopUp} from "./SuccessPopUp";
 import {AppDispatch} from "../../redux/redux-store";
+import {setBookingApiErrorAC} from "../../redux/Bookings/bookings-reducer";
+import {getBookingApiErrorSelector} from "../../redux/Bookings/bookings-selectors";
 
 type PropsType = {
     consentId: string;
@@ -20,6 +22,7 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
 }) => {
     const successModal = useSelector(getSuccessModalSelector);
     const dispatch = useDispatch<AppDispatch>();
+    const bookingApiError = useSelector(getBookingApiErrorSelector);
 
     const setSuccessModalCallBack = useCallback(() => {
         dispatch(setSuccessModalAC(false, ''));
@@ -35,7 +38,7 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
 
     const closeBookingModal = useCallback(() => {
         setBookingModal(false);
-        dispatch(setApiErrorAC(null));
+        dispatch(setBookingApiErrorAC(null));
     }, [dispatch]);
 
     useEffect(() => {
@@ -46,11 +49,11 @@ export const BookingButton: React.FC<PropsType> = React.memo(({
         }
     }, [successModal, dispatch]);
 
-    // useEffect(() => {
-    //     if (bookingModal && apiError === null) {
-    //         closeBookingModal();
-    //     }
-    // }, [apiError, bookingModal, closeBookingModal]);
+    useEffect(() => {
+        if (bookingModal && bookingApiError === null) {
+            closeBookingModal();
+        }
+    }, [bookingApiError]);
 
     return (
         <div className={'bookingBtnBlock'}>

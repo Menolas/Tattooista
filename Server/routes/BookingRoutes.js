@@ -4,6 +4,7 @@ const Booking = require('../models/Booking');
 const ArchivedBooking = require('../models/ArchivedBooking');
 const controller = require('../controllers/bookingController');
 const authRoleMiddleware = require('../middlewares/authRoleMiddleware');
+const notStrictAuthRoleMiddleware = require("../middlewares/notStrictAuthRoleMiddleware");
 
 // Getting bookings
 router.get('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.getBookings );
@@ -15,7 +16,7 @@ router.get('/archive', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.g
 router.get('/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getBooking, controller.getBooking);
 
 // Creating one
-router.post('/', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.createBooking);
+router.post('/', notStrictAuthRoleMiddleware(["ADMIN", "SUPERADMIN"]), controller.createBooking);
 
 // Change booking status
 router.patch('/status/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getBooking, controller.changeBookingStatus);
