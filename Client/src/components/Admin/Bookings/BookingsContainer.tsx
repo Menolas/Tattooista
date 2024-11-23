@@ -28,6 +28,8 @@ import {SearchFilterType} from "../../../types/Types";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {useNavigate} from "react-router-dom";
 import {AppDispatch} from "../../../redux/redux-store";
+import {getApiErrorSelector} from "../../../redux/General/general-selectors";
+import {setApiErrorAC} from "../../../redux/General/general-reducer";
 
 export const BookingsContainer: React.FC = () => {
 
@@ -42,6 +44,7 @@ export const BookingsContainer: React.FC = () => {
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getBookingAccessErrorSelector);
   const bookingApiError = useSelector(getBookingApiErrorSelector);
+  const apiError = useSelector(getApiErrorSelector)
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -106,9 +109,14 @@ export const BookingsContainer: React.FC = () => {
     dispatch(setBookingApiErrorAC(null));
   };
 
+  const setApiErrorCallBack = () => {
+    dispatch(setApiErrorAC(null));
+  }
+
   return (
       <Bookings
         bookingApiError={bookingApiError}
+        apiError={apiError}
         isFetching={isFetching}
         totalCount={totalCount}
         currentPage={currentPage}
@@ -125,6 +133,7 @@ export const BookingsContainer: React.FC = () => {
         setPageLimit={setPageSizeCallBack}
         archive={archiveCallBack}
         setBookingApiError={setBookingApiErrorCallBack}
+        setApiError={setApiErrorCallBack}
       />
   );
 };

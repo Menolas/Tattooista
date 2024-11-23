@@ -12,6 +12,8 @@ import {getNewPage} from "../../utils/functions";
 import {
   setSuccessModalAC,
   SetSuccessModalAT,
+  setApiErrorAC,
+  SetApiErrorAT,
 } from "../General/general-reducer";
 import {
   addArchivedBookingAC,
@@ -170,7 +172,8 @@ type ActionsTypes =
     | SetBookingApiErrorAT
     | AddArchivedBookingAT
     | SetBookingProfileAT
-    | SetNeedReLoginAT;
+    | SetNeedReLoginAT
+    | SetApiErrorAT;
 
 // actions creators
 type SetBookingProfileAT = {
@@ -425,14 +428,14 @@ export const deleteBooking = (
     const response = await bookingsApi.deleteConsultation(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
-      dispatch(setBookingApiErrorAC(null));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setBookingApiErrorAC(error.response?.data?.message));
+    dispatch(setApiErrorAC(error.response?.data?.message));
     console.log(e);
     return false;
   } finally {
@@ -475,7 +478,7 @@ export const turnBookingToClient = (
     const response = await bookingsApi.turnBookingToClient(token, id);
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
-      dispatch(setBookingApiErrorAC(null));
+      dispatch(setApiErrorAC(null));
       dispatch(setSuccessModalAC(true, BOOKING_INTO_CLIENT_SUCCESS));
       return true;
     } else {
@@ -483,7 +486,7 @@ export const turnBookingToClient = (
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setBookingApiErrorAC(error.response?.data?.message));
+    dispatch(setApiErrorAC(error.response?.data?.message));
     return false;
   } finally {
     dispatch(toggleIsDeletingInProcessAC(false, id));
@@ -504,14 +507,14 @@ export const archiveBooking = (
     if (response.resultCode === ResultCodesEnum.Success) {
       await dispatch(deleteBookingThunk(token, id, bookings, currentPage, pageLimit, filter));
       dispatch(addArchivedBookingAC(response.booking));
-      dispatch(setBookingApiErrorAC(null));
+      dispatch(setApiErrorAC(null));
       return true;
     } else {
       return false;
     }
   } catch (e) {
     const error = e as ApiErrorType;
-    dispatch(setBookingApiErrorAC(error.response?.data?.message));
+    dispatch(setApiErrorAC(error.response?.data?.message));
     console.log(error);
     return false;
   } finally {
