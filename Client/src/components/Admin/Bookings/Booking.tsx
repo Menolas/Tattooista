@@ -13,7 +13,7 @@ import {NavLink} from "react-router-dom";
 
 type PropsType = {
   data: BookingType;
-  isDeletingInProcess?: Array<string>;
+  isDeletingInProcess: Array<string>;
   isStatusChanging?: Array<string>;
   changeStatus: (id: string, status: boolean) => void;
   turnBookingToClient: (id: string) => void;
