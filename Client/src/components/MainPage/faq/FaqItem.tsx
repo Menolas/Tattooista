@@ -14,14 +14,16 @@ type SetUpdateFaqItemDataType = React.Dispatch<React.SetStateAction<{
 
 type PropsType = {
   isAuth: string | null;
-  item: FaqType;
+  isDeletingInProcess: Array<string>;
+  data: FaqType;
   remove: (id: string) => void;
   setEditData: SetUpdateFaqItemDataType;
 }
 
 export const FaqItem: React.FC<PropsType> = React.memo(({
     isAuth,
-    item,
+    isDeletingInProcess,
+    data,
     remove,
     setEditData,
 }) => {
@@ -40,7 +42,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
     }
 
     const removeCallBack = () => {
-        remove(item._id);
+        remove(data._id);
     }
 
     useEffect(() => {
@@ -88,7 +90,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                     data-tooltip-content="Edit FAQ item"
                     className={"btn btn--icon"}
                     onClick={() => {
-                        setEditData({isUpdateMode: true, faqItem: item});
+                        setEditData({isUpdateMode: true, faqItem: data});
                     }}
                 >
                     <EditIcon/>
@@ -97,10 +99,11 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
                     data-tooltip-id="faq-tooltip"
                     data-tooltip-content="Delete FAQ item"
                     className={"btn btn--icon"}
+                    disabled={isDeletingInProcess?.some(id => id === data._id)}
                     onClick={() => {
                         setConfirmationData({
                             needConfirmation: true,
-                            itemId: item._id,
+                            itemId: data._id,
                             context: 'Are you sure? You about to delete this FAQ item FOREVER...',
                             cb: removeCallBack
                         });
@@ -111,7 +114,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
             </div>
           }
           <h5 className="faq__item-title">
-            {item.question}
+            {data.question}
           </h5>
           <button
               className="btn btn--icon faq__item-handle"
@@ -123,7 +126,7 @@ export const FaqItem: React.FC<PropsType> = React.memo(({
           </button>
         </div>
         <p className="faq__item-text">
-          {item.answer}
+          {data.answer}
         </p>
         <Confirmation
           isOpen={confirmationData.needConfirmation}

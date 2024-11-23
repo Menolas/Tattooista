@@ -2,6 +2,7 @@ import * as React from "react";
 import {FaqItems} from "./FaqItems";
 import {
     getFaqItemsSelector,
+    getIsDeletingInProcessSelector,
     getIsFetchingSelector
 } from "../../../redux/Faq/faq-selectors";
 import {
@@ -24,6 +25,7 @@ export const FaqContainer = () => {
     const isAuth = useSelector(getAuthSelector);
     const faq = useSelector(getFaqItemsSelector);
     const isFetching = useSelector(getIsFetchingSelector);
+    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -44,6 +46,7 @@ export const FaqContainer = () => {
             apiError={apiError}
             isAuth={isAuth}
             isFetching={isFetching}
+            isDeletingInProcess={isDeletingInProcess}
             faq={faq}
             remove={removeCallBack}
             setApiError={setApiErrorCallBack}

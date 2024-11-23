@@ -12,7 +12,8 @@ import {UpdateServiceDataType} from "./Services";
 type PropsType = {
     isAuth: string | null;
     serviceIndex: number;
-    service: ServiceType;
+    data: ServiceType;
+    isDeletingInProcess: Array<string>;
     remove: (id: string) => void;
     setUpdateServiceData: React.Dispatch<React.SetStateAction<UpdateServiceDataType>>;
 };
@@ -20,13 +21,14 @@ type PropsType = {
 export const ServiceItem: React.FC<PropsType> = React.memo(({
     isAuth,
     serviceIndex,
-    service,
+    data,
+    isDeletingInProcess,
     remove,
     setUpdateServiceData,
 }) => {
 
 
-    const conditions = service.conditions.map((item, i) => {
+    const conditions = data.conditions.map((item, i) => {
         return item ? <li key = { i }>{item}</li> : null
     });
 
@@ -42,11 +44,11 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
     };
 
     const removeCallBack = () => {
-        remove(service._id);
+        remove(data._id);
     };
 
-    const wallPaperUrl = service.wallPaper
-        ? `url(${API_URL}/serviceWallpapers/${service._id}/${service.wallPaper})`
+    const wallPaperUrl = data.wallPaper
+        ? `url(${API_URL}/serviceWallpapers/${data._id}/${data.wallPaper})`
         : "./uploads/ServicesWallpapers/service.jpg";
 
     return (
@@ -64,7 +66,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                                     ...prevState,
                                     isUpdateMode: true,
                                     isEdit: true,
-                                    service: service
+                                    service: data
                                 }));
                             }}
                         >
@@ -74,10 +76,11 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                             data-tooltip-id="service-tooltip"
                             data-tooltip-content="Delete service item"
                             className={"btn btn--icon"}
+                            disabled={isDeletingInProcess?.some(id => id === data._id)}
                             onClick={() => {
                                 setConfirmationData({
                                     needConfirmation: true,
-                                    itemId: service._id,
+                                    itemId: data._id,
                                     context: 'Are you sure? You about to delete this service FOREVER...',
                                     cb: removeCallBack
                                 });
@@ -92,7 +95,7 @@ export const ServiceItem: React.FC<PropsType> = React.memo(({
                     style={{backgroundImage: wallPaperUrl}}
                 >{''}</div>
                 <div className="services__article-text-block">
-                    <h4>{service.title}:</h4>
+                    <h4>{data.title}:</h4>
                     <ul className="services__item-list">
                         {conditions}
                     </ul>
