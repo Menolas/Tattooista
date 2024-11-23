@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {logout, setLoginErrorAC, setNeedReLoginAC} from "../../redux/Auth/auth-reducer";
 import { Header } from "./Header";
 import {
-  getAuthSelector, getLoginErrorSelector, getNeedReLoginSelector
+  getAuthSelector, getLoginErrorSelector, getNeedReLoginSelector, getUserSelector
 } from "../../redux/Auth/auth-selectors";
 import {useLocation,} from "react-router-dom";
 import {getActiveStyleSelector} from "../../redux/Styles/styles-selectors";
@@ -13,6 +13,7 @@ import {AppDispatch} from "../../redux/redux-store";
 export const HeaderContainer: React.FC = () => {
 
   const isAuth = useSelector(getAuthSelector);
+  const profile = useSelector(getUserSelector);
   const loginError = useSelector(getLoginErrorSelector);
   const needReLogin = useSelector(getNeedReLoginSelector);
   const activeStyle = useSelector(getActiveStyleSelector);
@@ -66,5 +67,6 @@ export const HeaderContainer: React.FC = () => {
       closeLoginModal={closeLoginModal}
       openLoginModal={openLoginModal}
       activeStyle={activeStyle}
+      profile={profile}
   />
 }

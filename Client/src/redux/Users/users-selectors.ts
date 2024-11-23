@@ -35,3 +35,11 @@ export const getUsersApiErrorSelector = (state: AppStateType) => {
 export const getUsersAccessErrorSelector = (state: AppStateType) => {
     return state.users.accessError;
 };
+
+export const getUserProfileSelector = (state: AppStateType) => {
+    return state.users.profile;
+};
+
+export const getIsDeletingInProcessSelector = (state: AppStateType) => {
+    return state.users.isDeletingInProcess;
+}

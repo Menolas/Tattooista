@@ -10,10 +10,12 @@ import {ReactComponent as LogOutIcon} from "../../assets/svg/logout.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
-import {StyleType} from "../../types/Types";
+import {IUser, StyleType, UserType} from "../../types/Types";
 import {useEffect} from "react";
 import {ModalPopUp} from "../common/ModalPopUp";
 import {LoginForm} from "../Forms/LoginForm";
+import {DefaultAvatar} from "../common/DefaultAvatar";
+import {API_URL} from "../../http";
 
 type PropsType = {
     isLogin: boolean;
@@ -25,6 +27,7 @@ type PropsType = {
     closeLoginModal: () => void;
     openLoginModal: () => void;
     activeStyle: StyleType | null;
+    profile?: IUser | null;
 }
 
 export const Header: React.FC<PropsType> = React.memo(({
@@ -37,7 +40,10 @@ export const Header: React.FC<PropsType> = React.memo(({
   closeLoginModal,
   openLoginModal,
   activeStyle,
+  profile,
 }) => {
+
+    console.log(JSON.stringify(profile) + " user Profile!!!!!")
 
     useEffect(() => {
         if (needReLogin) {
@@ -84,16 +90,30 @@ export const Header: React.FC<PropsType> = React.memo(({
             }
             { isAuth
                 ? (
-                    <button
-                        className={"btn btn--transparent"}
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Log out"
-                        onClick={logout}
-                    >
-                        <LogOutIcon />
-                        Log Out
-                    </button>
-                  )
+                    <>
+                        <NavLink
+                            className={'avatar'}
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="See your profile"
+                            to={`/myProfile?userId=${profile?._id}`}
+                        >
+                            {!profile?.avatar
+                                ? <DefaultAvatar/>
+                                : <img src={`${API_URL}/users/${profile._id}/avatar/${profile.avatar}`} alt="preview"/>
+                            }
+                        </NavLink>
+                        <button
+                            className={"btn btn--transparent"}
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Log out"
+                            onClick={logout}
+                        >
+                            <LogOutIcon/>
+                            Log Out
+                        </button>
+                    </>
+
+                )
                 : (
                     <button
                         className={"btn btn--transparent"}
@@ -101,7 +121,7 @@ export const Header: React.FC<PropsType> = React.memo(({
                         data-tooltip-content="Log in"
                         onClick={openLoginModal}
                     >
-                        <LoginIcon />
+                    <LoginIcon />
                         Log In
                     </button>
                 )

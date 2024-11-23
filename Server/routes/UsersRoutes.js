@@ -20,6 +20,10 @@ router.post('/edit/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller
 //creating user
 router.post('/', authRoleMiddleware(["SUPERADMIN"]), controller.addUser);
 
+//getting one user
+
+router.get('/:id', authRoleMiddleware(["USER"]), getUser, controller.getUser);
+
 async function getUser(req, res, next) {
     let user;
     try {
