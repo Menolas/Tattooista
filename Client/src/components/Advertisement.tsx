@@ -1,10 +1,9 @@
 import * as React from "react";
-import {ReactComponent as FaceBookIcon} from "../../assets/svg/facebook.svg";
-import {ReactComponent as InstagramIcon} from "../../assets/svg/instagram.svg";
-import {ReactComponent as LinkedinIcon} from "../../assets/svg/linkedin.svg";
-import {ReactComponent as TwitterIcon} from "../../assets/svg/twitter.svg";
-import {BookingButton} from "../common/BookingButton";
-import {ShareButton} from "./ShareButton";
+import {ReactComponent as FaceBookIcon} from "../assets/svg/facebook.svg";
+import {ReactComponent as InstagramIcon} from "../assets/svg/instagram.svg";
+import {ReactComponent as LinkedinIcon} from "../assets/svg/linkedin.svg";
+import {ReactComponent as TwitterIcon} from "../assets/svg/twitter.svg";
+import {ShareButton} from "./Portfolio/ShareButton";
 
 export const Advertisement: React.FC = () => {
 
