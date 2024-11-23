@@ -9,7 +9,7 @@ import {ModalPopUp} from "../../common/ModalPopUp";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
 import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";
-import {Advertisement} from "../Advertisement";
+import {Advertisement} from "../../Advertisement";
 import {Preloader} from "../../common/Preloader";
 import {Slider} from "../../common/Slider";
 
