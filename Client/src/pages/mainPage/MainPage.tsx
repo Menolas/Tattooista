@@ -35,7 +35,7 @@ import {AboutContainer} from "../../components/MainPage/about/AboutContainer";
 import {ServicesContainer} from "../../components/MainPage/services/SevicesContainer";
 import {FaqContainer} from "../../components/MainPage/faq/FaqContainer";
 import {Preloader} from "../../components/common/Preloader";
-import {Advertisement} from "../../components/Portfolio/Advertisement";
+import {Advertisement} from "../../components/Advertisement";
 import {AppDispatch} from "../../redux/redux-store";
 
 export const MainPage: React.FC = () => {
@@ -50,11 +50,8 @@ export const MainPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // Check if the URL contains a hash
     if (window.location.hash) {
-      // Get the target element using the hash
       const targetElement = document.querySelector(window.location.hash);
-      // Scroll to the target element
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
@@ -65,7 +62,7 @@ export const MainPage: React.FC = () => {
     dispatch(getStyles(token, true));
   }, [dispatch, token]);
 
-useEffect(() => {
+  useEffect(() => {
     dispatch(setActiveStyle(styles[0]));
 }, [dispatch, styles]);
 
@@ -88,7 +85,9 @@ useEffect(() => {
   return (
     <>
       <MainOffer />
-      <Advertisement/>
+        <div className={'container'}>
+          <Advertisement/>
+        </div>
         {
             isFetching
                 ? <Preloader />

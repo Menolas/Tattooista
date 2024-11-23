@@ -117,10 +117,14 @@
           left: 0;
           right: 0;
 
-          &::before {
+          &::before,
+          &::after {
             content: "";
             display: block;
             position: absolute;
+          }
+
+          &::before {
             top: 50%;
             width: 45px;
             height: 2px;
@@ -129,9 +133,6 @@
           }
 
           &::after {
-            content: "";
-            display: block;
-            position: absolute;
             width: 18px;
             height: 22px;
             background-color: transparent;
@@ -167,9 +168,13 @@
         span {
           right: 0;
 
+          &::before {
+            top: 44%;
+          }
+
           &::after {
             right: 0;
-            bottom: 7px;
+            bottom: 9px;
             transform: skew(-30deg, -10deg) rotate(-30deg);
           }
         }

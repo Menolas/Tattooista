@@ -1,6 +1,6 @@
 .swiper-wrap {
   position: relative;
-  padding: 0 0 3rem;
+  padding: 0 0 3.5rem;
 
   .swiper {
     position: static;
@@ -13,41 +13,73 @@
 
 .swiper-button-next,
 .swiper-button-prev {
-  top: auto !important;
-  bottom: 0;
-  margin-top: 0 !important;
-  color: $light-text !important;
-  z-index: 0 !important;
+  position: absolute;
+  top: unset !important;
+  bottom: 1rem;
+  padding: 0;
+  width: 45px !important;
+  height: 30px !important;
+  transform: translate(0, 50%);
+
+  &::after,
+  &::before {
+    content: "" !important;
+    display: block;
+    position: absolute;
+  }
+
+  &::before {
+    top: 50%;
+    width: 45px;
+    height: 2px;
+    background-color: white;
+    transform: translate(0, -50%);
+  }
 
   &::after {
-    font-size: 1.5rem !important;
+    width: 18px;
+    height: 22px;
+    background-color: transparent;
+    box-sizing: border-box;
+    border: 1px solid white;
+    border-right: none;
+    border-top: none;
   }
 }
 
 .swiper-button-prev {
   left: 0 !important;
   justify-content: flex-start !important;
-  //transform: translate(-100%, 100%);
+
+  &::after {
+    left: 1px;
+    bottom: 1px;
+    transform: skew(-30deg, -10deg) rotate(-210deg);
+  }
 }
 
 .swiper-button-next {
   right: 0 !important;
   justify-content: flex-end !important;
-  //transform: translate(100%, 100%);
+
+  &::before {
+    top: 44%;
+  }
+
+  &::after {
+    right: 1px;
+    bottom: 9px;
+    transform: skew(-30deg, -10deg) rotate(-30deg);
+  }
 }
 
-@media (min-width: 600px) {
-  .swiper-wrap {
-    padding: 0 3rem;
 
-    .swiper {
-    }
-  }
+@media (min-width: 600px) {
+
 
   .swiper-button-next,
   .swiper-button-prev {
-    bottom: unset;
-    top: var(--swiper-navigation-top-offset, 50%) !important;
+    bottom: 2rem !important;
     margin-top: calc(0px - (var(--swiper-navigation-size) / 2)) !important;
     color: $light-text !important;
 
@@ -64,5 +96,20 @@
   .swiper-button-next {
     right: 0 !important;
     //transform: translate(100%, 100%);
+  }
+}
+
+@media (min-width: 900px) {
+  .swiper-wrap {
+    padding: 0 5.5rem;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: 40% !important;
+    width: 70px !important;
+
+    &::before {
+      width: 70px !important;
+    }
   }
 }
