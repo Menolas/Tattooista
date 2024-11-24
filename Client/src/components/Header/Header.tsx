@@ -10,7 +10,7 @@ import {ReactComponent as LogOutIcon} from "../../assets/svg/logout.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
-import {IUser, StyleType, UserType} from "../../types/Types";
+import {IUser, StyleType} from "../../types/Types";
 import {useEffect} from "react";
 import {ModalPopUp} from "../common/ModalPopUp";
 import {LoginForm} from "../Forms/LoginForm";
@@ -27,7 +27,7 @@ type PropsType = {
     closeLoginModal: () => void;
     openLoginModal: () => void;
     activeStyle: StyleType | null;
-    profile?: IUser | null;
+    user?: IUser | null;
 }
 
 export const Header: React.FC<PropsType> = React.memo(({
@@ -40,10 +40,8 @@ export const Header: React.FC<PropsType> = React.memo(({
   closeLoginModal,
   openLoginModal,
   activeStyle,
-  profile,
+  user,
 }) => {
-
-    console.log(JSON.stringify(profile) + " user Profile!!!!!")
 
     useEffect(() => {
         if (needReLogin) {
@@ -95,11 +93,11 @@ export const Header: React.FC<PropsType> = React.memo(({
                             className={'avatar'}
                             data-tooltip-id="my-tooltip"
                             data-tooltip-content="See your profile"
-                            to={`/myProfile?userId=${profile?._id}`}
+                            to={`/myProfile?userId=${user?._id}`}
                         >
-                            {!profile?.avatar
+                            {!user?.avatar
                                 ? <DefaultAvatar/>
-                                : <img src={`${API_URL}/users/${profile._id}/avatar/${profile.avatar}`} alt="preview"/>
+                                : <img src={`${API_URL}/users/${user._id}/avatar/${user.avatar}`} alt="preview"/>
                             }
                         </NavLink>
                         <button

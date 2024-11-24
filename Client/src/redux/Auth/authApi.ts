@@ -1,5 +1,5 @@
 import $api from "../../http";
-import {LoginFormValues, RegistrationFormValues, RoleType, CommonResponseFields} from "../../types/Types";
+import {LoginFormValues, RegistrationFormValues, RoleType, CommonResponseFields, UserType} from "../../types/Types";
 import {IUser} from "../../types/Types";
 
 type LoginResponseType = CommonResponseFields & {
@@ -21,6 +21,10 @@ type RegistrationResponseType = CommonResponseFields & {
 };
 
 type LogoutResponseType = CommonResponseFields;
+
+type UpdateUserResponseType = CommonResponseFields & {
+    user: UserType;
+}
 
 type CheckAuthResponseType = CommonResponseFields & {
     userData: {
@@ -52,5 +56,15 @@ export const authAPI = {
   async checkAuth() {
       return await $api.get<CheckAuthResponseType>(`auth/refresh`)
           .then(response => response.data);
+  },
+
+  async getUserProfile(
+    token: string | null,
+    userId: string
+  ) {
+    return await $api.get<UpdateUserResponseType>(
+        `users/${userId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
   },
 };

@@ -5,18 +5,31 @@ import {useNavigate} from "react-router-dom";
 import {UserProfile} from "./UserProfile";
 import {ApiErrorMessageModal} from "../common/ApiErrorMessageModal";
 import {getApiErrorSelector} from "../../redux/General/general-selectors";
-import {deleteUserFromProfile, getUserProfile} from "../../redux/Users/users-reducer";
-import {getIsDeletingInProcessSelector, getUserProfileSelector} from "../../redux/Users/users-selectors";
-import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {
+  deleteUserFromProfile,
+  getUserProfile
+} from "../../redux/Auth/auth-reducer";
+import {
+  getUserProfileSelector,
+  getTokenSelector,
+  getIsDeletingInProcessSelector,
+  getUserSelector,
+  getAuthAccessErrorSelector,
+} from "../../redux/Auth/auth-selectors";
 import {setApiErrorAC} from "../../redux/General/general-reducer";
 import {AppDispatch} from "../../redux/redux-store";
+import {getRolesSelector} from "../../redux/Users/users-selectors";
+import {getRoles} from "../../redux/Users/users-reducer";
 
 export const UserProfileContainer: React.FC = () => {
 
   const apiError = useSelector(getApiErrorSelector);
+  const user = useSelector(getUserSelector);
   const profile = useSelector(getUserProfileSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const token = useSelector(getTokenSelector);
+  const accessError = useSelector(getAuthAccessErrorSelector);
+  const roles = useSelector(getRolesSelector);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -25,16 +38,27 @@ export const UserProfileContainer: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     let actualId: string | null = profile?._id;
     if (urlParams.get('userId')) actualId = urlParams.get('userId');
-    if (actualId) dispatch(getUserProfile(token, actualId));
+    if (actualId) {
+      dispatch(getUserProfile(token, actualId));
+      dispatch(getRoles());
+    }
   }, [dispatch]);
 
   useEffect(() => {
     if(profile) navigate(`?userId=${profile._id}`);
   }, [profile, navigate]);
 
+  useEffect(() => {
+    if (accessError) {
+      navigate("/noAccess");
+    }
+  }, [accessError]);
+
   const deleteUserCallBack = async () => {
-    let success = await dispatch(deleteUserFromProfile(token, profile._id));
-    if (success) navigate("/");
+    if (profile) {
+      let success = await dispatch(deleteUserFromProfile(token, profile?._id));
+      if (success) navigate("/");
+    }
   };
 
   const setApiErrorCallBack = () => {
@@ -47,6 +71,7 @@ export const UserProfileContainer: React.FC = () => {
               apiError={apiError}
               data={profile}
               isDeletingPicturesInProcess={isDeletingInProcess}
+              possibleRoles={roles}
               remove={deleteUserCallBack}
           />
           {apiError &&

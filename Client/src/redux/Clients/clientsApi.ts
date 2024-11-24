@@ -30,9 +30,6 @@ export const clientsAPI = {
     pageSize = 5,
     filter: SearchFilterType
   ) {
-    console.log('filter', filter);
-    console.log(`Request URL: http://localhost:3030/clients?page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`);
-
     return await $api.get<GetClientsResponseType>(
         `clients/all?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&gallery=${filter.condition}&isFavourite=${filter.isFavourite}`,
         { headers: { Authorization: `Bearer ${token}` } }

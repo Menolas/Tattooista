@@ -14,13 +14,13 @@ import {
 import {
     getRolesSelector,
     getCurrentPageSelector,
-    getFiletSelector,
+    getFilterSelector,
     getIsFetching,
     getPageLimitSelector,
     getUsersSelector,
     getTotalCountSelector,
     getUsersApiErrorSelector,
-    getUsersAccessErrorSelector,
+    getUsersAccessErrorSelector, getIsDeletingInProcessSelector,
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../types/Types";
@@ -39,16 +39,17 @@ export const UsersContainer: React.FC = () => {
     const total = useSelector(getTotalCountSelector);
     const currentPage = useSelector(getCurrentPageSelector);
     const pageLimit = useSelector(getPageLimitSelector);
-    const filter = useSelector(getFiletSelector);
+    const filter = useSelector(getFilterSelector);
     const accessError = useSelector(getUsersAccessErrorSelector);
     const apiError = useSelector(getApiErrorSelector);
     const usersApiError = useSelector(getUsersApiErrorSelector);
+    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(getRoles())
+        dispatch(getRoles());
         dispatch(getUsers(token || "", currentPage, pageLimit, filter));
     }, [dispatch, token, currentPage, pageLimit, filter]);
 
@@ -93,7 +94,8 @@ export const UsersContainer: React.FC = () => {
                 total={total}
                 currentPage={currentPage}
                 pageLimit={pageLimit}
-                accessError={accessError}
+                //accessError={accessError}
+                isDeletingInProcess={isDeletingInProcess}
                 setPageLimit={setPageLimitCallBack}
                 setCurrentPage={setCurrentPageCallBack}
                 setFilter={setFilterCallBack}

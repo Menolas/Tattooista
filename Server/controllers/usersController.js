@@ -192,7 +192,7 @@ class usersController {
     }
 
     async getUser(req, res) {
-        if (!req.hasRole) {
+        if (!req.isRightUser) {
             return res.status(403).json({ message: "You don't have permission" });
         }
 

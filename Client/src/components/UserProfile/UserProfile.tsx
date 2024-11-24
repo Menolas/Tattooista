@@ -6,15 +6,15 @@ import {API_URL} from "../../http";
 import {ModalPopUp} from "../common/ModalPopUp";
 import {Confirmation} from "../common/Confirmation";
 import {Tooltip} from "react-tooltip";
-import {ReactComponent as EditIcon} from "../../assets/svg/edit.svg";
-import {ReactComponent as TrashIcon} from "../../assets/svg/trash.svg";
+import {ReactComponent as EnvelopIcon} from "../../assets/svg/envelop.svg";
 import {UserType} from "../../types/Types";
 import {UpdateUserForm} from "../Forms/UpdateUserForm";
 
 type PropsType = {
     apiError: null | string;
-    data: UserType;
+    data: UserType | null;
     isDeletingPicturesInProcess: Array<string>;
+    possibleRoles: Array<{ _id: string, value: string }>;
     remove: () => void;
 }
 
@@ -22,6 +22,7 @@ export const UserProfile: React.FC<PropsType> = ({
     apiError,
     data,
     isDeletingPicturesInProcess,
+    possibleRoles,
     remove,
 
 }) => {
@@ -53,24 +54,39 @@ export const UserProfile: React.FC<PropsType> = ({
         return <div>Sorry, we can not find such a client in data base</div>
     }
 
+    console.log(JSON.stringify(data.roles));
+    console.log(JSON.stringify(possibleRoles + " possible roles"));
+
     return (
         <div className={"user-profile container"}>
-            <div className="admin__card admin__card--avatar profile">
-                <div className="admin__card-actions">
-                    <button
-                        data-tooltip-id="profile-tooltip"
-                        data-tooltip-content="Edit client info"
-                        className="btn btn--icon"
+            <aside className="user-profile__aside">
+                <div className="user-profile__avatar">
+                    {!data?.avatar
+                        ? <DefaultAvatar/>
+                        : <img src={`${API_URL}/users/${data._id}/avatar/${data.avatar}`} alt={data.displayName}/>
+                    }
+                </div>
+                <div className="user-profile__details">
+                    <div className={"user-profile__name"}>{data.displayName}</div>
+                    <ul className={"user-profile__roles"}>
+                        {/*{data.roles?.map((role) => {*/}
+                        {/*    const value = possibleRoles.forEach(possibleRole => possibleRole._id === role);*/}
+                        {/*        return (*/}
+                        {/*            <li key={role._id} className={"user-profile__role"}>{role.value}</li>*/}
+                        {/*        )*/}
+                        {/*})}*/}
+                    </ul>
+                </div>
+                <div className="user-profile__actions">
+                <button
+                        className="btn btn--sm btn--transparent"
                         onClick={() => {
                             setEditUserMode(true);
                         }}
-                    >
-                        <EditIcon/>
+                    >Edit Profile
                     </button>
                     <button
-                        data-tooltip-id="profile-tooltip"
-                        data-tooltip-content="Delete client"
-                        className="btn btn--icon"
+                        className="btn btn--sm btn--transparent"
                         disabled={isDeletingPicturesInProcess?.some(id => id === data._id)}
                         onClick={() => {
                             setConfirmationData({
@@ -80,27 +96,12 @@ export const UserProfile: React.FC<PropsType> = ({
                                 cb: remove
                             });
                         }}
-                    >
-                        <TrashIcon/>
+                    >Delete profile
                     </button>
                 </div>
-                <div className="admin__card-link">
-                    <div className="admin__card-avatar">
-                        {!data?.avatar
-                            ? <DefaultAvatar/>
-                            : <img src={`${API_URL}/users/${data._id}/avatar/${data.avatar}`} alt={data.displayName}/>
-                        }
-                    </div>
-                    <div className="admin__card-details">
-                        <div className={"admin__card-detail-item"}>
-                            <span className={"admin__card-data-type"}>Name:&nbsp;</span>
-                            <span className={"admin__card-data"}>{data.displayName}</span>
-                        </div>
-                        <div className={"admin__card-detail-item"}>
-                            <span className={"admin__card-data-type"}>Email:&nbsp;</span>
-                            <span className={"admin__card-data"}>{data.email}</span>
-                        </div>
-                    </div>
+                <div className={"user-profile__contact"}>
+                    <span className={"user-profile__contact-icon"}><EnvelopIcon /></span>
+                    <span className={"user-profile__contact-email"}>{data.email}</span>
                 </div>
                 <ModalPopUp
                     isOpen={editUserMode}
@@ -129,7 +130,23 @@ export const UserProfile: React.FC<PropsType> = ({
                     cancel={closeModal}
                 />
                 <Tooltip id="profile-tooltip"/>
-            </div>
+            </aside>
+            <section className="user-profile_content">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean
+                massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+                Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
+                imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
+                Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
+                porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat
+                a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam
+                ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas
+                tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed
+                ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante
+                tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet
+                orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis
+                magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
+            </section>
         </div>
     );
 };

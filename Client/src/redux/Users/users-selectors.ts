@@ -20,7 +20,7 @@ export const getIsFetching = (state: AppStateType) => {
     return state.users.isFetching;
 };
 
-export const getFiletSelector = (state: AppStateType) => {
+export const getFilterSelector = (state: AppStateType) => {
     return state.users.filter;
 };
 
@@ -34,10 +34,6 @@ export const getUsersApiErrorSelector = (state: AppStateType) => {
 
 export const getUsersAccessErrorSelector = (state: AppStateType) => {
     return state.users.accessError;
-};
-
-export const getUserProfileSelector = (state: AppStateType) => {
-    return state.users.profile;
 };
 
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {

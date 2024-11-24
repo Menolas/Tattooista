@@ -22,7 +22,6 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ROLES = 'SET_ROLES';
 const EDIT_USER = 'EDIT_USER';
 const ADD_USER = 'ADD_USER';
-const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_USERS_API_ERROR = 'SET_USERS_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 
@@ -32,7 +31,6 @@ const ADD_USER_SUCCESS = 'You successfully added new user!';
 
 const initialState = {
     users: [] as Array<UserType>,
-    profile: {} as UserType,
     roles: [] as Array<RoleType>,
     totalCount: 0 as number,
     isFetching: false as boolean,
@@ -126,12 +124,6 @@ export const usersReducer = (
                 totalCount: state.totalCount + 1,
             }
 
-            case SET_USER_PROFILE:
-                return {
-                    ...state,
-                    profile: action.user
-                }
-
         case SET_USERS_API_ERROR:
             return {
                 ...state,
@@ -163,19 +155,9 @@ type ActionsTypes =
     | SetSuccessModalAT
     | SetApiErrorAT
     | SetUsersApiErrorAT
-    | SetNeedReLoginAT
-    | SetUserProfileAT;
+    | SetNeedReLoginAT;
 
 //actions creators
-
-type SetUserProfileAT = {
-    type: typeof SET_USER_PROFILE;
-    user: UserType;
-};
-
-const setUserProfileAC = (user: UserType): SetUserProfileAT => ({
-    type: SET_USER_PROFILE, user
-});
 
 type SetUsersApiErrorAT = {
     type: typeof SET_USERS_API_ERROR;
@@ -250,12 +232,12 @@ export const setPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
     type: SET_PAGE_LIMIT, pageLimit
 });
 
-type DeleteUserAT = {
+export type DeleteUserAT = {
     type: typeof DELETE_USER;
     userId: string;
 };
 
-const deleteUserAC = (userId: string): DeleteUserAT => ({
+export const deleteUserAC = (userId: string): DeleteUserAT => ({
     type: DELETE_USER, userId
 });
 
@@ -394,32 +376,6 @@ export const deleteUser = (
     }
 };
 
-export const deleteUserFromProfile = (
-    token: string | null,
-    id: string,
-): ThunkType => async (
-    dispatch
-) => {
-    try {
-        dispatch(toggleIsDeletingInProcessAC(true, id));
-        const response = await usersAPI.deleteUser(token, id);
-        if (response.resultCode === ResultCodesEnum.Success) {
-            dispatch(deleteUserAC(id));
-            dispatch(setUsersApiErrorAC(null));
-            return true;
-        } else {
-            return false;
-        }
-    } catch (e) {
-        const error = e as ApiErrorType;
-        dispatch(setUsersApiErrorAC(error.response?.data?.message));
-        console.log(e);
-        return false;
-    } finally {
-        dispatch(toggleIsDeletingInProcessAC(false, id));
-    }
-};
-
 export const updateUser = (
     token: string | null,
     id: string,
@@ -463,26 +419,5 @@ export const addUser = (
         const error = e as ApiErrorType;
         dispatch(setApiErrorAC(error.response?.data?.message));
         return false;
-    }
-};
-
-export const getUserProfile = (
-    token: string | null,
-    userId: string
-): ThunkType => async (dispatch) => {
-    try {
-        dispatch(toggleIsFetchingAC(true));
-        const response = await usersAPI.getUserProfile(token, userId);
-        if (response.resultCode === ResultCodesEnum.Success) {
-            dispatch(setUserProfileAC(response.user));
-            return true;
-        } else {
-            return false;
-        }
-    } catch (e) {
-        console.log(e);
-        return false;
-    } finally {
-        dispatch(toggleIsFetchingAC(false));
     }
 };
