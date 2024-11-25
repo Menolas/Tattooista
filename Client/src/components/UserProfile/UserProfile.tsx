@@ -54,10 +54,10 @@ export const UserProfile: React.FC<PropsType> = ({
         return <div>Sorry, we can not find such a user in data base</div>
     }
     const getUserRoleValues = (userRoleIds: Array<string>, allRoles: Array<RoleType>) => {
-        return userRoleIds.map(userRoleId => {
+        return userRoleIds?.map(userRoleId => {
             const role = allRoles.find(role => role._id === userRoleId);
-            return role ? role.value : null; // Return the value or null if not found
-        }).filter(roleValue => roleValue !== null); // Filter out nulls if no match is found
+            return role ? role.value : null;
+        }).filter(roleValue => roleValue !== null);
     }
 
     const userRoleValues = getUserRoleValues(data?.roles, possibleRoles);
