@@ -1,9 +1,11 @@
 export type RoleType = {
     _id: string;
     value: string;
+    description?: string;
 }
 
 export type IUser = {
+    "_id": string;
     displayName: string | undefined;
     isActivated: boolean;
     roles: Array<string>;
@@ -16,7 +18,7 @@ export type UserType = {
     email: string;
     isActivated: boolean;
     avatar: string;
-    roles: Array<RoleType>;
+    roles: Array<any>;
 }
 
 export interface ContactType {
@@ -147,7 +149,7 @@ export interface UpdateUserFormValues {
     displayName: string;
     email: string;
     password?: string;
-    roles: { [key: string]: boolean };
+    roles?: { [key: string]: boolean };
     [key: string]: any;
 }
 

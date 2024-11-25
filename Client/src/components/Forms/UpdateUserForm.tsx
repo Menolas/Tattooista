@@ -65,7 +65,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 type PropsType = {
   apiError: string | null;
   isEditing: boolean;
-  roles: Array<RoleType>;
+  roles?: Array<RoleType>;
   data?: UserType | null;
   closeModal: () => void;
 };
@@ -103,7 +103,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
   const isEditingWithData = isEditing && data;
 
-  const rolesInitialValues = roles.reduce((acc, role) => {
+  const rolesInitialValues = roles?.reduce((acc, role) => {
     const isSelected = isEditingWithData ? data.roles.some(profileRole => profileRole._id === role._id) : false;
     return {
         ...acc,
@@ -159,7 +159,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     >
       {propsF => {
 
-        const rolesFields = roles.map((role) => {
+        const rolesFields = roles?.map((role) => {
           return (
               <FieldWrapper
                   key={role._id}

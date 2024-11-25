@@ -190,6 +190,23 @@ class usersController {
             res.status(400).json(results);
         }
     }
+
+    async getUser(req, res) {
+        if (!req.isRightUser) {
+            return res.status(403).json({ message: "You don't have permission" });
+        }
+
+        const results = {};
+        try {
+            results.resultCode = 0;
+            results.user = res.user;
+            res.json(results);
+        } catch (e) {
+            results.resultCode = 1;
+            results.message = e.message;
+            res.status(400).json(results);
+        }
+    }
 }
 
 module.exports = new usersController();

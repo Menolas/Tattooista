@@ -2,7 +2,6 @@ const tokenService = require('../services/tokenService');
 const Role = require("../models/Role");
 
 module.exports = function (roles) {
-  console.log("hit middleware!!");
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
       req.hasRole = false;

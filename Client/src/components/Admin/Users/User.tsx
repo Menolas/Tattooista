@@ -9,7 +9,7 @@ import {DefaultAvatar} from "../../common/DefaultAvatar";
 
 type PropsType = {
     data: UserType;
-    isDeletingInProcess?: Array<string>;
+    isDeletingInProcess: Array<string>;
     remove: (userId: string) => void;
     setEditMode: (mode: boolean) => void;
     setData: (user: UserType) => void;

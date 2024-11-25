@@ -19,7 +19,8 @@ type PropsType = {
     total: number;
     currentPage: number;
     pageLimit: number;
-    accessError: string | null;
+    //accessError: string | null;
+    isDeletingInProcess: Array<string>;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
     setFilter: (filter: SearchFilterType) => void;
@@ -36,6 +37,7 @@ export const Users: React.FC<PropsType> = React.memo(({
    total,
    currentPage,
    pageLimit,
+   isDeletingInProcess,
    setPageLimit,
    setCurrentPage,
    setFilter,
@@ -68,6 +70,7 @@ export const Users: React.FC<PropsType> = React.memo(({
             <User
                 key={data._id}
                 data={data}
+                isDeletingInProcess={isDeletingInProcess}
                 remove={remove}
                 setEditMode={setEditMode}
                 setData={setData}

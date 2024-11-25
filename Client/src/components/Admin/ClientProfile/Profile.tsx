@@ -131,7 +131,7 @@ export const Profile: React.FC<PropsType> = ({
                 data-tooltip-content="Edit client info"
                 className="btn btn--icon"
                 onClick={() => {
-                    setEditClientMode(true)
+                    setEditClientMode(true);
                 }}
             >
                 <EditIcon/>
@@ -165,6 +165,7 @@ export const Profile: React.FC<PropsType> = ({
                 data-tooltip-id="profile-tooltip"
                 data-tooltip-content="Delete client"
                 className="btn btn--icon"
+                disabled={isDeletingPicturesInProcess?.some(id => id === data._id)}
                 onClick={() => {
                     setConfirmationData({
                         needConfirmation: true,

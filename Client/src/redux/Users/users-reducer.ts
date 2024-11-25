@@ -232,12 +232,12 @@ export const setPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
     type: SET_PAGE_LIMIT, pageLimit
 });
 
-type DeleteUserAT = {
+export type DeleteUserAT = {
     type: typeof DELETE_USER;
     userId: string;
 };
 
-const deleteUserAC = (userId: string): DeleteUserAT => ({
+export const deleteUserAC = (userId: string): DeleteUserAT => ({
     type: DELETE_USER, userId
 });
 
