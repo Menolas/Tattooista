@@ -24,10 +24,22 @@ export  const getFromSelector = (state: AppStateType) => {
     return state.auth.from
 };
 
-export const getRolesSelector = (state: AppStateType) => {
-  return state.auth.roles
-};
+// export const getRolesSelector = (state: AppStateType) => {
+//   return state.auth.roles
+// };
 
 export const getNeedReLoginSelector = (state: AppStateType) => {
   return state.auth.needReLogin
 };
+
+export const getUserProfileSelector = (state: AppStateType) => {
+  return state.auth.profile;
+};
+
+export const getIsDeletingInProcessSelector = (state: AppStateType) => {
+    return state.auth.isDeletingInProcess;
+};
+
+export const getAuthAccessErrorSelector = (state: AppStateType) => {
+    return state.auth.accessError;
+}

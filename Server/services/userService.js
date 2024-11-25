@@ -35,6 +35,7 @@ class UserService {
         return {
             ...tokens,
             user: {
+                _id: userDto.id,
                 displayName: userDto.displayName,
                 isActivated: userDto.isActivated,
                 roles: userDto.roles,
@@ -85,6 +86,7 @@ class UserService {
         return {
             ...tokens,
             user: {
+                _id: userDto.id,
                 displayName: userDto.displayName,
                 isActivated: userDto.isActivated,
                 roles: userDto.roles,
@@ -118,6 +120,7 @@ class UserService {
             ...tokens,
             isAuth: true,
             user: {
+                _id: userDto.id,
                 displayName: userDto.displayName,
                 isActivated: userDto.isActivated,
                 roles: userDto.roles,

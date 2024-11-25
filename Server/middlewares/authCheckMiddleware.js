@@ -1,10 +1,10 @@
 const tokenService = require('../services/tokenService');
-const Role = require("../models/Role");
 
-module.exports = function (roles) {
+module.exports = function (id) {
   return async function (req, res, next) {
+
     if (req.method === "OPTIONS") {
-      req.hasRole = false;
+      req.isRightUser = false;
       next();
       return;
     }
@@ -13,19 +13,13 @@ module.exports = function (roles) {
         ? req.headers.authorization?.split(' ')[1]
         :  null;
 
-    const roleObjectPromises = roles.map(async role => {
-      const roleObject = await Role.findOne({ value: role });
-      return roleObject._id;
-    });
-    const roleIds = await Promise.all(roleObjectPromises);
-    let hasRole = false;
-    let userRoles = [];
+    let isRightUser = false;
 
     try {
       if(token) {
         const data = tokenService.validateAccessToken(token);
-        if (data) {
-          userRoles = data.roles;
+        if (data && data.id === id) {
+          isRightUser = true;
         } else {
           token = null;
         }
@@ -33,29 +27,21 @@ module.exports = function (roles) {
 
       if (!token || token === 'null') {
         const { refreshToken } = req.cookies;
-
         if (!refreshToken) {
-          req.hasRole = false;
+          req.isRightUser = false;
           return res.status(401).json({ message: "Access denied, no valid tokens found" });
         }
 
         const userData = await tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (userData && tokenFromDb) {
-          userRoles = userData.roles;
+        if (userData.id === id && tokenFromDb) {
+          isRightUser = true;
         } else {
           return res.status(401).json({ message: "Failed to validate refresh token" });
         }
       }
 
-      userRoles?.forEach(role => {
-        roleIds.forEach(roleId => {
-          if (roleId.toString() === role) {
-            hasRole = true;
-          }
-        });
-      });
-      req.hasRole = hasRole;
+      req.isRightUser = isRightUser;
       next();
 
     } catch (e) {
