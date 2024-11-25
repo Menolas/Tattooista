@@ -7,14 +7,14 @@ import {ModalPopUp} from "../common/ModalPopUp";
 import {Confirmation} from "../common/Confirmation";
 import {Tooltip} from "react-tooltip";
 import {ReactComponent as EnvelopIcon} from "../../assets/svg/envelop.svg";
-import {UserType} from "../../types/Types";
+import {RoleType, UserType} from "../../types/Types";
 import {UpdateUserForm} from "../Forms/UpdateUserForm";
 
 type PropsType = {
     apiError: null | string;
     data: UserType | null;
     isDeletingPicturesInProcess: Array<string>;
-    possibleRoles: Array<{ _id: string, value: string }>;
+    possibleRoles: Array<RoleType>;
     remove: () => void;
 }
 
@@ -51,11 +51,16 @@ export const UserProfile: React.FC<PropsType> = ({
     }
 
     if (!data) {
-        return <div>Sorry, we can not find such a client in data base</div>
+        return <div>Sorry, we can not find such a user in data base</div>
+    }
+    const getUserRoleValues = (userRoleIds: Array<string>, allRoles: Array<RoleType>) => {
+        return userRoleIds.map(userRoleId => {
+            const role = allRoles.find(role => role._id === userRoleId);
+            return role ? role.value : null; // Return the value or null if not found
+        }).filter(roleValue => roleValue !== null); // Filter out nulls if no match is found
     }
 
-    console.log(JSON.stringify(data.roles));
-    console.log(JSON.stringify(possibleRoles + " possible roles"));
+    const userRoleValues = getUserRoleValues(data?.roles, possibleRoles);
 
     return (
         <div className={"user-profile container"}>
@@ -69,12 +74,7 @@ export const UserProfile: React.FC<PropsType> = ({
                 <div className="user-profile__details">
                     <div className={"user-profile__name"}>{data.displayName}</div>
                     <ul className={"user-profile__roles"}>
-                        {/*{data.roles?.map((role) => {*/}
-                        {/*    const value = possibleRoles.forEach(possibleRole => possibleRole._id === role);*/}
-                        {/*        return (*/}
-                        {/*            <li key={role._id} className={"user-profile__role"}>{role.value}</li>*/}
-                        {/*        )*/}
-                        {/*})}*/}
+                        {userRoleValues?.map(role => <li>{role}</li>)}
                     </ul>
                 </div>
                 <div className="user-profile__actions">
@@ -92,7 +92,7 @@ export const UserProfile: React.FC<PropsType> = ({
                             setConfirmationData({
                                 needConfirmation: true,
                                 itemId: data._id,
-                                context: 'Are you sure? You about to delete this client FOREVER along with all data...',
+                                context: 'Are you sure? You about to delete your profile FOREVER along with all data...',
                                 cb: remove
                             });
                         }}

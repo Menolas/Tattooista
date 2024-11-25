@@ -3835,8 +3835,9 @@ input[type=checkbox][value=true] + label .checkbox::after {
   }
 }
 .user-profile {
-  padding-top: 180px;
+  padding-top: 100px;
   display: flex;
+  flex-direction: column;
 }
 .user-profile .user-profile__aside {
   flex: 0 0 336px;
@@ -3883,8 +3884,16 @@ input[type=checkbox][value=true] + label .checkbox::after {
   height: 100%;
 }
 .user-profile .user-profile_content {
+  margin: 1.5rem;
   padding: 1.5rem;
   border: 1px solid #fafafa;
+}
+
+@media (min-width: 900px) {
+  .user-profile {
+    padding-top: 180px;
+    flex-direction: row;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

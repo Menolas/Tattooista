@@ -1,6 +1,7 @@
 .user-profile {
-  padding-top: 180px;
+  padding-top: 100px;
   display: flex;
+  flex-direction: column;
 
   .user-profile__aside {
     flex: 0 0 336px;
@@ -56,7 +57,15 @@
   }
 
   .user-profile_content {
+    margin: 1.5rem;
     padding: 1.5rem;
     border: 1px solid $light;
+  }
+}
+
+@media (min-width: 900px) {
+  .user-profile {
+    padding-top: 180px;
+    flex-direction: row;
   }
 }
