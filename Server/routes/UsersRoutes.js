@@ -23,14 +23,19 @@ router.get('/', authRoleMiddleware(["SUPERADMIN"]), controller.getUsers);
 // delete user
 router.delete('/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.deleteUser);
 
+// delete user from profile
+router.delete('/profile/:id', authCheckMiddleware(["SUPERADMIN"]), getUser, controller.deleteUser);
+
 //update user
-router.post('/edit/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.updateUser);
+router.post('/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.updateUser);
+
+//update user
+router.post('/profile/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.updateUser);
 
 //creating user
 router.post('/', authRoleMiddleware(["SUPERADMIN"]), controller.addUser);
 
 //getting one user
-
 router.get('/:id', dynamicAuthCheckMiddleware(), getUser, controller.getUser);
 
 async function getUser(req, res, next) {
