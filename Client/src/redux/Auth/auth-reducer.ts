@@ -376,9 +376,9 @@ export const deleteUserFromProfile = (
 ) => {
     try {
         dispatch(toggleIsDeletingInProcessAC(true, id));
-        const response = await usersAPI.deleteUser(token, id);
+        const response = await usersAPI.deleteUserFromProfile(token, id);
         if (response.resultCode === ResultCodesEnum.Success) {
-            dispatch(logout());
+            await dispatch(logout());
             dispatch(deleteUserAC(id));
             dispatch(setUsersApiErrorAC(null));
             return true;

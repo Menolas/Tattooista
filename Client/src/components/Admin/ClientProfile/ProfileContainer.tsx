@@ -9,7 +9,10 @@ import {
 } from "../../../redux/Clients/clients-reducer";
 import { Profile } from "./Profile";
 import {
-  getClientProfileSelector, getClientsApiErrorSelector, getClientsIsFavouriteChangingInProcessSelector,
+  getClientProfileSelector,
+  getClientsApiErrorSelector,
+  getClientsIsFavouriteChangingInProcessSelector,
+  getClientsIsFetchingSelector,
   getIsDeletingPicturesInProcess,
 } from "../../../redux/Clients/clients-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
@@ -17,6 +20,7 @@ import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../../redux/redux-store";
+import {Preloader} from "../../common/Preloader";
 
 export const ProfileContainer: React.FC = () => {
 
@@ -26,6 +30,7 @@ export const ProfileContainer: React.FC = () => {
   const apiError = useSelector(getApiErrorSelector);
   const clientApiError = useSelector(getClientsApiErrorSelector);
   const token = useSelector(getTokenSelector);
+  const isFetching = useSelector(getClientsIsFetchingSelector);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -61,16 +66,19 @@ export const ProfileContainer: React.FC = () => {
 
   return (
     <>
-      <Profile
-        key={profile._id + profile.isFavourite}
-        apiError={clientApiError}
-        data={profile}
-        isDeletingPicturesInProcess={isDeletingPicturesInProcess}
-        isFavouriteChangingInProcess={isFavouriteChangingInProcess}
-        toggleIsFavourite={toggleIsFavouriteCallBack}
-        remove={deleteClientCallBack}
-        archive={archiveClientCallBack}
-      />
+      {isFetching
+        ? <Preloader />
+        : <Profile
+              key={profile._id + profile.isFavourite}
+              apiError={clientApiError}
+              data={profile}
+              isDeletingPicturesInProcess={isDeletingPicturesInProcess}
+              isFavouriteChangingInProcess={isFavouriteChangingInProcess}
+              toggleIsFavourite={toggleIsFavouriteCallBack}
+              remove={deleteClientCallBack}
+              archive={archiveClientCallBack}
+          />
+      }
       {apiError &&
           <ApiErrorMessageModal
               isOpen={!!apiError}

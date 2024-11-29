@@ -13,13 +13,17 @@ import {
   getCurrentPageSelector,
   getPageSizeSelector,
   getBookingsSelector,
-  getFilterSelector, getIsDeletingInProcessSelector, getIsStatusChangingSelector,
+  getFilterSelector,
+  getIsDeletingInProcessSelector,
+  getIsStatusChangingSelector,
+  getIsFetchingSelector,
 } from "../../../redux/Bookings/bookings-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../../redux/redux-store";
+import {Preloader} from "../../common/Preloader";
 
 export const BookingProfileContainer: React.FC = () => {
 
@@ -32,6 +36,7 @@ export const BookingProfileContainer: React.FC = () => {
   const apiError = useSelector(getApiErrorSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const isStatusChanging = useSelector(getIsStatusChangingSelector);
+  const isFetching = useSelector(getIsFetchingSelector);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -111,15 +116,18 @@ export const BookingProfileContainer: React.FC = () => {
 
   return (
     <>
-      <BookingProfile
-        data={bookingProfile}
-        isDeletingInProcess={isDeletingInProcess}
-        isStatusChanging={isStatusChanging}
-        changeStatus={changeStatusCallBack}
-        turnBookingToClient={turnBookingToClientCallBack}
-        remove={deleteBookingCallBack}
-        archive={archiveBookingCallBack}
-      />
+      {isFetching
+        ? <Preloader />
+        : <BookingProfile
+              data={bookingProfile}
+              isDeletingInProcess={isDeletingInProcess}
+              isStatusChanging={isStatusChanging}
+              changeStatus={changeStatusCallBack}
+              turnBookingToClient={turnBookingToClientCallBack}
+              remove={deleteBookingCallBack}
+              archive={archiveBookingCallBack}
+          />
+      }
       {apiError &&
           <ApiErrorMessageModal
               isOpen={!!apiError}

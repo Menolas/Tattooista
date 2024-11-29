@@ -42,4 +42,8 @@ export const getIsDeletingInProcessSelector = (state: AppStateType) => {
 
 export const getAuthAccessErrorSelector = (state: AppStateType) => {
     return state.auth.accessError;
-}
+};
+
+export const getIsFetchingSelector = (state: AppStateType) => {
+    return state.auth.isFetching;
+};
