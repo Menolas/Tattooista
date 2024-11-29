@@ -15,11 +15,13 @@ import {
   getIsDeletingInProcessSelector,
   getUserSelector,
   getAuthAccessErrorSelector,
+  getIsFetchingSelector,
 } from "../../redux/Auth/auth-selectors";
 import {setApiErrorAC} from "../../redux/General/general-reducer";
 import {AppDispatch} from "../../redux/redux-store";
 import {getRolesSelector} from "../../redux/Users/users-selectors";
 import {getRoles} from "../../redux/Users/users-reducer";
+import {Preloader} from "../common/Preloader";
 
 export const UserProfileContainer: React.FC = () => {
 
@@ -30,6 +32,7 @@ export const UserProfileContainer: React.FC = () => {
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAuthAccessErrorSelector);
   const roles = useSelector(getRolesSelector);
+  const isFetching = useSelector(getIsFetchingSelector);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -66,21 +69,24 @@ export const UserProfileContainer: React.FC = () => {
   };
 
   return (
-      <>
-          <UserProfile
-              apiError={apiError}
-              data={profile}
-              isDeletingPicturesInProcess={isDeletingInProcess}
-              possibleRoles={roles}
-              remove={deleteUserCallBack}
-          />
-          {apiError &&
-              <ApiErrorMessageModal
-                  isOpen={!!apiError}
-                  error={apiError}
-                  closeModal={setApiErrorCallBack}
-              />
-          }
-      </>
+    <>
+      {isFetching
+        ? <Preloader />
+        : <UserProfile
+            apiError={apiError}
+            data={profile}
+            isDeletingPicturesInProcess={isDeletingInProcess}
+            possibleRoles={roles}
+            remove={deleteUserCallBack}
+        />
+      }
+      {apiError &&
+        <ApiErrorMessageModal
+            isOpen={!!apiError}
+            error={apiError}
+            closeModal={setApiErrorCallBack}
+        />
+      }
+    </>
   );
 };

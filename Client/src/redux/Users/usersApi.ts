@@ -21,8 +21,9 @@ type AddUserResponseType = UpdateUserResponseType;
 export const usersAPI = {
 
     async getRoles() {
-        return await $api.get<GetRolesResponseType>('users/roles')
-            .then(response => response.data);
+        return await $api.get<GetRolesResponseType>(
+            'users/roles'
+        ).then(response => response.data);
     },
 
     async getUsers(
@@ -34,8 +35,7 @@ export const usersAPI = {
         return await $api.get<GetUsersResponseType>(
             `users?&page=${currentPage}&limit=${pageSize}&term=${filter.term}&role=${filter.condition}`,
             { headers: { Authorization: `Bearer ${token}` } }
-        )
-                .then(response => response.data);
+        ).then(response => response.data);
     },
 
     async deleteUser(
@@ -45,8 +45,17 @@ export const usersAPI = {
         return await $api.delete<DeleteUserResponseType>(
             `users/${userId}`,
             { headers: { Authorization: `Bearer ${token}` } }
-        )
-            .then(response => response.data);
+        ).then(response => response.data);
+    },
+
+    async deleteUserFromProfile(
+        token: string | null,
+        userId: string
+    ) {
+        return await $api.delete<DeleteUserResponseType>(
+            `users/profile/${userId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        ).then(response => response.data);
     },
 
     async updateUser(
@@ -55,11 +64,22 @@ export const usersAPI = {
         values: FormData
     ) {
         return await $api.post<UpdateUserResponseType>(
-            `users/edit/${userId}`,
+            `users/${userId}`,
             values,
             { headers: { Authorization: `Bearer ${token}` } }
-        )
-            .then(response => response.data);
+        ).then(response => response.data);
+    },
+
+    async updateUserFromProfile(
+        token: string | null,
+        userId: string,
+        values: FormData
+    ) {
+        return await $api.post<UpdateUserResponseType>(
+            `users/profile/${userId}`,
+            values,
+            { headers: { Authorization: `Bearer ${token}` } }
+        ).then(response => response.data);
     },
 
     async addUser(
@@ -70,7 +90,6 @@ export const usersAPI = {
             'users',
             values,
             { headers: { Authorization: `Bearer ${token}` } }
-        )
-            .then(response => response.data);
+        ).then(response => response.data);
     },
 };

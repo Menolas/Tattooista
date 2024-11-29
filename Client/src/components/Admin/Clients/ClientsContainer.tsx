@@ -12,9 +12,9 @@ import {
   toggleFavourite,
 } from "../../../redux/Clients/clients-reducer";
 import {
-  getClientsIsFetching,
-  getTotalClientsCount,
-  getCurrentClientsPage,
+  getClientsIsFetchingSelector,
+  getTotalClientsCountSelector,
+  getCurrentClientsPageSelector,
   getClientsSelector,
   getIsClientDeletingInProcessSelector,
   getClientsFilterSelector,
@@ -34,9 +34,9 @@ import {AppDispatch} from "../../../redux/redux-store";
 
 export const ClientsContainer: React.FC = () => {
 
-  const isFetching = useSelector(getClientsIsFetching);
-  const currentPage = useSelector(getCurrentClientsPage);
-  const totalCount = useSelector(getTotalClientsCount);
+  const isFetching = useSelector(getClientsIsFetchingSelector);
+  const currentPage = useSelector(getCurrentClientsPageSelector);
+  const totalCount = useSelector(getTotalClientsCountSelector);
   const pageSize = useSelector(getClientsPageSizeSelector);
   const clients = useSelector(getClientsSelector);
   const filter = useSelector(getClientsFilterSelector);

@@ -12,15 +12,15 @@ export const getClientsPageSizeSelector = (state: AppStateType) => {
   return state.clients.pageSize;
 };
 
-export const getTotalClientsCount = (state: AppStateType) => {
+export const getTotalClientsCountSelector = (state: AppStateType) => {
   return state.clients.total;
 };
 
-export const getCurrentClientsPage = (state: AppStateType) => {
+export const getCurrentClientsPageSelector = (state: AppStateType) => {
   return state.clients.clientsCurrentPage;
 };
 
-export const getClientsIsFetching = (state: AppStateType) => {
+export const getClientsIsFetchingSelector = (state: AppStateType) => {
   return state.clients.isFetching;
 };
 
