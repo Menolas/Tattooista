@@ -1,35 +1,35 @@
 import { AppStateType } from "../redux-store"
 
 export const getAuthSelector = (state: AppStateType) => {
-  return state.auth.isAuth
+  return state.auth.isAuth;
 }
 
 export const getTokenSelector = (state: AppStateType) => {
-  return state.auth.token
+  return state.auth.token;
 }
 
 export const getUserSelector = (state: AppStateType) => {
-  return state.auth.user
+  return state.auth.user;
 }
 
-export const getAuthApiErrorSelector = (state: AppStateType) => {
-  return state.auth.authApiError
+// export const getAuthApiErrorSelector = (state: AppStateType) => {
+//   return state.auth.authApiError;
+// };
+
+export const getRegistrationApiErrorSelector = (state: AppStateType) => {
+    return state.auth.registrationApiError;
 };
 
 export const getLoginErrorSelector = (state: AppStateType) => {
-  return state.auth.loginError
+  return state.auth.loginError;
 };
 
 export  const getFromSelector = (state: AppStateType) => {
-    return state.auth.from
+    return state.auth.from;
 };
 
-// export const getRolesSelector = (state: AppStateType) => {
-//   return state.auth.roles
-// };
-
 export const getNeedReLoginSelector = (state: AppStateType) => {
-  return state.auth.needReLogin
+  return state.auth.needReLogin;
 };
 
 export const getUserProfileSelector = (state: AppStateType) => {

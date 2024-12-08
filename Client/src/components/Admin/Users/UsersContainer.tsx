@@ -9,7 +9,7 @@ import {
     setCurrentPageAC,
     setUsersFilterAC,
     setPageLimitAC,
-    setUsersApiErrorAC,
+    setUsersApiErrorAC, setUserUpdateErrorAC,
 } from "../../../redux/Users/users-reducer";
 import {
     getRolesSelector,
@@ -20,7 +20,7 @@ import {
     getUsersSelector,
     getTotalCountSelector,
     getUsersApiErrorSelector,
-    getUsersAccessErrorSelector, getIsDeletingInProcessSelector,
+    getUsersAccessErrorSelector, getIsDeletingInProcessSelector, getUserUpdateErrorSelector,
 } from "../../../redux/Users/users-selectors";
 import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../types/Types";
@@ -41,7 +41,7 @@ export const UsersContainer: React.FC = () => {
     const pageLimit = useSelector(getPageLimitSelector);
     const filter = useSelector(getFilterSelector);
     const accessError = useSelector(getUsersAccessErrorSelector);
-    const apiError = useSelector(getApiErrorSelector);
+    const userUpdateError = useSelector(getUserUpdateErrorSelector);
     const usersApiError = useSelector(getUsersApiErrorSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
 
@@ -75,8 +75,8 @@ export const UsersContainer: React.FC = () => {
         dispatch(deleteUser(token || "", userId, users, currentPage, pageLimit, filter));
     };
 
-    const setApiErrorCallBack = () => {
-        dispatch(setApiErrorAC(null));
+    const setUserUpdateErrorCallBack = () => {
+        dispatch(setUserUpdateErrorAC(null));
     };
 
     const setUsersApiErrorCallBack = () => {
@@ -86,7 +86,7 @@ export const UsersContainer: React.FC = () => {
     return (
         <>
             <Users
-                apiError={apiError}
+                userUpdateError={userUpdateError}
                 roles={roles}
                 users={users}
                 filter={filter}
@@ -100,7 +100,7 @@ export const UsersContainer: React.FC = () => {
                 setCurrentPage={setCurrentPageCallBack}
                 setFilter={setFilterCallBack}
                 remove={removeCallBack}
-                setApiError={setApiErrorCallBack}
+                setUserUpdateError={setUserUpdateErrorCallBack}
             />
             {usersApiError &&
                 <ApiErrorMessageModal

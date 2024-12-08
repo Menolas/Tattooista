@@ -7,9 +7,15 @@ const User = require("../models/User");
 
 function dynamicAuthCheckMiddleware() {
     return (req, res, next) => {
-        const userId = req.params.id; // Extract `id` dynamically
-        const middleware = authCheckMiddleware(userId); // Call the original middleware with `userId`
-        middleware(req, res, next); // Execute it as a middleware
+        const userId = req.params.id;
+        console.log(req.params.id + " here is the id");
+        if(userId !== null) {
+            const middleware = authCheckMiddleware(userId);
+            middleware(req, res, next);
+        } else {
+            return res.status(404).json({ message: 'Cannot find user' });
+        }
+
     };
 }
 
@@ -24,18 +30,18 @@ router.get('/', authRoleMiddleware(["SUPERADMIN"]), controller.getUsers);
 router.delete('/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.deleteUser);
 
 // delete user from profile
-router.delete('/profile/:id', authCheckMiddleware(["SUPERADMIN"]), getUser, controller.deleteUser);
+router.delete('/profile/:id', dynamicAuthCheckMiddleware(), getUser, controller.deleteUser);
 
 //update user
 router.post('/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.updateUser);
 
 //update user
-router.post('/profile/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.updateUser);
+router.post('/profile/:id', dynamicAuthCheckMiddleware(), getUser, controller.updateUser);
 
 //creating user
 router.post('/', authRoleMiddleware(["SUPERADMIN"]), controller.addUser);
 
-//getting one user
+//getting user profile
 router.get('/:id', dynamicAuthCheckMiddleware(), getUser, controller.getUser);
 
 async function getUser(req, res, next) {

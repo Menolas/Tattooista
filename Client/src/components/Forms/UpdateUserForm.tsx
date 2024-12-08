@@ -63,6 +63,7 @@ const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
 };
 
 type PropsType = {
+  fromProfile: boolean;
   apiError: string | null;
   isEditing: boolean;
   roles?: Array<RoleType>;
@@ -71,6 +72,7 @@ type PropsType = {
 };
 
 export const UpdateUserForm: React.FC<PropsType> = React.memo(({
+  fromProfile,
   apiError,
   isEditing,
   roles,
@@ -139,7 +141,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
     let success;
     if (isEditing && data) {
-      success = await dispatch(updateUser(token, data._id, formData));
+      success = await dispatch(updateUser(fromProfile, token, data._id, formData));
     } else {
       success = await dispatch(addUser(token, formData));
     }

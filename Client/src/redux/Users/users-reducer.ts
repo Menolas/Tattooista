@@ -9,7 +9,7 @@ import {
     SetSuccessModalAT,
     setApiErrorAC,
     SetApiErrorAT} from "../General/general-reducer";
-import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
+import {setNeedReLoginAC, SetNeedReLoginAT, setUserProfileAC, SetUserProfileAT} from "../Auth/auth-reducer";
 import {AnyAction} from "redux";
 
 const SET_USERS = 'SET_USERS';
@@ -24,6 +24,7 @@ const EDIT_USER = 'EDIT_USER';
 const ADD_USER = 'ADD_USER';
 const SET_USERS_API_ERROR = 'SET_USERS_API_ERROR';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+const SET_USER_UPDATE_ERROR = 'SET_USER_UPDATE_ERROR';
 
 const UPDATE_USER_SUCCESS = 'You successfully updated user info!';
 const ADD_USER_SUCCESS = 'You successfully added new user!';
@@ -42,6 +43,7 @@ const initialState = {
         condition: 'any'
     } as SearchFilterType,
     usersApiError: null as string | null,
+    userUpdateError: null as string | null,
     accessError: null as string | null,
 };
 
@@ -130,6 +132,12 @@ export const usersReducer = (
                 usersApiError: action.error
             }
 
+        case SET_USER_UPDATE_ERROR:
+        return {
+            ...state,
+            userUpdateError: action.error
+        }
+
         case SET_ACCESS_ERROR:
             return {
                 ...state,
@@ -155,9 +163,20 @@ type ActionsTypes =
     | SetSuccessModalAT
     | SetApiErrorAT
     | SetUsersApiErrorAT
-    | SetNeedReLoginAT;
+    | SetNeedReLoginAT
+    | SetUserUpdateErrorAT
+    | SetUserProfileAT;
 
 //actions creators
+
+type SetUserUpdateErrorAT = {
+    type: typeof SET_USER_UPDATE_ERROR;
+    error: string | null;
+};
+
+export const setUserUpdateErrorAC = (error: string | null): SetUserUpdateErrorAT => ({
+    type: SET_USER_UPDATE_ERROR, error
+});
 
 type SetUsersApiErrorAT = {
     type: typeof SET_USERS_API_ERROR;
@@ -377,16 +396,20 @@ export const deleteUser = (
 };
 
 export const updateUser = (
+    fromProfile: boolean,
     token: string | null,
     id: string,
     values: FormData
 ): ThunkType => async (dispatch) => {
     try {
         dispatch(toggleIsFetchingAC(true));
-        const response = await usersAPI.updateUser(token, id, values);
+        const response = !fromProfile ? await usersAPI.updateUser(token, id, values) : await usersAPI.updateUserFromProfile(token, id, values);
         if (response.resultCode === ResultCodesEnum.Success) {
+            if (fromProfile) {
+                dispatch(setUserProfileAC(response.user));
+            }
             dispatch(editUserAC(response.user));
-            dispatch(setApiErrorAC(null));
+            dispatch(setUserUpdateErrorAC(null));
             dispatch(setSuccessModalAC(true, UPDATE_USER_SUCCESS));
             return true;
         } else {
@@ -394,7 +417,7 @@ export const updateUser = (
         }
     } catch (e) {
         const error = e as ApiErrorType;
-        dispatch(setApiErrorAC(error.response?.data?.message));
+        dispatch(setUserUpdateErrorAC(error.response?.data?.message));
         return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
