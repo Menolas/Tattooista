@@ -48,7 +48,7 @@ export const UserProfileContainer: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if(profile) navigate(`?userId=${profile._id}`);
+    if(profile._id) navigate(`?userId=${profile._id}`);
   }, [profile, navigate]);
 
   useEffect(() => {

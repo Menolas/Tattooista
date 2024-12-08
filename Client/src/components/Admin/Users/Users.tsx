@@ -11,7 +11,7 @@ import {UpdateUserForm} from "../../Forms/UpdateUserForm";
 import {ModalPopUp} from "../../common/ModalPopUp";
 
 type PropsType = {
-    apiError: null | string;
+    userUpdateError: null | string;
     roles: Array<RoleType>;
     users: Array<UserType>;
     filter: SearchFilterType;
@@ -25,11 +25,11 @@ type PropsType = {
     setCurrentPage: (page: number) => void;
     setFilter: (filter: SearchFilterType) => void;
     remove: (userId: string) => void;
-    setApiError: () => void;
+    setUserUpdateError: () => void;
 }
 
 export const Users: React.FC<PropsType> = React.memo(({
-   apiError,
+   userUpdateError,
    roles,
    users,
    filter,
@@ -42,7 +42,7 @@ export const Users: React.FC<PropsType> = React.memo(({
    setCurrentPage,
    setFilter,
    remove,
-   setApiError,
+   setUserUpdateError,
 }) => {
 
     const [addUserMode, setAddMode] = useState<boolean>(false);
@@ -53,8 +53,8 @@ export const Users: React.FC<PropsType> = React.memo(({
         setAddMode(false);
         setEditMode(false);
         setData(null);
-        setApiError();
-    }, [setApiError]);
+        setUserUpdateError();
+    }, [setUserUpdateError]);
 
     // useEffect(() => {
     //     if ((addUserMode || editUserMode) && apiError === null) {
@@ -120,7 +120,8 @@ export const Users: React.FC<PropsType> = React.memo(({
             >
                 {(addUserMode || editUserMode) &&
                     <UpdateUserForm
-                        apiError={apiError}
+                        fromProfile={false}
+                        apiError={userUpdateError}
                         isEditing={editUserMode}
                         data={data}
                         roles={roles}

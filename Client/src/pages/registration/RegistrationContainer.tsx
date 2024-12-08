@@ -8,7 +8,7 @@ import {setSuccessModalAC} from "../../redux/General/general-reducer";
 import {
     getAuthSelector,
     getUserSelector,
-    getAuthApiErrorSelector
+    getRegistrationApiErrorSelector
 } from "../../redux/Auth/auth-selectors";
 import {SuccessPopUp} from "../../components/common/SuccessPopUp";
 import {useCallback, useEffect} from "react";
@@ -19,7 +19,7 @@ export const RegistrationContainer: React.FC = () => {
     const isAuth = useSelector(getAuthSelector);
     const user = useSelector(getUserSelector);
     const successModal = useSelector(getSuccessModalSelector);
-    const authApiError = useSelector(getAuthApiErrorSelector);
+    const authApiError = useSelector(getRegistrationApiErrorSelector);
 
     const dispatch = useDispatch<AppDispatch>();
 
