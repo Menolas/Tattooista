@@ -26,7 +26,6 @@ import {Preloader} from "../common/Preloader";
 export const UserProfileContainer: React.FC = () => {
 
   const apiError = useSelector(getApiErrorSelector);
-  const user = useSelector(getUserSelector);
   const profile = useSelector(getUserProfileSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const token = useSelector(getTokenSelector);
@@ -42,8 +41,8 @@ export const UserProfileContainer: React.FC = () => {
     let actualId: string | null = profile?._id;
     if (urlParams.get('userId')) actualId = urlParams.get('userId');
     if (actualId) {
-      dispatch(getUserProfile(token, actualId));
       dispatch(getRoles());
+      dispatch(getUserProfile(token, actualId, roles));
     }
   }, [dispatch]);
 

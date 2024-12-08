@@ -113,6 +113,7 @@ export const UserProfile: React.FC<PropsType> = ({
                             fromProfile={true}
                             apiError={apiError}
                             isEditing={editUserMode}
+                            roles={possibleRoles}
                             data={data}
                             closeModal={closeModal}
                         />

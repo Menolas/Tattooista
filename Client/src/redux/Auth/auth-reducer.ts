@@ -117,7 +117,8 @@ export const authReducer = (
           return {
               ...state,
               profile: action.user,
-              user: action.user
+              user: action.user,
+              isAuth: action.role
           }
 
       case TOGGLE_IS_DELETING_IN_PROCESS:
@@ -186,10 +187,14 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
 export type SetUserProfileAT = {
     type: typeof SET_USER_PROFILE;
     user: UserType;
+    role: string;
 };
 
-export const setUserProfileAC = (user: UserType): SetUserProfileAT => ({
-    type: SET_USER_PROFILE, user
+export const setUserProfileAC = (
+    user: UserType,
+    role: string
+): SetUserProfileAT => ({
+    type: SET_USER_PROFILE, user, role
 });
 
 type ToggleIsFetchingAT = {
@@ -362,14 +367,15 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
 
 export const getUserProfile = (
     token: string | null,
-    userId: string
+    userId: string,
+    roles: Array<RoleType>
 ): ThunkType => async (dispatch) => {
 
     try {
         dispatch(toggleIsFetchingAC(true));
         const response = await authAPI.getUserProfile(token, userId);
         if (response.resultCode === ResultCodesEnum.Success) {
-            dispatch(setUserProfileAC(response.user));
+            dispatch(setUserProfileAC(response.user, getUserRole(response.user.roles, roles)));
             return true;
         } else {
             return false;
