@@ -20,8 +20,9 @@ import {
 } from "../../redux/Users/users-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import {handleEnterClick} from "../../utils/functions";
-import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {getAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../redux/redux-store";
+import {SUPER_ADMIN} from "../../utils/constants";
 
 const getValidationSchema = (isEditing: boolean, hasNewFile: boolean) => {
   let schema = Yup.object().shape({
@@ -66,7 +67,7 @@ type PropsType = {
   fromProfile: boolean;
   apiError: string | null;
   isEditing: boolean;
-  roles?: Array<RoleType>;
+  roles: Array<RoleType>;
   data?: UserType | null;
   closeModal: () => void;
 };
@@ -80,6 +81,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   closeModal,
 }) => {
   const token = useSelector(getTokenSelector);
+  const isAuth = useSelector(getAuthSelector);
   const [hasNewFile, setHasNewFile] = useState(false);
   const validationSchema = getValidationSchema(isEditing, hasNewFile);
   const [imageURL, setImageURL] = useState('');
@@ -141,7 +143,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
     let success;
     if (isEditing && data) {
-      success = await dispatch(updateUser(fromProfile, token, data._id, formData));
+      success = await dispatch(updateUser(fromProfile, token, roles, data._id, formData));
     } else {
       success = await dispatch(addUser(token, formData));
     }
@@ -248,7 +250,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                   handleEnterClick(event, propsF.handleSubmit)
                 }}
             />
-            { rolesFields }
+            { (isAuth && isAuth === SUPER_ADMIN) && rolesFields }
             { !!apiError &&
                 <ApiErrorMessage message={apiError}/>
             }

@@ -27,6 +27,7 @@ export const AuthManager = ({children}: AuthManagerProps) => {
     }, []);
 
     useEffect(() => {
+        console.log(isAuth + " !AUTH!!!!!!!!");
         if (!isAuth && hasToken) {
             dispatch(checkAuth())
                 .finally(() => setLoading(false));
