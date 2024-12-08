@@ -10,7 +10,7 @@ import {ReactComponent as LogOutIcon} from "../../assets/svg/logout.svg";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
-import {IUser, StyleType} from "../../types/Types";
+import {StyleType, UserType} from "../../types/Types";
 import {useEffect} from "react";
 import {ModalPopUp} from "../common/ModalPopUp";
 import {LoginForm} from "../Forms/LoginForm";
@@ -27,7 +27,7 @@ type PropsType = {
     closeLoginModal: () => void;
     openLoginModal: () => void;
     activeStyle: StyleType | null;
-    user?: IUser | null;
+    user?: UserType | null;
 }
 
 export const Header: React.FC<PropsType> = React.memo(({

@@ -13,7 +13,6 @@ import {
   getUserProfileSelector,
   getTokenSelector,
   getIsDeletingInProcessSelector,
-  getUserSelector,
   getAuthAccessErrorSelector,
   getIsFetchingSelector,
 } from "../../redux/Auth/auth-selectors";
@@ -27,6 +26,7 @@ export const UserProfileContainer: React.FC = () => {
 
   const apiError = useSelector(getApiErrorSelector);
   const profile = useSelector(getUserProfileSelector);
+  console.log(profile?._id + " Here is our user!!!!!!!!!!!!");
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAuthAccessErrorSelector);
@@ -38,7 +38,8 @@ export const UserProfileContainer: React.FC = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    let actualId: string | null = profile?._id;
+    let actualId: string | null = null;
+    if(profile?._id) actualId = profile._id;
     if (urlParams.get('userId')) actualId = urlParams.get('userId');
     if (actualId) {
       dispatch(getRoles());
@@ -47,7 +48,7 @@ export const UserProfileContainer: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if(profile._id) navigate(`?userId=${profile._id}`);
+    if(profile?._id) navigate(`?userId=${profile._id}`);
   }, [profile, navigate]);
 
   useEffect(() => {

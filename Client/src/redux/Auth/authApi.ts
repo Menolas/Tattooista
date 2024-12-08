@@ -1,10 +1,9 @@
 import $api from "../../http";
 import {LoginFormValues, RegistrationFormValues, RoleType, CommonResponseFields, UserType} from "../../types/Types";
-import {IUser} from "../../types/Types";
 
 type LoginResponseType = CommonResponseFields & {
     userData: {
-        user: IUser;
+        user: UserType;
         accessToken: string;
         refreshToken: string;
         roles: Array<RoleType>;
@@ -13,7 +12,7 @@ type LoginResponseType = CommonResponseFields & {
 
 type RegistrationResponseType = CommonResponseFields & {
     userData: {
-        user: IUser;
+        user: UserType;
         accessToken: string;
         refreshToken: string;
         roles: Array<RoleType>;
@@ -29,7 +28,7 @@ type UpdateUserResponseType = CommonResponseFields & {
 type CheckAuthResponseType = CommonResponseFields & {
     userData: {
         isAuth?: boolean;
-        user: IUser;
+        user: UserType;
         accessToken: string;
         refreshToken: string;
         roles: Array<RoleType>;

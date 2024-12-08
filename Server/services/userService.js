@@ -38,6 +38,7 @@ class UserService {
                 _id: userDto.id,
                 displayName: userDto.displayName,
                 isActivated: userDto.isActivated,
+                email: userDto.email,
                 roles: userDto.roles,
                 avatar: userDto.avatar
             },
@@ -90,6 +91,7 @@ class UserService {
                 _id: userDto.id,
                 displayName: userDto.displayName,
                 isActivated: userDto.isActivated,
+                email: userDto.email,
                 roles: userDto.roles,
                 avatar: userDto.avatar
             },
@@ -124,6 +126,7 @@ class UserService {
                 _id: userDto.id,
                 displayName: userDto.displayName,
                 isActivated: userDto.isActivated,
+                email: userDto.email,
                 roles: userDto.roles,
                 avatar: userDto.avatar
             },

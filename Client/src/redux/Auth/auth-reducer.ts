@@ -3,7 +3,6 @@ import { ResultCodesEnum } from "../../utils/constants";
 import { ThunkAction } from "redux-thunk";
 import {AppStateType} from "../redux-store";
 import {ApiErrorType, LoginFormValues, RegistrationFormValues, RoleType, UserType} from "../../types/Types";
-import { IUser } from "../../types/Types";
 import {getUserRole} from "../../utils/functions";
 import {
   setSuccessModalAC,
@@ -30,8 +29,7 @@ const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
 
 const initialState = {
-  user: {} as IUser | null | undefined,
-  profile: {} as UserType,
+  user: {} as UserType | null,
   roles: [] as Array<RoleType> | null,
   token: null as string | null,
   isAuth: null as string | null,
@@ -78,7 +76,6 @@ export const authReducer = (
         ...state,
         token: null,
         user: null,
-        profile: {} as UserType,
         isAuth: null,
         roles: null,
       }
@@ -116,7 +113,6 @@ export const authReducer = (
       case SET_USER_PROFILE:
           return {
               ...state,
-              profile: action.user,
               user: action.user,
               isAuth: action.role
           }
@@ -235,14 +231,14 @@ const logOutAC = (): LogOutAT => ({
 export type LogInAT = {
     type: typeof LOG_IN;
     token: string | null;
-    user: IUser | null;
+    user: UserType | null;
     isAuth: string | null;
     roles: Array<RoleType> | null;
 };
 
 const logInAC = (
  token: null | string,
- user: null | IUser,
+ user: UserType | null,
  isAuth: null | string,
  roles: null | Array<RoleType>
 ): LogInAT => ({
