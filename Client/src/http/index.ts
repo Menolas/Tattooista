@@ -1,12 +1,12 @@
 import axios from "axios";
-import {IUser} from "../types/Types";
+import {UserType} from "../types/Types";
 
 export const API_URL = process.env.REACT_APP_API_URL;
 
 export interface AuthResponse {
     accessToken: string
     refreshToken: string
-    user: IUser
+    user: UserType
 }
 
 const $api = axios.create({

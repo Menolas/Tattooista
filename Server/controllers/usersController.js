@@ -53,14 +53,12 @@ class usersController {
             }
             if (searchConditions.length > 0) {
                 if (Object.keys(query).length > 0) {
-                    // If there's already a gallery condition in the query, combine using $and
                     query = { $and: [ { $or: searchConditions }, query ] };
                 } else {
-                    // If only term conditions are present, use $or
                     query = { $or: searchConditions };
                 }
             }
-            users = await User.find(query).sort({ createdAt: -1 }).populate('roles');
+            users = await User.find(query).sort({ createdAt: -1 });
             results.resultCode = 0;
             results.totalCount = users.length;
             results.users = users.slice(startIndex, endIndex);

@@ -2,7 +2,11 @@ import React, {ReactNode, useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {checkAuth, setFromAC} from "./redux/Auth/auth-reducer";
-import {getAuthSelector, getFromSelector, getUserSelector} from "./redux/Auth/auth-selectors";
+import {
+    getAuthSelector,
+    getFromSelector,
+    getUserProfileSelector,
+} from "./redux/Auth/auth-selectors";
 import {AppDispatch} from "./redux/redux-store";
 
 interface AuthManagerProps {
@@ -11,7 +15,7 @@ interface AuthManagerProps {
 
 export const AuthManager = ({children}: AuthManagerProps) => {
     const isAuth = useSelector(getAuthSelector);
-    const user = useSelector(getUserSelector);
+    const user = useSelector(getUserProfileSelector);
     const from = useSelector(getFromSelector);
 
     const location = useLocation();

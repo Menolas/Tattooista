@@ -11,7 +11,7 @@ import {
   getAuthSelector,
   getLoginErrorSelector,
   getNeedReLoginSelector,
-  getUserSelector
+  getUserProfileSelector,
 } from "../../redux/Auth/auth-selectors";
 import {useLocation,} from "react-router-dom";
 import {getActiveStyleSelector} from "../../redux/Styles/styles-selectors";
@@ -20,7 +20,7 @@ import {AppDispatch} from "../../redux/redux-store";
 export const HeaderContainer: React.FC = () => {
 
   const isAuth = useSelector(getAuthSelector);
-  const user = useSelector(getUserSelector);
+  const user = useSelector(getUserProfileSelector);
   const loginError = useSelector(getLoginErrorSelector);
   const needReLogin = useSelector(getNeedReLoginSelector);
   const activeStyle = useSelector(getActiveStyleSelector);

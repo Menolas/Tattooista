@@ -27,7 +27,7 @@ export const UserProfile: React.FC<PropsType> = ({
 
 }) => {
 
-    const { userId } = useParams();
+    const {userId} = useParams();
     const [user, setUser] = useState<UserType | null>(null);
     const [editUserMode, setEditUserMode] = useState<boolean>(false);
 
@@ -41,7 +41,7 @@ export const UserProfile: React.FC<PropsType> = ({
     const modalTitle = 'EDIT YOUR PROFILE';
 
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }, [userId]);
 
     const closeModal = () => {
@@ -51,7 +51,7 @@ export const UserProfile: React.FC<PropsType> = ({
     }
 
     if (!data) {
-        return <div>Sorry, we can not find such a user in data base</div>
+        return <div className="user-profile container">Sorry, we can not find such a user in data base</div>
     }
     const getUserRoleValues = (userRoleIds: Array<string>, allRoles: Array<RoleType>) => {
         return userRoleIds?.map(userRoleId => {
@@ -63,7 +63,7 @@ export const UserProfile: React.FC<PropsType> = ({
     const userRoleValues = getUserRoleValues(data?.roles, possibleRoles);
 
     return (
-        <div className={"user-profile container"}>
+        <div className="user-profile container">
             <aside className="user-profile__aside">
                 <div className="user-profile__avatar">
                     {!data?.avatar
@@ -78,7 +78,7 @@ export const UserProfile: React.FC<PropsType> = ({
                     </ul>
                 </div>
                 <div className="user-profile__actions">
-                <button
+                    <button
                         className="btn btn--sm btn--transparent"
                         onClick={() => {
                             setEditUserMode(true);
@@ -100,7 +100,7 @@ export const UserProfile: React.FC<PropsType> = ({
                     </button>
                 </div>
                 <div className={"user-profile__contact"}>
-                    <span className={"user-profile__contact-icon"}><EnvelopIcon /></span>
+                    <span className={"user-profile__contact-icon"}><EnvelopIcon/></span>
                     <span className={"user-profile__contact-email"}>{data.email}</span>
                 </div>
                 <ModalPopUp
@@ -150,6 +150,7 @@ export const UserProfile: React.FC<PropsType> = ({
                 magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
             </section>
         </div>
+
     );
 };
 
