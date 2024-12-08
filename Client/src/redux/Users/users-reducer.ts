@@ -3,7 +3,7 @@ import { ResultCodesEnum } from "../../utils/constants";
 import { AppStateType } from "../redux-store";
 import { ThunkAction } from "redux-thunk";
 import { usersAPI } from "./usersApi";
-import { getNewPage } from "../../utils/functions";
+import {getNewPage, getUserRole} from "../../utils/functions";
 import {
     setSuccessModalAC,
     SetSuccessModalAT,
@@ -398,6 +398,7 @@ export const deleteUser = (
 export const updateUser = (
     fromProfile: boolean,
     token: string | null,
+    roles: Array<RoleType>,
     id: string,
     values: FormData
 ): ThunkType => async (dispatch) => {
@@ -406,7 +407,7 @@ export const updateUser = (
         const response = !fromProfile ? await usersAPI.updateUser(token, id, values) : await usersAPI.updateUserFromProfile(token, id, values);
         if (response.resultCode === ResultCodesEnum.Success) {
             if (fromProfile) {
-                dispatch(setUserProfileAC(response.user));
+                dispatch(setUserProfileAC(response.user, getUserRole(response.user.roles, roles)));
             }
             dispatch(editUserAC(response.user));
             dispatch(setUserUpdateErrorAC(null));
