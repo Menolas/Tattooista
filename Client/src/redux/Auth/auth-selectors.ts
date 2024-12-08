@@ -8,14 +8,6 @@ export const getTokenSelector = (state: AppStateType) => {
   return state.auth.token;
 }
 
-export const getUserSelector = (state: AppStateType) => {
-  return state.auth.user;
-}
-
-// export const getAuthApiErrorSelector = (state: AppStateType) => {
-//   return state.auth.authApiError;
-// };
-
 export const getRegistrationApiErrorSelector = (state: AppStateType) => {
     return state.auth.registrationApiError;
 };
@@ -33,7 +25,7 @@ export const getNeedReLoginSelector = (state: AppStateType) => {
 };
 
 export const getUserProfileSelector = (state: AppStateType) => {
-  return state.auth.profile;
+  return state.auth.user;
 };
 
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {

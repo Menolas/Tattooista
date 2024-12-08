@@ -4,21 +4,13 @@ export type RoleType = {
     description?: string;
 }
 
-export type IUser = {
+export type UserType = {
     "_id": string;
     displayName: string | undefined;
     isActivated: boolean;
-    roles: Array<string>;
-    avatar?: string;
-}
-
-export type UserType = {
-    "_id": string;
-    displayName: string;
     email: string;
-    isActivated: boolean;
-    avatar: string;
     roles: Array<any>;
+    avatar?: string;
 }
 
 export interface ContactType {
