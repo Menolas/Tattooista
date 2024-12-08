@@ -27,6 +27,7 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
 
 const initialState = {
   user: {} as IUser | null | undefined,
@@ -36,6 +37,7 @@ const initialState = {
   isAuth: null as string | null,
   from: null as string | null,
   authApiError: null as null | string,
+  registrationApiError: null as null | string,
   needReLogin: false as boolean,
   loginError: null as null | string,
   isFetching: false as boolean,
@@ -67,6 +69,7 @@ export const authReducer = (
         roles: action.roles,
         loginError: null,
         authApiError: null,
+        registrationApiError: null,
         needReLogin: false
       }
 
@@ -79,6 +82,12 @@ export const authReducer = (
         isAuth: null,
         roles: null,
       }
+
+    case SET_REGISTRATION_API_ERROR:
+        return {
+            ...state,
+            registrationApiError: action.error,
+    }
 
     case SET_AUTH_API_ERROR:
       return {
@@ -107,7 +116,8 @@ export const authReducer = (
       case SET_USER_PROFILE:
           return {
               ...state,
-              profile: action.user
+              profile: action.user,
+              user: action.user
           }
 
       case TOGGLE_IS_DELETING_IN_PROCESS:
@@ -140,9 +150,19 @@ type ActionsTypes =
     | SetUserProfileAT
     | ToggleIsDeletingInProcessAT
     | DeleteUserAT
-    | SetAccessErrorAT;
+    | SetAccessErrorAT
+    | SetRegistrationApiErrorAT;
 
 // actions creators
+
+type SetRegistrationApiErrorAT = {
+    type: typeof SET_REGISTRATION_API_ERROR;
+    error: string | null;
+};
+
+export const setRegistrationApiErrorAC = (error: string | null): SetRegistrationApiErrorAT => ({
+    type: SET_REGISTRATION_API_ERROR, error
+});
 
 type SetAccessErrorAT = {
     type: typeof SET_ACCESS_ERROR;
@@ -163,12 +183,12 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
 });
 
-type SetUserProfileAT = {
+export type SetUserProfileAT = {
     type: typeof SET_USER_PROFILE;
     user: UserType;
 };
 
-const setUserProfileAC = (user: UserType): SetUserProfileAT => ({
+export const setUserProfileAC = (user: UserType): SetUserProfileAT => ({
     type: SET_USER_PROFILE, user
 });
 
@@ -244,7 +264,6 @@ export const setLoginErrorAC = (loginError: null | string): SetLoginErrorAT => (
 
 //thunks
 
-//export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 export const login = (values: LoginFormValues): ThunkType => async (
@@ -309,7 +328,7 @@ export const registration = (
       }
     } catch (e) {
       const error = e as ApiErrorType;
-      dispatch(setAuthApiErrorAC(error.response?.data?.message));
+      dispatch(setRegistrationApiErrorAC(error.response?.data?.message));
       console.log(error);
       return false;
     }
@@ -345,6 +364,7 @@ export const getUserProfile = (
     token: string | null,
     userId: string
 ): ThunkType => async (dispatch) => {
+
     try {
         dispatch(toggleIsFetchingAC(true));
         const response = await authAPI.getUserProfile(token, userId);

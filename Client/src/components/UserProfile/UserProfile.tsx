@@ -74,7 +74,7 @@ export const UserProfile: React.FC<PropsType> = ({
                 <div className="user-profile__details">
                     <div className={"user-profile__name"}>{data.displayName}</div>
                     <ul className={"user-profile__roles"}>
-                        {userRoleValues?.map(role => <li>{role}</li>)}
+                        {userRoleValues?.map(role => <li key={role}>{role}</li>)}
                     </ul>
                 </div>
                 <div className="user-profile__actions">
@@ -110,6 +110,7 @@ export const UserProfile: React.FC<PropsType> = ({
                 >
                     {editUserMode &&
                         <UpdateUserForm
+                            fromProfile={true}
                             apiError={apiError}
                             isEditing={editUserMode}
                             data={data}

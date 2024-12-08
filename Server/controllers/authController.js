@@ -53,8 +53,9 @@ class AuthController {
   async activate(req, res) {
     try {
       const activationLink = req.params.link;
-      await userService.activate(activationLink);
-      return res.redirect(`${process.env.ACTIVATE_URL}/login`);
+      const userId = await userService.activate(activationLink);
+      console.log(`${process.env.CLIENT_URL}/myProfile?userId=${userId}` + " activation link");
+      return res.redirect(`${process.env.CLIENT_URL}/myProfile?userId=${userId}`);
     } catch(e) {
       console.log(e);
       return res.status(400).json({ message: "Server error" });

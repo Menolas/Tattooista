@@ -28,7 +28,7 @@ class UserService {
             roles: [userRole._id],
             activationLink
         });
-        await mailService.sendActivationMail(email, `${process.env.CLIENT_URL}/auth/activate/${activationLink}`);
+        await mailService.sendActivationMail(email, `${process.env.SERVER_URL}/auth/activate/${activationLink}`);
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
@@ -69,6 +69,7 @@ class UserService {
         }
         user.isActivated = true;
         await user.save();
+        return user._id;
     }
 
     async login(email, password) {

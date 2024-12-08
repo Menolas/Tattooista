@@ -95,9 +95,11 @@ export const LoginForm: React.FC<PropsType> = React.memo(({
                   : 'Log In'
               }
             </button>
-            <NavLink className={'form__link'} to={'/registration'}>
-              Need registration?
-            </NavLink>
+            <NavLink
+                className={'form__link'}
+                to={'/registration'}
+                onClick={closeModal}
+            >Need registration?</NavLink>
           </Form>
         );
       }}
