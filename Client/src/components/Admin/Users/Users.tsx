@@ -65,18 +65,19 @@ export const Users: React.FC<PropsType> = React.memo(({
     const addUserModalTitle = 'ADD USER';
     const editUserModalTitle = 'Edit USER';
 
-    const usersElements = users.map(data => {
-        return (
-            <User
-                key={data._id}
-                data={data}
-                isDeletingInProcess={isDeletingInProcess}
-                remove={remove}
-                setEditMode={setEditMode}
-                setData={setData}
-            />
-        )
-    });
+    const usersElements = users.length
+        ? users.map((data, index) => {
+            return <User
+                    key={index}
+                    data={data}
+                    isDeletingInProcess={isDeletingInProcess}
+                    remove={remove}
+                    setEditMode={setEditMode}
+                    setData={setData}
+                />
+
+            })
+        : null;
 
     return (
         <>
@@ -108,7 +109,7 @@ export const Users: React.FC<PropsType> = React.memo(({
                     : total && total > 0
                         ? (
                             <ul className="admin__cards-list list">
-                                {usersElements}
+                                {usersElements && usersElements}
                             </ul>
                         )
                         : <NothingToShow/>
