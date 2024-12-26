@@ -29,8 +29,8 @@ const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
 
 const initialState = {
-  user: {} as UserType | null,
-  roles: [] as Array<RoleType> | null,
+  user: null as null | UserType,
+  roles: [] as Array<RoleType>,
   token: null as string | null,
   isAuth: null as string | null,
   from: null as string | null,
@@ -77,7 +77,7 @@ export const authReducer = (
         token: null,
         user: null,
         isAuth: null,
-        roles: null,
+        roles: [],
       }
 
     case SET_REGISTRATION_API_ERROR:
@@ -231,16 +231,16 @@ const logOutAC = (): LogOutAT => ({
 export type LogInAT = {
     type: typeof LOG_IN;
     token: string | null;
-    user: UserType | null;
+    user: UserType;
     isAuth: string | null;
-    roles: Array<RoleType> | null;
+    roles: Array<RoleType>;
 };
 
 const logInAC = (
  token: null | string,
- user: UserType | null,
+ user: UserType,
  isAuth: null | string,
- roles: null | Array<RoleType>
+ roles: Array<RoleType>
 ): LogInAT => ({
     type: LOG_IN, token, user, isAuth, roles
 });
@@ -272,7 +272,7 @@ export const login = (values: LoginFormValues): ThunkType => async (
 ) => {
   try {
     const response = await authAPI.login(values);
-    if(response.resultCode === ResultCodesEnum.Success) {
+    if(response.resultCode === ResultCodesEnum.Success && response.userData.user) {
       dispatch(logInAC(
             response.userData.accessToken,
             response.userData.user,
@@ -314,40 +314,43 @@ export const registration = (
     values: RegistrationFormValues
 ): ThunkType => async (dispatch) => {
     try {
-      const response = await authAPI.registration(values);
-      if (response.resultCode === ResultCodesEnum.Success) {
-        dispatch(logInAC(
-            response.userData.accessToken,
-            response.userData.user,
-            getUserRole(response.userData.user.roles, response.userData.roles),
-            response.userData.roles
-        ));
-        dispatch(setSuccessModalAC(true, "You successfully subscribed!"));
-        return true;
-      } else {
-        return false;
-      }
+        const response = await authAPI.registration(values);
+        if (response.resultCode === ResultCodesEnum.Success && response.userData.user) {
+            dispatch(logInAC(
+                response.userData.accessToken,
+                response.userData.user,
+                getUserRole(response.userData.user.roles, response.userData.roles),
+                response.userData.roles
+            ));
+            dispatch(setSuccessModalAC(true, "You successfully subscribed!"));
+            return true;
+        } else {
+            return false;
+        }
     } catch (e) {
-      const error = e as ApiErrorType;
-      dispatch(setRegistrationApiErrorAC(error.response?.data?.message));
-      console.log(error);
-      return false;
+        const error = e as ApiErrorType;
+        dispatch(setRegistrationApiErrorAC(error.response?.data?.message));
+        console.log(error);
+        return false;
     }
 };
+
 
 export const checkAuth = ():ThunkType => async (dispatch) => {
 
   try {
     const response = await authAPI.checkAuth();
     if (response.resultCode === ResultCodesEnum.Success && response.userData.isAuth === true) {
-        const isAuth = getUserRole(response.userData.user.roles, response.userData.roles);
-        dispatch(logInAC(
-            response.userData.accessToken,
-            response.userData.user,
-            isAuth,
-            response.userData.roles
-        ));
-      return true;
+        if (response.userData.user) {
+            const isAuth = getUserRole(response.userData.user.roles, response.userData.roles);
+            dispatch(logInAC(
+                response.userData.accessToken,
+                response.userData.user,
+                isAuth,
+                response.userData.roles
+            ));
+        }
+        return true;
     } else {
       return false;
     }
@@ -371,7 +374,11 @@ export const getUserProfile = (
         dispatch(toggleIsFetchingAC(true));
         const response = await authAPI.getUserProfile(token, userId);
         if (response.resultCode === ResultCodesEnum.Success) {
-            dispatch(setUserProfileAC(response.user, getUserRole(response.user.roles, roles)));
+            if (response.user) {
+                const authRole = getUserRole(response.user.roles, roles);
+                console.log(authRole + " Here is our user role!!!!!!!!!!!!");
+                dispatch(setUserProfileAC(response.user, authRole));
+            }
             return true;
         } else {
             return false;

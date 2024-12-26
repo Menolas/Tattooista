@@ -38,14 +38,13 @@ export const UserProfileContainer: React.FC = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    let actualId: string | null = null;
-    if(profile?._id) actualId = profile._id;
+    let actualId: string | null = profile?._id ?? null;
     if (urlParams.get('userId')) actualId = urlParams.get('userId');
     if (actualId) {
       dispatch(getRoles());
       dispatch(getUserProfile(token, actualId, roles));
     }
-  }, [dispatch]);
+  }, [dispatch, profile?._id]);
 
   useEffect(() => {
     if(profile?._id) navigate(`?userId=${profile._id}`);

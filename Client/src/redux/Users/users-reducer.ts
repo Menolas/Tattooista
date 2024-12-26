@@ -89,7 +89,7 @@ export const usersReducer = (
         case DELETE_USER:
             return {
                 ...state,
-                users: state.users.filter(user => user._id !== action.userId),
+                users: state.users.filter(user => user && user._id !== action.userId),
                 totalCount: state.totalCount - 1,
             }
 
@@ -111,7 +111,7 @@ export const usersReducer = (
             return {
                 ...state,
                 users: state.users.map(user => {
-                    if (user._id === action.user._id) {
+                    if (user && action.user && user._id === action.user._id) {
                         return { ...action.user }
                     }
 
@@ -120,11 +120,17 @@ export const usersReducer = (
             }
 
         case ADD_USER:
-            return {
-                ...state,
-                users: [{...action.user}, ...state.users ],
-                totalCount: state.totalCount + 1,
+            if (action.user) {
+                return {
+                    ...state,
+                    users: [{...action.user}, ...state.users ],
+                    totalCount: state.totalCount + 1,
+                }
+            } else {
+                console.error("ADD_USER action received a null user");
+                return state; // Return the current state unchanged
             }
+
 
         case SET_USERS_API_ERROR:
             return {
@@ -405,7 +411,7 @@ export const updateUser = (
     try {
         dispatch(toggleIsFetchingAC(true));
         const response = !fromProfile ? await usersAPI.updateUser(token, id, values) : await usersAPI.updateUserFromProfile(token, id, values);
-        if (response.resultCode === ResultCodesEnum.Success) {
+        if (response.resultCode === ResultCodesEnum.Success && response.user) {
             if (fromProfile) {
                 dispatch(setUserProfileAC(response.user, getUserRole(response.user.roles, roles)));
             }

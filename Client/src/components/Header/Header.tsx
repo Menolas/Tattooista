@@ -27,7 +27,7 @@ type PropsType = {
     closeLoginModal: () => void;
     openLoginModal: () => void;
     activeStyle: StyleType | null;
-    user?: UserType | null;
+    user: UserType | null;
 }
 
 export const Header: React.FC<PropsType> = React.memo(({
@@ -47,7 +47,7 @@ export const Header: React.FC<PropsType> = React.memo(({
         if (needReLogin) {
             openLoginModal();
         }
-    }, [needReLogin]);
+    }, [needReLogin, isLogin]);
 
   return (
     <header className = { 'main-header ' + headerClasses }>
@@ -97,7 +97,7 @@ export const Header: React.FC<PropsType> = React.memo(({
                         >
                             {!user?.avatar
                                 ? <DefaultAvatar/>
-                                : <img src={`${API_URL}/users/${user._id}/avatar/${user.avatar}`} alt="preview"/>
+                                : <img src={`${API_URL}/users/${user?._id}/avatar/${user?.avatar}`} alt="preview"/>
                             }
                         </NavLink>
                         <button
