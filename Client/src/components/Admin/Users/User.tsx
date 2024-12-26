@@ -35,11 +35,13 @@ export const User: React.FC<PropsType> = ({
     }
 
     const deleteUserCallBack = () => {
-        remove(data._id);
+        if (data) remove(data._id);
     }
 
+    const userRolesElements = data?.roles?.map(role => <span key={role._id}>{role.value}</span>);
+
     return (
-        <li key={data._id} className="admin__card admin__card--avatar admin__card--user">
+        <li key={data?._id} className="admin__card admin__card--avatar admin__card--user">
             <div className="admin__card-actions">
                 <button
                     data-tooltip-id="my-tooltip"
@@ -56,11 +58,11 @@ export const User: React.FC<PropsType> = ({
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Delete client"
                     className={"btn btn--icon"}
-                    disabled={isDeletingInProcess?.some(id => id === data._id)}
+                    disabled={isDeletingInProcess?.some(id => id === data?._id)}
                     onClick={() => {
                         setConfirmationData({
                             needConfirmation: true,
-                            itemId: data._id,
+                            itemId: data?._id,
                             context: 'Are you sure? You about to delete this user FOREVER along with  all the data...',
                             cb: deleteUserCallBack
                         });
@@ -80,18 +82,15 @@ export const User: React.FC<PropsType> = ({
                 <div className={"admin__card-details"}>
                     <div className={"admin__card-detail-item"}>
                         <span className={"admin__card-data-type"}>Display Name:&nbsp;</span>
-                        <span className={"admin__card-data"}>{data.displayName}</span>
+                        <span className={"admin__card-data"}>{data?.displayName}</span>
                     </div>
                     <div className={"admin__card-detail-item"}>
                         <span className={"admin__card-data-type"}>Email:&nbsp;</span>
-                        <span className={"admin__card-data"}>{data.email}</span>
+                        <span className={"admin__card-data"}>{data?.email}</span>
                     </div>
                     <div className="admin__card-detail-item admin__card-roles">
                         <span className={"admin__card-data-type"}>Roles:&nbsp;</span>
-                        { data?.roles?.length > 0
-                            ? data?.roles?.map(role => <span key={role._id}>{role.value}</span>)
-                            : <span className={"admin__card-data"}>{''}</span>
-                        }
+                        { userRolesElements}
                     </div>
                 </div>
             </div>

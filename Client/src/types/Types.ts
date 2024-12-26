@@ -5,13 +5,13 @@ export type RoleType = {
 }
 
 export type UserType = {
-    "_id": string;
+    _id: string;
     displayName: string | undefined;
     isActivated: boolean;
     email: string;
     roles: Array<any>;
     avatar?: string;
-}
+} | null;
 
 export interface ContactType {
     [key: string]: string;
