@@ -58,7 +58,7 @@ class usersController {
                     query = { $or: searchConditions };
                 }
             }
-            users = await User.find(query).sort({ createdAt: -1 });
+            users = await User.find(query).sort({ createdAt: -1 }).populate('roles');
             results.resultCode = 0;
             results.totalCount = users.length;
             results.users = users.slice(startIndex, endIndex);
@@ -110,7 +110,6 @@ class usersController {
 
             try {
                 await userService.editUser(displayName, email, res.user._id);
-                const hashPassword = await bcrypt.hash(password, 3);
                 if (res.user.email !== email) {
                     res.user.activationLink = uuid.v4();
                     await mailService.sendActivationMail(email, `${process.env.SERVER_URL}/auth/activate/${res.user.activationLink}`);
@@ -118,7 +117,9 @@ class usersController {
                 }
                 res.user.displayName = displayName;
                 res.user.email = email;
-                res.user.password = hashPassword;
+                if (password && password !== "") {
+                    res.user.password = await bcrypt.hash(password, 3);
+                }
                 const roleIds = req.body.roles.match(/[a-f\d]{24}/g);
                 if (roleIds === "" || roleIds === null) {
                     const userRole = await Role.findOne({value: "USER"});
