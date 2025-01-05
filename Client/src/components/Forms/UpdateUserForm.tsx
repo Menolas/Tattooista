@@ -108,7 +108,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   const isEditingWithData = isEditing && data;
 
   const rolesInitialValues = roles?.reduce((acc, role) => {
-    const isSelected = isEditingWithData ? data.roles.some(profileRole => profileRole === role._id) : false;
+    const isSelected = isEditingWithData ? data.roles.some(profileRole => profileRole._id === role._id) : false;
     return {
         ...acc,
         [role._id]: isSelected,
