@@ -5,11 +5,16 @@ class TokenService {
 
     generateTokens(payload) {
         const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '15m'});
+        console.log('Generated Token:', accessToken);
         const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: '30d'});
         return {
             accessToken,
             refreshToken
         }
+    }
+
+    generateEmailVerificationToken(payload) {
+        return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '5m'});
     }
 
     async saveToken(userId, refreshToken) {
@@ -33,16 +38,19 @@ class TokenService {
 
     validateAccessToken(token) {
         try {
+            console.log('JWT_ACCESS_SECRET during validation:', process.env.JWT_ACCESS_SECRET);
             return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
         } catch (e) {
-            return null;
+            console.error('Access token validation error:', e);
+            return null; // Return `null` instead of a string for consistency
         }
     }
     validateRefreshToken(token) {
         try {
             return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
         } catch (e) {
-            return null;
+            console.error('Refresh token validation error:', e);
+            return null; // Return `null` instead of a string for consistency
         }
     }
 

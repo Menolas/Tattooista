@@ -7,6 +7,7 @@ type PropsType = {
     modalTitle?: string;
     closeModal: () => void;
     children: React.ReactNode;
+    lightBg?: boolean;
 }
 
 export const ModalPopUp: React.FC<PropsType> = React.memo(({
@@ -15,6 +16,7 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
     modalTitle,
     closeModal,
     children,
+    lightBg = true,
 }) => {
   const classNames = `modal-wrap ${modalClasses} ${isOpen ? 'open' : ''}`;
   const innerBlockRef = useRef<HTMLDivElement>(null);
@@ -62,8 +64,8 @@ export const ModalPopUp: React.FC<PropsType> = React.memo(({
 
   return (
     <div className={classNames}>
-      <div className={'modal-wrap__inner-block'} ref={innerBlockRef}>
-          <div className={'modal__header'}>
+      <div className={`modal-wrap__inner-block ${lightBg ? 'light-bg' : 'dark-bg'}`} ref={innerBlockRef}>
+          <div className="modal__header">
               <h2 className={'modal__title'}>{modalTitle}</h2>
               <button
                   className={'close-button modal-wrap__close-btn'}

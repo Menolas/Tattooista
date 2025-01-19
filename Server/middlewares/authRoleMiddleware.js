@@ -1,5 +1,6 @@
 const tokenService = require('../services/tokenService');
 const Role = require("../models/Role");
+const {decode} = require("jsonwebtoken");
 
 module.exports = function (roles) {
   return async function (req, res, next) {
@@ -23,9 +24,17 @@ module.exports = function (roles) {
 
     try {
       if(token) {
+        //const decoded = decode(token, { complete: true });
+        //console.log('Decoded Token:', decoded);
         const data = tokenService.validateAccessToken(token);
+        const { accessToken } = tokenService.generateTokens({ email: 'olenakunina@gmail.com', id: 'test' });
+        console.log('Generated Token:', accessToken);
+        console.log('Received Token:', token);
+        console.log('Tokens Match:', accessToken === token);
+        //console.log(JSON.stringify(data) + " user roles from roleCheckMiddleware")
         if (data) {
           userRoles = data.roles;
+          console.log(userRoles + " user roles from roleCheckMiddleware")
         } else {
           token = null;
         }

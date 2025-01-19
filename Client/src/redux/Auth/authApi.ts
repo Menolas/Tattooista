@@ -57,6 +57,13 @@ export const authAPI = {
           .then(response => response.data);
   },
 
+  async verifyEmail(token: string | null) {
+    return await $api.post<LoginResponseType>(
+        `auth/verify-email`,
+        { token }
+    ).then(response => response.data);
+  },
+
   async getUserProfile(
     token: string | null,
     userId: string

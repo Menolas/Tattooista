@@ -11,7 +11,7 @@ import {
   SetApiErrorAT,
 } from "../General/general-reducer";
 import {addArchivedClientAC, AddArchivedClientAT} from "../ArchivedClients/archived-clients-reducer";
-import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
+import {setNeedReLoginAC, SetNeedReLoginAT, setAccessErrorAC, SetAccessErrorAT,} from "../Auth/auth-reducer";
 import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
@@ -25,7 +25,7 @@ const EDIT_CLIENT = 'EDIT_CLIENT';
 const ADD_CLIENT = 'ADD_CLIENT';
 const SET_CLIENT_PROFILE = 'SET_CLIENT_PROFILE';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
-const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+//const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_CLIENTS_API_ERROR = 'SET_CLIENTS_API_ERROR';
 const TOGGLE_IS_FAVOURITE = 'TOGGLE_IS_FAVOURITE';
 const TOGGLE_IS_FAVOURITE_CHANGING = 'TOGGLE_IS_FAVOURITE_CHANGING';
@@ -49,7 +49,7 @@ const initialState = {
     isFavourite: false as boolean,
   } as SearchFilterType,
   profile: {} as ClientType,
-  accessError: null as null | string,
+  //accessError: null as null | string,
   clientsApiError: null as null | string,
 };
 
@@ -149,11 +149,11 @@ export const clientsReducer = (
           : state.isFavouriteChangingInProcess.filter(id => id !== action.id)
       }
 
-    case SET_ACCESS_ERROR:
-      return {
-        ...state,
-        accessError: action.error
-      }
+    // case SET_ACCESS_ERROR:
+    //   return {
+    //     ...state,
+    //     accessError: action.error
+    //   }
 
     case SET_CLIENTS_API_ERROR:
       return {
@@ -226,14 +226,14 @@ export const setClientsApiErrorAC = (error: string | null): SetClientApiErrorAT 
     type: SET_CLIENTS_API_ERROR, error
 });
 
-type SetAccessErrorAT = {
-  type: typeof SET_ACCESS_ERROR;
-  error: null | string;
-};
-
-export const setAccessErrorAC = (error: null | string): SetAccessErrorAT => ({
-  type: SET_ACCESS_ERROR, error
-});
+// type SetAccessErrorAT = {
+//   type: typeof SET_ACCESS_ERROR;
+//   error: null | string;
+// };
+//
+// export const setAccessErrorAC = (error: null | string): SetAccessErrorAT => ({
+//   type: SET_ACCESS_ERROR, error
+// });
 
 type SetClientsPageSizeAT = {
   type: typeof  SET_PAGE_SIZE;

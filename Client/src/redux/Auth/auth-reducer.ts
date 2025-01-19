@@ -49,6 +49,7 @@ export const authReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
+    console.log(state.accessError + " !reducer ACCESS ERROR!!!!!!!!");
 
   switch (action.type) {
 
@@ -67,6 +68,7 @@ export const authReducer = (
         roles: action.roles,
         loginError: null,
         authApiError: null,
+        accessError: null,
         registrationApiError: null,
         needReLogin: false
       }
@@ -161,7 +163,7 @@ export const setRegistrationApiErrorAC = (error: string | null): SetRegistration
     type: SET_REGISTRATION_API_ERROR, error
 });
 
-type SetAccessErrorAT = {
+export type SetAccessErrorAT = {
     type: typeof SET_ACCESS_ERROR;
     error: string | null;
 };
@@ -362,6 +364,34 @@ export const checkAuth = ():ThunkType => async (dispatch) => {
     console.log(error);
     return false;
   }
+};
+
+export const verifyEmail = (
+    token: string | null
+): ThunkType => async (dispatch) => {
+    try {
+        const response = await authAPI.verifyEmail(token);
+        if (response.resultCode === ResultCodesEnum.Success) {
+            if (response.userData.user) {
+                dispatch(logInAC(
+                    response.userData.accessToken,
+                    response.userData.user,
+                    getUserRole(response.userData.user.roles, response.userData.roles),
+                    response.userData.roles
+                ));
+                localStorage.setItem('refreshToken', response.userData.refreshToken);
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setAuthApiErrorAC(error.response?.data?.message));
+        console.log(error);
+        return false;
+    }
 };
 
 export const getUserProfile = (

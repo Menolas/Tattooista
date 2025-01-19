@@ -9,7 +9,7 @@ import {
     SetSuccessModalAT,
     setApiErrorAC,
     SetApiErrorAT} from "../General/general-reducer";
-import {setNeedReLoginAC, SetNeedReLoginAT, setUserProfileAC, SetUserProfileAT} from "../Auth/auth-reducer";
+import {setNeedReLoginAC, SetNeedReLoginAT, setUserProfileAC, SetUserProfileAT, setAccessErrorAC, SetAccessErrorAT,} from "../Auth/auth-reducer";
 import {AnyAction} from "redux";
 
 const SET_USERS = 'SET_USERS';
@@ -23,7 +23,7 @@ const SET_ROLES = 'SET_ROLES';
 const EDIT_USER = 'EDIT_USER';
 const ADD_USER = 'ADD_USER';
 const SET_USERS_API_ERROR = 'SET_USERS_API_ERROR';
-const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+//const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_USER_UPDATE_ERROR = 'SET_USER_UPDATE_ERROR';
 
 const UPDATE_USER_SUCCESS = 'You successfully updated user info!';
@@ -44,7 +44,7 @@ const initialState = {
     } as SearchFilterType,
     usersApiError: null as string | null,
     userUpdateError: null as string | null,
-    accessError: null as string | null,
+    //accessError: null as string | null,
 };
 
 export type InitialStateType = typeof initialState;
@@ -144,11 +144,11 @@ export const usersReducer = (
             userUpdateError: action.error
         }
 
-        case SET_ACCESS_ERROR:
-            return {
-                ...state,
-                accessError: action.error
-            }
+        // case SET_ACCESS_ERROR:
+        //     return {
+        //         ...state,
+        //         accessError: action.error
+        //     }
 
         default: return state
     }
@@ -193,14 +193,14 @@ export const setUsersApiErrorAC = (error: string | null): SetUsersApiErrorAT => 
     type: SET_USERS_API_ERROR, error
 });
 
-type SetAccessErrorAT = {
-    type: typeof SET_ACCESS_ERROR;
-    error: string | null;
-};
-
-export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
-    type: SET_ACCESS_ERROR, error
-});
+// type SetAccessErrorAT = {
+//     type: typeof SET_ACCESS_ERROR;
+//     error: string | null;
+// };
+//
+// export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
+//     type: SET_ACCESS_ERROR, error
+// });
 
 type AddUserAT = {
     type: typeof ADD_USER;

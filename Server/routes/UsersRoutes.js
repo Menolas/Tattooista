@@ -38,7 +38,7 @@ router.post('/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.upda
 //update user
 router.post('/profile/:id', dynamicAuthCheckMiddleware(), getUser, controller.updateUser);
 
-//creating user
+//creating user from admin side
 router.post('/', authRoleMiddleware(["SUPERADMIN"]), controller.addUser);
 
 //getting user profile

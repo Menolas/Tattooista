@@ -15,16 +15,18 @@ module.exports = function (id) {
         :  null;
 
     try {
-      if(token && token !== 'null') {
-        console.log(token + " here is the token");
+      if(token) {
         const data = tokenService.validateAccessToken(token);
-        if (data && data.id === id) isRightUser = true;
-        console.log(data.id + " here is the token");
-        console.log(isRightUser + " we have token apparently...");
+        if (data && data.id === id) {
+          isRightUser = true;
+        } else {
+          token = null;
+        }
       }
 
       if (!token || token === 'null') {
         const { refreshToken } = req.cookies;
+
         if (!refreshToken) {
           return res.status(401).json({ message: "Access denied, no valid tokens found" });
         }

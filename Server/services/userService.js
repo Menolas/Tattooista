@@ -8,7 +8,7 @@ const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exeptions/apiErrors');
 
 class UserService {
-    async registration(displayName, email, password) {
+    async registration(displayName, email, password, isAdmin = false) {
         const displayNameCandidate = await  UserModel.findOne({displayName})
         if (displayNameCandidate) {
             throw ApiError.BadRequest(`The user with Display Name ${displayName} already exist`);
@@ -19,47 +19,52 @@ class UserService {
         }
         const hashPassword = await bcrypt.hash(password, 3);
         const activationLink = uuid.v4();
-        const userRole = await Role.findOne({value: "USER"});
 
-        let user = await UserModel.create({
+        let user = new UserModel({
             displayName,
             email,
             password: hashPassword,
-            roles: [userRole._id],
             activationLink
         });
         await mailService.sendActivationMail(email, `${process.env.SERVER_URL}/auth/activate/${activationLink}`);
-        const userDto = new UserDto(user);
-        const tokens = tokenService.generateTokens({...userDto});
-        await tokenService.saveToken(userDto.id, tokens.refreshToken);
-        return {
-            ...tokens,
-            user: {
-                _id: userDto.id,
-                displayName: userDto.displayName,
-                isActivated: userDto.isActivated,
-                email: userDto.email,
-                roles: userDto.roles,
-                avatar: userDto.avatar
-            },
-            roles: await Role.find()
+
+        if (!isAdmin) {
+            const userRole = await Role.findOne({value: "USER"});
+            user.roles = [userRole._id];
+            const tokens = tokenService.generateTokens({ ...user });
+            await tokenService.saveToken(user._id, tokens.refreshToken);
+            return {
+                ...tokens,
+                user,
+                roles: await Role.find()
+            };
         }
+        return user; // Return the Mongoose document
     }
 
-    async editUser(displayName, email, userId) {
+    async editUser(displayName, email, user) {
         const displayNameCandidate = await  UserModel.findOne({
             displayName: displayName,
-            _id: {$ne: userId}
+            _id: {$ne: user._id}
         });
         if (displayNameCandidate) {
             throw ApiError.BadRequest(`The user with Display Name ${displayName} already exist`);
         }
         const emailCandidate = await  UserModel.findOne({
             email: email,
-            _id: {$ne: userId}
+            _id: {$ne: user._id}
         });
         if (emailCandidate) {
             throw ApiError.BadRequest(`The user with email ${email} already exist`);
+        }
+
+        if (user.email !== email) {
+            user.activationLink = uuid.v4();
+            user.email = email;
+            user.isActivated = false;
+
+            // Send activation email
+            await mailService.sendActivationMail(email, `${process.env.SERVER_URL}/auth/activate/${user.activationLink}`);
         }
     }
 
@@ -70,18 +75,24 @@ class UserService {
         }
         user.isActivated = true;
         await user.save();
-        return user._id;
+        const userDto = new UserDto(user);
+        return await tokenService.generateEmailVerificationToken({...userDto});
     }
 
-    async login(email, password) {
+    async login(email, password, isVerifyEmail = false) {
         const user = await UserModel.findOne({email});
+        console.log(JSON.stringify(user) + " user from userService login");
         if (!user) {
             throw ApiError.BadRequest('there is no user with such email');
         }
-        const isPassEquals = await bcrypt.compare(password, user.password)
-        if (!isPassEquals) {
-            throw ApiError.BadRequest('wrong password');
+
+        if (!isVerifyEmail) {
+            const isPassEquals = await bcrypt.compare(password, user.password)
+            if (!isPassEquals) {
+                throw ApiError.BadRequest('wrong password');
+            }
         }
+
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
@@ -132,6 +143,13 @@ class UserService {
             },
             roles: await Role.find()
         }
+    }
+
+    async verifyEmail(token) {
+        if (!token) {
+            throw ApiError.BadRequest('no token');
+        }
+        return await tokenService.validateAccessToken(token);
     }
 }
 

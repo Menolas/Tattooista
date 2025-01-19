@@ -20,12 +20,11 @@ import {
     getUsersSelector,
     getTotalCountSelector,
     getUsersApiErrorSelector,
-    getUsersAccessErrorSelector, getIsDeletingInProcessSelector, getUserUpdateErrorSelector,
+    getIsDeletingInProcessSelector,
+    getUserUpdateErrorSelector,
 } from "../../../redux/Users/users-selectors";
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getAuthAccessErrorSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../types/Types";
-import {getApiErrorSelector} from "../../../redux/General/general-selectors";
-import {setApiErrorAC} from "../../../redux/General/general-reducer";
 import {ApiErrorMessageModal} from "../../common/ApiErrorMessageModal";
 import {useNavigate} from "react-router-dom";
 import {AppDispatch} from "../../../redux/redux-store";
@@ -40,7 +39,7 @@ export const UsersContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
     const pageLimit = useSelector(getPageLimitSelector);
     const filter = useSelector(getFilterSelector);
-    const accessError = useSelector(getUsersAccessErrorSelector);
+    const accessError = useSelector(getAuthAccessErrorSelector);
     const userUpdateError = useSelector(getUserUpdateErrorSelector);
     const usersApiError = useSelector(getUsersApiErrorSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
@@ -53,11 +52,12 @@ export const UsersContainer: React.FC = () => {
         dispatch(getUsers(token || "", currentPage, pageLimit, filter));
     }, [dispatch, token, currentPage, pageLimit, filter]);
 
-    useEffect(() => {
-        if (accessError) {
-            navigate("/noAccess");
-        }
-    }, [accessError]);
+    // useEffect(() => {
+    //     console.log(accessError + " !ACCESS ERROR!!!!!!!!");
+    //     if (accessError) {
+    //         navigate("/noAccess");
+    //     }
+    // }, [accessError]);
 
     const setPageLimitCallBack = (limit: number) => {
         dispatch(setPageLimitAC(limit));

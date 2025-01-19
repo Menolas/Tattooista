@@ -19,7 +19,7 @@ import {
   addArchivedBookingAC,
   AddArchivedBookingAT,
 } from "../ArchivedBookings/archived-bookings-reducer";
-import {setNeedReLoginAC, SetNeedReLoginAT} from "../Auth/auth-reducer";
+import {setNeedReLoginAC, setAccessErrorAC, SetAccessErrorAT, SetNeedReLoginAT} from "../Auth/auth-reducer";
 import {AnyAction} from "redux";
 
 const SET_PAGE_SIZE = 'SET_BOOKINGS_PAGE_SIZE';
@@ -32,7 +32,7 @@ const TOGGLE_IS_STATUS_CHANGING_IN_PROGRESS = 'TOGGLE_IS_STATUS_CHANGING_IN_PROG
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const DELETE_BOOKING = 'DELETE_BOOKING';
 const ADD_BOOKING = 'ADD_BOOKING';
-const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
+//const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_BOOKING_API_ERROR = 'SET_BOOKING_API_ERROR';
 const SET_BOOKING_PROFILE = 'SET_BOOKING_PROFILE';
 
@@ -52,7 +52,7 @@ const initialState = {
     condition: 'any' as string | null
   } as SearchFilterType,
   bookingProfile: {} as BookingType,
-  accessError: null as string | null,
+  //accessError: null as string | null,
   bookingApiError: null as null | string,
 };
 
@@ -140,11 +140,11 @@ export const bookingsReducer = (
         total: state.total + 1,
       }
 
-    case SET_ACCESS_ERROR:
-      return {
-        ...state,
-        accessError: action.error
-      }
+    // case SET_ACCESS_ERROR:
+    //   return {
+    //     ...state,
+    //     accessError: action.error
+    //   }
 
     case SET_BOOKING_API_ERROR:
       return {
@@ -194,14 +194,14 @@ export const setBookingApiErrorAC = (error: string | null): SetBookingApiErrorAT
   type: SET_BOOKING_API_ERROR, error
 });
 
-type SetAccessErrorAT = {
-  type: typeof SET_ACCESS_ERROR;
-  error: string | null;
-};
-
-export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
-  type: SET_ACCESS_ERROR, error
-});
+// type SetAccessErrorAT = {
+//   type: typeof SET_ACCESS_ERROR;
+//   error: string | null;
+// };
+//
+// export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
+//   type: SET_ACCESS_ERROR, error
+// });
 
 type SetPageSizeAT = {
   type: typeof  SET_PAGE_SIZE;

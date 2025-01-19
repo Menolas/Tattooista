@@ -127,7 +127,6 @@ class usersController {
                 } else {
                     res.user.roles = roleIds;
                 }
-                await res.user.populate('roles');
                 if (req.files && req.files.avatar) {
                     if (res.user.avatar) {
                         await fs.unlink(`./uploads/users/${res.user._id}/avatar/${res.user.avatar}`, e => {
@@ -164,8 +163,7 @@ class usersController {
             const email = req.body.email;
             const password = req.body.password;
             const roleIds = req.body.roles.match(/[a-f\d]{24}/g);
-            await userService.registration(displayName, email, password);
-            const user = await User.findOne({displayName});
+            const user = await userService.registration(displayName, email, password, true);
 
             if (roleIds === "" || roleIds === null) {
                 const userRole = await Role.findOne({value: "USER"});
@@ -184,9 +182,11 @@ class usersController {
                 user.avatar = newFileName;
             }
 
-            await user.populate('roles');
+            await user.save(); // Save changes to the user document
+            await user.populate("roles"); // Populate roles for response
+
             results.resultCode = 0;
-            results.user = await user.save();
+            results.user = user;
             return res.json(results);
         } catch (e) {
             results.resultCode = 1;

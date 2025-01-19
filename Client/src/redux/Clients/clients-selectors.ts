@@ -52,6 +52,6 @@ export const getClientsIsFavouriteChangingInProcessSelector = (state: AppStateTy
   return state.clients.isFavouriteChangingInProcess;
 };
 
-export const getClientsAccessErrorSelector = (state: AppStateType) => {
-  return state.clients.accessError;
-};
+// export const getClientsAccessErrorSelector = (state: AppStateType) => {
+//   return state.clients.accessError;
+// };
