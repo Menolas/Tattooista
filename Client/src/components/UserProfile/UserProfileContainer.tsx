@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {useNavigate,  useSearchParams} from "react-router-dom";
 import {UserProfile} from "./UserProfile";
 import {ApiErrorMessageModal} from "../common/ApiErrorMessageModal";
 import {getApiErrorSelector} from "../../redux/General/general-selectors";
@@ -26,7 +26,7 @@ export const UserProfileContainer: React.FC = () => {
 
   const apiError = useSelector(getApiErrorSelector);
   const profile = useSelector(getUserProfileSelector);
-  console.log(profile?._id + " Here is our user!!!!!!!!!!!!");
+  console.log(profile?._id + " Here is our user in container !!!!!!!!!!!!");
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const token = useSelector(getTokenSelector);
   const accessError = useSelector(getAuthAccessErrorSelector);
@@ -36,10 +36,15 @@ export const UserProfileContainer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get('userId');
+  console.log(userId, " User ID from URL");
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     let actualId: string | null = profile?._id ?? null;
     if (urlParams.get('userId')) actualId = urlParams.get('userId');
+    console.log(urlParams, " urlParams from useEffect");
     if (actualId) {
       dispatch(getRoles());
       dispatch(getUserProfile(token, actualId, roles));
@@ -47,6 +52,7 @@ export const UserProfileContainer: React.FC = () => {
   }, [dispatch, profile?._id]);
 
   useEffect(() => {
+    console.log(`Navigating to ?userId=${profile?._id}`);
     if(profile?._id) navigate(`?userId=${profile._id}`);
   }, [profile, navigate]);
 

@@ -50,9 +50,9 @@ export const UserProfile: React.FC<PropsType> = ({
         setUser(null);
     }
 
-    if (!data) {
-        return <div className="user-profile container">Sorry, we can not find such a user in data base</div>
-    }
+    // if (!data) {
+    //     return <div className="user-profile container">Sorry, we can not find such a user in data base</div>
+    // }
     const getUserRoleValues = (userRoleIds: Array<string>, allRoles: Array<RoleType>) => {
         return userRoleIds?.map(userRoleId => {
             const role = allRoles.find(role => role._id === userRoleId);
@@ -60,7 +60,7 @@ export const UserProfile: React.FC<PropsType> = ({
         }).filter(roleValue => roleValue !== null);
     }
 
-    const userRoleValues = getUserRoleValues(data?.roles, possibleRoles);
+    const userRoleValues = data ? getUserRoleValues(data.roles, possibleRoles) : [];
 
     return (
         <div className="user-profile container">
@@ -72,7 +72,7 @@ export const UserProfile: React.FC<PropsType> = ({
                     }
                 </div>
                 <div className="user-profile__details">
-                    <div className={"user-profile__name"}>{data.displayName}</div>
+                    <div className={"user-profile__name"}>{data?.displayName}</div>
                     <ul className={"user-profile__roles"}>
                         {userRoleValues?.map(role => <li key={role}>{role}</li>)}
                     </ul>
@@ -87,11 +87,11 @@ export const UserProfile: React.FC<PropsType> = ({
                     </button>
                     <button
                         className="btn btn--sm btn--transparent"
-                        disabled={isDeletingPicturesInProcess?.some(id => id === data._id)}
+                        disabled={isDeletingPicturesInProcess?.some(id => id === data?._id)}
                         onClick={() => {
                             setConfirmationData({
                                 needConfirmation: true,
-                                itemId: data._id,
+                                itemId: data?._id,
                                 context: 'Are you sure? You about to delete your profile FOREVER along with all data...',
                                 cb: remove
                             });
@@ -101,7 +101,7 @@ export const UserProfile: React.FC<PropsType> = ({
                 </div>
                 <div className={"user-profile__contact"}>
                     <span className={"user-profile__contact-icon"}><EnvelopIcon/></span>
-                    <span className={"user-profile__contact-email"}>{data.email}</span>
+                    <span className={"user-profile__contact-email"}>{data?.email}</span>
                 </div>
                 <ModalPopUp
                     isOpen={editUserMode}

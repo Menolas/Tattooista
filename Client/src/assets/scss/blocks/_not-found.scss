@@ -1,7 +1,9 @@
 .not-found {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
+  color: $dark-text;
 
   img {
     width: 100%;
@@ -13,6 +15,7 @@
     padding-top: 230px;
     img {
       width: 400px;
+      min-height: 200px;
     }
   }
 }
