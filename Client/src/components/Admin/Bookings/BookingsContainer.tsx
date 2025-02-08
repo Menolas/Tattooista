@@ -20,12 +20,11 @@ import {
   getFilterSelector,
   getIsStatusChangingSelector,
   getIsDeletingInProcessSelector,
-  getBookingAccessErrorSelector,
   getBookingApiErrorSelector,
 } from "../../../redux/Bookings/bookings-selectors";
 import { Bookings } from "./Bookings";
 import {SearchFilterType} from "../../../types/Types";
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getAuthAccessErrorSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {useNavigate} from "react-router-dom";
 import {AppDispatch} from "../../../redux/redux-store";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
@@ -42,7 +41,7 @@ export const BookingsContainer: React.FC = () => {
   const isStatusChanging = useSelector(getIsStatusChangingSelector);
   const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
   const token = useSelector(getTokenSelector);
-  const accessError = useSelector(getBookingAccessErrorSelector);
+  const accessError = useSelector(getAuthAccessErrorSelector);
   const bookingApiError = useSelector(getBookingApiErrorSelector);
   const apiError = useSelector(getApiErrorSelector)
 
@@ -59,11 +58,12 @@ export const BookingsContainer: React.FC = () => {
     }
   }, [filter, dispatch]);
 
-  useEffect(() => {
-    if (accessError) {
-      navigate("/noAccess");
-    }
-  }, [accessError]);
+  // useEffect(() => {
+  //   console.log(accessError + " !ACCESS ERROR!!!!!!!!");
+  //   if (accessError) {
+  //     navigate("/noAccess");
+  //   }
+  // }, [accessError]);
 
   const setCurrentPageCallBack = (
     page: number

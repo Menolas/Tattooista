@@ -37,7 +37,7 @@ type CheckAuthResponseType = CommonResponseFields & {
 
 export const authAPI = {
 
-  async registration(values: RegistrationFormValues) {
+  async registration(values: FormData) {
       return await $api.post<RegistrationResponseType>('auth/registration', values)
           .then(res => res.data);
   },
@@ -55,6 +55,13 @@ export const authAPI = {
   async checkAuth() {
       return await $api.get<CheckAuthResponseType>(`auth/refresh`)
           .then(response => response.data);
+  },
+
+  async verifyEmail(token: string | null) {
+    return await $api.post<LoginResponseType>(
+        `auth/verify-email`,
+        { token }
+    ).then(response => response.data);
   },
 
   async getUserProfile(

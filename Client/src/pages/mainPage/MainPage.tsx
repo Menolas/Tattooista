@@ -57,6 +57,7 @@ export const MainPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    console.log('token from main page useEffect', token);
     dispatch(getStyles(token, true));
   }, [dispatch, token]);
 

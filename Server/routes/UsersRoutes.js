@@ -8,8 +8,8 @@ const User = require("../models/User");
 function dynamicAuthCheckMiddleware() {
     return (req, res, next) => {
         const userId = req.params.id;
-        console.log(req.params.id + " here is the id");
         if(userId !== null) {
+            console.log(req.params.id + " here is the id from userRoutes");
             const middleware = authCheckMiddleware(userId);
             middleware(req, res, next);
         } else {
@@ -38,7 +38,7 @@ router.post('/:id', authRoleMiddleware(["SUPERADMIN"]), getUser, controller.upda
 //update user
 router.post('/profile/:id', dynamicAuthCheckMiddleware(), getUser, controller.updateUser);
 
-//creating user
+//creating user from admin side
 router.post('/', authRoleMiddleware(["SUPERADMIN"]), controller.addUser);
 
 //getting user profile

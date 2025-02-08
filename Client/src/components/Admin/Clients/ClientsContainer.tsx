@@ -21,11 +21,10 @@ import {
   getClientsPageSizeSelector,
   getIsDeletingPicturesInProcessSelector,
   getClientsApiErrorSelector,
-  getClientsAccessErrorSelector,
   getClientsIsFavouriteChangingInProcessSelector,
 } from "../../../redux/Clients/clients-selectors";
 import { Clients } from "./Clients";
-import {getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getAuthAccessErrorSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../../types/Types";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
@@ -44,7 +43,7 @@ export const ClientsContainer: React.FC = () => {
   const isDeletingPicturesInProcess = useSelector(getIsDeletingPicturesInProcessSelector);
   const isFavouriteChangingInProcess = useSelector(getClientsIsFavouriteChangingInProcessSelector);
   const token = useSelector(getTokenSelector);
-  const accessError = useSelector(getClientsAccessErrorSelector);
+  const accessError = useSelector(getAuthAccessErrorSelector);
   const clientsApiError = useSelector(getClientsApiErrorSelector);
   const apiError = useSelector(getApiErrorSelector);
 
@@ -62,11 +61,12 @@ export const ClientsContainer: React.FC = () => {
     }
   }, [dispatch, filter]);
 
-  useEffect(() => {
-    if (accessError) {
-      navigate("/noAccess");
-    }
-  }, [accessError]);
+  // useEffect(() => {
+  //   console.log(accessError + " !ACCESS ERROR!!!!!!!!");
+  //   if (accessError) {
+  //     navigate("/noAccess");
+  //   }
+  // }, [accessError]);
 
   const setCurrentPageCallBack = (
     page: number

@@ -30,6 +30,7 @@ export const HeaderContainer: React.FC = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
+  console.log(user?._id + " Here is our user in header !!!!!!!!!!!!");
 
   useEffect(() => {
     const pathArray = pageLocation.split('/');
