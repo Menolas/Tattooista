@@ -163,7 +163,8 @@ class usersController {
             const email = req.body.email;
             const password = req.body.password;
             const roleIds = req.body.roles.match(/[a-f\d]{24}/g);
-            const user = await userService.registration(displayName, email, password, true);
+            const userData = await userService.registration(displayName, email, password, true);
+            const user = await User.findOne({_id: userData._id});
 
             if (roleIds === "" || roleIds === null) {
                 const userRole = await Role.findOne({value: "USER"});

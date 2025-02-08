@@ -51,7 +51,7 @@ class bookingController {
       res.json(results);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Server error" });
+      res.status(400).json({ message: "Server error on get booking" });
     }
   }
 

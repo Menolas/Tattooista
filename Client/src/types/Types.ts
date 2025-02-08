@@ -93,11 +93,20 @@ export type GalleryItemType = {
 }
 
 export interface RegistrationFormValues {
-    avatar: File | string;
+    avatar?: File | string | null
     displayName: string;
     email: string;
     password: string;
     consent: boolean;
+}
+
+export interface UpdateUserFormValues {
+    avatar?: File | string | null;
+    displayName: string;
+    email: string;
+    password?: string;
+    roles?: { [key: string]: boolean };
+    [key: string]: any;
 }
 
 export interface LoginFormValues {
@@ -134,15 +143,6 @@ export interface AddClientFormValues {
     messenger: string | null;
     phone: string | null;
     whatsapp: string | null;
-}
-
-export interface UpdateUserFormValues {
-    avatar?: File | string | null;
-    displayName: string;
-    email: string;
-    password?: string;
-    roles?: { [key: string]: boolean };
-    [key: string]: any;
 }
 
 export type PageType = {

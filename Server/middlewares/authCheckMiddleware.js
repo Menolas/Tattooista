@@ -1,4 +1,5 @@
 const tokenService = require('../services/tokenService');
+const jwt = require("jsonwebtoken");
 
 module.exports = function (id) {
   return async function (req, res, next) {
@@ -16,7 +17,9 @@ module.exports = function (id) {
 
     try {
       if(token) {
+        console.log(token + " token from authCheckMiddleware");
         const data = tokenService.validateAccessToken(token);
+        console.log(data + " data from authCheckMiddleware");
         if (data && data.id === id) {
           isRightUser = true;
         } else {
@@ -32,22 +35,23 @@ module.exports = function (id) {
         }
 
         const userData = await tokenService.validateRefreshToken(refreshToken);
+        console.log(JSON.stringify(userData) + " userData from validateRefreshToken authCheckMiddleware");
         const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (userData.id === id && tokenFromDb) {
-          console.log(isRightUser + " we have right refresh token apparently...");
+        if (userData._id === id && tokenFromDb) {
           isRightUser = true;
+          console.log(isRightUser + " we have right refresh token apparently...");
         } else {
-          return res.status(401).json({ message: "Failed to validate refresh token" });
+          return res.status(401).json({ message: "Failed to validate refresh token in authCheckMiddleWare" });
         }
       }
 
       req.isRightUser = isRightUser;
-      console.log(req.isRightUser + " is user right in the end of the end");
+      //console.log(req.isRightUser + " is user right in the end of the end");
       next();
 
     } catch (e) {
       console.log(e);
-      return res.status(500).json({ message: "Server Error" });
+      return res.status(500).json({ message: "Server Error - authCheckMiddleware" });
     }
   }
 }

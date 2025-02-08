@@ -4,37 +4,29 @@ const {decode} = require("jsonwebtoken");
 
 module.exports = function (roles) {
   return async function (req, res, next) {
+
     if (req.method === "OPTIONS") {
       req.hasRole = false;
       next();
       return;
     }
 
-    let token = req.headers.authorization
-        ? req.headers.authorization?.split(' ')[1]
-        :  null;
-
+    let hasRole = false;
+    let userRoles = [];
     const roleObjectPromises = roles.map(async role => {
       const roleObject = await Role.findOne({ value: role });
       return roleObject._id;
     });
     const roleIds = await Promise.all(roleObjectPromises);
-    let hasRole = false;
-    let userRoles = [];
+    let token = req.headers.authorization
+        ? req.headers.authorization?.split(' ')[1]
+        :  null;
 
     try {
       if(token) {
-        //const decoded = decode(token, { complete: true });
-        //console.log('Decoded Token:', decoded);
         const data = tokenService.validateAccessToken(token);
-        const { accessToken } = tokenService.generateTokens({ email: 'olenakunina@gmail.com', id: 'test' });
-        console.log('Generated Token:', accessToken);
-        console.log('Received Token:', token);
-        console.log('Tokens Match:', accessToken === token);
-        //console.log(JSON.stringify(data) + " user roles from roleCheckMiddleware")
         if (data) {
           userRoles = data.roles;
-          console.log(userRoles + " user roles from roleCheckMiddleware")
         } else {
           token = null;
         }
@@ -53,7 +45,7 @@ module.exports = function (roles) {
         if (userData && tokenFromDb) {
           userRoles = userData.roles;
         } else {
-          return res.status(401).json({ message: "Failed to validate refresh token" });
+          return res.status(401).json({ message: "Failed to validate refresh token authRoleMiddleware" });
         }
       }
 

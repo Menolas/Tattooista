@@ -83,20 +83,24 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
     }
   };
 
-  const submit = async (
-      values: RegistrationFormValues,
-      actions: FormikHelpers<RegistrationFormValues>
-  ) => {
-    await dispatch(registration(values));
-    actions.setSubmitting(false);
-  };
-
   const initialValues: RegistrationFormValues = {
     avatar: '',
     displayName: '',
     email: '',
     password: '',
     consent: false,
+  };
+
+  const submit = async (
+      values: RegistrationFormValues,
+      actions: FormikHelpers<RegistrationFormValues>
+  ) => {
+    const formData = new FormData();
+    for (const key in values) {
+      formData.append(key, values[key as keyof RegistrationFormValues] as any);
+    }
+    await dispatch(registration(formData));
+    actions.setSubmitting(false);
   };
 
   return (

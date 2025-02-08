@@ -313,7 +313,7 @@ export const logout = (): ThunkType => async (
 };
 
 export const registration = (
-    values: RegistrationFormValues
+    values: FormData
 ): ThunkType => async (dispatch) => {
     try {
         const response = await authAPI.registration(values);
@@ -324,6 +324,7 @@ export const registration = (
                 getUserRole(response.userData.user.roles, response.userData.roles),
                 response.userData.roles
             ));
+            dispatch(setAuthApiErrorAC(null));
             dispatch(setSuccessModalAC(true, "You successfully subscribed!"));
             return true;
         } else {

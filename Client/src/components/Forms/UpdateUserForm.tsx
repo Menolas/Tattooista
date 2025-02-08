@@ -124,7 +124,10 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
     roles: rolesInitialValues,
   };
 
-  const submit = async (values: UpdateUserFormValues, actions: FormikHelpers<UpdateUserFormValues>) => {
+  const submit = async (
+      values: UpdateUserFormValues,
+      actions: FormikHelpers<UpdateUserFormValues>
+  ) => {
     const formData = new FormData();
     for (const key in values) {
       if (key === 'roles') {
@@ -192,7 +195,10 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
 
         return (
           <Form className="form" encType={"multipart/form-data"}>
-            <FieldWrapper name={'avatar'} wrapperClass={'form__input-wrap--uploadFile'}>
+            <FieldWrapper
+                name={'avatar'}
+                wrapperClass={'form__input-wrap--uploadFile'}
+            >
               <div className="form__input-wrap--uploadFile-img">
                 { !imageURL
                     ? !data?.avatar

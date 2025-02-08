@@ -5,7 +5,6 @@ class TokenService {
 
     generateTokens(payload) {
         const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '15m'});
-        console.log('Generated Token:', accessToken);
         const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: '30d'});
         return {
             accessToken,
@@ -29,7 +28,8 @@ class TokenService {
     async removeToken(refreshToken) {
         return tokenModel.updateOne(
             {refreshTokens: refreshToken},
-            {$pull: {refreshTokens: refreshToken}});
+            {$pull: {refreshTokens: refreshToken}}
+        );
     }
 
     async findToken(refreshToken) {
@@ -38,11 +38,15 @@ class TokenService {
 
     validateAccessToken(token) {
         try {
-            console.log('JWT_ACCESS_SECRET during validation:', process.env.JWT_ACCESS_SECRET);
+            console.log('Token received for validation:', token);
+            if (!token || token.split('.').length !== 3) {
+                console.error('Invalid token format:', token);
+            }
             return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
         } catch (e) {
+            console.log('Token received for validation with error:', token);
             console.error('Access token validation error:', e);
-            return null; // Return `null` instead of a string for consistency
+            return null;
         }
     }
     validateRefreshToken(token) {

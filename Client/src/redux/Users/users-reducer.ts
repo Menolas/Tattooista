@@ -144,12 +144,6 @@ export const usersReducer = (
             userUpdateError: action.error
         }
 
-        // case SET_ACCESS_ERROR:
-        //     return {
-        //         ...state,
-        //         accessError: action.error
-        //     }
-
         default: return state
     }
 };
@@ -192,15 +186,6 @@ type SetUsersApiErrorAT = {
 export const setUsersApiErrorAC = (error: string | null): SetUsersApiErrorAT => ({
     type: SET_USERS_API_ERROR, error
 });
-
-// type SetAccessErrorAT = {
-//     type: typeof SET_ACCESS_ERROR;
-//     error: string | null;
-// };
-//
-// export const setAccessErrorAC = (error: string | null): SetAccessErrorAT => ({
-//     type: SET_ACCESS_ERROR, error
-// });
 
 type AddUserAT = {
     type: typeof ADD_USER;

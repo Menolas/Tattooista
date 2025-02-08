@@ -1,28 +1,32 @@
 const tokenService = require('../services/tokenService');
 const Role = require("../models/Role");
+const {decode} = require("jsonwebtoken");
 
 module.exports = function (roles) {
   return async function (req, res, next) {
+
     if (req.method === "OPTIONS") {
       req.hasRole = false;
       next();
       return;
     }
 
-    let token = req.headers.authorization
-        ? req.headers.authorization?.split(' ')[1]
-        :  null;
-
+    let hasRole = false;
+    let userRoles = [];
     const roleObjectPromises = roles.map(async role => {
       const roleObject = await Role.findOne({ value: role });
       return roleObject._id;
     });
     const roleIds = await Promise.all(roleObjectPromises);
-    let hasRole = false;
-    let userRoles = [];
+    let token = req.headers.authorization
+        ? req.headers.authorization?.split(' ')[1]
+        :  null;
+    const decoded = decode(token, { complete: true });
+    console.log('Decoded Token:', decoded);
 
     try {
       if(token) {
+        console.log(tokenService.validateAccessToken(token) + " data from notStrictAuthRoleMiddleware");
         const data = tokenService.validateAccessToken(token);
         if (data) {
           userRoles = data.roles;
@@ -45,7 +49,7 @@ module.exports = function (roles) {
         if (userData && tokenFromDb) {
           userRoles = userData.roles;
         } else {
-          return res.status(401).json({ message: "Failed to validate refresh token" });
+          return res.status(401).json({ message: "Failed to validate refresh token in noStrictAuthRoleCheck" });
         }
       }
 
