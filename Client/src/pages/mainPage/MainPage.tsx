@@ -5,7 +5,7 @@ import { Booking } from "../../components/MainPage/Booking";
 import {
     StyleType
 } from "../../types/Types";
-import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+import {SuccessPopUp} from "../../components/PopUps/SuccessPopUp";
 import {useCallback, useEffect} from "react";
 import {
   setSuccessModalAC,

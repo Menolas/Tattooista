@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ConfettiContainer} from "./Confetti";
+import {ConfettiContainer} from "../common/Confetti";
 import {ModalPopUp} from "./ModalPopUp";
 import {useCallback, useEffect} from "react";
 

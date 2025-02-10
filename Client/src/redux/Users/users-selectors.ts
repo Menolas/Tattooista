@@ -36,10 +36,6 @@ export const getUserUpdateErrorSelector = (state: AppStateType) => {
     return state.users.userUpdateError;
 }
 
-// export const getUsersAccessErrorSelector = (state: AppStateType) => {
-//     return state.users.accessError;
-// };
-
 export const getIsDeletingInProcessSelector = (state: AppStateType) => {
     return state.users.isDeletingInProcess;
 }

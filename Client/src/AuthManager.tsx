@@ -4,24 +4,23 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkAuth, setFromAC} from "./redux/Auth/auth-reducer";
 import {
     getAuthAccessErrorSelector,
-    getAuthSelector,
+    getIsAuthSelector,
     getFromSelector,
     getUserProfileSelector,
 } from "./redux/Auth/auth-selectors";
 import {AppDispatch} from "./redux/redux-store";
-import {ModalPopUp} from "./components/common/ModalPopUp";
-import {NoAccessPopUp} from "./components/common/NoAccessPopUp";
+import {ModalPopUp} from "./components/PopUps/ModalPopUp";
+import {NoAccessPopUp} from "./components/PopUps/NoAccessPopUp";
 
 interface AuthManagerProps {
     children: ReactNode;
 }
 
 export const AuthManager = ({children}: AuthManagerProps) => {
-    const isAuth = useSelector(getAuthSelector);
+    const isAuth = useSelector(getIsAuthSelector);
     const user = useSelector(getUserProfileSelector);
     const from = useSelector(getFromSelector);
     const accessError = useSelector(getAuthAccessErrorSelector);
-    console.log(accessError + " !auth manager ACCESS ERROR!!!!!!!!")
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -43,7 +42,6 @@ export const AuthManager = ({children}: AuthManagerProps) => {
     }, []);
 
     useEffect(() => {
-        console.log(isAuth + " !AUTH!!!!!!!!");
         if (!isAuth && hasToken) {
             dispatch(checkAuth())
                 .finally(() => setLoading(false));
@@ -81,9 +79,7 @@ export const AuthManager = ({children}: AuthManagerProps) => {
     return (
         <div className={"app"}>
             {children}
-            {noAccess && <ModalPopUp isOpen={noAccess} closeModal={closeNoAccess}>
-                <NoAccessPopUp/>
-            </ModalPopUp>}
+            {noAccess && <NoAccessPopUp isOpen={noAccess} closeModal={closeNoAccess}/>}
         </div>
     );
 };

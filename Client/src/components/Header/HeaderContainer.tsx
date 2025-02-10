@@ -8,7 +8,7 @@ import {
 } from "../../redux/Auth/auth-reducer";
 import { Header } from "./Header";
 import {
-  getAuthSelector,
+  getIsAuthSelector,
   getLoginErrorSelector,
   getNeedReLoginSelector,
   getUserProfileSelector,
@@ -19,7 +19,7 @@ import {AppDispatch} from "../../redux/redux-store";
 
 export const HeaderContainer: React.FC = () => {
 
-  const isAuth = useSelector(getAuthSelector);
+  const isAuth = useSelector(getIsAuthSelector);
   const user = useSelector(getUserProfileSelector);
   const loginError = useSelector(getLoginErrorSelector);
   const needReLogin = useSelector(getNeedReLoginSelector);
@@ -30,7 +30,6 @@ export const HeaderContainer: React.FC = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  console.log(user?._id + " Here is our user in header !!!!!!!!!!!!");
 
   useEffect(() => {
     const pathArray = pageLocation.split('/');

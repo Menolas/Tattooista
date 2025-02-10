@@ -1,6 +1,6 @@
 import { AppStateType } from "../redux-store"
 
-export const getAuthSelector = (state: AppStateType) => {
+export const getIsAuthSelector = (state: AppStateType) => {
   return state.auth.isAuth;
 }
 

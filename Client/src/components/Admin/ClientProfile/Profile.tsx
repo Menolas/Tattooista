@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {ClientType, ContactType} from "../../../types/Types";
 import {API_URL} from "../../../http";
-import {ModalPopUp} from "../../common/ModalPopUp";
+import {ModalPopUp} from "../../PopUps/ModalPopUp";
 import {UpdateClientForm} from "../../Forms/UpdateClientForm";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";

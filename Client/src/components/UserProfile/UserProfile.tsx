@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import {API_URL} from "../../http";
-import {ModalPopUp} from "../common/ModalPopUp";
+import {ModalPopUp} from "../PopUps/ModalPopUp";
 import {Confirmation} from "../common/Confirmation";
 import {Tooltip} from "react-tooltip";
 import {ReactComponent as EnvelopIcon} from "../../assets/svg/envelop.svg";
