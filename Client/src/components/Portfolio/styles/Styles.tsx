@@ -5,7 +5,7 @@ import {StyleType} from "../../../types/Types";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as TrashIcon} from "../../../assets/svg/trash.svg";
 import {UpdateStyleForm} from "../../Forms/UpdateStyleForm";
-import {ModalPopUp} from "../../common/ModalPopUp";
+import {ModalPopUp} from "../../PopUps/ModalPopUp";
 import {Tooltip} from "react-tooltip";
 import {Confirmation} from "../../common/Confirmation";
 import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";

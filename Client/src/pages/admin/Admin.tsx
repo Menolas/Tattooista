@@ -3,12 +3,12 @@ import {NavLink} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getAuthSelector,
+    getIsAuthSelector,
 } from "../../redux/Auth/auth-selectors";
 import { ADMIN_BUTTONS_DATA, } from "../../utils/constants";
 import {ReactComponent as AdminIcon} from "../../assets/svg/admin.svg";
 import {useCallback, useEffect, useState} from "react";
-import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+import {SuccessPopUp} from "../../components/PopUps/SuccessPopUp";
 import {
     getSuccessModalSelector
 } from "../../redux/General/general-selectors";
@@ -29,7 +29,7 @@ interface SubMenuItemType {
 export const Admin: React.FC = () => {
 
   const successModal = useSelector(getSuccessModalSelector);
-  const isAuth = useSelector(getAuthSelector);
+  const isAuth = useSelector(getIsAuthSelector);
 
   const dispatch = useDispatch<AppDispatch>();
 

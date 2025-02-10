@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ModalPopUp} from "./ModalPopUp";
+import {ModalPopUp} from "../PopUps/ModalPopUp";
 import {useCallback, useEffect, useRef, useState} from "react";
 
 type PropsType = {

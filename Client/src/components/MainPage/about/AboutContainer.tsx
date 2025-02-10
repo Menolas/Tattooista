@@ -11,7 +11,7 @@ import {
     changeAboutPageVisibility,
 } from "../../../redux/About/about-reducer";
 import {useEffect} from "react";
-import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getIsAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {getApiErrorSelector} from "../../../redux/General/general-selectors";
 import {setApiErrorAC} from "../../../redux/General/general-reducer";
 import {AppDispatch} from "../../../redux/redux-store";
@@ -20,7 +20,7 @@ import {AppDispatch} from "../../../redux/redux-store";
 export const AboutContainer = () => {
     const token = useSelector(getTokenSelector);
     const apiError = useSelector(getApiErrorSelector);
-    const isAuth = useSelector(getAuthSelector);
+    const isAuth = useSelector(getIsAuthSelector);
     const page = useSelector(getPageSelector);
     const isFetching = useSelector(getIsFetchingSelector);
     const isEditing = useSelector(getIsEditingSelector);

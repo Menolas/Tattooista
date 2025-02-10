@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {ModalPopUp} from "./ModalPopUp";
+import {ModalPopUp} from "../PopUps/ModalPopUp";
 import {BookingForm} from "../Forms/BookingForm";
 import * as React from "react";
 import {
@@ -8,7 +8,7 @@ import {
 } from "../../redux/General/general-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {getSuccessModalSelector} from "../../redux/General/general-selectors";
-import {SuccessPopUp} from "./SuccessPopUp";
+import {SuccessPopUp} from "../PopUps/SuccessPopUp";
 import {AppDispatch} from "../../redux/redux-store";
 import {setBookingApiErrorAC} from "../../redux/Bookings/bookings-reducer";
 import {getBookingApiErrorSelector} from "../../redux/Bookings/bookings-selectors";

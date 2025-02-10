@@ -20,7 +20,7 @@ import {
 } from "../../redux/Users/users-reducer";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import {handleEnterClick} from "../../utils/functions";
-import {getAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {getIsAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../redux/redux-store";
 import {SUPER_ADMIN} from "../../utils/constants";
 
@@ -81,7 +81,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
   closeModal,
 }) => {
   const token = useSelector(getTokenSelector);
-  const isAuth = useSelector(getAuthSelector);
+  const isAuth = useSelector(getIsAuthSelector);
   const [hasNewFile, setHasNewFile] = useState(false);
   const validationSchema = getValidationSchema(isEditing, hasNewFile);
   const [imageURL, setImageURL] = useState('');

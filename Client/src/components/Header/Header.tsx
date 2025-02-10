@@ -12,7 +12,7 @@ import {ADMIN, SUPER_ADMIN} from "../../utils/constants";
 import {BookingButton} from "../common/BookingButton";
 import {StyleType, UserType} from "../../types/Types";
 import {useEffect} from "react";
-import {ModalPopUp} from "../common/ModalPopUp";
+import {ModalPopUp} from "../PopUps/ModalPopUp";
 import {LoginForm} from "../Forms/LoginForm";
 import {DefaultAvatar} from "../common/DefaultAvatar";
 import {API_URL} from "../../http";

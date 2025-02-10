@@ -9,7 +9,7 @@ import {
     deleteFaqItem,
     getFaqItems,
 } from "../../../redux/Faq/faq-reducer";
-import {getAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
+import {getIsAuthSelector, getTokenSelector} from "../../../redux/Auth/auth-selectors";
 import {
     useDispatch,
     useSelector
@@ -22,7 +22,7 @@ import {AppDispatch} from "../../../redux/redux-store";
 export const FaqContainer = () => {
     const token = useSelector(getTokenSelector);
     const apiError = useSelector(getApiErrorSelector);
-    const isAuth = useSelector(getAuthSelector);
+    const isAuth = useSelector(getIsAuthSelector);
     const faq = useSelector(getFaqItemsSelector);
     const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);

@@ -2,7 +2,7 @@ import * as React from "react";
 import {useCallback, useState} from "react";
 import {ServiceType} from "../../../types/Types";
 import {ServiceItem} from "./ServiceItem";
-import {ModalPopUp} from "../../common/ModalPopUp";
+import {ModalPopUp} from "../../PopUps/ModalPopUp";
 import {UpdateServiceItemForm} from "../../Forms/UpdateServiceItemForm";
 import {Preloader} from "../../common/Preloader";
 

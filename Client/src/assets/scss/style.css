@@ -108,6 +108,14 @@ img {
     opacity: 1;
   }
 }
+.text-dark {
+  color: #080808;
+}
+
+.text-bolder {
+  font-weight: 500;
+}
+
 .background-wrap {
   margin: 0 auto;
   width: 1440px;

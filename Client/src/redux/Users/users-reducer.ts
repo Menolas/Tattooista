@@ -23,7 +23,6 @@ const SET_ROLES = 'SET_ROLES';
 const EDIT_USER = 'EDIT_USER';
 const ADD_USER = 'ADD_USER';
 const SET_USERS_API_ERROR = 'SET_USERS_API_ERROR';
-//const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_USER_UPDATE_ERROR = 'SET_USER_UPDATE_ERROR';
 
 const UPDATE_USER_SUCCESS = 'You successfully updated user info!';
@@ -44,7 +43,6 @@ const initialState = {
     } as SearchFilterType,
     usersApiError: null as string | null,
     userUpdateError: null as string | null,
-    //accessError: null as string | null,
 };
 
 export type InitialStateType = typeof initialState;
@@ -279,7 +277,6 @@ const editUserAC = (user: UserType): EditUserAT => ({
     type: EDIT_USER, user
 });
 
-//export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, ActionsTypes>;
 export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
 export const getRoles = (): ThunkType => async (dispatch) => {
