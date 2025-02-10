@@ -1,5 +1,5 @@
 import * as React from "react";
-import {SuccessPopUp} from "../../components/common/SuccessPopUp";
+import {SuccessPopUp} from "../../components/PopUps/SuccessPopUp";
 import {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -18,7 +18,7 @@ import {ADMIN, SUPER_ADMIN, USER,} from "../../utils/constants";
 import {Gallery} from "../../components/Portfolio/gallery/Gallery";
 import {GalleryInfiniteScroll} from "../../components/Portfolio/gallery/GalleryInfiniteScroll";
 import {ApiErrorMessageModal} from "../../components/common/ApiErrorMessageModal";
-import {getAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {getIsAuthSelector, getTokenSelector} from "../../redux/Auth/auth-selectors";
 import {
     getCurrentPageSelector, getGalleryApiErrorSelector,
     getIsGalleryItemDeletingInProcessSelector,
@@ -35,7 +35,7 @@ import {StyleType} from "../../types/Types";
 import {AppDispatch} from "../../redux/redux-store";
 
 export const PortfolioContainer: React.FC = () => {
-    const isAuth = useSelector(getAuthSelector);
+    const isAuth = useSelector(getIsAuthSelector);
     const token = useSelector(getTokenSelector);
     const isFetching = useSelector(getIsFetchingSelector);
 

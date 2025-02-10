@@ -37,7 +37,7 @@ module.exports = function (id) {
         const userData = await tokenService.validateRefreshToken(refreshToken);
         console.log(JSON.stringify(userData) + " userData from validateRefreshToken authCheckMiddleware");
         const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (userData._id === id && tokenFromDb) {
+        if (userData.id === id && tokenFromDb) {
           isRightUser = true;
           console.log(isRightUser + " we have right refresh token apparently...");
         } else {

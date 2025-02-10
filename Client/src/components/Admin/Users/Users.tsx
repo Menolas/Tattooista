@@ -8,7 +8,7 @@ import { usersFilterSelectOptions } from "../../../utils/constants";
 import {SearchFilterForm} from "../../Forms/SearchFilterForm";
 import {useCallback, useState} from "react";
 import {UpdateUserForm} from "../../Forms/UpdateUserForm";
-import {ModalPopUp} from "../../common/ModalPopUp";
+import {ModalPopUp} from "../../PopUps/ModalPopUp";
 
 type PropsType = {
     userUpdateError: null | string;

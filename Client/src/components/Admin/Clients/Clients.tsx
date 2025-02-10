@@ -2,7 +2,7 @@ import * as React from "react";
 import {useCallback, useState} from "react";
 import { Client } from "./Client";
 import { Paginator } from "../../common/Paginator";
-import { ModalPopUp } from "../../common/ModalPopUp";
+import { ModalPopUp } from "../../PopUps/ModalPopUp";
 import { UpdateClientForm } from "../../Forms/UpdateClientForm";
 import {SearchFilterType, ClientType} from "../../../types/Types";
 import {NothingToShow} from "../../common/NothingToShow";

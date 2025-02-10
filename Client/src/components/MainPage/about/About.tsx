@@ -5,7 +5,7 @@ import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
 import {ReactComponent as EyeIcon} from "../../../assets/svg/eye.svg";
 import {ReactComponent as HideIcon} from "../../../assets/svg/hide.svg";
 import {API_URL} from "../../../http";
-import {ModalPopUp} from "../../common/ModalPopUp";
+import {ModalPopUp} from "../../PopUps/ModalPopUp";
 import { UpdateAboutPageForm } from "../../Forms/UpdateAboutPageForm";
 import {Tooltip} from "react-tooltip";
 import {ADMIN, SUPER_ADMIN} from "../../../utils/constants";

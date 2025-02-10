@@ -3,7 +3,7 @@ import {useCallback, useEffect, useState} from "react";
 import { Paginator } from "../../common/Paginator";
 import { Booking } from "./Booking";
 import {BookingType, SearchFilterType} from "../../../types/Types";
-import {ModalPopUp} from "../../common/ModalPopUp";
+import {ModalPopUp} from "../../PopUps/ModalPopUp";
 import {AddBookingForm} from "../../Forms/AddBookingForm";
 import {Preloader} from "../../common/Preloader";
 import {NothingToShow} from "../../common/NothingToShow";

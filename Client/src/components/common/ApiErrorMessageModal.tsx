@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ModalPopUp} from "./ModalPopUp";
+import {ModalPopUp} from "../PopUps/ModalPopUp";
 
 type PropsType = {
     isOpen: boolean;

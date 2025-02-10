@@ -2,7 +2,7 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import { Preloader } from "../../common/Preloader";
 import {GalleryItemType, StyleType} from "../../../types/Types";
-import { ModalPopUp } from "../../common/ModalPopUp";
+import { ModalPopUp } from "../../PopUps/ModalPopUp";
 import {API_URL} from "../../../http";
 import {Tooltip} from "react-tooltip";
 import {ReactComponent as EditIcon} from "../../../assets/svg/edit.svg";
