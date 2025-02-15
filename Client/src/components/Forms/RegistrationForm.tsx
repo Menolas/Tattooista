@@ -67,14 +67,6 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
 
   const [imageURL, setImageURL] = useState('');
 
-  const formikRef = React.useRef<FormikProps<RegistrationFormValues>>(null);
-
-  React.useEffect(() => {
-    if (formikRef.current) {
-      formikRef.current.resetForm();
-    }
-  }, []);
-
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
@@ -113,8 +105,6 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
 
   return (
     <Formik
-        key={Date.now()}
-        enableReinitialize={true}
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={submit}
