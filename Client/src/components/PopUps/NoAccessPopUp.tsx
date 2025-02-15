@@ -16,8 +16,8 @@ export const NoAccessPopUp: React.FC<PropsType> = ({
             closeModal={closeModal}
         >
             <div>
-                <img src={'./uploads/noaccess.webp'} alt={''}/>
-                <p className={"text-dark"}>No access</p>
+                <img src='../uploads/noaccess.webp' alt='no access'/>
+                <p className="text-dark">No access</p>
             </div>
         </ModalPopUp>
     );

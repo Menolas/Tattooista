@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Field, Form, Formik, FormikHelpers} from "formik";
+import {Field, Form, Formik, FormikHelpers, FormikProps} from "formik";
 import {
   isFileSizeValid,
   MAX_FILE_SIZE,
@@ -67,6 +67,14 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
 
   const [imageURL, setImageURL] = useState('');
 
+  const formikRef = React.useRef<FormikProps<RegistrationFormValues>>(null);
+
+  React.useEffect(() => {
+    if (formikRef.current) {
+      formikRef.current.resetForm();
+    }
+  }, []);
+
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
@@ -105,6 +113,8 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
 
   return (
     <Formik
+        key={Date.now()}
+        enableReinitialize={true}
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={submit}
@@ -162,6 +172,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 onKeyDown={(event: React.KeyboardEvent) => {
                   handleEnterClick(event, propsF.handleSubmit)
                 }}
+                autoComplete="new-email"
             />
             <FieldComponent
                 name={'password'}
@@ -172,6 +183,7 @@ export const RegistrationForm: React.FC<PropsType> = React.memo(({
                 onKeyDown={(event: React.KeyboardEvent) => {
                   handleEnterClick(event, propsF.handleSubmit)
                 }}
+                autoComplete="new-password"
             />
             <FieldWrapper
                 wrapperClass={'form__input-wrap--checkbox'}

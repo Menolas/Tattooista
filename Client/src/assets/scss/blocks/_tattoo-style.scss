@@ -1,8 +1,7 @@
 .tattoo-style {
   &.page-block {
     padding-top: 118px;
-    //margin-bottom: 88px;
-    background-image: url("../img/mainOfferBG.png");
+    background-image: url("../img/body-bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -179,7 +178,6 @@
     margin-bottom: 0;
     padding-top: 220px;
     padding-bottom: 28px;
-    background-image: url("../img/body-bg.jpg");
 
     &::before {
       bottom: 0;

@@ -1672,7 +1672,7 @@ img {
 }
 .tattoo-style.page-block {
   padding-top: 118px;
-  background-image: url("../img/mainOfferBG.png");
+  background-image: url("../img/body-bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -1824,7 +1824,6 @@ img {
     margin-bottom: 0;
     padding-top: 220px;
     padding-bottom: 28px;
-    background-image: url("../img/body-bg.jpg");
   }
   .tattoo-style.page-block::before {
     bottom: 0;
@@ -3904,6 +3903,17 @@ input[type=checkbox][value=true] + label .checkbox::after {
   .user-profile {
     padding-top: 180px;
     flex-direction: row;
+  }
+}
+.email-verified-container {
+  padding-top: 118px;
+  color: #fafafa;
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .email-verified-container {
+    padding-top: 220px;
   }
 }
 

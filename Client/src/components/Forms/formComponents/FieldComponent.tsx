@@ -10,6 +10,7 @@ type PropsType = {
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?: (e: React.KeyboardEvent) => void;
+    autoComplete?: string;
 }
 
 export const FieldComponent:React.FC<PropsType> = ({
@@ -20,6 +21,7 @@ export const FieldComponent:React.FC<PropsType> = ({
    onChange,
    value,
    onKeyDown,
+   autoComplete,
 }) => {
     return (
         <div className="form__input-wrap">
@@ -41,6 +43,7 @@ export const FieldComponent:React.FC<PropsType> = ({
                     onKeyDown={(event) => {
                         if (onKeyDown) onKeyDown(event);
                     }}
+                    autoComplete={autoComplete}
                 />
                 )}
             </Field>
