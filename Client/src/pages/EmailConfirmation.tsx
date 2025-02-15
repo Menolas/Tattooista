@@ -38,8 +38,8 @@ const EmailVerified = () => {
     return (
         <div className="email-verified-container">
             {status === "loading" && <p>Verifying your email...</p>}
-            {status === "success" && <p className="success">{message}</p>}
-            {status === "error" && <p className="error">{message}</p>}
+            {status === "success" && <p>{message}</p>}
+            {status === "error" && <p>{message}</p>}
         </div>
     );
 };
