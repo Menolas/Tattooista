@@ -100,15 +100,16 @@ export const Header: React.FC<PropsType> = React.memo(({
                                 : <img src={`${API_URL}/users/${user?._id}/avatar/${user?.avatar}`} alt="preview"/>
                             }
                         </NavLink>
-                        <button
+                        <NavLink
                             className={"btn btn--transparent"}
                             data-tooltip-id="my-tooltip"
                             data-tooltip-content="Log out"
                             onClick={logout}
+                            to={'/'}
                         >
                             <LogOutIcon/>
                             Log Out
-                        </button>
+                        </NavLink>
                     </>
 
                 )

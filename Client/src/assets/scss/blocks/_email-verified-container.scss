@@ -1,0 +1,11 @@
+.email-verified-container {
+  padding-top: 118px;
+  color: $light-text;
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .email-verified-container {
+    padding-top: 220px;
+  }
+}

@@ -105,7 +105,7 @@ class UserService {
             roles: user.roles.map(role => role.toString()),
             isActivated: user.isActivated
         };
-        console.log('Payload:', payload);
+
         return await tokenService.generateEmailVerificationToken(payload);
     }
 
@@ -128,7 +128,7 @@ class UserService {
             roles: user.roles.map(role => role.toString()),
             isActivated: user.isActivated
         };
-        console.log('Payload:', payload);
+
         const tokens = tokenService.generateTokens(payload);
         await tokenService.saveToken(user._id, tokens.refreshToken);
         return {
@@ -168,7 +168,7 @@ class UserService {
             roles: user.roles.map(role => role.toString()),
             isActivated: user.isActivated
         };
-        console.log('Payload:', payload);
+
         const tokens = tokenService.generateTokens(payload);
         await tokenService.saveToken(user._id, tokens.refreshToken);
         return {
@@ -179,9 +179,10 @@ class UserService {
                 email: user.email,
                 displayName: user.displayName,
                 isActivated: user.isActivated,
+                avatar: user.avatar,
                 roles: payload.roles,
             },
-            roles: await Role.find()
+            roles: await Role.find(),
         }
     }
 
