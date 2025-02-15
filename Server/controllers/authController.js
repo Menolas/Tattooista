@@ -19,6 +19,7 @@ class AuthController {
       res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
 
       if (req.files && req.files.avatar) {
+        console.log("we have avatar!!!!!!!!!");
         const file = req.files.avatar;
         if (!file) return res.json({error: 'Incorrect input name'});
         const newFileName = generateFileRandomName(file.name);
