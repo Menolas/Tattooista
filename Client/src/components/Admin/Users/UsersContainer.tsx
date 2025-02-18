@@ -52,13 +52,6 @@ export const UsersContainer: React.FC = () => {
         dispatch(getUsers(token || "", currentPage, pageLimit, filter));
     }, [dispatch, token, currentPage, pageLimit, filter]);
 
-    // useEffect(() => {
-    //     console.log(accessError + " !ACCESS ERROR!!!!!!!!");
-    //     if (accessError) {
-    //         navigate("/noAccess");
-    //     }
-    // }, [accessError]);
-
     const setPageLimitCallBack = (limit: number) => {
         dispatch(setPageLimitAC(limit));
     };

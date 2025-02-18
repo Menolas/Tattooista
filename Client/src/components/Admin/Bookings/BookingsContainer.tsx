@@ -46,7 +46,6 @@ export const BookingsContainer: React.FC = () => {
   const apiError = useSelector(getApiErrorSelector)
 
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getBookings(token, currentPage, pageSize, filter));
@@ -57,13 +56,6 @@ export const BookingsContainer: React.FC = () => {
       dispatch(setCurrentPageAC(1));
     }
   }, [filter, dispatch]);
-
-  // useEffect(() => {
-  //   console.log(accessError + " !ACCESS ERROR!!!!!!!!");
-  //   if (accessError) {
-  //     navigate("/noAccess");
-  //   }
-  // }, [accessError]);
 
   const setCurrentPageCallBack = (
     page: number

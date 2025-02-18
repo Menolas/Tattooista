@@ -50,12 +50,6 @@ export const ArchivedGallery: React.FC = React.memo(() => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (accessError) {
-    //         navigate("/noAccess");
-    //     }
-    // }, [accessError]);
-
     useEffect(() => {
         if (!accessError) {
             if (styles.length === 0) dispatch(getStyles(token));

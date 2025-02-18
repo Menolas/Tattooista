@@ -15,7 +15,7 @@ const getConditions = (reqBody) => {
 
 class ServiceService {
     async addService(data) {
-        console.log(JSON.stringify(data) + "controller service from serervice")
+        console.log(JSON.stringify(data) + "controller service from service")
         if (data.title) {
             const titleCandidate = await  Service.findOne({
                 'title': data.title

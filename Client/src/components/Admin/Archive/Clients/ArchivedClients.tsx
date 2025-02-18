@@ -51,12 +51,6 @@ export const ArchivedClients: React.FC = React.memo(() => {
         dispatch(getArchivedClients(token, currentPage, pageSize, filter));
     }, [token, dispatch, currentPage, pageSize, filter]);
 
-    // useEffect(() => {
-    //     if (accessError) {
-    //         navigate("/noAccess");
-    //     }
-    // }, [accessError]);
-
     const onPageChangedCallBack = (
         page: number
     ) => {

@@ -13,6 +13,13 @@ export type UserType = {
     avatar?: string;
 } | null;
 
+export type ReviewType = {
+    _id: string;
+    rate: number;
+    content: string;
+    createdAt?: Date;
+}
+
 export interface ContactType {
     [key: string]: string;
 }
@@ -64,6 +71,11 @@ export type UpdateServiceFormValues = {
     condition_4: string | undefined;
     condition_5: string | undefined;
     [key: string]: string | File | undefined;
+}
+
+export type UpdateReviewFormValues = {
+    rate: number;
+    content: string;
 }
 
 export type StyleType = {

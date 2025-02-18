@@ -13,6 +13,7 @@ import {faqReducer} from "./Faq/faq-reducer";
 import {archivedBookingsReducer} from "./ArchivedBookings/archived-bookings-reducer";
 import {archivedClientsReducer} from "./ArchivedClients/archived-clients-reducer";
 import {archivedGalleryReducer} from "./ArchivedGallery/archived-gallery-reducer";
+import {reviewsReducer} from "./Reviews/reviews-reducer";
 
 export type AppDispatch = ThunkDispatch<AppStateType, unknown, AnyAction>;
 
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   archivedClients: archivedClientsReducer,
   auth: authReducer,
   users: usersReducer,
+  reviews: reviewsReducer,
 });
 
 type RootReducerType = typeof rootReducer; // (global-state: AppStateType) => AppStateType

@@ -3916,5 +3916,52 @@ input[type=checkbox][value=true] + label .checkbox::after {
     padding-top: 220px;
   }
 }
+.reviews {
+  padding-top: 118px;
+  color: #fafafa;
+}
+.reviews__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 500px;
+}
+.reviews__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #fafafa;
+}
+.reviews__item-header {
+  display: flex;
+  justify-content: space-between;
+}
+.reviews__item-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.reviews__item-user img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.reviews__rate {
+  display: flex;
+  gap: 0.5rem;
+}
+.reviews__rate svg {
+  width: 20px;
+}
+
+@media (min-width: 900px) {
+  .reviews {
+    padding-top: 220px;
+  }
+}
 
 /*# sourceMappingURL=style.css.map */

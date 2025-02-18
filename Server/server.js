@@ -18,6 +18,7 @@ const faqRouter = require('./routes/FaqRoutes');
 const serviceRouter = require('./routes/ServiceRoutes');
 const pagesRouter = require('./routes/PagesRoutes');
 const usersRouter = require('./routes/UsersRoutes');
+const reviewsRouter = require('./routes/ReviewsRoutes')
 const rateLimit = require("express-rate-limit");
 
 mongoose.set('strictQuery', false);
@@ -49,6 +50,7 @@ app.use('/faq/', faqRouter);
 app.use('/services/', serviceRouter);
 app.use('/pages/', pagesRouter);
 app.use('/users/', usersRouter);
+app.use('/reviews', reviewsRouter);
 
 app.use(errorMiddleware);
 

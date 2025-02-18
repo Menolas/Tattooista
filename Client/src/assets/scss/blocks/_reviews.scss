@@ -1,0 +1,52 @@
+.reviews {
+  padding-top: 118px;
+  color: $light-text;
+
+  &__list {
+    @include list-style;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 500px;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $light;
+  }
+
+  &__item-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__item-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+  }
+
+  &__rate {
+    display: flex;
+    gap: 0.5rem;
+
+    svg {
+      width: 20px;
+    }
+  }
+}
+
+@media (min-width: 900px) {
+  .reviews {
+    padding-top: 220px;
+  }
+}
