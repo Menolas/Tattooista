@@ -125,6 +125,11 @@ label[for="concent"] {
       padding-left: 0;
     }
   }
+
+  & .rate {
+    display: flex;
+    gap: 0.25rem;
+  }
 }
 
 .form--galleryUpload,

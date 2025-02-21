@@ -37,13 +37,6 @@ export const Admin: React.FC = () => {
     dispatch(setSuccessModalAC(false, ''));
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (!isAuth || isAuth === "USER") {
-  //       dispatch(setFromAC(location.pathname));
-  //       navigate('/noAccess');
-  //   }
-  // }, [dispatch, navigate, isAuth, location.pathname]);
-
   useEffect(() => {
     if (successModal.isSuccess) {
         setTimeout( () => {

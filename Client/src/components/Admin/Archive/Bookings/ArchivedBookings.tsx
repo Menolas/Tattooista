@@ -51,12 +51,6 @@ export const ArchivedBookings: React.FC = React.memo(() => {
         dispatch(getArchivedBookings(token || "", currentPage, pageSize, filter));
     }, [token, currentPage, pageSize, filter, dispatch]);
 
-    // useEffect(() => {
-    //     if (accessError) {
-    //         navigate("/noAccess");
-    //     }
-    // }, [accessError]);
-
     const onPageChangedCallBack = (
         page: number
     ) => {

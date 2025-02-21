@@ -39,25 +39,16 @@ export const UsersContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
     const pageLimit = useSelector(getPageLimitSelector);
     const filter = useSelector(getFilterSelector);
-    const accessError = useSelector(getAuthAccessErrorSelector);
     const userUpdateError = useSelector(getUserUpdateErrorSelector);
     const usersApiError = useSelector(getUsersApiErrorSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
 
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getRoles());
         dispatch(getUsers(token || "", currentPage, pageLimit, filter));
     }, [dispatch, token, currentPage, pageLimit, filter]);
-
-    // useEffect(() => {
-    //     console.log(accessError + " !ACCESS ERROR!!!!!!!!");
-    //     if (accessError) {
-    //         navigate("/noAccess");
-    //     }
-    // }, [accessError]);
 
     const setPageLimitCallBack = (limit: number) => {
         dispatch(setPageLimitAC(limit));
@@ -94,7 +85,6 @@ export const UsersContainer: React.FC = () => {
                 total={total}
                 currentPage={currentPage}
                 pageLimit={pageLimit}
-                //accessError={accessError}
                 isDeletingInProcess={isDeletingInProcess}
                 setPageLimit={setPageLimitCallBack}
                 setCurrentPage={setCurrentPageCallBack}

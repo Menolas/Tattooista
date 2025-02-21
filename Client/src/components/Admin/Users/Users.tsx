@@ -19,7 +19,6 @@ type PropsType = {
     total: number;
     currentPage: number;
     pageLimit: number;
-    //accessError: string | null;
     isDeletingInProcess: Array<string>;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;

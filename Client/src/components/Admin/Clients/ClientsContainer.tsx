@@ -61,13 +61,6 @@ export const ClientsContainer: React.FC = () => {
     }
   }, [dispatch, filter]);
 
-  // useEffect(() => {
-  //   console.log(accessError + " !ACCESS ERROR!!!!!!!!");
-  //   if (accessError) {
-  //     navigate("/noAccess");
-  //   }
-  // }, [accessError]);
-
   const setCurrentPageCallBack = (
     page: number
   ) => {

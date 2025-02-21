@@ -21,13 +21,13 @@ import {ArchivedBookings} from "./components/Admin/Archive/Bookings/ArchivedBook
 import {ArchivedGallery} from "./components/Admin/Archive/Gallery/ArchivedGallery";
 import {RegistrationContainer} from "./pages/registration/RegistrationContainer";
 import {UsersContainer} from "./components/Admin/Users/UsersContainer";
-import {NotFound} from "./components/404-page";
-import {NoAccess} from "./components/NoAccess";
+import {NotFound} from "./pages/404-page";
 import {MainPage} from "./pages/mainPage/MainPage";
 import {PortfolioContainer} from "./pages/portfolio/PortfolioContainer";
 import {BookingProfileContainer} from "./components/Admin/BookingProfile/BookingProfileContainer";
 import {UserProfileContainer} from "./components/UserProfile/UserProfileContainer";
 import EmailConfirmation from "./pages/EmailConfirmation";
+import {ReviewsContainer} from "./pages/reviews/ReviewsContainer";
 
 const App = () => {
 
@@ -63,9 +63,9 @@ const App = () => {
                                    element={<UsersContainer/>} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
-                        <Route path={`noAccess`} element={<NoAccess />} />
                         <Route path={`myProfile`} element={<UserProfileContainer />} />
                         <Route path={'email-confirmation'} element={<EmailConfirmation />} />
+                        <Route path={'reviews'} element={<ReviewsContainer />} />
                     </Routes>
                 </MainWrap>
                 <Contacts />

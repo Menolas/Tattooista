@@ -395,39 +395,6 @@ export const verifyEmail = (
     }
 };
 
-export const getUserProfile = (
-    token: string | null,
-    userId: string,
-    roles: Array<RoleType>
-): ThunkType => async (dispatch) => {
-
-    try {
-        dispatch(toggleIsFetchingAC(true));
-        const response = await authAPI.getUserProfile(token, userId);
-        if (response.resultCode === ResultCodesEnum.Success) {
-            if (response.user) {
-                const authRole = getUserRole(response.user.roles, roles);
-                console.log(authRole + " Here is our user role!!!!!!!!!!!!");
-                dispatch(setUserProfileAC(response.user, authRole));
-            }
-            return true;
-        } else {
-            return false;
-        }
-    } catch (e) {
-        const error = e as ApiErrorType;
-        if (error.response?.status === 403 || error.response?.status === 401) {
-            dispatch(setAccessErrorAC(error.response.data.message));
-            dispatch(setNeedReLoginAC(true));
-        } else {
-            console.log(error);
-        }
-        return false;
-    } finally {
-        dispatch(toggleIsFetchingAC(false));
-    }
-};
-
 export const deleteUserFromProfile = (
     token: string | null,
     id: string,
