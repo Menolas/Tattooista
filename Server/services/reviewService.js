@@ -14,9 +14,9 @@ class ReviewService {
         }
 
         return await Review.create({
-            rate: data.starsNumber,
+            rate: data.rate,
             content: data.content.trim(),
-            userId: userId
+            user: userId
         });
     }
 

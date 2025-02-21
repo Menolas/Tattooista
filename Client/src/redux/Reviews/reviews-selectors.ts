@@ -16,6 +16,14 @@ export const getPageLimitSelector = (state: AppStateType) => {
     return state.reviews.pageLimit;
 };
 
-export const getIsFetching = (state: AppStateType) => {
+export const getIsFetchingSelector = (state: AppStateType) => {
     return state.reviews.isFetching;
 };
+
+export const getIsDeletingInProcessSelector = (state: AppStateType) => {
+    return state.reviews.isDeletingInProcess;
+}
+
+export const getReviewUpdateErrorSelector = (state: AppStateType) => {
+    return state.reviews.reviewUpdateError;
+}

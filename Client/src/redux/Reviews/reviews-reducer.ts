@@ -23,6 +23,8 @@ const initialState = {
     pageLimit: 5 as number,
     currentPage: 1 as number,
     isFetching: false as boolean,
+    reviewUpdateError: null as null | string,
+    isDeletingInProcess: [] as Array<string>,
 };
 
 export type InitialStateType = typeof initialState;
@@ -79,14 +81,14 @@ type SetPageLimitAT = {
     pageLimit: number;
 }
 
+export const setPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
+    type: SET_PAGE_LIMIT, pageLimit
+});
+
 type ToggleIsFetchingAT = {
     type: typeof TOGGLE_IS_FETCHING;
     isFetching: boolean;
 }
-
-export const setPageLimitAC = (pageLimit: number): SetPageLimitAT => ({
-    type: SET_PAGE_LIMIT, pageLimit
-});
 
 const toggleIsFetchingAC = (isFetching: boolean): ToggleIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching,
@@ -123,11 +125,12 @@ export const getReviews = (): ThunkType => async (dispatch) => {
 };
 
 export const addReview = (
+    userId: string | undefined,
     token: string | null,
     values: UpdateReviewFormValues
 ): ThunkType => async (dispatch) => {
     try {
-        const response = await reviewsAPI.addReview(token, values);
+        const response = await reviewsAPI.addReview(userId, token, values);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addReviewAC(response.review));
             dispatch(setSuccessModalAC(true, ADD_REVIEW_SUCCESS));

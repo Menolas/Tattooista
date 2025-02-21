@@ -8,7 +8,7 @@ function dynamicAuthCheckMiddleware() {
   return (req, res, next) => {
     const userId = req.params.id;
     if(userId !== null) {
-      console.log(req.params.id + " here is the id from userRoutes");
+      console.log(req.params.id + " here is the id from Reviews Routes dynamicAuthCheckMiddleware");
       const middleware = authCheckMiddleware(userId);
       middleware(req, res, next);
     } else {

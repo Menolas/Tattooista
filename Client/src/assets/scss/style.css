@@ -282,6 +282,9 @@ img {
   width: 24px;
   height: 24px;
 }
+.btn--icon.rate svg {
+  fill: gray;
+}
 .btn--icon:hover:not(.faq__item-handle) {
   background-color: #fafafa !important;
   color: #080808 !important;
@@ -2211,18 +2214,20 @@ img {
     width: 615px;
   }
 }
-.admin .admin__left-panel {
+.admin__left-panel {
   display: flex;
   flex-direction: column;
 }
-.admin .admin__left-panel-btn {
+
+.admin__left-panel-btn {
   margin-bottom: 1.5rem;
 }
-.admin .admin__left-panel-btn svg {
+.admin__left-panel-btn svg {
   width: 30px;
   height: 30px;
 }
-.admin .admin__nav {
+
+.admin__nav {
   position: fixed;
   left: 0;
   top: 0;
@@ -2234,17 +2239,17 @@ img {
   z-index: 10;
   transition: all 0.3s ease;
 }
-.admin .admin__nav .closing-btn {
+.admin__nav .closing-btn {
   position: absolute;
   top: 22px;
   right: 1rem;
 }
-.admin .admin__nav .admin__nav-list {
+.admin__nav .admin__nav-list {
   display: flex;
   flex-direction: column;
   row-gap: 1.5rem;
 }
-.admin .admin__nav .admin__nav-list a {
+.admin__nav .admin__nav-list a {
   display: inline-block;
   color: inherit;
   text-decoration: none;
@@ -2253,97 +2258,112 @@ img {
   white-space: nowrap;
   font-weight: 500;
 }
-.admin .admin__nav .admin__nav-list a.active {
+.admin__nav .admin__nav-list a.active {
   font-weight: 700;
 }
-.admin .subMenu {
+
+.subMenu {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem 1.5rem 0;
 }
-.admin .admin__left-panel.show .admin__nav {
+
+.admin__left-panel.show .admin__nav {
   transform: translate(0, 0);
 }
-.admin .admin__back-link {
+
+.admin__back-link {
   display: inline-block;
   color: inherit;
   text-decoration: none;
   font-size: inherit;
 }
-.admin .admin__content {
+
+.admin__content {
   display: flex;
   flex-direction: column;
 }
-.admin .admin__cards-header {
+
+.admin__cards-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
 }
-.admin .admin__cards-list {
+
+.admin__cards-list {
   display: flex;
   flex-direction: column;
   row-gap: 1.5rem;
   padding-top: 1.5rem;
   border-top: 2px solid #fafafa;
 }
-.admin .admin__card {
+
+.admin__card {
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
   padding: 13px 13px 29px 0;
   border-bottom: 2px solid #fafafa;
 }
-.admin .admin__cards-header {
+
+.admin__cards-header {
   margin-bottom: 2rem;
 }
-.admin .admin__card-details {
+
+.admin__card-details {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   max-width: 100%;
   overflow: hidden;
 }
-.admin .admin__card-detail-item {
+
+.admin__card-detail-item {
   display: flex;
   align-items: center;
 }
-.admin .admin__card-detail-item.admin__card-detail-item--message {
+.admin__card-detail-item.admin__card-detail-item--message {
   align-items: flex-start;
 }
-.admin .admin__card-detail-item.admin__card-detail-item--message p {
+.admin__card-detail-item.admin__card-detail-item--message p {
   margin: 0;
 }
-.admin .admin__card-data {
+
+.admin__card-data {
   margin: 0;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.admin .admin__card-roles {
+
+.admin__card-roles {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.admin .admin__card-avatar-wrap {
+
+.admin__card-avatar-wrap {
   width: 50px;
   height: 50px;
   overflow: hidden;
 }
-.admin .admin__card-btns {
+
+.admin__card-btns {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
 }
-.admin .admin__card-avatar {
+
+.admin__card-avatar {
   width: 100px;
   height: 100px;
   overflow: hidden;
 }
-.admin .admin__card-avatar:hover img {
+.admin__card-avatar:hover img {
   filter: none;
 }
 
@@ -2807,6 +2827,10 @@ label[for=concent] {
 }
 .form__input-wrap.form__input-wrap--uploadFile .form__error {
   padding-left: 0;
+}
+.form__input-wrap .rate {
+  display: flex;
+  gap: 0.25rem;
 }
 
 .form--galleryUpload .form__input-wrap--uploadFile,
@@ -3918,6 +3942,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
 }
 .reviews {
   padding-top: 118px;
+  max-width: 1000px;
   color: #fafafa;
 }
 .reviews__list {

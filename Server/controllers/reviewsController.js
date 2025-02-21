@@ -10,7 +10,7 @@ class reviewsController {
     const results = {};
     try {
       results.resultCode = 0;
-      results.reviews = await Review.find();
+      results.reviews = await Review.find().populate('user', 'displayName avatar');
       res.json(results);
     } catch (e) {
       console.log(e);
@@ -18,12 +18,13 @@ class reviewsController {
   }
 
   async addReview(req, res) {
-    if (!req.hasRole) {
-      return res.status(403).json({ message: "You don't have permission" });
+    if (!req.isRightUser) {
+      return res.status(403).json({ message: "You don't have permission - reviews controller" });
     }
     const results = {};
     try {
-      //const review = await ReviewService.addReview(req.body, req.params.id);
+      const review = await ReviewService.addReview(req.body, req.params.id);
+      console.log(JSON.stringify(req.body + " reviews controller req.body"))
 
       // if(req.files && req.files.wallPaper) {
       //   const file = req.files.wallPaper;
@@ -50,7 +51,7 @@ class reviewsController {
 
   // async updateReview(req, res) {
   //   if (!req.hasRole) {
-  //     return res.status(403).json({ message: "You don't have permission" });
+  //     return res.status(403).json({ message: "You don't have permission - reviews controller" });
   //   }
   //
   //   const results = {};
@@ -96,7 +97,7 @@ class reviewsController {
 
   // async deleteReview(req, res) {
   //   if (!req.hasRole) {
-  //     return res.status(403).json({ message: "You don't have permission" });
+  //     return res.status(403).json({ message: "You don't have permission - reviews controller" });
   //   }
   //
   //   const results = {};

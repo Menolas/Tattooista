@@ -17,7 +17,12 @@ export type ReviewType = {
     _id: string;
     rate: number;
     content: string;
-    createdAt?: Date;
+    createdAt?: string;
+    user: {
+      _id: string;
+      displayName: string;
+      avatar: string;
+    }
 }
 
 export interface ContactType {

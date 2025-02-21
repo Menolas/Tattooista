@@ -5,10 +5,11 @@ import {ReviewType, UpdateReviewFormValues,} from "../../types/Types";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useDispatch, useSelector} from "react-redux";
-//import {addReview, editReview,} from "../../redux/Services/services-reducer";
+import {addReview} from "../../redux/Reviews/reviews-reducer";
 import {handleEnterClick} from "../../utils/functions";
-import {getTokenSelector} from "../../redux/Auth/auth-selectors";
+import {getTokenSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../redux/redux-store";
+import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
 
 const validationSchema = Yup.object().shape({
     rate: Yup.number()
@@ -28,6 +29,7 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
     closeModal,
 }) => {
     const token = useSelector(getTokenSelector);
+    const user = useSelector(getUserProfileSelector);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -44,7 +46,7 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
             if (review) {
                 //success = await dispatch(editService(token, review._id, values));
             } else {
-                //success = await dispatch(addService(token, values));
+                success = await dispatch(addReview(user?._id, token, values));
             }
             if (success) {
                 closeModal();
@@ -66,25 +68,32 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                 return (
                     <Form className="form form--updateService" encType={"multipart/form-data"}>
 
-                        {/*<FieldComponent*/}
-                        {/*    name={'title'}*/}
-                        {/*    type={'text'}*/}
-                        {/*    placeholder={"Service Title"}*/}
-                        {/*    value={propsF.values.title}*/}
-                        {/*    onChange={propsF.handleChange}*/}
-                        {/*    onKeyDown={(event: React.KeyboardEvent) => {*/}
-                        {/*        handleEnterClick(event, propsF.handleSubmit)*/}
-                        {/*    }}*/}
-                        {/*/>*/}
+                        <FieldWrapper
+                            name={'rate'}
+                            label="Rate your experience"
+                        >
+                            <div className="rate">
+                                {[1, 2, 3, 4, 5].map((num) => (
+                                    <button
+                                        key={num}
+                                        type="button"
+                                        className={`btn btn--icon rate ${num <= propsF.values.rate ? "selected" : ""}`}
+                                        onClick={() => propsF.setFieldValue("rate", num)}
+                                    >
+                                        <StarFilled />
+                                    </button>
+                                ))}
+                            </div>
+                        </FieldWrapper>
 
                         <FieldWrapper
-                            name={'answer'}
+                            name={'content'}
                         >
                             <Field
-                                name={'answer'}
+                                name={'content'}
                                 component="textarea"
                                 rows={6}
-                                placeholder={"FAQ Answer"}
+                                placeholder={"Please describe your experience"}
                                 value={propsF.values.content}
                                 onChange={propsF.handleChange}
                                 onKeyDown={(event: React.KeyboardEvent) => {
@@ -92,7 +101,7 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                                 }}
                             />
                         </FieldWrapper>
-                        { !!apiError &&
+                        {!!apiError &&
                             <ApiErrorMessage message={apiError}/>
                         }
 

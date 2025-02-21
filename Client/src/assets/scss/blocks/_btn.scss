@@ -78,6 +78,12 @@
     height: 24px;
   }
 
+  &.rate {
+    svg {
+      fill: gray;
+    }
+  }
+
   &:hover:not(.faq__item-handle) {
     background-color: $light !important;
     color: $dark-text !important;

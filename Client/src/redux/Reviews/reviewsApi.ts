@@ -18,11 +18,12 @@ export const reviewsAPI = {
     },
 
     async addReview(
+        userId: string | undefined,
         token: string | null,
         values: UpdateReviewFormValues,
     ) {
         return await $api.post<AddReviewResponseType>(
-            'reviews',
+            `reviews/${userId}`,
             values,
             {headers: {Authorization: `Bearer ${token}`}}
         ).then(response => response.data);

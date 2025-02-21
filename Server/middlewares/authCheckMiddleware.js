@@ -46,7 +46,6 @@ module.exports = function (id) {
       }
 
       req.isRightUser = isRightUser;
-      //console.log(req.isRightUser + " is user right in the end of the end");
       next();
 
     } catch (e) {
