@@ -26,6 +26,10 @@ export const mainNavHashLinksData = [
         text: 'Contacts',
         url: '#contacts',
     },
+    {
+        text: 'Reviews',
+        url: '/reviews',
+    },
 ];
 
 export const socialLinksData = [

@@ -13,23 +13,27 @@ import {ReviewType} from "../../types/Types";
 import {ReviewItem} from "./ReviewItem";
 
 type PropsType = {
+    isAuth: null | string;
     reviews: Array<ReviewType>;
     totalCount: number;
     currentPage: number;
     pageLimit: number;
     isFetching: boolean;
+    isReviewSubmitted: boolean;
     isDeletingInProcess: Array<string>;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
 }
 
 export const Reviews: React.FC<PropsType> = ({
+  isAuth,
   reviews,
   totalCount,
   currentPage,
   pageLimit,
   isFetching,
   isDeletingInProcess,
+  isReviewSubmitted,
   setPageLimit,
   setCurrentPage,
 }) => {
@@ -45,14 +49,17 @@ export const Reviews: React.FC<PropsType> = ({
     return (
         <section className="reviews container">
             <div className="admin__cards-header">
-                <button
-                    className="btn btn--bg btn--light-bg add-btn"
-                    onClick={() => {
-                        setAddReviewMode(true)
-                    }}
-                >
-                    Add a Review
-                </button>
+                { isAuth !== null && !isReviewSubmitted &&
+                    <button
+                        className="btn btn--bg btn--light-bg add-btn"
+                        onClick={() => {
+                            setAddReviewMode(true)
+                        }}
+                    >
+                        Add a Review
+                    </button>
+                }
+
                 <Paginator
                     totalCount={totalCount}
                     pageSize={pageLimit}
@@ -68,52 +75,6 @@ export const Reviews: React.FC<PropsType> = ({
                     })
                     : null
                 }
-                <li className="reviews__item">
-                    <div className="reviews__item-header">
-                        <div className="reviews__item-user">
-                            <DefaultAvatar/>
-                            {/*<img src="" alt=""/>*/}
-                            <span className="reviews__item-user-name">Vasya Pupkin</span>
-                            <span className="reviews__item-user-date">56 June 3456</span>
-                        </div>
-                        <div className="reviews__rate">
-                            <StarFilled/>
-                            <StarFilled/>
-                            <StarFilled/>
-                            <StarFilled/>
-                            <StarFilled/>
-                        </div>
-                    </div>
-
-                    <div className="reviews__content">
-                        Absolutely love my new ink! The lines are crisp, the shading is flawless, and the detail is
-                        insane.
-                        The artist truly brought my vision to life. Couldn’t be happier!
-                    </div>
-                </li>
-                <li className="reviews__item">
-                    <div className="reviews__item-header">
-                        <div className="reviews__item-user">
-                            <DefaultAvatar/>
-                            {/*<img src="" alt=""/>*/}
-                            <span className="reviews__item-user-name">Vasya Pupkin</span>
-                            <span className="reviews__item-user-date">56 June 3456</span>
-                        </div>
-                        <div className="reviews__rate">
-                            <StarFilled/>
-                            <StarFilled/>
-                            <StarFilled/>
-                            <StarFilled/>
-                            <StarFilled/>
-                        </div>
-                    </div>
-
-                    <div className="reviews__content">
-                        Absolutely love my new ink! The lines are crisp, the shading is flawless, and the detail is
-                        insane.
-                        The artist truly brought my vision to life. Couldn’t be happier!
-                    </div>
-                </li>
             </ul>
             <ModalPopUp
                 isOpen={addReviewMode}
@@ -124,4 +85,4 @@ export const Reviews: React.FC<PropsType> = ({
             </ModalPopUp>
         </section>
     );
-}
+};

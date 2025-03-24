@@ -44,3 +44,11 @@ export const copyToClipboard = () => {
             console.error('Failed to copy: ', err);
         });
 };
+
+export const getDateFormatted = (date: Date) => {
+    return new Date(date).toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    });
+};

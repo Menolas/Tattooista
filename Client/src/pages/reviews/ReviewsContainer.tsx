@@ -2,7 +2,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {SuccessPopUp} from "../../components/PopUps/SuccessPopUp";
 import {AppDispatch} from "../../redux/redux-store";
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {setSuccessModalAC} from "../../redux/General/general-reducer";
 import {getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {Reviews} from "./Reviews";
@@ -13,6 +13,7 @@ import {
     getReviewsSelector,
     getTotalCountSelector
 } from "../../redux/Reviews/reviews-selectors";
+import {getIsAuthSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
 
 export const ReviewsContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
@@ -22,12 +23,25 @@ export const ReviewsContainer: React.FC = () => {
     const isFetching = useSelector(getIsFetchingSelector);
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const successModal = useSelector(getSuccessModalSelector);
+    const isAuth = useSelector(getIsAuthSelector);
+    const user = useSelector(getUserProfileSelector);
 
     const dispatch = useDispatch<AppDispatch>();
+
+    const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
 
     useEffect(() => {
         dispatch(getReviews());
     }, [dispatch, currentPage, pageLimit]);
+
+    useEffect(() => {
+        reviews.forEach(review => {
+            if(review.user._id === user?._id) {
+                setIsReviewSubmitted(true);
+            }
+        });
+        console.log(isReviewSubmitted)
+    }, [reviews]);
 
     const setSuccessModalCallBack = useCallback(() => {
         dispatch(setSuccessModalAC(false, ''));
@@ -44,6 +58,7 @@ export const ReviewsContainer: React.FC = () => {
     return (
         <>
             <Reviews
+                isAuth={isAuth}
                 reviews={reviews}
                 totalCount={totalCount}
                 currentPage={currentPage}
@@ -52,6 +67,7 @@ export const ReviewsContainer: React.FC = () => {
                 isDeletingInProcess={isDeletingInProcess}
                 setPageLimit={setPageLimitCallBack}
                 setCurrentPage={setCurrentPageCallBack}
+                isReviewSubmitted={isReviewSubmitted}
             />
             <SuccessPopUp
                 isOpen={successModal.isSuccess}

@@ -80,7 +80,13 @@
 
   &.rate {
     svg {
-      fill: gray;
+      fill: lightgray;
+    }
+  }
+
+  &.rate.selected {
+    svg {
+      fill: $dark;
     }
   }
 

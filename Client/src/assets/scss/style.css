@@ -283,7 +283,10 @@ img {
   height: 24px;
 }
 .btn--icon.rate svg {
-  fill: gray;
+  fill: lightgray;
+}
+.btn--icon.rate.selected svg {
+  fill: #080808;
 }
 .btn--icon:hover:not(.faq__item-handle) {
   background-color: #fafafa !important;

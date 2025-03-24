@@ -17,7 +17,7 @@ export type ReviewType = {
     _id: string;
     rate: number;
     content: string;
-    createdAt?: string;
+    createdAt: Date;
     user: {
       _id: string;
       displayName: string;
@@ -33,7 +33,7 @@ export type ClientType = {
     _id: string;
     fullName: string;
     isFavourite: boolean;
-    createdAt?: Date;
+    createdAt: Date;
     contacts: ContactType;
     avatar?: File | string;
     gallery: Array<string>;
@@ -44,7 +44,7 @@ export type BookingType = {
     fullName: string;
     message?: string;
     status?: boolean;
-    createdAt?: string;
+    createdAt: Date;
     contacts: ContactType;
 }
 
@@ -89,7 +89,7 @@ export type StyleType = {
     wallPaper?: string;
     description: string;
     nonStyle: boolean;
-    createdAt?: Date;
+    createdAt: Date;
 }
 
 export type UpdateStyleFormValues = {
@@ -106,7 +106,7 @@ export type GalleryItemType = {
     _id: string;
     fileName: string;
     tattooStyles: Array<string>;
-    createdAt?: CreatedAtType;
+    createdAt: CreatedAtType;
 }
 
 export interface RegistrationFormValues {
