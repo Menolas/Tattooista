@@ -1,15 +1,17 @@
 import {DefaultAvatar} from "../../components/common/DefaultAvatar";
 import * as React from "react";
-import {ReactComponent as Star} from "../../../assets/svg/star.svg";
+import {ReactComponent as Star} from "../../assets/svg/star.svg";
 import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
 import {ReviewType} from "../../types/Types";
 import {API_URL} from "../../http";
+import {getDateFormatted} from "../../utils/functions";
 
 type PropsType = {
     data: ReviewType;
-}
+};
 
 export const ReviewItem: React.FC<PropsType> = ({data}) => {
+    const formatted = getDateFormatted(data.createdAt);
     return (
         <li className="reviews__item">
             <div className="reviews__item-header">
@@ -19,14 +21,18 @@ export const ReviewItem: React.FC<PropsType> = ({data}) => {
                         : <DefaultAvatar/>
                     }
                     <span className="reviews__item-user-name">{data.user.displayName}</span>
-                    <span className="reviews__item-user-date">{data.createdAt?.split('T')[0] + ' (' + data.createdAt?.split('T')[1].split('.')[0] + ')'}</span>
+                    <span className="reviews__item-user-date">{formatted}</span>
                 </div>
                 <div className="reviews__rate">
-                    <StarFilled/>
-                    <StarFilled/>
-                    <StarFilled/>
-                    <StarFilled/>
-                    <StarFilled/>
+                    {
+                        [1, 2, 3, 4, 5].map((num) => {
+                            if (num <= data.rate) {
+                                return <StarFilled/>
+                            } else {
+                                return <Star />
+                            }
+                        })
+                    }
                 </div>
             </div>
 
@@ -34,5 +40,5 @@ export const ReviewItem: React.FC<PropsType> = ({data}) => {
                 {data.content}
             </div>
         </li>
-    )
-}
+    );
+};

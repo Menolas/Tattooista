@@ -10,7 +10,7 @@ class reviewsController {
     const results = {};
     try {
       results.resultCode = 0;
-      results.reviews = await Review.find().populate('user', 'displayName avatar');
+      results.reviews = await Review.find().sort({ createdAt: -1 }).populate('user', 'displayName avatar');
       res.json(results);
     } catch (e) {
       console.log(e);
@@ -24,7 +24,6 @@ class reviewsController {
     const results = {};
     try {
       const review = await ReviewService.addReview(req.body, req.params.id);
-      console.log(JSON.stringify(req.body + " reviews controller req.body"))
 
       // if(req.files && req.files.wallPaper) {
       //   const file = req.files.wallPaper;
@@ -39,7 +38,7 @@ class reviewsController {
       //   service.wallPaper = newFileName;
       // }
 
-      results.review = await ReviewService.addReview(req.body, req.params.id);
+      results.review = review;
       results.resultCode = 0;
       res.status(201).json(results);
     } catch (e) {

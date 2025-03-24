@@ -10,6 +10,7 @@ import {useState} from "react";
 import {Confirmation} from "../../common/Confirmation";
 import {ReadMore} from "../../common/ReadMore";
 import {NavLink} from "react-router-dom";
+import {getDateFormatted} from "../../../utils/functions";
 
 type PropsType = {
   data: BookingType;
@@ -40,19 +41,21 @@ export const Booking: React.FC<PropsType> = React.memo(({
 
     const closeModal = () => {
         setConfirmationData({needConfirmation: false, context: ''});
-    }
+    };
 
     const removeCallBack = () => {
         remove(data._id);
-    }
+    };
 
     const turnBookingToClientCallBack = () => {
         turnBookingToClient(data._id,);
-    }
+    };
 
     const archiveCallBack = () => {
         archive(data._id);
-    }
+    };
+
+    const formatted = getDateFormatted(data.createdAt);
 
     const bookingContacts = data?.contacts
         ? Object.keys(data?.contacts).map(contact => {
@@ -146,9 +149,7 @@ export const Booking: React.FC<PropsType> = React.memo(({
                 </div>
                 <div className={"admin__card-detail-item"}>
                     <span className={"admin__card-data-type"}>Created:&nbsp;</span>
-                    <span className={"admin__card-data"}>
-                        {data.createdAt?.split('T')[0] + ' (' + data.createdAt?.split('T')[1].split('.')[0] + ')'}
-                    </span>
+                    <span className={"admin__card-data"}>{formatted}</span>
                 </div>
                 { bookingContacts }
             </>

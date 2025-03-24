@@ -13,6 +13,7 @@ import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
 
 const validationSchema = Yup.object().shape({
     rate: Yup.number()
+        .moreThan(0, "Please rate your experience")
         .required("Please rate your experience"),
     content: Yup.string()
         .required("Please shortly describe your experience"),
