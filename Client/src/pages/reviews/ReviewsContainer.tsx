@@ -6,14 +6,14 @@ import {useCallback, useEffect, useState} from "react";
 import {setSuccessModalAC} from "../../redux/General/general-reducer";
 import {getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {Reviews} from "./Reviews";
-import {getReviews, setCurrentPageAC, setPageLimitAC} from "../../redux/Reviews/reviews-reducer";
+import {deleteReview, getReviews, setCurrentPageAC, setPageLimitAC} from "../../redux/Reviews/reviews-reducer";
 import {
     getCurrentPageSelector, getIsDeletingInProcessSelector, getIsFetchingSelector,
     getPageLimitSelector,
     getReviewsSelector,
     getTotalCountSelector
 } from "../../redux/Reviews/reviews-selectors";
-import {getIsAuthSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
+import {getIsAuthSelector, getTokenSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
 
 export const ReviewsContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
@@ -24,9 +24,16 @@ export const ReviewsContainer: React.FC = () => {
     const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const isAuth = useSelector(getIsAuthSelector);
+    const token = useSelector(getTokenSelector);
     const user = useSelector(getUserProfileSelector);
 
     const dispatch = useDispatch<AppDispatch>();
+
+    const deleteReviewCallBack = (
+        id: string
+    ) => {
+        dispatch(deleteReview(token, id, reviews, currentPage, pageLimit))
+    }
 
     const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
 
@@ -68,6 +75,7 @@ export const ReviewsContainer: React.FC = () => {
                 setPageLimit={setPageLimitCallBack}
                 setCurrentPage={setCurrentPageCallBack}
                 isReviewSubmitted={isReviewSubmitted}
+                remove={deleteReviewCallBack}
             />
             <SuccessPopUp
                 isOpen={successModal.isSuccess}

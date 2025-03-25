@@ -23,6 +23,7 @@ type PropsType = {
     isDeletingInProcess: Array<string>;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
+    remove: (id: string) => void;
 }
 
 export const Reviews: React.FC<PropsType> = ({
@@ -36,6 +37,7 @@ export const Reviews: React.FC<PropsType> = ({
   isReviewSubmitted,
   setPageLimit,
   setCurrentPage,
+                                                 remove,
 }) => {
     const apiError = useSelector(getReviewUpdateErrorSelector);
     const modalTitle = "Update your review here";
@@ -59,19 +61,27 @@ export const Reviews: React.FC<PropsType> = ({
                         Add a Review
                     </button>
                 }
-
-                <Paginator
-                    totalCount={totalCount}
-                    pageSize={pageLimit}
-                    currentPage={currentPage}
-                    onPageChanged={setCurrentPage}
-                    setPageLimit={setPageLimit}
-                />
+                {
+                    totalCount > pageLimit &&
+                    <Paginator
+                        totalCount={totalCount}
+                        pageSize={pageLimit}
+                        currentPage={currentPage}
+                        onPageChanged={setCurrentPage}
+                        setPageLimit={setPageLimit}
+                    />
+                }
             </div>
             <ul className="reviews__list">
                 { reviews.length
                     ? reviews.map((data, index) => {
-                        return <ReviewItem key={index} data={data}/>
+                        return <ReviewItem
+                                    key={index}
+                                    isAuth={isAuth}
+                                    isDeletingInProcess={isDeletingInProcess}
+                                    data={data}
+                                    remove={remove}
+                                />
                     })
                     : null
                 }
