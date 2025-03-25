@@ -18,6 +18,7 @@ export type ReviewType = {
     rate: number;
     content: string;
     createdAt: Date;
+    gallery: Array<string>;
     user: {
       _id: string;
       displayName: string;

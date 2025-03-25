@@ -3,6 +3,7 @@ const router = new Router();
 const Review = require('../models/Review');
 const controller = require('../controllers/reviewsController');
 const authCheckMiddleware = require("../middlewares/authCheckMiddleware");
+const authRoleMiddleware = require("../middlewares/authRoleMiddleware");
 
 function dynamicAuthCheckMiddleware() {
   return (req, res, next) => {
@@ -24,25 +25,25 @@ router.get('/', controller.getReviews);
 // add review
 router.post('/:id', dynamicAuthCheckMiddleware(), controller.addReview);
 
-// update service
+// update review
 //router.post('/:id',  getReview, controller.updateService);
 
-// delete service
-//router.delete('/:id', getReview, controller.deleteService);
+// delete review
+router.delete('/:id', authRoleMiddleware(["SUPERADMIN"]), getReview, controller.deleteReview);
 
 async function getReview(req, res, next) {
   let review;
 
   try {
     review = await Review.findById(req.params.id);
-    if (review == null) {
+    if (!review) {
       return res.status(404).json({ message: 'Cannot find review' });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 
-  res.service = review;
+  res.review = review;
   next();
 }
 

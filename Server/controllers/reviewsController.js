@@ -94,45 +94,28 @@ class reviewsController {
   //   }
   // }
 
-  // async deleteReview(req, res) {
-  //   if (!req.hasRole) {
-  //     return res.status(403).json({ message: "You don't have permission - reviews controller" });
-  //   }
-  //
-  //   const results = {};
-  //
-  //   try {
-  //     // If service has a wallpaper, attempt to delete it
-  //     if (res.service.wallPaper) {
-  //       const wallpaperDir = `./uploads/serviceWallpapers/${res.service._id}`;
-  //       const wallpaperPath = path.join(wallpaperDir, res.service.wallPaper);
-  //
-  //       // Try to delete the wallpaper file
-  //       await fs.unlink(wallpaperPath).catch(err => {
-  //         console.log("Failed to delete wallpaper:", err.message);
-  //       });
-  //
-  //       // Try to remove the directory (only if it's empty)
-  //       await fs.rmdir(wallpaperDir).catch(err => {
-  //         console.log("Failed to remove directory:", err.message);
-  //       });
-  //     }
-  //
-  //     // Always remove the service, regardless of whether the wallpaper exists or not
-  //     await res.service.remove();
-  //
-  //     // Fetch and return updated list of services
-  //     const services = await Service.find();
-  //     results.resultCode = 0;
-  //     results.services = services;
-  //     res.status(200).json(results);
-  //
-  //   } catch (e) {
-  //     results.resultCode = 1;
-  //     results.message = e.message;
-  //     res.status(500).json(results);
-  //   }
-  // }
+  async deleteReview(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission - reviews controller" });
+    }
+
+    const results = {};
+
+    console.log(JSON.stringify(res.review) + " review to delete!!!!!!!!!!")
+
+    try {
+      await res.review.remove();
+
+      results.resultCode = 0;
+      results.review = res.review;
+      res.status(200).json(results);
+
+    } catch (e) {
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(500).json(results);
+    }
+  }
 }
 
 module.exports = new reviewsController();

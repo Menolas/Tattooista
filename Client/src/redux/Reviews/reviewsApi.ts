@@ -4,11 +4,13 @@ import $api from "../../http";
 type GetReviewsResponseType = CommonResponseFields & {
     reviews: Array<ReviewType>;
     totalCount: number;
-}
+};
 
 type AddReviewResponseType = CommonResponseFields & {
     review: ReviewType
-}
+};
+
+type DeleteReviewResponseType = AddReviewResponseType;
 
 export const reviewsAPI = {
 
@@ -27,5 +29,15 @@ export const reviewsAPI = {
             values,
             {headers: {Authorization: `Bearer ${token}`}}
         ).then(response => response.data);
-    }
+    },
+
+    async deleteReview(
+        token: string | null,
+        userId: string
+    ) {
+        return await $api.delete<DeleteReviewResponseType>(
+            `reviews/${userId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        ).then(response => response.data);
+    },
 };

@@ -21,6 +21,7 @@ const ReviewSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    gallery: [{type: String}],
 });
 
 module.exports = model('Review', ReviewSchema);
