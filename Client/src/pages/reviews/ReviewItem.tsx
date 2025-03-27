@@ -45,17 +45,17 @@ export const ReviewItem: React.FC<PropsType> = ({
     };
 
     return (
-        <li className="reviews__item">
-            <div className="reviews__item-header">
-                <div className="reviews__item-user">
+        <li className="review-item">
+            <div className="reviews-item__header">
+                <div className="review-item__user">
                     {data.user.avatar
                         ? <img src={`${API_URL}/users/${data.user._id}/avatar/${data.user.avatar}`} alt=""/>
                         : <DefaultAvatar/>
                     }
-                    <span className="reviews__item-user-name">{data.user.displayName}</span>
-                    <span className="reviews__item-user-date">{formatted}</span>
+                    <span className="review-item__user-name">{data.user.displayName}</span>
+                    <span className="review-item__user-date">{formatted}</span>
                 </div>
-                <div className="reviews__rate">
+                <div className="review-item__rate">
                     {
                         [1, 2, 3, 4, 5].map((num) => {
                             if (num <= data.rate) {
@@ -86,13 +86,13 @@ export const ReviewItem: React.FC<PropsType> = ({
                 }
             </div>
 
-            <div className="reviews__content">
+            <div className="review-item__content">
                 {data.content}
             </div>
             {
                 data.gallery && data.gallery.length > 0 &&
-                <div className={"client-profile__gallery"}>
-                    <ul className={"client-profile__gallery-list list"}>
+                <div className={"review-item__gallery"}>
+                    <ul className={"review-item__gallery-list list"}>
                         {
                             data.gallery.map((item, index) => {
                                 return (
@@ -102,7 +102,7 @@ export const ReviewItem: React.FC<PropsType> = ({
                                             setCarouselData({isOpen: true, activeIndex: index});
                                         }}
                                     >
-                                        <img src={`${API_URL}/clients/${data._id}/doneTattooGallery/${item}`} alt={''}/>
+                                        <img src={`${API_URL}/reviews/${data._id}/${item}`} alt={''}/>
                                     </li>
                                 )
                             })

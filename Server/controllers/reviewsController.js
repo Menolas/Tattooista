@@ -3,6 +3,7 @@ const ReviewService = require("../services/reviewService");
 const fs = require('fs').promises;
 const path = require("path");
 const generateFileRandomName = require("../utils/functions");
+const generateFileRandomNameWithDate = require("../utils/functions");
 
 class reviewsController {
 
@@ -24,19 +25,30 @@ class reviewsController {
     const results = {};
     try {
       const review = await ReviewService.addReview(req.body, req.params.id);
+      console.log(JSON.stringify(req.body) + " request body")
+      if(req.files && Object.keys(req.files).length > 0) {
+        const files = req.files;
+        let gallery = [];
+        for (let key in files) {
+          const fileEntry = req.files[key];
+          const filesArray = Array.isArray(fileEntry) ? fileEntry : [fileEntry];
 
-      // if(req.files && req.files.wallPaper) {
-      //   const file = req.files.wallPaper;
-      //   if(!file)  return res.json({error: 'Incorrect input name'});
-      //   const newFileName = generateFileRandomName(file.name);
-      //   const dirPath = `./uploads/serviceWallpapers/${service._id}/`;
-      //   const fs = require('fs');
-      //   if (!fs.existsSync(dirPath)) {
-      //     fs.mkdirSync(dirPath, { recursive: true });
-      //   }
-      //   await file.mv(`${dirPath}${newFileName}`);
-      //   service.wallPaper = newFileName;
-      // }
+          for (const file of filesArray) {
+            const fileNewName = generateFileRandomNameWithDate(file.name);
+            const uploadPath = `./uploads/reviews/${review._id}/${fileNewName}`;
+
+            try {
+              await file.mv(uploadPath);
+              gallery.push(fileNewName);
+            } catch (err) {
+              console.error('Error moving file:', err);
+              throw err;
+            }
+          }
+        }
+        review.gallery = gallery;
+        await review.save();
+      }
 
       results.review = review;
       results.resultCode = 0;

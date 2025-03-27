@@ -22,7 +22,7 @@ export const reviewsAPI = {
     async addReview(
         userId: string | undefined,
         token: string | null,
-        values: UpdateReviewFormValues,
+        values: FormData,
     ) {
         return await $api.post<AddReviewResponseType>(
             `reviews/${userId}`,

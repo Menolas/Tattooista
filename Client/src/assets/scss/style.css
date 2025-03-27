@@ -3957,33 +3957,42 @@ input[type=checkbox][value=true] + label .checkbox::after {
   gap: 2rem;
   max-width: 500px;
 }
-.reviews__item {
+.reviews .review-item {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #fafafa;
 }
-.reviews__item-header {
+.reviews .reviews-item__header {
   display: flex;
   justify-content: space-between;
 }
-.reviews__item-user {
+.reviews .review-item__user {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-.reviews__item-user img {
+.reviews .review-item__user img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
-.reviews__rate {
+.reviews .review-item__rate {
   display: flex;
   gap: 0.5rem;
 }
-.reviews__rate svg {
+.reviews .review-item__rate svg {
   width: 20px;
+}
+.reviews .review-item__gallery-list {
+  display: flex;
+  gap: 0.5rem;
+}
+.reviews .review-item__gallery-list li img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
 }
 
 @media (min-width: 900px) {
