@@ -173,10 +173,10 @@ export const getReviews = (): ThunkType => async (dispatch) => {
 export const addReview = (
     userId: string | undefined,
     token: string | null,
-    values: UpdateReviewFormValues
+    formData: FormData,
 ): ThunkType => async (dispatch) => {
     try {
-        const response = await reviewsAPI.addReview(userId, token, values);
+        const response = await reviewsAPI.addReview(userId, token, formData);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addReviewAC(response.review));
             dispatch(setSuccessModalAC(true, ADD_REVIEW_SUCCESS));

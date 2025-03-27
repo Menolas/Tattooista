@@ -42,7 +42,9 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   const [imageURLs, setImageURLs] = useState<{ url: string | ArrayBuffer | null, file: File }[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnFileUploadChange = (
+      event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
       setImageURLs([]);
@@ -83,7 +85,10 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
         }),
   });
 
-  const submit = async (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
+  const submit = async (
+      values: FormValues,
+      formikHelpers: FormikHelpers<FormValues>
+  ) => {
     const { setSubmitting, setErrors } = formikHelpers;
 
     const formData = new FormData();

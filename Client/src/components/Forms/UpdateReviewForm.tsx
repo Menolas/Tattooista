@@ -10,6 +10,8 @@ import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../redux/redux-store";
 import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
+import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
+import {useState} from "react";
 
 const validationSchema = Yup.object().shape({
     rate: Yup.number()
@@ -17,6 +19,19 @@ const validationSchema = Yup.object().shape({
         .required("Please rate your experience"),
     content: Yup.string()
         .required("Please shortly describe your experience"),
+    gallery: Yup.array()
+        .max(3, "You can upload up to 3 files")
+        .of(
+            Yup.mixed()
+                .test('fileSize', "Max allowed size is 2MB", (value) => {
+                    if (!(value instanceof File)) return true;
+                    return isFileSizeValid([value], MAX_FILE_SIZE);
+                })
+                .test('fileType', "Invalid file type", (value) => {
+                    if (!(value instanceof File)) return true;
+                    return isFileTypesValid([value], VALID_FILE_EXTENSIONS);
+                })
+        ),
 });
 
 type PropsType = {
@@ -31,23 +46,58 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
 }) => {
     const token = useSelector(getTokenSelector);
     const user = useSelector(getUserProfileSelector);
+    const [imageURLs, setImageURLs] = useState<{ url: string | ArrayBuffer | null, file: File }[]>([]);
 
     const dispatch = useDispatch<AppDispatch>();
+
+    const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        if (event.target.files && event.target.files.length) {
+            setImageURLs([]);
+            const files = Array.from(event.target.files);
+            files.forEach((file) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setImageURLs((prev) => [...prev, { url: reader.result, file }]);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    };
+
+    const handleDeletePreview = (event: React.MouseEvent<HTMLButtonElement>, fileToDelete: File) => {
+        event.preventDefault();
+        setImageURLs((currentFiles) => currentFiles.filter(({ file }) => file !== fileToDelete));
+    };
 
     const initialValues: UpdateReviewFormValues = {
         rate: review?.rate ?? 0,
         content: review?.content ?? '',
+        gallery: [],
     };
 
-    const submit = async (values: UpdateReviewFormValues, actions: FormikHelpers<UpdateReviewFormValues>) => {
+    const submit = async (
+        values: UpdateReviewFormValues,
+        actions: FormikHelpers<UpdateReviewFormValues>
+    ) => {
+        const formData = new FormData();
+
+        // Append regular fields
+        formData.append('rate', values.rate.toString());
+        formData.append('content', values.content);
+
+        // Append files under 'gallery[]'
+        imageURLs.forEach(({ file }) => {
+            formData.append('gallery', file); // 👈 key must match what your backend expects
+        });
 
         let success;
 
         try {
             if (review) {
-                //success = await dispatch(editService(token, review._id, values));
+                //success = await dispatch(editService(token, review._id, formData));
             } else {
-                success = await dispatch(addReview(user?._id, token, values));
+                success = await dispatch(addReview(user?._id, token, formData));
             }
             if (success) {
                 closeModal();
@@ -99,6 +149,38 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                                 onChange={propsF.handleChange}
                                 onKeyDown={(event: React.KeyboardEvent) => {
                                     handleEnterClick(event, propsF.handleSubmit)
+                                }}
+                            />
+                        </FieldWrapper>
+                        <FieldWrapper name={'gallery'} wrapperClass={'form__input-wrap--uploadFile'}>
+                            {imageURLs.length > 0 && (
+                                <div>
+                                    <h4>Pictures to be uploaded</h4>
+                                    <ul className={"list gallery__uploadedImgPreviews"}>
+                                        {imageURLs.map((item, index) => (
+                                            <li className={"gallery__uploadedImgPreviews-item"} key={index}>
+                                                <button
+                                                    className="btn btn--icon close-button"
+                                                    onClick={(event) => handleDeletePreview(event, item.file)}
+                                                ></button>
+                                                <img className="client-profile__gallery-image" src={item.url as string} alt="preview" height="50" />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                            <label className="btn btn--sm btn--dark-bg" htmlFor={"gallery"}>Pick File</label>
+                            <Field
+                                className="hidden"
+                                id="gallery"
+                                name={'gallery'}
+                                type={'file'}
+                                accept="image/*,.png,.jpg,.web,.jpeg,.webp"
+                                value={undefined}
+                                multiple
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    propsF.setFieldValue('gallery', Array.from(e.currentTarget.files || []));
+                                    handleOnFileUploadChange(e);
                                 }}
                             />
                         </FieldWrapper>

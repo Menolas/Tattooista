@@ -82,6 +82,7 @@ export type UpdateServiceFormValues = {
 export type UpdateReviewFormValues = {
     rate: number;
     content: string;
+    gallery: File[];
 }
 
 export type StyleType = {
