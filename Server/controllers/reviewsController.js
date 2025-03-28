@@ -8,10 +8,50 @@ const generateFileRandomNameWithDate = require("../utils/functions");
 class reviewsController {
 
   async getReviews(req, res) {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const gallery = req.query.gallery;
+    const term = req.query.term;
+    const rate = req.query.rate;
+    let reviews = [];
+
     const results = {};
     try {
+      let query = {};
+      let searchConditions = [];
+
+      if (term) {
+        const regexSearch = { $regex: term, $options: 'i' };
+        searchConditions = [
+          { 'content': regexSearch },
+        ];
+      }
+
+      if (gallery === 'true') {
+        query.gallery = { $exists: true, $not: { $size: 0 } };
+      } else if (gallery === 'false') {
+        query.$or = [{ gallery: { $exists: true, $size: 0 } }, { gallery: { $exists: false } }];
+      }
+
+      if (rate && rate !== 'any') {
+        query.rate = parseInt(rate);
+      }
+
+      if (searchConditions.length > 0) {
+        if (Object.keys(query).length > 0) {
+          query = { $and: [ { $or: searchConditions }, query ] };
+        } else {
+          query = { $or: searchConditions };
+        }
+      }
+
+      reviews = await Review.find(query).sort({createdAt: -1}).populate('user', 'displayName avatar');
+
       results.resultCode = 0;
-      results.reviews = await Review.find().sort({ createdAt: -1 }).populate('user', 'displayName avatar');
+      results.totalCount = reviews.length;
+      results.reviews = reviews.slice(startIndex, endIndex);
       res.json(results);
     } catch (e) {
       console.log(e);

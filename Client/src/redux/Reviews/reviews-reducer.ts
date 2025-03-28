@@ -1,10 +1,8 @@
 import {
     ApiErrorType,
-    ClientType,
     ReviewType,
     SearchFilterType,
     UpdateReviewFormValues,
-    UserType
 } from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
@@ -12,13 +10,12 @@ import {AnyAction} from "redux";
 import {ResultCodesEnum} from "../../utils/constants";
 import {reviewsAPI} from "./reviewsApi";
 import {setApiErrorAC, setSuccessModalAC} from "../General/general-reducer";
-import {clientsAPI} from "../Clients/clientsApi";
 import {getNewPage} from "../../utils/functions";
-import {getClients, setClientsCurrentPageAC} from "../Clients/clients-reducer";
 
 const SET_REVIEWS = 'SET_REVIEWS';
 const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+const SET_FILTER = 'SET_FILTER';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const DELETE_REVIEW = 'DELETE_REVIEW';
 const ADD_REVIEW = 'ADD_REVIEW';
@@ -35,6 +32,11 @@ const initialState = {
     isFetching: false as boolean,
     reviewUpdateError: null as null | string,
     isDeletingInProcess: [] as Array<string>,
+    filter: {
+        term: '' as string | null,
+        rate: "any" as string | number,
+        condition: "any" as string | null,
+    } as SearchFilterType,
 };
 
 export type InitialStateType = typeof initialState;
@@ -44,6 +46,12 @@ export const reviewsReducer = (
     action: ActionsTypes
 ): InitialStateType => {
     switch (action.type) {
+        case SET_FILTER:
+            return {
+                ...state,
+                filter: action.filter
+            }
+
         case SET_REVIEWS:
             return {
                 ...state,
@@ -77,7 +85,8 @@ export const reviewsReducer = (
 };
 
 type ActionsTypes =
-    SetReviewsAT
+    SetFilterAT
+    | SetReviewsAT
     | SetPageLimitAT
     | SetReviewsCurrentPageAT
     | AddReviewAT
@@ -85,6 +94,15 @@ type ActionsTypes =
     | DeleteReviewAT;
 
 //actions creators
+type SetFilterAT = {
+    type: typeof SET_FILTER;
+    filter: SearchFilterType;
+};
+
+export const setFilterAC = (filter: SearchFilterType): SetFilterAT => ({
+    type: SET_FILTER, filter
+});
+
 type AddReviewAT = {
     type: typeof ADD_REVIEW;
     review: ReviewType;
@@ -152,10 +170,18 @@ const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsD
 
 export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
 
-export const getReviews = (): ThunkType => async (dispatch) => {
+export const getReviews = (
+    currentPage: number,
+    pageLimit: number,
+    filter: SearchFilterType,
+): ThunkType => async (dispatch) => {
     try {
         dispatch(toggleIsFetchingAC(true));
-        const response = await reviewsAPI.getReviews();
+        const response = await reviewsAPI.getReviews(
+            currentPage,
+            pageLimit,
+            filter
+        );
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(setReviewsAC(response.reviews, response.totalCount));
             return true;
@@ -197,7 +223,7 @@ export const deleteReview = (
     reviews: Array<ReviewType>,
     currentPage: number,
     pageLimit: number,
-    //filter: SearchFilterType
+    filter: SearchFilterType
 ): ThunkType => async (
     dispatch
 ) => {
@@ -205,7 +231,7 @@ export const deleteReview = (
         dispatch(toggleIsDeletingInProcessAC(true, id));
         const response = await reviewsAPI.deleteReview(token, id);
         if (response.resultCode === ResultCodesEnum.Success) {
-            await dispatch(deleteReviewThunk(token, id, reviews, currentPage, pageLimit));
+            await dispatch(deleteReviewThunk(token, id, reviews, currentPage, pageLimit, filter));
             dispatch(setApiErrorAC(null));
             return true;
         } else {
@@ -227,14 +253,18 @@ const deleteReviewThunk = (
     reviews: Array<ReviewType>,
     currentPage: number,
     pageLimit: number,
-    //filter: SearchFilterType
+    filter: SearchFilterType
 ): ThunkType => async (dispatch) => {
     if (reviews.length > 1) {
         dispatch(deleteReviewAC(id));
     } else {
         const newPage = getNewPage(currentPage);
         if (currentPage === newPage) {
-            await dispatch(getReviews());
+            await dispatch(getReviews(
+                currentPage,
+                pageLimit,
+                filter
+            ));
         }
         dispatch(deleteReviewAC(id));
         dispatch(setCurrentPageAC(newPage));

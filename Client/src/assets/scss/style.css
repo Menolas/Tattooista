@@ -3381,6 +3381,15 @@ input[type=checkbox][value=true] + label .checkbox::after {
   font-size: 18px !important;
   font-weight: 500 !important;
 }
+.search-form .search-form__rate {
+  margin-bottom: 0;
+}
+.search-form .btn--icon.rate svg {
+  fill: gray;
+}
+.search-form .btn--icon.rate.selected svg {
+  fill: #fafafa;
+}
 
 @media (min-width: 900px) {
   .search-form {

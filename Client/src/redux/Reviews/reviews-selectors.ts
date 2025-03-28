@@ -27,3 +27,7 @@ export const getIsDeletingInProcessSelector = (state: AppStateType) => {
 export const getReviewUpdateErrorSelector = (state: AppStateType) => {
     return state.reviews.reviewUpdateError;
 }
+
+export const getReviewsFilterSelector = (state: AppStateType) => {
+    return state.reviews.filter;
+};
