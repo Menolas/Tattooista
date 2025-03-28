@@ -131,6 +131,7 @@
   }
 
   .search-form__rate {
+    flex: 1 1 100%;
     margin-bottom: 0;
   }
 
@@ -166,6 +167,7 @@
       height: 66px;
     }
 
+    .search-reset,
     .search-submit {
       svg {
         width: 40px;

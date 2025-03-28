@@ -1,5 +1,5 @@
 import {
-    ApiErrorType,
+    ApiErrorType, ClientType,
     ReviewType,
     SearchFilterType,
     UpdateReviewFormValues,
@@ -66,6 +66,17 @@ export const reviewsReducer = (
                 totalCount: state.totalCount + 1,
             }
 
+        case EDIT_REVIEW:
+            return {
+                ...state,
+                reviews: state.reviews.map(review => {
+                    if (review._id === action.review._id) {
+                        return { ...action.review }
+                    }
+                    return review
+                }),
+            }
+
         case TOGGLE_IS_DELETING_IN_PROCESS:
             return {
                 ...state,
@@ -90,6 +101,7 @@ type ActionsTypes =
     | SetPageLimitAT
     | SetReviewsCurrentPageAT
     | AddReviewAT
+    | EditReviewAT
     | ToggleIsDeletingInProcessAT
     | DeleteReviewAT;
 
@@ -116,6 +128,15 @@ type SetReviewsCurrentPageAT = {
     type: typeof SET_CURRENT_PAGE;
     page: number;
 };
+
+type EditReviewAT = {
+    type: typeof EDIT_REVIEW;
+    review: ReviewType;
+};
+
+const editReviewAC = (review: ReviewType): EditReviewAT => ({
+    type: EDIT_REVIEW, review
+});
 
 export const setCurrentPageAC = (page: number): SetReviewsCurrentPageAT => ({
     type: SET_CURRENT_PAGE, page
@@ -205,6 +226,27 @@ export const addReview = (
         const response = await reviewsAPI.addReview(userId, token, formData);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addReviewAC(response.review));
+            dispatch(setSuccessModalAC(true, ADD_REVIEW_SUCCESS));
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setApiErrorAC(error.response?.data?.message));
+        return false;
+    }
+};
+
+export const updateReview = (
+    userId: string | undefined,
+    token: string | null,
+    formData: FormData,
+): ThunkType => async (dispatch) => {
+    try {
+        const response = await reviewsAPI.updateReview(userId, token, formData);
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(editReviewAC(response.review));
             dispatch(setSuccessModalAC(true, ADD_REVIEW_SUCCESS));
             return true;
         } else {
