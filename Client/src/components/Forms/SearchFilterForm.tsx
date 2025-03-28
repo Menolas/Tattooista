@@ -72,7 +72,10 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                                   key={num}
                                   type="button"
                                   className={`btn btn--icon rate ${num <= values.rate ? "selected" : ""}`}
-                                  onClick={() => setFieldValue("rate", num)}
+                                  onClick={() => {
+                                      const currentRate = values.rate;
+                                      setFieldValue("rate", currentRate === num ? 0 : num);
+                                  }}
                               >
                                   <StarFilled />
                               </button>

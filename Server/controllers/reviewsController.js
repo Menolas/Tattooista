@@ -11,52 +11,72 @@ class reviewsController {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const gallery = req.query.gallery;
     const term = req.query.term;
+    const gallery = req.query.gallery;
     const rate = req.query.rate;
-    let reviews = [];
 
     const results = {};
+
     try {
-      let query = {};
-      let searchConditions = [];
+      const matchStage = {};
 
       if (term) {
-        const regexSearch = { $regex: term, $options: 'i' };
-        searchConditions = [
-          { 'content': regexSearch },
+        const regex = new RegExp(term, 'i');
+
+        matchStage.$or = [
+          { content: regex },
+          { 'user.displayName': regex },
         ];
       }
 
       if (gallery === 'true') {
-        query.gallery = { $exists: true, $not: { $size: 0 } };
+        matchStage.gallery = { $exists: true, $not: { $size: 0 } };
       } else if (gallery === 'false') {
-        query.$or = [{ gallery: { $exists: true, $size: 0 } }, { gallery: { $exists: false } }];
+        matchStage.$or = [{ gallery: { $exists: true, $size: 0 } }, { gallery: { $exists: false } }];
       }
 
-      if (rate && rate !== 'any') {
-        query.rate = parseInt(rate);
+      if (rate && rate !== 'any' && rate !== '0') {
+        matchStage.rate = parseInt(rate);
       }
 
-      if (searchConditions.length > 0) {
-        if (Object.keys(query).length > 0) {
-          query = { $and: [ { $or: searchConditions }, query ] };
-        } else {
-          query = { $or: searchConditions };
+      const pipeline = [
+        { $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user'
+          }},
+        { $unwind: '$user' },
+        { $match: matchStage },
+        { $sort: { createdAt: -1 } },
+        { $facet: {
+            paginatedResults: [
+              { $skip: startIndex },
+              { $limit: limit }
+            ],
+            totalCount: [
+              { $count: 'count' }
+            ]
+          }
         }
-      }
+      ];
 
-      reviews = await Review.find(query).sort({createdAt: -1}).populate('user', 'displayName avatar');
+      const data = await Review.aggregate(pipeline);
+      const reviews = data[0].paginatedResults;
+      const totalCount = data[0].totalCount[0]?.count || 0;
 
       results.resultCode = 0;
-      results.totalCount = reviews.length;
-      results.reviews = reviews.slice(startIndex, endIndex);
+      results.reviews = reviews;
+      results.totalCount = totalCount;
       res.json(results);
     } catch (e) {
       console.log(e);
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
     }
   }
+
 
   async addReview(req, res) {
     if (!req.isRightUser) {
