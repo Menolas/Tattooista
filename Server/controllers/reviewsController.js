@@ -8,15 +8,75 @@ const generateFileRandomNameWithDate = require("../utils/functions");
 class reviewsController {
 
   async getReviews(req, res) {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const startIndex = (page - 1) * limit;
+    const term = req.query.term;
+    const gallery = req.query.gallery;
+    const rate = req.query.rate;
+
     const results = {};
+
     try {
+      const matchStage = {};
+
+      if (term) {
+        const regex = new RegExp(term, 'i');
+
+        matchStage.$or = [
+          { content: regex },
+          { 'user.displayName': regex },
+        ];
+      }
+
+      if (gallery === 'true') {
+        matchStage.gallery = { $exists: true, $not: { $size: 0 } };
+      } else if (gallery === 'false') {
+        matchStage.$or = [{ gallery: { $exists: true, $size: 0 } }, { gallery: { $exists: false } }];
+      }
+
+      if (rate && rate !== 'any' && rate !== '0') {
+        matchStage.rate = parseInt(rate);
+      }
+
+      const pipeline = [
+        { $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user'
+          }},
+        { $unwind: '$user' },
+        { $match: matchStage },
+        { $sort: { createdAt: -1 } },
+        { $facet: {
+            paginatedResults: [
+              { $skip: startIndex },
+              { $limit: limit }
+            ],
+            totalCount: [
+              { $count: 'count' }
+            ]
+          }
+        }
+      ];
+
+      const data = await Review.aggregate(pipeline);
+      const reviews = data[0].paginatedResults;
+      const totalCount = data[0].totalCount[0]?.count || 0;
+
       results.resultCode = 0;
-      results.reviews = await Review.find().sort({ createdAt: -1 }).populate('user', 'displayName avatar');
+      results.reviews = reviews;
+      results.totalCount = totalCount;
       res.json(results);
     } catch (e) {
       console.log(e);
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
     }
   }
+
 
   async addReview(req, res) {
     if (!req.isRightUser) {

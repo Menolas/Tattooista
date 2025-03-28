@@ -1,4 +1,4 @@
-import {CommonResponseFields, ReviewType, UpdateReviewFormValues} from "../../types/Types";
+import {CommonResponseFields, ReviewType, SearchFilterType, UpdateReviewFormValues} from "../../types/Types";
 import $api from "../../http";
 
 type GetReviewsResponseType = CommonResponseFields & {
@@ -14,8 +14,13 @@ type DeleteReviewResponseType = AddReviewResponseType;
 
 export const reviewsAPI = {
 
-    async getReviews() {
-        return await $api.get<GetReviewsResponseType>('reviews')
+    async getReviews(
+        currentPage = 1,
+        pageLimit = 5,
+        filter: SearchFilterType,
+    ) {
+        return await $api.get<GetReviewsResponseType>(
+            `reviews?&page=${currentPage}&limit=${pageLimit}&term=${filter.term}&gallery=${filter.condition}&rate=${filter.rate}`)
             .then(response => response.data);
     },
 

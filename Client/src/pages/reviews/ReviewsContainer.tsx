@@ -9,11 +9,13 @@ import {Reviews} from "./Reviews";
 import {deleteReview, getReviews, setCurrentPageAC, setPageLimitAC} from "../../redux/Reviews/reviews-reducer";
 import {
     getCurrentPageSelector, getIsDeletingInProcessSelector, getIsFetchingSelector,
-    getPageLimitSelector,
+    getPageLimitSelector, getReviewsFilterSelector,
     getReviewsSelector,
     getTotalCountSelector
 } from "../../redux/Reviews/reviews-selectors";
 import {getIsAuthSelector, getTokenSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
+import {SearchFilterType} from "../../types/Types";
+import {setFilterAC} from "../../redux/Reviews/reviews-reducer";
 
 export const ReviewsContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
@@ -26,20 +28,21 @@ export const ReviewsContainer: React.FC = () => {
     const isAuth = useSelector(getIsAuthSelector);
     const token = useSelector(getTokenSelector);
     const user = useSelector(getUserProfileSelector);
+    const filter = useSelector(getReviewsFilterSelector);
 
     const dispatch = useDispatch<AppDispatch>();
 
     const deleteReviewCallBack = (
         id: string
     ) => {
-        dispatch(deleteReview(token, id, reviews, currentPage, pageLimit))
-    }
+        dispatch(deleteReview(token, id, reviews, currentPage, pageLimit, filter));
+    };
 
     const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
 
     useEffect(() => {
-        dispatch(getReviews());
-    }, [dispatch, currentPage, pageLimit]);
+        dispatch(getReviews(currentPage, pageLimit, filter));
+    }, [dispatch, currentPage, pageLimit, filter]);
 
     useEffect(() => {
         reviews.forEach(review => {
@@ -56,11 +59,17 @@ export const ReviewsContainer: React.FC = () => {
 
     const setPageLimitCallBack = (pageLimit: number) => {
         dispatch(setPageLimitAC(pageLimit));
-    }
+    };
 
     const setCurrentPageCallBack = (page: number) => {
         dispatch(setCurrentPageAC(page));
-    }
+    };
+
+    const onFilterChangedCallBack = (
+        filter: SearchFilterType
+    ) => {
+        dispatch(setFilterAC(filter));
+    };
 
     return (
         <>
@@ -71,11 +80,13 @@ export const ReviewsContainer: React.FC = () => {
                 currentPage={currentPage}
                 pageLimit={pageLimit}
                 isFetching={isFetching}
+                filter={filter}
                 isDeletingInProcess={isDeletingInProcess}
                 setPageLimit={setPageLimitCallBack}
                 setCurrentPage={setCurrentPageCallBack}
                 isReviewSubmitted={isReviewSubmitted}
                 remove={deleteReviewCallBack}
+                onFilterChanged={onFilterChangedCallBack}
             />
             <SuccessPopUp
                 isOpen={successModal.isSuccess}
@@ -85,4 +96,6 @@ export const ReviewsContainer: React.FC = () => {
 
         </>
     )
-}
+};
+
+Reviews.displayName = 'Reviews';

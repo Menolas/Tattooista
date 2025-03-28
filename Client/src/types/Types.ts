@@ -188,6 +188,7 @@ export type SearchFilterType = {
     term: string;
     condition: string;
     isFavourite?: boolean;
+    rate?: string | number;
 }
 
 export type CommonResponseFields = {

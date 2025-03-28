@@ -5,9 +5,12 @@ import { ReactComponent as FilterIcon } from "../../assets/svg/filter.svg";
 import { SearchFilterType, SelectOptionType } from "../../types/Types";
 import { FormSelect } from "./formComponents/FormSelect";
 import {handleEnterClick} from "../../utils/functions";
+import {FieldWrapper} from "./formComponents/FieldWrapper";
+import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
 
 type PropsType = {
   isFavourite?: boolean;
+  isRated?: boolean;
   options: Array<SelectOptionType>;
   filter: SearchFilterType;
   onFilterChanged: (filter: SearchFilterType) => void;
@@ -15,17 +18,22 @@ type PropsType = {
 
 export const SearchFilterForm: React.FC<PropsType> = React.memo(({
  isFavourite,
+ isRated,
  options,
  filter,
  onFilterChanged
 }) => {
   const formRef = React.useRef<HTMLFormElement>(null);
 
-  const submit = (values: { term: string; condition: string; isFavourite: boolean }, formikHelpers: FormikHelpers<{ term: string; condition: string; isFavourite: boolean }>) => {
+  const submit = (
+      values: { term: string; condition: string; isFavourite: boolean, rate: string | number, },
+      formikHelpers: FormikHelpers<{ term: string; condition: string; isFavourite: boolean; rate: string | number; }>
+  ) => {
     const filter: SearchFilterType = {
       term: values.term,
       condition: values.condition,
-      isFavourite: values.isFavourite
+      isFavourite: values.isFavourite,
+      rate: values.rate,
     };
     onFilterChanged(filter);
     formikHelpers.setSubmitting(false);
@@ -35,7 +43,8 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
   const initialValues = {
     term: filter.term,
     condition: filter.condition,
-    isFavourite: filter.isFavourite ?? false
+    isFavourite: filter.isFavourite ?? false,
+    rate: filter.rate ?? "any"
   };
 
   return (
@@ -51,6 +60,29 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                   ref={formRef}
                   className={"form search-form"}
               >
+                { isRated &&
+                  <FieldWrapper
+                      wrapperClass='search-form__rate'
+                      name='rate'
+                      label="Rate your experience"
+                  >
+                      <div className="rate">
+                          {[1, 2, 3, 4, 5].map((num) => (
+                              <button
+                                  key={num}
+                                  type="button"
+                                  className={`btn btn--icon rate ${num <= values.rate ? "selected" : ""}`}
+                                  onClick={() => {
+                                      const currentRate = values.rate;
+                                      setFieldValue("rate", currentRate === num ? 0 : num);
+                                  }}
+                              >
+                                  <StarFilled />
+                              </button>
+                          ))}
+                      </div>
+                  </FieldWrapper>
+                }
                 <div className={'search-form__search-wrap'}>
                   <Field
                       className={"search-input"}
@@ -70,7 +102,7 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                       handleEnterClick(event, handleSubmit)
                     }}
                 />
-                {isFavourite && (
+                { isFavourite && (
                     <>
                       <Field
                           type="checkbox"

@@ -9,8 +9,10 @@ import {getReviewUpdateErrorSelector,
 import {useState} from "react";
 import {ModalPopUp} from "../../components/PopUps/ModalPopUp";
 import {UpdateReviewForm} from "../../components/Forms/UpdateReviewForm";
-import {ReviewType} from "../../types/Types";
+import {ReviewType, SearchFilterType} from "../../types/Types";
 import {ReviewItem} from "./ReviewItem";
+import {clientFilterSelectOptions} from "../../utils/constants";
+import {SearchFilterForm} from "../../components/Forms/SearchFilterForm";
 
 type PropsType = {
     isAuth: null | string;
@@ -19,11 +21,13 @@ type PropsType = {
     currentPage: number;
     pageLimit: number;
     isFetching: boolean;
+    filter: SearchFilterType;
     isReviewSubmitted: boolean;
     isDeletingInProcess: Array<string>;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
     remove: (id: string) => void;
+    onFilterChanged: (filter: SearchFilterType) => void;
 }
 
 export const Reviews: React.FC<PropsType> = ({
@@ -33,11 +37,13 @@ export const Reviews: React.FC<PropsType> = ({
   currentPage,
   pageLimit,
   isFetching,
+  filter,
   isDeletingInProcess,
   isReviewSubmitted,
   setPageLimit,
   setCurrentPage,
-                                                 remove,
+  onFilterChanged,
+  remove,
 }) => {
     const apiError = useSelector(getReviewUpdateErrorSelector);
     const modalTitle = "Update your review here";
@@ -51,6 +57,12 @@ export const Reviews: React.FC<PropsType> = ({
     return (
         <section className="reviews container">
             <div className="admin__cards-header">
+                <SearchFilterForm
+                    isRated={true}
+                    options={clientFilterSelectOptions}
+                    filter={filter}
+                    onFilterChanged={onFilterChanged}
+                />
                 { isAuth !== null && !isReviewSubmitted &&
                     <button
                         className="btn btn--bg btn--light-bg add-btn"

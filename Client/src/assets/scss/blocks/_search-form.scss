@@ -129,6 +129,17 @@
       font-weight: 500 !important;
     }
   }
+
+  .search-form__rate {
+    margin-bottom: 0;
+  }
+
+  .btn--icon.rate svg {
+    fill: gray;
+  }
+  .btn--icon.rate.selected svg {
+    fill: $light;
+  }
 }
 
 @media (min-width: 900px) {

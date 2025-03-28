@@ -367,7 +367,7 @@ export const getClients = (
   token: string | null,
   currentClientPage: number,
   clientsPageSize: number,
-  clientsFilter: SearchFilterType
+  clientsFilter: SearchFilterType,
 ): ThunkType => async (
     dispatch,
 ) => {
@@ -378,7 +378,7 @@ export const getClients = (
       currentClientPage,
       clientsPageSize,
       clientsFilter
-    )
+    );
     if (response.resultCode === ResultCodesEnum.Success) {
       dispatch(setAccessErrorAC(null));
       dispatch(setClientsAC(response.clients, response.totalCount));
