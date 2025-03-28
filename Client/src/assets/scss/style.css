@@ -3382,6 +3382,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
   font-weight: 500 !important;
 }
 .search-form .search-form__rate {
+  flex: 1 1 100%;
   margin-bottom: 0;
 }
 .search-form .btn--icon.rate svg {
@@ -3410,6 +3411,7 @@ input[type=checkbox][value=true] + label .checkbox::after {
   .search-form .select-block {
     height: 66px;
   }
+  .search-form .search-reset svg,
   .search-form .search-submit svg {
     width: 40px;
     height: 40px;

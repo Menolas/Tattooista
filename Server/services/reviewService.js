@@ -20,11 +20,10 @@ class ReviewService {
         });
     }
 
-    async editReview(review, newData, userId) {
+    async editReview(review, newData) {
 
-        review.starsNumber = newData.starsNumber;
+        review.rate = newData.rate;
         review.content = newData.content.trim();
-        review.userId = userId;
 
         return review;
     }

@@ -7,6 +7,7 @@ import { FormSelect } from "./formComponents/FormSelect";
 import {handleEnterClick} from "../../utils/functions";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
+import {ReactComponent as ArrowRotateLeftIcon} from "../../assets/svg/arrow-rotate-left.svg";
 
 type PropsType = {
   isFavourite?: boolean;
@@ -131,6 +132,27 @@ export const SearchFilterForm: React.FC<PropsType> = React.memo(({
                     type="submit" disabled={isSubmitting}
                 >
                   <FilterIcon/>
+                </button>
+                <button
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Reset search"
+                  type="button"
+                  className="btn btn--sm btn--transparent search-reset"
+                  onClick={() => {
+                      const resetValues = {
+                          term: '',
+                          condition: 'any',
+                          isFavourite: false,
+                          rate: 'any',
+                      };
+                      onFilterChanged(resetValues);
+                      setFieldValue('term', '');
+                      setFieldValue('condition', 'any');
+                      setFieldValue('isFavourite', false);
+                      setFieldValue('rate', 'any');
+                  }}
+                  >
+                    <ArrowRotateLeftIcon />
                 </button>
               </Form>
           )

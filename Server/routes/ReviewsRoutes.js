@@ -26,7 +26,7 @@ router.get('/', controller.getReviews);
 router.post('/:id', dynamicAuthCheckMiddleware(), controller.addReview);
 
 // update review
-//router.post('/:id',  getReview, controller.updateService);
+router.post('reviewUpdate/:id',  getReview, controller.updateReview);
 
 // delete review
 router.delete('/:id', authRoleMiddleware(["SUPERADMIN"]), getReview, controller.deleteReview);

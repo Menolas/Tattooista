@@ -36,6 +36,18 @@ export const reviewsAPI = {
         ).then(response => response.data);
     },
 
+    async updateReview(
+        userId: string | undefined,
+        token: string | null,
+        values: FormData,
+    ) {
+        return await $api.post<AddReviewResponseType>(
+            `reviews/reviewUpdate/${userId}`,
+            values,
+            {headers: {Authorization: `Bearer ${token}`}}
+        ).then(response => response.data);
+    },
+
     async deleteReview(
         token: string | null,
         userId: string
