@@ -77,6 +77,21 @@ class reviewsController {
     }
   }
 
+  async getUserReviews(req, res) {
+
+    const results = {};
+    try {
+      results.resultCode = 0;
+      results.reviews = await Review.find({ user: req.params.id }).sort({ createdAt: -1 });
+      res.json(results);
+    } catch (e) {
+      console.log(e);
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(400).json(results);
+    }
+  }
+
 
   async addReview(req, res) {
     if (!req.isRightUser) {
@@ -131,7 +146,7 @@ class reviewsController {
       const updatedReview = await ReviewService.editReview(res.review, req.body);
 
       results.resultCode = 0;
-      results.service = await updatedReview.save();
+      results.review = await updatedReview.save();
       res.status(201).json(results);
     } catch (e) {
       console.log(e);
@@ -155,6 +170,35 @@ class reviewsController {
       results.review = res.review;
       res.status(200).json(results);
 
+    } catch (e) {
+      results.resultCode = 1;
+      results.message = e.message;
+      res.status(500).json(results);
+    }
+  }
+
+  async deleteReviewGalleryPicture(req, res) {
+    if (!req.hasRole) {
+      return res.status(403).json({ message: "You don't have permission" });
+    }
+
+    const results = {};
+    const picture = req.query.picture;
+
+    try {
+      await res.review.gallery.pull(picture);
+      await fs.unlink(`./uploads/reviews/${res.review._id}/${picture}`, e => {
+        if (e) console.log(e);
+      });
+
+      if (res.review.gallery.length === 0) {
+        await fs.rm(`./uploads/reviews/${res.review._id}`, { recursive:true }, e => {
+          if (e) console.log(e);
+        });
+      }
+      results.resultCode = 0;
+      results.review = await res.review.save();
+      res.json(results);
     } catch (e) {
       results.resultCode = 1;
       results.message = e.message;

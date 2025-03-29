@@ -39,3 +39,7 @@ export const getAuthAccessErrorSelector = (state: AppStateType) => {
 export const getIsFetchingSelector = (state: AppStateType) => {
     return state.auth.isFetching;
 };
+
+export const getUsersReviewsSelector = (state: AppStateType) => {
+    return state.auth.reviews;
+};

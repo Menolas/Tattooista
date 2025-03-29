@@ -134,7 +134,6 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                 disabled={isDeletingPicturesInProcess?.some((id) => id === item)}
                                 onClick={async (event) => {
                                   event.preventDefault();
-                                  console.log(isGalleryModified + " on click isGalleryModified2!!!!!!!!!!");
                                   if (client?.gallery && deleteClientGalleryPicture) {
                                     let success = await dispatch(deleteClientGalleryPicture(token, client._id, item));
                                     if (success && refreshClientData) {
@@ -143,7 +142,6 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                                       refreshClientData(updatedClient);
 
                                       setIsGalleryModified(true);
-                                      console.log(isGalleryModified + " on click isGalleryModified3!!!!!!!!!!");
                                     }
                                   }
                                 }}

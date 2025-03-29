@@ -22,11 +22,15 @@ function dynamicAuthCheckMiddleware() {
 //getting all reviews
 router.get('/', controller.getReviews);
 
+router.get('/:id', controller.getUserReviews);
+
 // add review
 router.post('/:id', dynamicAuthCheckMiddleware(), controller.addReview);
 
 // update review
-router.post('reviewUpdate/:id',  getReview, controller.updateReview);
+router.post('/reviewUpdate/:id',  authRoleMiddleware(["SUPERADMIN"]), getReview, controller.updateReview);
+
+router.delete('/updateGallery/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getReview, controller.deleteReviewGalleryPicture);
 
 // delete review
 router.delete('/:id', authRoleMiddleware(["SUPERADMIN"]), getReview, controller.deleteReview);

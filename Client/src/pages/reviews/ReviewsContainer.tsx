@@ -6,14 +6,26 @@ import {useCallback, useEffect, useState} from "react";
 import {setSuccessModalAC} from "../../redux/General/general-reducer";
 import {getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {Reviews} from "./Reviews";
-import {deleteReview, getReviews, setCurrentPageAC, setPageLimitAC} from "../../redux/Reviews/reviews-reducer";
 import {
-    getCurrentPageSelector, getIsDeletingInProcessSelector, getIsFetchingSelector,
-    getPageLimitSelector, getReviewsFilterSelector,
+    deleteReview,
+    getReviews,
+    setCurrentPageAC,
+    setPageLimitAC
+} from "../../redux/Reviews/reviews-reducer";
+import {
+    getCurrentPageSelector,
+    getIsDeletingReviewInProcessSelector,
+    getIsFetchingSelector,
+    getPageLimitSelector,
+    getReviewsFilterSelector,
     getReviewsSelector,
     getTotalCountSelector
 } from "../../redux/Reviews/reviews-selectors";
-import {getIsAuthSelector, getTokenSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
+import {
+    getIsAuthSelector,
+    getTokenSelector,
+    getUserProfileSelector
+} from "../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../types/Types";
 import {setFilterAC} from "../../redux/Reviews/reviews-reducer";
 
@@ -23,7 +35,7 @@ export const ReviewsContainer: React.FC = () => {
     const totalCount = useSelector(getTotalCountSelector);
     const reviews = useSelector(getReviewsSelector);
     const isFetching = useSelector(getIsFetchingSelector);
-    const isDeletingInProcess = useSelector(getIsDeletingInProcessSelector);
+    const isDeletingInProcess = useSelector(getIsDeletingReviewInProcessSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const isAuth = useSelector(getIsAuthSelector);
     const token = useSelector(getTokenSelector);
@@ -50,12 +62,19 @@ export const ReviewsContainer: React.FC = () => {
                 setIsReviewSubmitted(true);
             }
         });
-        console.log(isReviewSubmitted)
     }, [reviews]);
 
     const setSuccessModalCallBack = useCallback(() => {
         dispatch(setSuccessModalAC(false, ''));
     }, [dispatch]);
+
+    useEffect(() => {
+        if (successModal.isSuccess) {
+            setTimeout( () => {
+                setSuccessModalCallBack();
+            }, 3000);
+        }
+    }, [successModal, setSuccessModalCallBack]);
 
     const setPageLimitCallBack = (pageLimit: number) => {
         dispatch(setPageLimitAC(pageLimit));

@@ -48,7 +48,6 @@ export const ClientsContainer: React.FC = () => {
   const apiError = useSelector(getApiErrorSelector);
 
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getClients(token || "", currentPage, pageSize, filter));
