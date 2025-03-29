@@ -20,13 +20,17 @@ export const getIsFetchingSelector = (state: AppStateType) => {
     return state.reviews.isFetching;
 };
 
-export const getIsDeletingInProcessSelector = (state: AppStateType) => {
+export const getIsDeletingReviewInProcessSelector = (state: AppStateType) => {
     return state.reviews.isDeletingInProcess;
-}
+};
+
+export const getIsDeletingReviewPicturesInProcessSelector = (state: AppStateType) => {
+    return state.reviews.isDeletingPicturesInProcess;
+};
 
 export const getReviewUpdateErrorSelector = (state: AppStateType) => {
     return state.reviews.reviewUpdateError;
-}
+};
 
 export const getReviewsFilterSelector = (state: AppStateType) => {
     return state.reviews.filter;

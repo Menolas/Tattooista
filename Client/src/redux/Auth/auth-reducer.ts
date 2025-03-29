@@ -2,7 +2,15 @@ import { authAPI } from "./authApi";
 import { ResultCodesEnum } from "../../utils/constants";
 import { ThunkAction } from "redux-thunk";
 import {AppStateType} from "../redux-store";
-import {ApiErrorType, LoginFormValues, RegistrationFormValues, RoleType, UserType} from "../../types/Types";
+import {
+    ApiErrorType,
+    LoginFormValues,
+    RegistrationFormValues,
+    ReviewType,
+    RoleType,
+    SearchFilterType,
+    UserType
+} from "../../types/Types";
 import {getUserRole} from "../../utils/functions";
 import {
   setSuccessModalAC,
@@ -15,6 +23,7 @@ import {
 import {AnyAction} from "redux";
 import {usersAPI} from "../Users/usersApi";
 import {setUsersApiErrorAC} from "../Users/users-reducer";
+import {reviewsAPI} from "../Reviews/reviewsApi";
 
 const SET_AUTH_API_ERROR = 'SET_AUTH_API_ERROR';
 const LOG_OUT = 'LOG_OUT';
@@ -24,12 +33,14 @@ const SET_NEED_RELOGIN = 'SET_NEED_RELOGIN';
 const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
+const SET_REVIEWS = 'SET_REVIEWS';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
 
 const initialState = {
   user: null as null | UserType,
+  reviews: [] as Array<ReviewType>,
   roles: [] as Array<RoleType>,
   token: null as string | null,
   isAuth: null as string | null,
@@ -119,6 +130,12 @@ export const authReducer = (
               isAuth: action.role
           }
 
+      case SET_REVIEWS:
+          return {
+              ...state,
+              reviews: action.reviews
+          }
+
       case TOGGLE_IS_DELETING_IN_PROCESS:
           return {
               ...state,
@@ -147,6 +164,7 @@ type ActionsTypes =
     | SetLoginErrorAT
     | ToggleIsFetchingAT
     | SetUserProfileAT
+    | SetReviewsAT
     | ToggleIsDeletingInProcessAT
     | DeleteUserAT
     | SetAccessErrorAT
@@ -193,6 +211,15 @@ export const setUserProfileAC = (
     role: string
 ): SetUserProfileAT => ({
     type: SET_USER_PROFILE, user, role
+});
+
+type SetReviewsAT = {
+    type: typeof SET_REVIEWS;
+    reviews: Array<ReviewType>;
+};
+
+const setReviewsAC = (reviews: Array<ReviewType>): SetReviewsAT => ({
+    type: SET_REVIEWS, reviews
 });
 
 type ToggleIsFetchingAT = {
@@ -419,5 +446,25 @@ export const deleteUserFromProfile = (
         return false;
     } finally {
         dispatch(toggleIsDeletingInProcessAC(false, id));
+    }
+};
+
+export const getReviews = (
+    id: string
+): ThunkType => async (dispatch) => {
+    try {
+        dispatch(toggleIsFetchingAC(true));
+        const response = await reviewsAPI.getUserReviews(id);
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(setReviewsAC(response.reviews));
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.log(e);
+        return false;
+    } finally {
+        dispatch(toggleIsFetchingAC(false));
     }
 };

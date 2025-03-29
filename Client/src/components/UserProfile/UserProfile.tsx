@@ -7,21 +7,28 @@ import {ModalPopUp} from "../PopUps/ModalPopUp";
 import {Confirmation} from "../common/Confirmation";
 import {Tooltip} from "react-tooltip";
 import {ReactComponent as EnvelopIcon} from "../../assets/svg/envelop.svg";
-import {RoleType, UserType} from "../../types/Types";
+import {ReviewType, RoleType, UserType} from "../../types/Types";
 import {UpdateUserForm} from "../Forms/UpdateUserForm";
+import {ReviewItem} from "../../pages/reviews/ReviewItem";
 
 type PropsType = {
+    isAuth: null | string;
     apiError: null | string;
     data: UserType | null;
+    reviews: Array<ReviewType>;
     isDeletingPicturesInProcess: Array<string>;
+    isDeletingReviewInProcess: Array<string>;
     possibleRoles: Array<RoleType>;
     remove: () => void;
 }
 
 export const UserProfile: React.FC<PropsType> = ({
+    isAuth,
     apiError,
     data,
+    reviews,
     isDeletingPicturesInProcess,
+    isDeletingReviewInProcess,
     possibleRoles,
     remove,
 
@@ -58,6 +65,17 @@ export const UserProfile: React.FC<PropsType> = ({
     }
 
     const userRoleValues = data ? getUserRoleValues(data.roles, possibleRoles) : [];
+
+    const reviewElements = reviews.map((review, index) => {
+        return <ReviewItem
+                    key={index}
+                    isAuth={isAuth}
+                    isDeletingInProcess={isDeletingReviewInProcess}
+                    data={review}
+                    closeUpdateReviewMode={closeModal}
+                    remove={remove}
+                />
+    });
 
     return (
         <div className="user-profile container">
@@ -131,7 +149,7 @@ export const UserProfile: React.FC<PropsType> = ({
                 <Tooltip id="profile-tooltip"/>
             </aside>
             <section className="user-profile_content">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean
                 massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
                 Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
                 Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
@@ -144,7 +162,10 @@ export const UserProfile: React.FC<PropsType> = ({
                 ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante
                 tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet
                 orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis
-                magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
+                    magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>
+                <div className='reviews'>
+                    <ul className="reviews__list">{reviewElements}</ul>
+                </div>
             </section>
         </div>
 

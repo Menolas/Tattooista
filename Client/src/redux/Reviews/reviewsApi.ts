@@ -24,6 +24,12 @@ export const reviewsAPI = {
             .then(response => response.data);
     },
 
+    async getUserReviews(id: string) {
+        return await $api.get<GetReviewsResponseType>(
+            `reviews/${id}`)
+            .then(response => response.data);
+    },
+
     async addReview(
         userId: string | undefined,
         token: string | null,
@@ -54,6 +60,17 @@ export const reviewsAPI = {
     ) {
         return await $api.delete<DeleteReviewResponseType>(
             `reviews/${userId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        ).then(response => response.data);
+    },
+
+    async deleteReviewGalleryPicture(
+        token: string | null,
+        reviewId: string,
+        picture: string
+    ) {
+        return await $api.delete<AddReviewResponseType>(
+            `reviews/updateGallery/${reviewId}?&picture=${picture}`,
             { headers: { Authorization: `Bearer ${token}` } }
         ).then(response => response.data);
     },

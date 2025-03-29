@@ -1,14 +1,6 @@
 import * as React from "react";
-import {ReactComponent as Star} from "../../../assets/svg/star.svg";
-import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
-import {DefaultAvatar} from "../../components/common/DefaultAvatar";
 import {Paginator} from "../../components/common/Paginator";
-import {useSelector} from "react-redux";
-import {getReviewUpdateErrorSelector,
-} from "../../redux/Reviews/reviews-selectors";
 import {useState} from "react";
-import {ModalPopUp} from "../../components/PopUps/ModalPopUp";
-import {UpdateReviewForm} from "../../components/Forms/UpdateReviewForm";
 import {ReviewType, SearchFilterType} from "../../types/Types";
 import {ReviewItem} from "./ReviewItem";
 import {clientFilterSelectOptions} from "../../utils/constants";
@@ -45,8 +37,6 @@ export const Reviews: React.FC<PropsType> = ({
   onFilterChanged,
   remove,
 }) => {
-    const apiError = useSelector(getReviewUpdateErrorSelector);
-    const modalTitle = "Update your review here";
 
     const [addReviewMode, setAddReviewMode] = useState<boolean>(false);
 
@@ -89,22 +79,17 @@ export const Reviews: React.FC<PropsType> = ({
                     ? reviews.map((data, index) => {
                         return <ReviewItem
                                     key={index}
+                                    addReviewMode={addReviewMode}
                                     isAuth={isAuth}
                                     isDeletingInProcess={isDeletingInProcess}
                                     data={data}
+                                    closeUpdateReviewMode={closeModal}
                                     remove={remove}
                                 />
                     })
                     : null
                 }
             </ul>
-            <ModalPopUp
-                isOpen={addReviewMode}
-                modalTitle={modalTitle}
-                closeModal={closeModal}
-            >
-                <UpdateReviewForm apiError={apiError} closeModal={closeModal} />
-            </ModalPopUp>
         </section>
     );
 };

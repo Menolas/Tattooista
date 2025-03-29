@@ -5,13 +5,15 @@ import {ReviewType, UpdateReviewFormValues,} from "../../types/Types";
 import {FieldWrapper} from "./formComponents/FieldWrapper";
 import {ApiErrorMessage} from "./formComponents/ApiErrorMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {addReview} from "../../redux/Reviews/reviews-reducer";
+import {addReview, deleteReviewGalleryPicture, updateReview} from "../../redux/Reviews/reviews-reducer";
 import {handleEnterClick} from "../../utils/functions";
 import {getTokenSelector, getUserProfileSelector} from "../../redux/Auth/auth-selectors";
 import {AppDispatch} from "../../redux/redux-store";
 import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
 import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS} from "../../utils/validators";
 import {useState} from "react";
+import {API_URL} from "../../http";
+import {getIsDeletingReviewPicturesInProcessSelector} from "../../redux/Reviews/reviews-selectors";
 
 const validationSchema = Yup.object().shape({
     rate: Yup.number()
@@ -36,16 +38,19 @@ const validationSchema = Yup.object().shape({
 
 type PropsType = {
     apiError: null | string;
-    review?: ReviewType;
+    isEditing: boolean;
+    review: ReviewType;
     closeModal: () => void;
 };
 export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
     apiError,
+    isEditing,
     review,
     closeModal,
 }) => {
     const token = useSelector(getTokenSelector);
     const user = useSelector(getUserProfileSelector);
+    const isDeletingPicturesInProcess = useSelector(getIsDeletingReviewPicturesInProcessSelector);
     const [imageURLs, setImageURLs] = useState<{ url: string | ArrayBuffer | null, file: File }[]>([]);
 
     const dispatch = useDispatch<AppDispatch>();
@@ -71,9 +76,9 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
     };
 
     const initialValues: UpdateReviewFormValues = {
-        rate: review?.rate ?? 0,
-        content: review?.content ?? '',
-        gallery: [],
+        rate: isEditing ? review?.rate : 0,
+        content: isEditing ? review.content : '',
+        gallery: isEditing ? review.gallery : [],
     };
 
     const submit = async (
@@ -82,20 +87,18 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
     ) => {
         const formData = new FormData();
 
-        // Append regular fields
         formData.append('rate', values.rate.toString());
         formData.append('content', values.content);
 
-        // Append files under 'gallery[]'
         imageURLs.forEach(({ file }) => {
-            formData.append('gallery', file); // 👈 key must match what your backend expects
+            formData.append('gallery', file);
         });
 
         let success;
 
         try {
-            if (review) {
-                //success = await dispatch(editService(token, review._id, formData));
+            if (isEditing && review) {
+                success = await dispatch(updateReview(token, review._id, formData));
             } else {
                 success = await dispatch(addReview(user?._id, token, formData));
             }
@@ -117,8 +120,7 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
             {propsF => {
 
                 return (
-                    <Form className="form form--updateService" encType={"multipart/form-data"}>
-
+                    <Form className="form form--updateReview" encType={"multipart/form-data"}>
                         <FieldWrapper
                             name={'rate'}
                             label="Rate your experience"
@@ -145,13 +147,39 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                                 component="textarea"
                                 rows={6}
                                 placeholder={"Please describe your experience"}
-                                value={propsF.values.content}
+                                value={propsF.values.content ?? ''}
                                 onChange={propsF.handleChange}
                                 onKeyDown={(event: React.KeyboardEvent) => {
                                     handleEnterClick(event, propsF.handleSubmit)
                                 }}
                             />
                         </FieldWrapper>
+                        {review?.gallery && review.gallery.length > 0 && (
+                            <ul className={"list client-gallery"}>
+                                {review?.gallery.map((item, i) => (
+                                    <li className={"client-gallery__item"} key={i}>
+                                        <button
+                                            className={"btn btn--icon btn--icon--light close-button"}
+                                            disabled={isDeletingPicturesInProcess?.some((id) => id === item)}
+                                            onClick={async (event) => {
+                                                event.preventDefault();
+                                                if (review?.gallery && deleteReviewGalleryPicture) {
+                                                    let success = await dispatch(deleteReviewGalleryPicture(token, review._id, item));
+                                                    // if (success && refreshClientData) {
+                                                    //     const updatedGallery = review.gallery.filter((picture) => picture !== item);
+                                                    //     const updatedClient = { ...review, gallery: updatedGallery };
+                                                    //     refreshClientData(updatedClient);
+                                                    //
+                                                    //     setIsGalleryModified(true);
+                                                    // }
+                                                }
+                                            }}
+                                        ></button>
+                                        <img src={`${API_URL}/reviews/${review._id}/${item}`} alt={''} />
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                         <FieldWrapper name={'gallery'} wrapperClass={'form__input-wrap--uploadFile'}>
                             {imageURLs.length > 0 && (
                                 <div>

@@ -2,7 +2,7 @@ import {DefaultAvatar} from "../../components/common/DefaultAvatar";
 import * as React from "react";
 import {ReactComponent as Star} from "../../assets/svg/star.svg";
 import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
-import {ReviewType} from "../../types/Types";
+import {ReviewType, UserType} from "../../types/Types";
 import {API_URL} from "../../http";
 import {getDateFormatted} from "../../utils/functions";
 import {ReactComponent as TrashIcon} from "../../assets/svg/trash.svg";
@@ -10,22 +10,35 @@ import {SUPER_ADMIN} from "../../utils/constants";
 import {useState} from "react";
 import {ImageFullView} from "../../components/common/ImageFullView";
 import {Confirmation} from "../../components/common/Confirmation";
+import {ReactComponent as EditIcon} from "../../assets/svg/edit.svg";
+import {UpdateReviewForm} from "../../components/Forms/UpdateReviewForm";
+import {ModalPopUp} from "../../components/PopUps/ModalPopUp";
+import {useSelector} from "react-redux";
+import {getReviewUpdateErrorSelector} from "../../redux/Reviews/reviews-selectors";
 
 type PropsType = {
     isAuth: null | string;
+    userId?: string;
     isDeletingInProcess: Array<string>;
     data: ReviewType;
+    addReviewMode?: boolean;
+    closeUpdateReviewMode?: () => void;
     remove: (id: string) => void;
 };
 
 export const ReviewItem: React.FC<PropsType> = ({
                                                     isAuth,
+                                                    userId,
                                                     isDeletingInProcess,
                                                     data,
+                                                    addReviewMode,
+                                                    closeUpdateReviewMode,
                                                     remove,
 }) => {
 
     const formatted = getDateFormatted(data.createdAt);
+    const apiError = useSelector(getReviewUpdateErrorSelector);
+    const modalTitle = "Update your review here";
     const [carouselData, setCarouselData] = useState<{
         isOpen: boolean, activeIndex?: number}>({isOpen: false});
     const [confirmationData, setConfirmationData] = useState<{
@@ -35,12 +48,19 @@ export const ReviewItem: React.FC<PropsType> = ({
         context: string
     }>({needConfirmation: false, context: ''});
 
+    const [editReviewMode, setEditReviewMode] = useState<boolean>(false);
+
     const removeCallBack = () => {
         remove(data._id);
     };
 
     const closeModal = () => {
         setConfirmationData({needConfirmation: false, context: ''});
+        if (closeUpdateReviewMode) {
+            closeUpdateReviewMode();
+        }
+        setEditReviewMode(false);
+
         //setApiError();
     };
 
@@ -66,23 +86,37 @@ export const ReviewItem: React.FC<PropsType> = ({
                         })
                     }
                 </div>
-                {isAuth === SUPER_ADMIN &&
-                    <button
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Delete client"
-                        className={"btn btn--icon"}
-                        disabled={isDeletingInProcess?.some(id => id === data._id)}
-                        onClick={() => {
-                            setConfirmationData({
-                                needConfirmation: true,
-                                itemId: data._id,
-                                context: 'Are you sure? You about to delete this review.',
-                                cb: removeCallBack
-                            });
-                        }}
-                    >
-                        <TrashIcon/>
-                    </button>
+                { (isAuth === SUPER_ADMIN || userId === data.user._id) && (
+                        <>
+                            <button
+                                data-tooltip-id="my-tooltip"
+                                data-tooltip-content="Edit client"
+                                className={"btn btn--icon"}
+                                    onClick={() => {
+                                        setEditReviewMode(true);
+                                        //setData(data);
+                                    }}
+                            >
+                                <EditIcon/>
+                            </button>
+                            <button
+                                data-tooltip-id="my-tooltip"
+                                data-tooltip-content="Delete client"
+                                className={"btn btn--icon"}
+                                disabled={isDeletingInProcess?.some(id => id === data._id)}
+                                onClick={() => {
+                                    setConfirmationData({
+                                        needConfirmation: true,
+                                        itemId: data._id,
+                                        context: 'Are you sure? You about to delete this review.',
+                                        cb: removeCallBack
+                                    });
+                                }}
+                            >
+                                <TrashIcon/>
+                            </button>
+                        </>
+                    )
                 }
             </div>
 
@@ -134,6 +168,18 @@ export const ReviewItem: React.FC<PropsType> = ({
                     imgUrl={`${API_URL}/reviews/${data._id}/`}
                 />
             }
+            <ModalPopUp
+                isOpen={addReviewMode || editReviewMode}
+                modalTitle={modalTitle}
+                closeModal={closeModal}
+            >
+                <UpdateReviewForm
+                    apiError={apiError}
+                    review={data}
+                    isEditing={editReviewMode}
+                    closeModal={closeModal}
+                />
+            </ModalPopUp>
         </li>
     );
 };

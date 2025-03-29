@@ -1,8 +1,7 @@
 import {
-    ApiErrorType, ClientType,
+    ApiErrorType,
     ReviewType,
     SearchFilterType,
-    UpdateReviewFormValues,
 } from "../../types/Types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "../redux-store";
@@ -11,6 +10,7 @@ import {ResultCodesEnum} from "../../utils/constants";
 import {reviewsAPI} from "./reviewsApi";
 import {setApiErrorAC, setSuccessModalAC} from "../General/general-reducer";
 import {getNewPage} from "../../utils/functions";
+import {clientsAPI} from "../Clients/clientsApi";
 
 const SET_REVIEWS = 'SET_REVIEWS';
 const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
@@ -21,8 +21,10 @@ const DELETE_REVIEW = 'DELETE_REVIEW';
 const ADD_REVIEW = 'ADD_REVIEW';
 const EDIT_REVIEW = 'EDIT_REVIEW';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
+const TOGGLE_IS_DELETING_PICTURES_IN_PROCESS = 'TOGGLE_IS_DELETING_PICTURE_IN_PROGRESS';
 
 const ADD_REVIEW_SUCCESS = 'You successfully added you review!';
+const UPDATE_REVIEW_SUCCESS = 'You successfully updated you review!';
 
 const initialState = {
     reviews: [] as Array<ReviewType>,
@@ -32,6 +34,7 @@ const initialState = {
     isFetching: false as boolean,
     reviewUpdateError: null as null | string,
     isDeletingInProcess: [] as Array<string>,
+    isDeletingPicturesInProcess: [] as Array<string>,
     filter: {
         term: '' as string | null,
         rate: "any" as string | number,
@@ -85,6 +88,14 @@ export const reviewsReducer = (
                     : state.isDeletingInProcess.filter(id => id !== action.id)
             }
 
+        case TOGGLE_IS_DELETING_PICTURES_IN_PROCESS:
+            return {
+                ...state,
+                isDeletingPicturesInProcess: action.isFetching
+                    ? [...state.isDeletingPicturesInProcess, action.id]
+                    : state.isDeletingPicturesInProcess.filter(id => id !== action.id)
+            }
+
         case DELETE_REVIEW:
             return {
                 ...state,
@@ -103,6 +114,7 @@ type ActionsTypes =
     | AddReviewAT
     | EditReviewAT
     | ToggleIsDeletingInProcessAT
+    | ToggleIsDeletingPicturesInProcessAT
     | DeleteReviewAT;
 
 //actions creators
@@ -160,12 +172,6 @@ const toggleIsFetchingAC = (isFetching: boolean): ToggleIsFetchingAT => ({
     type: TOGGLE_IS_FETCHING, isFetching,
 });
 
-type SetReviewsAT = {
-    type: typeof SET_REVIEWS;
-    reviews: Array<ReviewType>;
-    total: number;
-};
-
 type DeleteReviewAT = {
     type: typeof DELETE_REVIEW;
     id: string;
@@ -174,6 +180,12 @@ type DeleteReviewAT = {
 const deleteReviewAC = (id: string): DeleteReviewAT => ({
     type: DELETE_REVIEW, id
 });
+
+type SetReviewsAT = {
+    type: typeof SET_REVIEWS;
+    reviews: Array<ReviewType>;
+    total: number;
+};
 
 const setReviewsAC = (reviews: Array<ReviewType>, total: number): SetReviewsAT => ({
     type: SET_REVIEWS, reviews, total
@@ -187,6 +199,16 @@ type ToggleIsDeletingInProcessAT = {
 
 const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
+});
+
+type ToggleIsDeletingPicturesInProcessAT = {
+    type: typeof TOGGLE_IS_DELETING_PICTURES_IN_PROCESS;
+    isFetching: boolean;
+    id: string;
+};
+
+const toggleIsDeletingPicturesInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingPicturesInProcessAT  => ({
+    type: TOGGLE_IS_DELETING_PICTURES_IN_PROCESS, isFetching, id
 });
 
 export type ThunkType = ThunkAction<Promise<boolean>, AppStateType, unknown, AnyAction>;
@@ -239,15 +261,15 @@ export const addReview = (
 };
 
 export const updateReview = (
-    userId: string | undefined,
     token: string | null,
+    userId: string | undefined,
     formData: FormData,
 ): ThunkType => async (dispatch) => {
     try {
         const response = await reviewsAPI.updateReview(userId, token, formData);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(editReviewAC(response.review));
-            dispatch(setSuccessModalAC(true, ADD_REVIEW_SUCCESS));
+            dispatch(setSuccessModalAC(true, UPDATE_REVIEW_SUCCESS));
             return true;
         } else {
             return false;
@@ -273,7 +295,7 @@ export const deleteReview = (
         dispatch(toggleIsDeletingInProcessAC(true, id));
         const response = await reviewsAPI.deleteReview(token, id);
         if (response.resultCode === ResultCodesEnum.Success) {
-            await dispatch(deleteReviewThunk(token, id, reviews, currentPage, pageLimit, filter));
+            await dispatch(deleteReviewThunk(id, reviews, currentPage, pageLimit, filter));
             dispatch(setApiErrorAC(null));
             return true;
         } else {
@@ -290,7 +312,6 @@ export const deleteReview = (
 };
 
 const deleteReviewThunk = (
-    token: string | null,
     id: string,
     reviews: Array<ReviewType>,
     currentPage: number,
@@ -312,4 +333,26 @@ const deleteReviewThunk = (
         dispatch(setCurrentPageAC(newPage));
     }
     return true;
+};
+
+export const deleteReviewGalleryPicture = (
+    token: string | null,
+    id: string,
+    picture: string
+): ThunkType => async (dispatch) => {
+    try {
+        dispatch(toggleIsDeletingPicturesInProcessAC(true, picture));
+        const response = await reviewsAPI.deleteReviewGalleryPicture(token, id, picture);
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(editReviewAC(response.review));
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.log(e);
+        return false;
+    } finally {
+        dispatch(toggleIsDeletingPicturesInProcessAC(false, picture));
+    }
 };

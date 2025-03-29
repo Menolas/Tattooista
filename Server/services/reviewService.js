@@ -3,7 +3,6 @@ const ApiError = require("../exeptions/apiErrors");
 
 class ReviewService {
     async addReview(data, userId) {
-        console.log(JSON.stringify(data) + "review from service")
         if (userId) {
             const reviewCandidate = await  Review.findOne({
                 'userId': userId

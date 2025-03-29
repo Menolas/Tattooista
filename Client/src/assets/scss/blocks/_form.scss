@@ -272,6 +272,7 @@ input[type="checkbox"][value="true"] +label .checkbox::after {
   }
 }
 
+.form--updateReview,
 .form--galleryUpload {
 
   .client-gallery {
