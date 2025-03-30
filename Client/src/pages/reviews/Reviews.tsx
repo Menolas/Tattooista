@@ -5,6 +5,10 @@ import {ReviewType, SearchFilterType} from "../../types/Types";
 import {ReviewItem} from "./ReviewItem";
 import {clientFilterSelectOptions} from "../../utils/constants";
 import {SearchFilterForm} from "../../components/Forms/SearchFilterForm";
+import {ModalPopUp} from "../../components/PopUps/ModalPopUp";
+import {UpdateReviewForm} from "../../components/Forms/UpdateReviewForm";
+import {Preloader} from "../../components/common/Preloader";
+import {NothingToShow} from "../../components/common/NothingToShow";
 
 type PropsType = {
     isAuth: null | string;
@@ -14,12 +18,14 @@ type PropsType = {
     pageLimit: number;
     isFetching: boolean;
     filter: SearchFilterType;
-    isReviewSubmitted: boolean;
+    apiError: null | string;
+    isSubmittedReviews: number;
     isDeletingInProcess: Array<string>;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
     remove: (id: string) => void;
     onFilterChanged: (filter: SearchFilterType) => void;
+    setReviewApiError: () => void;
 }
 
 export const Reviews: React.FC<PropsType> = ({
@@ -30,19 +36,34 @@ export const Reviews: React.FC<PropsType> = ({
   pageLimit,
   isFetching,
   filter,
+  apiError,
   isDeletingInProcess,
-  isReviewSubmitted,
+  isSubmittedReviews,
   setPageLimit,
   setCurrentPage,
   onFilterChanged,
   remove,
+  setReviewApiError,
 }) => {
 
     const [addReviewMode, setAddReviewMode] = useState<boolean>(false);
 
     const closeModal = () => {
         setAddReviewMode(false);
+        setReviewApiError();
     };
+
+    const reviewElements = reviews?.map((data, index) => {
+        return <ReviewItem
+                    key={index}
+                    isAuth={isAuth}
+                    isDeletingInProcess={isDeletingInProcess}
+                    data={data}
+                    apiError={apiError}
+                    remove={remove}
+                    setReviewApiError={setReviewApiError}
+                />
+    });
 
     return (
         <section className="reviews container">
@@ -53,7 +74,7 @@ export const Reviews: React.FC<PropsType> = ({
                     filter={filter}
                     onFilterChanged={onFilterChanged}
                 />
-                { isAuth !== null && !isReviewSubmitted &&
+                { (isAuth !== null && isSubmittedReviews < 3) &&
                     <button
                         className="btn btn--bg btn--light-bg add-btn"
                         onClick={() => {
@@ -73,23 +94,39 @@ export const Reviews: React.FC<PropsType> = ({
                         setPageLimit={setPageLimit}
                     />
                 }
+                <button
+                    className="btn btn--bg btn--light-bg add-btn"
+                    onClick={() => {
+                        setAddReviewMode(true)
+                    }}
+                >
+                    Add a Review
+                </button>
             </div>
-            <ul className="reviews__list">
-                { reviews.length
-                    ? reviews.map((data, index) => {
-                        return <ReviewItem
-                                    key={index}
-                                    addReviewMode={addReviewMode}
-                                    isAuth={isAuth}
-                                    isDeletingInProcess={isDeletingInProcess}
-                                    data={data}
-                                    closeUpdateReviewMode={closeModal}
-                                    remove={remove}
-                                />
-                    })
-                    : null
-                }
-            </ul>
+            {
+                isFetching
+                    ? <Preloader/>
+                    : totalCount && totalCount > 0
+                        ? (
+                            <ul className="reviews__list">
+                                { reviewElements }
+                            </ul>
+                        )
+                        : <NothingToShow/>
+            }
+            {addReviewMode && (
+                <ModalPopUp
+                    isOpen={addReviewMode}
+                    modalTitle={"Leave a review"}
+                    closeModal={closeModal}
+                >
+                    <UpdateReviewForm
+                        apiError={apiError}
+                        isEditing={false}
+                        closeModal={closeModal}
+                    />
+                </ModalPopUp>
+            )}
         </section>
     );
 };

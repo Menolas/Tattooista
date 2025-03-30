@@ -60,7 +60,6 @@ export const authReducer = (
     state = initialState,
     action: ActionsTypes
 ): InitialStateType => {
-    console.log(state.accessError + " !reducer ACCESS ERROR!!!!!!!!");
 
   switch (action.type) {
 

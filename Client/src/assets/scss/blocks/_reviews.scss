@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    margin-bottom: 2rem;
     max-width: 500px;
   }
 
@@ -15,13 +16,13 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding-bottom: 0.5rem;
     border-bottom: 1px solid $light;
   }
 
   .reviews-item__header {
     display: flex;
     justify-content: space-between;
+    align-content: center;
   }
 
   .review-item__user {
@@ -56,6 +57,10 @@
         object-fit: cover;
       }
     }
+  }
+
+  .admin__card-actions {
+    margin-top: 0;
   }
 }
 

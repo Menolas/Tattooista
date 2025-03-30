@@ -10,33 +10,40 @@ import {ReactComponent as EnvelopIcon} from "../../assets/svg/envelop.svg";
 import {ReviewType, RoleType, UserType} from "../../types/Types";
 import {UpdateUserForm} from "../Forms/UpdateUserForm";
 import {ReviewItem} from "../../pages/reviews/ReviewItem";
+import {UpdateReviewForm} from "../Forms/UpdateReviewForm";
 
 type PropsType = {
     isAuth: null | string;
     apiError: null | string;
     data: UserType | null;
+    reviewApiError: null | string;
     reviews: Array<ReviewType>;
+    isSubmittedReviews: number;
     isDeletingPicturesInProcess: Array<string>;
     isDeletingReviewInProcess: Array<string>;
     possibleRoles: Array<RoleType>;
     remove: () => void;
+    setReviewApiError: () => void;
 }
 
 export const UserProfile: React.FC<PropsType> = ({
     isAuth,
     apiError,
     data,
+    reviewApiError,
     reviews,
+    isSubmittedReviews,
     isDeletingPicturesInProcess,
     isDeletingReviewInProcess,
     possibleRoles,
     remove,
-
+    setReviewApiError,
 }) => {
 
     const {userId} = useParams();
     const [user, setUser] = useState<UserType | null>(null);
     const [editUserMode, setEditUserMode] = useState<boolean>(false);
+    const [addReviewMode, setAddReviewMode] = useState<boolean>(false);
 
     const [confirmationData, setConfirmationData] = useState<{
         needConfirmation: boolean,
@@ -55,13 +62,18 @@ export const UserProfile: React.FC<PropsType> = ({
         setEditUserMode(false);
         setConfirmationData({needConfirmation: false, context: ''});
         setUser(null);
-    }
+    };
 
     const getUserRoleValues = (userRoleIds: Array<string>, allRoles: Array<RoleType>) => {
         return userRoleIds?.map(userRoleId => {
             const role = allRoles.find(role => role._id === userRoleId);
             return role ? role.value : null;
         }).filter(roleValue => roleValue !== null);
+    };
+
+    const closeReviewUpdateModal = () => {
+        setAddReviewMode(false);
+        setReviewApiError();
     }
 
     const userRoleValues = data ? getUserRoleValues(data.roles, possibleRoles) : [];
@@ -70,10 +82,11 @@ export const UserProfile: React.FC<PropsType> = ({
         return <ReviewItem
                     key={index}
                     isAuth={isAuth}
+                    apiError={reviewApiError}
                     isDeletingInProcess={isDeletingReviewInProcess}
                     data={review}
-                    closeUpdateReviewMode={closeModal}
                     remove={remove}
+                    setReviewApiError={setReviewApiError}
                 />
     });
 
@@ -164,7 +177,31 @@ export const UserProfile: React.FC<PropsType> = ({
                 orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis
                     magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>
                 <div className='reviews'>
+                    <h4>My reviews</h4>
                     <ul className="reviews__list">{reviewElements}</ul>
+                    { (isSubmittedReviews < 3) &&
+                        <button
+                            className="btn btn--bg btn--light-bg add-btn"
+                            onClick={() => {
+                                setAddReviewMode(true)
+                            }}
+                        >
+                            Add a Review
+                        </button>
+                    }
+                    {addReviewMode && (
+                        <ModalPopUp
+                            isOpen={addReviewMode}
+                            modalTitle={"Leave a review"}
+                            closeModal={closeReviewUpdateModal}
+                        >
+                            <UpdateReviewForm
+                                apiError={apiError}
+                                isEditing={false}
+                                closeModal={closeReviewUpdateModal}
+                            />
+                        </ModalPopUp>
+                    )}
                 </div>
             </section>
         </div>

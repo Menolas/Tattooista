@@ -39,7 +39,7 @@ const validationSchema = Yup.object().shape({
 type PropsType = {
     apiError: null | string;
     isEditing: boolean;
-    review: ReviewType;
+    review?: ReviewType;
     closeModal: () => void;
 };
 export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
@@ -76,9 +76,9 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
     };
 
     const initialValues: UpdateReviewFormValues = {
-        rate: isEditing ? review?.rate : 0,
-        content: isEditing ? review.content : '',
-        gallery: isEditing ? review.gallery : [],
+        rate: isEditing && review ? review.rate : 0,
+        content: isEditing && review ? review.content : '',
+        gallery: [],
     };
 
     const submit = async (

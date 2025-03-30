@@ -4,11 +4,10 @@ const ApiError = require("../exeptions/apiErrors");
 class ReviewService {
     async addReview(data, userId) {
         if (userId) {
-            const reviewCandidate = await  Review.findOne({
-                'userId': userId
-            });
-            if (reviewCandidate) {
-                throw ApiError.BadRequest(`You already added a review`);
+            const userReviewsCount = await Review.countDocuments({ user: userId });
+
+            if (userReviewsCount >= 3) {
+                throw ApiError.BadRequest(`You already submitted the maximum of 3 reviews.`);
             }
         }
 

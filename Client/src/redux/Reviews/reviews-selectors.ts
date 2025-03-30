@@ -28,10 +28,10 @@ export const getIsDeletingReviewPicturesInProcessSelector = (state: AppStateType
     return state.reviews.isDeletingPicturesInProcess;
 };
 
-export const getReviewUpdateErrorSelector = (state: AppStateType) => {
-    return state.reviews.reviewUpdateError;
-};
-
 export const getReviewsFilterSelector = (state: AppStateType) => {
     return state.reviews.filter;
+};
+
+export const getReviewApiErrorSelector = (state: AppStateType) => {
+    return state.reviews.reviewApiError;
 };
