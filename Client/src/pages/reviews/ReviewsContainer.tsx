@@ -23,11 +23,12 @@ import {
 } from "../../redux/Reviews/reviews-selectors";
 import {
     getIsAuthSelector,
-    getTokenSelector,
+    getTokenSelector, getUserProfileSelector,
     getUsersReviewsSelector
 } from "../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../types/Types";
 import {setFilterAC} from "../../redux/Reviews/reviews-reducer";
+import {getUsersReviews} from "../../redux/Auth/auth-reducer";
 
 export const ReviewsContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
@@ -38,6 +39,7 @@ export const ReviewsContainer: React.FC = () => {
     const isDeletingInProcess = useSelector(getIsDeletingReviewInProcessSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const isAuth = useSelector(getIsAuthSelector);
+    const user = useSelector(getUserProfileSelector);
     const token = useSelector(getTokenSelector);
     const submittedReviews = useSelector(getUsersReviewsSelector);
     const filter = useSelector(getReviewsFilterSelector);
@@ -53,7 +55,10 @@ export const ReviewsContainer: React.FC = () => {
 
     useEffect(() => {
         dispatch(getReviews(currentPage, pageLimit, filter));
-        console.log(currentPage + " currentpage!!!!!!!!!!!!!!!!!")
+        if (user) {
+            dispatch(getUsersReviews(user._id));
+        }
+
     }, [dispatch, currentPage, pageLimit, filter]);
 
     const setSuccessModalCallBack = useCallback(() => {

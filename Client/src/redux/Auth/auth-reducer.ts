@@ -217,7 +217,7 @@ type SetReviewsAT = {
     reviews: Array<ReviewType>;
 };
 
-const setReviewsAC = (reviews: Array<ReviewType>): SetReviewsAT => ({
+export const setReviewsAC = (reviews: Array<ReviewType>): SetReviewsAT => ({
     type: SET_REVIEWS, reviews
 });
 
@@ -448,7 +448,7 @@ export const deleteUserFromProfile = (
     }
 };
 
-export const getReviews = (
+export const getUsersReviews = (
     id: string
 ): ThunkType => async (dispatch) => {
     try {

@@ -82,7 +82,7 @@ class reviewsController {
     const results = {};
     try {
       results.resultCode = 0;
-      results.reviews = await Review.find({ user: req.params.id }).sort({ createdAt: -1 });
+      results.reviews = await Review.find({ user: req.params.id }).sort({ createdAt: -1 }).populate('user', 'displayName avatar');
       res.json(results);
     } catch (e) {
       console.log(e);

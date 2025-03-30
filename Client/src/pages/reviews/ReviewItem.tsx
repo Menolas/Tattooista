@@ -101,17 +101,17 @@ export const ReviewItem: React.FC<PropsType> = ({
                     )
                 }
             </div>
-            <div className="review-item__rate">
+            <ul className="review-item__rate">
                 {
-                    [1, 2, 3, 4, 5].map((num) => {
+                    [1, 2, 3, 4, 5].map((num, index) => {
                         if (num <= data.rate) {
-                            return <StarFilled/>
+                            return <li key={index}><StarFilled/></li>
                         } else {
-                            return <Star />
+                            return <li key={index}><Star /></li>
                         }
                     })
                 }
-            </div>
+            </ul>
             <div className="review-item__content">
                 {data.content}
             </div>

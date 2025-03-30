@@ -38,6 +38,7 @@
   }
 
   .review-item__rate {
+    @include list-style;
     display: flex;
     gap: 0.5rem;
 

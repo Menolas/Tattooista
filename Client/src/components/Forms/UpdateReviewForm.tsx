@@ -100,7 +100,9 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
             if (isEditing && review) {
                 success = await dispatch(updateReview(token, review._id, formData));
             } else {
-                success = await dispatch(addReview(user?._id, token, formData));
+                if (user) {
+                    success = await dispatch(addReview(user?._id, token, formData));
+                }
             }
             if (success) {
                 closeModal();

@@ -205,7 +205,6 @@ export const UserProfile: React.FC<PropsType> = ({
                 </div>
             </section>
         </div>
-
     );
 };
 

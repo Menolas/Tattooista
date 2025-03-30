@@ -5,7 +5,7 @@ import {UserProfile} from "./UserProfile";
 import {getApiErrorSelector} from "../../redux/General/general-selectors";
 import {getRoles} from "../../redux/Users/users-reducer";
 import {
-  deleteUserFromProfile, getReviews,
+  deleteUserFromProfile, getUsersReviews,
 } from "../../redux/Auth/auth-reducer";
 import {
   getUserProfileSelector,
@@ -43,8 +43,8 @@ export const UserProfileContainer: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (profile) dispatch(getReviews(profile._id));
-  }, [dispatch]);
+    if (profile) dispatch(getUsersReviews(profile._id));
+  }, [dispatch, profile]);
 
   const deleteUserCallBack = async () => {
     if (profile) {

@@ -47,6 +47,7 @@ export const Reviews: React.FC<PropsType> = ({
 }) => {
 
     const [addReviewMode, setAddReviewMode] = useState<boolean>(false);
+    console.log(isSubmittedReviews + " isSubmittedReviews !!!!!!!!!!!!!!")
 
     const closeModal = () => {
         setAddReviewMode(false);
@@ -94,14 +95,6 @@ export const Reviews: React.FC<PropsType> = ({
                         setPageLimit={setPageLimit}
                     />
                 }
-                <button
-                    className="btn btn--bg btn--light-bg add-btn"
-                    onClick={() => {
-                        setAddReviewMode(true)
-                    }}
-                >
-                    Add a Review
-                </button>
             </div>
             {
                 isFetching

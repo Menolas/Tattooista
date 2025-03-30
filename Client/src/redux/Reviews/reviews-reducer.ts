@@ -10,6 +10,7 @@ import {ResultCodesEnum} from "../../utils/constants";
 import {reviewsAPI} from "./reviewsApi";
 import {setApiErrorAC, setSuccessModalAC} from "../General/general-reducer";
 import {getNewPage} from "../../utils/functions";
+import {getUsersReviews} from "../Auth/auth-reducer";
 
 const SET_REVIEWS = 'SET_REVIEWS';
 const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
@@ -262,7 +263,7 @@ export const getReviews = (
 };
 
 export const addReview = (
-    userId: string | undefined,
+    userId: string,
     token: string | null,
     formData: FormData,
 ): ThunkType => async (dispatch) => {
@@ -270,6 +271,7 @@ export const addReview = (
         const response = await reviewsAPI.addReview(userId, token, formData);
         if (response.resultCode === ResultCodesEnum.Success) {
             dispatch(addReviewAC(response.review));
+            dispatch(getUsersReviews(userId))
             dispatch(setSuccessModalAC(true, ADD_REVIEW_SUCCESS));
             return true;
         } else {

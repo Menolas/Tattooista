@@ -4005,6 +4005,9 @@ input[type=checkbox][value=true] + label .checkbox::after {
   border-radius: 50%;
 }
 .reviews .review-item__rate {
+  margin: 0;
+  padding: 0;
+  list-style: none;
   display: flex;
   gap: 0.5rem;
 }
