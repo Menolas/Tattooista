@@ -256,7 +256,7 @@ export const UpdateUserForm: React.FC<PropsType> = React.memo(({
                   handleEnterClick(event, propsF.handleSubmit)
                 }}
             />
-            { (isAuth && isAuth === SUPER_ADMIN) && rolesFields }
+            { (isAuth && isAuth === SUPER_ADMIN && !fromProfile) && rolesFields }
             { !!apiError &&
                 <ApiErrorMessage message={apiError}/>
             }

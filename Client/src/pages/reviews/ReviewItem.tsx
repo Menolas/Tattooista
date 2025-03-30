@@ -2,7 +2,7 @@ import {DefaultAvatar} from "../../components/common/DefaultAvatar";
 import * as React from "react";
 import {ReactComponent as Star} from "../../assets/svg/star.svg";
 import {ReactComponent as StarFilled} from "../../assets/svg/star-filled.svg";
-import {ReviewType, UserType} from "../../types/Types";
+import {ReviewType} from "../../types/Types";
 import {API_URL} from "../../http";
 import {getDateFormatted} from "../../utils/functions";
 import {ReactComponent as TrashIcon} from "../../assets/svg/trash.svg";
@@ -13,17 +13,15 @@ import {Confirmation} from "../../components/common/Confirmation";
 import {ReactComponent as EditIcon} from "../../assets/svg/edit.svg";
 import {UpdateReviewForm} from "../../components/Forms/UpdateReviewForm";
 import {ModalPopUp} from "../../components/PopUps/ModalPopUp";
-import {useSelector} from "react-redux";
-import {getReviewUpdateErrorSelector} from "../../redux/Reviews/reviews-selectors";
 
 type PropsType = {
     isAuth: null | string;
     userId?: string;
     isDeletingInProcess: Array<string>;
     data: ReviewType;
-    addReviewMode?: boolean;
-    closeUpdateReviewMode?: () => void;
+    apiError: null | string;
     remove: (id: string) => void;
+    setReviewApiError: () => void;
 };
 
 export const ReviewItem: React.FC<PropsType> = ({
@@ -31,13 +29,12 @@ export const ReviewItem: React.FC<PropsType> = ({
                                                     userId,
                                                     isDeletingInProcess,
                                                     data,
-                                                    addReviewMode,
-                                                    closeUpdateReviewMode,
+                                                    apiError,
                                                     remove,
+                                                    setReviewApiError,
 }) => {
 
     const formatted = getDateFormatted(data.createdAt);
-    const apiError = useSelector(getReviewUpdateErrorSelector);
     const modalTitle = "Update your review here";
     const [carouselData, setCarouselData] = useState<{
         isOpen: boolean, activeIndex?: number}>({isOpen: false});
@@ -56,16 +53,12 @@ export const ReviewItem: React.FC<PropsType> = ({
 
     const closeModal = () => {
         setConfirmationData({needConfirmation: false, context: ''});
-        if (closeUpdateReviewMode) {
-            closeUpdateReviewMode();
-        }
         setEditReviewMode(false);
-
-        //setApiError();
+        setReviewApiError();
     };
 
     return (
-        <li className="review-item">
+        <li key={data._id} className="admin__card review-item">
             <div className="reviews-item__header">
                 <div className="review-item__user">
                     {data.user.avatar
@@ -75,19 +68,8 @@ export const ReviewItem: React.FC<PropsType> = ({
                     <span className="review-item__user-name">{data.user.displayName}</span>
                     <span className="review-item__user-date">{formatted}</span>
                 </div>
-                <div className="review-item__rate">
-                    {
-                        [1, 2, 3, 4, 5].map((num) => {
-                            if (num <= data.rate) {
-                                return <StarFilled/>
-                            } else {
-                                return <Star />
-                            }
-                        })
-                    }
-                </div>
                 { (isAuth === SUPER_ADMIN || userId === data.user._id) && (
-                        <>
+                        <div className="admin__card-actions">
                             <button
                                 data-tooltip-id="my-tooltip"
                                 data-tooltip-content="Edit client"
@@ -115,11 +97,21 @@ export const ReviewItem: React.FC<PropsType> = ({
                             >
                                 <TrashIcon/>
                             </button>
-                        </>
+                        </div>
                     )
                 }
             </div>
-
+            <div className="review-item__rate">
+                {
+                    [1, 2, 3, 4, 5].map((num) => {
+                        if (num <= data.rate) {
+                            return <StarFilled/>
+                        } else {
+                            return <Star />
+                        }
+                    })
+                }
+            </div>
             <div className="review-item__content">
                 {data.content}
             </div>
@@ -169,7 +161,7 @@ export const ReviewItem: React.FC<PropsType> = ({
                 />
             }
             <ModalPopUp
-                isOpen={addReviewMode || editReviewMode}
+                isOpen={editReviewMode}
                 modalTitle={modalTitle}
                 closeModal={closeModal}
             >

@@ -2,21 +2,21 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {SuccessPopUp} from "../../components/PopUps/SuccessPopUp";
 import {AppDispatch} from "../../redux/redux-store";
-import {useCallback, useEffect, useState} from "react";
-import {setSuccessModalAC} from "../../redux/General/general-reducer";
+import {useCallback, useEffect} from "react";
+import {setApiErrorAC, setSuccessModalAC} from "../../redux/General/general-reducer";
 import {getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {Reviews} from "./Reviews";
 import {
     deleteReview,
     getReviews,
     setCurrentPageAC,
-    setPageLimitAC
+    setPageLimitAC, setReviewApiErrorAC
 } from "../../redux/Reviews/reviews-reducer";
 import {
     getCurrentPageSelector,
     getIsDeletingReviewInProcessSelector,
     getIsFetchingSelector,
-    getPageLimitSelector,
+    getPageLimitSelector, getReviewApiErrorSelector,
     getReviewsFilterSelector,
     getReviewsSelector,
     getTotalCountSelector
@@ -24,7 +24,7 @@ import {
 import {
     getIsAuthSelector,
     getTokenSelector,
-    getUserProfileSelector
+    getUsersReviewsSelector
 } from "../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../types/Types";
 import {setFilterAC} from "../../redux/Reviews/reviews-reducer";
@@ -39,8 +39,9 @@ export const ReviewsContainer: React.FC = () => {
     const successModal = useSelector(getSuccessModalSelector);
     const isAuth = useSelector(getIsAuthSelector);
     const token = useSelector(getTokenSelector);
-    const user = useSelector(getUserProfileSelector);
+    const submittedReviews = useSelector(getUsersReviewsSelector);
     const filter = useSelector(getReviewsFilterSelector);
+    const apiError = useSelector(getReviewApiErrorSelector);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -50,19 +51,10 @@ export const ReviewsContainer: React.FC = () => {
         dispatch(deleteReview(token, id, reviews, currentPage, pageLimit, filter));
     };
 
-    const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
-
     useEffect(() => {
         dispatch(getReviews(currentPage, pageLimit, filter));
+        console.log(currentPage + " currentpage!!!!!!!!!!!!!!!!!")
     }, [dispatch, currentPage, pageLimit, filter]);
-
-    useEffect(() => {
-        reviews.forEach(review => {
-            if(review.user._id === user?._id) {
-                setIsReviewSubmitted(true);
-            }
-        });
-    }, [reviews]);
 
     const setSuccessModalCallBack = useCallback(() => {
         dispatch(setSuccessModalAC(false, ''));
@@ -90,6 +82,10 @@ export const ReviewsContainer: React.FC = () => {
         dispatch(setFilterAC(filter));
     };
 
+    const setApiErrorCallBack = () => {
+        dispatch(setReviewApiErrorAC(null));
+    };
+
     return (
         <>
             <Reviews
@@ -100,12 +96,14 @@ export const ReviewsContainer: React.FC = () => {
                 pageLimit={pageLimit}
                 isFetching={isFetching}
                 filter={filter}
+                apiError={apiError}
                 isDeletingInProcess={isDeletingInProcess}
+                isSubmittedReviews={submittedReviews.length}
                 setPageLimit={setPageLimitCallBack}
                 setCurrentPage={setCurrentPageCallBack}
-                isReviewSubmitted={isReviewSubmitted}
                 remove={deleteReviewCallBack}
                 onFilterChanged={onFilterChangedCallBack}
+                setReviewApiError={setApiErrorCallBack}
             />
             <SuccessPopUp
                 isOpen={successModal.isSuccess}

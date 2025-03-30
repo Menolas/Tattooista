@@ -3946,6 +3946,10 @@ input[type=checkbox][value=true] + label .checkbox::after {
   padding: 1.5rem;
   border: 1px solid #fafafa;
 }
+.user-profile .reviews {
+  margin-top: 2rem;
+  padding-top: 0;
+}
 
 @media (min-width: 900px) {
   .user-profile {
@@ -3976,18 +3980,19 @@ input[type=checkbox][value=true] + label .checkbox::after {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  margin-bottom: 2rem;
   max-width: 500px;
 }
 .reviews .review-item {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding-bottom: 0.5rem;
   border-bottom: 1px solid #fafafa;
 }
 .reviews .reviews-item__header {
   display: flex;
   justify-content: space-between;
+  align-content: center;
 }
 .reviews .review-item__user {
   display: flex;
@@ -4014,6 +4019,9 @@ input[type=checkbox][value=true] + label .checkbox::after {
   width: 100px;
   height: 100px;
   object-fit: cover;
+}
+.reviews .admin__card-actions {
+  margin-top: 0;
 }
 
 @media (min-width: 900px) {

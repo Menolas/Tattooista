@@ -18,7 +18,8 @@ import {getRolesSelector} from "../../redux/Users/users-selectors";
 import {Preloader} from "../common/Preloader";
 import {NoAccessPopUp} from "../PopUps/NoAccessPopUp";
 import {useEffect} from "react";
-import {getIsDeletingReviewInProcessSelector} from "../../redux/Reviews/reviews-selectors";
+import {getIsDeletingReviewInProcessSelector, getReviewApiErrorSelector} from "../../redux/Reviews/reviews-selectors";
+import {setReviewApiErrorAC} from "../../redux/Reviews/reviews-reducer";
 
 export const UserProfileContainer: React.FC = () => {
 
@@ -31,6 +32,8 @@ export const UserProfileContainer: React.FC = () => {
   const token = useSelector(getTokenSelector);
   const roles = useSelector(getRolesSelector);
   const isFetching = useSelector(getIsFetchingSelector);
+  const reviewApiError = useSelector(getReviewApiErrorSelector);
+  const submittedReviews = useSelector(getUsersReviewsSelector);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -52,6 +55,10 @@ export const UserProfileContainer: React.FC = () => {
 
   const closeModal = () => {
     navigate("/");
+  };
+
+  const setReviewApiErrorCallBack = () => {
+    dispatch(setReviewApiErrorAC(null));
   }
 
   return (
@@ -62,11 +69,14 @@ export const UserProfileContainer: React.FC = () => {
              isAuth={isAuth}
              apiError={apiError}
              data={profile}
+             reviewApiError={reviewApiError}
              reviews={reviews}
+             isSubmittedReviews={submittedReviews.length}
              isDeletingPicturesInProcess={isDeletingInProcess}
              isDeletingReviewInProcess={isDeletingReviewInProcess}
              possibleRoles={roles}
              remove={deleteUserCallBack}
+             setReviewApiError={setReviewApiErrorCallBack}
             />
       }
       <NoAccessPopUp isOpen={!isAuth} closeModal={closeModal}/>

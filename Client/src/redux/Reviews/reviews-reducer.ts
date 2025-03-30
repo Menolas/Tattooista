@@ -10,12 +10,12 @@ import {ResultCodesEnum} from "../../utils/constants";
 import {reviewsAPI} from "./reviewsApi";
 import {setApiErrorAC, setSuccessModalAC} from "../General/general-reducer";
 import {getNewPage} from "../../utils/functions";
-import {clientsAPI} from "../Clients/clientsApi";
 
 const SET_REVIEWS = 'SET_REVIEWS';
 const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const SET_FILTER = 'SET_FILTER';
+const SET_REVIEW_API_ERROR = 'SET_REVIEW_API_ERROR';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const DELETE_REVIEW = 'DELETE_REVIEW';
 const ADD_REVIEW = 'ADD_REVIEW';
@@ -32,7 +32,7 @@ const initialState = {
     pageLimit: 5 as number,
     currentPage: 1 as number,
     isFetching: false as boolean,
-    reviewUpdateError: null as null | string,
+    reviewApiError: null as null | string,
     isDeletingInProcess: [] as Array<string>,
     isDeletingPicturesInProcess: [] as Array<string>,
     filter: {
@@ -49,6 +49,12 @@ export const reviewsReducer = (
     action: ActionsTypes
 ): InitialStateType => {
     switch (action.type) {
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.page
+            }
+
         case SET_FILTER:
             return {
                 ...state,
@@ -60,6 +66,12 @@ export const reviewsReducer = (
                 ...state,
                 reviews: action.reviews,
                 totalCount: action.total,
+            }
+
+        case SET_REVIEW_API_ERROR:
+            return {
+                ...state,
+                reviewApiError: action.error
             }
 
         case ADD_REVIEW:
@@ -111,6 +123,7 @@ type ActionsTypes =
     | SetReviewsAT
     | SetPageLimitAT
     | SetReviewsCurrentPageAT
+    | SetReviewApiErrorAT
     | AddReviewAT
     | EditReviewAT
     | ToggleIsDeletingInProcessAT
@@ -118,6 +131,15 @@ type ActionsTypes =
     | DeleteReviewAT;
 
 //actions creators
+type SetReviewApiErrorAT = {
+    type: typeof SET_REVIEW_API_ERROR;
+    error: null | string;
+};
+
+export const setReviewApiErrorAC = (error: null | string): SetReviewApiErrorAT => ({
+    type: SET_REVIEW_API_ERROR, error
+});
+
 type SetFilterAT = {
     type: typeof SET_FILTER;
     filter: SearchFilterType;
@@ -255,7 +277,7 @@ export const addReview = (
         }
     } catch (e) {
         const error = e as ApiErrorType;
-        dispatch(setApiErrorAC(error.response?.data?.message));
+        dispatch(setReviewApiErrorAC(error.response?.data?.message));
         return false;
     }
 };
@@ -276,7 +298,7 @@ export const updateReview = (
         }
     } catch (e) {
         const error = e as ApiErrorType;
-        dispatch(setApiErrorAC(error.response?.data?.message));
+        dispatch(setReviewApiErrorAC(error.response?.data?.message));
         return false;
     }
 };
