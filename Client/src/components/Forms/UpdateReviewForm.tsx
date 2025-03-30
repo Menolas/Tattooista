@@ -182,20 +182,17 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                         )}
                         <FieldWrapper name={'gallery'} wrapperClass={'form__input-wrap--uploadFile'}>
                             {imageURLs.length > 0 && (
-                                <div>
-                                    <h4>Pictures to be uploaded</h4>
-                                    <ul className={"list gallery__uploadedImgPreviews"}>
-                                        {imageURLs.map((item, index) => (
-                                            <li className={"gallery__uploadedImgPreviews-item"} key={index}>
-                                                <button
-                                                    className="btn btn--icon close-button"
-                                                    onClick={(event) => handleDeletePreview(event, item.file)}
-                                                ></button>
-                                                <img className="client-profile__gallery-image" src={item.url as string} alt="preview" height="50" />
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                <ul className={"list gallery__uploadedImgPreviews"}>
+                                    {imageURLs.map((item, index) => (
+                                        <li className={"gallery__uploadedImgPreviews-item"} key={index}>
+                                            <button
+                                                className="btn btn--icon close-button"
+                                                onClick={(event) => handleDeletePreview(event, item.file)}
+                                            ></button>
+                                            <img className="client-profile__gallery-image" src={item.url as string} alt="preview" height="50" />
+                                        </li>
+                                    ))}
+                                </ul>
                             )}
                             <label className="btn btn--sm btn--dark-bg" htmlFor={"gallery"}>Pick File</label>
                             <Field

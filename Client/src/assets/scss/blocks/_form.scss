@@ -132,6 +132,7 @@ label[for="concent"] {
   }
 }
 
+.form--updateReview,
 .form--galleryUpload,
 .form--updateClient,
 .form--updateService,
@@ -141,6 +142,10 @@ label[for="concent"] {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.form__input-wrap--uploadFile {
+
 }
 
 .form__input-wrap--uploadFile-img {
