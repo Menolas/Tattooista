@@ -100,7 +100,6 @@ class reviewsController {
     const results = {};
     try {
       const review = await ReviewService.addReview(req.body, req.params.id);
-      console.log(JSON.stringify(req.body) + " request body")
       if(req.files && Object.keys(req.files).length > 0) {
         const files = req.files;
         let gallery = [];
@@ -143,10 +142,34 @@ class reviewsController {
     const results = {};
 
     try {
-      const updatedReview = await ReviewService.editReview(res.review, req.body);
+      const review = await ReviewService.editReview(res.review, req.body);
+
+      if(req.files && Object.keys(req.files).length > 0) {
+        const files = req.files;
+        let gallery = [];
+        for (let key in files) {
+          const fileEntry = req.files[key];
+          const filesArray = Array.isArray(fileEntry) ? fileEntry : [fileEntry];
+
+          for (const file of filesArray) {
+            const fileNewName = generateFileRandomNameWithDate(file.name);
+            const uploadPath = `./uploads/reviews/${review._id}/${fileNewName}`;
+
+            try {
+              await file.mv(uploadPath);
+              gallery.push(fileNewName);
+            } catch (err) {
+              console.error('Error moving file:', err);
+              throw err;
+            }
+          }
+        }
+        review.gallery = review.gallery.concat(gallery);
+        await review.save();
+      }
 
       results.resultCode = 0;
-      results.review = await updatedReview.save();
+      results.review = review;
       res.status(201).json(results);
     } catch (e) {
       console.log(e);
