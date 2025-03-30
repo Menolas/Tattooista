@@ -154,36 +154,35 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                                 }}
                             />
                         </FieldWrapper>
-                        {review?.gallery && review.gallery.length > 0 && (
-                            <ul className={"list client-gallery"}>
-                                {review?.gallery.map((item, i) => (
-                                    <li className={"client-gallery__item"} key={i}>
-                                        <button
-                                            className={"btn btn--icon btn--icon--light close-button"}
-                                            disabled={isDeletingPicturesInProcess?.some((id) => id === item)}
-                                            onClick={async (event) => {
-                                                event.preventDefault();
-                                                if (review?.gallery && deleteReviewGalleryPicture) {
-                                                    let success = await dispatch(deleteReviewGalleryPicture(token, review._id, item));
-                                                    // if (success && refreshClientData) {
-                                                    //     const updatedGallery = review.gallery.filter((picture) => picture !== item);
-                                                    //     const updatedClient = { ...review, gallery: updatedGallery };
-                                                    //     refreshClientData(updatedClient);
-                                                    //
-                                                    //     setIsGalleryModified(true);
-                                                    // }
-                                                }
-                                            }}
-                                        ></button>
-                                        <img src={`${API_URL}/reviews/${review._id}/${item}`} alt={''} />
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
                         <FieldWrapper name={'gallery'} wrapperClass={'form__input-wrap--uploadFile'}>
-                            {imageURLs.length > 0 && (
-                                <div>
-                                    <h4>Pictures to be uploaded</h4>
+                            <div className='form__uploadFile-galleries-wrap'>
+                                {review?.gallery && review.gallery.length > 0 && (
+                                    <ul className={"list client-gallery"}>
+                                        {review?.gallery.map((item, i) => (
+                                            <li className={"client-gallery__item"} key={i}>
+                                                <button
+                                                    className={"btn btn--icon btn--icon--light close-button"}
+                                                    disabled={isDeletingPicturesInProcess?.some((id) => id === item)}
+                                                    onClick={async (event) => {
+                                                        event.preventDefault();
+                                                        if (review?.gallery && deleteReviewGalleryPicture) {
+                                                            let success = await dispatch(deleteReviewGalleryPicture(token, review._id, item));
+                                                            // if (success && refreshClientData) {
+                                                            //     const updatedGallery = review.gallery.filter((picture) => picture !== item);
+                                                            //     const updatedClient = { ...review, gallery: updatedGallery };
+                                                            //     refreshClientData(updatedClient);
+                                                            //
+                                                            //     setIsGalleryModified(true);
+                                                            // }
+                                                        }
+                                                    }}
+                                                ></button>
+                                                <img src={`${API_URL}/reviews/${review._id}/${item}`} alt={''} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                {imageURLs.length > 0 && (
                                     <ul className={"list gallery__uploadedImgPreviews"}>
                                         {imageURLs.map((item, index) => (
                                             <li className={"gallery__uploadedImgPreviews-item"} key={index}>
@@ -195,8 +194,8 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                                             </li>
                                         ))}
                                     </ul>
-                                </div>
-                            )}
+                                )}
+                            </div>
                             <label className="btn btn--sm btn--dark-bg" htmlFor={"gallery"}>Pick File</label>
                             <Field
                                 className="hidden"
