@@ -144,8 +144,10 @@ label[for="concent"] {
   }
 }
 
-.form__input-wrap--uploadFile {
-
+.form__uploadFile-galleries-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .form__input-wrap--uploadFile-img {

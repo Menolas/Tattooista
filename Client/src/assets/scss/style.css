@@ -2846,6 +2846,12 @@ label[for=concent] {
   align-items: flex-start;
 }
 
+.form__uploadFile-galleries-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .form__input-wrap--uploadFile-img {
   display: flex;
   flex-direction: column;
