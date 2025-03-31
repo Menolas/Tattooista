@@ -35,6 +35,7 @@ const UserSchema = new Schema({
   activationLink: {
     type: String,
   },
+
   createdAt: {
     type: Date,
     default: Date.now,

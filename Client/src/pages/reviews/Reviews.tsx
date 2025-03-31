@@ -19,7 +19,6 @@ type PropsType = {
     isFetching: boolean;
     filter: SearchFilterType;
     apiError: null | string;
-    isSubmittedReviews: number;
     isDeletingInProcess: Array<string>;
     setPageLimit: (limit:number) => void;
     setCurrentPage: (page: number) => void;
@@ -38,7 +37,6 @@ export const Reviews: React.FC<PropsType> = ({
   filter,
   apiError,
   isDeletingInProcess,
-  isSubmittedReviews,
   setPageLimit,
   setCurrentPage,
   onFilterChanged,
@@ -47,7 +45,6 @@ export const Reviews: React.FC<PropsType> = ({
 }) => {
 
     const [addReviewMode, setAddReviewMode] = useState<boolean>(false);
-    console.log(isSubmittedReviews + " isSubmittedReviews !!!!!!!!!!!!!!")
 
     const closeModal = () => {
         setAddReviewMode(false);
@@ -58,6 +55,7 @@ export const Reviews: React.FC<PropsType> = ({
         return <ReviewItem
                     key={index}
                     isAuth={isAuth}
+                    isProfile={false}
                     isDeletingInProcess={isDeletingInProcess}
                     data={data}
                     apiError={apiError}
@@ -75,7 +73,7 @@ export const Reviews: React.FC<PropsType> = ({
                     filter={filter}
                     onFilterChanged={onFilterChanged}
                 />
-                { (isAuth !== null && isSubmittedReviews < 3) &&
+                { (isAuth !== null) &&
                     <button
                         className="btn btn--bg btn--light-bg add-btn"
                         onClick={() => {
@@ -86,7 +84,7 @@ export const Reviews: React.FC<PropsType> = ({
                     </button>
                 }
                 {
-                    totalCount > pageLimit &&
+                    (totalCount > pageLimit) &&
                     <Paginator
                         totalCount={totalCount}
                         pageSize={pageLimit}
@@ -99,7 +97,7 @@ export const Reviews: React.FC<PropsType> = ({
             {
                 isFetching
                     ? <Preloader/>
-                    : totalCount && totalCount > 0
+                    : (totalCount && totalCount > 0)
                         ? (
                             <ul className="reviews__list">
                                 { reviewElements }

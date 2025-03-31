@@ -63,14 +63,4 @@ export const authAPI = {
         { token }
     ).then(response => response.data);
   },
-
-  async getUserProfile(
-    token: string | null,
-    userId: string
-  ) {
-    return await $api.get<UpdateUserResponseType>(
-        `users/${userId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-    ).then(response => response.data);
-  },
 };

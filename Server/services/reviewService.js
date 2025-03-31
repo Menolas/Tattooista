@@ -1,4 +1,5 @@
 const Review = require("../models/Review");
+const User = require("../models/User");
 const ApiError = require("../exeptions/apiErrors");
 
 class ReviewService {
@@ -7,15 +8,17 @@ class ReviewService {
             const userReviewsCount = await Review.countDocuments({ user: userId });
 
             if (userReviewsCount >= 3) {
-                throw ApiError.BadRequest(`You already submitted the maximum of 3 reviews.`);
+                //throw ApiError.BadRequest(`You already submitted the maximum of 3 reviews.`);
             }
         }
 
-        return await Review.create({
+        const review = await Review.create({
             rate: data.rate,
             content: data.content.trim(),
             user: userId
         });
+
+        return review;
     }
 
     async editReview(review, newData) {

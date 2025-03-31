@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {SuccessPopUp} from "../../components/PopUps/SuccessPopUp";
 import {AppDispatch} from "../../redux/redux-store";
 import {useCallback, useEffect} from "react";
-import {setApiErrorAC, setSuccessModalAC} from "../../redux/General/general-reducer";
+import { setSuccessModalAC} from "../../redux/General/general-reducer";
 import {getSuccessModalSelector} from "../../redux/General/general-selectors";
 import {Reviews} from "./Reviews";
 import {
@@ -23,12 +23,11 @@ import {
 } from "../../redux/Reviews/reviews-selectors";
 import {
     getIsAuthSelector,
-    getTokenSelector, getUserProfileSelector,
-    getUsersReviewsSelector
+    getTokenSelector,
+    getUserProfileSelector,
 } from "../../redux/Auth/auth-selectors";
 import {SearchFilterType} from "../../types/Types";
 import {setFilterAC} from "../../redux/Reviews/reviews-reducer";
-import {getUsersReviews} from "../../redux/Auth/auth-reducer";
 
 export const ReviewsContainer: React.FC = () => {
     const currentPage = useSelector(getCurrentPageSelector);
@@ -39,9 +38,7 @@ export const ReviewsContainer: React.FC = () => {
     const isDeletingInProcess = useSelector(getIsDeletingReviewInProcessSelector);
     const successModal = useSelector(getSuccessModalSelector);
     const isAuth = useSelector(getIsAuthSelector);
-    const user = useSelector(getUserProfileSelector);
     const token = useSelector(getTokenSelector);
-    const submittedReviews = useSelector(getUsersReviewsSelector);
     const filter = useSelector(getReviewsFilterSelector);
     const apiError = useSelector(getReviewApiErrorSelector);
 
@@ -55,9 +52,6 @@ export const ReviewsContainer: React.FC = () => {
 
     useEffect(() => {
         dispatch(getReviews(currentPage, pageLimit, filter));
-        if (user) {
-            dispatch(getUsersReviews(user._id));
-        }
 
     }, [dispatch, currentPage, pageLimit, filter]);
 
@@ -103,7 +97,6 @@ export const ReviewsContainer: React.FC = () => {
                 filter={filter}
                 apiError={apiError}
                 isDeletingInProcess={isDeletingInProcess}
-                isSubmittedReviews={submittedReviews.length}
                 setPageLimit={setPageLimitCallBack}
                 setCurrentPage={setCurrentPageCallBack}
                 remove={deleteReviewCallBack}

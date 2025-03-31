@@ -26,7 +26,7 @@ export const reviewsAPI = {
 
     async getUserReviews(id: string) {
         return await $api.get<GetReviewsResponseType>(
-            `reviews/${id}`)
+            `reviews/userReview/${id}`)
             .then(response => response.data);
     },
 

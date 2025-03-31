@@ -26,7 +26,6 @@ class UserService {
             activationLink,
         });
 
-        console.log('User in registration userService:', JSON.stringify(user));
         await mailService.sendActivationMail(email, `${process.env.SERVER_URL}/auth/activate/${activationLink}`);
 
         const payload = {

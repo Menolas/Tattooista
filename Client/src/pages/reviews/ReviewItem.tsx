@@ -16,7 +16,7 @@ import {ModalPopUp} from "../../components/PopUps/ModalPopUp";
 
 type PropsType = {
     isAuth: null | string;
-    userId?: string;
+    isProfile: boolean;
     isDeletingInProcess: Array<string>;
     data: ReviewType;
     apiError: null | string;
@@ -26,7 +26,7 @@ type PropsType = {
 
 export const ReviewItem: React.FC<PropsType> = ({
                                                     isAuth,
-                                                    userId,
+                                                    isProfile,
                                                     isDeletingInProcess,
                                                     data,
                                                     apiError,
@@ -68,7 +68,7 @@ export const ReviewItem: React.FC<PropsType> = ({
                     <span className="review-item__user-name">{data.user.displayName}</span>
                     <span className="review-item__user-date">{formatted}</span>
                 </div>
-                { (isAuth === SUPER_ADMIN || userId === data.user._id) && (
+                { (isAuth === SUPER_ADMIN || isProfile) && (
                         <div className="admin__card-actions">
                             <button
                                 data-tooltip-id="my-tooltip"

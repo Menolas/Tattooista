@@ -22,7 +22,7 @@ function dynamicAuthCheckMiddleware() {
 //getting all reviews
 router.get('/', controller.getReviews);
 
-router.get('/:id', controller.getUserReviews);
+router.get('/userReview/:id', controller.getUserReviews);
 
 // add review
 router.post('/:id', dynamicAuthCheckMiddleware(), controller.addReview);

@@ -82,6 +82,7 @@ export const UserProfile: React.FC<PropsType> = ({
         return <ReviewItem
                     key={index}
                     isAuth={isAuth}
+                    isProfile={true}
                     apiError={reviewApiError}
                     isDeletingInProcess={isDeletingReviewInProcess}
                     data={review}
@@ -179,16 +180,14 @@ export const UserProfile: React.FC<PropsType> = ({
                 <div className='reviews'>
                     <h4>My reviews</h4>
                     <ul className="reviews__list">{reviewElements}</ul>
-                    { (isSubmittedReviews < 3) &&
-                        <button
-                            className="btn btn--bg btn--light-bg add-btn"
-                            onClick={() => {
-                                setAddReviewMode(true)
-                            }}
-                        >
-                            Add a Review
-                        </button>
-                    }
+                    <button
+                        className="btn btn--bg btn--light-bg add-btn"
+                        onClick={() => {
+                            setAddReviewMode(true)
+                        }}
+                    >
+                        Add a Review
+                    </button>
                     {addReviewMode && (
                         <ModalPopUp
                             isOpen={addReviewMode}

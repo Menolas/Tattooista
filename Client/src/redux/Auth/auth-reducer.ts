@@ -5,10 +5,8 @@ import {AppStateType} from "../redux-store";
 import {
     ApiErrorType,
     LoginFormValues,
-    RegistrationFormValues,
     ReviewType,
     RoleType,
-    SearchFilterType,
     UserType
 } from "../../types/Types";
 import {getUserRole} from "../../utils/functions";
@@ -34,6 +32,7 @@ const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_REVIEWS = 'SET_REVIEWS';
+const ADD_REVIEW = 'ADD_REVIEW';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
@@ -41,6 +40,7 @@ const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
 const initialState = {
   user: null as null | UserType,
   reviews: [] as Array<ReviewType>,
+  reviewsTotalCount: 0 as number,
   roles: [] as Array<RoleType>,
   token: null as string | null,
   isAuth: null as string | null,
@@ -135,6 +135,13 @@ export const authReducer = (
               reviews: action.reviews
           }
 
+      case ADD_REVIEW:
+          return {
+              ...state,
+              reviews: [{...action.review}, ...state.reviews],
+              reviewsTotalCount: state.reviewsTotalCount + 1,
+          }
+
       case TOGGLE_IS_DELETING_IN_PROCESS:
           return {
               ...state,
@@ -164,6 +171,7 @@ type ActionsTypes =
     | ToggleIsFetchingAT
     | SetUserProfileAT
     | SetReviewsAT
+    | AddUserReviewAT
     | ToggleIsDeletingInProcessAT
     | DeleteUserAT
     | SetAccessErrorAT
@@ -210,6 +218,15 @@ export const setUserProfileAC = (
     role: string
 ): SetUserProfileAT => ({
     type: SET_USER_PROFILE, user, role
+});
+
+type AddUserReviewAT = {
+    type: typeof ADD_REVIEW;
+    review: ReviewType;
+};
+
+export const addUserReviewAC = (review: ReviewType): AddUserReviewAT => ({
+    type: ADD_REVIEW, review
 });
 
 type SetReviewsAT = {
