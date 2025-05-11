@@ -1,16 +1,16 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {DefaultAvatar} from "../common/DefaultAvatar";
+import {DefaultAvatar} from "../../components/common/DefaultAvatar";
 import {API_URL} from "../../http";
-import {ModalPopUp} from "../PopUps/ModalPopUp";
-import {Confirmation} from "../common/Confirmation";
+import {ModalPopUp} from "../../components/PopUps/ModalPopUp";
+import {Confirmation} from "../../components/common/Confirmation";
 import {Tooltip} from "react-tooltip";
 import {ReactComponent as EnvelopIcon} from "../../assets/svg/envelop.svg";
 import {ReviewType, RoleType, UserType} from "../../types/Types";
-import {UpdateUserForm} from "../Forms/UpdateUserForm";
-import {ReviewItem} from "../../pages/reviews/ReviewItem";
-import {UpdateReviewForm} from "../Forms/UpdateReviewForm";
+import {UpdateUserForm} from "../../components/Forms/UpdateUserForm";
+import {ReviewItem} from "../reviews/ReviewItem";
+import {UpdateReviewForm} from "../../components/Forms/UpdateReviewForm";
 
 type PropsType = {
     isAuth: null | string;
@@ -23,6 +23,7 @@ type PropsType = {
     isDeletingReviewInProcess: Array<string>;
     possibleRoles: Array<RoleType>;
     remove: () => void;
+    removeReview: (id: string) => void;
     setReviewApiError: () => void;
 }
 
@@ -37,6 +38,7 @@ export const UserProfile: React.FC<PropsType> = ({
     isDeletingReviewInProcess,
     possibleRoles,
     remove,
+    removeReview,
     setReviewApiError,
 }) => {
 
@@ -85,7 +87,7 @@ export const UserProfile: React.FC<PropsType> = ({
                     apiError={reviewApiError}
                     isDeletingInProcess={isDeletingReviewInProcess}
                     data={review}
-                    remove={remove}
+                    remove={removeReview}
                     setReviewApiError={setReviewApiError}
                 />
     });

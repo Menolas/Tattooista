@@ -56,10 +56,10 @@ export const reviewsAPI = {
 
     async deleteReview(
         token: string | null,
-        userId: string
+        reviewId: string
     ) {
         return await $api.delete<DeleteReviewResponseType>(
-            `reviews/${userId}`,
+            `reviews/${reviewId}`,
             { headers: { Authorization: `Bearer ${token}` } }
         ).then(response => response.data);
     },

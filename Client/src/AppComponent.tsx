@@ -25,7 +25,7 @@ import {NotFound} from "./pages/404-page";
 import {MainPage} from "./pages/mainPage/MainPage";
 import {PortfolioContainer} from "./pages/portfolio/PortfolioContainer";
 import {BookingProfileContainer} from "./components/Admin/BookingProfile/BookingProfileContainer";
-import {UserProfileContainer} from "./components/UserProfile/UserProfileContainer";
+import {UserProfileContainer} from "./pages/UserProfile/UserProfileContainer";
 import EmailConfirmation from "./pages/EmailConfirmation";
 import {ReviewsContainer} from "./pages/reviews/ReviewsContainer";
 

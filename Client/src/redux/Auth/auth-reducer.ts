@@ -24,6 +24,7 @@ import {AnyAction} from "redux";
 import {usersAPI} from "../Users/usersApi";
 import {setUsersApiErrorAC} from "../Users/users-reducer";
 import {reviewsAPI} from "../Reviews/reviewsApi";
+import {setReviewApiErrorAC} from "../Reviews/reviews-reducer";
 
 const SET_AUTH_API_ERROR = 'SET_AUTH_API_ERROR';
 const LOG_OUT = 'LOG_OUT';
@@ -35,6 +36,9 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_REVIEWS = 'SET_REVIEWS';
 const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
+const TOGGLE_IS_DELETING_REVIEW_IN_PROCESS = 'TOGGLE_IS_DELETING_REVIEW_IN_PROCESS';
+const DELETE_REVIEW = 'DELETE_REVIEW';
+const ADD_REVIEW = 'ADD_REVIEW';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
 
@@ -143,6 +147,18 @@ export const authReducer = (
                   : state.isDeletingInProcess.filter(id => id !== action.id)
           }
 
+        case DELETE_REVIEW:
+            return {
+                ...state,
+                reviews: state.reviews.filter(review => review._id !== action.id)
+            }
+
+        case ADD_REVIEW:
+            return {
+                ...state,
+                reviews: [...state.reviews, action.review]
+            }
+
       case SET_ACCESS_ERROR:
           return {
               ...state,
@@ -167,9 +183,29 @@ type ActionsTypes =
     | ToggleIsDeletingInProcessAT
     | DeleteUserAT
     | SetAccessErrorAT
-    | SetRegistrationApiErrorAT;
+    | SetRegistrationApiErrorAT
+    | DeleteReviewAT
+    | AddReviewAT;
 
 // actions creators
+
+type AddReviewAT = {
+    type: typeof ADD_REVIEW;
+    review: ReviewType;
+};
+
+export const addReviewAC = (review: ReviewType): AddReviewAT => ({
+    type: ADD_REVIEW, review
+});
+
+type DeleteReviewAT = {
+    type: typeof DELETE_REVIEW;
+    id: string;
+};
+
+export const deleteReviewAC = (id: string): DeleteReviewAT => ({
+    type: DELETE_REVIEW, id
+});
 
 type SetRegistrationApiErrorAT = {
     type: typeof SET_REGISTRATION_API_ERROR;
@@ -465,5 +501,44 @@ export const getReviews = (
         return false;
     } finally {
         dispatch(toggleIsFetchingAC(false));
+    }
+};
+
+export const deleteReviewFromProfile = (
+    token: string | null,
+    id: string
+): ThunkType => async (dispatch) => {
+    try {
+        const response = await reviewsAPI.deleteReview(token, id);
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(deleteReviewAC(id));
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+};
+
+export const addReviewFromProfile = (
+    userId: string | undefined,
+    token: string | null,
+    formData: FormData,
+): ThunkType => async (dispatch) => {
+    try {
+        const response = await reviewsAPI.addReview(userId, token, formData);
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(addReviewAC(response.review));
+            //dispatch(setSuccessModalAC(true, ADD_REVIEW_SUCCESS));
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        const error = e as ApiErrorType;
+        dispatch(setReviewApiErrorAC(error.response?.data?.message));
+        return false;
     }
 };
