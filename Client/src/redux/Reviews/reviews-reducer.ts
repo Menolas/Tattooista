@@ -33,7 +33,7 @@ const initialState = {
     currentPage: 1 as number,
     isFetching: false as boolean,
     reviewApiError: null as null | string,
-    isDeletingInProcess: [] as Array<string>,
+    isDeletingReviewInProcess: [] as Array<string>,
     isDeletingPicturesInProcess: [] as Array<string>,
     filter: {
         term: '' as string | null,
@@ -95,9 +95,9 @@ export const reviewsReducer = (
         case TOGGLE_IS_DELETING_IN_PROCESS:
             return {
                 ...state,
-                isDeletingInProcess: action.isFetching
-                    ? [...state.isDeletingInProcess, action.id]
-                    : state.isDeletingInProcess.filter(id => id !== action.id)
+                isDeletingReviewInProcess: action.isFetching
+                    ? [...state.isDeletingReviewInProcess, action.id]
+                    : state.isDeletingReviewInProcess.filter(id => id !== action.id)
             }
 
         case TOGGLE_IS_DELETING_PICTURES_IN_PROCESS:
@@ -219,7 +219,7 @@ type ToggleIsDeletingInProcessAT = {
     id: string;
 };
 
-const toggleIsDeletingInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
+export const toggleIsDeletingReviewInProcessAC = (isFetching: boolean, id: string): ToggleIsDeletingInProcessAT => ({
     type: TOGGLE_IS_DELETING_IN_PROCESS, isFetching, id
 });
 
@@ -314,7 +314,7 @@ export const deleteReview = (
     dispatch
 ) => {
     try {
-        dispatch(toggleIsDeletingInProcessAC(true, id));
+        dispatch(toggleIsDeletingReviewInProcessAC(true, id));
         const response = await reviewsAPI.deleteReview(token, id);
         if (response.resultCode === ResultCodesEnum.Success) {
             await dispatch(deleteReviewThunk(id, reviews, currentPage, pageLimit, filter));
@@ -329,7 +329,7 @@ export const deleteReview = (
         console.log(e);
         return false;
     } finally {
-        dispatch(toggleIsDeletingInProcessAC(false, id));
+        dispatch(toggleIsDeletingReviewInProcessAC(false, id));
     }
 };
 

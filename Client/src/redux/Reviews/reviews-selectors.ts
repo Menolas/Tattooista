@@ -21,7 +21,7 @@ export const getIsFetchingSelector = (state: AppStateType) => {
 };
 
 export const getIsDeletingReviewInProcessSelector = (state: AppStateType) => {
-    return state.reviews.isDeletingInProcess;
+    return state.reviews.isDeletingReviewInProcess;
 };
 
 export const getIsDeletingReviewPicturesInProcessSelector = (state: AppStateType) => {

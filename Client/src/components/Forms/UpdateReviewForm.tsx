@@ -14,6 +14,7 @@ import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS}
 import {useState} from "react";
 import {API_URL} from "../../http";
 import {getIsDeletingReviewPicturesInProcessSelector} from "../../redux/Reviews/reviews-selectors";
+import {addReviewFromProfile} from "../../redux/Auth/auth-reducer";
 
 const validationSchema = Yup.object().shape({
     rate: Yup.number()
@@ -25,7 +26,7 @@ const validationSchema = Yup.object().shape({
         .max(3, "You can upload up to 3 files")
         .of(
             Yup.mixed()
-                .test('fileSize', "Max allowed size is 2MB", (value) => {
+                .test('fileSize', "Max allowed size is 1MB", (value) => {
                     if (!(value instanceof File)) return true;
                     return isFileSizeValid([value], MAX_FILE_SIZE);
                 })
@@ -37,12 +38,14 @@ const validationSchema = Yup.object().shape({
 });
 
 type PropsType = {
+    isFromProfile?: boolean;
     apiError: null | string;
     isEditing: boolean;
     review?: ReviewType;
     closeModal: () => void;
 };
 export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
+    isFromProfile,
     apiError,
     isEditing,
     review,
@@ -100,7 +103,11 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
             if (isEditing && review) {
                 success = await dispatch(updateReview(token, review._id, formData));
             } else {
-                success = await dispatch(addReview(user?._id, token, formData));
+                if (isFromProfile) {
+                    success = await dispatch(addReviewFromProfile(user?._id, token, formData));
+                } else {
+                    success = await dispatch(addReview(user?._id, token, formData));
+                }
             }
             if (success) {
                 closeModal();
