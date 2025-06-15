@@ -13,7 +13,7 @@ class MailService {
             }
         });
     }
-    async sendActivationMail(to, link) {
+    async sendActivationMail(to, name, link) {
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
@@ -25,8 +25,8 @@ class MailService {
                      <div style="text-align: center;">
                          <img src="${process.env.SERVER_URL}/logo.png" alt="" width="100" height="100" style="object-fit: contain;"/>
                      </div>
-                     <h1 style="text-align: center;">Congratulations! Now you are belong to the circle of chosens.</h1>
-                     <p style="text-align: center; color: #fafafa;">Activate you account with one click</p>
+                     <h1 style="text-align: center;">Congratulations, ${name}! Now you are belong to the circle of chosens.</h1>
+                     <p style="text-align: center; color: #fafafa;">Activate your account with one click</p>
                      <a style="color: #fafafa;" href=${link}>${link}</a>
                  </div>
                  `

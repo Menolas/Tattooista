@@ -39,6 +39,7 @@ const TOGGLE_IS_DELETING_IN_PROCESS = 'TOGGLE_IS_DELETING_IN_PROCESS';
 const TOGGLE_IS_DELETING_REVIEW_IN_PROCESS = 'TOGGLE_IS_DELETING_REVIEW_IN_PROCESS';
 const DELETE_REVIEW = 'DELETE_REVIEW';
 const ADD_REVIEW = 'ADD_REVIEW';
+const EDIT_REVIEW = 'EDIT_REVIEW';
 const SET_ACCESS_ERROR = 'SET_ACCESS_ERROR';
 const SET_REGISTRATION_API_ERROR = 'SET_REGISTRATION_API_ERROR';
 
@@ -159,6 +160,17 @@ export const authReducer = (
                 reviews: [...state.reviews, action.review]
             }
 
+        case EDIT_REVIEW:
+            return {
+                ...state,
+                reviews: state.reviews.map(review => {
+                    if (review._id === action.review._id) {
+                        return { ...action.review }
+                    }
+                    return review
+                }),
+            }
+
       case SET_ACCESS_ERROR:
           return {
               ...state,
@@ -185,9 +197,19 @@ type ActionsTypes =
     | SetAccessErrorAT
     | SetRegistrationApiErrorAT
     | DeleteReviewAT
-    | AddReviewAT;
+    | AddReviewAT
+    | EditReviewAT;
 
 // actions creators
+
+type EditReviewAT = {
+    type: typeof EDIT_REVIEW;
+    review: ReviewType;
+};
+
+const editReviewAC = (review: ReviewType): EditReviewAT => ({
+    type: EDIT_REVIEW, review
+});
 
 type AddReviewAT = {
     type: typeof ADD_REVIEW;
@@ -540,5 +562,27 @@ export const addReviewFromProfile = (
         const error = e as ApiErrorType;
         dispatch(setReviewApiErrorAC(error.response?.data?.message));
         return false;
+    }
+};
+
+export const deleteReviewGalleryPictureFromProfile = (
+    token: string | null,
+    id: string,
+    picture: string
+): ThunkType => async (dispatch) => {
+    try {
+        //dispatch(toggleIsDeletingPicturesInProcessAC(true, picture));
+        const response = await reviewsAPI.deleteReviewGalleryPicture(token, id, picture);
+        if (response.resultCode === ResultCodesEnum.Success) {
+            dispatch(editReviewAC(response.review));
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.log(e);
+        return false;
+    } finally {
+        //dispatch(toggleIsDeletingPicturesInProcessAC(false, picture));
     }
 };

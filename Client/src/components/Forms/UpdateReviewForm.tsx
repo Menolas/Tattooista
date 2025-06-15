@@ -14,7 +14,7 @@ import {isFileSizeValid, isFileTypesValid, MAX_FILE_SIZE, VALID_FILE_EXTENSIONS}
 import {useState} from "react";
 import {API_URL} from "../../http";
 import {getIsDeletingReviewPicturesInProcessSelector} from "../../redux/Reviews/reviews-selectors";
-import {addReviewFromProfile} from "../../redux/Auth/auth-reducer";
+import {addReviewFromProfile, deleteReviewGalleryPictureFromProfile} from "../../redux/Auth/auth-reducer";
 
 const validationSchema = Yup.object().shape({
     rate: Yup.number()
@@ -173,7 +173,9 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                                                     onClick={async (event) => {
                                                         event.preventDefault();
                                                         if (review?.gallery && deleteReviewGalleryPicture) {
-                                                            let success = await dispatch(deleteReviewGalleryPicture(token, review._id, item));
+                                                            let success = !isFromProfile
+                                                                ? await dispatch(deleteReviewGalleryPicture(token, review._id, item))
+                                                                : await dispatch(deleteReviewGalleryPictureFromProfile(token, review._id, item));
                                                             // if (success && refreshClientData) {
                                                             //     const updatedGallery = review.gallery.filter((picture) => picture !== item);
                                                             //     const updatedClient = { ...review, gallery: updatedGallery };

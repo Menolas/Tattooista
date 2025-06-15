@@ -1,6 +1,5 @@
 const tokenService = require('../services/tokenService');
 const Role = require("../models/Role");
-const {decode} = require("jsonwebtoken");
 
 module.exports = function (roles) {
   return async function (req, res, next) {
@@ -24,6 +23,7 @@ module.exports = function (roles) {
 
     try {
       if(token) {
+        console.log("Token found in headers !!!!!!!!!!!");
         const data = tokenService.validateAccessToken(token);
         if (data) {
           userRoles = data.roles;
