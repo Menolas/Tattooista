@@ -53,7 +53,6 @@ export const ReviewsContainer: React.FC = () => {
 
     useEffect(() => {
         dispatch(getReviews(currentPage, pageLimit, filter));
-        console.log(currentPage + " currentpage!!!!!!!!!!!!!!!!!")
     }, [dispatch, currentPage, pageLimit, filter]);
 
     const setSuccessModalCallBack = useCallback(() => {

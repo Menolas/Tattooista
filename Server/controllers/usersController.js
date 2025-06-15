@@ -103,6 +103,7 @@ class usersController {
         }
 
         if (req.hasRole || req.isRightUser) {
+            console.log("updateUser - has role, we are here!!!!!!!!!!!")
             const displayName = req.body.displayName.trim();
             const email = req.body.email;
             const password = req.body.password;
@@ -112,7 +113,7 @@ class usersController {
                 await userService.editUser(displayName, email, res.user._id);
                 if (res.user.email !== email) {
                     res.user.activationLink = uuid.v4();
-                    await mailService.sendActivationMail(email, `${process.env.SERVER_URL}/auth/activate/${res.user.activationLink}`);
+                    await mailService.sendActivationMail(email, displayName, `${process.env.SERVER_URL}/auth/activate/${res.user.activationLink}`);
                     res.user.isActivated = false;
                 }
                 res.user.displayName = displayName;

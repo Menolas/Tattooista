@@ -3,6 +3,8 @@ const ArchivedGalleryItem = require('../models/ArchivedGalleryItem');
 const TattooStyle = require('../models/TattooStyle');
 const fs = require('fs');
 const mv = require('mv');
+const util = require('util');
+const mvAsync = util.promisify(mv);
 const generateFileRandomNameWithDate =require('../utils/functions');
 
 class galleryController {
@@ -111,7 +113,7 @@ class galleryController {
       results.resultCode = 1;
       results.message = e.message;
       res.status(400).json(results);
-      console.log(e);;
+      console.log(e);
     }
   }
 
@@ -123,14 +125,11 @@ class galleryController {
     const results = {};
     try {
       await res.galleryItem.remove();
-      await fs.unlink(`./uploads/gallery/${res.galleryItem.fileName}`, e => {
-        if (e) {
-          console.log(e);
-        }
-      });
+      await fs.promises.unlink(`./uploads/gallery/${res.galleryItem.fileName}`);
       results.resultCode = 0;
       res.json(results);
     } catch (e) {
+      console.log(e);
       results.resultCode = 1;
       results.message = e.message;
       res.status(400).json(results);
@@ -200,10 +199,7 @@ class galleryController {
       });
       const oldPath = `./uploads/gallery/${res.galleryItem.fileName}`;
       const newPath = `./uploads/archivedGallery/${res.galleryItem.fileName}`;
-
-      await mv(oldPath, newPath, { mkdirp: true },function (e) {
-        if (e) console.log(e);
-      });
+      await mvAsync(oldPath, newPath, { mkdirp: true });
       await archivedGalleryItem.save();
       await res.galleryItem.remove();
       results.resultCode = 0;
@@ -235,10 +231,7 @@ class galleryController {
 
       const oldPath = `./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`;
       const newPath = `./uploads/gallery/${res.archivedGalleryItem.fileName}`;
-
-      await mv(oldPath, newPath, { mkdirp: true },function (e) {
-        if (e) console.log(e);
-      });
+      await mvAsync(oldPath, newPath, { mkdirp: true });
       await galleryItem.save();
       await res.archivedGalleryItem.remove();
       results.resultCode = 0;
@@ -259,11 +252,7 @@ class galleryController {
 
     try {
       await res.archivedGalleryItem.remove();
-      await fs.unlink(`./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`, e => {
-        if (e) {
-          res.status(400).send(e);
-        }
-      });
+      await fs.promises.unlink(`./uploads/archivedGallery/${res.archivedGalleryItem.fileName}`);
       results.resultCode = 0
       res.json(results);
     } catch (e) {

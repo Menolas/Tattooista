@@ -72,9 +72,7 @@ class ClientService {
                 throw ApiError.BadRequest(`Client with whatsapp ${newData.whatsapp} already exist`);
             }
         }
-
         return true;
-
     }
 
     async reactivateClient(client) {
