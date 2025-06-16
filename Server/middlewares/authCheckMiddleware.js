@@ -17,9 +17,7 @@ module.exports = function (id) {
 
     try {
       if(token) {
-        console.log(token + " token from authCheckMiddleware");
         const data = tokenService.validateAccessToken(token);
-        console.log(data + " data from authCheckMiddleware");
         if (data && data.id === id) {
           isRightUser = true;
         } else {
@@ -35,12 +33,11 @@ module.exports = function (id) {
         }
 
         const userData = await tokenService.validateRefreshToken(refreshToken);
-        console.log(JSON.stringify(userData) + " userData from validateRefreshToken authCheckMiddleware");
         const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (userData.id === id && tokenFromDb) {
+        if (userData.id.toString() === id.toString() && tokenFromDb) {
           isRightUser = true;
-          console.log(isRightUser + " we have right refresh token apparently...");
         } else {
+          console.log(userData.id + " " + id + " - userData.id and id in authCheckMiddleware");
           return res.status(401).json({ message: "Failed to validate refresh token in authCheckMiddleWare" });
         }
       }
