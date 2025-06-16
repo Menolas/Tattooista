@@ -61,8 +61,8 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
     const handleOnFileUploadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         if (event.target.files && event.target.files.length) {
-            setImageURLs([]);
             const files = Array.from(event.target.files);
+
             files.forEach((file) => {
                 const reader = new FileReader();
                 reader.onloadend = () => {
@@ -101,6 +101,7 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
 
         try {
             if (isEditing && review) {
+                console.log(user?._id + " " + review._id + " ids!!!!!!!!");
                 success = await dispatch(updateReview(token, review._id, formData));
             } else {
                 if (isFromProfile) {
@@ -215,7 +216,11 @@ export const UpdateReviewForm: React.FC<PropsType> = React.memo(({
                                 value={undefined}
                                 multiple
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    propsF.setFieldValue('gallery', Array.from(e.currentTarget.files || []));
+                                    const newFiles = Array.from(e.currentTarget.files || []);
+                                    const existingFiles = propsF.values.gallery || [];
+                                    const updatedFiles = [...existingFiles, ...newFiles];
+
+                                    propsF.setFieldValue('gallery', updatedFiles);
                                     handleOnFileUploadChange(e);
                                 }}
                             />

@@ -7,9 +7,8 @@ const authRoleMiddleware = require("../middlewares/authRoleMiddleware");
 
 function dynamicAuthCheckMiddleware() {
   return (req, res, next) => {
-    const userId = req.params.id;
+    const userId = res.review.user;
     if(userId !== null) {
-      console.log(req.params.id + " here is the id from Reviews Routes dynamicAuthCheckMiddleware");
       const middleware = authCheckMiddleware(userId);
       middleware(req, res, next);
     } else {
@@ -25,10 +24,10 @@ router.get('/', controller.getReviews);
 router.get('/:id', controller.getUserReviews);
 
 // add review
-router.post('/:id', dynamicAuthCheckMiddleware(), controller.addReview);
+router.post('/:id', controller.addReview);
 
 // update review
-router.post('/reviewUpdate/:id',  authRoleMiddleware(["SUPERADMIN"]), getReview, controller.updateReview);
+router.post('/reviewUpdate/:id', getReview, dynamicAuthCheckMiddleware(),  controller.updateReview);
 
 router.delete('/updateGallery/:id', authRoleMiddleware(["ADMIN", "SUPERADMIN"]), getReview, controller.deleteReviewGalleryPicture);
 

@@ -47,7 +47,6 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
   ) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length) {
-      setImageURLs([]);
       const files = Array.from(event.target.files);
       files.forEach((file) => {
         const reader = new FileReader();
@@ -175,7 +174,11 @@ export const GalleryUploadForm: React.FC<PropsType> = React.memo(({
                     value={undefined}
                     multiple
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      propsF.setFieldValue('gallery', Array.from(e.currentTarget.files || []));
+                      const newFiles = Array.from(e.currentTarget.files || []);
+                      const existingFiles = propsF.values.gallery || [];
+                      const updatedFiles = [...existingFiles, ...newFiles];
+
+                      propsF.setFieldValue('gallery', updatedFiles);
                       handleOnFileUploadChange(e);
                     }}
                 />
