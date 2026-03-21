@@ -3,9 +3,13 @@ export const dynamic = "force-dynamic"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { BookingForm } from "@/components/forms/booking-form"
+import { PortfolioSlider } from "@/components/shared/portfolio-slider"
+import { ReadMore } from "@/components/shared/read-more"
+import { FaqItem } from "@/components/shared/faq-item"
+import { Instagram, Facebook } from "lucide-react"
 
 async function getHomePageData() {
-  const [services, faqItems, aboutPage, galleryItems] = await Promise.all([
+  const [services, faqItems, aboutPage, tattooStyles] = await Promise.all([
     prisma.service.findMany({
       orderBy: { order: "asc" },
       take: 6,
@@ -17,18 +21,17 @@ async function getHomePageData() {
     prisma.page.findUnique({
       where: { name: "about" },
     }),
-    prisma.galleryItem.findMany({
-      where: { isArchived: false },
-      take: 6,
-      orderBy: { createdAt: "desc" },
+    prisma.tattooStyle.findMany({
+      where: { isArchived: false, wallPaper: { not: null } },
+      orderBy: { createdAt: "asc" },
     }),
   ])
 
-  return { services, faqItems, aboutPage, galleryItems }
+  return { services, faqItems, aboutPage, tattooStyles }
 }
 
 export default async function HomePage() {
-  const { services, faqItems, aboutPage, galleryItems } = await getHomePageData()
+  const { services, faqItems, aboutPage, tattooStyles } = await getHomePageData()
 
   return (
     <div>
@@ -65,57 +68,69 @@ export default async function HomePage() {
         </a>
       </section>
 
-      {/* Portfolio Preview */}
-      {galleryItems.length > 0 && (
-        <section className="py-[70px] md:py-[112px] px-4 md:px-[70px]">
-          <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-16">
+      {/* Portfolio Slider */}
+      {tattooStyles.length > 0 && (
+        <section className="container pt-[80px] md:pt-[112px] pb-[70px] md:pb-[112px]">
+          <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-[100px]">
             Portfolio
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {galleryItems.map((item) => (
-              <div
-                key={item.id}
-                className="group relative h-[320px] md:h-[440px] overflow-hidden"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/gallery/${item.fileName}`}
-                  alt="Tattoo artwork"
-                  className="h-full w-full object-cover grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 group-hover:scale-110"
-                />
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href="/portfolio"
-              className="inline-flex items-center justify-center border-2 border-foreground px-8 h-[60px] text-base font-extrabold uppercase tracking-wider transition-all duration-300 hover:bg-foreground hover:text-background"
-            >
-              View all works
-            </Link>
-          </div>
+          <PortfolioSlider styles={tattooStyles} />
         </section>
       )}
 
       {/* About Section */}
       {aboutPage && aboutPage.isActive && (
-        <section className="py-[70px] md:py-[112px] px-4 md:px-[70px]">
-          <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-16">
-            {aboutPage.title || "About"}
+        <section id="about" className="container relative py-[70px] md:py-[112px] md:pb-[70px] text-center">
+          <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-[62px]">
+            {aboutPage.title || "Tattoo Artist"}
           </h2>
-          <div className="max-w-3xl mx-auto">
-            {aboutPage.content && (
-              <p className="text-lg md:text-xl font-normal leading-relaxed text-foreground/80 whitespace-pre-wrap text-center">
-                {aboutPage.content}
-              </p>
-            )}
-            <div className="text-center mt-10">
-              <a
-                href="#booking"
-                className="inline-flex items-center justify-center border-2 border-foreground px-8 h-[60px] text-base font-extrabold uppercase tracking-wider transition-all duration-300 hover:bg-foreground hover:text-background"
-              >
-                Book a consultation
-              </a>
+          <div className="md:flex md:gap-[4%]">
+            {/* Image with decorative border */}
+            <div className="relative mx-auto mb-[45px] md:mb-0 md:mt-[42px] w-full md:w-[40%] h-[calc(100vw-2rem)] md:h-[400px] border-2 border-foreground">
+              <div
+                className="relative mx-auto w-[calc(100%-44px)] md:w-[calc(100%-84px)] h-full bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-300 -translate-y-[22px] md:-translate-y-[42px] z-10"
+                style={{
+                  backgroundImage: aboutPage.wallPaper
+                    ? `url(/pages/${aboutPage.id}/${aboutPage.wallPaper})`
+                    : "url(/images/body-bg.jpg)",
+                }}
+              />
+            </div>
+            {/* Content */}
+            <div className="md:w-[56%]">
+              <h3 className="text-left text-[25px] md:text-[43px] font-semibold mb-5">Facts about me</h3>
+              {aboutPage.content && (
+                <div className="text-left text-lg md:text-[26px] leading-[1.7] [&_p]:mb-4">
+                  <ReadMore id="text-about" text={aboutPage.content} amountOfWords={36} />
+                </div>
+              )}
+              <div className="mt-[40px]">
+                <h3 className="text-left text-[25px] md:text-[43px] font-semibold mb-5">Follow me</h3>
+                <nav className="flex gap-5 mb-[40px]">
+                  <a
+                    href="https://www.instagram.com/adelainehobf/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground hover:text-foreground/70 transition-colors"
+                  >
+                    <Instagram className="w-[70px] h-[70px]" />
+                  </a>
+                  <a
+                    href="https://www.facebook.com/a.hobf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground hover:text-foreground/70 transition-colors"
+                  >
+                    <Facebook className="w-[70px] h-[70px]" />
+                  </a>
+                </nav>
+                <a
+                  href="#booking"
+                  className="flex items-center justify-center border-2 border-foreground bg-transparent px-[38px] w-full md:w-fit h-[60px] md:h-[71px] text-[20px] md:text-[24px] font-semibold md:font-bold tracking-[1px] whitespace-nowrap transition-all duration-300 hover:bg-foreground hover:text-background"
+                >
+                  Book a consultation
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -123,36 +138,50 @@ export default async function HomePage() {
 
       {/* Services Section */}
       {services.length > 0 && (
-        <section className="py-[70px] md:py-[112px] px-4 md:px-[70px]">
-          <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-16">
+        <section id="services" className="container py-[70px] md:py-[112px] bg-none">
+          <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-[100px]">
             Studio services
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[8%] gap-y-12">
+          <div className="flex flex-wrap gap-x-[4%] gap-y-[20px] md:gap-x-[8%] md:gap-y-[88px] mx-auto w-full md:max-w-[1102px]">
             {services.map((service, index) => (
-              <article
+              <div
                 key={service.id}
-                className={`relative ${index % 2 === 1 ? "md:mt-16" : ""}`}
+                className={`w-full md:w-[46%] md:min-w-[46%] md:max-w-[46%] flex justify-center ${index % 2 === 1 ? "md:mt-[110px]" : ""}`}
               >
-                <span className="block text-[60px] md:text-[80px] font-bold leading-none text-foreground/10 mb-2">
-                  {`0${index + 1}`}
-                </span>
-                <div
-                  className="h-[200px] md:h-[300px] bg-cover bg-center grayscale transition-all duration-300 hover:grayscale-0 mb-6"
-                  style={{
-                    backgroundImage: service.wallPaper
-                      ? `url(/services/${service.wallPaper})`
-                      : "url(/images/service.png)",
-                  }}
-                />
-                <h4 className="text-xl md:text-2xl font-semibold mb-4">
-                  {service.title}
-                </h4>
-                {service.conditions && (
-                  <p className="text-base md:text-lg text-foreground/70 whitespace-pre-wrap leading-relaxed">
-                    {service.conditions}
-                  </p>
-                )}
-              </article>
+                <article className="relative w-full pl-[20px]">
+                  <span
+                    className="absolute top-0 left-0 text-[13px] font-semibold z-10 origin-[0_0]"
+                    style={{ transform: "rotate(-90deg) translateX(-100%)" }}
+                  >
+                    <span className="relative before:content-[''] before:absolute before:w-[9px] before:h-[2px] before:bg-foreground before:left-[-8px] before:top-1/2 before:-translate-x-full before:-translate-y-1/2">
+                      {`0${index + 1}`}
+                    </span>
+                  </span>
+                  <div
+                    className="h-[300px] max-w-full bg-cover bg-center bg-[url('/images/service.png')] grayscale transition-all duration-300 hover:grayscale-0 mb-[42px]"
+                    style={{
+                      backgroundImage: service.wallPaper
+                        ? `url(/serviceWallpapers/${service.id}/${service.wallPaper})`
+                        : undefined,
+                    }}
+                  />
+                  <h4 className="mt-0 mb-[20px] text-[24px]">
+                    {service.title}
+                  </h4>
+                  {service.conditions && (
+                    <ul className="list-none m-0 p-0 pl-[20px] flex flex-col gap-y-1">
+                      {service.conditions.split("\n").filter(Boolean).map((item, i) => (
+                        <li
+                          key={i}
+                          className="relative tracking-[0.7px] font-normal before:content-[''] before:absolute before:block before:w-[2px] before:h-[2px] before:bg-foreground before:left-[-16px] before:top-1/2 before:-translate-y-1/2"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </article>
+              </div>
             ))}
           </div>
         </section>
@@ -161,24 +190,25 @@ export default async function HomePage() {
       {/* FAQ Section */}
       {faqItems.length > 0 && (
         <section
-          className="py-[70px] md:py-[112px] bg-cover bg-center bg-no-repeat bg-[url('/images/body-bg.jpg')]"
+          id="faq"
+          className="relative pt-[70px] md:pt-[112px] pb-[70px] md:pb-[100px] bg-cover bg-no-repeat bg-[position:top_26px_center] bg-[url('/images/body-bg.jpg')] overflow-visible before:content-[''] before:absolute before:block before:w-full before:h-[111px] before:left-0 before:right-0 before:top-[26px] before:z-0 before:bg-gradient-to-b before:from-[#080808] before:to-transparent after:content-[''] after:absolute after:block after:w-full after:h-[111px] after:left-0 after:right-0 after:bottom-0 after:z-0 after:bg-gradient-to-t after:from-[#080808] after:to-transparent"
         >
-          <div className="px-4 md:px-[70px]">
-            <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-16">
+          <div className="container relative min-h-[700px] md:min-h-[800px] overflow-visible">
+            <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-[100px]">
               F.A.Q
             </h2>
-            <div className="max-w-3xl mx-auto space-y-0">
+            <ul className="flex flex-col mx-auto w-[calc(100%-2rem)] md:w-[1000px] list-none m-0 p-0">
               {faqItems.map((item) => (
                 <FaqItem key={item.id} question={item.question} answer={item.answer} />
               ))}
-            </div>
+            </ul>
           </div>
         </section>
       )}
 
       {/* Booking Section */}
       <section id="booking" className="py-[70px] md:py-[112px]">
-        <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-16 px-4 md:px-[70px]">
+        <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-[100px] px-4 md:px-[70px]">
           Apply for booking
         </h2>
         <div className="flex w-full md:w-[1230px] md:mx-auto">
@@ -203,21 +233,3 @@ export default async function HomePage() {
   )
 }
 
-function FaqItem({ question, answer }: { question: string; answer: string }) {
-  return (
-    <details className="group border-b border-foreground/10">
-      <summary className="flex items-center justify-between cursor-pointer py-5 md:py-6 list-none">
-        <h5 className="text-base md:text-lg font-semibold uppercase tracking-wider pr-4">
-          {question}
-        </h5>
-        <span className="relative w-5 h-5 flex-shrink-0">
-          <span className="absolute top-1/2 left-0 w-full h-[2px] bg-foreground -translate-y-1/2 transition-transform duration-300" />
-          <span className="absolute top-1/2 left-0 w-full h-[2px] bg-foreground -translate-y-1/2 rotate-90 transition-transform duration-300 group-open:rotate-0" />
-        </span>
-      </summary>
-      <p className="pb-6 text-base md:text-lg text-foreground/70 leading-relaxed whitespace-pre-wrap">
-        {answer}
-      </p>
-    </details>
-  )
-}
