@@ -1,0 +1,17 @@
+[
+  {
+    "_id": "63a95c692e595904f4f45c16",
+    "value": "ADMIN",
+    "__v": 0
+  },
+  {
+    "_id": "63a95c692e595904f4f45c15",
+    "value": "USER",
+    "__v": 0
+  },
+  {
+    "_id": "65b00573cd35da7a52e83c9f",
+    "value": "SUPERADMIN",
+    "__v": 0
+  }
+]

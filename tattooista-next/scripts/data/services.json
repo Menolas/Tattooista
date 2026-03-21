@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "63c6c4c7d07efd6612eb78fc",
+    "title": "INDIVIDUAL DESIGN",
+    "conditions": [
+      "1000 kr -minimum cost up to one hour",
+      "1000 kr/hour - no longer than 4 hours",
+      "700 kr/hour cost for each next hour if session longer than 4 hours",
+      "max session 6 hours",
+      "",
+      ""
+    ],
+    "__v": 4,
+    "wallPaper": "1727524736173_d94ca002c9b0.png"
+  },
+  {
+    "_id": "63c6c4d8d07efd6612eb78fe",
+    "title": "CONSULTATION",
+    "conditions": [
+      "1000 kr -minimum cost up to one hour",
+      "1000 kr/hour - no longer than 4 hours",
+      "700 kr/hour cost for each next hour if session longer than 4 hours",
+      "max session 6 hours",
+      "",
+      ""
+    ],
+    "__v": 8,
+    "wallPaper": "1727524696312_48cde65918a2.jpg"
+  },
+  {
+    "_id": "66a20fab712d656a993f2bb1",
+    "title": "Cover UP",
+    "conditions": [
+      "1000 kr -minimum cost up to one hour",
+      "1000 kr/hour - no longer than 4 hours",
+      "700 kr/hour cost for each next hour if session longer than 4 hours",
+      "max session 6 hours",
+      "",
+      ""
+    ],
+    "__v": 3,
+    "wallPaper": "1727524856041_83955a56a809.jpeg"
+  }
+]

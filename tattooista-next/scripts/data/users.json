@@ -1,0 +1,46 @@
+[
+  {
+    "_id": "65b00e13bd89fb9113448e29",
+    "displayName": "JustUser",
+    "email": "olenakunina+111@gmail.com",
+    "password": "$2b$04$PKze5Z/sJLxaowkqLE/PZe/CirB973KNZCiZpoiKFGUt0FHAjTPzK",
+    "roles": [
+      "63a95c692e595904f4f45c15",
+      "63a95c692e595904f4f45c16",
+      "65b00573cd35da7a52e83c9f"
+    ],
+    "isActivated": true,
+    "activationLink": "927b0c03-f19c-406b-aad0-6a40a0069bf4",
+    "createdAt": "2024-01-23T19:05:55.886Z",
+    "__v": 4,
+    "avatar": "1733051896728_ba67dfb91ae9.jpg"
+  },
+  {
+    "_id": "68208aac87a9345e7d258224",
+    "displayName": "Susanna5",
+    "email": "olenakunina@gmail.com",
+    "password": "$2b$04$LlyEF2D4GtubxkcOL1/Wye1g6JhB7hZ4pLQMGRWN2NcNzItc50oe2",
+    "roles": [
+      "63a95c692e595904f4f45c15"
+    ],
+    "isActivated": true,
+    "activationLink": "ea1bf16c-3346-4fdc-a75f-318f8c6a195a",
+    "createdAt": "2025-05-11T11:31:56.072Z",
+    "__v": 2,
+    "avatar": "1749964480395_280303a0618e.avif"
+  },
+  {
+    "_id": "684e3d26cf55a847c75e8f05",
+    "displayName": "JustUser1",
+    "email": "olenakunina+898@gmail.com",
+    "password": "$2b$04$caosye342uRRniPV305f3eUTy42PaFewsDQAJJBli2DE0mNoe5Z22",
+    "roles": [
+      "63a95c692e595904f4f45c15"
+    ],
+    "isActivated": true,
+    "activationLink": "4910d21b-56f6-4357-839f-1b93749747f7",
+    "createdAt": "2025-06-15T03:25:26.190Z",
+    "__v": 0,
+    "avatar": "1749958371041_5f867ad3e9e2.webp"
+  }
+]
