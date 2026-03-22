@@ -17,13 +17,8 @@ export default auth(async (req) => {
   // ---- TENANT RESOLUTION ----
   const hostname = req.headers.get("host") || "localhost:3000"
 
-  // Dev mode: support ?studio=slug query param
-  let slug: string | null = null
-  if (process.env.NODE_ENV === "development") {
-    slug = nextUrl.searchParams.get("studio") || extractSubdomain(hostname)
-  } else {
-    slug = extractSubdomain(hostname)
-  }
+  // Resolve tenant: subdomain takes priority, ?studio=slug as fallback
+  const slug = extractSubdomain(hostname) || nextUrl.searchParams.get("studio")
 
   // If we have a slug, resolve the studio
   if (slug) {
