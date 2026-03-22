@@ -26,7 +26,6 @@ async function getHomePageData() {
     prisma.faqItem.findMany({
       where: { studioId: studio.id },
       orderBy: { order: "asc" },
-      take: 5,
     }),
     prisma.page.findUnique({
       where: { studioId_name: { studioId: studio.id, name: "about" } },
@@ -117,7 +116,7 @@ export default async function HomePage() {
                 style={{
                   backgroundImage: aboutPage.wallPaper
                     ? `url(${pageWallpaperUrl(aboutPage.id, aboutPage.wallPaper)})`
-                    : "url(/images/body-bg.jpg)",
+                    : "url(/images/avatar.jpg)",
                 }}
               />
             </div>
