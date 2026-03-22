@@ -66,6 +66,29 @@ Every business model gets a `studioId` foreign key:
 - GalleryItem, GalleryItemStyle, TattooStyle
 - Service, Page, FaqItem
 
+### Unique constraint changes
+
+Several models have `@unique` constraints that must become compound with `studioId` once they're tenant-scoped:
+
+- `Page.name` → `@@unique([studioId, name])` — two studios can both have an "about" page
+- `TattooStyle.value` → `@@unique([studioId, value])` — two studios can both have "Realism"
+
+### TattooStyle: per-studio, not shared
+
+Styles are tenant-scoped. Each studio creates and manages its own styles. A default "Other" style is seeded on studio creation. There is no shared/platform-level style catalog — studios have full control over their style labels.
+
+### Database indexes
+
+Every tenant-scoped model must have `@@index([studioId])` for query performance. Common compound indexes:
+
+- `@@index([studioId, createdAt])` on models with list views sorted by date (Client, Booking, GalleryItem, Review)
+- `@@index([studioId, isArchived])` on models with archive filtering (Client, Booking, Review, TattooStyle, GalleryItem)
+
+### Booking and Client model clarifications
+
+- **Booking** remains anonymous (no `userId`). Bookings are form submissions from the public site with `fullName`, `email`, `phone` — no account required. Public visitor registration is for reviews only (Review already has `userId`).
+- **Client** is an internal CRM record created by studio staff to track their customers. It has no link to User — studio staff manage client records manually.
+
 ### Platform-level models (no studioId)
 
 - User, Account, Session, VerificationToken, PasswordResetToken
@@ -79,11 +102,14 @@ Every business model gets a `studioId` foreign key:
 
 `proxy.ts` (or `middleware.ts`) intercepts every request:
 
-1. Extract subdomain from hostname (`ink-master.tattooista.com` → `ink-master`)
-2. Look up `Studio` by slug
-3. If found and active: inject `studioId` into `x-studio-id` request header, continue
-4. If not found: 404 page
-5. If not active (suspended): "studio suspended" page
+1. **Strip any incoming `x-studio-id` header** — prevents client-side spoofing
+2. Extract subdomain from hostname (`ink-master.tattooista.com` → `ink-master`)
+3. Look up `Studio` by slug
+4. If found and active: inject `studioId` into `x-studio-id` request header, continue
+5. If not found: 404 page
+6. If not active (suspended): "studio suspended" page
+
+**Security note**: The middleware must always strip the `x-studio-id` header from incoming requests before setting its own value. This prevents malicious clients from forging tenant context by sending the header directly.
 
 ### Special subdomains
 
@@ -106,7 +132,7 @@ Use `localhost:3000` as landing site. Tenant resolution in dev mode via `?studio
 
 - **Studio owner**: `tattooista.com/register` → creates User + Studio + StudioMembership(OWNER) in one transaction → redirects to `{slug}.tattooista.com/admin`
 - **Staff invite**: owner invites via email from admin panel → recipient creates User (or links existing) → gets StudioMembership(STAFF)
-- **Public visitor**: `{slug}.tattooista.com/register` → creates User with no membership → can submit bookings and reviews on that studio
+- **Public visitor**: `{slug}.tattooista.com/register` → creates User with no membership → can submit reviews on that studio (bookings are anonymous form submissions, no account required)
 
 ### Sign-in
 
@@ -116,6 +142,8 @@ Use `localhost:3000` as landing site. Tenant resolution in dev mode via `?studio
 ### Session
 
 Session contains `userId` and `platformRole` only. Studio role is resolved per-request from subdomain + StudioMembership lookup — no studio context stored in the session.
+
+**JWT and studio suspension**: Since NextAuth uses JWT sessions, tokens cannot be server-side revoked. When a studio is suspended (`isActive = false`), the middleware/proxy blocks all requests to that subdomain regardless of JWT validity. This is the revocation mechanism — no separate token invalidation needed.
 
 ### Authorization
 
@@ -132,9 +160,11 @@ Utility `requireStudioRole('OWNER')`:
 ### Prisma extension for automatic tenant scoping
 
 `tenantPrisma(studioId)` returns a Prisma client that:
-- Automatically injects `WHERE studioId = ?` on every `findMany`, `findFirst`, `findUnique`, `update`, `delete` for tenant-scoped models
+- Automatically injects `WHERE studioId = ?` on every `findMany`, `findFirst`, `update`, `delete` for tenant-scoped models
 - Automatically sets `studioId` on every `create` call
 - Prevents creating records without a tenant
+
+**`findUnique` limitation**: Prisma's `findUnique` only accepts unique fields in its `where` clause. The extension overrides `findUnique` to use `findFirst` internally, adding the `studioId` condition alongside the original unique field. This ensures tenant isolation even on unique lookups. For models with compound unique constraints that include `studioId` (e.g., `Page` with `@@unique([studioId, name])`), native `findUnique` works directly.
 
 ### Usage pattern
 
@@ -176,7 +206,7 @@ Upload route handler reads tenant context, constructs path prefix, passes to Ver
 
 ### Deletion
 
-Studio deletion or cancellation → bulk-delete all blobs under `studios/{studioId}/`.
+Studio deletion or cancellation requires listing all blobs with the `studios/{studioId}/` prefix using Vercel Blob's `list()` (with cursor-based pagination), then deleting them in batches using `del()`. There is no atomic prefix-delete — this must be handled iteratively.
 
 ### User avatars
 
@@ -214,8 +244,9 @@ Stored under `users/{userId}/` since a user can belong to multiple studios.
 
 1. Visitor on `tattooista.com` clicks "Create Your Studio"
 2. **Account step**: email, password, display name → creates User
-3. **Studio step**: studio name, subdomain slug (auto-generated from name, editable), optional logo upload → creates Studio + StudioMembership(OWNER) in one transaction
-4. Redirect to `{slug}.tattooista.com/admin`
+3. **Email verification**: user must verify email before proceeding (prevents bot spam and ensures valid contact). The existing `isActivated` / email verification infrastructure is reused.
+4. **Studio step**: studio name, subdomain slug (auto-generated from name, editable), optional logo upload → creates Studio + StudioMembership(OWNER) in one transaction
+5. Redirect to `{slug}.tattooista.com/admin`
 
 ### Default data seeded on studio creation
 
