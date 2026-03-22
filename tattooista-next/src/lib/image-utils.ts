@@ -8,6 +8,12 @@ function isExternalUrl(value: string): boolean {
   return value.startsWith("http://") || value.startsWith("https://")
 }
 
+// Seed data stores full relative paths (e.g. "styles/mg_xxx/file.jpg")
+// Admin uploads store just the filename (resolved with entity ID)
+function isRelativePath(value: string): boolean {
+  return value.includes("/")
+}
+
 export function galleryImageUrl(fileName: string): string {
   if (isExternalUrl(fileName)) return fileName
   return `/gallery/${fileName}`
@@ -25,6 +31,7 @@ export function clientAvatarUrl(clientId: string, avatar: string): string {
 
 export function styleWallpaperUrl(styleId: string, wallPaper: string): string {
   if (isExternalUrl(wallPaper)) return wallPaper
+  if (isRelativePath(wallPaper)) return `/${wallPaper}`
   return `/styleWallpapers/${styleId}/${wallPaper}`
 }
 
