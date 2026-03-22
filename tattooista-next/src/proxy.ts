@@ -27,21 +27,26 @@ export default auth(async (req) => {
 
   // If we have a slug, resolve the studio
   if (slug) {
-    const studio = await prisma.studio.findUnique({
-      where: { slug },
-      select: { id: true, isActive: true },
-    })
+    try {
+      const studio = await prisma.studio.findUnique({
+        where: { slug },
+        select: { id: true, isActive: true },
+      })
 
-    if (!studio) {
-      return NextResponse.rewrite(new URL("/not-found", nextUrl))
+      if (!studio) {
+        return NextResponse.rewrite(new URL("/not-found", nextUrl))
+      }
+
+      if (!studio.isActive) {
+        return NextResponse.rewrite(new URL("/studio-suspended", nextUrl))
+      }
+
+      // Inject studioId for downstream use
+      requestHeaders.set(STUDIO_ID_HEADER, studio.id)
+    } catch (error) {
+      console.error("Proxy: tenant resolution failed", error)
+      return NextResponse.next({ request: { headers: requestHeaders } })
     }
-
-    if (!studio.isActive) {
-      return NextResponse.rewrite(new URL("/studio-suspended", nextUrl))
-    }
-
-    // Inject studioId for downstream use
-    requestHeaders.set(STUDIO_ID_HEADER, studio.id)
   }
 
   // ---- ROUTE PROTECTION ----
