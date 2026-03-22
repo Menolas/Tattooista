@@ -4,11 +4,21 @@ import type { Studio, StudioRole } from "@/types"
 
 const SPECIAL_SUBDOMAINS = ["www", "app"]
 
+// Domains where the first segment is NOT a tenant subdomain
+const PLATFORM_DOMAINS = ["vercel.app", "vercel.sh"]
+
 export function extractSubdomain(hostname: string): string | null {
   const host = hostname.split(":")[0]
 
   if (host === "localhost" || host === "127.0.0.1") {
     return null
+  }
+
+  // Skip subdomain extraction on Vercel preview/deployment URLs
+  for (const domain of PLATFORM_DOMAINS) {
+    if (host.endsWith(`.${domain}`)) {
+      return null
+    }
   }
 
   const parts = host.split(".")
