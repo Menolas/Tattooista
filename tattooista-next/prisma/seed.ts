@@ -2,8 +2,12 @@ import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { Pool } from "pg"
 import bcrypt from "bcryptjs"
+import fs from "fs"
+import path from "path"
 
 import "dotenv/config"
+
+const PUBLIC_DIR = path.join(__dirname, "..", "public")
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
@@ -100,41 +104,48 @@ async function main() {
   console.log("Created default pages")
 
   // Seed tattoo styles (using compound unique)
+  // wallPaperSource maps to existing images in /public/styles/{mongoId}/
   const styles = [
     {
       value: "Traditional",
       description:
         "Bold lines, limited color palette, and iconic imagery. Classic American tattoo style.",
+      wallPaperSource: "styles/mg_63bf36c2c3cf5018e63959ea/1705989076302_90345086fd58.jpg",
     },
     {
       value: "Blackwork",
       description:
         "Using exclusively black ink to create bold, graphic designs and patterns.",
+      wallPaperSource: "styles/mg_650349d7f56daad5f49df4e9/1705990192452_15d45932b76c.jpg",
     },
     {
       value: "Realism",
       description:
         "Highly detailed tattoos that look like photographs or 3D images.",
+      wallPaperSource: "styles/mg_655a218dbf8c718670be6a58/1712734019347_0e6f74759321.jpg",
     },
     {
       value: "Watercolor",
       description:
         "Soft, flowing designs that mimic watercolor paintings with splashes of color.",
+      wallPaperSource: "styles/mg_65ad683491d96372e7947ad8/1705988606001_eb5bfbe27e4e.jpg",
     },
     {
       value: "Minimalist",
       description:
         "Simple, clean designs with fine lines and minimal detail.",
+      wallPaperSource: "styles/mg_65ad685191d96372e7947add/1705988298732_06afd4950285.jpg",
     },
     {
       value: "Other",
       description: null,
       nonStyle: true,
+      wallPaperSource: null,
     },
   ]
 
   for (const style of styles) {
-    await prisma.tattooStyle.upsert({
+    const record = await prisma.tattooStyle.upsert({
       where: {
         studioId_value: {
           studioId: demoStudio.id,
@@ -149,6 +160,21 @@ async function main() {
         nonStyle: style.nonStyle ?? false,
       },
     })
+
+    // Copy wallpaper image to /public/styleWallpapers/{uuid}/ and update record
+    if (style.wallPaperSource) {
+      const srcPath = path.join(PUBLIC_DIR, style.wallPaperSource)
+      if (fs.existsSync(srcPath)) {
+        const fileName = path.basename(style.wallPaperSource)
+        const destDir = path.join(PUBLIC_DIR, "styleWallpapers", record.id)
+        fs.mkdirSync(destDir, { recursive: true })
+        fs.copyFileSync(srcPath, path.join(destDir, fileName))
+        await prisma.tattooStyle.update({
+          where: { id: record.id },
+          data: { wallPaper: fileName },
+        })
+      }
+    }
   }
 
   console.log("Created tattoo styles:", styles.map((s) => s.value))
