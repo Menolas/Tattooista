@@ -99,44 +99,49 @@ async function main() {
 
   console.log("Created default pages")
 
-  // Seed tattoo styles (using compound unique)
-  // wallPaperSource maps to existing images in /public/styles/{mongoId}/
+  // Seed tattoo styles from original MERN app (scripts/data/tattoostyles.json)
   const styles = [
     {
-      value: "Traditional",
+      value: "FineLine",
       description:
-        "Bold lines, limited color palette, and iconic imagery. Classic American tattoo style.",
+        "Fine line tattooing consists of distinct straight or curved thin lines, without gradations in shade or color to represent 2D or 3D objects, emphasizing form and outline over color, shading, and texture. These tattoos can have incredible levels of detail built in, without being 'loud' about it.",
       wallPaperSource: "styles/mg_63bf36c2c3cf5018e63959ea/1705989076302_90345086fd58.jpg",
     },
     {
-      value: "Blackwork",
+      value: "Black@Gray",
       description:
-        "Using exclusively black ink to create bold, graphic designs and patterns.",
+        "Black-and-gray is sometimes referred to as \"jailhouse\" or \"joint style\" and is thought to have originated in prisons where inmates had limited access to different materials; they resorted to using guitar strings for needles and used cigarette ashes or pen ink to produce tattoos.",
       wallPaperSource: "styles/mg_650349d7f56daad5f49df4e9/1705990192452_15d45932b76c.jpg",
     },
     {
-      value: "Realism",
+      value: "No Style",
       description:
-        "Highly detailed tattoos that look like photographs or 3D images.",
+        "Here the images of tattoos which difficult to define which style it is actually",
+      nonStyle: true,
       wallPaperSource: "styles/mg_655a218dbf8c718670be6a58/1712734019347_0e6f74759321.jpg",
     },
     {
-      value: "Watercolor",
+      value: "BlackWork",
       description:
-        "Soft, flowing designs that mimic watercolor paintings with splashes of color.",
+        "A blackwork tattoo is a bold work of body art rendered in solid planes of black ink. Usually, these tattoos are composed of abstract patterns and geometric shapes, though some feature figurative forms and recognizable scenes and subjects.",
       wallPaperSource: "styles/mg_65ad683491d96372e7947ad8/1705988606001_eb5bfbe27e4e.jpg",
     },
     {
-      value: "Minimalist",
+      value: "NeoTraditional",
       description:
-        "Simple, clean designs with fine lines and minimal detail.",
+        "Neo-traditional tattoo designs feature bold, dark outlines and illustrative looks. There is a feeling of subtle dimension and the use of saturated colors. This dimension is not a 3D type of tattoo, yet they contain lines that vary in weight. This style of tattoo art consists of an illustrated look.",
       wallPaperSource: "styles/mg_65ad685191d96372e7947add/1705988298732_06afd4950285.jpg",
     },
     {
-      value: "Other",
-      description: null,
-      nonStyle: true,
-      wallPaperSource: null,
+      value: "Realistic",
+      description:
+        "Realism tattoos can depict anything, with the only requirement being that the tattoo looks as close to photorealistic as possible. Portraits of famous people, loved ones, nature, and meaningful objects are all common choices for realistic tattoos.",
+      wallPaperSource: "styles/mg_65be73db5b50bdfa55dabf00/1716730967403_9696c3542d5b.jpg",
+    },
+    {
+      value: "Designs",
+      description: "Here you can see some of my designs and drawings.",
+      wallPaperSource: "styles/mg_663602db8b824c641813786e/1715001956431_728b5fd67cd6.jpg",
     },
   ]
 
