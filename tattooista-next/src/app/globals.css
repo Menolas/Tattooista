@@ -128,7 +128,7 @@
     cursor: text;
   }
 
-  /* Container */
+  /* Container — can't be expressed as Tailwind classes (used as a shared layout class) */
   .container {
     margin: 0 auto;
     padding: 0 16px;
@@ -158,7 +158,7 @@
   }
 }
 
-/* Slider arrows */
+/* Slider arrows — pseudo-elements, can't be Tailwind */
 .slider-arrow {
   position: absolute;
   padding: 0;
@@ -236,5 +236,133 @@
 
   .slider-arrow span::before {
     width: 70px;
+  }
+}
+
+/* Hamburger — pseudo-element X transformation, can't be Tailwind */
+.hamburger {
+  position: relative;
+  width: 44px;
+  height: 28px;
+  cursor: pointer;
+  z-index: 20;
+  background: transparent;
+  border: none;
+}
+
+.hamburger::before,
+.hamburger::after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 2px;
+  background-color: var(--foreground);
+  right: 0;
+  transition: all 0.3s ease;
+}
+
+.hamburger::before {
+  top: 50%;
+  width: 26px;
+  transform: translate(0, -50%);
+}
+
+.hamburger::after {
+  bottom: 0;
+  width: 100%;
+}
+
+.hamburger span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+/* Open state — mobile */
+.hamburger.open::before {
+  display: none;
+}
+
+.hamburger.open::after {
+  top: 13px;
+  bottom: auto;
+  right: -3px;
+  width: 50px;
+  transform: rotate(32deg);
+}
+
+.hamburger.open span {
+  position: absolute;
+  bottom: 13px;
+  left: -3px;
+  width: 50px;
+  transform: rotate(-32deg);
+}
+
+.hamburger.open {
+  position: fixed;
+  top: 22px;
+  right: 1rem;
+}
+
+@media (min-width: 990px) {
+  .hamburger {
+    width: 60px;
+    height: 38px;
+  }
+
+  .hamburger::before {
+    left: 0;
+    right: auto;
+    width: 40px;
+  }
+
+  .hamburger::after {
+    width: 60px;
+  }
+
+  .hamburger span {
+    width: 60px;
+  }
+
+  .hamburger.open {
+    position: static;
+  }
+
+  .hamburger.open::after {
+    top: 18px;
+    right: -5px;
+    width: 69px;
+    transform: rotate(32deg);
+  }
+
+  .hamburger.open span {
+    position: absolute;
+    bottom: 18px;
+    left: -5px;
+    width: 69px;
+    transform: rotate(-32deg);
+  }
+}
+
+/* Tattoo style section — gradient pseudo-element, can't be Tailwind */
+.tattoo-style-section::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 111px;
+  bottom: -32px;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(0deg, rgba(8,8,8,1) 0%, rgba(8,8,8,0) 100%);
+}
+
+@media (min-width: 990px) {
+  .tattoo-style-section::before {
+    bottom: 0;
   }
 }

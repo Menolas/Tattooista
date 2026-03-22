@@ -6,7 +6,6 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { User, LogOut, LogIn, LayoutDashboard, Phone } from "lucide-react"
 import { logout } from "@/lib/actions/auth"
 
 const navItems = [
@@ -19,11 +18,26 @@ const navItems = [
   { href: "/reviews", label: "Reviews" },
 ]
 
+const socialLinks = [
+  {
+    tooltipText: "My Instagram",
+    url: "https://www.instagram.com/adelainehobf/",
+    icon: "/icons/instagram.svg",
+  },
+  {
+    tooltipText: "My Facebook",
+    url: "https://www.facebook.com/a.hobf",
+    icon: "/icons/facebook.svg",
+  },
+]
+
 export function Header() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navRef = useRef<HTMLDivElement>(null)
+
+  const isPortfolio = pathname.startsWith("/portfolio")
 
   const isAdmin =
     session?.user?.roles?.includes("ADMIN") ||
@@ -46,7 +60,6 @@ export function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [isMenuOpen])
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden"
@@ -57,9 +70,9 @@ export function Header() {
   }, [isMenuOpen])
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-10 flex items-center px-4 pt-[22px] md:px-[70px] md:pt-[42px] overflow-visible">
+    <header className="absolute top-0 left-0 right-0 z-10 flex items-center px-4 pt-[22px] min-[990px]:px-[70px] min-[990px]:pt-[42px] overflow-visible">
       {/* Logo */}
-      <Link href="/" className="relative w-[50px] h-[50px] md:w-[55px] md:h-[88px] shrink-0">
+      <Link href="/" className="relative w-[50px] h-[50px] min-[990px]:w-[55px] min-[990px]:h-[88px] shrink-0">
         <Image
           src="/images/logo.png"
           alt="Tattooista"
@@ -70,39 +83,18 @@ export function Header() {
       </Link>
 
       {/* Nav wrapper */}
-      <div ref={navRef} className="relative ml-auto md:mx-auto lg:mx-[80px]">
+      <div ref={navRef} className="relative ml-auto min-[990px]:mx-auto min-[1200px]:mx-[80px]">
         {/* Hamburger */}
-        <button
+        <div
+          className={`hamburger ${isMenuOpen ? "open" : ""}`}
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className={`relative z-20 w-[44px] h-[28px] md:w-[60px] md:h-[38px] ${isMenuOpen ? "md:static fixed top-[22px] right-4" : ""}`}
         >
-          {/* Top line */}
-          <span
-            className={`absolute right-0 top-0 h-[2px] bg-foreground transition-all duration-300 ${
-              isMenuOpen
-                ? "w-[50px] md:w-[69px] top-[13px] md:top-[18px] -right-[3px] md:-right-[5px] rotate-[32deg]"
-                : "w-full"
-            }`}
-          />
-          {/* Middle line */}
-          <span
-            className={`absolute right-0 top-1/2 -translate-y-1/2 h-[2px] bg-foreground transition-all duration-300 ${
-              isMenuOpen ? "opacity-0" : "w-[26px] md:w-[40px] md:left-0 md:right-auto"
-            }`}
-          />
-          {/* Bottom line */}
-          <span
-            className={`absolute right-0 bottom-0 h-[2px] bg-foreground transition-all duration-300 ${
-              isMenuOpen
-                ? "w-[50px] md:w-[69px] bottom-[13px] md:bottom-[18px] -left-[3px] md:-left-[5px] -rotate-[32deg]"
-                : "w-full md:w-[60px]"
-            }`}
-          />
-        </button>
+          <span />
+        </div>
 
         {/* Desktop dropdown menu */}
         <ul
-          className={`hidden md:flex flex-col gap-2 absolute bottom-[-10px] translate-y-full transition-all duration-[250ms] ease-in-out z-10 ${
+          className={`hidden min-[990px]:flex flex-col gap-2 absolute bottom-[-10px] translate-y-full transition-all duration-[250ms] ease-in-out z-10 ${
             isMenuOpen
               ? "h-auto py-6 px-8 pr-14 before:content-[''] before:absolute before:inset-0 before:bg-[rgba(8,8,8,0.5)] before:shadow-[0_4px_30px_rgba(0,0,0,0.1)] before:backdrop-blur-[9px] before:border-2 before:border-[rgba(250,250,250,0.6)] before:-z-10"
               : "h-0 overflow-hidden"
@@ -122,22 +114,69 @@ export function Header() {
         </ul>
       </div>
 
+      {/* Social nav — hidden on mobile, visible on desktop */}
+      <nav className="hidden min-[990px]:block mr-4">
+        <ul className="flex items-center gap-5 list-none m-0 p-0">
+          {socialLinks.map((link) => (
+            <li key={link.url}>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={link.tooltipText}
+                className="flex items-center no-underline"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={link.icon}
+                  alt={link.tooltipText}
+                  className="w-[40px] h-[40px] transition-transform duration-300 hover:scale-[1.2]"
+                  style={{ filter: "brightness(0) invert(1)" }}
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       {/* Desktop right section */}
-      <div className="hidden md:flex items-center gap-[50px] ml-auto">
+      <div className="hidden min-[990px]:flex items-center gap-[50px] ml-auto">
+        {/* Booking button — only on portfolio page */}
+        {isPortfolio && (
+          <Link
+            href="/#booking"
+            className="flex items-center justify-center px-[38px] h-[60px] min-[990px]:h-[60px] text-[20px] font-semibold tracking-[1px] text-foreground bg-transparent border-2 border-foreground whitespace-nowrap transition-all duration-300 hover:bg-foreground hover:text-background"
+          >
+            Book a consultation
+          </Link>
+        )}
+
         <nav className="flex items-center gap-[40px]">
           <a
             href="tel:+4745519015"
             className="flex items-center gap-4 text-foreground font-normal bg-transparent border-none hover:[&_svg]:scale-[1.2] transition-all duration-300"
           >
-            <Phone className="w-[40px] h-[40px] transition-transform duration-300" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icons/phone.svg"
+              alt="Phone"
+              className="w-[40px] h-[40px] transition-transform duration-300"
+              style={{ filter: "brightness(0) invert(1)" }}
+            />
             Call me
           </a>
           {isAdmin && (
             <Link
               href="/admin"
-              className="flex items-center gap-4 text-foreground font-normal hover:[&_svg]:scale-[1.2] transition-all duration-300"
+              className="flex items-center gap-4 text-foreground font-normal hover:[&_img]:scale-[1.2] transition-all duration-300"
             >
-              <LayoutDashboard className="w-[40px] h-[40px] transition-transform duration-300" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icons/admin.svg"
+                alt="Admin"
+                className="w-[40px] h-[40px] transition-transform duration-300"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
               Admin
             </Link>
           )}
@@ -160,18 +199,30 @@ export function Header() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-4 text-foreground font-normal border-none bg-transparent hover:[&_svg]:scale-[1.2] transition-all duration-300"
+                className="flex items-center gap-4 text-foreground font-normal border-none bg-transparent hover:[&_img]:scale-[1.2] transition-all duration-300"
               >
-                <LogOut className="w-[40px] h-[40px] transition-transform duration-300" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icons/logout.svg"
+                  alt="Log Out"
+                  className="w-[40px] h-[40px] transition-transform duration-300"
+                  style={{ filter: "brightness(0) invert(1)" }}
+                />
                 Log Out
               </button>
             </>
           ) : (
             <button
               onClick={() => window.location.href = "/login"}
-              className="flex items-center gap-4 text-foreground font-normal border-none bg-transparent hover:[&_svg]:scale-[1.2] transition-all duration-300"
+              className="flex items-center gap-4 text-foreground font-normal border-none bg-transparent hover:[&_img]:scale-[1.2] transition-all duration-300"
             >
-              <LogIn className="w-[40px] h-[40px] transition-transform duration-300" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icons/login.svg"
+                alt="Log In"
+                className="w-[40px] h-[40px] transition-transform duration-300"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
               Log In
             </button>
           )}
@@ -180,14 +231,13 @@ export function Header() {
 
       {/* Mobile fullscreen menu */}
       <div
-        className={`md:hidden fixed inset-0 z-10 bg-[#080808] bg-[url('/images/body-bg.jpg')] bg-no-repeat bg-cover p-[5rem_2rem] transition-transform duration-300 shadow-[0_3px_5px_5px_rgba(0,0,0,0.9)] ${
+        className={`min-[990px]:hidden fixed inset-0 z-10 bg-background bg-[url('/images/body-bg.jpg')] bg-no-repeat bg-cover p-[5rem_2rem] transition-transform duration-300 shadow-[0_3px_5px_5px_rgba(0,0,0,0.9)] ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Overlay */}
         <div className="absolute inset-0 bg-[rgba(8,8,8,0.7)]" />
 
-        <ul className="relative z-10 flex flex-col gap-4">
+        <ul className="relative z-10 flex flex-col gap-4 list-none m-0 p-0">
           {navItems.map((item) => (
             <li key={item.href}>
               <Link
@@ -208,7 +258,6 @@ export function Header() {
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal"
                   >
-                    <LayoutDashboard className="w-[30px] h-[30px]" />
                     Admin
                   </Link>
                 )}
@@ -217,14 +266,12 @@ export function Header() {
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal"
                 >
-                  <User className="w-[30px] h-[30px]" />
                   Profile
                 </Link>
                 <button
                   onClick={() => { setIsMenuOpen(false); handleLogout() }}
                   className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal bg-transparent border-none"
                 >
-                  <LogOut className="w-[30px] h-[30px]" />
                   Log Out
                 </button>
               </div>
@@ -234,7 +281,6 @@ export function Header() {
                 onClick={() => setIsMenuOpen(false)}
                 className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal"
               >
-                <User className="w-[30px] h-[30px]" />
                 Log In
               </Link>
             )}
