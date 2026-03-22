@@ -84,10 +84,6 @@ export default auth(async (req) => {
   return NextResponse.next({ request: { headers: requestHeaders } })
 })
 
-// Force Node.js runtime — required because Prisma uses the pg driver
-// (TCP sockets), which is incompatible with the default Edge Runtime.
-export const runtime = "nodejs"
-
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 }
