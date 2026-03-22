@@ -72,9 +72,9 @@ async function main() {
     create: {
       studioId: demoStudio.id,
       name: "about",
-      title: "About Us",
+      title: "Hey!! It is me",
       content:
-        "Welcome to Tattooista! We are a professional tattoo studio dedicated to creating unique, personalized artwork that tells your story. Our experienced artists specialize in various styles and are committed to delivering exceptional results in a clean, comfortable environment.",
+        "gdfgsdfgiusto odio dignissimos ducimus qui blanditiis praesentium volusdgsdgsdgptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat",
       isActive: true,
     },
   })
@@ -153,30 +153,30 @@ async function main() {
 
   console.log("Created tattoo styles:", styles.map((s) => s.value))
 
-  // Seed services
+  // Seed services (from original MERN app)
   const services = [
     {
-      title: "Custom Tattoos",
+      title: "TATTOO SESSION",
       conditions:
-        "Unique designs created specifically for you based on your ideas and vision. Includes consultation and multiple revision rounds.",
+        "1000 kr -minimum cost up to one hour\n1000 kr/hour - no longer then 4 hours\n700 kr/hour cost for each next hour if session longer then 4 hours\nmax session 90 hours",
       order: 0,
     },
     {
-      title: "Cover-ups",
+      title: "CAVER UP",
       conditions:
-        "Transform existing tattoos you're no longer happy with into beautiful new pieces. Requires consultation to assess the existing tattoo.",
+        "1000 kr -minimum cost up to one hour\n1000 kr/hour - no longer then 4 hours\n700 kr/hour cost for each next hour if session longer then 4 hours\nmax session 6 hours",
       order: 1,
     },
     {
-      title: "Touch-ups",
+      title: "INDIVIDUAL DESIGN",
       conditions:
-        "Refresh and revitalize older tattoos that have faded over time. Free touch-ups within 3 months for tattoos done at our studio.",
+        "1000 kr -minimum cost up to one hour\n1000 kr/hour - no longer then 4 hours\n700 kr/hour cost for each next hour if session longer then 4 hours\nmax session 6 hours",
       order: 2,
     },
     {
-      title: "Consultations",
+      title: "CONSULTATION",
       conditions:
-        "Free consultations to discuss your tattoo ideas, placement, sizing, and pricing. No commitment required.",
+        "1000 kr -minimum cost up to one hour\n1000 kr/hour - no longer then 4 hours\n700 kr/hour cost for each next hour if session longer then 4 hours\nmax session 6 hours",
       order: 3,
     },
   ]
@@ -194,37 +194,47 @@ async function main() {
 
   console.log("Created services:", services.map((s) => s.title))
 
-  // Seed FAQ items
+  // Seed FAQ items (from original MERN app)
   const faqItems = [
     {
-      question: "How much does a tattoo cost?",
+      question: "IS IT SAFE TO GET A TATTOO?",
       answer:
-        "Tattoo pricing depends on size, complexity, placement, and time required. We offer free consultations where we can provide an accurate quote for your specific design. Our minimum is $100 for small pieces.",
+        "Tattoos breach the skin, which means that skin infections and other complications are possible, including: allergic reactions, skin infections and other skin problems. From my side I can guarantee that your tattoo will be done by all hygienic standards and if you will follow my tips and look after your fresh tattoo together we can minimize that risk.",
       order: 0,
     },
     {
-      question: "Does getting a tattoo hurt?",
+      question: "HOW TO LOOK AFTER YOU FRESH TATTOO?",
       answer:
-        "Pain levels vary depending on the location and your personal pain tolerance. Most people describe it as a scratching sensation. We can take breaks as needed and use numbing products for sensitive areas.",
+        "Stay away from dust, dirt, direct sun rays, pools, saunas etc - especially for the first week after it is done, also first 2-3 days it is very important to wash your fresh tattoo every 4-5 hours with a soft soap, dry it and grease.",
       order: 1,
     },
     {
-      question: "How do I care for my new tattoo?",
+      question: "RECOMMENDATION BEFORE SESSION?",
       answer:
-        "After your session, we'll provide detailed aftercare instructions. Generally, keep the tattoo clean, moisturized, and out of direct sunlight. Avoid swimming and soaking for 2-3 weeks.",
+        "Before session have a good meal, get shower, change your cloth. If you getting late - write a message, if you going to cancel - do it beforehand, let respect each other.",
       order: 2,
     },
     {
-      question: "How do I book an appointment?",
+      question: "CAN I GET A TATTOO IF I AM UNDER 18?",
       answer:
-        "You can book a consultation through our website's booking form, or contact us directly via email or phone. We'll discuss your ideas and schedule your session.",
+        "If you are under 18 then you gonna need your parents permission, your mom or dad need to say me personally, that they do not mind you having a tattoo.",
       order: 3,
     },
     {
-      question: "What should I do before my appointment?",
-      answer:
-        "Get a good night's sleep, eat a meal before your appointment, stay hydrated, and avoid alcohol for 24 hours. Wear comfortable clothing that provides easy access to the tattoo area.",
+      question: "DO YOU PROVIDE ANT ANESTHESIA WHILE TATTOOING?",
+      answer: "In some cases I do, but you'll need to preorder it.",
       order: 4,
+    },
+    {
+      question: "HOW LONG CAN BE A ONE TATTOO SESSION?",
+      answer:
+        "Up to 6 hours, in this case we gonna have few brakes. Bring your snacks!))",
+      order: 5,
+    },
+    {
+      question: "DO YOU REMOVE TATTOO?",
+      answer: "Long story - short - I don't.",
+      order: 6,
     },
   ]
 
