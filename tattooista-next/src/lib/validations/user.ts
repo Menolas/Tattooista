@@ -10,7 +10,6 @@ export const createUserSchema = z.object({
     .string()
     .min(2, "Display name must be at least 2 characters")
     .max(50, "Display name is too long"),
-  roles: z.array(z.enum(["USER", "ADMIN", "SUPERADMIN"])).min(1, "At least one role is required"),
 })
 
 export const updateUserSchema = z.object({
@@ -26,7 +25,7 @@ export const updateUserSchema = z.object({
     .min(2, "Display name must be at least 2 characters")
     .max(50, "Display name is too long")
     .optional(),
-  roles: z.array(z.enum(["USER", "ADMIN", "SUPERADMIN"])).min(1, "At least one role is required").optional(),
+  platformRole: z.enum(["USER", "PLATFORM_ADMIN"]).optional(),
   isActivated: z.boolean().optional(),
   avatar: z.string().url().optional().or(z.literal("")),
 })

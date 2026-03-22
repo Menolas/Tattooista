@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { put } from "@vercel/blob"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 
 export async function POST(request: NextRequest) {
   const session = await auth()
@@ -16,10 +17,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "No files provided" }, { status: 400 })
   }
 
-  // Admin-only contexts
+  // Admin-only contexts require studio membership
   const adminContexts = ["gallery", "wallpaper", "client"]
-  if (context && adminContexts.includes(context) && !isAdmin(session.user.roles)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  if (context && adminContexts.includes(context)) {
+    try {
+      const studio = await requireTenantContext()
+      await requireStudioRole(session.user.id, studio.id)
+    } catch {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
   }
 
   // Review context requires activated user

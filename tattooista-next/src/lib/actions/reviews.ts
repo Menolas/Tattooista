@@ -1,7 +1,8 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isSuperAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { reviewSchema, updateReviewSchema } from "@/lib/validations/review"
 
@@ -78,6 +79,8 @@ export async function createReview(formData: FormData) {
     return { error: "Please verify your email before submitting a review" }
   }
 
+  const studio = await requireTenantContext()
+
   const galleryJson = formData.get("gallery")
   let gallery: string[] = []
 
@@ -104,11 +107,13 @@ export async function createReview(formData: FormData) {
 
   const review = await prisma.review.create({
     data: {
+      studioId: studio.id,
       rate: data.rate,
       content: data.content,
       userId: session.user.id,
       gallery: data.gallery && data.gallery.length > 0 ? {
         create: data.gallery.map((fileName) => ({
+          studioId: studio.id,
           fileName,
         })),
       } : undefined,
@@ -188,6 +193,8 @@ export async function addReviewGalleryItem(reviewId: string, fileName: string) {
     return { error: "Unauthorized" }
   }
 
+  const studio = await requireTenantContext()
+
   const review = await prisma.review.findUnique({
     where: { id: reviewId },
   })
@@ -202,6 +209,7 @@ export async function addReviewGalleryItem(reviewId: string, fileName: string) {
 
   await prisma.reviewGalleryItem.create({
     data: {
+      studioId: studio.id,
       fileName,
       reviewId,
     },
@@ -242,9 +250,9 @@ export async function removeReviewGalleryItem(id: string) {
 
 export async function archiveReview(id: string) {
   const session = await auth()
-  if (!session?.user || !isSuperAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.review.update({
     where: { id },
@@ -258,9 +266,9 @@ export async function archiveReview(id: string) {
 
 export async function restoreReview(id: string) {
   const session = await auth()
-  if (!session?.user || !isSuperAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.review.update({
     where: { id },
@@ -274,9 +282,9 @@ export async function restoreReview(id: string) {
 
 export async function deleteReview(id: string) {
   const session = await auth()
-  if (!session?.user || !isSuperAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.review.delete({
     where: { id },

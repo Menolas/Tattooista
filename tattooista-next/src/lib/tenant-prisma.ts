@@ -50,7 +50,7 @@ export function tenantPrisma(studioId: string) {
         },
         async create({ model, args, query }) {
           if (isTenantScopedModel(toModelName(model))) {
-            args.data = { ...args.data, studioId }
+            args.data = { ...args.data, studioId } as any
           }
           return query(args)
         },

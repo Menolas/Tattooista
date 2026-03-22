@@ -79,7 +79,7 @@ export function AdminSidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
 
-  const isSuperAdmin = session?.user?.roles?.includes("SUPERADMIN")
+  const isSuperAdmin = session?.user?.platformRole === "PLATFORM_ADMIN"
 
   return (
     <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0">

@@ -160,8 +160,8 @@ export default function ProfilePage() {
             <p>{session.user.email}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Roles</p>
-            <p>{session.user.roles.join(", ")}</p>
+            <p className="text-sm font-medium text-muted-foreground">Role</p>
+            <p>{session.user.platformRole}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">

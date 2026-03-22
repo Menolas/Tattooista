@@ -32,7 +32,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { MoreHorizontal, Edit, Trash2, Plus } from "lucide-react"
 import { deleteUser } from "@/lib/actions/users"
 import { UserForm } from "./user-form"
-import type { Role } from "@/types"
+import type { PlatformRole } from "@/types"
 import { formatDistanceToNow } from "date-fns"
 import { userAvatarUrl } from "@/lib/image-utils"
 
@@ -42,7 +42,7 @@ interface User {
   displayName: string
   avatar: string | null
   isActivated: boolean
-  roles: Role[]
+  platformRole: PlatformRole
   createdAt: Date
 }
 
@@ -73,10 +73,9 @@ export function UsersManager({ users, currentUserId }: UsersManagerProps) {
     }
   }
 
-  const roleColors: Record<Role, string> = {
+  const roleColors: Record<PlatformRole, string> = {
     USER: "bg-gray-100 text-gray-800",
-    ADMIN: "bg-blue-100 text-blue-800",
-    SUPERADMIN: "bg-purple-100 text-purple-800",
+    PLATFORM_ADMIN: "bg-purple-100 text-purple-800",
   }
 
   return (
@@ -112,7 +111,7 @@ export function UsersManager({ users, currentUserId }: UsersManagerProps) {
               <TableRow>
                 <TableHead>User</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Roles</TableHead>
+                <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Joined</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
@@ -137,17 +136,12 @@ export function UsersManager({ users, currentUserId }: UsersManagerProps) {
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    <div className="flex gap-1 flex-wrap">
-                      {user.roles.map((role) => (
-                        <Badge
-                          key={role}
-                          className={roleColors[role]}
-                          variant="secondary"
-                        >
-                          {role}
-                        </Badge>
-                      ))}
-                    </div>
+                    <Badge
+                      className={roleColors[user.platformRole]}
+                      variant="secondary"
+                    >
+                      {user.platformRole}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge

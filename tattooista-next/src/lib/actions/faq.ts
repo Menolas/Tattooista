@@ -1,7 +1,8 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { faqSchema, updateFaqSchema } from "@/lib/validations/faq"
 
@@ -27,9 +28,9 @@ export async function getFaqItemById(id: string) {
 
 export async function createFaqItem(formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
     question: formData.get("question"),
@@ -46,6 +47,7 @@ export async function createFaqItem(formData: FormData) {
 
   const item = await prisma.faqItem.create({
     data: {
+      studioId: studio.id,
       question: data.question,
       answer: data.answer,
       order: data.order ?? 0,
@@ -59,9 +61,9 @@ export async function createFaqItem(formData: FormData) {
 
 export async function updateFaqItem(id: string, formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
     question: formData.get("question") || undefined,
@@ -92,9 +94,9 @@ export async function updateFaqItem(id: string, formData: FormData) {
 
 export async function deleteFaqItem(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.faqItem.delete({
     where: { id },
@@ -107,9 +109,9 @@ export async function deleteFaqItem(id: string) {
 
 export async function reorderFaqItems(orderedIds: string[]) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await Promise.all(
     orderedIds.map((id, index) =>

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic"
 
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import { requireTenantContext } from "@/lib/tenant"
 import { BookingForm } from "@/components/forms/booking-form"
 import { PortfolioSlider } from "@/components/shared/portfolio-slider"
 import { ReadMore } from "@/components/shared/read-more"
@@ -10,20 +11,24 @@ import { Instagram, Facebook } from "lucide-react"
 import { pageWallpaperUrl, serviceWallpaperUrl } from "@/lib/image-utils"
 
 async function getHomePageData() {
+  const studio = await requireTenantContext()
+
   const [services, faqItems, aboutPage, tattooStyles] = await Promise.all([
     prisma.service.findMany({
+      where: { studioId: studio.id },
       orderBy: { order: "asc" },
       take: 6,
     }),
     prisma.faqItem.findMany({
+      where: { studioId: studio.id },
       orderBy: { order: "asc" },
       take: 5,
     }),
     prisma.page.findUnique({
-      where: { name: "about" },
+      where: { studioId_name: { studioId: studio.id, name: "about" } },
     }),
     prisma.tattooStyle.findMany({
-      where: { isArchived: false, wallPaper: { not: null } },
+      where: { studioId: studio.id, isArchived: false, wallPaper: { not: null } },
       orderBy: { createdAt: "asc" },
     }),
   ])

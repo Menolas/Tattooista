@@ -20,10 +20,8 @@ import {
 import { createUserSchema, updateUserSchema } from "@/lib/validations/user"
 import { createUser, updateUser } from "@/lib/actions/users"
 import { LoadingSpinner } from "@/components/shared/loading-spinner"
-import type { Role } from "@/types"
+import type { PlatformRole } from "@/types"
 import { z } from "zod"
-
-const roles: Role[] = ["USER", "ADMIN", "SUPERADMIN"]
 
 interface UserFormProps {
   user?: {
@@ -32,7 +30,7 @@ interface UserFormProps {
     displayName: string
     avatar: string | null
     isActivated: boolean
-    roles: Role[]
+    platformRole: PlatformRole
   }
   onSuccess?: () => void
 }
@@ -50,7 +48,6 @@ export function UserForm({ user, onSuccess }: UserFormProps) {
       email: user?.email || "",
       password: "",
       displayName: user?.displayName || "",
-      roles: user?.roles || ["USER"],
       ...(isEditing && {
         isActivated: user?.isActivated,
         avatar: user?.avatar || "",
@@ -65,7 +62,6 @@ export function UserForm({ user, onSuccess }: UserFormProps) {
       formData.append("email", data.email || "")
       if (data.password) formData.append("password", data.password)
       formData.append("displayName", data.displayName || "")
-      formData.append("roles", JSON.stringify(data.roles))
 
       if (isEditing) {
         if ("isActivated" in data && data.isActivated !== undefined) {
@@ -138,46 +134,6 @@ export function UserForm({ user, onSuccess }: UserFormProps) {
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="roles"
-          render={() => (
-            <FormItem>
-              <FormLabel>Roles *</FormLabel>
-              <div className="space-y-2">
-                {roles.map((role) => (
-                  <FormField
-                    key={role}
-                    control={form.control}
-                    name="roles"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(role)}
-                            onCheckedChange={(checked) => {
-                              const current = field.value || []
-                              if (checked) {
-                                field.onChange([...current, role])
-                              } else {
-                                field.onChange(
-                                  current.filter((r: Role) => r !== role)
-                                )
-                              }
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal">{role}</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
               <FormMessage />
             </FormItem>
           )}
