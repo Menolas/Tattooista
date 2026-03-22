@@ -7,6 +7,7 @@ import { PortfolioSlider } from "@/components/shared/portfolio-slider"
 import { ReadMore } from "@/components/shared/read-more"
 import { FaqItem } from "@/components/shared/faq-item"
 import { Instagram, Facebook } from "lucide-react"
+import { pageWallpaperUrl, serviceWallpaperUrl } from "@/lib/image-utils"
 
 async function getHomePageData() {
   const [services, faqItems, aboutPage, tattooStyles] = await Promise.all([
@@ -91,7 +92,7 @@ export default async function HomePage() {
                 className="relative mx-auto w-[calc(100%-44px)] md:w-[calc(100%-84px)] h-full bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-300 -translate-y-[22px] md:-translate-y-[42px] z-10"
                 style={{
                   backgroundImage: aboutPage.wallPaper
-                    ? `url(/pages/${aboutPage.id}/${aboutPage.wallPaper})`
+                    ? `url(${pageWallpaperUrl(aboutPage.id, aboutPage.wallPaper)})`
                     : "url(/images/body-bg.jpg)",
                 }}
               />
@@ -161,7 +162,7 @@ export default async function HomePage() {
                     className="h-[300px] max-w-full bg-cover bg-center bg-[url('/images/service.png')] grayscale transition-all duration-300 hover:grayscale-0 mb-[42px]"
                     style={{
                       backgroundImage: service.wallPaper
-                        ? `url(/serviceWallpapers/${service.id}/${service.wallPaper})`
+                        ? `url(${serviceWallpaperUrl(service.id, service.wallPaper)})`
                         : undefined,
                     }}
                   />

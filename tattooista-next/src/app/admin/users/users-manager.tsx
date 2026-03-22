@@ -34,6 +34,7 @@ import { deleteUser } from "@/lib/actions/users"
 import { UserForm } from "./user-form"
 import type { Role } from "@/types"
 import { formatDistanceToNow } from "date-fns"
+import { userAvatarUrl } from "@/lib/image-utils"
 
 interface User {
   id: string
@@ -124,7 +125,7 @@ export function UsersManager({ users, currentUserId }: UsersManagerProps) {
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarImage
-                          src={user.avatar ? `/users/${user.id}/avatar/${user.avatar}` : undefined}
+                          src={user.avatar ? userAvatarUrl(user.id, user.avatar) : undefined}
                           alt={user.displayName}
                         />
                         <AvatarFallback>

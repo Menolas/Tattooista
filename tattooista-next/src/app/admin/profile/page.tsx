@@ -21,6 +21,7 @@ import {
 import { updateProfileSchema, type UpdateProfileInput } from "@/lib/validations/auth"
 import { updateProfile } from "@/lib/actions/users"
 import { LoadingSpinner, PageLoader } from "@/components/shared/loading-spinner"
+import { userAvatarUrl } from "@/lib/image-utils"
 
 export default function ProfilePage() {
   const { data: session, update } = useSession()
@@ -88,7 +89,7 @@ export default function ProfilePage() {
           <div className="flex items-center gap-6 mb-6">
             <Avatar className="h-20 w-20">
               <AvatarImage
-                src={session.user.avatar ? `/users/${session.user.id}/avatar/${session.user.avatar}` : undefined}
+                src={session.user.avatar ? userAvatarUrl(session.user.id, session.user.avatar) : undefined}
                 alt={session.user.displayName}
               />
               <AvatarFallback className="text-2xl">

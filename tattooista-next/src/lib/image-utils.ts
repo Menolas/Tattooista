@@ -1,32 +1,49 @@
 /**
- * Image URL helpers matching the original MERN app's file storage structure.
- * Files are served from /public/ which maps to Server/uploads/ via symlinks.
+ * Image URL helpers.
+ * If the stored value is already a full URL (from Uploadthing), return it directly.
+ * Otherwise, construct a local path for dev compatibility.
  */
 
+function isExternalUrl(value: string): boolean {
+  return value.startsWith("http://") || value.startsWith("https://")
+}
+
 export function galleryImageUrl(fileName: string): string {
+  if (isExternalUrl(fileName)) return fileName
   return `/gallery/${fileName}`
 }
 
 export function userAvatarUrl(userId: string, avatar: string): string {
+  if (isExternalUrl(avatar)) return avatar
   return `/users/${userId}/avatar/${avatar}`
 }
 
 export function clientAvatarUrl(clientId: string, avatar: string): string {
+  if (isExternalUrl(avatar)) return avatar
   return `/clients/${clientId}/avatar/${avatar}`
 }
 
 export function styleWallpaperUrl(styleId: string, wallPaper: string): string {
+  if (isExternalUrl(wallPaper)) return wallPaper
   return `/styleWallpapers/${styleId}/${wallPaper}`
 }
 
 export function serviceWallpaperUrl(serviceId: string, wallPaper: string): string {
+  if (isExternalUrl(wallPaper)) return wallPaper
   return `/serviceWallpapers/${serviceId}/${wallPaper}`
 }
 
 export function pageWallpaperUrl(pageId: string, wallPaper: string): string {
+  if (isExternalUrl(wallPaper)) return wallPaper
   return `/pageWallpapers/${pageId}/${wallPaper}`
 }
 
 export function reviewImageUrl(reviewId: string, fileName: string): string {
+  if (isExternalUrl(fileName)) return fileName
   return `/reviews/${reviewId}/${fileName}`
+}
+
+export function clientGalleryImageUrl(clientId: string, fileName: string): string {
+  if (isExternalUrl(fileName)) return fileName
+  return `/clients/${clientId}/${fileName}`
 }

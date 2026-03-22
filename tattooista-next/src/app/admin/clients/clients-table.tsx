@@ -46,6 +46,7 @@ import {
 } from "@/lib/actions/clients"
 import type { Client, Contact, ClientGalleryItem } from "@prisma/client"
 import { formatDistanceToNow } from "date-fns"
+import { clientAvatarUrl } from "@/lib/image-utils"
 
 type ClientWithRelations = Client & {
   contacts: Contact[]
@@ -144,7 +145,7 @@ export function ClientsTable({ clients }: ClientsTableProps) {
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarImage
-                          src={client.avatar ? `/clients/${client.id}/avatar/${client.avatar}` : undefined}
+                          src={client.avatar ? clientAvatarUrl(client.id, client.avatar) : undefined}
                           alt={client.fullName}
                         />
                         <AvatarFallback>
