@@ -1,7 +1,8 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { serviceSchema, updateServiceSchema } from "@/lib/validations/service"
 
@@ -27,9 +28,9 @@ export async function getServiceById(id: string) {
 
 export async function createService(formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
     title: formData.get("title"),
@@ -47,6 +48,7 @@ export async function createService(formData: FormData) {
 
   const service = await prisma.service.create({
     data: {
+      studioId: studio.id,
       title: data.title,
       wallPaper: data.wallPaper || null,
       conditions: data.conditions || null,
@@ -61,9 +63,9 @@ export async function createService(formData: FormData) {
 
 export async function updateService(id: string, formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
     title: formData.get("title") || undefined,
@@ -96,9 +98,9 @@ export async function updateService(id: string, formData: FormData) {
 
 export async function deleteService(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.service.delete({
     where: { id },
@@ -111,9 +113,9 @@ export async function deleteService(id: string) {
 
 export async function reorderServices(orderedIds: string[]) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await Promise.all(
     orderedIds.map((id, index) =>

@@ -1,15 +1,16 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { clientSchema, updateClientSchema } from "@/lib/validations/client"
 
 export async function getClients(includeArchived = false) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    throw new Error("Unauthorized")
-  }
+  if (!session?.user) throw new Error("Unauthorized")
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const clients = await prisma.client.findMany({
     where: includeArchived ? {} : { isArchived: false },
@@ -28,9 +29,9 @@ export async function getClients(includeArchived = false) {
 
 export async function getClientById(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    throw new Error("Unauthorized")
-  }
+  if (!session?.user) throw new Error("Unauthorized")
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const client = await prisma.client.findUnique({
     where: { id },
@@ -49,9 +50,9 @@ export async function getClientById(id: string) {
 
 export async function createClient(formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const contactsJson = formData.get("contacts")
   let contacts: Array<{ type: string; value: string }> = []
@@ -79,10 +80,12 @@ export async function createClient(formData: FormData) {
 
   const client = await prisma.client.create({
     data: {
+      studioId: studio.id,
       fullName: data.fullName,
       avatar: data.avatar || null,
       contacts: data.contacts ? {
         create: data.contacts.map((c) => ({
+          studioId: studio.id,
           type: c.type,
           value: c.value,
         })),
@@ -100,9 +103,9 @@ export async function createClient(formData: FormData) {
 
 export async function updateClient(id: string, formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const contactsJson = formData.get("contacts")
   let contacts: Array<{ type: string; value: string }> | undefined
@@ -143,6 +146,7 @@ export async function updateClient(id: string, formData: FormData) {
       ...(contacts && {
         contacts: {
           create: contacts.map((c) => ({
+            studioId: studio.id,
             type: c.type,
             value: c.value,
           })),
@@ -162,9 +166,9 @@ export async function updateClient(id: string, formData: FormData) {
 
 export async function toggleClientFavourite(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const client = await prisma.client.findUnique({
     where: { id },
@@ -185,9 +189,9 @@ export async function toggleClientFavourite(id: string) {
 
 export async function archiveClient(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.client.update({
     where: { id },
@@ -200,9 +204,9 @@ export async function archiveClient(id: string) {
 
 export async function restoreClient(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.client.update({
     where: { id },
@@ -215,9 +219,9 @@ export async function restoreClient(id: string) {
 
 export async function deleteClient(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.client.delete({
     where: { id },
@@ -229,12 +233,13 @@ export async function deleteClient(id: string) {
 
 export async function addClientGalleryItem(clientId: string, fileName: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.clientGalleryItem.create({
     data: {
+      studioId: studio.id,
       fileName,
       clientId,
     },
@@ -246,9 +251,9 @@ export async function addClientGalleryItem(clientId: string, fileName: string) {
 
 export async function removeClientGalleryItem(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const item = await prisma.clientGalleryItem.findUnique({
     where: { id },

@@ -1,13 +1,16 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { bookingSchema, updateBookingStatusSchema } from "@/lib/validations/booking"
 import { sendBookingNotification } from "@/lib/email"
 import type { BookingStatus } from "@prisma/client"
 
 export async function createBooking(formData: FormData) {
+  const studio = await requireTenantContext()
+
   const rawData = {
     fullName: formData.get("fullName"),
     email: formData.get("email") || undefined,
@@ -25,6 +28,7 @@ export async function createBooking(formData: FormData) {
 
   const booking = await prisma.booking.create({
     data: {
+      studioId: studio.id,
       fullName: data.fullName,
       email: data.email || null,
       phone: data.phone || null,
@@ -41,9 +45,9 @@ export async function createBooking(formData: FormData) {
 
 export async function getBookings(includeArchived = false) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    throw new Error("Unauthorized")
-  }
+  if (!session?.user) throw new Error("Unauthorized")
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const bookings = await prisma.booking.findMany({
     where: includeArchived ? {} : { isArchived: false },
@@ -55,9 +59,9 @@ export async function getBookings(includeArchived = false) {
 
 export async function getBookingById(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    throw new Error("Unauthorized")
-  }
+  if (!session?.user) throw new Error("Unauthorized")
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const booking = await prisma.booking.findUnique({
     where: { id },
@@ -72,9 +76,9 @@ export async function getBookingById(id: string) {
 
 export async function updateBookingStatus(id: string, status: BookingStatus) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const validationResult = updateBookingStatusSchema.safeParse({ status })
   if (!validationResult.success) {
@@ -92,9 +96,9 @@ export async function updateBookingStatus(id: string, status: BookingStatus) {
 
 export async function archiveBooking(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.booking.update({
     where: { id },
@@ -107,9 +111,9 @@ export async function archiveBooking(id: string) {
 
 export async function restoreBooking(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.booking.update({
     where: { id },
@@ -122,9 +126,9 @@ export async function restoreBooking(id: string) {
 
 export async function deleteBooking(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.booking.delete({
     where: { id },
@@ -136,9 +140,9 @@ export async function deleteBooking(id: string) {
 
 export async function convertBookingToClient(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const booking = await prisma.booking.findUnique({
     where: { id },
@@ -151,17 +155,18 @@ export async function convertBookingToClient(id: string) {
   // Create client with contacts from booking
   const contacts = []
   if (booking.email) {
-    contacts.push({ type: "email", value: booking.email })
+    contacts.push({ type: "email", value: booking.email, studioId: studio.id })
   }
   if (booking.phone) {
-    contacts.push({ type: "phone", value: booking.phone })
+    contacts.push({ type: "phone", value: booking.phone, studioId: studio.id })
   }
   if (booking.instagram) {
-    contacts.push({ type: "instagram", value: booking.instagram })
+    contacts.push({ type: "instagram", value: booking.instagram, studioId: studio.id })
   }
 
   const client = await prisma.client.create({
     data: {
+      studioId: studio.id,
       fullName: booking.fullName,
       contacts: {
         create: contacts,

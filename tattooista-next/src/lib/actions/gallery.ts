@@ -1,7 +1,8 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 
 export async function getGalleryItems(includeArchived = false) {
@@ -52,15 +53,17 @@ export async function getGalleryItemsByStyle(styleId: string) {
 
 export async function createGalleryItem(fileName: string, styleIds: string[] = []) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const item = await prisma.galleryItem.create({
     data: {
+      studioId: studio.id,
       fileName,
       styles: styleIds.length > 0 ? {
         create: styleIds.map((styleId) => ({
+          studioId: studio.id,
           tattooStyleId: styleId,
         })),
       } : undefined,
@@ -83,18 +86,20 @@ export async function createManyGalleryItems(
   items: Array<{ fileName: string; styleIds?: string[] }>
 ) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const createdItems = []
 
   for (const item of items) {
     const created = await prisma.galleryItem.create({
       data: {
+        studioId: studio.id,
         fileName: item.fileName,
         styles: item.styleIds && item.styleIds.length > 0 ? {
           create: item.styleIds.map((styleId) => ({
+            studioId: studio.id,
             tattooStyleId: styleId,
           })),
         } : undefined,
@@ -110,9 +115,9 @@ export async function createManyGalleryItems(
 
 export async function updateGalleryItemStyles(id: string, styleIds: string[]) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   // Delete existing style associations
   await prisma.galleryItemStyle.deleteMany({
@@ -123,6 +128,7 @@ export async function updateGalleryItemStyles(id: string, styleIds: string[]) {
   if (styleIds.length > 0) {
     await prisma.galleryItemStyle.createMany({
       data: styleIds.map((styleId) => ({
+        studioId: studio.id,
         galleryItemId: id,
         tattooStyleId: styleId,
       })),
@@ -136,9 +142,9 @@ export async function updateGalleryItemStyles(id: string, styleIds: string[]) {
 
 export async function archiveGalleryItem(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.galleryItem.update({
     where: { id },
@@ -152,9 +158,9 @@ export async function archiveGalleryItem(id: string) {
 
 export async function restoreGalleryItem(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.galleryItem.update({
     where: { id },
@@ -168,9 +174,9 @@ export async function restoreGalleryItem(id: string) {
 
 export async function deleteGalleryItem(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.galleryItem.delete({
     where: { id },

@@ -1,12 +1,50 @@
 import NextAuth from "next-auth"
 import authConfig from "@/lib/auth.config"
 import { NextResponse } from "next/server"
+import { extractSubdomain, STUDIO_ID_HEADER } from "@/lib/tenant"
+import { prisma } from "@/lib/prisma"
 
 const { auth } = NextAuth(authConfig)
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl, auth: session } = req
   const isLoggedIn = !!session
+
+  // ---- SECURITY: Strip any client-sent x-studio-id header ----
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.delete(STUDIO_ID_HEADER)
+
+  // ---- TENANT RESOLUTION ----
+  const hostname = req.headers.get("host") || "localhost:3000"
+
+  // Dev mode: support ?studio=slug query param
+  let slug: string | null = null
+  if (process.env.NODE_ENV === "development") {
+    slug = nextUrl.searchParams.get("studio") || extractSubdomain(hostname)
+  } else {
+    slug = extractSubdomain(hostname)
+  }
+
+  // If we have a slug, resolve the studio
+  if (slug) {
+    const studio = await prisma.studio.findUnique({
+      where: { slug },
+      select: { id: true, isActive: true },
+    })
+
+    if (!studio) {
+      return NextResponse.rewrite(new URL("/not-found", nextUrl))
+    }
+
+    if (!studio.isActive) {
+      return NextResponse.rewrite(new URL("/studio-suspended", nextUrl))
+    }
+
+    // Inject studioId for downstream use
+    requestHeaders.set(STUDIO_ID_HEADER, studio.id)
+  }
+
+  // ---- ROUTE PROTECTION ----
   const isAdminRoute = nextUrl.pathname.startsWith("/admin")
   const isAuthRoute =
     nextUrl.pathname.startsWith("/login") ||
@@ -22,7 +60,7 @@ export default auth((req) => {
 
   // Allow public routes
   if (isPublicRoute) {
-    return NextResponse.next()
+    return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
   // Redirect logged-in users away from auth pages
@@ -30,18 +68,11 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/", nextUrl))
   }
 
-  // Protect admin routes
+  // Protect admin routes — require login
+  // (full role check happens in the admin layout)
   if (isAdminRoute) {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/login", nextUrl))
-    }
-
-    const roles = session.user?.roles || []
-    const isAdmin =
-      roles.includes("ADMIN") || roles.includes("SUPERADMIN")
-
-    if (!isAdmin) {
-      return NextResponse.redirect(new URL("/", nextUrl))
     }
   }
 
@@ -50,8 +81,12 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/login", nextUrl))
   }
 
-  return NextResponse.next()
+  return NextResponse.next({ request: { headers: requestHeaders } })
 })
+
+// Force Node.js runtime — required because Prisma uses the pg driver
+// (TCP sockets), which is incompatible with the default Edge Runtime.
+export const runtime = "nodejs"
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],

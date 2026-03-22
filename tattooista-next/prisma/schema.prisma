@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,21 +6,90 @@ datasource db {
   provider = "postgresql"
 }
 
+// ============ ENUMS ============
+
+enum PlatformRole {
+  USER
+  PLATFORM_ADMIN
+}
+
+enum StudioRole {
+  OWNER
+  STAFF
+}
+
+enum Plan {
+  FREE
+  PRO
+}
+
+enum BookingStatus {
+  PENDING
+  CONTACTED
+  COMPLETED
+  CANCELLED
+}
+
+// ============ TENANT ============
+
+model Studio {
+  id                   String   @id @default(cuid())
+  name                 String
+  slug                 String   @unique
+  logo                 String?
+  customDomain         String?  @unique
+  plan                 Plan     @default(FREE)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  isActive             Boolean  @default(true)
+
+  memberships StudioMembership[]
+  clients     Client[]
+  contacts    Contact[]
+  clientGalleryItems ClientGalleryItem[]
+  bookings    Booking[]
+  reviews     Review[]
+  reviewGalleryItems ReviewGalleryItem[]
+  galleryItems GalleryItem[]
+  galleryItemStyles GalleryItemStyle[]
+  tattooStyles TattooStyle[]
+  services    Service[]
+  pages       Page[]
+  faqItems    FaqItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudioMembership {
+  id       String     @id @default(cuid())
+  userId   String
+  studioId String
+  role     StudioRole
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, studioId])
+  @@index([studioId])
+}
+
 // ============ AUTH ============
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String       @id @default(cuid())
+  email         String       @unique
   emailVerified DateTime?
   password      String
   displayName   String
   avatar        String?
-  isActivated   Boolean   @default(false)
+  isActivated   Boolean      @default(false)
+  platformRole  PlatformRole @default(USER)
 
-  roles    UserRole[]
-  reviews  Review[]
-  accounts Account[]
-  sessions Session[]
+  memberships StudioMembership[]
+  reviews     Review[]
+  accounts    Account[]
+  sessions    Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,55 +139,56 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
-model Role {
-  id    String     @id @default(cuid())
-  value String     @unique // USER, ADMIN, SUPERADMIN
-  users UserRole[]
-}
-
-model UserRole {
-  id     String @id @default(cuid())
-  userId String
-  roleId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, roleId])
-}
-
 // ============ BUSINESS ============
 
 model Client {
   id          String  @id @default(cuid())
+  studioId    String
   fullName    String
   avatar      String?
   isFavourite Boolean @default(false)
   isArchived  Boolean @default(false)
 
+  studio   Studio              @relation(fields: [studioId], references: [id], onDelete: Cascade)
   contacts Contact[]
   gallery  ClientGalleryItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([studioId])
+  @@index([studioId, createdAt])
+  @@index([studioId, isArchived])
 }
 
 model Contact {
   id       String @id @default(cuid())
-  type     String // instagram, phone, email, whatsapp, messenger
+  studioId String
+  type     String
   value    String
   clientId String
-  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([studioId])
 }
 
 model ClientGalleryItem {
   id       String @id @default(cuid())
+  studioId String
   fileName String
   clientId String
-  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([studioId])
 }
 
 model Booking {
   id         String        @id @default(cuid())
+  studioId   String
   fullName   String
   email      String?
   phone      String?
@@ -130,107 +197,148 @@ model Booking {
   status     BookingStatus @default(PENDING)
   isArchived Boolean       @default(false)
 
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-enum BookingStatus {
-  PENDING
-  CONTACTED
-  COMPLETED
-  CANCELLED
+  @@index([studioId])
+  @@index([studioId, createdAt])
+  @@index([studioId, isArchived])
 }
 
 model Review {
   id         String  @id @default(cuid())
-  rate       Int // 1-5
+  studioId   String
+  rate       Int
   content    String  @db.Text
   isArchived Boolean @default(false)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
 
   gallery ReviewGalleryItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([studioId])
+  @@index([studioId, createdAt])
+  @@index([studioId, isArchived])
 }
 
 model ReviewGalleryItem {
   id       String @id @default(cuid())
+  studioId String
   fileName String
   reviewId String
-  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([studioId])
 }
 
 // ============ PORTFOLIO ============
 
 model TattooStyle {
   id          String  @id @default(cuid())
-  value       String  @unique
+  studioId    String
+  value       String
   description String? @db.Text
   wallPaper   String?
   nonStyle    Boolean @default(false)
   isArchived  Boolean @default(false)
 
+  studio       Studio             @relation(fields: [studioId], references: [id], onDelete: Cascade)
   galleryItems GalleryItemStyle[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([studioId, value])
+  @@index([studioId])
+  @@index([studioId, isArchived])
 }
 
 model GalleryItem {
   id         String  @id @default(cuid())
+  studioId   String
   fileName   String
   isArchived Boolean @default(false)
 
+  studio Studio             @relation(fields: [studioId], references: [id], onDelete: Cascade)
   styles GalleryItemStyle[]
 
   createdAt DateTime @default(now())
+
+  @@index([studioId])
+  @@index([studioId, createdAt])
+  @@index([studioId, isArchived])
 }
 
 model GalleryItemStyle {
   id            String @id @default(cuid())
+  studioId      String
   galleryItemId String
   tattooStyleId String
 
+  studio      Studio      @relation(fields: [studioId], references: [id], onDelete: Cascade)
   galleryItem GalleryItem @relation(fields: [galleryItemId], references: [id], onDelete: Cascade)
   tattooStyle TattooStyle @relation(fields: [tattooStyleId], references: [id], onDelete: Cascade)
 
   @@unique([galleryItemId, tattooStyleId])
+  @@index([studioId])
 }
 
 // ============ CMS ============
 
 model Service {
   id         String  @id @default(cuid())
+  studioId   String
   title      String
   wallPaper  String?
   conditions String? @db.Text
   order      Int     @default(0)
 
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([studioId])
 }
 
 model Page {
   id        String  @id @default(cuid())
-  name      String  @unique // about, contacts, etc.
+  studioId  String
+  name      String
   isActive  Boolean @default(true)
   title     String?
   wallPaper String?
   content   String? @db.Text
 
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([studioId, name])
+  @@index([studioId])
 }
 
 model FaqItem {
   id       String @id @default(cuid())
+  studioId String
   question String
   answer   String @db.Text
   order    Int    @default(0)
 
+  studio Studio @relation(fields: [studioId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([studioId])
 }

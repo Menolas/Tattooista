@@ -39,9 +39,7 @@ export function Header() {
 
   const isPortfolio = pathname.startsWith("/portfolio")
 
-  const isAdmin =
-    session?.user?.roles?.includes("ADMIN") ||
-    session?.user?.roles?.includes("SUPERADMIN")
+  const isAdmin = !!session?.user
 
   const handleLogout = async () => {
     await logout()

@@ -1,13 +1,15 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { updatePageSchema } from "@/lib/validations/page"
 
 export async function getPageByName(name: string) {
+  const studio = await requireTenantContext()
   const page = await prisma.page.findUnique({
-    where: { name },
+    where: { studioId_name: { studioId: studio.id, name } },
   })
 
   return page
@@ -23,9 +25,9 @@ export async function getPages() {
 
 export async function updatePage(id: string, formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
     name: formData.get("name") || undefined,
@@ -75,9 +77,9 @@ export async function updatePage(id: string, formData: FormData) {
 
 export async function createPage(formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const name = formData.get("name") as string
 
@@ -87,7 +89,7 @@ export async function createPage(formData: FormData) {
 
   // Check if page exists
   const existing = await prisma.page.findUnique({
-    where: { name },
+    where: { studioId_name: { studioId: studio.id, name } },
   })
 
   if (existing) {
@@ -96,6 +98,7 @@ export async function createPage(formData: FormData) {
 
   const page = await prisma.page.create({
     data: {
+      studioId: studio.id,
       name,
       title: (formData.get("title") as string) || null,
       wallPaper: (formData.get("wallPaper") as string) || null,
@@ -110,9 +113,9 @@ export async function createPage(formData: FormData) {
 
 export async function deletePage(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.page.delete({
     where: { id },

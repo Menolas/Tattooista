@@ -1,27 +1,19 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isSuperAdmin } from "@/lib/auth"
+import { auth, isPlatformAdmin } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
 import { createUserSchema, updateUserSchema } from "@/lib/validations/user"
 import { updateProfileSchema } from "@/lib/validations/auth"
 import bcrypt from "bcryptjs"
-import type { Role } from "@/types"
 
 export async function getUsers() {
   const session = await auth()
-  if (!session?.user || !isSuperAdmin(session.user.roles)) {
+  if (!session?.user || !isPlatformAdmin(session.user.platformRole)) {
     throw new Error("Unauthorized")
   }
 
   const users = await prisma.user.findMany({
-    include: {
-      roles: {
-        include: {
-          role: true,
-        },
-      },
-    },
     orderBy: { createdAt: "desc" },
   })
 
@@ -31,7 +23,7 @@ export async function getUsers() {
     displayName: user.displayName,
     avatar: user.avatar,
     isActivated: user.isActivated,
-    roles: user.roles.map((ur) => ur.role.value as Role),
+    platformRole: user.platformRole,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   }))
@@ -43,20 +35,13 @@ export async function getUserById(id: string) {
     throw new Error("Unauthorized")
   }
 
-  // Users can view their own profile, superadmins can view any profile
-  if (session.user.id !== id && !isSuperAdmin(session.user.roles)) {
+  // Users can view their own profile, platform admins can view any profile
+  if (session.user.id !== id && !isPlatformAdmin(session.user.platformRole)) {
     throw new Error("Unauthorized")
   }
 
   const user = await prisma.user.findUnique({
     where: { id },
-    include: {
-      roles: {
-        include: {
-          role: true,
-        },
-      },
-    },
   })
 
   if (!user) {
@@ -69,7 +54,7 @@ export async function getUserById(id: string) {
     displayName: user.displayName,
     avatar: user.avatar,
     isActivated: user.isActivated,
-    roles: user.roles.map((ur) => ur.role.value as Role),
+    platformRole: user.platformRole,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   }
@@ -77,26 +62,14 @@ export async function getUserById(id: string) {
 
 export async function createUser(formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isSuperAdmin(session.user.roles)) {
+  if (!session?.user || !isPlatformAdmin(session.user.platformRole)) {
     return { error: "Unauthorized" }
-  }
-
-  const rolesJson = formData.get("roles")
-  let roles: Role[] = ["USER"]
-
-  if (rolesJson && typeof rolesJson === "string") {
-    try {
-      roles = JSON.parse(rolesJson)
-    } catch {
-      return { error: "Invalid roles data" }
-    }
   }
 
   const rawData = {
     email: formData.get("email"),
     password: formData.get("password"),
     displayName: formData.get("displayName"),
-    roles,
   }
 
   const validationResult = createUserSchema.safeParse(rawData)
@@ -117,39 +90,12 @@ export async function createUser(formData: FormData) {
 
   const hashedPassword = await bcrypt.hash(data.password, 12)
 
-  // Get or create roles
-  const roleRecords = await Promise.all(
-    data.roles.map(async (roleValue) => {
-      let role = await prisma.role.findUnique({
-        where: { value: roleValue },
-      })
-      if (!role) {
-        role = await prisma.role.create({
-          data: { value: roleValue },
-        })
-      }
-      return role
-    })
-  )
-
   const user = await prisma.user.create({
     data: {
       email: data.email,
       password: hashedPassword,
       displayName: data.displayName,
       isActivated: true, // Admin-created users are pre-activated
-      roles: {
-        create: roleRecords.map((role) => ({
-          roleId: role.id,
-        })),
-      },
-    },
-    include: {
-      roles: {
-        include: {
-          role: true,
-        },
-      },
     },
   })
 
@@ -160,26 +106,15 @@ export async function createUser(formData: FormData) {
       id: user.id,
       email: user.email,
       displayName: user.displayName,
-      roles: user.roles.map((ur) => ur.role.value as Role),
+      platformRole: user.platformRole,
     },
   }
 }
 
 export async function updateUser(id: string, formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isSuperAdmin(session.user.roles)) {
+  if (!session?.user || !isPlatformAdmin(session.user.platformRole)) {
     return { error: "Unauthorized" }
-  }
-
-  const rolesJson = formData.get("roles")
-  let roles: Role[] | undefined
-
-  if (rolesJson && typeof rolesJson === "string") {
-    try {
-      roles = JSON.parse(rolesJson)
-    } catch {
-      return { error: "Invalid roles data" }
-    }
   }
 
   const rawData = {
@@ -188,7 +123,7 @@ export async function updateUser(id: string, formData: FormData) {
     displayName: formData.get("displayName") || undefined,
     isActivated: formData.has("isActivated") ? formData.get("isActivated") === "true" : undefined,
     avatar: formData.get("avatar") || undefined,
-    roles,
+    platformRole: formData.get("platformRole") || undefined,
   }
 
   const validationResult = updateUserSchema.safeParse(rawData)
@@ -212,42 +147,13 @@ export async function updateUser(id: string, formData: FormData) {
     }
   }
 
-  // Update roles if provided
-  if (data.roles) {
-    // Delete existing roles
-    await prisma.userRole.deleteMany({
-      where: { userId: id },
-    })
-
-    // Get or create roles and assign
-    const roleRecords = await Promise.all(
-      data.roles.map(async (roleValue) => {
-        let role = await prisma.role.findUnique({
-          where: { value: roleValue },
-        })
-        if (!role) {
-          role = await prisma.role.create({
-            data: { value: roleValue },
-          })
-        }
-        return role
-      })
-    )
-
-    await prisma.userRole.createMany({
-      data: roleRecords.map((role) => ({
-        userId: id,
-        roleId: role.id,
-      })),
-    })
-  }
-
   const updateData: Record<string, unknown> = {}
   if (data.email) updateData.email = data.email
   if (data.displayName) updateData.displayName = data.displayName
   if (data.isActivated !== undefined) updateData.isActivated = data.isActivated
   if (data.avatar !== undefined) updateData.avatar = data.avatar || null
   if (data.password) updateData.password = await bcrypt.hash(data.password, 12)
+  if (data.platformRole) updateData.platformRole = data.platformRole
 
   await prisma.user.update({
     where: { id },
@@ -260,7 +166,7 @@ export async function updateUser(id: string, formData: FormData) {
 
 export async function deleteUser(id: string) {
   const session = await auth()
-  if (!session?.user || !isSuperAdmin(session.user.roles)) {
+  if (!session?.user || !isPlatformAdmin(session.user.platformRole)) {
     return { error: "Unauthorized" }
   }
 
@@ -305,12 +211,4 @@ export async function updateProfile(formData: FormData) {
 
   revalidatePath("/admin/profile")
   return { success: true }
-}
-
-export async function getRoles() {
-  const roles = await prisma.role.findMany({
-    orderBy: { value: "asc" },
-  })
-
-  return roles.map((role) => role.value as Role)
 }

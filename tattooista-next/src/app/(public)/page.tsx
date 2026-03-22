@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic"
 
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import { getTenantContext } from "@/lib/tenant"
 import { BookingForm } from "@/components/forms/booking-form"
 import { PortfolioSlider } from "@/components/shared/portfolio-slider"
 import { ReadMore } from "@/components/shared/read-more"
@@ -10,20 +11,28 @@ import { Instagram, Facebook } from "lucide-react"
 import { pageWallpaperUrl, serviceWallpaperUrl } from "@/lib/image-utils"
 
 async function getHomePageData() {
+  const studio = await getTenantContext()
+
+  if (!studio) {
+    return null
+  }
+
   const [services, faqItems, aboutPage, tattooStyles] = await Promise.all([
     prisma.service.findMany({
+      where: { studioId: studio.id },
       orderBy: { order: "asc" },
       take: 6,
     }),
     prisma.faqItem.findMany({
+      where: { studioId: studio.id },
       orderBy: { order: "asc" },
       take: 5,
     }),
     prisma.page.findUnique({
-      where: { name: "about" },
+      where: { studioId_name: { studioId: studio.id, name: "about" } },
     }),
     prisma.tattooStyle.findMany({
-      where: { isArchived: false, wallPaper: { not: null } },
+      where: { studioId: studio.id, isArchived: false, wallPaper: { not: null } },
       orderBy: { createdAt: "asc" },
     }),
   ])
@@ -32,7 +41,22 @@ async function getHomePageData() {
 }
 
 export default async function HomePage() {
-  const { services, faqItems, aboutPage, tattooStyles } = await getHomePageData()
+  const data = await getHomePageData()
+
+  // No studio context = landing page (will be built in a later layer)
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-5xl font-bold mb-4">Tattooista</h1>
+        <p className="text-xl text-muted-foreground mb-8">The platform for tattoo studios</p>
+        <a href="/register" className="inline-flex items-center justify-center border-2 border-foreground px-8 h-14 text-lg font-semibold transition-all duration-300 hover:bg-foreground hover:text-background">
+          Create Your Studio
+        </a>
+      </div>
+    )
+  }
+
+  const { services, faqItems, aboutPage, tattooStyles } = data
 
   return (
     <div>

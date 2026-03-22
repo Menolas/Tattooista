@@ -1,5 +1,28 @@
 // User types
-export type Role = "USER" | "ADMIN" | "SUPERADMIN"
+export type PlatformRole = "USER" | "PLATFORM_ADMIN"
+export type StudioRole = "OWNER" | "STAFF"
+export type Plan = "FREE" | "PRO"
+
+export interface Studio {
+  id: string
+  name: string
+  slug: string
+  logo: string | null
+  customDomain: string | null
+  plan: Plan
+  stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface StudioMembership {
+  id: string
+  userId: string
+  studioId: string
+  role: StudioRole
+}
 
 export interface User {
   id: string
@@ -8,13 +31,11 @@ export interface User {
   password: string
   displayName: string
   avatar: string | null
-  roles: Role[]
+  platformRole: PlatformRole
   isActivated: boolean
   createdAt: Date
   updatedAt: Date
 }
-
-export type UserWithoutPassword = Omit<User, "password">
 
 // Client types
 export interface Contact {
@@ -22,12 +43,14 @@ export interface Contact {
   type: string // instagram, phone, email, whatsapp, messenger
   value: string
   clientId: string
+  studioId: string
 }
 
 export interface ClientGalleryItem {
   id: string
   fileName: string
   clientId: string
+  studioId: string
 }
 
 export interface Client {
@@ -38,6 +61,7 @@ export interface Client {
   isArchived: boolean
   contacts: Contact[]
   gallery: ClientGalleryItem[]
+  studioId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -54,6 +78,7 @@ export interface Booking {
   message: string | null
   status: BookingStatus
   isArchived: boolean
+  studioId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -63,6 +88,7 @@ export interface ReviewGalleryItem {
   id: string
   fileName: string
   reviewId: string
+  studioId: string
 }
 
 export interface Review {
@@ -71,8 +97,9 @@ export interface Review {
   content: string
   isArchived: boolean
   userId: string
-  user?: UserWithoutPassword
+  user?: Omit<User, "password">
   gallery: ReviewGalleryItem[]
+  studioId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -86,6 +113,7 @@ export interface TattooStyle {
   nonStyle: boolean
   isArchived: boolean
   galleryItems?: GalleryItem[]
+  studioId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -95,7 +123,14 @@ export interface GalleryItem {
   fileName: string
   isArchived: boolean
   styles: TattooStyle[]
+  studioId: string
   createdAt: Date
+}
+
+export interface GalleryItemStyle {
+  galleryItemId: string
+  tattooStyleId: string
+  studioId: string
 }
 
 // CMS types
@@ -105,6 +140,7 @@ export interface Service {
   wallPaper: string | null
   conditions: string | null
   order: number
+  studioId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -116,6 +152,7 @@ export interface Page {
   title: string | null
   wallPaper: string | null
   content: string | null
+  studioId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -125,6 +162,7 @@ export interface FaqItem {
   question: string
   answer: string
   order: number
+  studioId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -211,6 +249,6 @@ export interface SessionUser {
   email: string
   displayName: string
   avatar: string | null
-  roles: Role[]
+  platformRole: PlatformRole
   isActivated: boolean
 }

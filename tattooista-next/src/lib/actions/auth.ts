@@ -36,17 +36,6 @@ export async function register(formData: FormData) {
   // Hash password
   const hashedPassword = await bcrypt.hash(password, 12)
 
-  // Get or create USER role
-  let userRole = await prisma.role.findUnique({
-    where: { value: "USER" },
-  })
-
-  if (!userRole) {
-    userRole = await prisma.role.create({
-      data: { value: "USER" },
-    })
-  }
-
   // Create user
   await prisma.user.create({
     data: {
@@ -54,11 +43,6 @@ export async function register(formData: FormData) {
       password: hashedPassword,
       displayName,
       isActivated: false,
-      roles: {
-        create: {
-          roleId: userRole.id,
-        },
-      },
     },
   })
 

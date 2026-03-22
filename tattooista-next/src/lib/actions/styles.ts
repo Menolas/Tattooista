@@ -1,7 +1,8 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { auth, isAdmin } from "@/lib/auth"
+import { auth } from "@/lib/auth"
+import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { styleSchema, updateStyleSchema } from "@/lib/validations/style"
 
@@ -48,9 +49,9 @@ export async function getStyleById(id: string) {
 
 export async function createStyle(formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
     value: formData.get("value"),
@@ -68,7 +69,7 @@ export async function createStyle(formData: FormData) {
 
   // Check if style with same name exists
   const existing = await prisma.tattooStyle.findUnique({
-    where: { value: data.value },
+    where: { studioId_value: { studioId: studio.id, value: data.value } },
   })
 
   if (existing) {
@@ -77,6 +78,7 @@ export async function createStyle(formData: FormData) {
 
   const style = await prisma.tattooStyle.create({
     data: {
+      studioId: studio.id,
       value: data.value,
       description: data.description || null,
       wallPaper: data.wallPaper || null,
@@ -91,9 +93,9 @@ export async function createStyle(formData: FormData) {
 
 export async function updateStyle(id: string, formData: FormData) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
     value: formData.get("value") || undefined,
@@ -140,9 +142,9 @@ export async function updateStyle(id: string, formData: FormData) {
 
 export async function archiveStyle(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.tattooStyle.update({
     where: { id },
@@ -156,9 +158,9 @@ export async function archiveStyle(id: string) {
 
 export async function restoreStyle(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.tattooStyle.update({
     where: { id },
@@ -172,9 +174,9 @@ export async function restoreStyle(id: string) {
 
 export async function deleteStyle(id: string) {
   const session = await auth()
-  if (!session?.user || !isAdmin(session.user.roles)) {
-    return { error: "Unauthorized" }
-  }
+  if (!session?.user) return { error: "Unauthorized" }
+  const studio = await requireTenantContext()
+  await requireStudioRole(session.user.id, studio.id)
 
   await prisma.tattooStyle.delete({
     where: { id },

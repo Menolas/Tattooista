@@ -4,7 +4,7 @@ import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 import authConfig from "./auth.config"
-import type { Role } from "@/types"
+import type { PlatformRole } from "@/types"
 
 declare module "next-auth" {
   interface Session {
@@ -13,7 +13,7 @@ declare module "next-auth" {
       email: string
       displayName: string
       avatar: string | null
-      roles: Role[]
+      platformRole: PlatformRole
       isActivated: boolean
     }
   }
@@ -23,7 +23,7 @@ declare module "next-auth" {
     email: string
     displayName: string
     avatar: string | null
-    roles: Role[]
+    platformRole: PlatformRole
     isActivated: boolean
   }
 }
@@ -31,7 +31,7 @@ declare module "next-auth" {
 declare module "@auth/core/jwt" {
   interface JWT {
     id: string
-    roles: Role[]
+    platformRole: PlatformRole
     isActivated: boolean
     displayName: string
     avatar: string | null
@@ -56,13 +56,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
-          include: {
-            roles: {
-              include: {
-                role: true,
-              },
-            },
-          },
         })
 
         if (!user) {
@@ -82,14 +75,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new Error("Please verify your email before logging in")
         }
 
-        const roles = user.roles.map((ur) => ur.role.value as Role)
-
         return {
           id: user.id,
           email: user.email,
           displayName: user.displayName,
           avatar: user.avatar,
-          roles,
+          platformRole: user.platformRole,
           isActivated: user.isActivated,
         }
       },
@@ -99,7 +90,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id
-        token.roles = user.roles
+        token.platformRole = user.platformRole
         token.isActivated = user.isActivated
         token.displayName = user.displayName
         token.avatar = user.avatar
@@ -116,7 +107,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string
-        session.user.roles = token.roles as Role[]
+        session.user.platformRole = token.platformRole as PlatformRole
         session.user.isActivated = token.isActivated as boolean
         session.user.displayName = token.displayName as string
         session.user.avatar = token.avatar as string | null
@@ -126,15 +117,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 })
 
-// Helper functions for role checking
-export function hasRole(roles: Role[], requiredRole: Role): boolean {
-  return roles.includes(requiredRole)
-}
-
-export function isAdmin(roles: Role[]): boolean {
-  return hasRole(roles, "ADMIN") || hasRole(roles, "SUPERADMIN")
-}
-
-export function isSuperAdmin(roles: Role[]): boolean {
-  return hasRole(roles, "SUPERADMIN")
+export function isPlatformAdmin(platformRole: PlatformRole): boolean {
+  return platformRole === "PLATFORM_ADMIN"
 }
