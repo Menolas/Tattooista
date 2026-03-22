@@ -1,0 +1,19 @@
+<svg viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            .cls-1{
+            fill:none;
+            stroke:currentColor;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+            stroke-width:1px;
+            }
+        </style>
+    </defs>
+    <g id="ic-social-linkedin">
+    <rect class="cls-1" x="3" y="3" width="18" height="18" rx="6"/>
+    <line class="cls-1" x1="7.63" y1="10.89" x2="7.63" y2="16.89"/>
+    <path class="cls-1" d="M10.38,16.89v-3a3,3,0,0,1,3-3h0a3,3,0,0,1,3,3v3"/>
+    <line class="cls-1" x1="7.63" y1="7.89" x2="7.63" y2="7.78"/>
+    </g>
+</svg>

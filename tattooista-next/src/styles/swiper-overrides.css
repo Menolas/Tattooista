@@ -1,0 +1,127 @@
+/* Swiper navigation overrides — must load AFTER swiper/css/navigation */
+
+.swiper-wrap {
+  position: relative;
+  padding: 0 0 3.5rem;
+}
+
+.swiper-wrap .swiper {
+  position: static;
+}
+
+.swiper-wrap .swiper-wrapper {
+  z-index: 0;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  position: absolute;
+  top: unset !important;
+  bottom: 1rem;
+  padding: 0;
+  width: 45px !important;
+  height: 30px !important;
+  transform: translate(0, 50%);
+  color: transparent !important;
+}
+
+/* Hide Swiper's default SVG arrows */
+.swiper-button-next svg,
+.swiper-button-prev svg,
+.swiper-button-next .swiper-navigation-icon,
+.swiper-button-prev .swiper-navigation-icon {
+  display: none !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-next::before,
+.swiper-button-prev::after,
+.swiper-button-prev::before {
+  content: "" !important;
+  display: block;
+  position: absolute;
+}
+
+.swiper-button-next::before,
+.swiper-button-prev::before {
+  top: 50%;
+  width: 45px;
+  height: 2px;
+  background-color: white;
+  transform: translate(0, -50%);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  width: 18px;
+  height: 22px;
+  background-color: transparent;
+  box-sizing: border-box;
+  border: 1px solid white;
+  border-right: none;
+  border-top: none;
+}
+
+.swiper-button-prev {
+  left: 0 !important;
+  justify-content: flex-start !important;
+}
+
+.swiper-button-prev::after {
+  left: 1px;
+  bottom: 1px;
+  transform: skew(-30deg, -10deg) rotate(-210deg);
+}
+
+.swiper-button-next {
+  right: 0 !important;
+  justify-content: flex-end !important;
+}
+
+.swiper-button-next::before {
+  top: 44%;
+}
+
+.swiper-button-next::after {
+  right: 1px;
+  bottom: 9px;
+  transform: skew(-30deg, -10deg) rotate(-30deg);
+}
+
+@media (min-width: 600px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    bottom: 2rem !important;
+    margin-top: calc(0px - (var(--swiper-navigation-size) / 2)) !important;
+  }
+
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: var(--swiper-navigation-size) !important;
+  }
+
+  .swiper-button-prev {
+    left: 0 !important;
+  }
+
+  .swiper-button-next {
+    right: 0 !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .swiper-wrap {
+    padding: 0 5.5rem;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: 40% !important;
+    width: 70px !important;
+  }
+
+  .swiper-button-next::before,
+  .swiper-button-prev::before {
+    width: 70px !important;
+  }
+}
