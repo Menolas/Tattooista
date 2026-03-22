@@ -2,12 +2,8 @@ import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { Pool } from "pg"
 import bcrypt from "bcryptjs"
-import fs from "fs"
-import path from "path"
 
 import "dotenv/config"
-
-const PUBLIC_DIR = path.join(__dirname, "..", "public")
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
@@ -145,36 +141,24 @@ async function main() {
   ]
 
   for (const style of styles) {
-    const record = await prisma.tattooStyle.upsert({
+    await prisma.tattooStyle.upsert({
       where: {
         studioId_value: {
           studioId: demoStudio.id,
           value: style.value,
         },
       },
-      update: {},
+      update: {
+        wallPaper: style.wallPaperSource,
+      },
       create: {
         studioId: demoStudio.id,
         value: style.value,
         description: style.description,
         nonStyle: style.nonStyle ?? false,
+        wallPaper: style.wallPaperSource,
       },
     })
-
-    // Copy wallpaper image to /public/styleWallpapers/{uuid}/ and update record
-    if (style.wallPaperSource) {
-      const srcPath = path.join(PUBLIC_DIR, style.wallPaperSource)
-      if (fs.existsSync(srcPath)) {
-        const fileName = path.basename(style.wallPaperSource)
-        const destDir = path.join(PUBLIC_DIR, "styleWallpapers", record.id)
-        fs.mkdirSync(destDir, { recursive: true })
-        fs.copyFileSync(srcPath, path.join(destDir, fileName))
-        await prisma.tattooStyle.update({
-          where: { id: record.id },
-          data: { wallPaper: fileName },
-        })
-      }
-    }
   }
 
   console.log("Created tattoo styles:", styles.map((s) => s.value))
