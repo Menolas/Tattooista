@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Star, Mail, Phone, Instagram } from "lucide-react"
+import { clientAvatarUrl, clientGalleryImageUrl } from "@/lib/image-utils"
 
 export const metadata: Metadata = {
   title: "Client Details",
@@ -65,7 +66,7 @@ export default async function ClientPage({ params }: ClientPageProps) {
             <div className="flex flex-col items-center text-center">
               <Avatar className="h-24 w-24 mb-4">
                 <AvatarImage
-                  src={client.avatar ? `/clients/${client.id}/avatar/${client.avatar}` : undefined}
+                  src={client.avatar ? clientAvatarUrl(client.id, client.avatar) : undefined}
                   alt={client.fullName}
                 />
                 <AvatarFallback className="text-2xl">
@@ -122,7 +123,7 @@ export default async function ClientPage({ params }: ClientPageProps) {
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`/clients/${client.id}/${item.fileName}`}
+                      src={clientGalleryImageUrl(client.id, item.fileName)}
                       alt="Client gallery"
                       className="w-full h-full object-cover"
                     />

@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ReviewForm } from "@/components/forms/review-form"
 import { Star } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
+import { userAvatarUrl, reviewImageUrl } from "@/lib/image-utils"
 
 export const metadata: Metadata = {
   title: "Reviews",
@@ -129,7 +130,7 @@ export default async function ReviewsPage() {
                   <div className="flex items-start gap-4">
                     <Avatar>
                       <AvatarImage
-                        src={review.user.avatar ? `/users/${review.user.id}/avatar/${review.user.avatar}` : undefined}
+                        src={review.user.avatar ? userAvatarUrl(review.user.id, review.user.avatar) : undefined}
                         alt={review.user.displayName}
                       />
                       <AvatarFallback>
@@ -160,7 +161,7 @@ export default async function ReviewsPage() {
                             >
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
-                                src={`/reviews/${review.id}/${img.fileName}`}
+                                src={reviewImageUrl(review.id, img.fileName)}
                                 alt="Review image"
                                 className="w-full h-full object-cover"
                               />

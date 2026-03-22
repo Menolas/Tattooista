@@ -20,8 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { UploadDropzone } from "@/lib/uploadthing"
 import {
   createManyGalleryItems,
   updateGalleryItemStyles,
@@ -29,6 +29,7 @@ import {
   deleteGalleryItem,
 } from "@/lib/actions/gallery"
 import { Upload, MoreVertical, Archive, Trash2, Tag } from "lucide-react"
+import { galleryImageUrl } from "@/lib/image-utils"
 import type { TattooStyle } from "@prisma/client"
 
 interface GalleryItem {
@@ -49,24 +50,47 @@ export function GalleryManager({ galleryItems, styles }: GalleryManagerProps) {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false)
   const [selectedStyleIds, setSelectedStyleIds] = useState<string[]>([])
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
 
-  const handleUploadComplete = async (
-    res: Array<{ url: string; name: string }>
-  ) => {
-    const items = res.map((file) => ({
-      fileName: file.url,
-      styleIds: selectedStyleIds,
-    }))
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
 
-    const result = await createManyGalleryItems(items)
+    setIsUploading(true)
+    try {
+      const formData = new FormData()
+      for (const file of Array.from(files)) {
+        formData.append("files", file)
+      }
+      formData.append("context", "gallery")
 
-    if (result.error) {
-      toast.error(result.error)
-    } else {
-      toast.success(`${res.length} image(s) uploaded successfully`)
-      setIsUploadDialogOpen(false)
-      setSelectedStyleIds([])
-      router.refresh()
+      const res = await fetch("/api/upload", { method: "POST", body: formData })
+      const data = await res.json()
+
+      if (!res.ok) {
+        toast.error(data.error || "Upload failed")
+        return
+      }
+
+      const items = data.files.map((file: { url: string }) => ({
+        fileName: file.url,
+        styleIds: selectedStyleIds,
+      }))
+
+      const result = await createManyGalleryItems(items)
+
+      if (result.error) {
+        toast.error(result.error)
+      } else {
+        toast.success(`${data.files.length} image(s) uploaded successfully`)
+        setIsUploadDialogOpen(false)
+        setSelectedStyleIds([])
+        router.refresh()
+      }
+    } catch {
+      toast.error("Upload failed")
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -158,13 +182,18 @@ export function GalleryManager({ galleryItems, styles }: GalleryManagerProps) {
               </div>
             )}
 
-            <UploadDropzone
-              endpoint="galleryUploader"
-              onClientUploadComplete={handleUploadComplete}
-              onUploadError={(error) => {
-                toast.error(error.message)
-              }}
-            />
+            <div className="space-y-2">
+              <Input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileUpload}
+                disabled={isUploading}
+              />
+              {isUploading && (
+                <p className="text-sm text-muted-foreground text-center">Uploading...</p>
+              )}
+            </div>
           </DialogContent>
         </Dialog>
       </div>
@@ -179,7 +208,7 @@ export function GalleryManager({ galleryItems, styles }: GalleryManagerProps) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`/gallery/${item.fileName}`}
+                src={galleryImageUrl(item.fileName)}
                 alt="Gallery item"
                 className="w-full h-full object-cover"
               />

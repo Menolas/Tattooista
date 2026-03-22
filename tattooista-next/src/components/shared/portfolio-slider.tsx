@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import Link from "next/link"
 import type { TattooStyle } from "@prisma/client"
+import { styleWallpaperUrl } from "@/lib/image-utils"
 
 type Props = {
   styles: TattooStyle[]
@@ -58,7 +59,7 @@ export function PortfolioSlider({ styles }: Props) {
               className="flex justify-center items-end pb-[20px] w-full h-full bg-cover bg-no-repeat bg-center grayscale group-hover:grayscale-0 transition-all duration-300"
               style={{
                 backgroundImage: style.wallPaper
-                  ? `url(/styles/${style.id}/${style.wallPaper})`
+                  ? `url(${styleWallpaperUrl(style.id, style.wallPaper)})`
                   : undefined,
               }}
             >
