@@ -1,17 +1,29 @@
-import { Resend } from "resend"
+import nodemailer from "nodemailer"
 import type { Booking } from "@prisma/client"
 
-// Lazy initialization to avoid errors during build when API key is not set
-let resend: Resend | null = null
+let transporter: nodemailer.Transporter | null = null
 
-function getResend(): Resend {
-  if (!resend) {
-    if (!process.env.RESEND_API_KEY) {
-      throw new Error("RESEND_API_KEY environment variable is not set")
+function getTransporter(): nodemailer.Transporter {
+  if (!transporter) {
+    const host = process.env.SMTP_HOST
+    const port = parseInt(process.env.SMTP_PORT || "587", 10)
+    const user = process.env.SMTP_USER
+    const pass = process.env.SMTP_PASS
+
+    if (!host || !user || !pass) {
+      throw new Error(
+        "SMTP configuration is missing. Set SMTP_HOST, SMTP_USER, and SMTP_PASS environment variables."
+      )
     }
-    resend = new Resend(process.env.RESEND_API_KEY)
+
+    transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465,
+      auth: { user, pass },
+    })
   }
-  return resend
+  return transporter
 }
 
 const FROM_EMAIL = process.env.FROM_EMAIL || "Tattooista <noreply@tattooista.com>"
@@ -22,7 +34,7 @@ export async function sendVerificationEmail(email: string, token: string) {
   const verificationLink = `${APP_URL}/verify-email?token=${token}`
 
   try {
-    await getResend().emails.send({
+    await getTransporter().sendMail({
       from: FROM_EMAIL,
       to: email,
       subject: "Verify your email - Tattooista",
@@ -66,7 +78,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
   const resetLink = `${APP_URL}/reset-password?token=${token}`
 
   try {
-    await getResend().emails.send({
+    await getTransporter().sendMail({
       from: FROM_EMAIL,
       to: email,
       subject: "Reset your password - Tattooista",
@@ -120,7 +132,7 @@ export async function sendBookingNotification(booking: Booking) {
   if (booking.instagram) contactInfo.push(`Instagram: ${booking.instagram}`)
 
   try {
-    await getResend().emails.send({
+    await getTransporter().sendMail({
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
       subject: `New booking from ${booking.fullName} - Tattooista`,
