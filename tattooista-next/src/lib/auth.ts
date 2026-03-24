@@ -15,6 +15,7 @@ declare module "next-auth" {
       avatar: string | null
       platformRole: PlatformRole
       isActivated: boolean
+      studioSlug: string | null
     }
   }
 
@@ -25,6 +26,7 @@ declare module "next-auth" {
     avatar: string | null
     platformRole: PlatformRole
     isActivated: boolean
+    studioSlug?: string | null
   }
 
   interface JWT {
@@ -33,6 +35,7 @@ declare module "next-auth" {
     isActivated: boolean
     displayName: string
     avatar: string | null
+    studioSlug: string | null
   }
 }
 
@@ -54,6 +57,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
+          include: {
+            memberships: {
+              include: { studio: { select: { slug: true } } },
+              take: 1,
+            },
+          },
         })
 
         if (!user) {
@@ -80,6 +89,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           avatar: user.avatar,
           platformRole: user.platformRole,
           isActivated: user.isActivated,
+          studioSlug: user.memberships[0]?.studio.slug ?? null,
         }
       },
     }),
@@ -92,6 +102,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.isActivated = user.isActivated
         token.displayName = user.displayName
         token.avatar = user.avatar
+        token.studioSlug = user.studioSlug ?? null
       }
 
       // Handle session update (e.g., after profile update)
@@ -109,6 +120,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.isActivated = token.isActivated as boolean
         session.user.displayName = token.displayName as string
         session.user.avatar = token.avatar as string | null
+        session.user.studioSlug = token.studioSlug as string | null
       }
       return session
     },

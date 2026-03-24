@@ -1,7 +1,14 @@
+"use client"
+
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 export default function NotFound() {
+  const pathname = usePathname()
+  // Extract /{slug}/admin from current path
+  const adminBase = pathname.match(/^\/[^/]+\/admin/)?.[0] ?? "/"
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] px-4">
       <h1 className="text-6xl font-bold text-muted-foreground mb-4">404</h1>
@@ -10,7 +17,7 @@ export default function NotFound() {
         The page you&apos;re looking for doesn&apos;t exist.
       </p>
       <Button asChild>
-        <Link href="/admin">Go to Dashboard</Link>
+        <Link href={adminBase}>Go to Dashboard</Link>
       </Button>
     </div>
   )

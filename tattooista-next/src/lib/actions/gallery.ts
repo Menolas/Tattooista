@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 
 export async function getGalleryItems(includeArchived = false) {
@@ -54,7 +54,7 @@ export async function getGalleryItemsByStyle(styleId: string) {
 export async function createGalleryItem(fileName: string, styleIds: string[] = []) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const item = await prisma.galleryItem.create({
@@ -77,7 +77,7 @@ export async function createGalleryItem(fileName: string, styleIds: string[] = [
     },
   })
 
-  revalidatePath("/admin/gallery")
+  revalidatePath("/[slug]/admin/gallery", "page")
   revalidatePath("/portfolio")
   return { success: true, data: item }
 }
@@ -87,7 +87,7 @@ export async function createManyGalleryItems(
 ) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const createdItems = []
@@ -108,7 +108,7 @@ export async function createManyGalleryItems(
     createdItems.push(created)
   }
 
-  revalidatePath("/admin/gallery")
+  revalidatePath("/[slug]/admin/gallery", "page")
   revalidatePath("/portfolio")
   return { success: true, data: createdItems }
 }
@@ -116,7 +116,7 @@ export async function createManyGalleryItems(
 export async function updateGalleryItemStyles(id: string, styleIds: string[]) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   // Delete existing style associations
@@ -135,7 +135,7 @@ export async function updateGalleryItemStyles(id: string, styleIds: string[]) {
     })
   }
 
-  revalidatePath("/admin/gallery")
+  revalidatePath("/[slug]/admin/gallery", "page")
   revalidatePath("/portfolio")
   return { success: true }
 }
@@ -143,7 +143,7 @@ export async function updateGalleryItemStyles(id: string, styleIds: string[]) {
 export async function archiveGalleryItem(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.galleryItem.update({
@@ -151,7 +151,7 @@ export async function archiveGalleryItem(id: string) {
     data: { isArchived: true },
   })
 
-  revalidatePath("/admin/gallery")
+  revalidatePath("/[slug]/admin/gallery", "page")
   revalidatePath("/portfolio")
   return { success: true }
 }
@@ -159,7 +159,7 @@ export async function archiveGalleryItem(id: string) {
 export async function restoreGalleryItem(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.galleryItem.update({
@@ -167,7 +167,7 @@ export async function restoreGalleryItem(id: string) {
     data: { isArchived: false },
   })
 
-  revalidatePath("/admin/gallery")
+  revalidatePath("/[slug]/admin/gallery", "page")
   revalidatePath("/portfolio")
   return { success: true }
 }
@@ -175,14 +175,14 @@ export async function restoreGalleryItem(id: string) {
 export async function deleteGalleryItem(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.galleryItem.delete({
     where: { id },
   })
 
-  revalidatePath("/admin/gallery")
+  revalidatePath("/[slug]/admin/gallery", "page")
   revalidatePath("/portfolio")
   return { success: true }
 }

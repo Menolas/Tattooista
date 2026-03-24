@@ -99,7 +99,7 @@ export async function createUser(formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/users")
+  revalidatePath("/[slug]/admin/users", "page")
   return {
     success: true,
     data: {
@@ -160,7 +160,7 @@ export async function updateUser(id: string, formData: FormData) {
     data: updateData,
   })
 
-  revalidatePath("/admin/users")
+  revalidatePath("/[slug]/admin/users", "page")
   return { success: true }
 }
 
@@ -179,7 +179,7 @@ export async function deleteUser(id: string) {
     where: { id },
   })
 
-  revalidatePath("/admin/users")
+  revalidatePath("/[slug]/admin/users", "page")
   return { success: true }
 }
 
@@ -209,6 +209,6 @@ export async function updateProfile(formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/profile")
+  revalidatePath("/[slug]/admin/profile", "page")
   return { success: true }
 }

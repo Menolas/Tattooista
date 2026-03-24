@@ -53,7 +53,12 @@ async function getDashboardStats() {
   }
 }
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
   const stats = await getDashboardStats()
 
   return (
@@ -127,7 +132,7 @@ export default async function AdminDashboardPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Recent Bookings</CardTitle>
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/admin/bookings">
+            <Link href={`/${slug}/admin/bookings`}>
               View all <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
@@ -186,7 +191,7 @@ export default async function AdminDashboardPage() {
               Manage consultation requests and convert them to clients.
             </p>
             <Button asChild>
-              <Link href="/admin/bookings">View Bookings</Link>
+              <Link href={`/${slug}/admin/bookings`}>View Bookings</Link>
             </Button>
           </CardContent>
         </Card>
@@ -200,7 +205,7 @@ export default async function AdminDashboardPage() {
               Upload and manage your portfolio images.
             </p>
             <Button asChild>
-              <Link href="/admin/gallery">Manage Gallery</Link>
+              <Link href={`/${slug}/admin/gallery`}>Manage Gallery</Link>
             </Button>
           </CardContent>
         </Card>
@@ -214,7 +219,7 @@ export default async function AdminDashboardPage() {
               View and manage your client records.
             </p>
             <Button asChild>
-              <Link href="/admin/clients">View Clients</Link>
+              <Link href={`/${slug}/admin/clients`}>View Clients</Link>
             </Button>
           </CardContent>
         </Card>

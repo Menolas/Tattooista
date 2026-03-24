@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { reviewSchema, updateReviewSchema } from "@/lib/validations/review"
 
@@ -79,7 +79,7 @@ export async function createReview(formData: FormData) {
     return { error: "Please verify your email before submitting a review" }
   }
 
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
 
   const galleryJson = formData.get("gallery")
   let gallery: string[] = []
@@ -193,7 +193,7 @@ export async function addReviewGalleryItem(reviewId: string, fileName: string) {
     return { error: "Unauthorized" }
   }
 
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
 
   const review = await prisma.review.findUnique({
     where: { id: reviewId },
@@ -251,7 +251,7 @@ export async function removeReviewGalleryItem(id: string) {
 export async function archiveReview(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.review.update({
@@ -260,14 +260,14 @@ export async function archiveReview(id: string) {
   })
 
   revalidatePath("/reviews")
-  revalidatePath("/admin/reviews")
+  revalidatePath("/[slug]/admin/reviews", "page")
   return { success: true }
 }
 
 export async function restoreReview(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.review.update({
@@ -276,14 +276,14 @@ export async function restoreReview(id: string) {
   })
 
   revalidatePath("/reviews")
-  revalidatePath("/admin/reviews")
+  revalidatePath("/[slug]/admin/reviews", "page")
   return { success: true }
 }
 
 export async function deleteReview(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.review.delete({
@@ -291,6 +291,6 @@ export async function deleteReview(id: string) {
   })
 
   revalidatePath("/reviews")
-  revalidatePath("/admin/reviews")
+  revalidatePath("/[slug]/admin/reviews", "page")
   return { success: true }
 }

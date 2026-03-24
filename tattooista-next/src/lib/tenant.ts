@@ -59,6 +59,35 @@ export async function requireTenantContext(): Promise<Studio> {
   return studio
 }
 
+/**
+ * Get studio from the authenticated user's session (for server actions).
+ * Falls back to x-studio-id header for backward compatibility.
+ */
+export async function getSessionStudio(): Promise<Studio | null> {
+  // Try header first (set by proxy for subdomain-based access)
+  const headerStudio = await getTenantContext()
+  if (headerStudio) return headerStudio
+
+  // Fall back to session-based lookup
+  const { auth } = await import("@/lib/auth")
+  const session = await auth()
+  if (!session?.user?.studioSlug) return null
+
+  const studio = await prisma.studio.findUnique({
+    where: { slug: session.user.studioSlug },
+  })
+
+  return studio as Studio | null
+}
+
+export async function requireSessionStudio(): Promise<Studio> {
+  const studio = await getSessionStudio()
+  if (!studio) {
+    throw new Error("This action requires a studio context")
+  }
+  return studio
+}
+
 export async function requireStudioRole(
   userId: string,
   studioId: string,

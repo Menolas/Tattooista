@@ -2,14 +2,14 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { bookingSchema, updateBookingStatusSchema } from "@/lib/validations/booking"
 import { sendBookingNotification } from "@/lib/email"
 import type { BookingStatus } from "@prisma/client"
 
 export async function createBooking(formData: FormData) {
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
 
   const rawData = {
     fullName: formData.get("fullName"),
@@ -46,7 +46,7 @@ export async function createBooking(formData: FormData) {
 export async function getBookings(includeArchived = false) {
   const session = await auth()
   if (!session?.user) throw new Error("Unauthorized")
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const bookings = await prisma.booking.findMany({
@@ -60,7 +60,7 @@ export async function getBookings(includeArchived = false) {
 export async function getBookingById(id: string) {
   const session = await auth()
   if (!session?.user) throw new Error("Unauthorized")
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const booking = await prisma.booking.findUnique({
@@ -77,7 +77,7 @@ export async function getBookingById(id: string) {
 export async function updateBookingStatus(id: string, status: BookingStatus) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const validationResult = updateBookingStatusSchema.safeParse({ status })
@@ -90,14 +90,14 @@ export async function updateBookingStatus(id: string, status: BookingStatus) {
     data: { status },
   })
 
-  revalidatePath("/admin/bookings")
+  revalidatePath("/[slug]/admin/bookings", "page")
   return { success: true }
 }
 
 export async function archiveBooking(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.booking.update({
@@ -105,14 +105,14 @@ export async function archiveBooking(id: string) {
     data: { isArchived: true },
   })
 
-  revalidatePath("/admin/bookings")
+  revalidatePath("/[slug]/admin/bookings", "page")
   return { success: true }
 }
 
 export async function restoreBooking(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.booking.update({
@@ -120,28 +120,28 @@ export async function restoreBooking(id: string) {
     data: { isArchived: false },
   })
 
-  revalidatePath("/admin/bookings")
+  revalidatePath("/[slug]/admin/bookings", "page")
   return { success: true }
 }
 
 export async function deleteBooking(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.booking.delete({
     where: { id },
   })
 
-  revalidatePath("/admin/bookings")
+  revalidatePath("/[slug]/admin/bookings", "page")
   return { success: true }
 }
 
 export async function convertBookingToClient(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const booking = await prisma.booking.findUnique({
@@ -183,7 +183,7 @@ export async function convertBookingToClient(id: string) {
     data: { status: "COMPLETED" },
   })
 
-  revalidatePath("/admin/bookings")
-  revalidatePath("/admin/clients")
+  revalidatePath("/[slug]/admin/bookings", "page")
+  revalidatePath("/[slug]/admin/clients", "page")
   return { success: true, data: client }
 }

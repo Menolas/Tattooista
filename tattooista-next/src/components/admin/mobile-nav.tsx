@@ -23,25 +23,26 @@ import {
 } from "lucide-react"
 
 const navItems = [
-  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { title: "Bookings", href: "/admin/bookings", icon: CalendarCheck },
-  { title: "Clients", href: "/admin/clients", icon: Users },
-  { title: "Gallery", href: "/admin/gallery", icon: Image },
-  { title: "Styles", href: "/admin/styles", icon: Palette },
-  { title: "Services", href: "/admin/services", icon: Briefcase },
-  { title: "FAQ", href: "/admin/faq", icon: HelpCircle },
-  { title: "Pages", href: "/admin/pages", icon: FileText },
+  { title: "Dashboard", path: "", icon: LayoutDashboard },
+  { title: "Bookings", path: "/bookings", icon: CalendarCheck },
+  { title: "Clients", path: "/clients", icon: Users },
+  { title: "Gallery", path: "/gallery", icon: Image },
+  { title: "Styles", path: "/styles", icon: Palette },
+  { title: "Services", path: "/services", icon: Briefcase },
+  { title: "FAQ", path: "/faq", icon: HelpCircle },
+  { title: "Pages", path: "/pages", icon: FileText },
 ]
 
-export function AdminMobileNav() {
+export function AdminMobileNav({ slug }: { slug: string }) {
   const pathname = usePathname()
   const { data: session } = useSession()
 
   const isSuperAdmin = session?.user?.platformRole === "PLATFORM_ADMIN"
+  const base = `/${slug}/admin`
 
   return (
     <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b bg-background">
-      <Link href="/admin" className="text-lg font-bold">
+      <Link href="/" className="text-lg font-bold">
         Tattooista
       </Link>
 
@@ -55,18 +56,21 @@ export function AdminMobileNav() {
         <SheetContent side="left" className="w-[280px] p-0">
           <div className="flex flex-col h-full">
             <div className="p-4 border-b">
-              <Link href="/admin" className="text-xl font-bold">
+              <Link href="/" className="text-xl font-bold">
                 Tattooista
               </Link>
             </div>
 
             <nav className="flex-1 overflow-y-auto p-4 space-y-1">
               {navItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+                const href = `${base}${item.path}`
+                const isActive = item.path === ""
+                  ? pathname === base
+                  : pathname === href || pathname.startsWith(`${href}/`)
                 return (
                   <Link
-                    key={item.href}
-                    href={item.href}
+                    key={item.path}
+                    href={href}
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                       isActive
@@ -82,10 +86,10 @@ export function AdminMobileNav() {
 
               {isSuperAdmin && (
                 <Link
-                  href="/admin/users"
+                  href={`${base}/users`}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                    pathname === "/admin/users" || pathname.startsWith("/admin/users/")
+                    pathname === `${base}/users` || pathname.startsWith(`${base}/users/`)
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   )}
@@ -98,10 +102,10 @@ export function AdminMobileNav() {
 
             <div className="border-t p-4 space-y-1">
               <Link
-                href="/admin/profile"
+                href={`${base}/profile`}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  pathname === "/admin/profile"
+                  pathname === `${base}/profile`
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 )}
@@ -110,10 +114,10 @@ export function AdminMobileNav() {
                 Profile
               </Link>
               <Link
-                href="/admin/settings"
+                href={`${base}/settings`}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  pathname === "/admin/settings"
+                  pathname === `${base}/settings`
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 )}
@@ -122,7 +126,7 @@ export function AdminMobileNav() {
                 Settings
               </Link>
               <Link
-                href="/"
+                href={`/${slug}`}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 <Star className="h-4 w-4" />
