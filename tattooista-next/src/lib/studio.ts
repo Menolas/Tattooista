@@ -1,5 +1,8 @@
+import { PrismaClient } from "@prisma/client"
 import { prisma } from "./prisma"
 import { validateSlug } from "./slug"
+
+export type TxClient = Parameters<Parameters<PrismaClient["$transaction"]>[0]>[0]
 
 interface StudioCreationInput {
   name: string
@@ -28,47 +31,48 @@ export function validateStudioCreation(
 
 export async function createStudioWithDefaults(
   ownerId: string,
-  input: StudioCreationInput
+  input: StudioCreationInput,
+  tx?: TxClient
 ) {
-  return prisma.$transaction(async (tx) => {
-    const existing = await tx.studio.findUnique({
-      where: { slug: input.slug },
-    })
-    if (existing) {
-      throw new Error(`Slug "${input.slug}" is already taken`)
-    }
+  const client = tx ?? prisma
 
-    const studio = await tx.studio.create({
-      data: {
-        name: input.name.trim(),
-        slug: input.slug,
-        logo: input.logo ?? null,
-      },
-    })
-
-    await tx.studioMembership.create({
-      data: {
-        userId: ownerId,
-        studioId: studio.id,
-        role: "OWNER",
-      },
-    })
-
-    await tx.page.createMany({
-      data: [
-        { studioId: studio.id, name: "about", isActive: true },
-        { studioId: studio.id, name: "contacts", isActive: true },
-      ],
-    })
-
-    await tx.tattooStyle.create({
-      data: {
-        studioId: studio.id,
-        value: "Other",
-        nonStyle: true,
-      },
-    })
-
-    return studio
+  const existing = await client.studio.findUnique({
+    where: { slug: input.slug },
   })
+  if (existing) {
+    throw new Error(`Slug "${input.slug}" is already taken`)
+  }
+
+  const studio = await client.studio.create({
+    data: {
+      name: input.name.trim(),
+      slug: input.slug,
+      logo: input.logo ?? null,
+    },
+  })
+
+  await client.studioMembership.create({
+    data: {
+      userId: ownerId,
+      studioId: studio.id,
+      role: "OWNER",
+    },
+  })
+
+  await client.page.createMany({
+    data: [
+      { studioId: studio.id, name: "about", isActive: true },
+      { studioId: studio.id, name: "contacts", isActive: true },
+    ],
+  })
+
+  await client.tattooStyle.create({
+    data: {
+      studioId: studio.id,
+      value: "Other",
+      nonStyle: true,
+    },
+  })
+
+  return studio
 }
