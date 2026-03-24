@@ -48,6 +48,26 @@ export const updateProfileSchema = z.object({
   avatar: z.string().url().optional().or(z.literal("")),
 })
 
+export const createStudioSchema = z
+  .object({
+    studioName: z
+      .string()
+      .min(2, "Studio name must be at least 2 characters")
+      .max(100, "Studio name is too long"),
+    email: z.string().email("Please enter a valid email address"),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .max(100, "Password is too long"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+
+export type CreateStudioInput = z.infer<typeof createStudioSchema>
+
 export type LoginInput = z.infer<typeof loginSchema>
 export type RegisterInput = z.infer<typeof registerSchema>
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>
