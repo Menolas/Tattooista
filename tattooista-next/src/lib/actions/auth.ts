@@ -302,7 +302,7 @@ export async function createStudio(formData: FormData) {
         where: { email },
       })
       if (existingUser) {
-        throw new Error("An account with this email already exists. If you already have a studio, please sign in instead.")
+        throw new Error("This email is already associated with a studio on our platform. Please use a different email or sign in to your existing studio.")
       }
 
       // Check slug not taken
