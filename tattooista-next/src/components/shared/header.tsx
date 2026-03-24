@@ -9,13 +9,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { logout } from "@/lib/actions/auth"
 
 const navItems = [
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/#about", label: "Tattoo Artist" },
-  { href: "/#services", label: "Studio Services" },
-  { href: "/#faq", label: "F.A.Q" },
-  { href: "/#booking", label: "Booking" },
-  { href: "/contacts", label: "Contacts" },
-  { href: "/reviews", label: "Reviews" },
+  { path: "/portfolio", label: "Portfolio" },
+  { path: "/#about", label: "Tattoo Artist" },
+  { path: "/#services", label: "Studio Services" },
+  { path: "/#faq", label: "F.A.Q" },
+  { path: "/#booking", label: "Booking" },
+  { path: "/contacts", label: "Contacts" },
+  { path: "/reviews", label: "Reviews" },
 ]
 
 const socialLinks = [
@@ -31,15 +31,22 @@ const socialLinks = [
   },
 ]
 
-export function Header() {
+function studioHref(path: string, slug: string) {
+  // For hash links like /#about → /{slug}#about
+  if (path.startsWith("/#")) {
+    return `/${slug}${path.slice(1)}`
+  }
+  // For regular paths like /portfolio → /{slug}/portfolio
+  return `/${slug}${path}`
+}
+
+export function Header({ studioSlug }: { studioSlug: string }) {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navRef = useRef<HTMLDivElement>(null)
 
-  const isPortfolio = pathname.startsWith("/portfolio")
-
-  const isAdmin = !!session?.user
+  const isPortfolio = pathname.includes("/portfolio")
 
   const handleLogout = async () => {
     await logout()
@@ -70,7 +77,7 @@ export function Header() {
   return (
     <header className="absolute top-0 left-0 right-0 z-10 flex items-center px-4 pt-[22px] min-[990px]:px-[70px] min-[990px]:pt-[42px] overflow-visible">
       {/* Logo */}
-      <Link href="/" className="relative w-[50px] h-[50px] min-[990px]:w-[55px] min-[990px]:h-[88px] shrink-0">
+      <Link href={`/${studioSlug}`} className="relative w-[50px] h-[50px] min-[990px]:w-[55px] min-[990px]:h-[88px] shrink-0">
         <Image
           src="/images/logo.png"
           alt="Tattooista"
@@ -99,9 +106,9 @@ export function Header() {
           }`}
         >
           {navItems.map((item) => (
-            <li key={item.href}>
+            <li key={item.path}>
               <Link
-                href={item.href}
+                href={studioHref(item.path, studioSlug)}
                 onClick={() => setIsMenuOpen(false)}
                 className="block py-2 text-[30px] capitalize tracking-[1.9px] whitespace-nowrap text-foreground no-underline hover:text-foreground/70 transition-colors"
               >
@@ -142,7 +149,7 @@ export function Header() {
         {/* Booking button — only on portfolio page */}
         {isPortfolio && (
           <Link
-            href="/#booking"
+            href={studioHref("/#booking", studioSlug)}
             className="flex items-center justify-center px-[38px] h-[60px] min-[990px]:h-[60px] text-[20px] font-semibold tracking-[1px] text-foreground bg-transparent border-2 border-foreground whitespace-nowrap transition-all duration-300 hover:bg-foreground hover:text-background"
           >
             Book a consultation
@@ -163,37 +170,25 @@ export function Header() {
             />
             Call me
           </a>
-          {isAdmin && (
-            <Link
-              href="/admin"
-              className="flex items-center gap-4 text-foreground font-normal hover:[&_img]:scale-[1.2] transition-all duration-300"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icons/admin.svg"
-                alt="Admin"
-                className="w-[40px] h-[40px] transition-transform duration-300"
-                style={{ filter: "brightness(0) invert(1)" }}
-              />
-              Admin
-            </Link>
-          )}
           {session?.user && (
             <>
               <Link
-                href="/admin/profile"
-                className="w-[50px] h-[50px] rounded-full overflow-hidden"
+                href={session.user.studioSlug ? `/${session.user.studioSlug}/admin` : "/"}
+                className="flex items-center gap-4 text-foreground font-normal hover:opacity-80 transition-all duration-300"
               >
-                <Avatar className="w-full h-full">
-                  <AvatarImage
-                    src={session.user.avatar ? `/users/${session.user.id}/avatar/${session.user.avatar}` : undefined}
-                    alt={session.user.displayName}
-                    className="object-cover"
-                  />
-                  <AvatarFallback>
-                    {session.user.displayName?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+                  <Avatar className="w-full h-full">
+                    <AvatarImage
+                      src={session.user.avatar ? `/users/${session.user.id}/avatar/${session.user.avatar}` : undefined}
+                      alt={session.user.displayName}
+                      className="object-cover"
+                    />
+                    <AvatarFallback>
+                      {session.user.displayName?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+                Admin
               </Link>
               <button
                 onClick={handleLogout}
@@ -223,9 +218,9 @@ export function Header() {
 
         <ul className="relative z-10 flex flex-col gap-4 list-none m-0 p-0">
           {navItems.map((item) => (
-            <li key={item.href}>
+            <li key={item.path}>
               <Link
-                href={item.href}
+                href={studioHref(item.path, studioSlug)}
                 onClick={() => setIsMenuOpen(false)}
                 className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal no-underline"
               >
@@ -236,21 +231,12 @@ export function Header() {
           {session?.user && (
             <li className="border-t border-foreground/10 pt-4 mt-2">
               <div className="flex flex-col gap-4">
-                {isAdmin && (
-                  <Link
-                    href="/admin"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal"
-                  >
-                    Admin
-                  </Link>
-                )}
                 <Link
-                  href="/admin/profile"
+                  href={session.user.studioSlug ? `/${session.user.studioSlug}/admin` : "/"}
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal"
                 >
-                  Profile
+                  Admin
                 </Link>
                 <button
                   onClick={() => { setIsMenuOpen(false); handleLogout() }}

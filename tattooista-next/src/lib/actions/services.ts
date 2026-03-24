@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { serviceSchema, updateServiceSchema } from "@/lib/validations/service"
 
@@ -29,7 +29,7 @@ export async function getServiceById(id: string) {
 export async function createService(formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
@@ -56,7 +56,7 @@ export async function createService(formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/services")
+  revalidatePath("/[slug]/admin/services", "page")
   revalidatePath("/")
   return { success: true, data: service }
 }
@@ -64,7 +64,7 @@ export async function createService(formData: FormData) {
 export async function updateService(id: string, formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
@@ -91,7 +91,7 @@ export async function updateService(id: string, formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/services")
+  revalidatePath("/[slug]/admin/services", "page")
   revalidatePath("/")
   return { success: true, data: service }
 }
@@ -99,14 +99,14 @@ export async function updateService(id: string, formData: FormData) {
 export async function deleteService(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.service.delete({
     where: { id },
   })
 
-  revalidatePath("/admin/services")
+  revalidatePath("/[slug]/admin/services", "page")
   revalidatePath("/")
   return { success: true }
 }
@@ -114,7 +114,7 @@ export async function deleteService(id: string) {
 export async function reorderServices(orderedIds: string[]) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await Promise.all(
@@ -126,7 +126,7 @@ export async function reorderServices(orderedIds: string[]) {
     )
   )
 
-  revalidatePath("/admin/services")
+  revalidatePath("/[slug]/admin/services", "page")
   revalidatePath("/")
   return { success: true }
 }

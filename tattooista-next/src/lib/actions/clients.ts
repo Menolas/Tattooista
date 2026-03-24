@@ -2,14 +2,14 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { clientSchema, updateClientSchema } from "@/lib/validations/client"
 
 export async function getClients(includeArchived = false) {
   const session = await auth()
   if (!session?.user) throw new Error("Unauthorized")
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const clients = await prisma.client.findMany({
@@ -30,7 +30,7 @@ export async function getClients(includeArchived = false) {
 export async function getClientById(id: string) {
   const session = await auth()
   if (!session?.user) throw new Error("Unauthorized")
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const client = await prisma.client.findUnique({
@@ -51,7 +51,7 @@ export async function getClientById(id: string) {
 export async function createClient(formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const contactsJson = formData.get("contacts")
@@ -97,14 +97,14 @@ export async function createClient(formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/clients")
+  revalidatePath("/[slug]/admin/clients", "page")
   return { success: true, data: client }
 }
 
 export async function updateClient(id: string, formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const contactsJson = formData.get("contacts")
@@ -159,15 +159,15 @@ export async function updateClient(id: string, formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/clients")
-  revalidatePath(`/admin/clients/${id}`)
+  revalidatePath("/[slug]/admin/clients", "page")
+  revalidatePath(`/[slug]/admin/clients/${id}`, "page")
   return { success: true, data: client }
 }
 
 export async function toggleClientFavourite(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const client = await prisma.client.findUnique({
@@ -183,14 +183,14 @@ export async function toggleClientFavourite(id: string) {
     data: { isFavourite: !client.isFavourite },
   })
 
-  revalidatePath("/admin/clients")
+  revalidatePath("/[slug]/admin/clients", "page")
   return { success: true }
 }
 
 export async function archiveClient(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.client.update({
@@ -198,14 +198,14 @@ export async function archiveClient(id: string) {
     data: { isArchived: true },
   })
 
-  revalidatePath("/admin/clients")
+  revalidatePath("/[slug]/admin/clients", "page")
   return { success: true }
 }
 
 export async function restoreClient(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.client.update({
@@ -213,28 +213,28 @@ export async function restoreClient(id: string) {
     data: { isArchived: false },
   })
 
-  revalidatePath("/admin/clients")
+  revalidatePath("/[slug]/admin/clients", "page")
   return { success: true }
 }
 
 export async function deleteClient(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.client.delete({
     where: { id },
   })
 
-  revalidatePath("/admin/clients")
+  revalidatePath("/[slug]/admin/clients", "page")
   return { success: true }
 }
 
 export async function addClientGalleryItem(clientId: string, fileName: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.clientGalleryItem.create({
@@ -245,14 +245,14 @@ export async function addClientGalleryItem(clientId: string, fileName: string) {
     },
   })
 
-  revalidatePath(`/admin/clients/${clientId}`)
+  revalidatePath(`/[slug]/admin/clients/${clientId}`, "page")
   return { success: true }
 }
 
 export async function removeClientGalleryItem(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const item = await prisma.clientGalleryItem.findUnique({
@@ -267,6 +267,6 @@ export async function removeClientGalleryItem(id: string) {
     where: { id },
   })
 
-  revalidatePath(`/admin/clients/${item.clientId}`)
+  revalidatePath(`/[slug]/admin/clients/${item.clientId}`, "page")
   return { success: true }
 }

@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { styleSchema, updateStyleSchema } from "@/lib/validations/style"
 
@@ -50,7 +50,7 @@ export async function getStyleById(id: string) {
 export async function createStyle(formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
@@ -86,7 +86,7 @@ export async function createStyle(formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/styles")
+  revalidatePath("/[slug]/admin/styles", "page")
   revalidatePath("/portfolio")
   return { success: true, data: style }
 }
@@ -94,7 +94,7 @@ export async function createStyle(formData: FormData) {
 export async function updateStyle(id: string, formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
@@ -135,7 +135,7 @@ export async function updateStyle(id: string, formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/styles")
+  revalidatePath("/[slug]/admin/styles", "page")
   revalidatePath("/portfolio")
   return { success: true, data: style }
 }
@@ -143,7 +143,7 @@ export async function updateStyle(id: string, formData: FormData) {
 export async function archiveStyle(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.tattooStyle.update({
@@ -151,7 +151,7 @@ export async function archiveStyle(id: string) {
     data: { isArchived: true },
   })
 
-  revalidatePath("/admin/styles")
+  revalidatePath("/[slug]/admin/styles", "page")
   revalidatePath("/portfolio")
   return { success: true }
 }
@@ -159,7 +159,7 @@ export async function archiveStyle(id: string) {
 export async function restoreStyle(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.tattooStyle.update({
@@ -167,7 +167,7 @@ export async function restoreStyle(id: string) {
     data: { isArchived: false },
   })
 
-  revalidatePath("/admin/styles")
+  revalidatePath("/[slug]/admin/styles", "page")
   revalidatePath("/portfolio")
   return { success: true }
 }
@@ -175,14 +175,14 @@ export async function restoreStyle(id: string) {
 export async function deleteStyle(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.tattooStyle.delete({
     where: { id },
   })
 
-  revalidatePath("/admin/styles")
+  revalidatePath("/[slug]/admin/styles", "page")
   revalidatePath("/portfolio")
   return { success: true }
 }

@@ -40,13 +40,11 @@ export function OwnerLoginForm() {
         return
       }
 
-      // Find their studio server-side (reads session internally) and redirect
-      // TODO: when custom domains are live, redirect to subdomain URL instead
+      // Find their studio and redirect to admin
       const slug = await getMyStudioSlug()
       if (slug) {
-        window.location.href = `/?studio=${slug}`
+        window.location.href = `/${slug}/admin`
       } else {
-        // User exists but has no studio — shouldn't happen normally
         window.location.href = "/"
       }
     } catch {
@@ -84,7 +82,7 @@ export function OwnerLoginForm() {
                 </Link>
               </div>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input type="password" autoComplete="current-password" placeholder="••••••••" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

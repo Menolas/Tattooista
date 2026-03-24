@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 interface ClientPageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ slug: string; id: string }>
 }
 
 async function getClient(id: string) {
@@ -38,7 +38,7 @@ const contactIcons: Record<string, React.ReactNode> = {
 }
 
 export default async function ClientPage({ params }: ClientPageProps) {
-  const { id } = await params
+  const { slug, id } = await params
   const client = await getClient(id)
 
   if (!client) {
@@ -49,7 +49,7 @@ export default async function ClientPage({ params }: ClientPageProps) {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
-          <Link href="/admin/clients">
+          <Link href={`/${slug}/admin/clients`}>
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>

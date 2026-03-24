@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { faqSchema, updateFaqSchema } from "@/lib/validations/faq"
 
@@ -29,7 +29,7 @@ export async function getFaqItemById(id: string) {
 export async function createFaqItem(formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
@@ -54,7 +54,7 @@ export async function createFaqItem(formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/faq")
+  revalidatePath("/[slug]/admin/faq", "page")
   revalidatePath("/")
   return { success: true, data: item }
 }
@@ -62,7 +62,7 @@ export async function createFaqItem(formData: FormData) {
 export async function updateFaqItem(id: string, formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
@@ -87,7 +87,7 @@ export async function updateFaqItem(id: string, formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/faq")
+  revalidatePath("/[slug]/admin/faq", "page")
   revalidatePath("/")
   return { success: true, data: item }
 }
@@ -95,14 +95,14 @@ export async function updateFaqItem(id: string, formData: FormData) {
 export async function deleteFaqItem(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.faqItem.delete({
     where: { id },
   })
 
-  revalidatePath("/admin/faq")
+  revalidatePath("/[slug]/admin/faq", "page")
   revalidatePath("/")
   return { success: true }
 }
@@ -110,7 +110,7 @@ export async function deleteFaqItem(id: string) {
 export async function reorderFaqItems(orderedIds: string[]) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await Promise.all(
@@ -122,7 +122,7 @@ export async function reorderFaqItems(orderedIds: string[]) {
     )
   )
 
-  revalidatePath("/admin/faq")
+  revalidatePath("/[slug]/admin/faq", "page")
   revalidatePath("/")
   return { success: true }
 }

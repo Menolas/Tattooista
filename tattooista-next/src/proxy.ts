@@ -1,94 +1,73 @@
 import NextAuth from "next-auth"
 import authConfig from "@/lib/auth.config"
 import { NextResponse } from "next/server"
-import { extractSubdomain, STUDIO_ID_HEADER } from "@/lib/tenant"
-import { prisma } from "@/lib/prisma"
+import { extractSubdomain } from "@/lib/tenant"
 
 const { auth } = NextAuth(authConfig)
+
+// Known top-level routes that are NOT studio slugs
+const PLATFORM_ROUTES = [
+  "login", "register", "verify-email", "reset-password",
+  "api", "_next", "not-found", "studio-suspended",
+]
+
+function extractSlugFromPath(pathname: string): string | null {
+  const firstSegment = pathname.split("/")[1]
+  if (!firstSegment) return null
+  if (PLATFORM_ROUTES.includes(firstSegment)) return null
+  return firstSegment
+}
 
 export default auth(async (req) => {
   const { nextUrl, auth: session } = req
   const isLoggedIn = !!session
 
-  // ---- SECURITY: Strip any client-sent x-studio-id header ----
-  const requestHeaders = new Headers(req.headers)
-  requestHeaders.delete(STUDIO_ID_HEADER)
-
   // ---- TENANT RESOLUTION ----
   const hostname = req.headers.get("host") || "localhost:3000"
 
-  // Resolve tenant: subdomain takes priority, ?studio=slug as fallback
-  const slug = extractSubdomain(hostname) || nextUrl.searchParams.get("studio")
+  // Resolve tenant: subdomain (production) or first path segment (localhost)
+  const slug = extractSubdomain(hostname) || extractSlugFromPath(nextUrl.pathname)
 
-  // If we have a slug, resolve the studio
-  if (slug) {
-    try {
-      const studio = await prisma.studio.findUnique({
-        where: { slug },
-        select: { id: true, isActive: true },
-      })
-
-      if (!studio) {
-        return NextResponse.rewrite(new URL("/not-found", nextUrl))
-      }
-
-      if (!studio.isActive) {
-        return NextResponse.rewrite(new URL("/studio-suspended", nextUrl))
-      }
-
-      // Inject studioId for downstream use
-      requestHeaders.set(STUDIO_ID_HEADER, studio.id)
-    } catch (error) {
-      console.error("Proxy: tenant resolution failed", error)
-      return NextResponse.next({ request: { headers: requestHeaders } })
-    }
-  }
-
-  // If we're on a studio context, block auth routes for visitors
-  // Studio owners log in on the platform level and get redirected here
+  // ---- ROUTE CLASSIFICATION ----
+  const isAdminRoute = /^\/[^/]+\/admin(\/|$)/.test(nextUrl.pathname)
+  const isStudioPublicRoute = slug && !isAdminRoute
   const isAuthRoute =
     nextUrl.pathname.startsWith("/login") ||
     nextUrl.pathname.startsWith("/register")
-
-  if (slug && isAuthRoute) {
-    return NextResponse.redirect(new URL("/", nextUrl))
-  }
-
-  // ---- ROUTE PROTECTION ----
-  const isAdminRoute = nextUrl.pathname.startsWith("/admin")
-  const isPublicRoute =
+  const isPlatformPublicRoute =
     nextUrl.pathname === "/" ||
-    nextUrl.pathname.startsWith("/portfolio") ||
-    nextUrl.pathname.startsWith("/reviews") ||
-    nextUrl.pathname.startsWith("/contacts") ||
     nextUrl.pathname.startsWith("/api/auth") ||
     nextUrl.pathname.startsWith("/verify-email") ||
     nextUrl.pathname.startsWith("/reset-password")
 
-  // Allow public routes
-  if (isPublicRoute) {
-    return NextResponse.next({ request: { headers: requestHeaders } })
+  // ---- PUBLIC ROUTES: allow through ----
+  if (isPlatformPublicRoute || isStudioPublicRoute) {
+    return NextResponse.next()
   }
 
-  // Redirect logged-in users away from auth pages
-  if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL("/", nextUrl))
+  // ---- AUTH ROUTES ----
+  if (isAuthRoute) {
+    // Logged-in users don't need auth pages
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL("/", nextUrl))
+    }
+    return NextResponse.next()
   }
 
-  // Protect admin routes — require login
-  // (full role check happens in the admin layout)
+  // ---- ADMIN ROUTES: require login ----
   if (isAdminRoute) {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/login", nextUrl))
     }
+    return NextResponse.next()
   }
 
-  // Require login for non-public routes
-  if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
+  // ---- EVERYTHING ELSE: require login ----
+  if (!isLoggedIn) {
     return NextResponse.redirect(new URL("/login", nextUrl))
   }
 
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  return NextResponse.next()
 })
 
 export const config = {

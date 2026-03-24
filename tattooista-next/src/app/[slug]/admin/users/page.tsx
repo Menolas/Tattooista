@@ -27,11 +27,16 @@ async function getUsers() {
   }))
 }
 
-export default async function UsersPage() {
+export default async function UsersPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
   const session = await auth()
 
   if (!session?.user || !isPlatformAdmin(session.user.platformRole)) {
-    redirect("/admin")
+    redirect(`/${slug}/admin`)
   }
 
   const users = await getUsers()

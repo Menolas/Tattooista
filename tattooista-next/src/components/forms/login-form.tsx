@@ -88,7 +88,7 @@ export function LoginForm() {
                 </Link>
               </div>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input type="password" autoComplete="current-password" placeholder="••••••••" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

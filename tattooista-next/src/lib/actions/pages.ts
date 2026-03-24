@@ -2,12 +2,12 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { requireTenantContext, requireStudioRole } from "@/lib/tenant"
+import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 import { updatePageSchema } from "@/lib/validations/page"
 
 export async function getPageByName(name: string) {
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   const page = await prisma.page.findUnique({
     where: { studioId_name: { studioId: studio.id, name } },
   })
@@ -26,7 +26,7 @@ export async function getPages() {
 export async function updatePage(id: string, formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const rawData = {
@@ -69,7 +69,7 @@ export async function updatePage(id: string, formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/pages")
+  revalidatePath("/[slug]/admin/pages", "page")
   revalidatePath("/")
   revalidatePath("/contacts")
   return { success: true, data: page }
@@ -78,7 +78,7 @@ export async function updatePage(id: string, formData: FormData) {
 export async function createPage(formData: FormData) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   const name = formData.get("name") as string
@@ -107,20 +107,20 @@ export async function createPage(formData: FormData) {
     },
   })
 
-  revalidatePath("/admin/pages")
+  revalidatePath("/[slug]/admin/pages", "page")
   return { success: true, data: page }
 }
 
 export async function deletePage(id: string) {
   const session = await auth()
   if (!session?.user) return { error: "Unauthorized" }
-  const studio = await requireTenantContext()
+  const studio = await requireSessionStudio()
   await requireStudioRole(session.user.id, studio.id)
 
   await prisma.page.delete({
     where: { id },
   })
 
-  revalidatePath("/admin/pages")
+  revalidatePath("/[slug]/admin/pages", "page")
   return { success: true }
 }
