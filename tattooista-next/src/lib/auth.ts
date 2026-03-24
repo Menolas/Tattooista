@@ -26,9 +26,7 @@ declare module "next-auth" {
     platformRole: PlatformRole
     isActivated: boolean
   }
-}
 
-declare module "@auth/core/jwt" {
   interface JWT {
     id: string
     platformRole: PlatformRole
