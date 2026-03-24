@@ -30,7 +30,7 @@ export default async function VerifyEmailPage({ searchParams }: VerifyEmailPageP
         </CardHeader>
         <CardContent className="text-center">
           <Button asChild>
-            <Link href="/login">Go to Login</Link>
+            <Link href="/?mode=login">Go to Login</Link>
           </Button>
         </CardContent>
       </Card>
@@ -63,7 +63,7 @@ export default async function VerifyEmailPage({ searchParams }: VerifyEmailPageP
 
         <div className="text-center">
           <Button asChild>
-            <Link href="/login">Go to Login</Link>
+            <Link href="/?mode=login">Go to Login</Link>
           </Button>
         </div>
       </CardContent>

@@ -1,12 +1,14 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CreateStudioForm } from "@/components/forms/create-studio-form"
 import { OwnerLoginForm } from "@/components/forms/owner-login-form"
 
 export function PlatformLanding() {
-  const [showLogin, setShowLogin] = useState(false)
+  const searchParams = useSearchParams()
+  const [showLogin, setShowLogin] = useState(searchParams.get("mode") === "login")
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
