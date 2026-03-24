@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { signIn, signOut } from "@/lib/auth"
+import { signIn, signOut, auth } from "@/lib/auth"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
 import { registerSchema, loginSchema, resetPasswordSchema, newPasswordSchema, createStudioSchema } from "@/lib/validations/auth"
@@ -104,6 +104,17 @@ export async function logout() {
   await signOut({ redirect: false })
   revalidatePath("/")
   return { success: true }
+}
+
+export async function getMyStudioSlug() {
+  const session = await auth()
+  if (!session?.user?.id) return null
+
+  const membership = await prisma.studioMembership.findFirst({
+    where: { userId: session.user.id, role: "OWNER" },
+    include: { studio: { select: { slug: true } } },
+  })
+  return membership?.studio.slug ?? null
 }
 
 export async function verifyEmail(token: string) {
