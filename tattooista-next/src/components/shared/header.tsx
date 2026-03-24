@@ -178,7 +178,7 @@ export function Header() {
               Admin
             </Link>
           )}
-          {session?.user ? (
+          {session?.user && (
             <>
               <Link
                 href="/admin/profile"
@@ -209,20 +209,6 @@ export function Header() {
                 Log Out
               </button>
             </>
-          ) : (
-            <button
-              onClick={() => window.location.href = "/login"}
-              className="flex items-center gap-4 text-foreground font-normal border-none bg-transparent hover:[&_img]:scale-[1.2] transition-all duration-300"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icons/login.svg"
-                alt="Log In"
-                className="w-[40px] h-[40px] transition-transform duration-300"
-                style={{ filter: "brightness(0) invert(1)" }}
-              />
-              Log In
-            </button>
           )}
         </nav>
       </div>
@@ -247,8 +233,8 @@ export function Header() {
               </Link>
             </li>
           ))}
-          <li className="border-t border-foreground/10 pt-4 mt-2">
-            {session?.user ? (
+          {session?.user && (
+            <li className="border-t border-foreground/10 pt-4 mt-2">
               <div className="flex flex-col gap-4">
                 {isAdmin && (
                   <Link
@@ -273,16 +259,8 @@ export function Header() {
                   Log Out
                 </button>
               </div>
-            ) : (
-              <Link
-                href="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-2 py-2 text-[20px] text-foreground font-normal"
-              >
-                Log In
-              </Link>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
       </div>
     </header>
