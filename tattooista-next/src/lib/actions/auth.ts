@@ -1,10 +1,12 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { signIn, signOut } from "@/lib/auth"
+import { signIn, signOut, auth } from "@/lib/auth"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
-import { registerSchema, loginSchema, resetPasswordSchema, newPasswordSchema } from "@/lib/validations/auth"
+import { registerSchema, loginSchema, resetPasswordSchema, newPasswordSchema, createStudioSchema } from "@/lib/validations/auth"
+import { createStudioWithDefaults } from "@/lib/studio"
+import { generateSlug, validateSlug } from "@/lib/slug"
 import { sendVerificationEmail, sendPasswordResetEmail } from "@/lib/email"
 import { revalidatePath } from "next/cache"
 import { AuthError } from "next-auth"
@@ -102,6 +104,17 @@ export async function logout() {
   await signOut({ redirect: false })
   revalidatePath("/")
   return { success: true }
+}
+
+export async function getMyStudioSlug() {
+  const session = await auth()
+  if (!session?.user?.id) return null
+
+  const membership = await prisma.studioMembership.findFirst({
+    where: { userId: session.user.id, role: "OWNER" },
+    include: { studio: { select: { slug: true } } },
+  })
+  return membership?.studio.slug ?? null
 }
 
 export async function verifyEmail(token: string) {
@@ -253,4 +266,95 @@ export async function resendVerificationEmail(email: string) {
   await sendVerificationEmail(email, token)
 
   return { success: true, message: "Verification email sent! Please check your inbox." }
+}
+
+export async function createStudio(formData: FormData) {
+  const rawData = {
+    studioName: formData.get("studioName"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  }
+
+  const validationResult = createStudioSchema.safeParse(rawData)
+  if (!validationResult.success) {
+    return { error: validationResult.error.issues[0].message }
+  }
+
+  const { studioName, email, password } = validationResult.data
+
+  // Generate and validate slug before hitting the DB
+  const slug = generateSlug(studioName)
+  const slugValidation = validateSlug(slug)
+  if (!slugValidation.valid) {
+    return { error: `Studio name produces an invalid URL. Try a longer or different name.` }
+  }
+
+  // Hash password before the transaction (CPU-intensive, don't hold tx open)
+  const hashedPassword = await bcrypt.hash(password, 12)
+
+  // Atomic: create User + Studio + Membership + defaults + verification token
+  let verificationToken: string
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      // Check email not taken
+      const existingUser = await tx.user.findUnique({
+        where: { email },
+      })
+      if (existingUser) {
+        throw new Error("This email is already associated with a studio on our platform. Please use a different email or sign in to your existing studio.")
+      }
+
+      // Check slug not taken
+      const existingStudio = await tx.studio.findUnique({
+        where: { slug },
+      })
+      if (existingStudio) {
+        throw new Error(`The URL "${slug}" is already taken. Try a different studio name.`)
+      }
+
+      // Create user
+      const user = await tx.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          displayName: studioName,
+          isActivated: false,
+        },
+      })
+
+      // Create studio with defaults (Studio + Membership + pages + default style)
+      await createStudioWithDefaults(user.id, { name: studioName, slug }, tx)
+
+      // Create verification token
+      const token = crypto.randomBytes(32).toString("hex")
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
+
+      await tx.verificationToken.create({
+        data: {
+          identifier: email,
+          token,
+          expires,
+        },
+      })
+
+      return { slug, token }
+    })
+
+    verificationToken = result.token
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message }
+    }
+    return { error: "Failed to create studio. Please try again." }
+  }
+
+  // Send email outside transaction — failure here doesn't roll back the DB
+  await sendVerificationEmail(email, verificationToken)
+
+  return {
+    success: true,
+    slug,
+    message: "Studio created! Please check your email to verify your account.",
+  }
 }

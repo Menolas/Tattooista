@@ -44,11 +44,18 @@ export default auth(async (req) => {
     }
   }
 
-  // ---- ROUTE PROTECTION ----
-  const isAdminRoute = nextUrl.pathname.startsWith("/admin")
+  // If we're on a studio context, block auth routes for visitors
+  // Studio owners log in on the platform level and get redirected here
   const isAuthRoute =
     nextUrl.pathname.startsWith("/login") ||
     nextUrl.pathname.startsWith("/register")
+
+  if (slug && isAuthRoute) {
+    return NextResponse.redirect(new URL("/", nextUrl))
+  }
+
+  // ---- ROUTE PROTECTION ----
+  const isAdminRoute = nextUrl.pathname.startsWith("/admin")
   const isPublicRoute =
     nextUrl.pathname === "/" ||
     nextUrl.pathname.startsWith("/portfolio") ||
