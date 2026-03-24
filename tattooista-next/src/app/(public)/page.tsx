@@ -1,6 +1,5 @@
 export const dynamic = "force-dynamic"
 
-import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { getTenantContext } from "@/lib/tenant"
 import { BookingForm } from "@/components/forms/booking-form"
@@ -9,6 +8,7 @@ import { ReadMore } from "@/components/shared/read-more"
 import { FaqItem } from "@/components/shared/faq-item"
 import { Instagram, Facebook } from "lucide-react"
 import { pageWallpaperUrl, serviceWallpaperUrl } from "@/lib/image-utils"
+import { PlatformLanding } from "@/components/platform-landing"
 
 async function getHomePageData() {
   const studio = await getTenantContext()
@@ -42,17 +42,8 @@ async function getHomePageData() {
 export default async function HomePage() {
   const data = await getHomePageData()
 
-  // No studio context = landing page (will be built in a later layer)
   if (!data) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <h1 className="text-5xl font-bold mb-4">Tattooista</h1>
-        <p className="text-xl text-muted-foreground mb-8">The platform for tattoo studios</p>
-        <a href="/register" className="inline-flex items-center justify-center border-2 border-foreground px-8 h-14 text-lg font-semibold transition-all duration-300 hover:bg-foreground hover:text-background">
-          Create Your Studio
-        </a>
-      </div>
-    )
+    return <PlatformLanding />
   }
 
   const { services, faqItems, aboutPage, tattooStyles } = data
