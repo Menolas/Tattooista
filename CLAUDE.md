@@ -38,6 +38,54 @@ Before every `git push`, mentally verify:
 4. Do file paths resolve correctly (no local-only files)?
 5. Does the hostname/URL pattern work on vercel.app?
 
+## FORBIDDEN: Git and deployment
+
+NEVER commit, push, or deploy. User handles all git operations and deployments themselves.
+
+## Ask about choices, not execution
+
+Ask permission for decisions (which service, tool, approach) but never for executing what the user already asked for. If something should match the original MERN project, just fix it — don't ask.
+
+## When user says "md"
+
+They mean CLAUDE.md, not memory files.
+
+## When user says "how do I start"
+
+They mean "what do we work on next", not project setup instructions.
+
+---
+
+# Coding Patterns & Gotchas
+
+## Tenant resolution in public pages
+
+Pages under `[slug]/(public)/` MUST use `params.slug` to query the studio directly — NOT `getTenantContext()`. The latter reads the `x-studio-id` header which may not be present. Follow the home page pattern: `const { slug } = await params` → `prisma.studio.findUnique({ where: { slug } })`.
+
+## Images from DB: use `<img>`, not `next/image`
+
+`next/image` requires paths starting with `/` or full URLs. Seed data has relative paths like `styles/mg_xxx/file.jpg` (no leading slash), user uploads return various formats. Use plain `<img>` with eslint-disable for any image src from DB. Reserve `next/image` for static known images only.
+
+## CSS `url()` must have quotes
+
+Always: `url('${path}')` — never `url(${path})`. Filenames with spaces or parens (e.g. `image (1).jpg`) break silently without quotes — element renders but no background, no console error.
+
+## FileReader + input reset race condition
+
+`e.target.files` is a live FileList. Resetting `input.value = ""` clears it before async `onloadend` callbacks fire. Always `Array.from()` the FileList and capture length BEFORE resetting the input.
+
+## Portfolio style switching is client-side
+
+Style carousel clicks use `<button onClick>` + useState, not `<Link>` navigation. URL should not change when switching styles. The `?style=` param is only for initial deep-linking (e.g. from home page carousel).
+
+## SCSS → Tailwind: grep first, never guess
+
+Always grep for SCSS variable values (`$color-xxx`, `$border-xxx`) before writing Tailwind classes. Never guess colors, borders, or sizes.
+
+## Tailwind only, no raw CSS
+
+Never write raw CSS class systems in `globals.css`. Use Tailwind utilities and CSS variables. Never hardcode hex values.
+
 ---
 
 # Tech Stack
