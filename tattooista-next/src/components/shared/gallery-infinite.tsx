@@ -87,7 +87,7 @@ export function GalleryInfinite({
                   className="h-full bg-cover bg-no-repeat bg-center overflow-hidden cursor-pointer grayscale hover:grayscale-0 shadow-[0_0_5px_3px_rgba(250,250,250,0.07)] min-[990px]:relative min-[990px]:transition-all min-[990px]:duration-300 min-[990px]:ease-in-out min-[990px]:hover:scale-[1.4] min-[990px]:hover:shadow-[0_0_10px_7px_rgba(0,0,0,0.8)] min-[990px]:hover:z-10"
                   onClick={() => setFullViewIndex(index)}
                   style={{
-                    backgroundImage: `url(${galleryImageUrl(item.fileName)})`,
+                    backgroundImage: `url('${galleryImageUrl(item.fileName)}')`,
                   }}
                 />
               </li>

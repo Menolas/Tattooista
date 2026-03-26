@@ -16,6 +16,7 @@ function isRelativePath(value: string): boolean {
 
 export function galleryImageUrl(fileName: string): string {
   if (isExternalUrl(fileName)) return fileName
+  if (isRelativePath(fileName)) return fileName.startsWith("/") ? fileName : `/${fileName}`
   return `/gallery/${fileName}`
 }
 

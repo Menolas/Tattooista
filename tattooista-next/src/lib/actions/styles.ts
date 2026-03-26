@@ -76,19 +76,29 @@ export async function createStyle(formData: FormData) {
     return { error: "A style with this name already exists" }
   }
 
-  const style = await prisma.tattooStyle.create({
-    data: {
-      studioId: studio.id,
-      value: data.value,
-      description: data.description || null,
-      wallPaper: data.wallPaper || null,
-      nonStyle: data.nonStyle || false,
-    },
-  })
+  try {
+    const style = await prisma.tattooStyle.create({
+      data: {
+        studioId: studio.id,
+        value: data.value,
+        description: data.description || null,
+        wallPaper: data.wallPaper || null,
+        nonStyle: data.nonStyle || false,
+      },
+    })
 
-  revalidatePath("/[slug]/admin/styles", "page")
-  revalidatePath("/portfolio")
-  return { success: true, data: style }
+    revalidatePath("/[slug]/admin/styles", "page")
+    revalidatePath("/portfolio")
+    return { success: true, data: style }
+  } catch (err: unknown) {
+    if (
+      err instanceof Error &&
+      err.message.includes("Unique constraint")
+    ) {
+      return { error: "A style with this name already exists" }
+    }
+    throw err
+  }
 }
 
 export async function updateStyle(id: string, formData: FormData) {
@@ -111,10 +121,11 @@ export async function updateStyle(id: string, formData: FormData) {
 
   const data = validationResult.data
 
-  // Check if another style with same name exists
+  // Check if another style with same name exists in this studio
   if (data.value) {
     const existing = await prisma.tattooStyle.findFirst({
       where: {
+        studioId: studio.id,
         value: data.value,
         NOT: { id },
       },

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   createManyGalleryItems,
@@ -28,8 +27,9 @@ import {
   archiveGalleryItem,
   deleteGalleryItem,
 } from "@/lib/actions/gallery"
-import { Upload, MoreVertical, Archive, Trash2, Tag } from "lucide-react"
+import { Upload, MoreVertical, Archive, Trash2, Tag, X, ImagePlus } from "lucide-react"
 import { galleryImageUrl } from "@/lib/image-utils"
+import { LoadingSpinner } from "@/components/shared/loading-spinner"
 import type { TattooStyle } from "@prisma/client"
 
 interface GalleryItem {
@@ -45,21 +45,56 @@ interface GalleryManagerProps {
   styles: TattooStyle[]
 }
 
+interface FilePreview {
+  file: File
+  previewUrl: string
+}
+
 export function GalleryManager({ galleryItems, styles }: GalleryManagerProps) {
   const router = useRouter()
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false)
   const [selectedStyleIds, setSelectedStyleIds] = useState<string[]>([])
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [filePreviews, setFilePreviews] = useState<FilePreview[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files || files.length === 0) return
+  const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+
+    // Reset input so the same files can be re-selected if needed
+    if (fileInputRef.current) fileInputRef.current.value = ""
+
+    const totalFiles = files.length
+    const newPreviews: FilePreview[] = []
+    for (const file of files) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        newPreviews.push({ file, previewUrl: reader.result as string })
+        if (newPreviews.length === totalFiles) {
+          setFilePreviews((prev) => [...prev, ...newPreviews])
+        }
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleRemovePreview = (fileToRemove: File) => {
+    setFilePreviews((prev) => prev.filter(({ file }) => file !== fileToRemove))
+  }
+
+  const handleUploadSubmit = async () => {
+    if (filePreviews.length === 0) return
+    if (selectedStyleIds.length === 0) {
+      toast.error("Please select at least one style")
+      return
+    }
 
     setIsUploading(true)
     try {
       const formData = new FormData()
-      for (const file of Array.from(files)) {
+      for (const { file } of filePreviews) {
         formData.append("files", file)
       }
       formData.append("context", "gallery")
@@ -85,12 +120,21 @@ export function GalleryManager({ galleryItems, styles }: GalleryManagerProps) {
         toast.success(`${data.files.length} image(s) uploaded successfully`)
         setIsUploadDialogOpen(false)
         setSelectedStyleIds([])
+        setFilePreviews([])
         router.refresh()
       }
     } catch {
       toast.error("Upload failed")
     } finally {
       setIsUploading(false)
+    }
+  }
+
+  const handleDialogClose = (open: boolean) => {
+    setIsUploadDialogOpen(open)
+    if (!open) {
+      setFilePreviews([])
+      setSelectedStyleIds([])
     }
   }
 
@@ -133,25 +177,68 @@ export function GalleryManager({ galleryItems, styles }: GalleryManagerProps) {
   return (
     <>
       <div className="flex justify-end mb-4">
-        <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+        <Dialog open={isUploadDialogOpen} onOpenChange={handleDialogClose}>
           <DialogTrigger asChild>
             <Button>
               <Upload className="mr-2 h-4 w-4" />
               Upload Images
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Upload Gallery Images</DialogTitle>
               <DialogDescription>
-                Upload images to your portfolio gallery.
+                Select images, choose styles, then upload.
               </DialogDescription>
             </DialogHeader>
+
+            {/* Image Previews */}
+            {filePreviews.length > 0 && (
+              <div className="space-y-2">
+                <Label>Selected images ({filePreviews.length}):</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {filePreviews.map(({ file, previewUrl }) => (
+                    <div key={file.name + file.lastModified} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={previewUrl}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemovePreview(file)}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Pick Files Button */}
+            <div>
+              <label className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium cursor-pointer bg-muted hover:bg-muted/80 transition-colors">
+                <ImagePlus className="h-4 w-4" />
+                {filePreviews.length > 0 ? "Add More Images" : "Pick Files"}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleFilesSelected}
+                  disabled={isUploading}
+                />
+              </label>
+            </div>
 
             {/* Style Selection */}
             {styles.length > 0 && (
               <div className="space-y-3">
-                <Label>Select styles for uploaded images:</Label>
+                <Label>Select styles for uploaded images: *</Label>
                 <div className="grid grid-cols-2 gap-2">
                   {styles
                     .filter((style) => !style.nonStyle)
@@ -182,18 +269,21 @@ export function GalleryManager({ galleryItems, styles }: GalleryManagerProps) {
               </div>
             )}
 
-            <div className="space-y-2">
-              <Input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleFileUpload}
-                disabled={isUploading}
-              />
-              {isUploading && (
-                <p className="text-sm text-muted-foreground text-center">Uploading...</p>
+            {/* Submit */}
+            <Button
+              onClick={handleUploadSubmit}
+              disabled={isUploading || filePreviews.length === 0 || selectedStyleIds.length === 0}
+              className="w-full"
+            >
+              {isUploading ? (
+                <>
+                  <LoadingSpinner size="sm" className="mr-2" />
+                  Uploading...
+                </>
+              ) : (
+                `Upload ${filePreviews.length} Image${filePreviews.length !== 1 ? "s" : ""}`
               )}
-            </div>
+            </Button>
           </DialogContent>
         </Dialog>
       </div>

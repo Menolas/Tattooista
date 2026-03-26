@@ -33,10 +33,27 @@ async function main() {
   // Create demo studio
   const demoStudio = await prisma.studio.upsert({
     where: { slug: "demo" },
-    update: {},
+    update: {
+      heroImage: "/images/body-bg.jpg",
+      heroPortrait: "/images/offerIllustration.png",
+      heroTextLeft: "Tattoo Artist",
+      heroTextCenter: "Your\nStudio",
+      heroTextBottom: "Your tagline goes here",
+      phone: "+1234567890",
+      instagram: "#",
+      facebook: "#",
+    },
     create: {
       name: "Demo Tattoo Studio",
       slug: "demo",
+      heroImage: "/images/body-bg.jpg",
+      heroPortrait: "/images/offerIllustration.png",
+      heroTextLeft: "Tattoo Artist",
+      heroTextCenter: "Your\nStudio",
+      heroTextBottom: "Your tagline goes here",
+      phone: "+1234567890",
+      instagram: "#",
+      facebook: "#",
     },
   })
 

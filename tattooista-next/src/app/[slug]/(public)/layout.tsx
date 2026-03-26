@@ -13,10 +13,12 @@ export default async function StudioPublicLayout({
 }) {
   const { slug } = await params
 
-  // Validate the studio exists and is active
   const studio = await prisma.studio.findUnique({
     where: { slug },
-    select: { id: true, isActive: true, slug: true },
+    select: {
+      id: true, isActive: true, slug: true,
+      phone: true, instagram: true, facebook: true, logo: true,
+    },
   })
 
   if (!studio || !studio.isActive) {
@@ -25,7 +27,13 @@ export default async function StudioPublicLayout({
 
   return (
     <>
-      <Header studioSlug={slug} />
+      <Header
+        studioSlug={slug}
+        logo={studio.logo}
+        phone={studio.phone}
+        instagram={studio.instagram}
+        facebook={studio.facebook}
+      />
       <main>{children}</main>
       <Contacts />
       <Footer />

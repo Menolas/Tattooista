@@ -43,6 +43,18 @@ model Studio {
   stripeSubscriptionId String?
   isActive             Boolean  @default(true)
 
+  // Hero block
+  heroImage            String?  // background image for hero section
+  heroPortrait         String?  // portrait/illustration overlay on hero
+  heroTextLeft         String?  // rotated label (e.g. "Tattoo Artist")
+  heroTextCenter       String?  // main heading (two lines separated by \n)
+  heroTextBottom       String?  // tagline below heading
+
+  // Contact & social
+  phone                String?
+  instagram            String?
+  facebook             String?
+
   memberships StudioMembership[]
   clients     Client[]
   contacts    Contact[]

@@ -7,9 +7,10 @@ import { styleWallpaperUrl } from "@/lib/image-utils"
 
 type Props = {
   styles: TattooStyle[]
+  slug: string
 }
 
-export function PortfolioSlider({ styles }: Props) {
+export function PortfolioSlider({ styles, slug }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -55,7 +56,7 @@ export function PortfolioSlider({ styles }: Props) {
             className="group flex-shrink-0 w-[calc(100%-10px)] sm:w-[275px] md:w-[325px] h-full snap-start p-[5px]"
           >
             <Link
-              href={`/portfolio?style=${style.id}`}
+              href={`/${slug}/portfolio?style=${style.id}`}
               className="flex justify-center items-end pb-[20px] w-full h-full bg-cover bg-no-repeat bg-center grayscale group-hover:grayscale-0 transition-all duration-300"
               style={{
                 backgroundImage: style.wallPaper
