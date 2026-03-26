@@ -2,7 +2,9 @@
 
 import { useState } from "react"
 import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { CreateStudioForm } from "@/components/forms/create-studio-form"
 import { OwnerLoginForm } from "@/components/forms/owner-login-form"
 
@@ -60,6 +62,12 @@ export function PlatformLanding() {
             )}
           </CardContent>
         </Card>
+
+        <div className="text-center mt-6">
+          <Button variant="outline" asChild>
+            <Link href="/demo" target="_blank">See Demo Studio</Link>
+          </Button>
+        </div>
       </div>
     </div>
   )

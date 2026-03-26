@@ -12,7 +12,11 @@ import { pageWallpaperUrl, serviceWallpaperUrl } from "@/lib/image-utils"
 async function getHomePageData(slug: string) {
   const studio = await prisma.studio.findUnique({
     where: { slug },
-    select: { id: true, isActive: true },
+    select: {
+      id: true, isActive: true,
+      heroImage: true, heroPortrait: true, heroTextLeft: true, heroTextCenter: true, heroTextBottom: true,
+      phone: true, instagram: true, facebook: true,
+    },
   })
 
   if (!studio || !studio.isActive) return null
@@ -36,7 +40,7 @@ async function getHomePageData(slug: string) {
     }),
   ])
 
-  return { services, faqItems, aboutPage, tattooStyles }
+  return { studio, services, faqItems, aboutPage, tattooStyles }
 }
 
 export default async function StudioHomePage({
@@ -51,13 +55,17 @@ export default async function StudioHomePage({
     notFound()
   }
 
-  const { services, faqItems, aboutPage, tattooStyles } = data
+  const { studio, services, faqItems, aboutPage, tattooStyles } = data
+  const heroLines = (studio.heroTextCenter || "Your\nName").split("\n")
 
   return (
     <div>
       {/* Hero / Main Offer */}
       <section
-        className="relative flex flex-col items-start h-[432px] md:h-screen pt-[107px] px-4 md:pt-[270px] md:px-[70px] md:pb-[93px] overflow-visible bg-no-repeat bg-[length:360px_337px,cover] md:bg-[length:contain,cover] bg-[position:top_95px_right_-25px,center] md:bg-[position:bottom_0_right_0,top_center] bg-[url('/images/offerIllustration.png'),url('/images/body-bg.jpg')]"
+        className="relative flex flex-col items-start h-[432px] md:h-screen pt-[107px] px-4 md:pt-[270px] md:px-[70px] md:pb-[93px] overflow-visible bg-no-repeat bg-[length:360px_337px,cover] md:bg-[length:contain,cover] bg-[position:top_95px_right_-25px,center] md:bg-[position:bottom_0_right_0,top_center]"
+        style={{
+          backgroundImage: `url('${studio.heroPortrait || "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"}'), url('${studio.heroImage || "/images/body-bg.jpg"}')`,
+        }}
       >
         {/* Bottom gradient overlay */}
         <div className="absolute bottom-0 left-0 right-0 h-[111px] md:h-[187px] bg-gradient-to-t from-[#080808] to-transparent" />
@@ -66,16 +74,17 @@ export default async function StudioHomePage({
         <div className="relative pl-[28px] md:pl-[66px] uppercase leading-none">
           {/* Decorative rotated text */}
           <span className="absolute -left-[40px] top-[42px] md:-left-[68px] md:top-[74px] text-[10px] md:text-[18px] font-medium md:font-semibold text-[#c7c7c7] tracking-[1.5px] -rotate-90 before:content-[''] before:absolute before:w-[21px] md:before:w-[45px] before:h-[2px] before:bg-[#c7c7c7] before:top-1/2 before:-left-[5px] md:before:-left-[10px] before:-translate-x-full before:-translate-y-1/2">
-            Tattoo Artist
+            {studio.heroTextLeft || "Tattoo Artist"}
           </span>
 
           <h1 className="flex flex-col text-left text-[46px] md:text-[130px] font-bold leading-[0.9] m-0 [text-shadow:2px_2px_3px_rgba(0,0,0,0.8)]">
-            <span>Hobf</span>
-            <span>Adelaine</span>
+            {heroLines.map((line, i) => (
+              <span key={i}>{line}</span>
+            ))}
           </h1>
 
           <span className="block py-[22px] md:py-0 md:mt-[14px] w-[140px] md:w-auto text-[13px] md:text-[30px] font-normal text-[#c7c7c7] leading-[15.85px] md:leading-normal tracking-[0.6px] md:tracking-[1px] md:text-right">
-            Your philosophy on your skin
+            {studio.heroTextBottom || ""}
           </span>
         </div>
 
@@ -94,7 +103,7 @@ export default async function StudioHomePage({
           <h2 className="text-center text-[30px] md:text-[55px] font-bold uppercase tracking-wider mb-10 md:mb-[100px]">
             Portfolio
           </h2>
-          <PortfolioSlider styles={tattooStyles} />
+          <PortfolioSlider styles={tattooStyles} slug={slug} />
         </section>
       )}
 
@@ -125,24 +134,30 @@ export default async function StudioHomePage({
                 </div>
               )}
               <div className="mt-[40px]">
+                {(studio.instagram || studio.facebook) && (
                 <h3 className="text-left text-[25px] md:text-[43px] font-semibold mb-5">Follow me</h3>
+                )}
                 <nav className="flex gap-5 mb-[40px]">
+                  {studio.instagram && (
                   <a
-                    href="https://www.instagram.com/adelainehobf/"
+                    href={studio.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-foreground hover:text-foreground/70 transition-colors"
                   >
                     <Instagram className="w-[70px] h-[70px]" />
                   </a>
+                  )}
+                  {studio.facebook && (
                   <a
-                    href="https://www.facebook.com/a.hobf"
+                    href={studio.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-foreground hover:text-foreground/70 transition-colors"
                   >
                     <Facebook className="w-[70px] h-[70px]" />
                   </a>
+                  )}
                 </nav>
                 <a
                   href="#booking"

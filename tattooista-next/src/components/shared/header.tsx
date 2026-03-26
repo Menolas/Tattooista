@@ -18,35 +18,33 @@ const navItems = [
   { path: "/reviews", label: "Reviews" },
 ]
 
-const socialLinks = [
-  {
-    tooltipText: "My Instagram",
-    url: "https://www.instagram.com/adelainehobf/",
-    icon: "/icons/instagram.svg",
-  },
-  {
-    tooltipText: "My Facebook",
-    url: "https://www.facebook.com/a.hobf",
-    icon: "/icons/facebook.svg",
-  },
-]
-
 function studioHref(path: string, slug: string) {
-  // For hash links like /#about → /{slug}#about
   if (path.startsWith("/#")) {
     return `/${slug}${path.slice(1)}`
   }
-  // For regular paths like /portfolio → /{slug}/portfolio
   return `/${slug}${path}`
 }
 
-export function Header({ studioSlug }: { studioSlug: string }) {
+interface HeaderProps {
+  studioSlug: string
+  logo?: string | null
+  phone?: string | null
+  instagram?: string | null
+  facebook?: string | null
+}
+
+export function Header({ studioSlug, logo, phone, instagram, facebook }: HeaderProps) {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navRef = useRef<HTMLDivElement>(null)
 
   const isPortfolio = pathname.includes("/portfolio")
+
+  const socialLinks = [
+    instagram ? { tooltipText: "Instagram", url: instagram, icon: "/icons/instagram.svg" } : null,
+    facebook ? { tooltipText: "Facebook", url: facebook, icon: "/icons/facebook.svg" } : null,
+  ].filter(Boolean) as { tooltipText: string; url: string; icon: string }[]
 
   const handleLogout = async () => {
     await logout()
@@ -79,8 +77,8 @@ export function Header({ studioSlug }: { studioSlug: string }) {
       {/* Logo */}
       <Link href={`/${studioSlug}`} className="relative w-[50px] h-[50px] min-[990px]:w-[55px] min-[990px]:h-[88px] shrink-0">
         <Image
-          src="/images/logo.png"
-          alt="Tattooista"
+          src={logo || "/images/logo.png"}
+          alt="Studio"
           fill
           className="object-contain"
           priority
@@ -120,6 +118,7 @@ export function Header({ studioSlug }: { studioSlug: string }) {
       </div>
 
       {/* Social nav — hidden on mobile, visible on desktop */}
+      {socialLinks.length > 0 && (
       <nav className="hidden min-[990px]:block mr-4">
         <ul className="flex items-center gap-5 list-none m-0 p-0">
           {socialLinks.map((link) => (
@@ -143,6 +142,7 @@ export function Header({ studioSlug }: { studioSlug: string }) {
           ))}
         </ul>
       </nav>
+      )}
 
       {/* Desktop right section */}
       <div className="hidden min-[990px]:flex items-center gap-[50px] ml-auto">
@@ -157,8 +157,9 @@ export function Header({ studioSlug }: { studioSlug: string }) {
         )}
 
         <nav className="flex items-center gap-[40px]">
+          {phone && (
           <a
-            href="tel:+4745519015"
+            href={`tel:${phone}`}
             className="flex items-center gap-4 text-foreground font-normal bg-transparent border-none hover:[&_svg]:scale-[1.2] transition-all duration-300"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -170,6 +171,7 @@ export function Header({ studioSlug }: { studioSlug: string }) {
             />
             Call me
           </a>
+          )}
           {session?.user && (
             <>
               <Link

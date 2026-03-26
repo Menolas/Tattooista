@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+
+# local uploads
+/public/uploads
 /.pnp
 .pnp.*
 .yarn/*

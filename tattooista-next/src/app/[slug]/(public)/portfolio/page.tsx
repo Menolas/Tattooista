@@ -1,10 +1,9 @@
 export const dynamic = "force-dynamic"
 
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
-import { Advertisement } from "@/components/shared/advertisement"
-import { StyleSlider } from "@/components/shared/style-slider"
-import { GalleryInfinite } from "@/components/shared/gallery-infinite"
+import { PortfolioContent } from "./portfolio-content"
 
 export const metadata: Metadata = {
   title: "Portfolio",
@@ -12,21 +11,31 @@ export const metadata: Metadata = {
 }
 
 interface PortfolioPageProps {
+  params: Promise<{ slug: string }>
   searchParams: Promise<{ style?: string }>
 }
 
-async function getPortfolioData(styleId?: string) {
+async function getPortfolioData(slug: string, requestedStyleId?: string) {
+  const studio = await prisma.studio.findUnique({
+    where: { slug },
+    select: { id: true, isActive: true },
+  })
+
+  if (!studio || !studio.isActive) return null
+
   const styles = await prisma.tattooStyle.findMany({
-    where: { isArchived: false },
+    where: { studioId: studio.id, isArchived: false },
     orderBy: { value: "asc" },
   })
 
-  const activeStyleId = styleId || styles[0]?.id || null
-  const activeStyle = styles.find((s) => s.id === activeStyleId) || null
-
+  const activeStyleId =
+    (requestedStyleId && styles.some((s) => s.id === requestedStyleId)
+      ? requestedStyleId
+      : null) || styles[0]?.id || null
   const pageSize = 20
 
   const where = {
+    studioId: studio.id,
     isArchived: false,
     ...(activeStyleId && {
       styles: {
@@ -46,56 +55,33 @@ async function getPortfolioData(styleId?: string) {
     prisma.galleryItem.count({ where }),
   ])
 
-  return { styles, activeStyle, galleryItems, totalCount, pageSize }
+  return { styles, galleryItems, totalCount, pageSize, activeStyleId }
 }
 
-export default async function PortfolioPage({ searchParams }: PortfolioPageProps) {
-  const params = await searchParams
-  const { styles, activeStyle, galleryItems, totalCount, pageSize } =
-    await getPortfolioData(params.style)
+export default async function PortfolioPage({ params, searchParams }: PortfolioPageProps) {
+  const { slug } = await params
+  const { style } = await searchParams
+  const data = await getPortfolioData(slug, style)
+
+  if (!data) notFound()
+
+  const { styles, galleryItems, totalCount, pageSize, activeStyleId } = data
 
   return (
-    <>
-      {/* Styles Section */}
-      <section className="tattoo-style-section relative pt-[118px] md:pt-[220px] md:pb-[28px] md:mb-0 bg-[url('/images/body-bg.jpg')] bg-no-repeat bg-cover">
-        <div className="container overflow-visible">
-          {/* Style title + description */}
-          <div className="flex flex-col leading-[1.4] md:flex-row md:gap-[60px] md:mx-auto md:max-w-[1317px]">
-            <div>
-              <h1 className="relative mt-0 mb-4 md:mb-6 max-w-full overflow-hidden text-ellipsis text-[36px] md:text-[80px] text-center font-bold uppercase tracking-wider">
-                {activeStyle?.value || "Portfolio"}
-              </h1>
-              <div className="text-center">
-                {activeStyle?.description || "---"}
-              </div>
-            </div>
-          </div>
-
-          <Advertisement />
-
-          <StyleSlider
-            styles={styles.map((s) => ({
-              id: s.id,
-              value: s.value,
-              nonStyle: s.nonStyle,
-            }))}
-            activeStyleId={activeStyle?.id || null}
-          />
-        </div>
-      </section>
-
-      {/* Gallery Section */}
-      {activeStyle && (
-        <GalleryInfinite
-          styleId={activeStyle.id}
-          initialItems={galleryItems.map((item) => ({
-            id: item.id,
-            fileName: item.fileName,
-          }))}
-          initialTotalCount={totalCount}
-          pageSize={pageSize}
-        />
-      )}
-    </>
+    <PortfolioContent
+      styles={styles.map((s) => ({
+        id: s.id,
+        value: s.value,
+        description: s.description,
+        nonStyle: s.nonStyle,
+      }))}
+      initialStyleId={activeStyleId}
+      initialGalleryItems={galleryItems.map((item) => ({
+        id: item.id,
+        fileName: item.fileName,
+      }))}
+      initialTotalCount={totalCount}
+      pageSize={pageSize}
+    />
   )
 }
