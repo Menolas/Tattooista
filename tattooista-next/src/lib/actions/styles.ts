@@ -7,8 +7,10 @@ import { revalidatePath } from "next/cache"
 import { styleSchema, updateStyleSchema } from "@/lib/validations/style"
 
 export async function getStyles(includeArchived = false) {
+  const studio = await requireSessionStudio()
+
   const styles = await prisma.tattooStyle.findMany({
-    where: includeArchived ? {} : { isArchived: false },
+    where: { studioId: studio.id, ...(includeArchived ? {} : { isArchived: false }) },
     include: {
       _count: {
         select: {
@@ -26,6 +28,8 @@ export async function getStyles(includeArchived = false) {
 }
 
 export async function getStyleById(id: string) {
+  const studio = await requireSessionStudio()
+
   const style = await prisma.tattooStyle.findUnique({
     where: { id },
     include: {
@@ -37,7 +41,7 @@ export async function getStyleById(id: string) {
     },
   })
 
-  if (!style) {
+  if (!style || style.studioId !== studio.id) {
     throw new Error("Style not found")
   }
 

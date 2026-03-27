@@ -6,8 +6,10 @@ import { requireSessionStudio, requireStudioRole } from "@/lib/tenant"
 import { revalidatePath } from "next/cache"
 
 export async function getGalleryItems(includeArchived = false) {
+  const studio = await requireSessionStudio()
+
   const items = await prisma.galleryItem.findMany({
-    where: includeArchived ? {} : { isArchived: false },
+    where: { studioId: studio.id, ...(includeArchived ? {} : { isArchived: false }) },
     include: {
       styles: {
         include: {
@@ -26,8 +28,11 @@ export async function getGalleryItems(includeArchived = false) {
 }
 
 export async function getGalleryItemsByStyle(styleId: string) {
+  const studio = await requireSessionStudio()
+
   const items = await prisma.galleryItem.findMany({
     where: {
+      studioId: studio.id,
       isArchived: false,
       styles: {
         some: {

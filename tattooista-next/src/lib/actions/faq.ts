@@ -7,7 +7,10 @@ import { revalidatePath } from "next/cache"
 import { faqSchema, updateFaqSchema } from "@/lib/validations/faq"
 
 export async function getFaqItems() {
+  const studio = await requireSessionStudio()
+
   const items = await prisma.faqItem.findMany({
+    where: { studioId: studio.id },
     orderBy: { order: "asc" },
   })
 
@@ -15,11 +18,13 @@ export async function getFaqItems() {
 }
 
 export async function getFaqItemById(id: string) {
+  const studio = await requireSessionStudio()
+
   const item = await prisma.faqItem.findUnique({
     where: { id },
   })
 
-  if (!item) {
+  if (!item || item.studioId !== studio.id) {
     throw new Error("FAQ item not found")
   }
 

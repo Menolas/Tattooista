@@ -50,7 +50,7 @@ export async function getBookings(includeArchived = false) {
   await requireStudioRole(session.user.id, studio.id)
 
   const bookings = await prisma.booking.findMany({
-    where: includeArchived ? {} : { isArchived: false },
+    where: { studioId: studio.id, ...(includeArchived ? {} : { isArchived: false }) },
     orderBy: { createdAt: "desc" },
   })
 
@@ -67,7 +67,7 @@ export async function getBookingById(id: string) {
     where: { id },
   })
 
-  if (!booking) {
+  if (!booking || booking.studioId !== studio.id) {
     throw new Error("Booking not found")
   }
 

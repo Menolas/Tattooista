@@ -7,8 +7,10 @@ import { revalidatePath } from "next/cache"
 import { reviewSchema, updateReviewSchema } from "@/lib/validations/review"
 
 export async function getReviews(includeArchived = false) {
+  const studio = await requireSessionStudio()
+
   const reviews = await prisma.review.findMany({
-    where: includeArchived ? {} : { isArchived: false },
+    where: { studioId: studio.id, ...(includeArchived ? {} : { isArchived: false }) },
     include: {
       user: {
         select: {
@@ -26,6 +28,8 @@ export async function getReviews(includeArchived = false) {
 }
 
 export async function getReviewById(id: string) {
+  const studio = await requireSessionStudio()
+
   const review = await prisma.review.findUnique({
     where: { id },
     include: {
@@ -40,7 +44,7 @@ export async function getReviewById(id: string) {
     },
   })
 
-  if (!review) {
+  if (!review || review.studioId !== studio.id) {
     throw new Error("Review not found")
   }
 
@@ -48,8 +52,11 @@ export async function getReviewById(id: string) {
 }
 
 export async function getUserReviews(userId: string) {
+  const studio = await requireSessionStudio()
+
   const reviews = await prisma.review.findMany({
     where: {
+      studioId: studio.id,
       userId,
       isArchived: false,
     },

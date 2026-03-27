@@ -7,7 +7,10 @@ import { revalidatePath } from "next/cache"
 import { serviceSchema, updateServiceSchema } from "@/lib/validations/service"
 
 export async function getServices() {
+  const studio = await requireSessionStudio()
+
   const services = await prisma.service.findMany({
+    where: { studioId: studio.id },
     orderBy: { order: "asc" },
   })
 
@@ -15,11 +18,13 @@ export async function getServices() {
 }
 
 export async function getServiceById(id: string) {
+  const studio = await requireSessionStudio()
+
   const service = await prisma.service.findUnique({
     where: { id },
   })
 
-  if (!service) {
+  if (!service || service.studioId !== studio.id) {
     throw new Error("Service not found")
   }
 

@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic"
 
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { StylesManager } from "./styles-manager"
 
@@ -8,9 +9,9 @@ export const metadata: Metadata = {
   title: "Tattoo Styles",
 }
 
-async function getStyles() {
+async function getStyles(studioId: string) {
   const styles = await prisma.tattooStyle.findMany({
-    where: { isArchived: false },
+    where: { studioId, isArchived: false },
     include: {
       _count: {
         select: { galleryItems: true },
@@ -25,8 +26,15 @@ async function getStyles() {
   }))
 }
 
-export default async function StylesPage() {
-  const styles = await getStyles()
+export default async function StylesPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const studio = await prisma.studio.findUnique({ where: { slug }, select: { id: true } })
+  if (!studio) notFound()
+  const styles = await getStyles(studio.id)
 
   return (
     <div className="space-y-6">

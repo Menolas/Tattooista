@@ -16,7 +16,10 @@ export async function getPageByName(name: string) {
 }
 
 export async function getPages() {
+  const studio = await requireSessionStudio()
+
   const pages = await prisma.page.findMany({
+    where: { studioId: studio.id },
     orderBy: { name: "asc" },
   })
 
@@ -44,10 +47,11 @@ export async function updatePage(id: string, formData: FormData) {
 
   const data = validationResult.data
 
-  // Check if another page has this name
+  // Check if another page has this name in this studio
   if (data.name) {
     const existing = await prisma.page.findFirst({
       where: {
+        studioId: studio.id,
         name: data.name,
         NOT: { id },
       },
