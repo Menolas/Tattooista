@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic"
 
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { FaqManager } from "./faq-manager"
 
@@ -8,16 +9,24 @@ export const metadata: Metadata = {
   title: "FAQ",
 }
 
-async function getFaqItems() {
+async function getFaqItems(studioId: string) {
   const items = await prisma.faqItem.findMany({
+    where: { studioId },
     orderBy: { order: "asc" },
   })
 
   return items
 }
 
-export default async function FaqPage() {
-  const faqItems = await getFaqItems()
+export default async function FaqPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const studio = await prisma.studio.findUnique({ where: { slug }, select: { id: true } })
+  if (!studio) notFound()
+  const faqItems = await getFaqItems(studio.id)
 
   return (
     <div className="space-y-6">

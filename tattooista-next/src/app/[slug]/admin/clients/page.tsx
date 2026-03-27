@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic"
 
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { ClientsTable } from "./clients-table"
 
@@ -8,9 +9,9 @@ export const metadata: Metadata = {
   title: "Clients",
 }
 
-async function getClients() {
+async function getClients(studioId: string) {
   const clients = await prisma.client.findMany({
-    where: { isArchived: false },
+    where: { studioId, isArchived: false },
     include: {
       contacts: true,
       gallery: true,
@@ -21,8 +22,15 @@ async function getClients() {
   return clients
 }
 
-export default async function ClientsPage() {
-  const clients = await getClients()
+export default async function ClientsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const studio = await prisma.studio.findUnique({ where: { slug }, select: { id: true } })
+  if (!studio) notFound()
+  const clients = await getClients(studio.id)
 
   return (
     <div className="space-y-6">

@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic"
 
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { GalleryManager } from "./gallery-manager"
 
@@ -8,10 +9,10 @@ export const metadata: Metadata = {
   title: "Gallery",
 }
 
-async function getGalleryData() {
+async function getGalleryData(studioId: string) {
   const [galleryItems, styles] = await Promise.all([
     prisma.galleryItem.findMany({
-      where: { isArchived: false },
+      where: { studioId, isArchived: false },
       include: {
         styles: {
           include: {
@@ -22,7 +23,7 @@ async function getGalleryData() {
       orderBy: { createdAt: "desc" },
     }),
     prisma.tattooStyle.findMany({
-      where: { isArchived: false },
+      where: { studioId, isArchived: false },
       orderBy: { value: "asc" },
     }),
   ])
@@ -36,8 +37,15 @@ async function getGalleryData() {
   }
 }
 
-export default async function GalleryPage() {
-  const { galleryItems, styles } = await getGalleryData()
+export default async function GalleryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const studio = await prisma.studio.findUnique({ where: { slug }, select: { id: true } })
+  if (!studio) notFound()
+  const { galleryItems, styles } = await getGalleryData(studio.id)
 
   return (
     <div className="space-y-6">

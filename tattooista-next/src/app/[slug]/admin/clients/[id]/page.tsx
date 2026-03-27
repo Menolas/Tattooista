@@ -39,9 +39,11 @@ const contactIcons: Record<string, React.ReactNode> = {
 
 export default async function ClientPage({ params }: ClientPageProps) {
   const { slug, id } = await params
+  const studio = await prisma.studio.findUnique({ where: { slug }, select: { id: true } })
+  if (!studio) notFound()
   const client = await getClient(id)
 
-  if (!client) {
+  if (!client || client.studioId !== studio.id) {
     notFound()
   }
 

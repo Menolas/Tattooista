@@ -13,7 +13,7 @@ export async function getClients(includeArchived = false) {
   await requireStudioRole(session.user.id, studio.id)
 
   const clients = await prisma.client.findMany({
-    where: includeArchived ? {} : { isArchived: false },
+    where: { studioId: studio.id, ...(includeArchived ? {} : { isArchived: false }) },
     include: {
       contacts: true,
       gallery: true,
@@ -41,7 +41,7 @@ export async function getClientById(id: string) {
     },
   })
 
-  if (!client) {
+  if (!client || client.studioId !== studio.id) {
     throw new Error("Client not found")
   }
 

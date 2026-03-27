@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic"
 
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   title: "Admin Dashboard",
 }
 
-async function getDashboardStats() {
+async function getDashboardStats(studioId: string) {
   const [
     pendingBookings,
     totalClients,
@@ -26,19 +27,19 @@ async function getDashboardStats() {
     recentBookings,
   ] = await Promise.all([
     prisma.booking.count({
-      where: { status: "PENDING", isArchived: false },
+      where: { studioId, status: "PENDING", isArchived: false },
     }),
     prisma.client.count({
-      where: { isArchived: false },
+      where: { studioId, isArchived: false },
     }),
     prisma.galleryItem.count({
-      where: { isArchived: false },
+      where: { studioId, isArchived: false },
     }),
     prisma.review.count({
-      where: { isArchived: false },
+      where: { studioId, isArchived: false },
     }),
     prisma.booking.findMany({
-      where: { isArchived: false },
+      where: { studioId, isArchived: false },
       orderBy: { createdAt: "desc" },
       take: 5,
     }),
@@ -59,7 +60,9 @@ export default async function AdminDashboardPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const stats = await getDashboardStats()
+  const studio = await prisma.studio.findUnique({ where: { slug }, select: { id: true } })
+  if (!studio) notFound()
+  const stats = await getDashboardStats(studio.id)
 
   return (
     <div className="space-y-8">
