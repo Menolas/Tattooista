@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Instagram, Facebook } from "lucide-react"
 
-export function Footer() {
+export function Footer({ studioSlug }: { studioSlug?: string }) {
   return (
     <footer className="flex flex-col gap-5 py-[60px] font-medium text-[18px] md:font-semibold md:text-[30px] bg-[url('/images/body-bg.jpg')] bg-no-repeat bg-cover">
       <div className="container md:flex md:flex-row md:items-center md:justify-between">
@@ -13,7 +13,7 @@ export function Footer() {
               src="/images/logo.png"
               alt="Tattooista"
               fill
-              className="object-contain"
+              className={`object-contain${studioSlug === "demo" ? " invert" : ""}`}
             />
           </Link>
           <nav className="mb-[25px] md:mb-0">

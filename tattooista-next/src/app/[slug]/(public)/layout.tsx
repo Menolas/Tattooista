@@ -36,7 +36,7 @@ export default async function StudioPublicLayout({
       />
       <main>{children}</main>
       <Contacts />
-      <Footer />
+      <Footer studioSlug={slug} />
     </>
   )
 }
