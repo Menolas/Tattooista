@@ -80,7 +80,7 @@ export function Header({ studioSlug, logo, phone, instagram, facebook }: HeaderP
           src={logo || "/images/logo.png"}
           alt="Studio"
           fill
-          className="object-contain"
+          className={`object-contain${studioSlug === "demo" ? " invert" : ""}`}
           priority
         />
       </Link>
