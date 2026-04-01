@@ -73,9 +73,9 @@ export function Header({ studioSlug, logo, phone, instagram, facebook }: HeaderP
   }, [isMenuOpen])
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-10 flex items-center px-4 pt-[22px] min-[990px]:px-[70px] min-[990px]:pt-[42px] overflow-visible">
+    <header className="absolute top-0 left-0 right-0 z-10 flex items-center px-4 pt-[22px] min-[990px]:px-[70px] min-[990px]:pt-5 overflow-visible">
       {/* Logo */}
-      <Link href={`/${studioSlug}`} className="relative w-[50px] h-[50px] min-[990px]:w-[55px] min-[990px]:h-[88px] shrink-0">
+      <Link href={`/${studioSlug}`} className="relative w-[50px] h-[50px] min-[990px]:w-[80px] min-[990px]:h-[88px] shrink-0">
         <Image
           src={logo || "/images/logo.png"}
           alt="Studio"
@@ -169,7 +169,7 @@ export function Header({ studioSlug, logo, phone, instagram, facebook }: HeaderP
               className="w-[40px] h-[40px] transition-transform duration-300"
               style={{ filter: "brightness(0) invert(1)" }}
             />
-            Call me
+            Call us
           </a>
           )}
           {session?.user && (

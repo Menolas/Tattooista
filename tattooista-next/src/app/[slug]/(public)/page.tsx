@@ -62,7 +62,7 @@ export default async function StudioHomePage({
     <div>
       {/* Hero / Main Offer */}
       <section
-        className="relative flex flex-col items-start h-[432px] md:h-screen pt-[107px] px-4 md:pt-[270px] md:px-[70px] md:pb-[93px] overflow-visible bg-no-repeat bg-[length:360px_337px,cover] md:bg-[length:contain,cover] bg-[position:top_95px_right_-25px,center] md:bg-[position:bottom_0_right_0,top_center]"
+        className="relative flex flex-col items-start h-[432px] md:h-screen pt-[107px] px-4 md:pt-[270px] md:px-[70px] md:pb-[93px] overflow-visible bg-no-repeat bg-[length:360px_337px,cover] md:bg-[length:contain,cover] bg-[position:top_95px_right_-25px,center] md:bg-[position:bottom_0_right_0,top_center] before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[110px] before:bg-gradient-to-b before:from-[#080808] before:to-transparent before:z-[1]"
         style={{
           backgroundImage: `url('${studio.heroPortrait || "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"}'), url('${studio.heroImage || "/images/body-bg.jpg"}')`,
         }}
